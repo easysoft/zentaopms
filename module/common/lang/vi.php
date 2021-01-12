@@ -338,13 +338,16 @@ $lang->project->menu = new stdclass();
 $lang->project->menu->task      = array('link' => 'Nhiệm vụ|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
 $lang->project->menu->kanban    = array('link' => 'Kanban|project|kanban|projectID=%s');
 $lang->project->menu->burn      = array('link' => 'Burndown|project|burn|projectID=%s');
-$lang->project->menu->list      = array('link' => 'Thêm|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->view      = array('link' => 'View|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story     = array('link' => 'Câu chuyện|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->qa        = array('link' => 'Test|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->bug       = array('link' => 'Bug|project|bug|projectID=%s');
+$lang->project->menu->build     = array('link' => 'Bản dựng|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->testtask  = array('link' => 'Yêu cầu|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 $lang->project->menu->doc       = array('link' => 'Tài liệu|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->action    = array('link' => 'Lịch sử|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Đội nhóm|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->more      = array('link' => 'More|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->action    = array('link' => 'Lịch sử|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->view      = array('link' => 'Tổng quan|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->project->menu->whitelist = array('link' => 'Whitelist|project|whitelist|projectID=%s', 'alias' => 'addwhitelist', 'subModule' => 'personnel');
 
@@ -358,7 +361,12 @@ $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => 'Bản dựng|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => 'Yêu cầu|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->dividerMenu = ',projectstory,issue,story,team,product,';
+$lang->project->subMenu->more = new stdclass();
+$lang->project->subMenu->more->whitelist = array('link' => 'Whitelist|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
+$lang->project->subMenu->more->action    = array('link' => 'Lịch sử|project|dynamic|projectID=%s');
+$lang->project->subMenu->more->view      = array('link' => 'Tổng quan|project|view|projectID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+
+$lang->project->dividerMenu = ',project,doc,programplan,projectbuild,story,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();

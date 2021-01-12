@@ -331,13 +331,16 @@ $lang->project->menu = new stdclass();
 $lang->project->menu->task      = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
 $lang->project->menu->kanban    = array('link' => '看板|project|kanban|projectID=%s');
 $lang->project->menu->burn      = array('link' => '燃盡圖|project|burn|projectID=%s');
-$lang->project->menu->list      = array('link' => '更多|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->view      = array('link' => '视图|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story     = array('link' => "{$lang->projectSRCommon}|project|story|projectID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->qa        = array('link' => '測試|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->bug       = array('link' => 'Bug|project|bug|projectID=%s');
+$lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->testtask  = array('link' => '測試單|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 $lang->project->menu->doc       = array('link' => '文檔|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->action    = array('link' => '動態|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
 $lang->project->menu->team      = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->more      = array('link' => '更多|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->action    = array('link' => '動態|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->view      = array('link' => '概況|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->project->menu->whitelist = array('link' => '白名單|project|whitelist|projectID=%s', 'alias' => 'addwhitelist', 'subModule' => 'personnel');
 
@@ -351,7 +354,12 @@ $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => '測試單|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->dividerMenu = ',project,doc,programplan,projectbuild,story,team,product,other,';
+$lang->project->subMenu->more = new stdclass();
+$lang->project->subMenu->more->whitelist = array('link' => '白名單|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
+$lang->project->subMenu->more->action    = array('link' => '動態|project|dynamic|projectID=%s');
+$lang->project->subMenu->more->view      = array('link' => '概況|project|view|projectID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+
+$lang->project->dividerMenu = ',project,doc,programplan,projectbuild,story,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();

@@ -338,15 +338,15 @@ $lang->project->menu = new stdclass();
 $lang->project->menu->task      = array('link' => 'Aufgabenliste|project|task|projectID=%s', 'subModule' => 'task,grouptask,tree', 'alias' => 'grouptask,importtask,importbug,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->kanban    = array('link' => 'Kanban|project|kanban|projectID=%s');
 $lang->project->menu->burn      = array('link' => 'Burn|project|burn|projectID=%s');
-$lang->project->menu->list      = array('link' => 'More|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->view      = array('link' => 'View|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->qa        = array('link' => 'Bug|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->bug       = array('link' => 'Bug|project|bug|projectID=%s');
+$lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->testtask  = array('link' => 'Test Aufgabe|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 $lang->project->menu->doc       = array('link' => 'Dok|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->action    = array('link' => 'Verlauf|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->view      = array('link' => 'Übersicht|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
-$lang->project->menu->whitelist = array('link' => 'Whitelist|project|whitelist|projectID=%s', 'alias' => 'addwhitelist', 'subModule' => 'personnel');
+$lang->project->menu->more      = array('link' => 'More|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
 $lang->project->subMenu = new stdclass();
 $lang->project->subMenu->list = new stdclass();
@@ -358,7 +358,12 @@ $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => 'Test Aufgabe|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->dividerMenu = ',projectstory,issue,story,team,product,';
+$lang->project->subMenu->more = new stdclass();
+$lang->project->subMenu->more->whitelist = array('link' => 'Whitelist|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
+$lang->project->subMenu->more->action    = array('link' => 'Verlauf|project|dynamic|projectID=%s');
+$lang->project->subMenu->more->view      = array('link' => 'Übersicht|project|view|projectID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+
+$lang->project->dividerMenu = ',project,doc,programplan,projectbuild,story,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();

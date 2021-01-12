@@ -338,27 +338,32 @@ $lang->project->menu = new stdclass();
 $lang->project->menu->task      = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
 $lang->project->menu->kanban    = array('link' => '看板|project|kanban|projectID=%s');
 $lang->project->menu->burn      = array('link' => '燃尽图|project|burn|projectID=%s');
-$lang->project->menu->list      = array('link' => '更多|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->view      = array('link' => '视图|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story     = array('link' => "{$lang->projectSRCommon}|project|story|projectID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->qa        = array('link' => '测试|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->bug       = array('link' => 'Bug|project|bug|projectID=%s');
+$lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->testtask  = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 $lang->project->menu->doc       = array('link' => '文档|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->action    = array('link' => '动态|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
 $lang->project->menu->team      = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->view      = array('link' => '概况|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
-$lang->project->menu->whitelist = array('link' => '白名单|project|whitelist|projectID=%s', 'alias' => 'addwhitelist', 'subModule' => 'personnel');
+$lang->project->menu->more      = array('link' => '更多|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
 $lang->project->subMenu = new stdclass();
-$lang->project->subMenu->list = new stdclass();
-$lang->project->subMenu->list->groupTask = '分组视图|project|groupTask|projectID=%s';
-$lang->project->subMenu->list->tree      = '树状图|project|tree|projectID=%s';
+$lang->project->subMenu->view = new stdclass();
+$lang->project->subMenu->view->groupTask = '分组视图|project|groupTask|projectID=%s';
+$lang->project->subMenu->view->tree      = '树状图|project|tree|projectID=%s';
 
 $lang->project->subMenu->qa = new stdclass();
 $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->dividerMenu = ',project,doc,programplan,projectbuild,story,team,product,other,';
+$lang->project->subMenu->more = new stdclass();
+$lang->project->subMenu->more->whitelist = array('link' => '白名单|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
+$lang->project->subMenu->more->action    = array('link' => '动态|project|dynamic|projectID=%s');
+$lang->project->subMenu->more->view      = array('link' => '概况|project|view|projectID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+
+$lang->project->dividerMenu = ',project,doc,programplan,projectbuild,story,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
