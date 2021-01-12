@@ -21,12 +21,13 @@
 </div>
 <?php $hideAttribute = $planID == 0 ? '' : ' hidden'?>
 <?php $class = $planID == 0 ? '' : "disabled='disabled'"?>
+<?php $name = $planID == 0 ? $lang->programplan->name : $lang->programplan->subStageName;?>
 <div id='mainContent' class='main-content'>
   <form class='main-form form-ajax' method='post' id='planForm' enctype='multipart/form-data'>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
-          <th class='required'><?php echo $lang->programplan->name;?></th>
+          <th class='required'><?php echo $name;?></th>
           <th class='w-100px'><?php echo $lang->programplan->percent;?></th>
           <th class='w-110px <?php echo $hideAttribute?>'><?php echo $lang->programplan->attribute;?></th>
           <th class='w-110px'><?php echo $lang->project->acl;?></th>
