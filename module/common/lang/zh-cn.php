@@ -148,7 +148,7 @@ $lang->dividerMenu = ',project,doc,';
 $lang->program = new stdclass();
 $lang->program->menu = new stdclass();
 //$lang->program->menu->index   = '主页|program|pgmindex|';
-$lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers');
+$lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers,prjcreate');
 
 $lang->PRJ = new stdclass();
 $lang->PRJ->menu = new stdclass();
@@ -363,7 +363,7 @@ $lang->project->subMenu->more->whitelist = array('link' => '白名单|project|wh
 $lang->project->subMenu->more->action    = array('link' => '动态|project|dynamic|projectID=%s');
 $lang->project->subMenu->more->view      = array('link' => '概况|project|view|projectID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 
-$lang->project->dividerMenu = ',project,doc,programplan,projectbuild,story,other,';
+$lang->project->dividerMenu = ',project,programplan,projectbuild,story,team,product,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
@@ -374,6 +374,7 @@ $lang->build->menu = $lang->project->menu;
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
+$lang->qa->menu->index     = array('link' => '仪表盘|qa|index');
 $lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto');
 $lang->qa->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'class' => 'dropdown dropdown-hover');
 $lang->qa->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
@@ -390,6 +391,7 @@ $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 $lang->bug->subMenu = $lang->qa->subMenu;
 
+$lang->bug->menu->index     = array('link' => '仪表盘|qa|index');
 $lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->bug->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s');
@@ -920,7 +922,7 @@ $lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|pr
 $lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|requirement', 'alias' => 'requirement,story,track');
 $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代码|repo|browse|';
-$lang->menu->waterfall->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,caselib,');
+$lang->menu->waterfall->qa             = '测试|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc');
@@ -990,6 +992,6 @@ $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommo
 $lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score');
 
 include (dirname(__FILE__) . '/menuOrder.php');

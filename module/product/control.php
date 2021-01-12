@@ -762,6 +762,7 @@ class product extends control
         $this->view->extra     = $extra;
         $this->view->products  = $products;
         $this->view->projectID = $this->session->PRJ;
+        $this->view->programs  = $this->loadModel('program')->getPGMPairs();
         $this->display();
     }
 

@@ -51,7 +51,6 @@ class projectrelease extends control
         $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->branch   = $branch;
         $this->view->project  = $this->loadModel('project')->getById($this->session->PRJ);
-        $this->product->setMenu($this->product->getPairs(), $productID, $branch, '', '', $this->session->PRJ);
     }
 
     /**
@@ -66,11 +65,18 @@ class projectrelease extends control
     public function browse($productID = 0, $branch = 0, $type = 'all')
     {
         if(!$productID) $productID = key($this->products);
-        $this->commonAction($productID, $branch);
+        $product = $this->product->getById($productID);
         $this->session->set('releaseList', $this->app->getURI(true));
 
-        $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->release->browse;
+        $project = $this->loadModel('project')->getById($this->session->PRJ);
+
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
+        $this->view->project    = $project;
+        $this->view->products   = $this->loadModel('product')->getProductsByProject($this->session->PRJ);
+        $this->view->product    = $product;
+        $this->view->branches   = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->view->branch     = $branch;
         $this->view->releases   = $this->projectrelease->getList($this->session->PRJ, $productID, $branch, $type);
         $this->view->type       = $type;
         $this->display();

@@ -15,6 +15,14 @@
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <div class="btn-group">
+      <?php echo html::a('javascript:;', "<span class='text'>{$product->name}</span> <span class='caret'></span>", '', "class='btn btn-link btn-limit' style='border-radius: 2px;' data-toggle='dropdown'")?>
+      <ul class="dropdown-menu" style="max-height:240px; max-width: 300px; overflow-y:auto">
+        <?php foreach($products as $product): ?>
+        <li><?php echo html::a($this->inLink('browse', "productID=$product->id&branch=0&type=$type", '', '', $this->session->PRJ), $product->name);?></li>
+        <?php endforeach;?>
+      </ul>
+    </div>
     <?php
     echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=all"), "<span class='text'>{$lang->release->all}</span>" . ($type == 'all' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
     echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=normal"), "<span class='text'>{$lang->release->statusList['normal']}</span>" . ($type == 'normal' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='normalTab' class='btn btn-link" . ('normal' == $type ? ' btn-active-text' : '') . "'");

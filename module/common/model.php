@@ -622,7 +622,7 @@ class commonModel extends model
         global $app, $lang, $config;
 
         /* If program, return.*/
-        if($moduleName == 'program' and strpos($methodName, 'prj') !== false) $lang->program->menu->browse = $lang->PRJ->menu->browse;
+        if($moduleName == 'program' and strpos($methodName, 'prj') !== false) $lang->program->menu = $lang->PRJ->menu;
         if($moduleName == 'product' and $methodName == 'create') return;
 
         /* Set the main main menu. */

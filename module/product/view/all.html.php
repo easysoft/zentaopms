@@ -29,7 +29,7 @@
   </div>
   <?php else:?>
   <div class="main-col">
-    <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>'>
+    <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>' data-preserve-nested='false' data-expand-nest-child='true'>
       <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
       <table id="productList" class="table has-sort-head table-fixed table-nested">
         <?php $vars = "browseType=$browseType&orderBy=%s";?>

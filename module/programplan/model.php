@@ -727,7 +727,7 @@ class programplanModel extends model
         {
             $class  = 'c-' . $id;
             $title  = '';
-            $idList = array('id','name','output','percent','attribute','milestone','version','openedBy','openedDate','begin','end','realBegan','realEnd');
+            $idList = array('id','name','output','percent','attribute','version','begin','end','realBegan','realEnd');
             if(in_array($id,$idList))
             {
                 $class .= ' text-left';
@@ -749,8 +749,9 @@ class programplanModel extends model
                 echo sprintf('%03d', $plan->id);
                 break;
             case 'name':
+                $milestoneFlag = $plan->milestone ? " <i class='icon icon-flag' title={$this->lang->programplan->milestone} style='color:red'></i>" : '';
                 if($plan->grade > 1) echo '<span class="label label-badge label-light" title="' . $this->lang->programplan->children . '">' . $this->lang->programplan->childrenAB . '</span> ';
-                echo $plan->name;
+                echo $plan->name . $milestoneFlag;
                 if(!empty($plan->children)) echo '<a class="plan-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
                 break;
             case 'percent':
@@ -758,9 +759,6 @@ class programplanModel extends model
                 break;
             case 'attribute':
                 echo zget($this->lang->stage->typeList, $plan->attribute, '');
-                break;
-            case 'milestone':
-                echo zget($this->lang->programplan->milestoneList, $plan->milestone, 0);
                 break;
             case 'begin':
                 echo $plan->begin;
@@ -779,12 +777,6 @@ class programplanModel extends model
                 break;
             case 'version':
                 echo $plan->version;
-                break;
-            case 'openedBy':
-                echo zget($users, $plan->openedBy);
-                break;
-            case 'openedDate':
-                echo substr($plan->openedDate, 5, 11);
                 break;
             case 'editedBy':
                 echo zget($users, $plan->editedBy);
