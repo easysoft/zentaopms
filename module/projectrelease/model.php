@@ -52,13 +52,12 @@ class projectreleaseModel extends model
      */
     public function getList($projectID, $productID, $branch = 0, $type = 'all')
     {
-        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project')
+        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project, t4.name as executionName')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t3.project = t4.id')
             ->where('t1.PRJ')->eq((int)$projectID)
-            ->andWhere('t1.product')->eq((int)$productID)
-            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC')
@@ -68,52 +67,45 @@ class projectreleaseModel extends model
     /**
      * Get last release.
      * 
-     * @param  int    $productID 
-     * @param  int    $branch 
+     * @param  int    $projectID
      * @access public
      * @return bool | object 
      */
-    public function getLast($productID, $branch = 0)
+    public function getLast($projectID)
     {
         return $this->dao->select('id, name')->from(TABLE_RELEASE)
-            ->where('product')->eq((int)$productID)
-            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+            ->where('PRJ')->eq((int)$projectID)
             ->orderBy('date DESC')
             ->limit(1)
             ->fetch();
     }
 
     /**
-     * Get release builds from product.
+     * Get release builds from project.
      * 
-     * @param  int    $productID 
-     * @param  int    $branch 
+     * @param  int    $projectID
      * @access public
-     * @return void
+     * @return array
      */
-    public function getReleaseBuilds($productID, $branch = 0)
+    public function getReleaseBuilds($projectID)
     {
         $releases = $this->dao->select('build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->eq($productID)
-            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+            ->andWhere('PRJ')->eq($projectID)
             ->fetchAll('build');
         return array_keys($releases);
     }
 
     /**
      * Create a release.
-     * 
-     * @param  int    $productID
-     * @param  int    $branch
      *
      * @access public
      * @return int
      */
-    public function create($productID, $branch = 0)
+    public function create()
     {
-        $productID = (int)$productID;
-        $branch    = (int)$branch;
+        $productID = $this->post->product;
+        $branch    = $this->post->branch;
         $buildID   = 0;
 
         /* Check build if build is required. */
@@ -121,6 +113,13 @@ class projectreleaseModel extends model
 
         /* Check date must be not more than today. */
         if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
+
+        if($this->post->build)
+        {
+            $build     = $this->loadModel('build')->getByID($this->post->build);
+            $productID = $build->product;
+            $branch    = $build->branch;
+        }
 
         $release = fixer::input('post')
             ->add('PRJ', $this->session->PRJ)
@@ -130,6 +129,8 @@ class projectreleaseModel extends model
             ->join('stories', ',')
             ->join('bugs', ',')
             ->setIF($this->post->build == false, 'build', $buildID)
+            ->setIF($productID, 'product', $productID)
+            ->setIF($branch, 'branch', $branch)
             ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
             ->remove('allchecker,files,labels,uid')
             ->get();
