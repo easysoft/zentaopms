@@ -345,9 +345,9 @@ $lang->project->menu->view      = array('link' => '概況|project|view|projectID
 $lang->project->menu->whitelist = array('link' => '白名單|project|whitelist|projectID=%s', 'alias' => 'addwhitelist', 'subModule' => 'personnel');
 
 $lang->project->subMenu = new stdclass();
-$lang->project->subMenu->list = new stdclass();
-$lang->project->subMenu->list->groupTask = '分組視圖|project|groupTask|projectID=%s';
-$lang->project->subMenu->list->tree      = '樹狀圖|project|tree|projectID=%s';
+$lang->project->subMenu->view = new stdclass();
+$lang->project->subMenu->view->groupTask = '分組視圖|project|groupTask|projectID=%s';
+$lang->project->subMenu->view->tree      = '樹狀圖|project|tree|projectID=%s';
 
 $lang->project->subMenu->qa = new stdclass();
 $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';

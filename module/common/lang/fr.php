@@ -352,9 +352,9 @@ $lang->project->menu->view      = array('link' => "Vue d'ensemble|project|view|p
 $lang->project->menu->whitelist = array('link' => 'Whitelist|project|whitelist|projectID=%s', 'alias' => 'addwhitelist', 'subModule' => 'personnel');
 
 $lang->project->subMenu = new stdclass();
-$lang->project->subMenu->list = new stdclass();
-$lang->project->subMenu->list->groupTask = 'Vision Groupée|project|groupTask|projectID=%s';
-$lang->project->subMenu->list->tree      = 'Arborescence|project|tree|projectID=%s';
+$lang->project->subMenu->view = new stdclass();
+$lang->project->subMenu->view->groupTask = 'Vision Groupée|project|groupTask|projectID=%s';
+$lang->project->subMenu->view->tree      = 'Arborescence|project|tree|projectID=%s';
 
 $lang->project->subMenu->qa = new stdclass();
 $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
@@ -366,7 +366,7 @@ $lang->project->subMenu->more->whitelist = array('link' => 'Whitelist|project|wh
 $lang->project->subMenu->more->action    = array('link' => 'Historique|project|dynamic|projectID=%s');
 $lang->project->subMenu->more->view      = array('link' => "Vue d'ensemble|project|view|projectID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 
-$lang->project->dividerMenu = ',project,programplan,projectbuild,story,team,product,other,';
+$lang->project->dividerMenu = ',project,programplan,projectbuild,story,doc,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
