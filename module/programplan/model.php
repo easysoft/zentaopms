@@ -727,7 +727,7 @@ class programplanModel extends model
         {
             $class  = 'c-' . $id;
             $title  = '';
-            $idList = array('id','name','output','percent','attribute','milestone','version','openedBy','openedDate','begin','end','realBegan','realEnd');
+            $idList = array('id','name','output','percent','attribute','milestone','version','begin','end','realBegan','realEnd');
             if(in_array($id,$idList))
             {
                 $class .= ' text-left';
@@ -779,12 +779,6 @@ class programplanModel extends model
                 break;
             case 'version':
                 echo $plan->version;
-                break;
-            case 'openedBy':
-                echo zget($users, $plan->openedBy);
-                break;
-            case 'openedDate':
-                echo substr($plan->openedDate, 5, 11);
                 break;
             case 'editedBy':
                 echo zget($users, $plan->editedBy);
