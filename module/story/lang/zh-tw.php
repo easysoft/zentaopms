@@ -293,7 +293,7 @@ $lang->story->report = new stdclass();
 $lang->story->report->common = '報表';
 $lang->story->report->select = '請選擇報表類型';
 $lang->story->report->create = '生成報表';
-$lang->story->report->value  = "{$lang->productSRCommon}數";
+$lang->story->report->value  = "需求數";
 
 $lang->story->report->charts['storysPerProduct']        = $lang->productCommon . "{$lang->productSRCommon}數量";
 $lang->story->report->charts['storysPerModule']         = "模組{$lang->productSRCommon}數量";
