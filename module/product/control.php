@@ -524,6 +524,8 @@ class product extends control
         $product = $this->product->getStatByID($productID);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        $moduleIndex = array_search('product', $this->lang->noMenuModule);
+        unset($this->lang->noMenuModule[$moduleIndex]);
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
@@ -545,10 +547,7 @@ class product extends control
         $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
-        $this->view->dynamics   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, $productID);
-        $this->view->roadmaps   = $this->product->getRoadmap($productID, 0, 6);
 
         $this->display();
     }
@@ -676,6 +675,45 @@ class product extends control
         $this->view->pager      = $pager;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
         $this->view->direction  = $direction;
+        $this->display();
+    }
+
+    /**
+     * Product dashboard.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function dashboard($productID)
+    {
+        $product = $this->product->getStatByID($productID);
+        if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+
+        $product->desc = $this->loadModel('file')->setImgSize($product->desc);
+        $this->product->setMenu($this->products, $productID);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 30, 1);
+
+        $this->executeHooks($productID);
+
+        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
+        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+        $this->view->position[] = $this->lang->product->view;
+
+        $this->view->product    = $product;
+        $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
+        $this->view->dynamics   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, $productID);
+        $this->view->roadmaps   = $this->product->getRoadmap($productID, 0, 6);
+
         $this->display();
     }
 

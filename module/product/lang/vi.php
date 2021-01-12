@@ -30,6 +30,7 @@ $lang->product->orderAction  = "Đánh giá {$lang->productCommon}";
 $lang->product->all          = "Tất cả {$lang->productCommon}";
 $lang->product->export       = 'Xuất';
 $lang->product->exportAction = "Xuất {$lang->productCommon}";
+$lang->product->dashboard    = "Dashboard";
 
 $lang->product->basicInfo = 'Thông tin cơ bản';
 $lang->product->otherInfo = 'Thông tin khác';

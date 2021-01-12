@@ -173,19 +173,20 @@ $lang->product->menu->home = '主页|product|index|';
 $lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
 $lang->product->viewMenu = new stdclass();
-$lang->product->viewMenu->view        = array('link' => '仪表盘|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->viewMenu->requirement = array('link' => "$lang->productURCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->story       = array('link' => "$lang->productSRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->track       = array('link' => "跟踪矩阵|story|track|productID=%s");
 $lang->product->viewMenu->plan        = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->viewMenu->release     = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s';
-$lang->product->viewMenu->dynamic     = '动态|product|dynamic|productID=%s';
 $lang->product->viewMenu->project     = "项目|product|project|status=all&productID=%s";
 $lang->product->viewMenu->doc         = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->viewMenu->set         = array('link' => '设置|tree|browse|productID=%s&view=story', 'subModule' => 'branch');
+$lang->product->viewMenu->dynamic     = '动态|product|dynamic|productID=%s';
+$lang->product->viewMenu->dashboard   = array('link' => '仪表盘|product|dashboard|productID=%s');
+$lang->product->viewMenu->set         = array('link' => '设置|product|view|productID=%s', 'subModule' => 'tree,branch');
 
 $lang->product->setMenu = new stdclass();
+$lang->product->setMenu->view      = array('link' => '概况|product|view|productID={PRODUCT}', 'alias' => 'edit');
 $lang->product->setMenu->module    = array('link' => '模块|tree|browse|product={PRODUCT}&view=story', 'subModule' => 'tree');
 $lang->product->setMenu->branch    = array('link' => '@branch@|branch|manage|product={PRODUCT}', 'subModule' => 'branch');
 $lang->product->setMenu->whitelist = array('link' => '白名单|product|whitelist|product={PRODUCT}', 'subModule' => 'personnel');
@@ -325,7 +326,7 @@ $lang->scrumproduct->menu->view    = array('link' => '概况|product|view|produc
 $lang->scrumproduct->menu->requirement = array('link' => "{$lang->projectURCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->scrumproduct->menu->story       = array('link' => "{$lang->projectSRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 
-$lang->product->dividerMenu = ',requirement,plan,project,';
+$lang->product->dividerMenu = ',plan,project,';
 
 $lang->story = new stdclass();
 
