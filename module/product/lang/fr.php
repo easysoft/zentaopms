@@ -30,6 +30,7 @@ $lang->product->orderAction  = "Rang {$lang->productCommon}";
 $lang->product->all          = "Tous les {$lang->productCommon}s";
 $lang->product->export       = 'Export';
 $lang->product->exportAction = "Export {$lang->productCommon}";
+$lang->product->dashboard    = "Dashboard";
 
 $lang->product->basicInfo = 'Infos de Base';
 $lang->product->otherInfo = 'Autres Infos';

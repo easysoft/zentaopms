@@ -30,6 +30,7 @@ $lang->product->orderAction  = "Rank {$lang->productCommon}";
 $lang->product->all          = "Alle {$lang->productCommon}";
 $lang->product->export       = 'Exportiere Daten';
 $lang->product->exportAction = "Export {$lang->productCommon}";
+$lang->product->dashboard    = 'Dashboard';
 
 $lang->product->basicInfo = 'Basis Info';
 $lang->product->otherInfo = 'Andere Info';

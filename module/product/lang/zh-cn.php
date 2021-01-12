@@ -30,6 +30,7 @@ $lang->product->orderAction  = "{$lang->productCommon}排序";
 $lang->product->all          = "所有{$lang->productCommon}";
 $lang->product->export       = '导出数据';
 $lang->product->exportAction = "导出{$lang->productCommon}";
+$lang->product->dashboard    = "{$lang->productCommon}仪表盘";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';

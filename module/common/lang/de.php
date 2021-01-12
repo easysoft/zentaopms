@@ -173,19 +173,20 @@ $lang->product->menu->home = 'Home|product|index|';
 $lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
 $lang->product->viewMenu = new stdclass();
-$lang->product->viewMenu->view        = array('link' => 'Index|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->viewMenu->requirement = array('link' => "$lang->productURCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->story       = array('link' => "$lang->productSRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->track       = array('link' => "Track|story|track|productID=%s");
 $lang->product->viewMenu->plan        = array('link' => "Plan|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s",     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
-$lang->product->viewMenu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->viewMenu->project     = "Project|product|project|status=all&productID=%s";
 $lang->product->viewMenu->doc         = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->viewMenu->set         = array('link' => 'Setting|tree|browse|productID=%s&view=story', 'subModule' => 'branch');
+$lang->product->viewMenu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
+$lang->product->viewMenu->dashboard   = array('link' => 'Dashboard|product|dashboard|productID=%s');
+$lang->product->viewMenu->set         = array('link' => 'Setting|product|view|productID=%s', 'subModule' => 'tree,branch');
 
 $lang->product->setMenu = new stdclass();
+$lang->product->setMenu->view      = array('link' => 'View|product|view|productID={PRODUCT}', 'alias' => 'edit');
 $lang->product->setMenu->module    = array('link' => 'Module|tree|browse|product={PRODUCT}&view=story', 'subModule' => 'tree');
 $lang->product->setMenu->branch    = array('link' => '@branch@|branch|manage|product={PRODUCT}', 'subModule' => 'branch');
 $lang->product->setMenu->whitelist = array('link' => 'Whitelist|product|whitelist|product={PRODUCT}', 'subModule' => 'personnel');
@@ -321,7 +322,7 @@ $lang->scrumproduct->menu->view     = array('link' => 'Übersicht|product|view|p
 $lang->scrumproduct->menu->requirement = array('link' => "Requirement|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->scrumproduct->menu->story       = array('link' => "Story|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 
-$lang->product->dividerMenu = ',project,doc,';
+$lang->product->dividerMenu = ',plan,project,';
 
 $lang->story = new stdclass();
 

@@ -1,10 +1,5 @@
 <?php include '../../common/view/header.html.php';?>
 <style> table td{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;} </style>
-<div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-right">
-    <?php common::printLink('issue', 'create', 'from=stakeholder', "<i class='icon icon-plus'></i>" . $lang->issue->create, '', "class='btn btn-primary'");?>
-  </div>
-</div>
 <div id='mainContent' class='main-row fade'>
   <div class='main-col'>
     <?php if(!empty($issues)):?>

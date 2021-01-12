@@ -94,7 +94,10 @@
           $trAttrs .= " class='$trClass'";
           ?>
           <tr class="text-center" <?php echo $trAttrs;?>>
-            <td class="c-name text-left" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
+            <td class="c-name text-left" title='<?php echo $product->name?>'>
+              <span class='table-nest-icon icon icon-product'></span>
+              <?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?>
+            </td>
             <td><?php echo $product->requirements['active'];?></td>
             <td><?php echo $product->requirements['closed'];?></td>
             <td><?php echo $product->requirements['draft'];?></td>
