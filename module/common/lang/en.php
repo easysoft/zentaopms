@@ -201,23 +201,19 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => 'Global Settings|subject|browse|', 'subModule' => 'holiday');
+$lang->system->menu->company   = array('link' => 'Global Settings|subject|browse|', 'subModule' => 'holiday,custom');
 $lang->system->menu->scrum     = array('link' => 'Scrum Model|custom|configurescrum|');
-$lang->system->menu->waterfall = array('link' => 'Waterfall Model|custom|estimate|', 'subModule' => 'stage');
+$lang->system->menu->waterfall = array('link' => 'Waterfall Model|stage|settype|');
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
-$lang->subject->menu->subject = array('link' => 'Subject|subject|browse|');
-$lang->subject->menu->holiday = array('link' => 'Holiday|holiday|browse|');
-$lang->subject->menu->concept = array('link' => 'Story Concept|custom|browsestoryconcept|');
+$lang->subject->menu->subject  = array('link' => 'Subject|subject|browse|');
+$lang->subject->menu->holiday  = array('link' => 'Holiday|holiday|browse|');
+$lang->subject->menu->concept  = array('link' => 'Story Concept|custom|browsestoryconcept|');
+$lang->subject->menu->estimate = array('link' => 'Estimate|custom|estimate');
 
 $lang->holiday = new stdclass();
 $lang->holiday->menu = $lang->subject->menu;
-
-$lang->stage = new stdclass();
-$lang->stage->menu = new stdclass();
-$lang->stage->menu->estimate = array('link' => 'Estimate|custom|estimate');
-$lang->stage->menu->stage    = array('link' => 'Stage|stage|settype', 'subModule' => 'stage');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -991,6 +987,6 @@ $lang->projectstory->menu->story       = array('link' => "{$lang->projectSRCommo
 $lang->projectstory->menu->track       = array('link' => 'Track|projectstory|track', 'subModule' => '');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'job', 'jenkins', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'job', 'jenkins', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');
