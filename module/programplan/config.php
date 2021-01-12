@@ -19,17 +19,17 @@ $config->programplan->datatable->fieldList['name']['required'] = 'yes';
 
 $config->programplan->datatable->fieldList['percent']['title']    = 'percent';
 $config->programplan->datatable->fieldList['percent']['fixed']    = 'no';
-$config->programplan->datatable->fieldList['percent']['width']    = '90';
+$config->programplan->datatable->fieldList['percent']['width']    = '100';
 $config->programplan->datatable->fieldList['percent']['required'] = 'no';
 
 $config->programplan->datatable->fieldList['attribute']['title']    = 'attribute';
 $config->programplan->datatable->fieldList['attribute']['fixed']    = 'no';
-$config->programplan->datatable->fieldList['attribute']['width']    = '80';
+$config->programplan->datatable->fieldList['attribute']['width']    = '90';
 $config->programplan->datatable->fieldList['attribute']['required'] = 'no';
 
 $config->programplan->datatable->fieldList['milestone']['title']    = 'milestone';
 $config->programplan->datatable->fieldList['milestone']['fixed']    = 'no';
-$config->programplan->datatable->fieldList['milestone']['width']    = '100';
+$config->programplan->datatable->fieldList['milestone']['width']    = '80';
 $config->programplan->datatable->fieldList['milestone']['required'] = 'no';
 
 $config->programplan->datatable->fieldList['openedBy']['title']    = 'openedBy';
