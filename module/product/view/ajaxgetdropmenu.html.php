@@ -21,23 +21,24 @@ $closedProductsHtml = '';
 
 foreach($products as $product)
 {
+    $productName = $product->program ? zget($programs, $product->program, '') . '/' . $product->name : $product->name;
     if($product->status == 'normal' and $product->PO == $this->app->user->account)
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
-        $myProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+        $myProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $productName, '', "class='text-important' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
     }
     else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
-        $normalProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+        $normalProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $productName, '', "title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
     }
     else if($product->status == 'closed')
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $objectID);
-        $closedProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+        $closedProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $productName, '', "title='{$productName}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
     }
 }
 ?>
