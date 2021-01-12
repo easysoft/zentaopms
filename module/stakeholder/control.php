@@ -321,6 +321,8 @@ class stakeholder extends control
     {
         $this->loadModel('issue');
 
+        if(common::hasPriv('issue', 'create')) $this->lang->TRActions = html::a($this->createLink('issue', 'create', 'from=stakeholder'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->issue->create, '', "class='btn btn-primary'");
+
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->issue;
         $this->view->position[] = $this->lang->stakeholder->issue;
 
