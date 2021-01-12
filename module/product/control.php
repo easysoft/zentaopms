@@ -831,7 +831,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($browseType = 'noclosed', $orderBy = 'order_desc')
+    public function all($browseType = 'noclosed', $orderBy = 'order_asc')
     {
         $this->lang->product->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
 

@@ -63,7 +63,7 @@
         <?php foreach($programs as $programID => $program):?>
         <?php
         $trAttrs  = "data-id='program.$programID' data-parent='0' data-nested='true'";
-        $trClass  = 'is-top-level table-nest-child-hide';
+        $trClass  = 'is-top-level table-nest-child';
         $trAttrs .= " class='$trClass'";
         ?>
           <?php if($program->name):?>
@@ -83,7 +83,7 @@
           if($product->programName)
           {
               $trAttrs  = "data-id='$product->id' data-parent='program.$product->program'";
-              $trClass .= ' is-nest-child  table-nest-hide';
+              $trClass .= ' is-nest-child  table-nest';
               $trAttrs .= " data-nest-parent='program.$product->program' data-nest-path='program.$product->program,$product->id'";
           }
           else
