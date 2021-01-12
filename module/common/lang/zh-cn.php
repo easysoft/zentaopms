@@ -358,7 +358,7 @@ $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->dividerMenu = ',project,doc,programplan,projectbuild,story,team,product,other,';
+$lang->project->dividerMenu = ',project,programplan,projectbuild,story,team,product,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();

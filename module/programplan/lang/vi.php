@@ -21,6 +21,7 @@ $lang->programplan->createSubPlan = 'Create Sub Plan';
 $lang->programplan->parent           = 'Parent Stage';
 $lang->programplan->emptyParent      = 'N/A';
 $lang->programplan->name             = 'Stage Name';
+$lang->programplan->subStageName     = 'Sub Stage Name';
 $lang->programplan->percent          = 'Workload Ratio';
 $lang->programplan->percentAB        = 'Workload Ratio';
 $lang->programplan->planPercent      = 'Workload';

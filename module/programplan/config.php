@@ -5,7 +5,7 @@ $config->programplan->create->requiredFields = 'name,begin,end';
 $config->programplan->edit->requiredFields   = 'name,begin,end';
 
 $config->programplan->datatable = new stdclass();
-$config->programplan->datatable->defaultField = array('id', 'name', 'percent', 'attribute', 'milestone', 'begin', 'end', 'realBegan', 'realEnd', 'openedBy', 'openedDate', 'actions');
+$config->programplan->datatable->defaultField = array('id', 'name', 'percent', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'actions');
 
 $config->programplan->datatable->fieldList['id']['title']    = 'idAB';
 $config->programplan->datatable->fieldList['id']['fixed']    = 'left';
@@ -26,21 +26,6 @@ $config->programplan->datatable->fieldList['attribute']['title']    = 'attribute
 $config->programplan->datatable->fieldList['attribute']['fixed']    = 'no';
 $config->programplan->datatable->fieldList['attribute']['width']    = '90';
 $config->programplan->datatable->fieldList['attribute']['required'] = 'no';
-
-$config->programplan->datatable->fieldList['milestone']['title']    = 'milestone';
-$config->programplan->datatable->fieldList['milestone']['fixed']    = 'no';
-$config->programplan->datatable->fieldList['milestone']['width']    = '80';
-$config->programplan->datatable->fieldList['milestone']['required'] = 'no';
-
-$config->programplan->datatable->fieldList['openedBy']['title']    = 'openedBy';
-$config->programplan->datatable->fieldList['openedBy']['fixed']    = 'no';
-$config->programplan->datatable->fieldList['openedBy']['width']    = '90';
-$config->programplan->datatable->fieldList['openedBy']['required'] = 'no';
-
-$config->programplan->datatable->fieldList['openedDate']['title']    = 'openedDate';
-$config->programplan->datatable->fieldList['openedDate']['fixed']    = 'no';
-$config->programplan->datatable->fieldList['openedDate']['width']    = '90';
-$config->programplan->datatable->fieldList['openedDate']['required'] = 'no';
 
 $config->programplan->datatable->fieldList['begin']['title']    = 'begin';
 $config->programplan->datatable->fieldList['begin']['fixed']    = 'no';
