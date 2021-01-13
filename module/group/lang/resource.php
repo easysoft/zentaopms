@@ -99,6 +99,7 @@ $lang->resource->my->deleteContacts  = 'deleteContacts';
 $lang->resource->my->score           = 'score';
 $lang->resource->my->unbind          = 'unbind';
 $lang->resource->my->setStoryConcept = 'setStoryConcept';
+$lang->resource->my->team            = 'team';
 
 $lang->my->methodOrder[0]  = 'index';
 $lang->my->methodOrder[5]  = 'todo';
@@ -114,6 +115,7 @@ $lang->my->methodOrder[50] = 'deleteContacts';
 $lang->my->methodOrder[55] = 'score';
 $lang->my->methodOrder[60] = 'unbind';
 $lang->my->methodOrder[65] = 'setStoryConcept';
+$lang->my->methodOrder[70] = 'team';
 
 /* Todo. */
 $lang->resource->todo = new stdclass();
