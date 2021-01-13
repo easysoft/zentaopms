@@ -42,7 +42,7 @@
         <td><?php echo $score->before; ?></td>
         <td><?php echo $score->score; ?></td>
         <td><?php echo $score->after; ?></td>
-        <td><?php echo $score->desc; ?></td>
+        <td class="text-ellipsis" title="<?php echo $score->desc;?>"><?php echo $score->desc;?></td>
       </tr>
       <?php endforeach;?>
     </tbody>
