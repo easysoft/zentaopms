@@ -403,6 +403,7 @@ $lang->bug->menu->caselib   = array('link' => 'Library Recette|caselib|browse');
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 $lang->testcase->subMenu = $lang->qa->subMenu;
+$lang->testcase->menu->index     = array('link' => 'Index|qa|index');
 $lang->testcase->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase  = array('link' => 'CasTest|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree', 'class' => 'dropdown dropdown-hover');
 $lang->testcase->menu->testtask  = array('link' => 'Recette|testtask|browse|productID=%s');
@@ -413,6 +414,7 @@ $lang->testcase->menu->caselib   = array('link' => 'Library Recette|caselib|brow
 $lang->testtask = new stdclass();
 $lang->testtask->menu = new stdclass();
 $lang->testtask->subMenu = $lang->qa->subMenu;
+$lang->testtask->menu->index     = array('link' => 'Index|qa|index');
 $lang->testtask->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testtask->menu->testcase  = array('link' => 'CasTest|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->testtask->menu->testtask  = array('link' => 'Recette|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
@@ -423,6 +425,7 @@ $lang->testtask->menu->caselib   = array('link' => 'Library Recette|caselib|brow
 $lang->testsuite = new stdclass();
 $lang->testsuite->menu = new stdclass();
 $lang->testsuite->subMenu = $lang->qa->subMenu;
+$lang->testsuite->menu->index     = array('link' => 'Index|qa|index');
 $lang->testsuite->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testsuite->menu->testcase  = array('link' => 'CasTest|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->testsuite->menu->testtask  = array('link' => 'Recette|testtask|browse|productID=%s');
@@ -433,6 +436,7 @@ $lang->testsuite->menu->caselib   = array('link' => 'Library Recette|caselib|bro
 $lang->testreport = new stdclass();
 $lang->testreport->menu = new stdclass();
 $lang->testreport->subMenu = $lang->qa->subMenu;
+$lang->testreport->menu->index     = array('link' => 'Index|qa|index');
 $lang->testreport->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testreport->menu->testcase  = array('link' => 'CasTest|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->testreport->menu->testtask  = array('link' => 'Recette|testtask|browse|productID=%s');
@@ -442,6 +446,7 @@ $lang->testreport->menu->caselib   = array('link' => 'Library Recette|caselib|br
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
+$lang->caselib->menu->index     = array('link' => 'Index|qa|index');
 $lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|');
 $lang->caselib->menu->testcase  = array('link' => 'CasTest|testcase|browse|', 'class' => 'dropdown dropdown-hover');
 $lang->caselib->menu->testtask  = array('link' => 'Recette|testtask|browse|');
@@ -822,7 +827,7 @@ $lang->icons['task']      = 'check-sign';
 $lang->icons['tasks']     = 'tasks';
 $lang->icons['program']   = 'folder-open-o';
 $lang->icons['project']   = 'project';
-$lang->icons['stage']     = 'stage';
+$lang->icons['stage']     = 'waterfall';
 $lang->icons['sprint']    = 'sprint';
 $lang->icons['doc']       = 'file-text';
 $lang->icons['doclib']    = 'folder-close';

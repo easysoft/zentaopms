@@ -33,7 +33,16 @@
           </tr>
           <tr>
             <th><?php echo $lang->release->build;?></th>
-            <td><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></td><td></td>
+            <td><?php echo html::select('build', $builds, '', "onchange='showProducts(this.value)' class='form-control chosen'");?></td><td></td>
+          </tr>
+          <tr id='productBox'>
+            <th><?php echo $lang->release->product;?></th>
+            <td>
+              <div class='input-group'>
+              <?php echo html::select('product', $products, '', "onchange='loadBranches(this.value)' class='form-control chosen'");?>
+              <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "class='form-control chosen control-branch'");?>
+              </div>
+            </td><td></td>
           </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>

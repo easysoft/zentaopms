@@ -256,7 +256,13 @@ class block extends control
             if(isset($this->lang->block->modules[$source]->moreLinkList->{$blockID}))
             {
                 list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$source]->moreLinkList->{$blockID}, isset($block->params->type) ? $block->params->type : ''));
+
+                /* The list assigned to me jumps to the work page when click more button. */
                 $block->moreLink = $this->createLink($moduleName, $method, $vars);
+                if($moduleName = 'my' and strpos('task|story|requirement|bug|testcase|testtask|issue|risk', $method))
+                {
+                    $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
+                }
             }
             elseif($block->block == 'dynamic')
             {

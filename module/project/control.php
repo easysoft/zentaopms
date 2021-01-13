@@ -2428,11 +2428,16 @@ class project extends control
         $executions = $this->project->getRecentExecutions();
         if(!empty($executions))
         {
+            $executionsName = array();
+            foreach($executions as $execution) $executionsName[] = $execution->name;
+            $executionsPinYin = common::convert2Pinyin($executionsName);
+
             foreach($executions as $execution)
             {
                 $link = helper::createLink('project', 'task', 'projectID=' . $execution->id, '', false, $execution->project);
                 $execution->code = empty($execution->code) ? $execution->name : $execution->code;
-                echo html::a($link, '<i class="icon icon-menu-doc"></i>' . $execution->code, '', "class='text-ellipsis' title='$execution->name'");
+                $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
+                echo html::a($link, '<i class="icon icon-' . $this->lang->icons[$execution->type] . '"></i> ' . $execution->code, '', "class='search-list-item' title='$execution->name' $dataKey");
             }
         }
     }

@@ -98,7 +98,6 @@ class buildModel extends model
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.PRJ')->eq((int)$projectID)
-            ->andWhere('t1.project')->ne(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
             ->andWhere('t1.deleted')->eq(0)

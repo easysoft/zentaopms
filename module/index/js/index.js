@@ -449,9 +449,20 @@
         });
 
         /* Hide execution list on mouseleave or click */
-        $('#executionList').on('mouseleave click', function()
+        $(document).click(function()
         {
-            $('#moreExecution').hide();
+            $("#moreExecution").hide();
+        });
+
+        $("#recentMenu").click(function(event)
+        {
+            event.stopPropagation();
+            getExecutions();
+        });
+
+        $("#moreExecution").click(function(event)
+        {
+            event.stopPropagation();
         });
     });
 }());
@@ -462,6 +473,15 @@ function getExecutions()
     var $moreExecution = $('#moreExecution').toggle();
     if(!$moreExecution.is(':hidden'))
     {
+        if($('body').hasClass('menu-hide'))
+        {
+            $('#moreExecution').addClass('more-execution-hide');
+        }
+        else
+        {
+            $('#moreExecution').removeClass('more-execution-hide');
+        }
+
         $.ajax(
         {
             url: createLink('project', 'ajaxGetRecentExecutions'),
