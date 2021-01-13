@@ -283,6 +283,7 @@ $lang->my->menu->contribute  = array('link' => '贡献|my|contribute|mode=task')
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
 $lang->my->menu->score       = array('link' => '积分|my|score|', 'subModule' => 'score');
 $lang->my->menu->contacts    = '联系人|my|managecontacts|';
+$lang->my->menu->team        = array('link' => '团队|my|team|', 'subModule' => 'user');
 
 $lang->my->workMenu = new stdclass();
 $lang->my->workMenu->task     = '任务|my|work|mode=task';

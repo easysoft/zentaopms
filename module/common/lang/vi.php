@@ -283,6 +283,7 @@ $lang->my->menu->contribute  = array('link' => 'Contribute|my|contribute|mode=ta
 $lang->my->menu->dynamic     = 'Dynamic|my|dynamic|';
 $lang->my->menu->score       = 'Score|my|score|';
 $lang->my->menu->contacts    = 'Contacts|my|managecontacts|';
+$lang->my->menu->team        = array('link' => 'Team|my|team|', 'subModule' => 'user');
 
 $lang->my->workMenu = new stdclass();
 $lang->my->workMenu->task     = 'Task|my|work|mode=task';

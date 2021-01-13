@@ -49,6 +49,7 @@ $lang->my->menuOrder[35] = 'score';
 $lang->my->menuOrder[40] = 'dynamic';
 $lang->my->menuOrder[45] = 'follow';
 $lang->my->menuOrder[50] = 'contacts';
+$lang->my->menuOrder[55] = 'team';
 $lang->todo->menuOrder = $lang->my->menuOrder;
 
 /* product menu order. */
