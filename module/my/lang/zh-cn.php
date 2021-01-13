@@ -22,12 +22,13 @@ $lang->my->dynamic         = '我的动态';
 $lang->my->team            = '团队';
 $lang->my->editProfile     = '修改档案';
 $lang->my->changePassword  = '修改密码';
+$lang->my->preference      = '个性化设置';
 $lang->my->unbind          = '解除ZDOO绑定';
 $lang->my->manageContacts  = '维护联系人';
 $lang->my->deleteContacts  = '删除联系人';
 $lang->my->shareContacts   = '共享联系人列表';
 $lang->my->setStoryConcept = '设置需求概念';
-$lang->my->storyConcept    = '需求概念';
+$lang->my->storyConcept    = '默认需求概念组合';
 $lang->my->limited         = '受限操作(只能编辑与自己相关的内容)';
 $lang->my->score           = '我的积分';
 $lang->my->scoreRule       = '积分规则';
@@ -80,3 +81,25 @@ $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = '基本信息';
 $lang->my->form->lblContact = '联系信息';
 $lang->my->form->lblAccount = '帐号信息';
+
+$lang->my->programLink = '项目集默认着陆页';
+$lang->my->productLink = '产品默认着陆页'; 
+$lang->my->projectLink = '项目默认着陆页';
+
+$lang->my->programLinkList = array();
+$lang->my->programLinkList['PGMHome']    = '默认进入项目集主页，可以了解公司整体的战略规划状况';
+$lang->my->programLinkList['PGMList']    = '默认进入项目集列表，可以查看所有的项目集';
+$lang->my->programLinkList['PGMIndex']   = '默认进入最近一个项目集仪表盘，可以查看当前项目集概况';
+$lang->my->programLinkList['PGMProject'] = '默认进入最近一个项目集的项目列表，可以查看当前项目集下所有项目';
+
+$lang->my->productLinkList = array();
+$lang->my->productLinkList['productHome']  = '默认进入产品主页，可以了解公司整体的产品状况';
+$lang->my->productLinkList['productList']  = '默认进入产品列表，可以查看所有的产品';
+$lang->my->productLinkList['productIndex'] = '默认进入最近一个产品仪表盘，可以查看当前产品概况';
+$lang->my->productLinkList['productStory'] = '默认进入最近一个产品的需求列表，可以查看当前产品下的需求信息';
+
+$lang->my->projectLinkList = array();
+$lang->my->projectLinkList['PRJHome']  = '默认进入项目主页，可以了解公司整体的项目状况';
+$lang->my->projectLinkList['PRJList']  = '默认进入项目列表，可以查看所有的项目';
+$lang->my->projectLinkList['PRJIndex'] = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
+$lang->my->projectLinkList['PRJTask']  = '默认进入最近一个项目迭代的任务列表，可以查看当前迭代下的任务信息';

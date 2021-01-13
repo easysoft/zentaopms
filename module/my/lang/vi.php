@@ -22,6 +22,7 @@ $lang->my->dynamic         = 'Lịch sử của bạn';
 $lang->my->team            = 'My Team';
 $lang->my->editProfile     = 'Sửa';
 $lang->my->changePassword  = 'Sửa mật khẩu';
+$lang->my->preference      = 'Preference';
 $lang->my->unbind          = 'Gỡ kết nối từ Zdoo';
 $lang->my->manageContacts  = 'Quản lý Liên hệ';
 $lang->my->deleteContacts  = 'Xóa Liên hệ';

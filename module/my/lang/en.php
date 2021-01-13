@@ -22,6 +22,7 @@ $lang->my->dynamic         = 'My Dynamics';
 $lang->my->team            = 'My Team';
 $lang->my->editProfile     = 'Edit';
 $lang->my->changePassword  = 'Edit Password';
+$lang->my->preference      = 'Preference';
 $lang->my->unbind          = 'Unbind from Zdoo';
 $lang->my->manageContacts  = 'Manage Contact';
 $lang->my->deleteContacts  = 'Delete Contact';
