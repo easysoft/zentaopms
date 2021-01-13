@@ -119,10 +119,10 @@
             if($canBeChanged)
             {
                 $params = "bugID=$bug->id";
-                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true, '', '', $bug->PRJ);
+                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true, '', '', $bug->PRJ);
                 common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true, '', '', $bug->PRJ);
-                common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true, '', '', $bug->PRJ);
-                common::printIcon('bug', 'edit',       $params, $bug, 'list', '', '', '', '', '', '', $bug->PRJ);
+                common::printIcon('bug', 'close',      $params, $bug, 'list', '',        '', 'iframe', true, '', '', $bug->PRJ);
+                common::printIcon('bug', 'edit',       $params, $bug, 'list', '',        '', '',       '',   '', '', $bug->PRJ);
                 common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', '', '', '', '', $bug->PRJ);
             }
             ?>
