@@ -1,4 +1,9 @@
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('workingHours', $lang->custom->conceptOptions->hourPoint[0]);?>
+<?php js::set('storyPoint', $lang->custom->conceptOptions->hourPoint[1]);?>
+<?php js::set('functionPoint', $lang->custom->conceptOptions->hourPoint[2]);?>
+<?php js::set('efficiency', $lang->custom->unitList['efficiency']);?>
+<?php js::set('unit', $unit);?>
 <?php
 $lang->custom->object   = array();
 $lang->custom->system   = array();
@@ -21,7 +26,7 @@ $lang->custom->system[] = 'estimate';
           <td class='w-350px'><?php echo html::radio('hourPoint', $lang->custom->conceptOptions->hourPoint, $unit);?></td>
           <td></td>
         </tr>
-        <tr class='hidden' id='storyScale'>
+        <tr class='hidden' id='convertRelations'>
           <th class='w-150px'><?php echo $lang->custom->one . $lang->custom->conceptOptions->hourPoint[$unit];?></th>
           <td>
             <div class='input-group w-300px'>
@@ -37,14 +42,8 @@ $lang->custom->system[] = 'estimate';
           <td>
             <div class='input-group w-300px'>
               <?php
-              if($unit == 0)
-              {
-                  echo html::input('efficiency', $efficiency, "class='form-control' disabled");
-              }
-              else
-              {
-                  echo html::input('efficiency', $efficiency, "class='form-control'");
-              }
+              if($unit == 0) echo html::input('efficiency', $efficiency, "class='form-control' disabled");
+              if($unit != 0) echo html::input('efficiency', $efficiency, "class='form-control'");
               ?>
               <span class='input-group-addon unify-padding'>
               <?php
@@ -100,48 +99,4 @@ $lang->custom->system[] = 'estimate';
     </form>
   </div>
 </div>
-<?php js::set('workingHours', $lang->custom->conceptOptions->hourPoint[0]);?>
-<?php js::set('storyPoint', $lang->custom->conceptOptions->hourPoint[1]);?>
-<?php js::set('functionPoint', $lang->custom->conceptOptions->hourPoint[2]);?>
-<?php js::set('efficiency', $lang->custom->unitList['efficiency']);?>
-<?php js::set('unit', $unit);?>
-<script>
-$('#estimateTab').addClass('btn-active-text');
-$('input[name="hourPoint"]').change(function()
-{
-    if($(this).val() == unit)
-    {
-        $('#storyScale').addClass('hidden');
-    }
-    else
-    {
-        $('#storyScale').removeClass('hidden');
-    }
-
-    if($(this).val() == 0)
-    {
-        $('#scaleFactor + span').text(workingHours);
-        $('#efficiency + span').text(workingHours);
-        $('#efficiency').val("1");
-        $('#efficiency').attr('disabled', 'diabled');
-    }
-
-    if($(this).val() == 1 || $(this).val() == 2)
-    {
-        $('#efficiency').val('');
-        $('#efficiency').removeAttr('disabled');
-        if($(this).val() == 1)
-        {
-            $('#scaleFactor + span').text(storyPoint);
-            $('#efficiency + span').text(efficiency + storyPoint);
-        }
-
-        if($(this).val() == 2)
-        {
-            $('#scaleFactor + span').text(functionPoint);
-            $('#efficiency + span').text(efficiency + functionPoint);
-        }
-    }
-})
-</script>
 <?php include '../../common/view/footer.html.php';?>

@@ -28,6 +28,7 @@ $lang->custom->estimateEfficiency = 'Productivity';
 $lang->custom->estimateCost       = 'Unit Labour Cost';
 $lang->custom->estimateHours      = 'Daily Working Hours';
 $lang->custom->estimateDays       = 'Working Days Per Week';
+$lang->custom->convertRelations   = 'Convert Relations';
 $lang->custom->region             = 'Interval';
 $lang->custom->tips               = 'Tips';
 $lang->custom->setTips            = 'Set Tips';
@@ -48,6 +49,7 @@ $lang->custom->deleteStoryConcept = "Delete story Concept";
 $lang->custom->configureScrum     = "Scrum Model Custom";
 $lang->custom->URConcept          = "UR Concept";
 $lang->custom->SRConcept          = "SR Concept";
+$lang->custom->one                = "One";
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
