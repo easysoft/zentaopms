@@ -39,7 +39,7 @@
           <?php if(isset($this->config->qcVersion)):?>
           <th class='w-110px'><?php echo $lang->programplan->output;?></th>
           <?php endif;?>
-          <th class="w-90px"> <?php echo $lang->actions;?></th>
+          <th class="w-70px text-center"> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -64,7 +64,7 @@
             <?php if(isset($this->config->qcVersion)):?>
             <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen' multiple");?></td>
             <?php endif;?>
-            <td class='c-actions text-center'>
+            <td class='c-actions text-left'>
               <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
               <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
             </td>
@@ -96,7 +96,7 @@
             <?php $option = empty($plan->output) ? 0 : explode(',', $plan->output);?>
             <td><?php echo html::select("output[$i][]", $documentList, $option, "class='form-control chosen' multiple");?></td>
             <?php endif;?>
-            <td class='c-actions text-center'>
+            <td class='c-actions text-left'>
               <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             </td>
           </tr>
@@ -123,7 +123,7 @@
           <?php if(isset($this->config->qcVersion)):?>
           <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen' multiple");?></td>
           <?php endif;?>
-          <td class='c-actions text-center'>
+          <td class='c-actions text-left'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
           </td>
