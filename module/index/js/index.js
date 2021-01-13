@@ -67,13 +67,10 @@
         var methodLowerCase = methodName.toLowerCase();
         if(moduleName === 'doc')
         {
-            if(link.prj)
-            {
-                if(methodLowerCase === 'objectlibs' && (link.params.from || link.params.$3) == 'product') return 'product';
+            if(link.prj) return 'project';
 
-                return 'project';
-            }
-
+            if(methodLowerCase === 'objectlibs' && link.params.$3 == 'product') return 'product';
+            if(methodLowerCase === 'showfiles' && link.params.$1 == 'product') return 'product';
             if(methodLowerCase === 'browse' && (link.params.from || link.params.$5) == 'product') return 'product';
             return 'doc';
         }

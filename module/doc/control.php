@@ -773,8 +773,7 @@ class doc extends control
         /* According the from, set menus. */
         if($this->from == 'product')
         {
-            $this->lang->navGroup->doc  = 'project';
-            $this->lang->doc->menu      = $this->lang->product->menu;
+            $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
             $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($objectID);
