@@ -63,9 +63,11 @@ $lang->product->unResolvedBugsTitle   = '未解决Bug';
 $lang->product->assignToNullBugs      = '未指派Bug';
 $lang->product->assignToNullBugsTitle = '未指派Bug';
 
-$lang->product->confirmDelete  = " 您确定删除该{$lang->productCommon}吗？";
-$lang->product->errorNoProduct = "还没有创建{$lang->productCommon}！";
-$lang->product->accessDenied   = "您无权访问该{$lang->productCommon}";
+$lang->product->confirmDelete    = " 您确定删除该{$lang->productCommon}吗？";
+$lang->product->errorNoProduct   = "还没有创建{$lang->productCommon}！";
+$lang->product->accessDenied     = "您无权访问该{$lang->productCommon}";
+$lang->product->PGMChangeTip     = "该{$lang->productCommon}关联的项目：%s将一同转移到项目集下。";
+$lang->product->confirmChangePGM = "该{$lang->productCommon}关联的项目：%s还关联了其他产品，是否将这些项目一同转移到项目集下。";
 
 $lang->product->id             = '编号';
 $lang->product->program        = "所属项目集";

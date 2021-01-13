@@ -569,7 +569,7 @@ class productModel extends model
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid')
+            ->remove('uid,comfirmChange')
             ->get();
 
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
@@ -1573,5 +1573,29 @@ class productModel extends model
         $this->lang->story->createRequirement = str_replace($lastSRCommon, $SRCommon, $this->lang->story->createRequirement);
         $this->lang->story->noStory           = str_replace($lastSRCommon, $SRCommon, $this->lang->story->noStory);
         $this->lang->story->title             = str_replace($lastSRCommon, $SRCommon, $this->lang->story->title);
+    }
+
+    /**
+     * Change the projects set of the program.
+     *
+     * @param  object $projects
+     * @param  int    $programID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function changeProjectsPGM($projects, $programID, $comfirmChange = 'no')
+    {
+        foreach($projects as $project)
+        {
+            if((count($project->product) == 1) or $comfirmChange)
+            {
+                $this->dao->update(TABLE_PROJECT)
+                    ->set('parent')->eq($programID)
+                    ->set('path')->eq(',' . $programID . ',' . $project->id . ',')
+                    ->where('id')->eq($project->id)
+                    ->exec();
+            }
+        }
     }
 }

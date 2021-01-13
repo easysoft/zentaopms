@@ -63,9 +63,11 @@ $lang->product->unResolvedBugsTitle   = 'Kích hoạt Bugs';
 $lang->product->assignToNullBugs      = 'Chưa giao [B]';
 $lang->product->assignToNullBugsTitle = 'Chưa giao Bugs';
 
-$lang->product->confirmDelete  = " Bạn có muốn xóa {$lang->productCommon} này?";
-$lang->product->errorNoProduct = "Không có {$lang->productCommon} được tạo!";
-$lang->product->accessDenied   = "Bạn không có quyền truy cập tới  {$lang->productCommon} này.";
+$lang->product->confirmDelete    = " Bạn có muốn xóa {$lang->productCommon} này?";
+$lang->product->errorNoProduct   = "Không có {$lang->productCommon} được tạo!";
+$lang->product->accessDenied     = "Bạn không có quyền truy cập tới  {$lang->productCommon} này.";
+$lang->product->PGMChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the program set together.";
+$lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer these projects to the program set together.";
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";

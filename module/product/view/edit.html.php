@@ -13,6 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noProject', false);?>
+<?php js::set('projects', $projects);?>
+<?php js::set('oldProgramID', $product->program);?>
+<?php js::set('PGMChangeTip', $lang->product->PGMChangeTip);?>
+<?php js::set('confirmChangePGM', $lang->product->confirmChangePGM);?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">
@@ -28,7 +32,8 @@
           <?php if($product->program):?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
-            <td><?php echo zget($programs, $product->program, '/');?></td>
+            <td><?php echo html::select('program', $programs, $product->program, "class='form-control chosen'");?></td>
+            <td><?php echo html::hidden('comfirmChange', 'no');?></td>
           </tr>
           <?php endif;?>
           <tr>

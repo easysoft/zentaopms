@@ -63,9 +63,11 @@ $lang->product->unResolvedBugsTitle   = 'Bugs Ouverts';
 $lang->product->assignToNullBugs      = 'Orphelins [B]';
 $lang->product->assignToNullBugsTitle = 'Bugs non assignés';
 
-$lang->product->confirmDelete  = "Voulez-vous vraiment supprimer le {$lang->productCommon} ?";
-$lang->product->errorNoProduct = "Aucun {$lang->productCommon} n'est créé pour l'instant !";
-$lang->product->accessDenied   = "Vous n'avez pas accès au {$lang->productCommon}.";
+$lang->product->confirmDelete    = "Voulez-vous vraiment supprimer le {$lang->productCommon} ?";
+$lang->product->errorNoProduct   = "Aucun {$lang->productCommon} n'est créé pour l'instant !";
+$lang->product->accessDenied     = "Vous n'avez pas accès au {$lang->productCommon}.";
+$lang->product->PGMChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the program set together.";
+$lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer these projects to the program set together.";
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";

@@ -324,14 +324,35 @@ class product extends control
      */
     public function edit($productID, $action = 'edit', $extra = '', $programID = 0)
     {
+        /* Set menu. */
         $this->app->loadLang('custom');
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
+        $product = $this->product->getById($productID);
+
+        /* Get the projects linked with this product. */
+        $projects     = array();
+        $projectPairs = $this->product->getProjectPairsByProduct($productID);
+        if(!empty($projectPairs))
+        {
+            foreach($projectPairs as $projectID => $projectName)
+            {
+                $projects[$projectID] = new stdClass();
+                $projects[$projectID]->id      = $projectID;
+                $projects[$projectID]->name    = $projectName;
+                $projects[$projectID]->product = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+            }
+        }
+
         if(!empty($_POST))
         {
             $changes = $this->product->update($productID);
+            if(($_POST['program'] != $product->program) and $projects)
+            {
+                $this->product->changeProjectsPGM($projects, $_POST['program'], $_POST['comfirmChange']);
+            }
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {
@@ -370,8 +391,7 @@ class product extends control
             $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         }
 
-        $product = $this->product->getById($productID);
-
+        /* Get the relevant person in charge. */
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst',  $product->PO, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
@@ -395,6 +415,7 @@ class product extends control
         $this->view->rdUsers    = $rdUsers;
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
+        $this->view->projects   = $projects;
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 

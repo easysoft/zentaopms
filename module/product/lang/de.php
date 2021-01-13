@@ -63,9 +63,11 @@ $lang->product->unResolvedBugsTitle   = 'Active Bugs';
 $lang->product->assignToNullBugs      = 'Nicht zugewiesene [B]';
 $lang->product->assignToNullBugsTitle = 'Unassigned Bugs';
 
-$lang->product->confirmDelete  = " Möchten Sie {$lang->productCommon} löschen?";
-$lang->product->errorNoProduct = "Kein {$lang->productCommon} erstellt!";
-$lang->product->accessDenied   = "Sie haben keinen Zugriff auf {$lang->productCommon}.";
+$lang->product->confirmDelete    = " Möchten Sie {$lang->productCommon} löschen?";
+$lang->product->errorNoProduct   = "Kein {$lang->productCommon} erstellt!";
+$lang->product->accessDenied     = "Sie haben keinen Zugriff auf {$lang->productCommon}.";
+$lang->product->PGMChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the program set together.";
+$lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer these projects to the program set together.";
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
