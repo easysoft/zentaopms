@@ -282,8 +282,8 @@ $lang->my->menu->myExecution = 'Execution|my|execution|type=undone';
 $lang->my->menu->contribute  = array('link' => 'Contribute|my|contribute|mode=task');
 $lang->my->menu->dynamic     = 'Dynamic|my|dynamic|';
 $lang->my->menu->score       = 'Score|my|score|';
-$lang->my->menu->contacts    = 'Contacts|my|managecontacts|';
 $lang->my->menu->team        = array('link' => 'Team|my|team|', 'subModule' => 'user');
+$lang->my->menu->contacts    = 'Contacts|my|managecontacts|';
 
 $lang->my->workMenu = new stdclass();
 $lang->my->workMenu->task     = 'Task|my|work|mode=task';
@@ -301,7 +301,7 @@ $lang->my->contributeMenu->testtask  = 'Test Case|my|contribute|mode=testtask';
 $lang->my->contributeMenu->issue     = 'Issue|my|contribute|mode=issue';
 $lang->my->contributeMenu->risk      = 'Risk|my|contribute|mode=risk';
 
-$lang->my->dividerMenu = ',myProject,contacts,';
+$lang->my->dividerMenu = ',myProject,team,';
 
 $lang->todo    = new stdclass();
 $lang->todo->menu = $lang->my->menu;

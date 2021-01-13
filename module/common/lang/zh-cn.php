@@ -282,8 +282,8 @@ $lang->my->menu->myExecution = '执行|my|execution|type=undone';
 $lang->my->menu->contribute  = array('link' => '贡献|my|contribute|mode=task');
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
 $lang->my->menu->score       = array('link' => '积分|my|score|', 'subModule' => 'score');
-$lang->my->menu->contacts    = '联系人|my|managecontacts|';
 $lang->my->menu->team        = array('link' => '团队|my|team|', 'subModule' => 'user');
+$lang->my->menu->contacts    = '联系人|my|managecontacts|';
 
 $lang->my->workMenu = new stdclass();
 $lang->my->workMenu->task     = '任务|my|work|mode=task';
@@ -301,7 +301,7 @@ $lang->my->contributeMenu->testtask  = '用例|my|contribute|mode=testtask&type=
 $lang->my->contributeMenu->issue     = '问题|my|contribute|mode=issue';
 $lang->my->contributeMenu->risk      = '风险|my|contribute|mode=risk';
 
-$lang->my->dividerMenu = ',myProject,contacts,';
+$lang->my->dividerMenu = ',myProject,team,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
