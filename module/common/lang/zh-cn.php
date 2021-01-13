@@ -148,7 +148,7 @@ $lang->dividerMenu = ',project,doc,';
 $lang->program = new stdclass();
 $lang->program->menu = new stdclass();
 //$lang->program->menu->index   = '主页|program|pgmindex|';
-$lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers,prjcreate,prjedit');
+$lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers,prjcreate,prjedit,prjmanageproducts');
 
 $lang->PRJ = new stdclass();
 $lang->PRJ->menu = new stdclass();

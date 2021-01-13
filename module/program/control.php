@@ -924,7 +924,7 @@ class program extends control
         $this->app->loadLang('project');
         $this->loadModel('productplan');
 
-        /* Navigation stay in program when enter from pgmbrowse. */
+        /* Navigation stay in program when enter from program list. */
         if($from == 'PGM') $this->lang->PRJ->menu = $this->lang->program->menu;
 
         if($_POST)
@@ -1524,12 +1524,14 @@ class program extends control
      *
      * @param  int     $projectID
      * @param  int     $programID
+     * @param  string  $from PRJ|PGM
      * @access public
      * @return void
      */
-    public function PRJManageProducts($projectID, $programID = 0)
+    public function PRJManageProducts($projectID, $programID = 0, $from = 'PRJ')
     {
-        $browseProjectLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse', "programID=$programID");
+        /* Navigation stay in program when enter from program list. */
+        if($from == 'PGM') $this->lang->PRJ->menu = $this->lang->program->menu;
 
         if(!empty($_POST))
         {
@@ -1549,7 +1551,15 @@ class program extends control
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $browseProjectLink));
+            if($from == 'PGM')
+            {
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PGMBrowse')));
+            }
+            else
+            {
+                $browseProjectLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse', "programID=$programID");
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $browseProjectLink));
+            }
         }
 
         $this->loadModel('product');
