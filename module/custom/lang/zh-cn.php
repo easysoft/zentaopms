@@ -28,6 +28,7 @@ $lang->custom->estimateEfficiency = '生产率';
 $lang->custom->estimateCost       = '单位人工成本';
 $lang->custom->estimateHours      = '每日工时';
 $lang->custom->estimateDays       = '每周工作天数';
+$lang->custom->convertRelations   = '换算关系';
 $lang->custom->region             = '区间';
 $lang->custom->tips               = '提示语';
 $lang->custom->setTips            = '设置提示语';
@@ -48,6 +49,7 @@ $lang->custom->deleteStoryConcept = "删除需求概念";
 $lang->custom->configureScrum     = "敏捷模型自定义";
 $lang->custom->URConcept          = "用需概念";
 $lang->custom->SRConcept          = "软需概念";
+$lang->custom->one                = "一个";
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -220,9 +222,9 @@ $lang->custom->conceptOptions->story['0'] = '需求';
 $lang->custom->conceptOptions->story['1'] = '故事';
 
 $lang->custom->conceptOptions->hourPoint      = array();
-$lang->custom->conceptOptions->hourPoint['0'] = '故事点';
-$lang->custom->conceptOptions->hourPoint['1'] = '功能点';
-$lang->custom->conceptOptions->hourPoint['2'] = '代码行';
+$lang->custom->conceptOptions->hourPoint['0'] = '工时';
+$lang->custom->conceptOptions->hourPoint['1'] = '故事点';
+$lang->custom->conceptOptions->hourPoint['2'] = '功能点';
 
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = '设置项目概念';

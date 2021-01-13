@@ -333,7 +333,7 @@ class custom extends control
      */
     public function estimate()
     {
-        $this->lang->custom->menu = $this->lang->stage->menu;
+        $this->lang->custom->menu = $this->lang->subject->menu;
         $this->lang->navGroup->custom = 'system';
         $key = array_search('custom', $this->lang->noMenuModule);
         unset($this->lang->noMenuModule[$key]);
@@ -341,12 +341,30 @@ class custom extends control
         if(strtolower($this->server->request_method) == "post")
         {
             $this->loadModel('setting');
-            $data = fixer::input('post')->get();
+            $data = fixer::input('post')->setIF(!isset($_POST['efficiency']), 'efficiency', 1)->get();
+            if(isset($_POST['scaleFactor']) and empty($this->post->scaleFactor))
+            {
+                dao::$errors['scaleFactor'] = sprintf($this->lang->error->notempty, $this->lang->custom->convertRelations);
+                $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
+
             $this->setting->setItem('system.custom.hourPoint', $data->hourPoint);
             $this->setting->setItem('system.custom.cost', $data->cost);
             $this->setting->setItem('system.custom.efficiency', $data->efficiency);
             $this->setting->setItem('system.custom.days', $data->days);
             $this->setting->setItem('system.project.defaultWorkhours', $data->defaultWorkhours);
+
+            if(isset($_POST['scaleFactor']))
+            {
+                $stories = $this->dao->select('*')->from(TABLE_STORY)->fetchAll();
+                foreach($stories as $story)
+                {
+                    $this->dao->update(TABLE_STORY)
+                        ->set('estimate')->eq($story->estimate * $this->post->scaleFactor)
+                        ->where('id')->eq($story->id)
+                        ->exec();
+                }
+            }
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'estimate')));
