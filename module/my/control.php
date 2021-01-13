@@ -782,6 +782,41 @@ class my extends control
     }
 
     /**
+     * User preference setting.
+     *
+     * @access public
+     * @return void
+     */
+    public function preference()
+    {
+        $this->loadModel('setting');
+
+        if($_POST)
+        {
+            foreach($_POST as $key => $value) $this->setting->setItem("{$this->app->user->account}.common.$key", $value);
+
+            die(js::closeModal('parent.parent'));
+        }
+
+        /* Get default URSR. */
+        $URSR = $this->setting->getItem("owner={$this->app->user->account}&module=common&key=URSR");
+
+        /* Get default menu link. */
+        $programLink = $this->setting->getItem("owner={$this->app->user->account}&module=common&key=programLink");
+        $productLink = $this->setting->getItem("owner={$this->app->user->account}&module=common&key=productLink");
+        $projectLink = $this->setting->getItem("owner={$this->app->user->account}&module=common&key=projectLink");
+
+        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;
+        $this->view->position[]  = $this->lang->my->preference;
+        $this->view->URSRList    = $this->loadModel('custom')->getURSRPairs();
+        $this->view->URSR        = $URSR ? $URSR : $this->setting->getItem('owner=system&module=custom&key=URSR');
+        $this->view->programLink = $programLink ? $programLink : 'PGMList';
+        $this->view->productLink = $productLink ? $productLink : 'productList';
+        $this->view->projectLink = $projectLink ? $projectLink : 'PRJList';
+        $this->display();
+    }
+
+    /**
      * My dynamic.
      *
      * @param  string $type

@@ -22,6 +22,7 @@ $lang->my->dynamic         = 'Meine Verlauf';
 $lang->my->team            = 'My Team';
 $lang->my->editProfile     = 'Profil bearbeiten';
 $lang->my->changePassword  = 'Passwort ändern';
+$lang->my->preference      = 'Preference';
 $lang->my->unbind          = 'Unbind Ranger';
 $lang->my->manageContacts  = 'Kontakt pflegen';
 $lang->my->deleteContacts  = 'Kontakt löschen';

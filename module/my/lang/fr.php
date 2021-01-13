@@ -22,6 +22,7 @@ $lang->my->dynamic         = 'Mon Historique';
 $lang->my->team            = 'My Team';
 $lang->my->editProfile     = 'Edit Profil';
 $lang->my->changePassword  = 'Changer le Mot de Passe';
+$lang->my->preference      = 'Preference';
 $lang->my->unbind          = 'Dissocier de Zdoo';
 $lang->my->manageContacts  = 'Gérer Contact';
 $lang->my->deleteContacts  = 'Supprimer Contact';

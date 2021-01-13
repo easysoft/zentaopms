@@ -34,7 +34,7 @@ include 'chosen.html.php';
       <div id="pageActions"><div class='btn-toolbar'><?php if(isset($lang->TRActions)) echo $lang->TRActions;?></div></div>
     </div>
   </div>
-<?php endif;?>
+  <?php endif;?>
   <?php
   if(!empty($config->sso->redirect))
   {
