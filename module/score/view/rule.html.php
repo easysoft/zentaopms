@@ -39,35 +39,34 @@
         <td><?php echo empty($rule['times']) ? $lang->score->noLimit : $rule['times'];?></td>
         <td><?php echo empty($rule['hour'])  ? $lang->score->noLimit : $rule['hour'];?></td>
         <td><?php echo $rule['score'];?></td>
-        <td>
-          <?php
-          if(isset($lang->score->extended[$module][$method]))
-          {
-              $desc     = $lang->score->extended[$module][$method];
-              $descRule = explode('##', $desc);
-              if(!empty($descRule))
-              {
-                  foreach($descRule as $key => $value)
-                  {
-                      if($key % 2 == 1)
-                      {
-                          $match = explode(',', $value);
-                          if(count($match) == 2)
-                          {
-                              $score = $config->score->ruleExtended[$module][$method][$match[0]][$match[1]];
-                          }
-                          else
-                          {
-                              $score = $config->score->ruleExtended[$module][$method][$match[0]];
-                          }
-                          $desc = str_replace('##' . $value . '##', $score, $desc);
-                      }
-                  }
-              }
-              echo $desc;
-          }
-          ?>
-        </td>
+        <?php
+        $desc = '';
+        if(isset($lang->score->extended[$module][$method]))
+        {
+            $desc     = $lang->score->extended[$module][$method];
+            $descRule = explode('##', $desc);
+            if(!empty($descRule))
+            {
+                foreach($descRule as $key => $value)
+                {
+                    if($key % 2 == 1)
+                    {
+                        $match = explode(',', $value);
+                        if(count($match) == 2)
+                        {
+                            $score = $config->score->ruleExtended[$module][$method][$match[0]][$match[1]];
+                        }
+                        else
+                        {
+                            $score = $config->score->ruleExtended[$module][$method][$match[0]];
+                        }
+                        $desc = str_replace('##' . $value . '##', $score, $desc);
+                    }
+                }
+            }
+        }
+        ?>
+        <td class="text-ellipsis" title="<?php echo $desc;?>"><?php echo $desc;?></td>
       </tr>
       <?php endforeach;?>
       <?php endforeach;?>
