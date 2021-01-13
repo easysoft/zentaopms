@@ -352,6 +352,9 @@ class commonModel extends model
 
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
+
+        self::printClientLink();
+
         echo '<li>' . html::a(helper::createLink('misc', 'about'), "<i class='icon icon-about'></i> " . $lang->aboutZenTao, '', "class='about iframe' data-width='1050' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
         echo '<li>' . $lang->designedByAIUX . '</li>';
     }
@@ -981,9 +984,15 @@ class commonModel extends model
      */
     public static function printClientLink()
     {
-        global $lang;
-        echo html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='btn btn-link iframe' data-width='600'");
-        echo html::a($lang->clientHelpLink, "<i class='icon-lightbulb text-success'></i>", '', "title='$lang->clientHelp' class='btn btn-link' target='_blank'");
+        global $config, $lang;
+        if(isset($config->xxserver->installed) and $config->xuanxuan->turnon)
+        {
+            echo "<li class='dropdown-submenu'>";
+            echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->client . "</a><ul class='dropdown-menu pull-left'>";
+            echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
+            echo '<li>' . html::a($lang->clientHelpLink, $lang->clientHelp, '', "title='$lang->clientHelp' target='_blank'") . '</li>';
+            echo '</ul></li>';
+        }
     }
 
     /**

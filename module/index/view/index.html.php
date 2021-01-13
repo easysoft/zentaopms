@@ -51,11 +51,9 @@ js::set('defaultOpen', $open);
   <ul id='bars' class='nav nav-default'></ul>
   <div id='poweredBy'>
     <div id="globalBarLogo">
-      <?php if(isset($config->xxserver->installed) and $config->xuanxuan->turnon) commonModel::printClientLink();?>
       <?php echo $lang->proVersion;?>
       <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $config->version;?>'><i class="icon icon-zentao" style="font-size: 24px;"></i></a>
-      <!--
-      <a href='javascript:void(0)' class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>
+      <!--<a href='javascript:void(0)' class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>-->
       <div id="globalSearchDiv">
         <div class="input-group">
           <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example" id="searchboxExample">
@@ -66,7 +64,6 @@ js::set('defaultOpen', $open);
           </span>
         </div>
       </div>
-      -->
     </div>
   </div>
 </div>
