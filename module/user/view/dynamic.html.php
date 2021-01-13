@@ -25,7 +25,7 @@
         $active = 'btn-active-text';
         $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
     }
-    echo html::a(inlink('dynamic', "type=$period&userID={$user->id}"), $label, '', "class='btn btn-link $active' id='{$period}'")
+    echo html::a(inlink('dynamic', "userID={$user->id}&fromModule=$fromModule&type=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
     <?php endforeach;?>
   </div>

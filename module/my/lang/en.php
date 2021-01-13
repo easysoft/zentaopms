@@ -19,6 +19,7 @@ $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
 $lang->my->profile         = 'My Profile';
 $lang->my->dynamic         = 'My Dynamics';
+$lang->my->team            = 'My Team';
 $lang->my->editProfile     = 'Edit';
 $lang->my->changePassword  = 'Edit Password';
 $lang->my->unbind          = 'Unbind from Zdoo';

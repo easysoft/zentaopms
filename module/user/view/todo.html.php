@@ -14,6 +14,7 @@
 <?php include "../../common/view/datepicker.html.php"; ?>
 <?php include './featurebar.html.php';?>
 <?php js::set('userID', $user->id);?>
+<?php js::set('fromModule', $fromModule);?>
 <?php js::set('type', $type);?>
 <div id='mainContent'>
   <nav id='contentNav'>
@@ -22,7 +23,7 @@
       foreach($lang->todo->periods as $period => $label)
       {
           $active = $type == $period ? 'active' : '';
-          $vars = "userID={$user->id}&date=$period";
+          $vars = "userID={$user->id}&fromModule=$fromModule&date=$period";
           if($period == 'before') $vars .= "&status=undone";
           echo "<li id='$period' class='$active'>" . html::a(inlink('todo', $vars), $label) . '</li> ';
       }
@@ -32,7 +33,7 @@
 
   <form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' data-ride='table' id='todoform' class='main-table table-todo'>
     <table class='table has-sort-head table-fixed'>
-      <?php $vars = "userID={$user->id}&type=$type&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
+      <?php $vars = "userID={$user->id}&fromModule=$fromModule&type=$type&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
       <tr class='colhead'>
         <th class='w-id'>    <?php common::printOrderLink('id',     $orderBy, $vars, $lang->idAB);?></th>

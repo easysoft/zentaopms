@@ -19,6 +19,7 @@ $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
 $lang->my->profile         = 'Mon Profil';
 $lang->my->dynamic         = 'Mon Historique';
+$lang->my->team            = 'My Team';
 $lang->my->editProfile     = 'Edit Profil';
 $lang->my->changePassword  = 'Changer le Mot de Passe';
 $lang->my->unbind          = 'Dissocier de Zdoo';

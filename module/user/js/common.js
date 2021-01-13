@@ -19,19 +19,19 @@ $(document).ready(function()
     });
 });
 
-function switchAccount(account, method)
+function switchAccount(account, method, fromModule)
 {
     if(method == 'dynamic')
     {
-        link = createLink('user', method, 'period=' + period + '&account=' + account);
+        link = createLink('user', method, 'account=' + account + '&fromModule=' + fromModule + '&period=' + period);
     }
     else if(method == 'todo')
     {
-        link = createLink('user', method, 'account=' + account + '&type=' + type);
+        link = createLink('user', method, 'account=' + account + '&fromModule=' + fromModule + '&type=' + type);
     }
     else
     {
-        link = createLink('user', method, 'account=' + account);
+        link = createLink('user', method, 'account=' + account + '&fromModule=' + fromModule);
     }
     location.href=link;
 }

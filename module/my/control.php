@@ -539,7 +539,7 @@ class my extends control
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->type       = $type;
-        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, $orderBy, $pager);
+        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, $this->app->user->account, $orderBy, $pager);
         $this->display();
     }
 
@@ -562,12 +562,36 @@ class my extends control
 
         $this->view->title      = $this->lang->my->risk;
         $this->view->position[] = $this->lang->my->risk;
-        $this->view->risks      = $this->loadModel('risk')->getUserRisks($type, $orderBy, $pager);
+        $this->view->risks      = $this->loadModel('risk')->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->mode       = 'risk';
+        $this->display();
+    }
+
+    public function team($orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
+        /* Get users by dept. */
+        $user   = $this->loadModel('user')->getById($this->app->user->account, 'account');
+        $deptID = $user->dept;
+        $users  = $this->loadModel('company')->getUsers('inside', 'bydept', 0, $deptID, $sort, $pager);
+        foreach($users as $user) unset($user->password); //Remove passwd.
+
+        $this->view->title      = $this->lang->my->team;
+        $this->view->position[] = $this->lang->my->team;
+        $this->view->users      = $users;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+
         $this->display();
     }
 

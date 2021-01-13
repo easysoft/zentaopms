@@ -19,6 +19,7 @@ $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
 $lang->my->profile         = 'Hồ sơ của bạn';
 $lang->my->dynamic         = 'Lịch sử của bạn';
+$lang->my->team            = 'My Team';
 $lang->my->editProfile     = 'Sửa';
 $lang->my->changePassword  = 'Sửa mật khẩu';
 $lang->my->unbind          = 'Gỡ kết nối từ Zdoo';

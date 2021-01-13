@@ -236,16 +236,19 @@ class riskModel extends model
      * Get user risks.
      *
      * @param  string $type    open|assignto|closed|suspended|canceled
+     * @param  string $account
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return object
      */
-    public function getUserRisks($type = 'assignedTo', $orderBy = 'id_desc', $pager)
+    public function getUserRisks($type = 'assignedTo', $account = '', $orderBy = 'id_desc', $pager)
     {
+        if(empty($account)) $account = $this->app->user->account;
+
         $riskList = $this->dao->select('*')->from(TABLE_RISK)
             ->where('deleted')->eq('0')
-            ->andWhere($type)->eq($this->app->user->account)->fi()
+            ->andWhere($type)->eq($account)->fi()
             ->beginIF($this->app->rawMethod == 'contribute')->andWhere("status")->in('closed,canceled')->fi()
             ->orderBy($orderBy)
             ->page($pager)

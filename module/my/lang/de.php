@@ -19,6 +19,7 @@ $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
 $lang->my->profile         = 'Meine Profil';
 $lang->my->dynamic         = 'Meine Verlauf';
+$lang->my->team            = 'My Team';
 $lang->my->editProfile     = 'Profil bearbeiten';
 $lang->my->changePassword  = 'Passwort ändern';
 $lang->my->unbind          = 'Unbind Ranger';

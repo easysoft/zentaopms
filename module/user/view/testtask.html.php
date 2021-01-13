@@ -17,16 +17,16 @@
     <ul class='nav nav-default'>
       <?php
       $that = zget($lang->user->thirdPerson, $user->gender);
-      echo "<li class='active'>"  . html::a($this->createLink('user', 'testtask', "userID={$user->id}"),  sprintf($lang->user->testTask2Him, $that)) . "</li>";
-      echo "<li>"  . html::a($this->createLink('user', 'testcase', "userID={$user->id}&type=case2Him"),  sprintf($lang->user->case2Him, $that)) . "</li>";
-      echo "<li>" . html::a($this->createLink('user', 'testcase', "userID={$user->id}&type=caseByHim"),  sprintf($lang->user->caseByHim, $that)) . "</li>";
+      echo "<li class='active'>" . html::a($this->createLink('user', 'testtask', "userID={$user->id}&fromModule=$fromModule"), sprintf($lang->user->testTask2Him, $that)) . "</li>";
+      echo "<li>" . html::a($this->createLink('user', 'testcase', "userID={$user->id}&fromModule=$fromModule&type=case2Him"),  sprintf($lang->user->case2Him, $that)) . "</li>";
+      echo "<li>" . html::a($this->createLink('user', 'testcase', "userID={$user->id}&fromModule=$fromModule&type=caseByHim"), sprintf($lang->user->caseByHim, $that)) . "</li>";
       ?>
     </ul>
   </nav>
 
   <div class='main-table'>
     <table class='table has-sort-head'>
-      <?php $vars = "userID={$user->id}&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $vars = "userID={$user->id}&fromModule=$fromModule&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr>
           <th class='w-id'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>

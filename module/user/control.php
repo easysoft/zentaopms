@@ -32,18 +32,20 @@ class user extends control
      * View a user.
      *
      * @param  string $userID
+     * @param  string $fromModule
      * @access public
      * @return void
      */
-    public function view($userID)
+    public function view($userID, $fromModule = 'user')
     {
-        $this->locate($this->createLink('user', 'todo', "userID=$userID"));
+        $this->locate($this->createLink('user', 'todo', "userID=$userID&fromModule=$fromModule"));
     }
 
     /**
      * Todos of a user.
      *
      * @param  string $userID
+     * @param  string $fromModule
      * @param  string $type         the todo type, today|lastweek|thisweek|all|undone, or a date.
      * @param  string $status
      * @param  string $orderBy
@@ -53,7 +55,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function todo($userID, $type = 'today', $status = 'all', $orderBy='date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo($userID, $fromModule = 'user', $type = 'today', $status = 'all', $orderBy='date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set thie url to session. */
         $uri = $this->app->getURI(true);
@@ -74,13 +76,17 @@ class user extends control
         $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
 
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
+
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
         $this->view->position[] = $this->lang->user->todo;
         $this->view->tabID      = 'todo';
+        $this->view->fromModule = $fromModule;
         $this->view->date       = $date;
         $this->view->todos      = $todos;
         $this->view->user       = $user;
@@ -96,6 +102,7 @@ class user extends control
      * Story of a user.
      *
      * @param  int    $userID
+     * @param  string $fromModule
      * @param  string $type
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -103,7 +110,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function story($userID, $type = 'assignedTo', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($userID, $fromModule = 'user', $type = 'assignedTo', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('storyList', $this->app->getURI(true));
@@ -118,15 +125,19 @@ class user extends control
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
 
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
+
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
         $this->view->position[] = $this->lang->user->story;
         $this->view->stories    = $this->loadModel('story')->getUserStories($account, $type, 'id_desc', $pager);
         $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->fromModule = $fromModule;
         $this->view->type       = $type;
         $this->view->user       = $user;
         $this->view->pager      = $pager;
-        $this->view->userList   = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID);
+        $this->view->userList   = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
 
         $this->display();
     }
@@ -135,6 +146,7 @@ class user extends control
      * Tasks of a user.
      *
      * @param  int    $userID
+     * @param  string $fromModule
      * @param  string $type
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -142,7 +154,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function task($userID, $type = 'assignedTo', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task($userID, $fromModule = 'user',  $type = 'assignedTo', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
         $this->session->set('taskList', $this->app->getURI(true));
@@ -156,13 +168,17 @@ class user extends control
 
         /* Set the menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
+
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
         $this->view->position[] = $this->lang->user->task;
         $this->view->tabID      = 'task';
         $this->view->tasks      = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager);
+        $this->view->fromModule = $fromModule;
         $this->view->type       = $type;
         $this->view->user       = $user;
         $this->view->pager      = $pager;
@@ -174,6 +190,7 @@ class user extends control
      * User bugs.
      *
      * @param  int    $userID
+     * @param  string $fromModule
      * @param  string $type
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -182,7 +199,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function bug($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($userID, $fromModule = 'user', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
         $this->session->set('bugList', $this->app->getURI(true));
@@ -196,15 +213,19 @@ class user extends control
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
 
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
+
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
         $this->view->position[] = $this->lang->user->bug;
         $this->view->tabID      = 'bug';
         $this->view->bugs       = $this->loadModel('bug')->getUserBugs($account, $type, $orderBy, 0, $pager);
+        $this->view->fromModule = $fromModule;
         $this->view->type       = $type;
         $this->view->user       = $user;
         $this->view->users      = $this->user->getPairs('noletter');
@@ -217,6 +238,7 @@ class user extends control
      * User's testtask
      *
      * @param  int    $userID
+     * @param  string $fromModule
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -224,7 +246,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function testtask($userID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testtask($userID, $fromModule = 'user', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -235,7 +257,7 @@ class user extends control
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
 
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
@@ -245,11 +267,15 @@ class user extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
+
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
         $this->view->position[] = $this->lang->user->testTask;
         $this->view->tasks      = $this->loadModel('testtask')->getByUser($account, $pager, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->user       = $user;
+        $this->view->fromModule = $fromModule;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
@@ -262,6 +288,7 @@ class user extends control
      * User's test case.
      *
      * @param  int    $userID
+     * @param  string $fromModule
      * @param  string $type
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -270,7 +297,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function testcase($userID, $type = 'case2Him', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($userID, $fromModule = 'user', $type = 'case2Him', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
         $this->session->set('caseList', $this->app->getURI(true));
@@ -288,6 +315,9 @@ class user extends control
 
          /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
+
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
 
         $cases = array();
         if($type == 'case2Him')
@@ -307,39 +337,136 @@ class user extends control
         $this->view->cases      = $cases;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';
+        $this->view->fromModule = $fromModule;
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->userList   = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID);
+        $this->view->userList   = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
 
         $this->display();
     }
 
     /**
-     * User projects.
+     * User executions.
      *
      * @param  int    $userID
+     * @param  string $fromModule
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function project($userID)
+    public function execution($userID, $fromModule = 'user', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         /* Set the menus. */
         $this->loadModel('project');
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted|useid'), $userID);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted|useid'), $userID, $fromModule);
+
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
         $this->view->position[] = $this->lang->user->project;
+        $this->view->fromModule = $fromModule;
         $this->view->tabID      = 'project';
-        $this->view->projects   = $this->user->getProjects($account);
+        $this->view->executions = $this->user->getProjects($account, array('sprint', 'stage'), 'all', $pager);
         $this->view->user       = $user;
+        $this->view->pager      = $pager;
+
+        $this->display();
+    }
+
+    /**
+     * User issues.
+     *
+     * @param  int    $userID
+     * @param  string $fromModule
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function issue($userID, $fromModule = 'user', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $user    = $this->user->getById($userID, 'id');
+        $account = $user->account;
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Set the menus. */
+        $this->lang->set('menugroup.user', 'company');
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted|useid'), $userID, $fromModule);
+
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
+
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
+        $this->view->position[] = $this->lang->user->issue;
+        $this->view->fromModule = $fromModule;
+        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, $account, $orderBy, $pager);
+        $this->view->user       = $user;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->type       = $type;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+
+        $this->display();
+    }
+
+    /**
+     * User risks.
+     *
+     * @param  int    $userID
+     * @param  string $fromModule
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function risk($userID, $fromModule = 'user', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $user    = $this->user->getById($userID, 'id');
+        $account = $user->account;
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Set the menus. */
+        $this->lang->set('menugroup.user', 'company');
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted|useid'), $userID, $fromModule);
+
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
+
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->risk;
+        $this->view->position[] = $this->lang->user->risk;
+        $this->view->fromModule = $fromModule;
+        $this->view->risks      = $this->loadModel('risk')->getUserRisks($type, $account, $orderBy, $pager);
+        $this->view->user       = $user;
+        $this->view->type       = $type;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -348,24 +475,29 @@ class user extends control
      * The profile of a user.
      *
      * @param  int    $userID
+     * @param  string $fromModule
      * @access public
      * @return void
      */
-    public function profile($userID = '')
+    public function profile($userID = '', $fromModule = 'user')
     {
         if(empty($userID)) $userID = $this->app->user->id;
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
 
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
+
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->position[]   = $this->lang->user->common;
         $this->view->position[]   = $this->lang->user->profile;
         $this->view->user         = $user;
+        $this->view->fromModule   = $fromModule;
         $this->view->groups       = $this->loadModel('group')->getByAccount($account);
         $this->view->deptPath     = $this->dept->getParents($user->dept);
         $this->view->personalData = $this->user->getPersonalData($user->account);
-        $this->view->userList     = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted|useid'), $userID);
+        $this->view->userList     = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted|useid'), $userID, $fromModule);
 
         $this->display();
     }
@@ -935,22 +1067,23 @@ class user extends control
     /**
      * User dynamic.
      *
-     * @param  string $period
      * @param  int    $userID
+     * @param  string $fromModule
+     * @param  string $period
      * @param  int    $recTotal
      * @param  string $date
      * @param  string $direction     next|pre
      * @access public
      * @return void
      */
-    public function dynamic($period = 'today', $userID = '', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic($userID = '', $fromModule = 'user', $period = 'today', $recTotal = 0, $date = '', $direction = 'next')
     {
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
 
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
 
         /* Save session. */
         $uri   = $this->app->getURI(true);
@@ -974,6 +1107,9 @@ class user extends control
         $sort    = $this->loadModel('common')->appendOrder($orderBy);
         $date    = empty($date) ? '' : date('Y-m-d', $date);
 
+        /* Change the menu when in my module. */
+        $this->resetMenu($fromModule);
+
         $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', 'all', $date, $direction);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
@@ -984,9 +1120,26 @@ class user extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->user       = $user;
+        $this->view->fromModule = $fromModule;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
         $this->view->direction  = $direction;
         $this->display();
+    }
+
+    /**
+     * Reset menu when from my module.
+     *
+     * @param  string $fromModule
+     * @access public
+     * @return void
+     */
+    public function resetMenu($fromModule = 'user')
+    {
+        if($fromModule == 'my')
+        {
+            $this->lang->admin->menu    = $this->lang->my->menu;
+            $this->lang->noMenuModule[] = 'user';
+        }
     }
 
     /**

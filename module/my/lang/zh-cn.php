@@ -19,6 +19,7 @@ $lang->my->issue           = '我的问题';
 $lang->my->risk            = '我的风险';
 $lang->my->profile         = '我的档案';
 $lang->my->dynamic         = '我的动态';
+$lang->my->team            = '团队';
 $lang->my->editProfile     = '修改档案';
 $lang->my->changePassword  = '修改密码';
 $lang->my->unbind          = '解除ZDOO绑定';

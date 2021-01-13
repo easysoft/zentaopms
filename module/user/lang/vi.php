@@ -51,6 +51,7 @@ $lang->user->newPassword      = 'Mật khẩu mới';
 $lang->user->verifyPassword   = 'Mật khẩu';
 $lang->user->resetPassword    = 'Quên mật khẩu?';
 $lang->user->score            = 'Điểm';
+$lang->user->name             = 'Name';
 
 $lang->user->legendBasic        = 'Thông tin cơ bản';
 $lang->user->legendContribution = 'Đóng góp';
@@ -96,6 +97,8 @@ $lang->user->bug      = 'Bugs';
 $lang->user->test     = 'Test';
 $lang->user->testTask = 'Yêu cầu';
 $lang->user->testCase = 'Tình huống';
+$lang->user->issue    = 'Issue';
+$lang->user->risk     = 'Risk';
 $lang->user->schedule = 'Lịch trình';
 $lang->user->todo     = 'Việc làm';
 $lang->user->story    = 'Câu chuyện';

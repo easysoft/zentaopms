@@ -151,16 +151,19 @@ class issueModel extends model
      * Get user issues.
      *
      * @param  string $browseType open|assignto|closed|suspended|canceled
+     * @param  string $account
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getUserIssues($type = 'assignedTo', $orderBy = 'id_desc', $pager)
+    public function getUserIssues($type = 'assignedTo', $account = '', $orderBy = 'id_desc', $pager)
     {
+        if(empty($account)) $account = $this->app->user->account;
+
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('deleted')->eq('0')
-            ->andWhere($type)->eq($this->app->user->account)->fi()
+            ->andWhere($type)->eq($account)->fi()
             ->beginIF($this->app->rawMethod == 'contribute')->andWhere("status")->in('resolved,canceled,closed')->fi()
             ->orderBy($orderBy)
             ->page($pager)
