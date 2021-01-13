@@ -11,11 +11,6 @@ $.initSidebar();
 <footer id='footer'>
   <div class="container">
     <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>
-    <div id='poweredBy'>
-      <a href='<?php echo $lang->website;?>' target='_blank'><i class='icon-zentao'></i> <?php echo $lang->zentaoPMS . $config->version;?></a> &nbsp;
-      <?php echo $lang->proVersion;?>
-      <?php if(isset($config->xxserver->installed) and $config->xuanxuan->turnon) commonModel::printClientLink();?>
-    </div>
   </div>
 </footer>
 <div id="noticeBox"><?php echo $this->loadModel('score')->getNotice(); ?></div>

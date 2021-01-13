@@ -763,6 +763,7 @@ $lang->colorPicker->errorTip = "Ce n'est pas une valeur de couleur valide";
 
 $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='btn btn-link'><span class='label label-primary'>Upgrade</span></a>";
 $lang->downNotify     = "Télécharger la notification sur le bureau";
+$lang->client         = "Desktop";
 $lang->downloadClient = "Télécharger ZenTao Desktop";
 $lang->clientHelp     = "Aide Client";
 $lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/scrum-tool-im-integration-206.html";

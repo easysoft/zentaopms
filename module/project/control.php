@@ -2421,7 +2421,7 @@ class project extends control
      * Get recent executions.
      *
      * @access public
-     * @return string
+     * @return void
      */
     public function ajaxGetRecentExecutions()
     {
@@ -2434,7 +2434,7 @@ class project extends control
 
             foreach($executions as $execution)
             {
-                $link = helper::createLink('project', 'task', 'projectID=' . $execution->id, '', false, $execution->project);
+                $link = helper::createLink('project', 'task', 'executionID=' . $execution->id, '', false, $execution->project);
                 $execution->code = empty($execution->code) ? $execution->name : $execution->code;
                 $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
                 echo html::a($link, '<i class="icon icon-' . $this->lang->icons[$execution->type] . '"></i> ' . $execution->code, '', "class='search-list-item' title='$execution->name' $dataKey");
