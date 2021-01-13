@@ -727,7 +727,7 @@ class programplanModel extends model
         {
             $class  = 'c-' . $id;
             $title  = '';
-            $idList = array('id','name','output','percent','attribute','version','begin','end','realBegan','realEnd');
+            $idList = array('id','name','output','percent','attribute','version','begin','end','realBegan','realEnd', 'openedBy', 'openedDate');
             if(in_array($id,$idList))
             {
                 $class .= ' text-left';
@@ -783,6 +783,12 @@ class programplanModel extends model
                 break;
             case 'editedDate':
                 echo substr($plan->editedDate, 5, 11);
+                break;
+            case 'openedBy':
+                echo zget($users, $plan->openedBy);
+                break;
+            case 'openedDate':
+                echo substr($plan->openedDate, 5, 11);
                 break;
             case 'actions':
                 common::printIcon('project', 'start', "projectID={$plan->id}", $plan, 'list', '', '', 'iframe', true);
