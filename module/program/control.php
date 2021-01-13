@@ -914,18 +914,18 @@ class program extends control
      *
      * @param  int    $projectID
      * @param  int    $programID
-     * @param  string $from  project|program
+     * @param  string $from  PRJ|PGM
      * @access public
      * @return void
      */
-    public function PRJEdit($projectID = 0, $programID = 0, $from = 'project')
+    public function PRJEdit($projectID = 0, $programID = 0, $from = 'PRJ')
     {
         $this->app->loadLang('custom');
         $this->app->loadLang('project');
         $this->loadModel('productplan');
 
         /* Navigation stay in program when enter from pgmbrowse. */
-        if($from == 'program') $this->app->rawMethod = 'pgmbrowse';
+        if($from == 'PGM') $this->lang->PRJ->menu = $this->lang->program->menu;
 
         if($_POST)
         {
@@ -938,9 +938,15 @@ class program extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $url = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse');
-            if($from == 'program') $url = inLink('PGMBrowse');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
+            if($from == 'PGM')
+            {
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PGMBrowse')));
+            }
+            else
+            {
+                $url = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse');
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
+            }
         }
 
         $project = $this->program->getPRJByID($projectID);
