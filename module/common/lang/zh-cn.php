@@ -301,7 +301,7 @@ $lang->my->contributeMenu->testtask  = '用例|my|contribute|mode=testtask&type=
 $lang->my->contributeMenu->issue     = '问题|my|contribute|mode=issue';
 $lang->my->contributeMenu->risk      = '风险|my|contribute|mode=risk';
 
-$lang->my->dividerMenu = ',myProject,';
+$lang->my->dividerMenu = ',myProject,contacts,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
