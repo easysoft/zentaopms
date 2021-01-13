@@ -914,14 +914,18 @@ class program extends control
      *
      * @param  int    $projectID
      * @param  int    $programID
+     * @param  string $from  project|program
      * @access public
      * @return void
      */
-    public function PRJEdit($projectID = 0, $programID = 0)
+    public function PRJEdit($projectID = 0, $programID = 0, $from = 'project')
     {
         $this->app->loadLang('custom');
         $this->app->loadLang('project');
         $this->loadModel('productplan');
+
+        /* Navigation stay in program when enter from pgmbrowse. */
+        if($from == 'program') $this->app->rawMethod = 'pgmbrowse';
 
         if($_POST)
         {
@@ -935,6 +939,7 @@ class program extends control
             }
 
             $url = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse');
+            if($from == 'program') $url = inLink('PGMBrowse');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
@@ -969,6 +974,7 @@ class program extends control
         $this->view->linkedProducts = $linkedProducts;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
         $this->view->URSRPairs      = $this->loadModel('custom')->getURSRPairs();
+        $this->view->from           = $from;
 
         $this->display();
     }

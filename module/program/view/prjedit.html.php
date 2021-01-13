@@ -19,6 +19,7 @@
 <?php js::set('projectID', $project->id);?>
 <?php js::set('PGMChangeTips', $lang->program->PGMChangeTips);?>
 <?php js::set('longTime', $lang->program->PRJLongTime);?>
+<?php js::set('from', $from);?>
 <?php $aclList = $project->parent ? $lang->program->PGMPRJAclList : $lang->program->PRJAclList;?>
 <?php $requiredFields = $config->program->PRJEdit->requiredFields;?>
 <div id='mainContent' class='main-content'>

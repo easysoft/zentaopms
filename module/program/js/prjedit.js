@@ -27,7 +27,7 @@ function setParentProgram()
 
     if(confirm(PGMChangeTips))
     {
-        location.href = createLink('program', 'PRJEdit', 'projectID=' + projectID + '&programID=' + parentProgram);
+        location.href = createLink('program', 'PRJEdit', 'projectID=' + projectID + '&programID=' + parentProgram + '&from=' + from);
     }
     else
     {
