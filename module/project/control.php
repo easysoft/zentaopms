@@ -2431,7 +2431,6 @@ class project extends control
             $executionsName = array();
             foreach($executions as $execution) $executionsName[] = $execution->name;
             $executionsPinYin = common::convert2Pinyin($executionsName);
-
             foreach($executions as $execution)
             {
                 $link = helper::createLink('project', 'task', 'executionID=' . $execution->id, '', false, $execution->project);
@@ -2439,6 +2438,10 @@ class project extends control
                 $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
                 echo html::a($link, '<i class="icon icon-' . $this->lang->icons[$execution->type] . '"></i> ' . $execution->code, '', "class='search-list-item' title='$execution->name' $dataKey");
             }
+        }
+        else
+        {
+            echo '<div class="table-empty-tip">' . $this->lang->noData . '</div>';
         }
     }
 

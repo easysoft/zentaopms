@@ -183,7 +183,7 @@ $lang->product->viewMenu->project     = "项目|product|project|status=all&produ
 $lang->product->viewMenu->doc         = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->viewMenu->dynamic     = '动态|product|dynamic|productID=%s';
 $lang->product->viewMenu->dashboard   = array('link' => '仪表盘|product|dashboard|productID=%s');
-$lang->product->viewMenu->set         = array('link' => '设置|product|view|productID=%s', 'subModule' => 'tree,branch');
+$lang->product->viewMenu->set         = array('link' => '设置|product|view|productID=%s', 'subModule' => 'tree,branch', 'alias' => 'edit');
 
 $lang->product->setMenu = new stdclass();
 $lang->product->setMenu->view      = array('link' => '概况|product|view|productID={PRODUCT}', 'alias' => 'edit');

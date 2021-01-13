@@ -357,6 +357,9 @@ class product extends control
 
         $this->product->setMenu($this->products, $productID);
 
+        $moduleIndex = array_search('product', $this->lang->noMenuModule);
+        unset($this->lang->noMenuModule[$moduleIndex]);
+
         if($programID)
         {
             $this->app->rawModule = 'program';

@@ -176,7 +176,7 @@ $lang->product->viewMenu->project     = "項目|product|project|status=all&produ
 $lang->product->viewMenu->doc         = array('link' => '文檔|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->viewMenu->dynamic     = '動態|product|dynamic|productID=%s';
 $lang->product->viewMenu->dashboard   = array('link' => '儀表盤|product|dashboard|productID=%s');
-$lang->product->viewMenu->set         = array('link' => '設置|product|view|productID=%s', 'subModule' => 'tree,branch');
+$lang->product->viewMenu->set         = array('link' => '設置|product|view|productID=%s', 'subModule' => 'tree,branch', 'alias' => 'edit');
 
 $lang->product->setMenu = new stdclass();
 $lang->product->setMenu->view      = array('link' => '概況|product|view|productID={PRODUCT}', 'alias' => 'edit');
