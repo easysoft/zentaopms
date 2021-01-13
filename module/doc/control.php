@@ -28,6 +28,7 @@ class doc extends control
         $this->from      = $this->cookie->from ? $this->cookie->from : 'doc';
         $this->productID = $this->cookie->product ? $this->cookie->product : '0';
         $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        if($this->from == 'doc') $this->session->set('PRJ', '');
         if(!$this->projectID) $this->lang->navGroup->doc = 'doc';
     }
 
