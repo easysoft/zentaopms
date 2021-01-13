@@ -121,18 +121,20 @@ class programplan extends control
         $stages = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
 
         $this->app->loadLang('stage');
-        $project = $this->loadModel('project')->getById($projectID);
-        $plans   = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
+        $project     = $this->loadModel('project')->getById($projectID);
+        $programPlan = $this->project->getById($planID);
+        $plans       = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
 
         $this->view->title      = $this->lang->programplan->create . $this->lang->colon . $project->name;
         $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->programplan->create;
 
-        $this->view->project  = $project;
-        $this->view->stages   = $stages;
-        $this->view->plans    = $plans;
-        $this->view->planID   = $planID;
-        $this->view->type     = 'lists';
+        $this->view->project     = $project;
+        $this->view->stages      = $stages;
+        $this->view->programPlan = $programPlan;
+        $this->view->plans       = $plans;
+        $this->view->planID      = $planID;
+        $this->view->type        = 'lists';
 
         $this->display();
     }

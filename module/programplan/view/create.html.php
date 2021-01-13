@@ -15,7 +15,10 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
-      <?php echo html::a($this->createLink('programplan', 'create', "projectID={$project->id}"), "<span class='text'> {$lang->programplan->create}</span>");?>
+      <?php
+      $title = $programPlan->name . $lang->project->statge . '（' . $programPlan->begin . $lang->project->to . $programPlan->end . '）';
+      echo "<span class='text'>{$title}</span>";
+      ?>
     </span>
   </div>
 </div>
