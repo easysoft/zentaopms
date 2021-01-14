@@ -52,7 +52,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->risk->pri;?></th>
-            <td><?php echo html::select('pri', $lang->risk->priList, '', "class='form-control chosen'");?></td>
+            <td id='priValue'><?php echo html::select('pri', $lang->risk->priList, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->risk->plannedClosedDate;?></th>
