@@ -673,7 +673,7 @@ class program extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
 
-        $this->view->normalProjectsHtml = $this->program->getPRJTreeMenu(0, array('programmodel', 'createPRJManageLink'));
+        $this->view->normalProjectsHtml = $this->program->getPRJTreeMenu(0, array('programmodel', 'createPRJManageLink'), 0, 'dropmenu');
         $this->view->closedProjectsHtml = $closedProjectsHtml;
 
         $this->display();
@@ -782,7 +782,7 @@ class program extends control
         $this->view->pager        = $pager;
         $this->view->programID    = $programID;
         $this->view->program      = $this->program->getPRJByID($programID);
-        $this->view->PRJTree      = $this->program->getPRJTreeMenu(0, array('programmodel', 'createPRJManageLink'));
+        $this->view->PRJTree      = $this->program->getPRJTreeMenu(0, array('programmodel', 'createPRJManageLink'), 0, 'list');
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;

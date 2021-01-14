@@ -1214,19 +1214,21 @@ class programModel extends model
      * Build the query.
      *
      * @param  int    $projectID
+     * @param  string $type   list|dropmenu
      * @access public
      * @return object
      */
-    public function buildPRJMenuQuery($projectID = 0)
+    public function buildPRJMenuQuery($projectID = 0, $type = 'list')
     {
         $path    = '';
         $program = $this->getPRJByID($projectID);
         if($program) $path = $program->path;
 
         return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('type')->eq('program')
+            ->where('deleted')->eq('0')
+            ->beginIF($type == 'list')->andWhere('type')->eq('program')->fi()
+            ->beginIF($type == 'dropmenu')->andWhere('type')->in('program,project')->fi()
             ->andWhere('status')->ne('closed')
-            ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
@@ -1259,13 +1261,14 @@ class programModel extends model
      * @param  int       $projectID
      * @param  string    $userFunc
      * @param  int       $param
+     * @param  string    $type  list|dropmenu
      * @access public
      * @return string
      */
-    public function getPRJTreeMenu($projectID = 0, $userFunc, $param = 0)
+    public function getPRJTreeMenu($projectID = 0, $userFunc, $param = 0, $type = 'list')
     {
         $projectMenu = array();
-        $stmt        = $this->dbh->query($this->buildPRJMenuQuery($projectID));
+        $stmt        = $this->dbh->query($this->buildPRJMenuQuery($projectID, $type));
 
         while($project = $stmt->fetch())
         {
