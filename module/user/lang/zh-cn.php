@@ -101,7 +101,7 @@ $lang->user->issue    = '问题';
 $lang->user->risk     = '风险';
 $lang->user->schedule = '日程';
 $lang->user->todo     = '待办';
-$lang->user->story    = $lang->productSRCommon;
+$lang->user->story    = $lang->SRCommon;
 $lang->user->dynamic  = '动态';
 
 $lang->user->openedBy    = '由%s创建';

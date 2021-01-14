@@ -31,7 +31,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $programList, $programID ? $programID : $project->parent, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
+          <td><?php echo html::select('parent', $programList, $programID != $project->parent ? $programID : $project->parent, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
           <td></td>
           <td></td>
         </tr>
@@ -131,12 +131,6 @@
               <?php endforeach;?>
               <div class="col-sm-4" id="planDefault" style="padding-right: 6px;"><?php echo html::select("plans[0]", array(), 0, "class='form-control chosen'");?></div>
             </div>
-          </td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->program->PRJStoryConcept;?></th>
-          <td>
-            <?php echo html::select('storyConcept', $URSRPairs, $project->storyConcept, "class='form-control chosen'");?>
           </td>
         </tr>
         <tr>

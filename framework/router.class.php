@@ -157,7 +157,7 @@ class router extends baseRouter
         if(!defined('STAGE_KEY'))     define('STAGE_KEY', 2);
         if(!defined('PRODUCT_KEY'))   define('PRODUCT_KEY', 0);
 
-        global $lang;
+        global $lang, $app;
         $sprintConcept = $hourPoint = false;
 
         /* Get config from DB. */
@@ -199,7 +199,19 @@ class router extends baseRouter
         $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$$projectKey];
         $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]  : $this->config->hourPointCommonList['en'][(int)$hourKey];
 
-        $config->URSR = $URSR;
+        $config->URSR        = $URSR;
+        $config->programLink = 'programList';
+        $config->productLink = 'productList';
+        $config->projectLink = 'projectList';
+
+        $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$this->session->user->account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'URSR')")->fetchAll();
+        foreach($userSetting as $setting)
+        {
+             if($setting->key == 'URSR')        $config->URSR        = $setting->value;
+             if($setting->key == 'programLink') $config->programLink = $setting->value;
+             if($setting->key == 'productLink') $config->productLink = $setting->value;
+             if($setting->key == 'projectLink') $config->projectLink = $setting->value;
+        }
 
         if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
         {
@@ -219,28 +231,6 @@ class router extends baseRouter
             /* Set default story concept and init UR and SR concept. */
             $lang->URCommon = zget($URPairs, $config->URSR);
             $lang->SRCommon = zget($SRPairs, $config->URSR);
-            $lang->projectURCommon = $lang->URCommon;
-            $lang->productURCommon = $lang->URCommon;
-            $lang->projectSRCommon = $lang->SRCommon;
-            $lang->productSRCommon = $lang->SRCommon;
-
-            /* Set project story concept. */
-            $projectID = $this->session->PRJ;
-            if($projectID)
-            {    
-                $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PROJECT . "WHERE id = {$projectID}")->fetch();
-                $lang->projectURCommon = zget($URPairs, $storyConcept->storyConcept, $lang->URCommon);
-                $lang->projectSRCommon = zget($SRPairs, $storyConcept->storyConcept, $lang->SRCommon);
-            }    
-
-            /* Set product story concept. */
-            $productID = $this->session->product;
-            if($productID)
-            {    
-                $storyConcept = $this->dbh->query('SELECT `storyConcept` FROM' . TABLE_PRODUCT . "WHERE id = {$productID}")->fetch();
-                $lang->productURCommon = zget($URPairs, $storyConcept->storyConcept, $lang->URCommon);
-                $lang->productSRCommon = zget($SRPairs, $storyConcept->storyConcept, $lang->SRCommon);
-            }
         }
     }
 

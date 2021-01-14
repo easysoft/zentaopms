@@ -51,10 +51,10 @@ class projectStory extends control
         $this->projectstory->setMenu($this->products, $productID, $branch);
 
         $this->loadModel('story')->replaceURLang('requirement');
-        $this->lang->story->title             = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->title);
-        $this->lang->story->createRequirement = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->createRequirement);
-        $this->lang->story->createStory       = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->createStory);
-        $this->lang->story->noStory           = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->noStory);
+        $this->lang->story->title             = str_replace($this->lang->URCommon, $this->lang->URCommon, $this->lang->story->title);
+        $this->lang->story->createRequirement = str_replace($this->lang->URCommon, $this->lang->URCommon, $this->lang->story->createRequirement);
+        $this->lang->story->createStory       = str_replace($this->lang->URCommon, $this->lang->URCommon, $this->lang->story->createStory);
+        $this->lang->story->noStory           = str_replace($this->lang->URCommon, $this->lang->URCommon, $this->lang->story->noStory);
 
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
@@ -82,10 +82,10 @@ class projectStory extends control
         $this->lang->projectstory->menu->story['subModule'] = 'product';
         $this->projectstory->setMenu($this->products, $productID, $branch);
 
-        $this->lang->story->title             = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->title);
-        $this->lang->story->createRequirement = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->createRequirement);
-        $this->lang->story->createStory       = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->createStory);
-        $this->lang->story->noStory           = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->noStory);
+        $this->lang->story->title             = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
+        $this->lang->story->createRequirement = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->createRequirement);
+        $this->lang->story->createStory       = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->createStory);
+        $this->lang->story->noStory           = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->noStory);
 
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
@@ -108,8 +108,8 @@ class projectStory extends control
         $this->lang->projectstory->menu->track['subModule'] = 'story';
         $this->projectstory->setMenu($this->products, $productID, $branch);
 
-        $this->lang->story->requirement = str_replace($this->lang->productURCommon, $this->lang->projectURCommon, $this->lang->story->requirement);
-        $this->lang->story->story       = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->story);
+        $this->lang->story->requirement = str_replace($this->lang->URCommon, $this->lang->URCommon, $this->lang->story->requirement);
+        $this->lang->story->story       = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->story);
 
         echo $this->fetch('story', 'track', "productID=$productID&branch=$branch&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }

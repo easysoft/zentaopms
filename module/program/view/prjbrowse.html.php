@@ -77,6 +77,7 @@ js::set('browseType', $browseType);
         </thead>
         <tbody class="sortable" id='projectTableList'>
           <?php foreach($projectStats as $project):?>
+          <?php $project->from = 'PRJ';?>
           <tr data-id="<?php echo $project->id;?>">
             <?php foreach($setting as $value) $this->program->printCell($value, $project, $users, $programID);?>
           </tr>

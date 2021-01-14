@@ -113,9 +113,9 @@ $lang->report->annualData->foundBugs        = "Bug được tạo";
 $lang->report->annualData->createdCases     = "Tình huống được tạo";
 $lang->report->annualData->involvedProducts = "{$lang->productCommon} liên quan";
 $lang->report->annualData->createdPlans     = "Kế hoạch được tạo";
-$lang->report->annualData->createdStories   = "{$lang->productSRCommon} được tạo";
+$lang->report->annualData->createdStories   = "{$lang->SRCommon} được tạo";
 
-$lang->report->annualData->productOverview = "{$lang->productCommon} {$lang->productSRCommon} số lượng và Phần trăm";
+$lang->report->annualData->productOverview = "{$lang->productCommon} {$lang->SRCommon} số lượng và Phần trăm";
 $lang->report->annualData->qaOverview      = "Bug {$lang->productCommon} số lượng và Phần trăm";
 $lang->report->annualData->projectOverview = "Tổng quan {$lang->executionCommon}";
 $lang->report->annualData->doneProject     = "{$lang->executionCommon} hoàn thành";
@@ -123,13 +123,13 @@ $lang->report->annualData->doingProject    = "{$lang->executionCommon} đang th�
 $lang->report->annualData->suspendProject  = "{$lang->executionCommon} bị đình chỉ";
 
 $lang->report->annualData->projectName   = "{$lang->executionCommon}";
-$lang->report->annualData->finishedStory = "{$lang->productSRCommon} kết thúc";
+$lang->report->annualData->finishedStory = "{$lang->SRCommon} kết thúc";
 $lang->report->annualData->finishedTask  = 'Nhiệm vụ hoàn thành';
 $lang->report->annualData->foundBug      = 'Bug được báo cáo';
 $lang->report->annualData->resolvedBug   = 'Bug được giải quyết';
 $lang->report->annualData->productName   = "{$lang->productCommon}";
 $lang->report->annualData->planCount     = 'Kế hoạch';
-$lang->report->annualData->storyCount    = "{$lang->productSRCommon}";
+$lang->report->annualData->storyCount    = "{$lang->SRCommon}";
 
 $lang->report->annualData->qaData           = "Bug được tạo và Tình huống được tạo";
 $lang->report->annualData->totalCreatedBug  = 'Bug được báo cáo';
@@ -140,12 +140,12 @@ $lang->report->annualData->totalFinishedTask = 'Nhiệm vụ hoàn thành';
 $lang->report->annualData->totalResolvedBug  = 'Bug được giải quyết';
 $lang->report->annualData->totalConsumed     = 'Đã làm';
 
-$lang->report->annualData->poData          = "{$lang->productSRCommon} được tạo, Ưu tiên và tình trạng";
-$lang->report->annualData->totalStoryPri   = "{$lang->productSRCommon} Ưu tiên";
-$lang->report->annualData->totalStoryStage = "Giai đoạn {$lang->productSRCommon}";
+$lang->report->annualData->poData          = "{$lang->SRCommon} được tạo, Ưu tiên và tình trạng";
+$lang->report->annualData->totalStoryPri   = "{$lang->SRCommon} Ưu tiên";
+$lang->report->annualData->totalStoryStage = "Giai đoạn {$lang->SRCommon}";
 
 $lang->report->annualData->qaStatistics  = "Bug được tạo hàng tháng và Tình huống";
-$lang->report->annualData->poStatistics  = "{$lang->productSRCommon} được tạo hàng tháng";
+$lang->report->annualData->poStatistics  = "{$lang->SRCommon} được tạo hàng tháng";
 $lang->report->annualData->devStatistics = "Nhiệm vụ hoàn thành háng tháng, giờ và Bug được giải quyết";
 
 $lang->report->annualData->unit = " ";

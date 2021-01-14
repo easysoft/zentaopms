@@ -12,17 +12,17 @@
 $lang->build->common           = "版本";
 $lang->build->create           = "創建版本";
 $lang->build->edit             = "編輯版本";
-$lang->build->linkStory        = "關聯{$lang->productSRCommon}";
+$lang->build->linkStory        = "關聯{$lang->SRCommon}";
 $lang->build->linkBug          = "關聯Bug";
 $lang->build->delete           = "刪除版本";
 $lang->build->deleted          = "已刪除";
 $lang->build->view             = "版本詳情";
 $lang->build->batchUnlink      = '批量移除';
-$lang->build->batchUnlinkStory = "批量移除{$lang->productSRCommon}";
+$lang->build->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->build->batchUnlinkBug   = '批量移除Bug';
 
 $lang->build->confirmDelete      = "您確認刪除該版本嗎？";
-$lang->build->confirmUnlinkStory = "您確認移除該{$lang->productSRCommon}嗎？";
+$lang->build->confirmUnlinkStory = "您確認移除該{$lang->SRCommon}嗎？";
 $lang->build->confirmUnlinkBug   = "您確認移除該Bug嗎？";
 
 $lang->build->basicInfo = '基本信息';
@@ -40,19 +40,19 @@ $lang->build->desc          = '描述';
 $lang->build->files         = '上傳發行包';
 $lang->build->last          = '上個版本';
 $lang->build->packageType   = '包類型';
-$lang->build->unlinkStory   = "移除{$lang->productSRCommon}";
+$lang->build->unlinkStory   = "移除{$lang->SRCommon}";
 $lang->build->unlinkBug     = '移除Bug';
-$lang->build->stories       = "完成的{$lang->productSRCommon}";
+$lang->build->stories       = "完成的{$lang->SRCommon}";
 $lang->build->bugs          = '解決的Bug';
 $lang->build->generatedBugs = '產生的Bug';
 $lang->build->noProduct     = " <span style='color:red'>該{$lang->executionCommon}沒有關聯{$lang->productCommon}，無法創建版本，請先<a href='%s'>關聯{$lang->productCommon}</a></span>";
 $lang->build->noBuild       = '暫時沒有版本。';
 
 $lang->build->notice = new stdclass();
-$lang->build->notice->changeProduct = "已經關聯{$lang->productSRCommon}或Bug的版本，不能修改其所屬產品";
+$lang->build->notice->changeProduct = "已經關聯{$lang->SRCommon}或Bug的版本，不能修改其所屬產品";
 $lang->build->notice->changeProject = "提交測試單的版本，不能修改其所屬{$lang->executionCommon}";
 
-$lang->build->finishStories = " 本次共完成 %s 個{$lang->productSRCommon}";
+$lang->build->finishStories = " 本次共完成 %s 個{$lang->SRCommon}";
 $lang->build->resolvedBugs  = ' 本次共解決 %s 個Bug';
 $lang->build->createdBugs   = ' 本次共產生 %s 個Bug';
 

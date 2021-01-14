@@ -225,7 +225,7 @@ $lang->custom->conceptOptions->story['0'] = 'Điều kiện';
 $lang->custom->conceptOptions->story['1'] = 'Câu chuyện';
 
 $lang->custom->conceptOptions->hourPoint      = array();
-$lang->custom->conceptOptions->hourPoint['0'] = 'Working Hours';
+$lang->custom->conceptOptions->hourPoint['0'] = 'giờ';
 $lang->custom->conceptOptions->hourPoint['1'] = 'Điểm';
 $lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';
 

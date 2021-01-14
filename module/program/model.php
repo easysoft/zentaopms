@@ -1443,7 +1443,6 @@ class programModel extends model
                 $product->name         = $this->post->productName ? $this->post->productName : $project->name;
                 $product->bind         = $this->post->productName ? 0 : 1;
                 $product->program      = $project->parent ? current(array_filter(explode(',', $parentProgram->path))) : 0;
-                $product->storyConcept = $project->storyConcept;
                 $product->acl          = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO           = $project->PM;
                 $product->createdBy    = $this->app->user->account;
@@ -1707,14 +1706,16 @@ class programModel extends model
                     echo "</ul>";
                     echo "</div>";
 
-                    common::printIcon('program', 'PRJEdit', "projectID=$project->id", $project, 'list', 'edit');
+                    $from      = $project->from == 'PRJ' ? 'PRJ' : 'pgmproject';
+                    $dataGroup = $project->from == 'PRJ' ? 'project' : 'program';
+                    common::printIcon('program', 'PRJEdit', "projectID=$project->id&programID=$project->parent&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$dataGroup");
                     common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group');
                     common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock');
 
                     echo "<div class='btn-group'>";
                     echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action');
+                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$programID&from=$from", $project, 'list', 'link', '', 'btn-action', '', "data-group=$dataGroup");
                     common::printIcon('program', 'PRJWhitelist', "projectID=$project->id", $project, 'list', 'shield-check', '', 'btn-action');
                     if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
                     echo "</ul>";

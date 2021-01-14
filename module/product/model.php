@@ -43,8 +43,6 @@ class productModel extends model
             $replace['branch']    = $branch;
             common::setMenuVars($this->lang->product->menu, $key, $replace);
         }
-
-        if($this->cookie->lastProduct and ($this->cookie->lastProduct != $this->session->product)) $this->replaceStoryConcept($productID);
     }
 
     /**
@@ -422,33 +420,11 @@ class productModel extends model
             {
                 $closedProducts[$product->id] = $product;
             }
-            $concept = $this->getStoryConceptByProduct($product->id);
-            $product->conceptName = $concept->SR;
         }
         $products = $mineProducts + $otherProducts + $closedProducts;
 
         if(empty($num)) return $products;
         return array_slice($products, 0, $num, true);
-    }
-
-    /*
-     * Get the concept of requirements for product use.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function getStoryConceptByProduct($productID = 0)
-    {
-        $this->loadModel('custom');
-        $product = $this->getById($productID);
-        $URPairs = $this->custom->getURPairs();
-        $SRPairs = $this->custom->getSRPairs();
-
-        $concept = new stdClass();
-        $concept->UR = zget($URPairs, $product->storyConcept, $this->lang->URCommon);
-        $concept->SR = zget($SRPairs, $product->storyConcept, $this->lang->SRCommon);
-        return $concept;
     }
 
     /*
@@ -1399,9 +1375,9 @@ class productModel extends model
         $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
         $rate  = count($stories) == 0 || $rateCount == 0 ? 0 : round(count($cases) / $rateCount, 2);
 
-        $storyCommon = $this->lang->productSRCommon;
-        if($storyType == 'requirement') $storyCommon = $this->lang->productURCommon;
-        if($storyType == 'story')       $storyCommon = $this->lang->productSRCommon;
+        $storyCommon = $this->lang->SRCommon;
+        if($storyType == 'requirement') $storyCommon = $this->lang->URCommon;
+        if($storyType == 'story')       $storyCommon = $this->lang->SRCommon;
 
         return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
     }
@@ -1532,50 +1508,6 @@ class productModel extends model
     }
 
     /**
-     * Replace story concept when change product.
-     *
-     * @param  int   $productID
-     * @access public
-     * @return void
-     */
-    public function replaceStoryConcept($productID = 0)
-    {
-        if($this->cookie->lastProduct) return false;
-
-        $this->loadModel('custom');
-        $product     = $this->getByID($productID);
-        $lastProduct = $this->getByID($this->cookie->lastProduct);
-
-        $URPairs = $this->custom->getURPairs();
-        $SRPairs = $this->custom->getSRPairs();
-
-        /* Replace menu lang. */
-        foreach($this->lang->product->menu as $key => $menu)
-        {
-            if($key == 'requirement')
-            {
-                $link    = explode('|', $menu['link']);
-                $link[0] = zget($URPairs, $product->storyConcept, $this->lang->URCommon);
-                $this->lang->product->menu->$key = implode('|', $link);
-            }
-            if($key == 'story')
-            {
-                $link    = explode('|', $menu['link']);
-                $link[0] = zget($SRPairs, $product->storyConcept, $this->lang->SRCommon);
-                $this->lang->product->menu->$key = implode('|', $link);
-            }
-        }
-
-        $lastSRCommon = zget($SRPairs, $lastProduct->storyConcept, $this->lang->SRCommon);
-        $SRCommon     = zget($SRPairs, $product->storyConcept, $this->lang->SRCommon);
-
-        $this->lang->story->createStory       = str_replace($lastSRCommon, $SRCommon, $this->lang->story->create);
-        $this->lang->story->createRequirement = str_replace($lastSRCommon, $SRCommon, $this->lang->story->createRequirement);
-        $this->lang->story->noStory           = str_replace($lastSRCommon, $SRCommon, $this->lang->story->noStory);
-        $this->lang->story->title             = str_replace($lastSRCommon, $SRCommon, $this->lang->story->title);
-    }
-
-    /**
      * Change the projects set of the program.
      *
      * @param  object $projects
@@ -1584,11 +1516,11 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function changeProjectsPGM($projects, $programID, $comfirmChange = 'no')
+    public function updateProjects($projects, $programID, $comfirmChange = 'no')
     {
         foreach($projects as $project)
         {
-            if((count($project->product) == 1) or $comfirmChange)
+            if((count($project->product) == 1) or $comfirmChange == 'yes')
             {
                 $this->dao->update(TABLE_PROJECT)
                     ->set('parent')->eq($programID)

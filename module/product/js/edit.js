@@ -5,8 +5,8 @@ $(function()
         var programID = $(this).val();
         if(programID != oldProgramID && projects)
         {
-            var singleLinkProjects = '';
-            var mulLinkProjects = '';
+            var singleLinkProjects   = '';
+            var multipleLinkProjects = '';
             for(var i in projects)
             {
                 var project = projects[i];
@@ -17,16 +17,20 @@ $(function()
                 }
                 else
                 {
-                    mulLinkProjects += project.name + ',';
+                    multipleLinkProjects += project.name + ',';
                 }
             }
 
             PGMChangeTip     = PGMChangeTip.replace("%s", singleLinkProjects);
-            confirmChangePGM = confirmChangePGM.replace("%s", mulLinkProjects);
+            confirmChangePGM = confirmChangePGM.replace("%s", multipleLinkProjects);
             if(singleLinkProjects) alert(PGMChangeTip);
-            if(mulLinkProjects && confirm(confirmChangePGM))
+            if(multipleLinkProjects && confirm(confirmChangePGM))
             {
                 $('#comfirmChange').val('yes');
+            }
+            else
+            {
+                $('#comfirmChange').val('no');
             }
         }
     })

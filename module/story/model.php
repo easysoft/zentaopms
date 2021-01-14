@@ -1569,6 +1569,10 @@ class storyModel extends model
         {
             dao::$errors['hourPointValue'] = sprintf($this->lang->error->notempty, $this->lang->story->convertRelations);
         }
+        elseif(isset($data->hourPointValue) and !is_numeric($data->hourPointValue))
+        {
+            dao::$errors['hourPointValue'] = sprintf($this->lang->error->float, $this->lang->story->convertRelations);
+        }
         if(dao::isError()) return false;
 
         /* Create tasks. */
@@ -3870,8 +3874,8 @@ class storyModel extends model
         if($type == 'requirement')
         {   
             $storyLang = $this->lang->story;
-            $SRCommon  = $this->lang->productSRCommon;
-            $URCommon  = $this->lang->productURCommon;
+            $SRCommon  = $this->lang->SRCommon;
+            $URCommon  = $this->lang->URCommon;
 
             $storyLang->create             = str_replace($SRCommon, $URCommon, $storyLang->create);
             $storyLang->changeAction       = str_replace($SRCommon, $URCommon, $storyLang->changeAction);

@@ -75,7 +75,7 @@ $lang->custom->closedProduct = '已關閉' . $lang->productCommon;
 
 $lang->custom->object['product']  = $lang->productCommon;
 $lang->custom->object['project']  = $lang->executionCommon;
-$lang->custom->object['story']    = $lang->productSRCommon;
+$lang->custom->object['story']    = $lang->SRCommon;
 $lang->custom->object['task']     = '任務';
 $lang->custom->object['bug']      = 'Bug';
 $lang->custom->object['testcase'] = '用例';
@@ -155,7 +155,7 @@ $lang->custom->notice->noClosedBlock               = '沒有永久關閉的區�
 $lang->custom->notice->required                    = '頁面提交時，選中的欄位必填';
 $lang->custom->notice->conceptResult               = '我們已經根據您的選擇為您設置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath                 = '您可以在：後台 -> 自定義 -> 流程頁面修改。';
-$lang->custom->notice->readOnlyOfProduct           = '禁止修改後，已關閉' . $lang->productCommon . '下的' . $lang->productSRCommon . '、Bug、用例、日誌、發佈、計劃都禁止修改。';
+$lang->custom->notice->readOnlyOfProduct           = '禁止修改後，已關閉' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日誌、發佈、計劃都禁止修改。';
 $lang->custom->notice->readOnlyOfProject           = '禁止修改後，已關閉' . $lang->executionCommon . '下的任務、版本、日誌以及關聯需求都禁止修改。';
 
 $lang->custom->notice->indexPage['product']        = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";

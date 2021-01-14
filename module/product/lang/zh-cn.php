@@ -11,7 +11,7 @@
  */
 $lang->product->common       = $lang->productCommon . '视图';
 $lang->product->index        = $lang->productCommon . '主页';
-$lang->product->browse       = "{$lang->productSRCommon}列表";
+$lang->product->browse       = "{$lang->SRCommon}列表";
 $lang->product->dynamic      = '产品动态';
 $lang->product->view         = "{$lang->productCommon}概况";
 $lang->product->edit         = "编辑{$lang->productCommon}";
@@ -50,14 +50,14 @@ $lang->product->moreProduct = "更多产品";
 $lang->product->projectInfo = "所有与此产品关联的项目";
 
 $lang->product->currentExecution      = "当前{$lang->sprintCommon}";
-$lang->product->activeStories         = "激活{$lang->productSRCommon}";
-$lang->product->activeStoriesTitle    = "激活{$lang->productSRCommon}";
-$lang->product->changedStories        = "已变更{$lang->productSRCommon}";
-$lang->product->changedStoriesTitle   = "已变更{$lang->productSRCommon}";
-$lang->product->draftStories          = "草稿{$lang->productSRCommon}";
-$lang->product->draftStoriesTitle     = "草稿{$lang->productSRCommon}";
-$lang->product->closedStories         = "已关闭{$lang->productSRCommon}";
-$lang->product->closedStoriesTitle    = "已关闭{$lang->productSRCommon}";
+$lang->product->activeStories         = "激活{$lang->SRCommon}";
+$lang->product->activeStoriesTitle    = "激活{$lang->SRCommon}";
+$lang->product->changedStories        = "已变更{$lang->SRCommon}";
+$lang->product->changedStoriesTitle   = "已变更{$lang->SRCommon}";
+$lang->product->draftStories          = "草稿{$lang->SRCommon}";
+$lang->product->draftStoriesTitle     = "草稿{$lang->SRCommon}";
+$lang->product->closedStories         = "已关闭{$lang->SRCommon}";
+$lang->product->closedStoriesTitle    = "已关闭{$lang->SRCommon}";
 $lang->product->unResolvedBugs        = '未解决Bug';
 $lang->product->unResolvedBugsTitle   = '未解决Bug';
 $lang->product->assignToNullBugs      = '未指派Bug';
@@ -99,7 +99,6 @@ $lang->product->iterationInfo  = '迭代 %s 次';
 $lang->product->iterationView  = '查看详情';
 $lang->product->createdBy      = '由谁创建';
 $lang->product->createdDate    = '创建日期';
-$lang->product->storyConcept   = '需求概念组合';
 
 $lang->product->searchStory  = '搜索';
 $lang->product->assignedToMe = '指给我';

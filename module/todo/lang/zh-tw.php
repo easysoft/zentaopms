@@ -37,7 +37,7 @@ $lang->todo->project      = "所屬項目";
 $lang->todo->product      = "所屬產品";
 $lang->todo->execution    = "所屬" . $lang->sprintCommon;
 
-$lang->todo->reasonList['story'] = "轉{$lang->productSRCommon}";
+$lang->todo->reasonList['story'] = "轉{$lang->SRCommon}";
 $lang->todo->reasonList['task']  = "轉任務";
 $lang->todo->reasonList['bug']   = "轉Bug";
 $lang->todo->reasonList['done']  = "完成";

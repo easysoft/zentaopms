@@ -14,8 +14,8 @@ $lang->story->create            = "Create Story";
 $lang->story->createStory       = 'Create Story';
 $lang->story->createRequirement = 'Create Requirement';
 
-$lang->story->requirement       = zget($lang, 'urCommon', "Requirement");
-$lang->story->story             = zget($lang, 'srCommon', "Story");
+$lang->story->requirement       = zget($lang, 'UrCommon', "Requirement");
+$lang->story->story             = zget($lang, 'SrCommon', "Story");
 $lang->story->createStory       = 'Create ' . $lang->story->story;
 $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
 $lang->story->affectedStories   = "Affected {$lang->story->story}";
@@ -78,7 +78,7 @@ $lang->story->convertRelations  = 'Convert Relations';
 
 $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
-$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->projectSRCommon} and link {$lang->projectSRCommon} to the task. The closed {$lang->projectSRCommon} will not be converted into tasks.";
+$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->SRCommon} and link {$lang->SRCommon} to the task. The closed {$lang->SRCommon} will not be converted into tasks.";
 $lang->story->successToTask   = "Converted to task.";
 
 $lang->story->common         = 'Câu chuyện';
@@ -125,7 +125,7 @@ $lang->story->version        = 'Phiên bản';
 $lang->story->plan           = 'Kế hoạch liên kết';
 $lang->story->planAB         = 'Kế hoạch';
 $lang->story->comment        = 'Nhận xét';
-$lang->story->children       = "$lang->projectSRCommon} con";
+$lang->story->children       = "$lang->SRCommon} con";
 $lang->story->childrenAB     = "C";
 $lang->story->linkStories    = 'Câu chuyện liên kết';
 $lang->story->childStories   = 'Câu chuyện được phân rã';
@@ -262,8 +262,8 @@ $lang->story->mustChoosePreVersion = 'Chọn một phiên bản để chuyển t
 $lang->story->noStory              = 'Không có câu chuyện nào';
 $lang->story->noRequirement        = 'Không có câu chuyện nào';
 $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
-$lang->story->cannotDeleteParent   = "Không thể xóa {$lang->projectSRCommon} mẹ";
-$lang->story->moveChildrenTips     = "Its Child {$lang->projectSRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->projectSRCommon}.";
+$lang->story->cannotDeleteParent   = "Không thể xóa {$lang->SRCommon} mẹ";
+$lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 
 $lang->story->form = new stdclass();

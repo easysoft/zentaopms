@@ -22,6 +22,6 @@ $lang->projectrelease->changeStatus     = "Thay đổi tình trạng";
 $lang->projectrelease->batchUnlink      = "Hủy liên kết hàng loạt";
 $lang->projectrelease->batchUnlinkStory = "Hủy liên kết câu chuyện hàng loạt";
 $lang->projectrelease->batchUnlinkBug   = "Hủy liên kết Bug hàng loạt";
-$lang->projectrelease->unlinkStory      = "Unlink {$lang->productSRCommon}";
+$lang->projectrelease->unlinkStory      = "Unlink {$lang->SRCommon}";
 $lang->projectrelease->unlinkBug        = 'Unlink Bug';
 $lang->projectrelease->export           = 'Xuất ra HTML';

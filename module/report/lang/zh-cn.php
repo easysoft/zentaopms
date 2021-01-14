@@ -113,9 +113,9 @@ $lang->report->annualData->foundBugs        = "累计创建Bug数";
 $lang->report->annualData->createdCases     = "累计创建用例数";
 $lang->report->annualData->involvedProducts = "累计参与{$lang->productCommon}数";
 $lang->report->annualData->createdPlans     = "累计创建计划数";
-$lang->report->annualData->createdStories   = "累计创建{$lang->productSRCommon}数";
+$lang->report->annualData->createdStories   = "累计创建{$lang->SRCommon}数";
 
-$lang->report->annualData->productOverview = "{$lang->productCommon}创建{$lang->productSRCommon}数及占比";
+$lang->report->annualData->productOverview = "{$lang->productCommon}创建{$lang->SRCommon}数及占比";
 $lang->report->annualData->qaOverview      = "{$lang->productCommon}创建Bug数及占比";
 $lang->report->annualData->projectOverview = "参与{$lang->executionCommon}概览";
 $lang->report->annualData->doneProject     = "已完成的{$lang->executionCommon}";
@@ -123,13 +123,13 @@ $lang->report->annualData->doingProject    = "正在进行的{$lang->executionCo
 $lang->report->annualData->suspendProject  = "已挂起的{$lang->executionCommon}";
 
 $lang->report->annualData->projectName   = "{$lang->executionCommon}名称";
-$lang->report->annualData->finishedStory = "完成{$lang->productSRCommon}数";
+$lang->report->annualData->finishedStory = "完成{$lang->SRCommon}数";
 $lang->report->annualData->finishedTask  = '完成任务数';
 $lang->report->annualData->foundBug      = '创建Bug数';
 $lang->report->annualData->resolvedBug   = '解决Bug数';
 $lang->report->annualData->productName   = "{$lang->productCommon}名称";
 $lang->report->annualData->planCount     = "计划数";
-$lang->report->annualData->storyCount    = "{$lang->productSRCommon}数";
+$lang->report->annualData->storyCount    = "{$lang->SRCommon}数";
 
 $lang->report->annualData->qaData           = "累计创建Bug数和创建用例数";
 $lang->report->annualData->totalCreatedBug  = '累计创建Bug数';
@@ -140,12 +140,12 @@ $lang->report->annualData->totalFinishedTask = '完成任务数';
 $lang->report->annualData->totalResolvedBug  = '解决Bug数';
 $lang->report->annualData->totalConsumed     = '累计工时';
 
-$lang->report->annualData->poData          = "所创建{$lang->productSRCommon}数和对应的优先级及状态";
-$lang->report->annualData->totalStoryPri   = "创建{$lang->productSRCommon}优先级分布";
-$lang->report->annualData->totalStoryStage = "创建{$lang->productSRCommon}阶段分布";
+$lang->report->annualData->poData          = "所创建{$lang->SRCommon}数和对应的优先级及状态";
+$lang->report->annualData->totalStoryPri   = "创建{$lang->SRCommon}优先级分布";
+$lang->report->annualData->totalStoryStage = "创建{$lang->SRCommon}阶段分布";
 
 $lang->report->annualData->qaStatistics  = "月创建Bug数和创建用例数";
-$lang->report->annualData->poStatistics  = "月创建{$lang->productSRCommon}数";
+$lang->report->annualData->poStatistics  = "月创建{$lang->SRCommon}数";
 $lang->report->annualData->devStatistics = "月完成任务数及累计工时和解决Bug数";
 
 $lang->report->annualData->unit = "个";

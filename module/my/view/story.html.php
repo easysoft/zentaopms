@@ -15,7 +15,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <span class='nav-title' style='padding-left:0px;'><?php echo $URCommon;?></span>
+    <span class='nav-title' style='padding-left:0px;'><?php echo $lang->URCommon;?></span>
     <?php
     if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' && $mode == 'requirement' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' && $mode == 'requirement' ? ' btn-active-text' : '') . "'");
     if($app->rawMethod == 'contribute')
@@ -26,7 +26,7 @@
     }
     ?>
     <span class='nav-title'> | </span>
-    <span class='nav-title'><?php echo $SRCommon;?></span>
+    <span class='nav-title'><?php echo $lang->SRCommon;?></span>
     <?php
     if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=story&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' && $mode == 'story' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' && $mode == 'story' ? ' btn-active-text' : '') . "'");
     if($app->rawMethod == 'contribute')
@@ -37,14 +37,11 @@
     }
     ?>
   </div>
-  <div class="btn-toolbar pull-right">
-    <?php common::printIcon('my', 'setStoryConcept', '', '', 'button', 'icon icon-cog-outline', '', 'iframe', 1, 'data-width="600"', $lang->my->setStoryConcept);?>
-  </div>
 </div>
 <div id="mainContent">
   <?php if(!$stories):?>
   <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo $mode == 'story' ? sprintf($lang->my->noData, $SRCommon) : sprintf($lang->my->noData, $URCommon);?></span></p>
+    <p><span class="text-muted"><?php echo $mode == 'story' ? sprintf($lang->my->noData, $lang->SRCommon) : sprintf($lang->my->noData, $lang->URCommon);?></span></p>
   </div>
   <?php else:?>
   <form id='myStoryForm' class="main-table table-story" data-ride="table" method="post">

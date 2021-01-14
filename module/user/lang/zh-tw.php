@@ -99,7 +99,7 @@ $lang->user->issue    = '問題';
 $lang->user->risk     = '風險';
 $lang->user->schedule = '日程';
 $lang->user->todo     = '待辦';
-$lang->user->story    = $lang->productSRCommon;
+$lang->user->story    = $lang->SRCommon;
 $lang->user->dynamic  = '動態';
 
 $lang->user->openedBy    = '由%s創建';
@@ -147,7 +147,7 @@ $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
 
 $lang->user->personalData['createdTodos']   = '創建的待辦數';
-$lang->user->personalData['createdStories'] = "創建的{$lang->productSRCommon}數";
+$lang->user->personalData['createdStories'] = "創建的{$lang->SRCommon}數";
 $lang->user->personalData['finishedTasks']  = '完成的任務數';
 $lang->user->personalData['resolvedBugs']   = '解決的Bug數';
 $lang->user->personalData['createdCases']   = '創建的用例數';

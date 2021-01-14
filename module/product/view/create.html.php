@@ -52,11 +52,6 @@
             </td>
             <td></td>
           </tr>  
-          <tr>
-            <th><?php echo $lang->product->storyConcept;?></th>
-            <td><?php echo html::select('storyConcept', $URSRPairs, $config->custom->URSR, "class='form-control chosen'");?></td>
-            <td></td>
-          </tr>
           <tr class='hide'>
             <th><?php echo $lang->product->status;?></th>
             <td><?php echo html::hidden('status', 'normal');?></td>

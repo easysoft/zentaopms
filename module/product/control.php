@@ -203,7 +203,7 @@ class product extends control
         /* Change for requirement story title. */
         if($storyType == 'requirement')
         {
-            $this->lang->story->title = str_replace($this->lang->productSRCommon, $this->lang->productURCommon, $this->lang->story->title);
+            $this->lang->story->title = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
         }
 
@@ -349,10 +349,13 @@ class product extends control
         if(!empty($_POST))
         {
             $changes = $this->product->update($productID);
+
+            /* Change the projects set of the program. */
             if(($_POST['program'] != $product->program) and $projects)
             {
-                $this->product->changeProjectsPGM($projects, $_POST['program'], $_POST['comfirmChange']);
+                $this->product->updateProjects($projects, $_POST['program'], $_POST['comfirmChange']);
             }
+
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {

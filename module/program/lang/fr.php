@@ -30,7 +30,6 @@ $lang->program->PRJUpdateOrder       = 'Order';
 $lang->program->PRJSort              = 'Order';
 $lang->program->PRJWhitelist         = 'Project Whitelist';
 $lang->program->PRJAddWhitelist      = 'Project Add Whitelist';
-$lang->program->PRJStoryConcept      = 'Story Concept';
 $lang->program->unbindWhielist       = 'Project Remove Whitelist';
 $lang->program->PRJManageProducts    = 'Manage Products';
 $lang->program->view                 = 'Program Detail';

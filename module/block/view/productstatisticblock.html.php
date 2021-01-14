@@ -124,7 +124,7 @@ $(function()
         <div class="table-row">
           <div class="col-6 text-middle">
             <div class="tile">
-              <div class="tile-title"><?php echo $product->conceptName;?></div>
+              <div class="tile-title"><?php echo $lang->SRCommon;?></div>
               <?php if($product->stories):?>
               <div class="tile-amount"><?php echo array_sum($product->stories);?></div>
               <?php common::printLink('product', 'browse', "productID={$product->id}&branch=&type=allstory", $lang->story->viewAll . '<span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span>', '', 'class="btn btn-primary btn-circle btn-icon-right btn-sm"');?>
