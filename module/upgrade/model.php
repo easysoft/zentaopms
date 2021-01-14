@@ -660,6 +660,11 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('20.0.beta2'));
             $this->adjustBudget();
             $this->appendExec('20_0_beta2');
+        case '20_0_beta3':
+            $this->saveLogs('Execute 20_0_beta3');
+            $this->execSQL($this->getUpgradeFile('20.0.beta3'));
+            $this->addPriv20_0_bata3();
+            $this->appendExec('20_0_beta3');
         }
 
         $this->deletePatch();
@@ -4468,6 +4473,36 @@ class upgradeModel extends model
             if($data) $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($id)->exec();
         }
 
+        return true;
+    }
+
+    public function addPriv20_0_bata3()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('user')->andWhere('method')->eq('view')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $this->dao->replace(TABLE_GROUPPRIV)
+                ->set('module')->eq('user')
+                ->set('method')->eq('execution')
+                ->set('`group`')->eq($groupID)
+                ->exec();
+            $this->saveLogs($this->dao->get());
+
+            $this->dao->replace(TABLE_GROUPPRIV)
+                ->set('module')->eq('user')
+                ->set('method')->eq('issue')
+                ->set('`group`')->eq($groupID)
+                ->exec();
+            $this->saveLogs($this->dao->get());
+
+            $this->dao->replace(TABLE_GROUPPRIV)
+                ->set('module')->eq('user')
+                ->set('method')->eq('risk')
+                ->set('`group`')->eq($groupID)
+                ->exec();
+            $this->saveLogs($this->dao->get());
+        }
         return true;
     }
 }

@@ -40,7 +40,7 @@
     $active = $methodName == 'dynamic' ? ' btn-active-text' : '';
     common::printLink('user', 'dynamic',  "userID={$user->id}&fromModule=$fromModule&type=today", $label, '', "class='btn btn-link $active'");
 
-    $label  = "<span class='text'>{$lang->execution->common}</span>";
+    $label  = "<span class='text'>{$lang->user->execution}</span>";
     $active = $methodName == 'execution' ? ' btn-active-text' : '';
     common::printLink('user', 'execution',  "userID={$user->id}&fromModule=$fromModule", $label, '', "class='btn btn-link $active'");
 

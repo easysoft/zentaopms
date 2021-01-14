@@ -898,7 +898,6 @@ class actionModel extends model
                 }
 
                 $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $PRJ);
-                if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectName));
                 $action->objectLabel = $objectLabel;
             }
             else
