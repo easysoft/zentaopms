@@ -1443,7 +1443,6 @@ class programModel extends model
                 $product->name         = $this->post->productName ? $this->post->productName : $project->name;
                 $product->bind         = $this->post->productName ? 0 : 1;
                 $product->program      = $project->parent ? current(array_filter(explode(',', $parentProgram->path))) : 0;
-                $product->storyConcept = $project->storyConcept;
                 $product->acl          = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO           = $project->PM;
                 $product->createdBy    = $this->app->user->account;

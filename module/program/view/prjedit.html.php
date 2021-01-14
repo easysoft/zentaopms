@@ -134,12 +134,6 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->PRJStoryConcept;?></th>
-          <td>
-            <?php echo html::select('storyConcept', $URSRPairs, $project->storyConcept, "class='form-control chosen'");?>
-          </td>
-        </tr>
-        <tr>
           <th><?php echo $lang->program->PRJDesc;?></th>
           <td colspan='3'>
             <?php echo html::textarea('desc', $project->desc, "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>

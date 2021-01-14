@@ -66,7 +66,7 @@ $lang->action->periods['lastmonth'] = $lang->action->dynamic->lastMonth;
 
 $lang->action->objectTypes['product']     = $lang->productCommon;
 $lang->action->objectTypes['branch']      = 'Branche';
-$lang->action->objectTypes['story']       = $lang->productSRCommon;
+$lang->action->objectTypes['story']       = $lang->SRCommon;
 $lang->action->objectTypes['design']      = 'Design';
 $lang->action->objectTypes['productplan'] = 'Plan';
 $lang->action->objectTypes['release']     = 'Release';

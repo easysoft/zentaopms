@@ -1676,7 +1676,7 @@ class projectModel extends model
             $this->config->product->search['module'] = 'projectStory';
         }
 
-        $this->config->product->search['fields']['title'] = str_replace($this->lang->productSRCommon, $this->lang->projectSRCommon, $this->lang->story->title);
+        $this->config->product->search['fields']['title'] = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);

@@ -48,9 +48,9 @@ if($config->global->flow == 'full' or $config->global->flow != 'onlyTask')
 
 if($config->global->flow == 'full' or $config->global->flow == 'onlyStory')
 {
-    $lang->tutorial->tasks['createStory']         = array('title' => "創建{$lang->productSRCommon}");
-    $lang->tutorial->tasks['createStory']['nav']  = array('module' => 'story', 'method' => 'create', 'menuModule' => 'product', 'menu' => 'story', 'target' => '.create-story-btn', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => "提{$lang->productSRCommon}");
-    $lang->tutorial->tasks['createStory']['desc'] = "<p>在系統創建一個新的{$lang->productSRCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> {$lang->productSRCommon} <i class='icon icon-angle-right'></i> 添加{$lang->productSRCommon}</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的{$lang->productSRCommon}信息；</li><li data-target='submit'>保存{$lang->productSRCommon}信息。</li></ul>";
+    $lang->tutorial->tasks['createStory']         = array('title' => "創建{$lang->SRCommon}");
+    $lang->tutorial->tasks['createStory']['nav']  = array('module' => 'story', 'method' => 'create', 'menuModule' => 'product', 'menu' => 'story', 'target' => '.create-story-btn', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => "提{$lang->SRCommon}");
+    $lang->tutorial->tasks['createStory']['desc'] = "<p>在系統創建一個新的{$lang->SRCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 添加{$lang->SRCommon}</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的{$lang->SRCommon}信息；</li><li data-target='submit'>保存{$lang->SRCommon}信息。</li></ul>";
 }
 
 if($config->global->flow == 'full' or $config->global->flow == 'onlyTask')
@@ -65,14 +65,14 @@ if($config->global->flow == 'full' or $config->global->flow == 'onlyTask')
 
     if($config->global->flow == 'full')
     {
-        $lang->tutorial->tasks['linkStory']         = array('title' => "關聯{$lang->productSRCommon}");
-        $lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => "關聯{$lang->productSRCommon}");
-        $lang->tutorial->tasks['linkStory']['desc'] = "<p>將{$lang->productSRCommon}關聯到{$lang->executionCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> {$lang->productSRCommon} <i class='icon icon-angle-right'></i> 關聯{$lang->productSRCommon}</span> 頁面；</li><li data-target='form'>在{$lang->productSRCommon}列表中勾選要關聯的{$lang->productSRCommon}；</li><li data-target='submit'>保存關聯的{$lang->productSRCommon}信息。</li></ul>";
+        $lang->tutorial->tasks['linkStory']         = array('title' => "關聯{$lang->SRCommon}");
+        $lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => "關聯{$lang->SRCommon}");
+        $lang->tutorial->tasks['linkStory']['desc'] = "<p>將{$lang->SRCommon}關聯到{$lang->executionCommon}：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 關聯{$lang->SRCommon}</span> 頁面；</li><li data-target='form'>在{$lang->SRCommon}列表中勾選要關聯的{$lang->SRCommon}；</li><li data-target='submit'>保存關聯的{$lang->SRCommon}信息。</li></ul>";
     }
 
     $lang->tutorial->tasks['createTask']         = array('title' => '分解任務');
     $lang->tutorial->tasks['createTask']['nav']  = array('module' => 'task', 'method' => 'create', 'menuModule' => 'project', 'menu' => 'story', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '建任務');
-    $lang->tutorial->tasks['createTask']['desc'] = "<p>將{$lang->executionCommon}{$lang->productSRCommon}分解為任務：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> {$lang->productSRCommon} <i class='icon icon-angle-right'></i> 分解任務</span> 頁面；</li><li data-target='form'>在表單中填寫任務信息；</li><li data-target='submit'>保存任務信息。</li></ul>";
+    $lang->tutorial->tasks['createTask']['desc'] = "<p>將{$lang->executionCommon}{$lang->SRCommon}分解為任務：</p><ul><li data-target='nav'>打開 <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 分解任務</span> 頁面；</li><li data-target='form'>在表單中填寫任務信息；</li><li data-target='submit'>保存任務信息。</li></ul>";
 }
 
 if($config->global->flow == 'full' or $config->global->flow == 'onlyTest')

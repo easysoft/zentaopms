@@ -12,17 +12,17 @@
 $lang->build->common           = "Bản dựng";
 $lang->build->create           = "Tạo bản dựng";
 $lang->build->edit             = "Sửa bản dựng";
-$lang->build->linkStory        = "Liên kết {$lang->productSRCommon}";
+$lang->build->linkStory        = "Liên kết {$lang->SRCommon}";
 $lang->build->linkBug          = "Liên kết Bug";
 $lang->build->delete           = "Xóa bản dựng";
 $lang->build->deleted          = "Đã xóa";
 $lang->build->view             = "Chi tiết bản dựng";
 $lang->build->batchUnlink      = 'Hủy liên kết hàng loạt';
-$lang->build->batchUnlinkStory = "Hủy liên kết {$lang->productSRCommon} hàng loạt";
+$lang->build->batchUnlinkStory = "Hủy liên kết {$lang->SRCommon} hàng loạt";
 $lang->build->batchUnlinkBug   = 'Hủy liên kết Bug hàng loạt';
 
 $lang->build->confirmDelete      = "Bạn có muốn xóa bản dựng này?";
-$lang->build->confirmUnlinkStory = "Bạn có muốn hủy liên kết {$lang->productSRCommon} này?";
+$lang->build->confirmUnlinkStory = "Bạn có muốn hủy liên kết {$lang->SRCommon} này?";
 $lang->build->confirmUnlinkBug   = "Bạn có muốn hủy liên kết this Bug?";
 
 $lang->build->basicInfo = 'Thông tin cơ bản';
@@ -40,19 +40,19 @@ $lang->build->desc          = 'Mô tả';
 $lang->build->files         = 'Files';
 $lang->build->last          = 'Bản dựng cuối';
 $lang->build->packageType   = 'Loại gói';
-$lang->build->unlinkStory   = "Hủy liên kết {$lang->productSRCommon}";
+$lang->build->unlinkStory   = "Hủy liên kết {$lang->SRCommon}";
 $lang->build->unlinkBug     = 'Hủy liên kết Bug';
-$lang->build->stories       = "{$lang->productSRCommon} đã kết thúc";
+$lang->build->stories       = "{$lang->SRCommon} đã kết thúc";
 $lang->build->bugs          = 'Bugs đã giải quyết';
 $lang->build->generatedBugs = 'Bugs đã báo cáo';
 $lang->build->noProduct     = " <span style='color:red'>{$lang->executionCommon} này chưa liên kết tới {$lang->productCommon}, bởi vậy Bản dựng này không thể tạo. Vui lòng liên kết <a href='%s'> {$lang->productCommon} trước</a></span>";
 $lang->build->noBuild       = 'Không có bản dựng nào';
 
 $lang->build->notice = new stdclass();
-$lang->build->notice->changeProduct = "The {$lang->productSRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
+$lang->build->notice->changeProduct = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
 $lang->build->notice->changeProject = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
 
-$lang->build->finishStories = "  {$lang->productSRCommon} đã kết thúc %s";
+$lang->build->finishStories = "  {$lang->SRCommon} đã kết thúc %s";
 $lang->build->resolvedBugs  = '  Bug đã giải quyết %s';
 $lang->build->createdBugs   = '  Bug đã báo cáo %s';
 

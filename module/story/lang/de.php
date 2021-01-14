@@ -14,8 +14,8 @@ $lang->story->create            = "Story hinzufügen";
 $lang->story->createStory       = "Story hinzufügen";
 $lang->story->createRequirement = 'Create Requirement';
 
-$lang->story->requirement       = zget($lang, 'urCommon', "Requirement");
-$lang->story->story             = zget($lang, 'srCommon', "Story");
+$lang->story->requirement       = zget($lang, 'URCommon', "Requirement");
+$lang->story->story             = zget($lang, 'SRCommon', "Story");
 $lang->story->createStory       = 'Create ' . $lang->story->story;
 $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
 $lang->story->affectedStories   = "Affected {$lang->story->story}";
@@ -78,7 +78,7 @@ $lang->story->convertRelations  = 'Convert Relations';
 
 $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
-$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->projectSRCommon} and link {$lang->projectSRCommon} to the task. The closed {$lang->projectSRCommon} will not be converted into tasks.";
+$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->SRCommon} and link {$lang->SRCommon} to the task. The closed {$lang->SRCommon} will not be converted into tasks.";
 $lang->story->successToTask   = "Converted to task.";
 
 $lang->story->common         = 'Story';
@@ -125,7 +125,7 @@ $lang->story->version        = 'Version';
 $lang->story->plan           = 'Plan';
 $lang->story->planAB         = 'Plan';
 $lang->story->comment        = 'Kommentar';
-$lang->story->children       = "Child {$lang->projectSRCommon}";
+$lang->story->children       = "Child {$lang->SRCommon}";
 $lang->story->childrenAB     = "C";
 $lang->story->linkStories    = 'Story verknüpfen';
 $lang->story->childStories   = 'Story aufteilen';
@@ -262,8 +262,8 @@ $lang->story->mustChoosePreVersion = 'Version wählen um es umzukhren.';
 $lang->story->noStory              = 'Keine Storys. ';
 $lang->story->noRequirement        = 'Keine Requirements. ';
 $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
-$lang->story->cannotDeleteParent   = "Can not delete parent {$lang->projectSRCommon}";
-$lang->story->moveChildrenTips     = "Its Child {$lang->projectSRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->projectSRCommon}.";
+$lang->story->cannotDeleteParent   = "Can not delete parent {$lang->SRCommon}";
+$lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 
 $lang->story->form = new stdclass();

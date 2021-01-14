@@ -18,8 +18,8 @@ $lang->bug->productplan      = '所属' . '计划';
 $lang->bug->module           = '所属模块';
 $lang->bug->moduleAB         = '模块';
 $lang->bug->project          = '所属' . $lang->executionCommon;
-$lang->bug->story            = "相关{$lang->projectSRCommon}";
-$lang->bug->storyVersion     = "{$lang->projectSRCommon}版本";
+$lang->bug->story            = "相关{$lang->SRCommon}";
+$lang->bug->storyVersion     = "{$lang->SRCommon}版本";
 $lang->bug->color            = '标题颜色';
 $lang->bug->task             = '相关任务';
 $lang->bug->title            = 'Bug标题';
@@ -39,7 +39,7 @@ $lang->bug->activatedDate    = '激活日期';
 $lang->bug->confirmed        = '是否确认';
 $lang->bug->confirmedAB      = '确认';
 $lang->bug->toTask           = '转任务';
-$lang->bug->toStory          = "转{$lang->projectSRCommon}";
+$lang->bug->toStory          = "转{$lang->SRCommon}";
 $lang->bug->mailto           = '抄送给';
 $lang->bug->openedBy         = '由谁创建';
 $lang->bug->openedByAB       = '创建者';
@@ -110,7 +110,7 @@ $lang->bug->exportAction       = '导出Bug';
 $lang->bug->delete             = '删除';
 $lang->bug->deleteAction       = '删除Bug';
 $lang->bug->deleted            = '已删除';
-$lang->bug->confirmStoryChange = "确认{$lang->projectSRCommon}变动";
+$lang->bug->confirmStoryChange = "确认{$lang->SRCommon}变动";
 $lang->bug->copy               = '复制Bug';
 $lang->bug->search             = '搜索';
 
@@ -129,7 +129,7 @@ $lang->bug->postponedBugs      = '被延期';
 $lang->bug->overdueBugs        = '过期Bug';
 $lang->bug->allBugs            = '所有';
 $lang->bug->byQuery            = '搜索';
-$lang->bug->needConfirm        = "{$lang->projectSRCommon}变动";
+$lang->bug->needConfirm        = "{$lang->SRCommon}变动";
 $lang->bug->allProduct         = '所有' . $lang->productCommon;
 $lang->bug->my                 = '我的';
 $lang->bug->yesterdayResolved  = '昨天解决Bug数';
@@ -159,7 +159,7 @@ $lang->bug->createBuild   = '创建';
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
 $lang->bug->legendAttatch               = '附件';
-$lang->bug->legendPrjStoryTask          = $lang->executionCommon . "/{$lang->projectSRCommon}/任务";
+$lang->bug->legendPrjStoryTask          = $lang->executionCommon . "/{$lang->SRCommon}/任务";
 $lang->bug->lblTypeAndSeverity          = '类型/严重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系统/浏览器';
 $lang->bug->legendSteps                 = '重现步骤';
@@ -173,7 +173,7 @@ $lang->bug->buttonConfirm = '确认';
 
 /* 交互提示。*/
 $lang->bug->summary              = "本页共 <strong>%s</strong> 个Bug，未解决 <strong>%s</strong>。";
-$lang->bug->confirmChangeProduct = "修改{$lang->productCommon}会导致相应的{$lang->executionCommon}、{$lang->projectSRCommon}和任务发生变化，确定吗？";
+$lang->bug->confirmChangeProduct = "修改{$lang->productCommon}会导致相应的{$lang->executionCommon}、{$lang->SRCommon}和任务发生变化，确定吗？";
 $lang->bug->confirmDelete        = '您确认要删除该Bug吗？';
 $lang->bug->remindTask           = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
 $lang->bug->skipClose            = 'Bug %s 不是已解决状态，不能关闭。';
@@ -270,7 +270,7 @@ $lang->bug->resolutionList['fixed']      = '已解决';
 $lang->bug->resolutionList['notrepro']   = '无法重现';
 $lang->bug->resolutionList['postponed']  = '延期处理';
 $lang->bug->resolutionList['willnotfix'] = "不予解决";
-$lang->bug->resolutionList['tostory']    = "转为{$lang->projectSRCommon}";
+$lang->bug->resolutionList['tostory']    = "转为{$lang->SRCommon}";
 
 /* 统计报表。*/
 $lang->bug->report = new stdclass();
@@ -371,7 +371,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '处理步骤';
 /* 操作记录。*/
 $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
-$lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong> ' . $lang->projectSRCommon . '</strong>，编号为 <strong>$extra</strong>。');
+$lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong> ' . $lang->SRCommon . '</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->totask              = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。');
 $lang->bug->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。');

@@ -356,7 +356,7 @@
 $(function()
 {
     // Update table summary text
-    <?php $storyCommon = $lang->projectSRCommon;?>
+    <?php $storyCommon = $lang->SRCommon;?>
     var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
     $('#projectStoryForm').table(
     {

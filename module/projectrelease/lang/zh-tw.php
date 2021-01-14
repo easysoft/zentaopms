@@ -12,7 +12,7 @@
 $lang->projectrelease->common           = '發佈';
 $lang->projectrelease->create           = "創建發佈";
 $lang->projectrelease->edit             = "編輯發佈";
-$lang->projectrelease->linkStory        = "關聯{$lang->productSRCommon}";
+$lang->projectrelease->linkStory        = "關聯{$lang->SRCommon}";
 $lang->projectrelease->linkBug          = "關聯Bug";
 $lang->projectrelease->delete           = "刪除發佈";
 $lang->projectrelease->deleted          = '已刪除';
@@ -20,6 +20,6 @@ $lang->projectrelease->view             = "發佈詳情";
 $lang->projectrelease->browse           = "瀏覽發佈";
 $lang->projectrelease->changeStatus     = "修改狀態";
 $lang->projectrelease->batchUnlink      = "批量移除";
-$lang->projectrelease->batchUnlinkStory = "批量移除{$lang->productSRCommon}";
+$lang->projectrelease->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->projectrelease->batchUnlinkBug   = "批量移除Bug";
 $lang->projectrelease->export           = '導出HTML';

@@ -22,6 +22,6 @@ $lang->projectrelease->changeStatus     = "Change Statut";
 $lang->projectrelease->batchUnlink      = "Retirer par Lot";
 $lang->projectrelease->batchUnlinkStory = "Retirer Stories par Lot";
 $lang->projectrelease->batchUnlinkBug   = "Retirer Bugs par Lot";
-$lang->projectrelease->unlinkStory      = "Unlink {$lang->productSRCommon}";
+$lang->projectrelease->unlinkStory      = "Unlink {$lang->SRCommon}";
 $lang->projectrelease->unlinkBug        = 'Unlink Bug';
 $lang->projectrelease->export           = 'Export HTML';

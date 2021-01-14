@@ -3874,8 +3874,8 @@ class storyModel extends model
         if($type == 'requirement')
         {   
             $storyLang = $this->lang->story;
-            $SRCommon  = $this->lang->productSRCommon;
-            $URCommon  = $this->lang->productURCommon;
+            $SRCommon  = $this->lang->SRCommon;
+            $URCommon  = $this->lang->URCommon;
 
             $storyLang->create             = str_replace($SRCommon, $URCommon, $storyLang->create);
             $storyLang->changeAction       = str_replace($SRCommon, $URCommon, $storyLang->changeAction);

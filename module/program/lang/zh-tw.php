@@ -30,7 +30,6 @@ $lang->program->PRJUpdateOrder       = '排序';
 $lang->program->PRJSort              = '項目排序';
 $lang->program->PRJWhitelist         = '項目白名單';
 $lang->program->PRJAddWhitelist      = '項目添加白名單';
-$lang->program->PRJStoryConcept      = '需求概念組合';
 $lang->program->unbindWhielist       = '項目刪除白名單';
 $lang->program->PRJManageProducts    = '關聯產品';
 $lang->program->view                 = '項目集詳情';
