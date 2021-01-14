@@ -75,13 +75,14 @@ class user extends control
         $account = $user->account;
         $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Change the menu when in my module. */
         $this->resetMenu($fromModule);
 
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList = $this->user->setUserList($users, $userID, $fromModule);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
         $this->view->position[] = $this->lang->user->todo;
@@ -121,6 +122,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
@@ -137,7 +139,7 @@ class user extends control
         $this->view->type       = $type;
         $this->view->user       = $user;
         $this->view->pager      = $pager;
-        $this->view->userList   = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList   = $this->user->setUserList($users, $userID, $fromModule);
 
         $this->display();
     }
@@ -165,10 +167,11 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Set the menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList = $this->user->setUserList($users, $userID, $fromModule);
 
         /* Change the menu when in my module. */
         $this->resetMenu($fromModule);
@@ -210,10 +213,11 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList = $this->user->setUserList($users, $userID, $fromModule);
 
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
@@ -254,10 +258,11 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList = $this->user->setUserList($users, $userID, $fromModule);
 
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
@@ -309,6 +314,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -344,7 +350,7 @@ class user extends control
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->userList   = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList   = $this->user->setUserList($users, $userID, $fromModule);
 
         $this->display();
     }
@@ -364,6 +370,7 @@ class user extends control
     {
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -372,7 +379,7 @@ class user extends control
         /* Set the menus. */
         $this->loadModel('project');
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList = $this->user->setUserList($users, $userID, $fromModule);
 
         /* Change the menu when in my module. */
         $this->resetMenu($fromModule);
@@ -405,6 +412,7 @@ class user extends control
     {
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -412,7 +420,7 @@ class user extends control
 
         /* Set the menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList = $this->user->setUserList($users, $userID, $fromModule);
 
         /* Change the menu when in my module. */
         $this->resetMenu($fromModule);
@@ -447,6 +455,7 @@ class user extends control
     {
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -454,7 +463,7 @@ class user extends control
 
         /* Set the menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList = $this->user->setUserList($users, $userID, $fromModule);
 
         /* Change the menu when in my module. */
         $this->resetMenu($fromModule);
@@ -485,6 +494,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Change the menu when in my module. */
         $this->resetMenu($fromModule);
@@ -497,7 +507,7 @@ class user extends control
         $this->view->groups       = $this->loadModel('group')->getByAccount($account);
         $this->view->deptPath     = $this->dept->getParents($user->dept);
         $this->view->personalData = $this->user->getPersonalData($user->account);
-        $this->view->userList     = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList     = $this->user->setUserList($users, $userID, $fromModule);
 
         $this->display();
     }
@@ -1080,10 +1090,11 @@ class user extends control
     {
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
+        $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted|useid'), $userID, $fromModule);
+        $this->view->userList = $this->user->setUserList($users, $userID, $fromModule);
 
         /* Save session. */
         $uri   = $this->app->getURI(true);

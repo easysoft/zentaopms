@@ -24,7 +24,7 @@ $(function()
         var projectID = $('#project').val();
         var link      = createLink('task', 'create', 'projectID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView, 'no', projectID);
 
-        parent.location.href = link;
+        location.href = link;
     })
 
     $('#toStoryButton').click(function()
@@ -35,7 +35,7 @@ $(function()
         var productID = $('#product').val();
         var link      = createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView, 'no', programID);
 
-        parent.location.href = link;
+        location.href = link;
     })
 
     $('#toBugButton').click(function()
@@ -46,7 +46,7 @@ $(function()
         var productID = $('#product').val();
         var link      = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView, 'no', projectID);
 
-        parent.location.href = link;
+        location.href = link;
     })
 
     $('#project, #product').change();
