@@ -700,7 +700,7 @@ class commonModel extends model
                             $subActive .= 'dropdown-submenu';
                             $subLink = 'javascript:;';
                             $subProgram .= "<ul class='dropdown-menu'>";
-                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'prjedit', "programID={$app->session->PRJ}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->PRJEdit}</span>", '', "class='btn btn-link'") . '</li>';
+                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'prjedit', "projectID={$app->session->PRJ}&programID={$program->parent}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->PRJEdit}</span>", '', "class='btn btn-link'") . '</li>';
                             $subProgram .= '<li>' . self::buildIconButton('program', 'prjgroup', "projectID={$app->session->PRJ}", $program, 'button', 'group', '', '', '', '', $lang->program->PRJGroup) . '</li>';
                             $subProgram .= '<li>' . self::buildIconButton('program', 'prjmanageMembers', "projectID={$app->session->PRJ}", $program, 'button', 'persons', '', '', '', '', $lang->program->PRJManageMembers) . '</li>';
                             $subProgram .= '<li>' . self::buildIconButton('program', 'prjstart', "projectID={$app->session->PRJ}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->PRJStart) . '</li>';

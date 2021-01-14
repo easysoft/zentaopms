@@ -1707,7 +1707,9 @@ class programModel extends model
                     echo "</ul>";
                     echo "</div>";
 
-                    common::printIcon('program', 'PRJEdit', "projectID=$project->id", $project, 'list', 'edit');
+                    $from      = $project->from == 'PRJ' ? 'PRJ' : 'pgmproject';
+                    $dataGroup = $project->from == 'PRJ' ? 'project' : 'program';
+                    common::printIcon('program', 'PRJEdit', "projectID=$project->id&programID=$project->parent&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$dataGroup");
                     common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group');
                     common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock');
 

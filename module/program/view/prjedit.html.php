@@ -31,7 +31,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $programList, $programID ? $programID : $project->parent, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
+          <td><?php echo html::select('parent', $programList, $programID != $project->parent ? $programID : $project->parent, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
           <td></td>
           <td></td>
         </tr>
