@@ -93,9 +93,23 @@ $lang->program->morePRJ            = '更多项目';
 $lang->program->productNotEmpty  = '请关联产品或创建产品。';
 $lang->program->existProductName = '产品名称已存在。';
 
-$lang->program->unitList['']        = '';
-$lang->program->unitList['wanyuan'] = '万元';
-$lang->program->unitList['dollar']  = 'Dollars';
+$lang->program->unitList['CNY']  = '人民币';
+$lang->program->unitList['USD']  = '美元';
+$lang->program->unitList['HKD']  = '港元';
+$lang->program->unitList['NTD']  = '台元';
+$lang->program->unitList['EUR']  = '欧元';
+$lang->program->unitList['DEM']  = '马克';
+$lang->program->unitList['CHF']  = '瑞士法郎';
+$lang->program->unitList['FRF']  = '法国法郎';
+$lang->program->unitList['GBP']  = '英镑';
+$lang->program->unitList['NLG']  = '荷兰盾';
+$lang->program->unitList['CAD']  = '加拿大元';
+$lang->program->unitList['RUR']  = '卢布';
+$lang->program->unitList['INR']  = '卢比';
+$lang->program->unitList['AUD']  = '澳大利亚元';
+$lang->program->unitList['NZD']  = '新西兰元';
+$lang->program->unitList['THB']  = '泰国铢';
+$lang->program->unitList['SGD']  = '新加坡元';
 
 $lang->program->modelList['scrum']     = "Scrum";
 $lang->program->modelList['waterfall'] = "瀑布";

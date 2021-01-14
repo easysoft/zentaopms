@@ -69,6 +69,7 @@ $lang->custom->tipRangeList[1]  = 'Yes';
 
 $lang->custom->regionMustNumber = 'The interval must be a number!';
 $lang->custom->tipNotEmpty      = 'The prompt can not be empty!';
+$lang->custom->currencyNotEmpty = 'You have to select one currency at least.';
 
 $lang->custom->numberError = 'The interval must be greater than zero!';
 
@@ -88,6 +89,8 @@ $lang->custom->object['user']     = 'User';
 $lang->custom->object['block']    = 'Block';
 
 $lang->custom->program = new stdClass();
+$lang->custom->program->currencySetting    = 'Currency Setting';
+$lang->custom->program->mainCurrency       = 'Main Currency';
 $lang->custom->program->fields['unitList'] = 'Unit List';
 
 $lang->custom->story = new stdClass();

@@ -93,9 +93,23 @@ $lang->program->morePRJ            = 'More Project';
 $lang->program->productNotEmpty  = 'Please link products or create products.';
 $lang->program->existProductName = 'Product name already exists.';
 
-$lang->program->unitList['']        = '';
-$lang->program->unitList['wanyuan'] = 'Wanyuan';
-$lang->program->unitList['dollar']  = 'Dollars';
+$lang->program->unitList['CNY'] = 'RMB ￥';
+$lang->program->unitList['USD'] = 'USD $';
+$lang->program->unitList['HKD'] = 'HKD $';
+$lang->program->unitList['NTD'] = 'New Taiwan $';
+$lang->program->unitList['EUR'] = 'Euro €';
+$lang->program->unitList['DEM'] = 'Deutsche Mark';
+$lang->program->unitList['CHF'] = 'Swiss Franc';
+$lang->program->unitList['FRF'] = 'French Franc';
+$lang->program->unitList['GBP'] = 'Pound £';
+$lang->program->unitList['NLG'] = 'Florin';
+$lang->program->unitList['CAD'] = 'Canadian $';
+$lang->program->unitList['RUR'] = 'Russian Ruble';
+$lang->program->unitList['INR'] = 'Indian ₹';
+$lang->program->unitList['AUD'] = 'Australian $';
+$lang->program->unitList['NZD'] = 'New Zealand $';
+$lang->program->unitList['THB'] = 'Thai Baht';
+$lang->program->unitList['SGD'] = 'Singapore $';
 
 $lang->program->modelList['scrum']     = "Scrum";
 $lang->program->modelList['waterfall'] = "CMMI";

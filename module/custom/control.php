@@ -48,13 +48,20 @@ class custom extends control
         $this->app->loadLang($module);
         $fieldList = zget($this->lang->$module, $field, '');
 
+        if($module == 'program' and $field == 'unitList')
+        {
+            $this->app->loadConfig($module);
+            $unitList = zget($this->config->$module, 'unitList', '');
+            $this->view->unitList     = explode(',', $unitList);
+            $this->view->mainCurrency = zget($this->config->$module, 'mainCurrency', 'rmb');
+        }
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
             $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-            $this->view->needReview      = zget($this->config->$module, 'needReview', 1);
-            $this->view->forceReview     = zget($this->config->$module, 'forceReview', '');
-            $this->view->forceNotReview  = zget($this->config->$module, 'forceNotReview', '');
+            $this->view->needReview     = zget($this->config->$module, 'needReview', 1);
+            $this->view->forceReview    = zget($this->config->$module, 'forceReview', '');
+            $this->view->forceNotReview = zget($this->config->$module, 'forceNotReview', '');
         }
         if($module == 'task' and $field == 'hours')
         {
@@ -65,7 +72,7 @@ class custom extends control
         if($module == 'bug' and $field == 'longlife')
         {
             $this->app->loadConfig('bug');
-            $this->view->longlife  = $this->config->bug->longlife;
+            $this->view->longlife = $this->config->bug->longlife;
         }
         if($module == 'block' and $field == 'closed')
         {
@@ -83,7 +90,13 @@ class custom extends control
 
         if(strtolower($this->server->request_method) == "post")
         {
-            if($module == 'story' and $field == 'review')
+            if($module == 'program' and $field == 'unitList')
+            {
+                $data = fixer::input('post')->join('unitList', ',')->get();
+                if(empty($data->unitList)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->currencyNotEmpty));
+                $this->loadModel('setting')->setItems("system.$module", $data);
+            }
+            elseif($module == 'story' and $field == 'review')
             {
                 $data = fixer::input('post')->join('forceReview', ',')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);

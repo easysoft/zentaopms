@@ -31,6 +31,9 @@ EOT;
 <?php js::set('itemRow', $itemRow)?>
 <?php js::set('module',  $module)?>
 <?php js::set('field',   $field)?>
+<style>
+.checkbox-primary {width: 170px; margin: 0 10px 10px 0; display: inline-block;}
+</style>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
     <div class='cell'>
@@ -51,7 +54,25 @@ EOT;
           <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
         </div>
       </div>
-      <?php if(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
+      <?php if($module == 'program' and $field == 'unitList'):?>
+      <table class='table table-form'>
+        <tr>
+          <th class='text-left'><?php echo $lang->custom->program->currencySetting;?></th>
+        </tr>
+        <tr>
+          <td colspan='4'><?php echo html::checkbox('unitList', $lang->program->unitList, $unitList);?></td>
+        </tr>
+        <tr>
+          <th class='text-left'><?php echo $lang->custom->program->mainCurrency;?></th>
+          <td><?php echo html::select('mainCurrency', $lang->program->unitList, $mainCurrency, "class='form-control chosen' required");?></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan='4' class='text-center'><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
+      <?php elseif(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
       <table class='table table-form mw-800px'>
         <tr>
           <th class='thWidth'><?php echo $lang->custom->storyReview;?></th>

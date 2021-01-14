@@ -10,3 +10,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (9,  'product', 'dashboard'),
 (10, 'product', 'dashboard'),
 (11, 'product', 'dashboard');
+
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'unitList', 'CNY,USD');
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'mainCurrency', 'CNY');
