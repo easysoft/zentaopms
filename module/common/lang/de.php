@@ -287,20 +287,22 @@ $lang->my->menu->team        = array('link' => 'Team|my|team|', 'subModule' => '
 $lang->my->menu->contacts    = 'Contacts|my|managecontacts|';
 
 $lang->my->workMenu = new stdclass();
-$lang->my->workMenu->task     = 'Task|my|work|mode=task';
-$lang->my->workMenu->story    = 'Story|my|work|mode=story';
-$lang->my->workMenu->bug      = 'Bug|my|work|mode=bug';
-$lang->my->workMenu->testtask = 'Test Case|my|work|mode=testtask';
-$lang->my->workMenu->issue    = 'Issue|my|work|mode=issue';
-$lang->my->workMenu->risk     = 'Risk|my|work|mode=risk';
+$lang->my->workMenu->task        = 'Task|my|work|mode=task';
+$lang->my->workMenu->story       = "$lang->SRCommon|my|work|mode=story";
+$lang->my->workMenu->requirement = "$lang->URCommon|my|work|mode=requirement";
+$lang->my->workMenu->bug         = 'Bug|my|work|mode=bug';
+$lang->my->workMenu->testtask    = 'Test Case|my|work|mode=testtask';
+$lang->my->workMenu->issue       = 'Issue|my|work|mode=issue';
+$lang->my->workMenu->risk        = 'Risk|my|work|mode=risk';
 
 $lang->my->contributeMenu = new stdclass();
-$lang->my->contributeMenu->task      = 'Task|my|contribute|mode=task';
-$lang->my->contributeMenu->story     = 'Story|my|contribute|mode=story';
-$lang->my->contributeMenu->bug       = 'Bug|my|contribute|mode=bug';
-$lang->my->contributeMenu->testtask  = 'Test Case|my|contribute|mode=testtask';
-$lang->my->contributeMenu->issue     = 'Issue|my|contribute|mode=issue';
-$lang->my->contributeMenu->risk      = 'Risk|my|contribute|mode=risk';
+$lang->my->contributeMenu->task        = 'Task|my|contribute|mode=task';
+$lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=story";
+$lang->my->contributeMenu->requirement = "$lang->URCommon|my|contribute|mode=requirement";
+$lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
+$lang->my->contributeMenu->testtask    = 'Test Case|my|contribute|mode=testtask';
+$lang->my->contributeMenu->issue       = 'Issue|my|contribute|mode=issue';
+$lang->my->contributeMenu->risk        = 'Risk|my|contribute|mode=risk';
 
 $lang->my->dividerMenu = ',myProject,team,';
 

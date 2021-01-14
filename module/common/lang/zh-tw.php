@@ -278,20 +278,22 @@ $lang->my->menu->score       = '積分|my|score|';
 $lang->my->menu->contacts    = '聯繫人|my|managecontacts|';
 
 $lang->my->workMenu = new stdclass();
-$lang->my->workMenu->task     = '任務|my|work|mode=task';
-$lang->my->workMenu->story    = '需求|my|work|mode=story';
-$lang->my->workMenu->bug      = 'Bug|my|work|mode=bug';
-$lang->my->workMenu->testtask = '測試|my|work|mode=testtask&type=wait';
-$lang->my->workMenu->issue    = '問題|my|work|mode=issue';
-$lang->my->workMenu->risk     = '風險|my|work|mode=risk';
+$lang->my->workMenu->task        = '任務|my|work|mode=task';
+$lang->my->workMenu->story       = "$lang->SRCommon|my|work|mode=story";
+$lang->my->workMenu->requirement = "$lang->URCommon|my|work|mode=requirement";
+$lang->my->workMenu->bug         = 'Bug|my|work|mode=bug';
+$lang->my->workMenu->testtask    = '測試|my|work|mode=testtask&type=wait';
+$lang->my->workMenu->issue       = '問題|my|work|mode=issue';
+$lang->my->workMenu->risk        = '風險|my|work|mode=risk';
 
 $lang->my->contributeMenu = new stdclass();
-$lang->my->contributeMenu->task      = '任務|my|contribute|mode=task';
-$lang->my->contributeMenu->story     = '需求|my|contribute|mode=story';
-$lang->my->contributeMenu->bug       = 'Bug|my|contribute|mode=bug';
-$lang->my->contributeMenu->testtask  = '用例|my|contribute|mode=testtask&type=done';
-$lang->my->contributeMenu->issue     = '問題|my|contribute|mode=issue';
-$lang->my->contributeMenu->risk      = '風險|my|contribute|mode=risk';
+$lang->my->contributeMenu->task        = '任務|my|contribute|mode=task';
+$lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=story";
+$lang->my->contributeMenu->requirement = "$lang->URCommon|my|contribute|mode=requirement";
+$lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
+$lang->my->contributeMenu->testtask    = '用例|my|contribute|mode=testtask&type=done';
+$lang->my->contributeMenu->issue       = '問題|my|contribute|mode=issue';
+$lang->my->contributeMenu->risk        = '風險|my|contribute|mode=risk';
 
 $lang->my->dividerMenu = ',myProject,team,';
 

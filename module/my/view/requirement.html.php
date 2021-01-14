@@ -16,12 +16,12 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=story&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+    if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
     if($app->rawMethod == 'contribute')
     {
-        echo html::a(inlink($app->rawMethod, "mode=story&type=openedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=story&type=reviewedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=story&type=closedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=openedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=closedBy&&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),  "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
     }
     ?>
   </div>
@@ -29,7 +29,7 @@
 <div id="mainContent">
   <?php if(!$stories):?>
   <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo sprintf($lang->my->noData, $lang->SRCommon);?></span></p>
+    <p><span class="text-muted"><?php echo sprintf($lang->my->noData, $lang->URCommon);?></span></p>
   </div>
   <?php else:?>
   <form id='myStoryForm' class="main-table table-story" data-ride="table" method="post">
@@ -55,7 +55,6 @@
           <th class='c-pri w-40px'><?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-name'>      <?php common::printOrderLink('title',        $orderBy, $vars, $lang->my->name);?></th>
           <th class='c-product'>   <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
-          <th class='c-plan'>      <?php common::printOrderLink('plan',         $orderBy, $vars, $lang->story->plan);?></th>
           <th class='c-user'>      <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='c-hours'>     <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='c-status'>    <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
@@ -85,7 +84,6 @@
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';;?>
           </td>
           <td class='c-product'><?php echo $story->productTitle;?></td>
-          <td class='c-plan'><?php echo $story->planTitle;?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
           <td class='c-hours'><?php echo $story->estimate;?></td>
           <td class='c-status'><span class='status-story status-<?php echo $story->status;?>'> <?php echo $this->processStatus('story', $story);?></span></td>
@@ -122,10 +120,9 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
           <td class='c-name nobr'>
-            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product'");?>
+            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">SR</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product'");?>
           </td>
           <td class='c-product'><?php echo $child->productTitle;?></td>
-          <td class='c-plan'><?php echo $child->planTitle;?></td>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
           <td class='c-hours'><?php echo $child->estimate;?></td>
           <td class='c-status'><span class='status-story status-<?php echo $child->status;?>'> <?php echo $this->processStatus('story', $child);?></span></td>

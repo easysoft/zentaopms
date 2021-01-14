@@ -89,14 +89,7 @@ class my extends control
         $moduleIndex = array_search('my', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
-        if($mode == 'story' or $mode == 'requirement')
-        {
-            echo $this->fetch('my', 'story', "type=$type&storyType=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
-        }
-        else
-        {
-            echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
-        }
+        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -118,14 +111,7 @@ class my extends control
 
         if(($mode == 'issue' or $mode == 'risk') and $type == 'openedBy') $type = 'createdBy';
 
-        if($mode == 'story' or $mode == 'requirement')
-        {
-            echo $this->fetch('my', 'story', "type=$type&storyType=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
-        }
-        else
-        {
-            echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
-        }
+        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -192,7 +178,6 @@ class my extends control
      * My stories.
      *
      * @param  string $type
-     * @param  string $storyType
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -200,7 +185,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function story($type = 'assignedTo', $storyType = 'story', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
@@ -216,7 +201,7 @@ class my extends control
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, $storyType);
+        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projects   = $this->loadModel('program')->getPRJPairs();
         $this->view->type       = $type;
@@ -225,7 +210,48 @@ class my extends control
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->mode       = $storyType;
+        $this->view->mode       = 'story';
+
+        $this->display();
+    }
+
+    /**
+     * My requirements.
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function requirement($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Save session. */
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
+        /* Assign. */
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
+        $this->view->position[] = $this->lang->my->story;
+        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->projects   = $this->loadModel('program')->getPRJPairs();
+        $this->view->type       = $type;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->mode       = 'requirement';
 
         $this->display();
     }
