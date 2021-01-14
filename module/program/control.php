@@ -104,10 +104,6 @@ class program extends control
      */
     public function PGMProduct($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $programID = $this->program->savePGMState($programID, $this->program->getPGMPairs());
-        if(!$programID) $this->locate($this->createLink('program', 'PGMbrowse')); 
-        setCookie("lastPGM", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
         $this->lang->navGroup->program       = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
@@ -400,6 +396,10 @@ class program extends control
      */
     public function PGMProject($programID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $programID = $this->program->savePGMState($programID, $this->program->getPGMPairs());
+        if(!$programID) $this->locate($this->createLink('program', 'PGMbrowse')); 
+        setCookie("lastPGM", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();

@@ -57,7 +57,7 @@ body.menu-hide {padding-left: 0;}
 #userNav>li .top .dropdown-menu{top: -60px}
 #userNav .dropdown-menu>li>a>.icon { position: initial;  display: inline;}
 #userNav li.open>a{background:#0c64eb}
-#userNav li.divider{opacity: .24; border-top: 1px solid; height: 0px;}
+#userNav li.divider{opacity: .24; border-top: 1px solid; height: 2px;}
 #userNav .dropdown-submenu:focus > a, #userNav .dropdown-submenu:hover > a {background-color: rgba(0,0,0,.2);}
 #poweredBy{width: 55%; position: absolute; top: 4px; right: 0; padding: 0;}
 

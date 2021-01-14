@@ -67,39 +67,40 @@ class project extends control
     /**
      * Common actions.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  string $extra
      * @access public
      * @return object current object
      */
-    public function commonAction($projectID = 0, $extra = '')
+    public function commonAction($executionID = 0, $extra = '')
     {
         $this->loadModel('product');
 
-        /* Get projects and products info. */
-        $projectID     = $this->project->saveState($projectID, $this->projects);
-        $project       = $this->project->getById($projectID);
-        $products      = $this->project->getProducts($projectID);
-        $childProjects = $this->project->getChildExecutions($projectID);
-        $teamMembers   = $this->project->getTeamMembers($projectID);
-        $actions       = $this->loadModel('action')->getList('execution', $projectID);
+        /* Get executions and products info. */
+        $executionID     = $this->project->saveState($executionID, $this->projects);
+        $execution       = $this->project->getById($executionID);
+        $products        = $this->project->getProducts($executionID);
+        $childExecutions = $this->project->getChildExecutions($executionID);
+        $teamMembers     = $this->project->getTeamMembers($executionID);
+        $actions         = $this->loadModel('action')->getList('execution', $executionID);
 
         /* Set menu. */
-        $this->project->setMenu($this->projects, $projectID, $buildID = 0, $extra);
+        $this->project->setMenu($this->projects, $executionID, $buildID = 0, $extra);
 
         /* Assign. */
         $this->view->projects      = $this->projects;
-        $this->view->project       = $project;
-        $this->view->childProjects = $childProjects;
+        $this->view->project       = $execution;
+        $this->view->childProjects = $childExecutions;
         $this->view->products      = $products;
         $this->view->teamMembers   = $teamMembers;
 
-        return $project;
+        return $execution;
     }
 
     /**
-     * Tasks of a project.
+     * Tasks of a execution.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  string $status
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -108,8 +109,13 @@ class project extends control
      * @access public
      * @return void
      */
-    public function task($projectID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function task($executionID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
+        /* Save last PRJ. */
+        $projectID = $this->loadModel('program')->savePRJState($this->session->PRJ, $this->program->getPRJPairs());
+        if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
+        setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         $this->loadModel('tree');
         $this->loadModel('search');
         $this->loadModel('task');
@@ -120,13 +126,13 @@ class project extends control
         /* Set browse type. */
         $browseType = strtolower($status);
 
-        /* Get products by project. */
-        $project   = $this->commonAction($projectID, $status);
-        $projectID = $project->id;
-        $products  = $this->loadModel('product')->getProductPairsByProject($projectID);
-        setcookie('preProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        /* Get products by execution. */
+        $execution   = $this->commonAction($executionID, $status);
+        $executionID = $execution->id;
+        $products    = $this->loadModel('product')->getProductPairsByProject($executionID);
+        setcookie('preProjectID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        if($this->cookie->preProjectID != $projectID)
+        if($this->cookie->preProjectID != $executionID)
         {
             $_COOKIE['moduleBrowseParam'] = $_COOKIE['productBrowseParam'] = 0;
             setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, false);
@@ -168,8 +174,8 @@ class project extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Header and position. */
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->task;
-        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->project->task;
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "executionID=$executionID"), $execution->name);
         $this->view->position[] = $this->lang->project->task;
 
         /* Load pager and get tasks. */
@@ -178,17 +184,17 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get tasks. */
-        $tasks = $this->project->getTasks($productID, $projectID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
+        $tasks = $this->project->getTasks($productID, $executionID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
         if(empty($tasks) and $pageID > 1)
         {
             $pager = pager::init(0, $recPerPage, 1);
-            $tasks = $this->project->getTasks($productID, $projectID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
+            $tasks = $this->project->getTasks($productID, $executionID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
         }
 
         /* Build the search form. */
-        $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
+        $actionURL = $this->createLink('project', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
         $this->config->project->search['onMenuBar'] = 'yes';
-        $this->project->buildTaskSearchForm($projectID, $this->projects, $queryID, $actionURL);
+        $this->project->buildTaskSearchForm($executionID, $this->projects, $queryID, $actionURL);
 
         /* team member pairs. */
         $memberPairs = array();
@@ -197,7 +203,7 @@ class project extends control
         $showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
         $extra         = (isset($this->config->project->task->allModule) && $this->config->project->task->allModule == 1) ? 'allModule' : '';
         $showModule    = !empty($this->config->datatable->projectTask->showModule) ? $this->config->datatable->projectTask->showModule : '';
-        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($projectID, 'task', $showModule) : array();
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($executionID, 'task', $showModule) : array();
 
         /* Assign. */
         $this->view->tasks        = $tasks;
@@ -211,16 +217,16 @@ class project extends control
         $this->view->status       = $status;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->param        = $param;
-        $this->view->projectID    = $projectID;
-        $this->view->project      = $project;
+        $this->view->executionID  = $projectID;
+        $this->view->execution    = $execution;
         $this->view->productID    = $productID;
-        $this->view->modules      = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
+        $this->view->modules      = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
         $this->view->moduleID     = $moduleID;
-        $this->view->moduleTree   = $this->tree->getTaskTreeMenu($projectID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
+        $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->view->setModule    = true;
-        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
+        $this->view->canBeChanged = common::canModify('project', $execution); // Determines whether an object is editable.
 
         $this->display();
     }

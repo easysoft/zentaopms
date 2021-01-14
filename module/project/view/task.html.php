@@ -17,12 +17,12 @@ include '../../common/view/datepicker.html.php';
 include '../../common/view/datatable.fix.html.php';
 js::set('moduleID', $moduleID);
 js::set('productID', $productID);
-js::set('projectID', $projectID);
+js::set('executionID', $executionID);
 js::set('browseType', $browseType);
 
 /* Set unfold parent taskID. */
 $unfoldTasks = isset($config->project->task->unfoldTasks) ? json_decode($config->project->task->unfoldTasks, true) : array();
-$unfoldTasks = zget($unfoldTasks, $projectID, array());
+$unfoldTasks = zget($unfoldTasks, $executionID, array());
 js::set('unfoldTasks', $unfoldTasks);
 js::set('unfoldAll',   $lang->project->treeLevel['all']);
 js::set('foldAll',     $lang->project->treeLevel['root']);
@@ -34,14 +34,14 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
       if(!empty($productID))
       {
           $product    = $this->product->getById($productID);
-          $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
+          $removeLink = $browseType == 'byproduct' ? inlink('task', "executionID=$executionID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
           echo $product->name;
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       elseif(!empty($moduleID))
       {
           $module     = $this->tree->getById($moduleID);
-          $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
+          $removeLink = $browseType == 'bymodule' ? inlink('task', "executionID=$executionID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
           echo $module->name;
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
@@ -57,12 +57,12 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
     <?php
     foreach(customModel::getFeatureMenu('project', 'task') as $menuItem)
     {
-        if($project->type == 'ops' && $menuItem->name == 'needconfirm') continue;
+        if($execution->type == 'ops' && $menuItem->name == 'needconfirm') continue;
         if(isset($menuItem->hidden)) continue;
         $menuType = $menuItem->name;
         if($menuType == 'QUERY')
         {
-            $searchBrowseLink = $this->createLink('project', 'task', "project=$projectID&type=bySearch&param=%s");
+            $searchBrowseLink = $this->createLink('project', 'task', "project=$executionID&type=bySearch&param=%s");
             $isBySearch       = $this->session->taskBrowseType == 'bysearch';
             include '../../common/view/querymenu.html.php';
         }
@@ -72,7 +72,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
             $label  .= $menuType == $this->session->taskBrowseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
             $active  = $menuType == $this->session->taskBrowseType ? 'btn-active-text' : '';
             $title   = $menuType == 'needconfirm' ? "title='{$lang->task->storyChange}'" : '';
-            echo html::a(inlink('task', "project=$projectID&type=$menuType"), $label, '', "id='{$menuType}' class='btn btn-link $active' $title");
+            echo html::a(inlink('task', "project=$executionID&type=$menuType"), $label, '', "id='{$menuType}' class='btn btn-link $active' $title");
         }
         elseif($menuType == 'status')
         {
@@ -91,7 +91,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
             {
                 if($key == '') continue;
                 echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
-                echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value);
+                echo html::a($this->createLink('project', 'task', "project=$executionID&type=$key"), $value);
             }
             echo '</ul></div>';
         }
@@ -103,7 +103,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
     <?php
     if(!isset($browseType)) $browseType = '';
     if(!isset($orderBy))    $orderBy = '';
-    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'bar-chart muted');
+    common::printIcon('task', 'report', "project=$executionID&browseType=$browseType", '', 'button', 'bar-chart muted');
     ?>
 
     <div class="btn-group dropdown-hover">
@@ -112,25 +112,25 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
         <?php
         $class = common::hasPriv('task', 'export') ? '' : "class=disabled";
         $misc  = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
-        $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
+        $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$executionID&orderBy=$orderBy&type=$browseType") : '#';
         echo "<li $class>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
 
-    <?php if(common::canModify('project', $project)):?>
+    <?php if(common::canModify('project', $execution)):?>
     <div class="btn-group dropdown-hover">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu pull-right" id='importActionMenu'>
         <?php
         $class = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
         $misc  = common::hasPriv('project', 'importTask') ? "class='import'" : "class=disabled";
-        $link  = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$project->id") : '#';
+        $link  = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$execution->id") : '#';
         echo "<li $class>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
 
         $class = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
         $misc  = common::hasPriv('project', 'importBug') ? "class='import'" : "class=disabled";
-        $link  = common::hasPriv('project', 'importBug') ? $this->createLink('project', 'importBug', "project=$project->id") : '#';
+        $link  = common::hasPriv('project', 'importBug') ? $this->createLink('project', 'importBug', "project=$execution->id") : '#';
         echo "<li $class>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
         ?>
       </ul>
@@ -138,27 +138,27 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
     <?php endif;?>
     <?php
     $checkObject = new stdclass();
-    $checkObject->project = $projectID;
+    $checkObject->project = $executionID;
     ?>
     <?php if(!common::checkNotCN()):?>
     <?php
-    $link = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+    $link = $this->createLink('task', 'batchCreate', "project=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
     if($canBeChanged and common::hasPriv('task', 'batchCreate', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");
 
-    $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
+    $link = $this->createLink('task', 'create', "project=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     if($canBeChanged and common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
     ?>
     <?php else:?>
     <?php
     echo "<div class='btn-group dropdown-hover'>";
-    $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
+    $link = $this->createLink('task', 'create', "project=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     if($canBeChanged and common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create} </span><span class='caret'>", '', "class='btn btn-primary'");
     ?>
     <ul class='dropdown-menu'>
       <?php $disabled = common::hasPriv('task', 'batchCreate') ? '' : "class='disabled'";?>
       <li <?php echo $disabled?>>
       <?php
-        $batchLink = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+        $batchLink = $this->createLink('task', 'batchCreate', "project=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
         echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->task->batchCreate) . "</li>";
       ?>
       </li>
@@ -173,7 +173,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
     <div class="cell">
       <?php echo $moduleTree;?>
       <div class="text-center">
-        <?php common::printLink('tree', 'browsetask', "rootID=$projectID&productID=0", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
+        <?php common::printLink('tree', 'browsetask', "rootID=$executionID&productID=0", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>
@@ -185,7 +185,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
       <p>
         <span class="text-muted"><?php echo $lang->task->noTask;?></span>
         <?php if($canBeChanged and common::hasPriv('task', 'create')):?>
-        <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+        <?php echo html::a($this->createLink('task', 'create', "project=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
     </div>
@@ -197,12 +197,12 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
       $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars         = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
+      $vars         = "executionID=$execution->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
 
       $customFields = $this->datatable->getSetting('project');
-      if($project->type == 'ops')
+      if($execution->type == 'ops')
       {
           foreach($customFields as $id => $customField)
           {
@@ -265,7 +265,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php
-            $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
+            $actionLink = $this->createLink('task', 'batchEdit', "executionID=$executionID");
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
 
             echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");
@@ -318,7 +318,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
             <?php
             $withSearch = count($memberPairs) > 10;
-            $actionLink = $this->createLink('task', 'batchAssignTo', "projectID=$projectID");
+            $actionLink = $this->createLink('task', 'batchAssignTo', "executionID=$executionID");
             echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
             if($withSearch):
             ?>

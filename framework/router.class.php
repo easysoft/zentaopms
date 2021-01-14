@@ -195,16 +195,19 @@ class router extends baseRouter
         if(isset($model->model) && $model->model == 'waterfall') $projectKey = STAGE_KEY;
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
-        $lang->productCommon = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
+        $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
         $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$$projectKey];
-        $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]  : $this->config->hourPointCommonList['en'][(int)$hourKey];
+        $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]  : $this->config->hourPointCommonList['en'][(int)$hourKey];
 
+        /* User preference init. */
         $config->URSR        = $URSR;
-        $config->programLink = 'programList';
-        $config->productLink = 'productList';
-        $config->projectLink = 'projectList';
+        $config->programLink = 'program-pgmbrowse';
+        $config->productLink = 'product-all';
+        $config->projectLink = 'program-prjbrowse';
 
-        $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$this->session->user->account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'URSR')")->fetchAll();
+        /* Get user preference. */
+        $account     = isset($this->session->user->account) ? $this->session->user->account : '';
+        $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'URSR')")->fetchAll();
         foreach($userSetting as $setting)
         {
              if($setting->key == 'URSR')        $config->URSR        = $setting->value;

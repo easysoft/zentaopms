@@ -801,9 +801,9 @@ class my extends control
         $this->view->position[]  = $this->lang->my->preference;
         $this->view->URSRList    = $this->loadModel('custom')->getURSRPairs();
         $this->view->URSR        = $URSR ? $URSR : $this->setting->getItem('owner=system&module=custom&key=URSR');
-        $this->view->programLink = $programLink ? $programLink : 'PGMList';
-        $this->view->productLink = $productLink ? $productLink : 'productList';
-        $this->view->projectLink = $projectLink ? $projectLink : 'PRJList';
+        $this->view->programLink = $programLink ? $programLink : 'program-pgmbrowse';
+        $this->view->productLink = $productLink ? $productLink : 'product-all';
+        $this->view->projectLink = $projectLink ? $projectLink : 'program-prjbrowse';
         $this->display();
     }
 

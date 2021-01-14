@@ -712,10 +712,11 @@ class product extends control
      * @access public
      * @return void
      */
-    public function dashboard($productID)
+    public function dashboard($productID = 0)
     {
-        $product = $this->product->getStatByID($productID);
-        if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
+        $productID = $this->product->saveState($productID, $this->products);
+        $product   = $this->product->getStatByID($productID);
+        if(!$product) die(js::locate('product', 'all'));
 
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);

@@ -131,12 +131,17 @@ $lang->typeAB       = '类型';
 $lang->common = new stdclass();
 $lang->common->common = '公有模块';
 
+global $config;
+list($programModule, $programMethod) = explode('-', $config->programLink);
+list($productModule, $productMethod) = explode('-', $config->productLink);
+list($projectModule, $projectMethod) = explode('-', $config->projectLink);
+
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> 项目集|program|pgmbrowse|';
-$lang->mainNav->product = '<i class="icon icon-product"></i> 产品|product|browse|';
-$lang->mainNav->project = '<i class="icon icon-project"></i> 项目|program|index|';
+$lang->mainNav->program = "<i class='icon icon-folder-open-o'></i> 项目集|$programModule|$programMethod|";
+$lang->mainNav->product = "<i class='icon icon-product'></i> 产品|$productModule|$productMethod|";
+$lang->mainNav->project = "<i class='icon icon-project'></i> 项目|$projectModule|$projectMethod|";
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|subject|browse|';
@@ -203,7 +208,7 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => '全局设置|subject|browse|', 'subModule' => 'holiday,custom');
+$lang->system->menu->company   = array('link' => '全局设置|subject|browse|', 'subModule' => 'holiday');
 $lang->system->menu->scrum     = array('link' => '敏捷模型|custom|configurescrum|');
 $lang->system->menu->waterfall = array('link' => '瀑布模型|stage|settype|');
 

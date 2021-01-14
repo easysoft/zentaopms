@@ -494,7 +494,7 @@ class custom extends control
     {
         $this->loadModel('setting')->setItem('system.custom.URSR', $key);
 
-        die(js::reload('parent'));
+        die(js::locate(inlink('browseStoryConcept'), 'parent'));
     }
 
     /**

@@ -269,20 +269,27 @@ class projectModel extends model
     /**
      * Save the project id user last visited to session.
      *
-     * @param  int   $projectID
-     * @param  array $projects
+     * @param  int   $executionID
+     * @param  array $executions
      * @access public
      * @return int
      */
-    public function saveState($projectID, $projects)
+    public function saveState($executionID, $executions)
     {
-        if($projectID > 0) $this->session->set('project', (int)$projectID);
-        if($projectID == 0 and $this->cookie->lastProject) $this->session->set('project', (int)$this->cookie->lastProject);
-        if($projectID == 0 and $this->session->project == '') $this->session->set('project', key($projects));
-        if(!isset($projects[$this->session->project]))
+        if($executionID > 0) $this->session->set('project', (int)$executionID);
+        if($executionID == 0 and $this->cookie->lastProject) 
         {
-            $this->session->set('project', key($projects));
-            if($projectID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->project},") === false) $this->accessDenied();
+            /* Project link is project-task. */
+            $executionID = (int)$this->cookie->lastProject;
+            $executions  = $this->getExecutionPairs($this->session->PRJ);
+            $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
+            $this->session->set('project', $executionID);
+        }
+        if($executionID == 0 and $this->session->project == '') $this->session->set('project', key($executions));
+        if(!isset($executions[$this->session->project]))
+        {
+            $this->session->set('project', key($executions));
+            if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->project},") === false) $this->accessDenied();
         }
         return $this->session->project;
     }
