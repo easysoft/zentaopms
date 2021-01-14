@@ -340,6 +340,8 @@ class custom extends control
         $key = array_search('custom', $this->lang->noMenuModule);
         unset($this->lang->noMenuModule[$key]);
 
+        $unit = zget($this->config->custom, 'hourPoint', '1');
+
         if(strtolower($this->server->request_method) == "post")
         {
             /* Load module and get the data from the post. */
@@ -347,9 +349,14 @@ class custom extends control
             $data = fixer::input('post')->setIF(!isset($_POST['efficiency']), 'efficiency', 1)->get();
 
             /* Judgment of required items. */
-            if(isset($_POST['scaleFactor']) and empty($_POST['scaleFactor']))
+            if(($unit != $_POST['hourPoint']) and empty($_POST['scaleFactor']))
             {
                 dao::$errors['scaleFactor'] = sprintf($this->lang->error->notempty, $this->lang->custom->convertRelations);
+                $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
+            elseif(($unit != $_POST['hourPoint']) and !is_numeric($_POST['scaleFactor']))
+            {
+                dao::$errors['scaleFactor'] = sprintf($this->lang->error->float, $this->lang->custom->convertRelations);
                 $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
@@ -360,7 +367,7 @@ class custom extends control
             $this->setting->setItem('system.project.defaultWorkhours', $data->defaultWorkhours);
 
             /* Update story estimate field. */
-            if(isset($_POST['scaleFactor']))
+            if($unit != $_POST['hourPoint'])
             {
                 $stories = $this->dao->select('*')->from(TABLE_STORY)->fetchAll();
                 foreach($stories as $story)
@@ -378,7 +385,7 @@ class custom extends control
         $this->view->position[]  = $this->lang->custom->common;
         $this->view->position[]  = $this->lang->custom->estimateConfig;
 
-        $this->view->unit       = zget($this->config->custom, 'hourPoint', '1');
+        $this->view->unit       = $unit;
         $this->view->cost       = zget($this->config->custom, 'cost', '');
         $this->view->efficiency = zget($this->config->custom, 'efficiency', '');
         $this->view->hours      = zget($this->config->project, 'defaultWorkhours', '');

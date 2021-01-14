@@ -222,7 +222,7 @@ $lang->custom->conceptOptions->story['0'] = 'Requirement';
 $lang->custom->conceptOptions->story['1'] = 'Story';
 
 $lang->custom->conceptOptions->hourPoint      = array();
-$lang->custom->conceptOptions->hourPoint['0'] = 'Working Hours';
+$lang->custom->conceptOptions->hourPoint['0'] = 'Stunde';
 $lang->custom->conceptOptions->hourPoint['1'] = 'Story Point';
 $lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';
 
