@@ -92,7 +92,7 @@
           <div class='btn-group'>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
-              <?php common::printIcon('program', 'PRJManageProducts', "projectID=$program->id&programID=0&from=PGM", $program, 'list', 'link', '', '', '', "data-group='program'");?>
+              <?php common::printIcon('program', 'PRJManageProducts', "projectID=$program->id&programID=0&from=pgmbrowse", $program, 'list', 'link', '', '', '', "data-group='program'");?>
               <?php common::printIcon('program', 'PRJWhitelist',      "projectID=$program->id", $program, 'list', 'shield-check');?>
               <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
             </ul>
