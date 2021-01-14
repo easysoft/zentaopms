@@ -346,7 +346,10 @@ class custom extends control
         {
             /* Load module and get the data from the post. */
             $this->loadModel('setting');
-            $data = fixer::input('post')->setIF(!isset($_POST['efficiency']), 'efficiency', 1)->get();
+            $data = fixer::input('post')
+                ->setIF(!isset($_POST['efficiency']), 'efficiency', 1)
+                ->remove('scaleFactor')
+                ->get();
 
             /* Judgment of required items. */
             if(($unit != $_POST['hourPoint']) and empty($_POST['scaleFactor']))
