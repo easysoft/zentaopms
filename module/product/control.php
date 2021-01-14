@@ -349,10 +349,13 @@ class product extends control
         if(!empty($_POST))
         {
             $changes = $this->product->update($productID);
+
+            /* Change the projects set of the program. */
             if(($_POST['program'] != $product->program) and $projects)
             {
-                $this->product->changeProjectsPGM($projects, $_POST['program'], $_POST['comfirmChange']);
+                $this->product->updateProjects($projects, $_POST['program'], $_POST['comfirmChange']);
             }
+
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {

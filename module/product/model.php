@@ -1584,11 +1584,11 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function changeProjectsPGM($projects, $programID, $comfirmChange = 'no')
+    public function updateProjects($projects, $programID, $comfirmChange = 'no')
     {
         foreach($projects as $project)
         {
-            if((count($project->product) == 1) or $comfirmChange)
+            if((count($project->product) == 1) or $comfirmChange == 'yes')
             {
                 $this->dao->update(TABLE_PROJECT)
                     ->set('parent')->eq($programID)
