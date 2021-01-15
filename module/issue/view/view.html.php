@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php
-$browseLink = $this->createLink('issue', 'browse');
+$browseLink = $app->session->issueList != false ? $app->session->issueList : $this->createLink('issue', 'browse');
 $createLink = $this->createLink('issue', 'create');
 
 $dateFiled  = array('deadline', 'resolvedDate', 'createdDate', 'editedDate', 'activateDate', 'closedDate', 'assignedDate');

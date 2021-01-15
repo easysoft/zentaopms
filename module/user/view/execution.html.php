@@ -30,11 +30,11 @@
       </thead>
       <tbody>
         <?php foreach($executions as $execution):?>
-        <?php $executionLink = $this->createLink('project', 'view', "projectID=$execution->id");?>
+        <?php $executionLink = $this->createLink('project', 'view', "projectID=$execution->id", '', false, $execution->project);?>
         <tr>
           <td><?php echo html::a($executionLink, $execution->id);?></td>
           <td>
-            <span class='project-type-label label label-info label-outline'><?php echo zget($lang->project->typeList, $execution->type);?></span>
+            <span class='project-type-label label label-info label-outline'><?php echo zget($lang->user->executionTypeList, $execution->type);?></span>
             <?php echo html::a($executionLink, $execution->name);?>
           </td>
           <td><?php echo $execution->begin;?></td>
