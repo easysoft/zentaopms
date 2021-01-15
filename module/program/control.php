@@ -1027,7 +1027,7 @@ class program extends control
             $_POST['PRJ'] = $projectID;
             $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(inLink('PRJGroup', "projectID=$projectID&programID=$programID"), 'parent.parent'));
+            die(js::closeModal('parent.parent'));
         }
 
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
