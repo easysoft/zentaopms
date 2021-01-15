@@ -313,4 +313,7 @@ js::set('isStepsTemplate', $isStepsTemplate);
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
+<script>
+$(function() {parent.$('body.hide-modal-close').removeClass('hide-modal-close'); })
+</script>
 <?php include '../../common/view/footer.html.php';?>
