@@ -111,7 +111,8 @@ class product extends control
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
-        $browseType = strtolower($browseType);
+        $browseType             = strtolower($browseType);
+        $projectStoryBrowseType = $browseType;
 
         /* Load datatable. */
         $this->loadModel('datatable');
@@ -182,6 +183,30 @@ class product extends control
 
         /* Get stories. */
         $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+        if($this->app->rawModule == 'projectstory')
+        {
+            $products     = $this->product->getProductsByProject($this->session->PRJ);
+            $productPlans = $this->loadModel('project')->getPlans($products);
+            $projectPlanList = $this->dao->select('product,plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($this->session->PRJ)->fetchPairs('product', 'plan');
+            $notLinkPlans = array();
+
+            foreach($projectPlanList as $productID => $planID)
+            {
+                if(isset($productPlans[$productID][$planID])) unset($productPlans[$productID][$planID]);
+            }
+
+            foreach($productPlans as $productPlans)
+            {
+                foreach($productPlans as $id => $plan) $notLinkPlans[$id] = $plan;
+            }
+
+            if(!empty($plans))
+            {
+                foreach($plans as $productID => $plan) $allPlans += $plan;
+            }
+            if($projectStoryBrowseType == 'bybranch') $param = $branch;
+            $stories = $this->story->getProjectStories($this->session->PRJ, $sort, $projectStoryBrowseType, $param, 'story', '', $pager, $productID);
+        }
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch');
@@ -227,6 +252,7 @@ class product extends control
         $this->view->moduleID      = $moduleID;
         $this->view->stories       = $stories;
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
+        $this->view->notLinkPlans  = isset($notLinkPlans) ? $notLinkPlans : array();
         $this->view->summary       = $this->product->summary($stories, $storyType);
         $this->view->moduleTree    = $moduleTree;
         $this->view->parentModules = $this->tree->getParents($moduleID);

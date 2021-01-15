@@ -22,6 +22,15 @@ $(function()
         $td.find('a').eq(0).css('max-width', $td.width() - labelWidth - 60);
     });
 
+    $('#toTaskButton').on('click', function()
+    {
+        var planID = $('#plan').val();
+        if(planID)
+        {
+            parent.location.href = createLink('project', 'importPlanStories', 'projectID=' + projectID + '&planID=' + planID);
+        }
+    })
+
     $(document).on('click', '.story-toggle', function(e)
     {
         var $toggle = $(this);

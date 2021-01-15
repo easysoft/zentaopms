@@ -50,6 +50,23 @@ class story extends control
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
+        if($projectID)
+        {
+            $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
+            if($project->type == 'project')
+            {
+                $this->app->rawModule = 'projectstory';
+                $this->lang->navGroup->story = 'project';
+                $this->lang->product->menu = $this->lang->menu->{$project->model};
+            }
+            else
+            {
+                $this->app->rawModule = 'project';
+                $this->lang->navGroup->story = 'project';
+            }
+            $this->view->project = $project;
+        }
+
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -99,7 +116,10 @@ class story extends control
                 }
                 else
                 {
-                    $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID");
+                    $project            = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
+                    $moduleName         = $project->type == 'project' ? 'projectstory' : 'project';
+                    $param              = $project->type == 'project' ? "PRJ=$projectID" : "projectID=$projectID";
+                    $response['locate'] = $this->createLink($moduleName, 'story', $param);
                 }
                 $this->send($response);
             }
@@ -147,7 +167,10 @@ class story extends control
             else
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, true);
-                $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID&orderBy=id_desc&browseType=unclosed");
+                $project            = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
+                $moduleName         = $project->type == 'project' ? 'projectstory' : 'project';
+                $param              = $project->type == 'project' ? "PRJ=$projectID" : "projectID=$projectID&orderBy=id_desc&browseType=unclosed";
+                $response['locate'] = $this->createLink($moduleName, 'story', $param);
             }
             if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
             $this->send($response);
@@ -255,7 +278,7 @@ class story extends control
             }
         }
 
-        /* Set Custom*/
+        /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->story->custom->createFields;
@@ -311,6 +334,22 @@ class story extends control
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
+        if($project)
+        {
+            $prj = $this->dao->findById((int)$project)->from(TABLE_PROJECT)->fetch();
+            if($prj->type == 'project')
+            {
+                $this->app->rawModule = 'projectstory';
+                $this->lang->navGroup->story = 'project';
+                $this->lang->product->menu = $this->lang->menu->{$prj->model};
+            }
+            else
+            {
+                
+            }
+            $this->view->project = $prj;
+        }
+
         /* Clear title when switching products and set the session for the current product. */
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
@@ -349,7 +388,10 @@ class story extends control
             elseif($project)
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, false);
-                die(js::locate($this->createLink('project', 'story', "projectID=$project&orderBy=id_desc&browseType=unclosed"), 'parent'));
+                $moduleName = $prj->type == 'project' ? 'projectstory' : 'project';
+                $param      = $prj->type == 'project' ? "PRJ=$project#open=project" : "projectID=$project&orderBy=id_desc&browseType=unclosed";
+                $link       = $this->createLink($moduleName, 'story', $param);
+                die(js::locate($link, 'parent'));
             }
             else
             {

@@ -2106,7 +2106,7 @@ class projectModel extends model
             if($statusPairs[$storyID] == 'draft' || $statusPairs[$storyID] == 'closed') continue;
             if(isset($linkedStories[$storyID])) continue;
 
-            $productID = (int)$products[$storyID];
+            $productID = (empty($products) and $this->app->rawMethod == 'batchcreate') ? $this->cookie->preProductID : (int)$products[$storyID];
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
