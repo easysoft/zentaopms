@@ -217,7 +217,7 @@ class project extends control
         $this->view->status       = $status;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->param        = $param;
-        $this->view->executionID  = $projectID;
+        $this->view->executionID  = $executionID;
         $this->view->execution    = $execution;
         $this->view->productID    = $productID;
         $this->view->modules      = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
