@@ -368,6 +368,9 @@ class user extends control
      */
     public function execution($userID, $fromModule = 'user', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $uri = $this->app->getURI(true);
+        $this->session->set('projectList',  $uri);
+
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
         $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
@@ -410,6 +413,9 @@ class user extends control
      */
     public function issue($userID, $fromModule = 'user', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $uri = $this->app->getURI(true);
+        $this->session->set('issueList',  $uri);
+
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
         $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
@@ -453,6 +459,9 @@ class user extends control
      */
     public function risk($userID, $fromModule = 'user', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $uri = $this->app->getURI(true);
+        $this->session->set('riskList',  $uri);
+
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
         $users   = $fromModule == 'user' ? $this->user->getPairs('noempty|noclosed|nodeleted|useid') : $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');

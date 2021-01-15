@@ -25,15 +25,17 @@ class issue extends control
      */
     public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $browseType = strtolower($browseType);
+        $uri = $this->app->getURI(true);
+        $this->session->set('issueList',  $uri);
 
         /* Load pager */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('issue', 'browse', "browseType=bysearch&queryID=myQueryID");
+        $browseType = strtolower($browseType);
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+        $actionURL  = $this->createLink('issue', 'browse', "browseType=bysearch&queryID=myQueryID");
         $this->issue->buildSearchForm($actionURL, $queryID);
 
         $this->view->title      = $this->lang->issue->common . $this->lang->colon . $this->lang->issue->browse;

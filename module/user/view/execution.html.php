@@ -30,7 +30,7 @@
       </thead>
       <tbody>
         <?php foreach($executions as $execution):?>
-        <?php $executionLink = $this->createLink('project', 'view', "projectID=$execution->id");?>
+        <?php $executionLink = $this->createLink('project', 'view', "projectID=$execution->id", '', false, $execution->project);?>
         <tr>
           <td><?php echo html::a($executionLink, $execution->id);?></td>
           <td>
