@@ -13,11 +13,11 @@ $(function()
 
                 if(Object.getOwnPropertyNames(project.product).length == 1)
                 {
-                    singleLinkProjects += project.name + ',';
+                    singleLinkProjects += '【' + project.name + '】';
                 }
                 else
                 {
-                    multipleLinkProjects += project.name + ',';
+                    multipleLinkProjects += '【' +  project.name + '】';
                 }
             }
 
