@@ -1480,6 +1480,7 @@ class program extends control
      * @param  int    $projectID
      * @param  int    $programID
      * @param  string $module
+     * @param  string $from  PRJ|pgmbrowse|pgmproject
      * @param  string $objectType
      * @param  string $orderby
      * @param  int    $recTotal
@@ -1488,9 +1489,18 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PRJWhitelist($projectID = 0, $programID = 0, $module='program', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function PRJWhitelist($projectID = 0, $programID = 0, $module='program', $from = '', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        if($from == 'pgmbrowse') $this->lang->PRJ->menu = $this->lang->program->menu;
+        if($from == 'pgmproject')
+        {
+            $this->app->rawMethod = 'pgmproject';
+            $this->lang->navGroup->program       = 'program';
+            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
+            $this->program->setPGMViewMenu($programID);
+        }
+
+        echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&programID=$programID&from=$from");
     }
 
     /**
@@ -1498,12 +1508,23 @@ class program extends control
      *
      * @param  int     $projectID
      * @param  int     $deptID
+     * @param  int     $programID
+     * @param  int     $from
      * @access public
      * @return void
      */
-    public function PRJAddWhitelist($projectID = 0, $deptID = 0)
+    public function PRJAddWhitelist($projectID = 0, $deptID = 0, $programID = 0, $from = '')
     {
-        echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=program");
+        /* Navigation stay in program when enter from program list. */
+        if($from == 'pgmbrowse') $this->lang->PRJ->menu = $this->lang->program->menu;
+        if($from == 'pgmproject')
+        {
+            $this->app->rawMethod = 'pgmproject';
+            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
+            $this->program->setPGMViewMenu($programID);
+        }
+
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=program&programID=$programID&from=$from");
     }
 
     /*

@@ -91,10 +91,12 @@ class personnel extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  int    $programID
+     * @param  string $from       PRJ|pgmbrowse|pgmproject
      * @access public
      * @return void
      */
-    public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0, $from = '')
     {
         if($module == 'personnel') $this->setProgramNavMenu($objectID);
 
@@ -113,11 +115,9 @@ class personnel extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set back link. */
-        if($module == 'program')
-        {
-            $goback = $this->session->PRJBrowse ? $this->session->PRJBrowse : $this->createLink('program', 'PRJBrowse');
-            $this->view->goback = $goback;
-        }
+        if($from == 'pgmbrowse')  $goback = $this->createLink('program', 'PGMBrowse');
+        if($from == 'pgmproject') $goback = $this->createLink('program', 'PGMProject', "programID=$programID");
+        if($from == 'PRJ')        $goback = $this->createLink('program', 'PRJBrowse');
 
         $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->position[] = $this->lang->personnel->whitelist;
@@ -127,6 +127,9 @@ class personnel extends control
         $this->view->whitelist = $this->personnel->getWhitelist($objectID, $objectType, $orderBy, $pager);
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->module    = $module;
+        $this->view->goback    = isset($goback) ? $goback : '';
+        $this->view->programID = $programID;
+        $this->view->from      = $from;
 
         $this->display();
     }
@@ -138,10 +141,12 @@ class personnel extends control
      * @param  int     $deptID
      * @param  string  $objectType  program|project|product|sprint
      * @param  string  $module
+     * @param  int     $programID
+     * @param  string  $from        PRJ|pgmbrowse|pgmproject
      * @access public
      * @return void
      */
-    public function addWhitelist($objectID = 0, $deptID = 0, $objectType = 'program', $module = 'personnel')
+    public function addWhitelist($objectID = 0, $deptID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
     {
         if($module == 'personnel') $this->setProgramNavMenu($objectID);
         $this->app->loadLang('project');
@@ -151,8 +156,13 @@ class personnel extends control
             $this->personnel->addWhitelist($objectType, $objectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
-            $moduleMethod = $module == 'program' ? 'PRJWhitelist' : 'whitelist';
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, $moduleMethod, "objectID=$objectID")));
+            $locateLink = $this->createLink($module, 'whitelist', "objectID=$objectID");
+            if($module == 'program')
+            {
+                $openModule = $from == 'PRJ' ? 'project' : 'program';
+                $locateLink = $this->createLink('program', 'PRJWhitelist', "objectID=$objectID&programID=$programID&module=$module&from=$from") . "#open=$openModule";
+            }
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
         $this->loadModel('dept');
@@ -170,6 +180,8 @@ class personnel extends control
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $this->view->dept       = $this->dept->getByID($deptID);
+        $this->view->programID  = $programID;
+        $this->view->from       = $from;
 
         $this->display();
     }
