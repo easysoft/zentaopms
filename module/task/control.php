@@ -122,17 +122,17 @@ class task extends control
                 $this->action->create('task', $taskID, 'Opened', '');
             }
 
+            if($todoID > 0)
+            {
+                $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+                $this->action->create('todo', $todoID, 'finished', '', "TASK:$taskID");
+            }
+
             /* If link from no head then reload*/
             if(isonlybody())
             {
                 $this->executeHooks($taskID);
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            }
-
-            if($todoID > 0)
-            {
-                $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
-                $this->action->create('todo', $todoID, 'finished', '', "TASK:$taskID");
             }
 
             $this->executeHooks($taskID);

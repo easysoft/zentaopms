@@ -313,6 +313,13 @@ class bug extends control
                 $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
             }
 
+            /* If link from no head then reload*/
+            if(isonlybody())
+            {
+                $this->executeHooks($bugID);
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            }
+
             $this->executeHooks($bugID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));

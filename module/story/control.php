@@ -120,6 +120,12 @@ class story extends control
                 $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
             }
 
+            if(isonlybody())
+            {
+                $this->executeHooks($storyID);
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            }
+
             $this->executeHooks($storyID);
 
             if($this->post->newStory)
