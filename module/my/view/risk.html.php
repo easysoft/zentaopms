@@ -57,7 +57,12 @@
           <td><?php echo zget($lang->risk->statusList, $risk->status);?></td>
           <td><?php echo $risk->identifiedDate == '0000-00-00' ? '' : $risk->identifiedDate;?></td>
           <td><?php echo $risk->rate;?></td>
-          <td><?php echo zget($lang->risk->priList, $risk->pri)?></td>
+          <?php
+          $priColor = 'black';
+          if($risk->pri == 'middle') $priColor = 'yellow';
+          if($risk->pri == 'high')   $priColor = 'red';
+          ?>
+          <td><?php echo "<span class='text-{$priColor}'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
           <td><?php echo $this->risk->printAssignedHtml($risk, $users);;?></td>
           <td><?php echo zget($lang->risk->categoryList, $risk->category);?></td>
           <td class='c-actions'>

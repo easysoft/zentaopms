@@ -39,7 +39,12 @@
         </td>
         <?php if($longBlock):?>
         <td class='c-rate'><?php echo $risk->rate?></td>
-        <td class='c-pri'><?php echo zget($lang->risk->priList, $risk->pri, $risk->pri)?></td>
+        <?php
+        $priColor = 'black';
+        if($risk->pri == 'middle') $priColor = 'yellow';
+        if($risk->pri == 'high')   $priColor = 'red';
+        ?>
+        <td><?php echo "<span class='text-{$priColor}'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
         <td><?php echo zget($users, $risk->assignedTo, $risk->assignedTo)?></td>
         <td class='c-category'><?php echo zget($lang->risk->categoryList, $risk->category, $risk->category)?></td>
         <?php endif;?>
