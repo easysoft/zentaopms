@@ -66,9 +66,10 @@
           <th><?php echo $lang->program->PGMBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('budget', '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
+              <?php if($parentProgram) $parentProgramNote = $lang->program->PGMParentBudget . ($parentProgram->budget != 0 ? $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, '') : $lang->program->future);?>
+              <?php echo html::input('budget', '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($parentProgram ? "placeholder=$parentProgramNote" : ''));?>
               <span class='input-group-addon fix-border'></span>
-              <?php echo html::select('budgetUnit', $lang->program->unitList, empty($parentProgram->budgetUnit) ? 'wanyuan' : $parentProgram->budgetUnit, "class='form-control'");?>
+              <?php echo html::select('budgetUnit', $budgetUnitList, empty($parentProgram->budgetUnit) ? $config->program->mainCurrency : $parentProgram->budgetUnit, "class='form-control'");?>
             </div>
           </td>
           <td>
@@ -76,7 +77,6 @@
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->program->future;?></label>
             </div>
-            <span class='muted budgetSpan'><?php if($parentProgram) echo $lang->program->PGMParentBudget . ($parentProgram->budget != 0 ? $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, '') : $lang->program->future);?></span>
           </td>
         </tr>
         <tr>

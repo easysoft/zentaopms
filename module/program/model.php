@@ -664,6 +664,20 @@ class programModel extends model
     }
 
     /**
+     * Get budget unit list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBudgetUnitList()
+    {
+        $budgetUnitList = array();
+        foreach(explode(',', $this->config->program->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->program->unitList, $unit, '');
+
+        return $budgetUnitList;
+    }
+
+    /**
      * Get program parent pairs
      *
      * @param  string $model

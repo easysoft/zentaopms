@@ -293,19 +293,17 @@ function setBudgetTipsAndAclList(parentProgramID)
 {
     if(parentProgramID != 0)
     {
-        $('.budgetSpan').removeClass('hidden');
-
         parentProgram = PGMList[parentProgramID];
         programBudget = parentProgram.budget;
         PGMBudgetUnit = budgetUnitList[parentProgram.budgetUnit];
 
         budgetNotes = programBudget != 0 ? (programBudget + PGMBudgetUnit) : future;
-        $('.budgetSpan').html(PGMParentBudget + budgetNotes);
+        $('#budget').attr('placeholder', PGMParentBudget + budgetNotes);
         $('.aclBox').html($('#subPGMAcl').html());
     }
     else
     {
-        $('.budgetSpan').addClass('hidden');
+        $('#budget').removeAttr('placeholder');
         $('.aclBox').html($('#PGMAcl').html());
     }
 }
