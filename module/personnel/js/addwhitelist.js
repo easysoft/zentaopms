@@ -8,6 +8,9 @@ function setDeptUsers(dept)
 {
     var deptID = $(dept).val();
     var link   = createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&objectType=' + objectType + '&module=' + module);
+
+    if(module == 'program') link = createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&programID=' + programID + '&from=' + from);
+
     location.href = link;
 }
 

@@ -154,11 +154,11 @@ $lang->dividerMenu = ',project,doc,';
 $lang->program = new stdclass();
 $lang->program->menu = new stdclass();
 //$lang->program->menu->index   = '主页|program|pgmindex|';
-$lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers,prjcreate,prjedit,prjmanageproducts');
+$lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers,prjcreate,prjedit,prjmanageproducts,prjwhitelist,prjaddwhitelist');
 
 $lang->PRJ = new stdclass();
 $lang->PRJ->menu = new stdclass();
-$lang->PRJ->menu->browse = array('link' => '项目|program|prjbrowse|', 'alias' => 'prjcreate,prjedit,prjgroup,prjmanagepriv,prjmanageview,prjmanagemembers,prjmanageproducts');
+$lang->PRJ->menu->browse = array('link' => '项目|program|prjbrowse|', 'alias' => 'prjcreate,prjedit,prjgroup,prjmanagepriv,prjmanageview,prjmanagemembers,prjmanageproducts,prjwhitelist,prjaddwhitelist');
 
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => '产品|program|pgmproduct|program=%s', 'alias' => 'view');

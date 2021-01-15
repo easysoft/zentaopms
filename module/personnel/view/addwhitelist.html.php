@@ -84,7 +84,8 @@
           <td colspan='6' class='text-left form-actions'>
             <?php echo html::submitButton(); ?>
             <?php $gobackURL = $this->session->whitelistBrowse;?>
-            <?php echo empty($gobackURL) ? html::backButton() : html::a($gobackURL, $lang->goback, '', 'class="btn btn-back btn-wide"');?>
+            <?php $dataGroup = $module == 'program' ? ($from == 'PRJ' ? "data-group='project'" : "data-group='program'") : '';?>
+            <?php echo empty($gobackURL) ? html::backButton() : html::a($gobackURL, $lang->goback, '', "class='btn btn-back btn-wide' $dataGroup");?>
           </td>
         </tr>
       </tfoot>
@@ -105,4 +106,6 @@
 <?php js::set('index', $i);?>
 <?php js::set('module', $module);?>
 <?php js::set('moduleMethod', $moduleMethod);?>
+<?php js::set('programID', $programID);?>
+<?php js::set('from', $from);?>
 <?php include '../../common/view/footer.html.php';?>
