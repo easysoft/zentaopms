@@ -221,7 +221,14 @@
       </div>
     </section>
     <?php endif;?>
-    <?php foreach(array('story', 'task', 'bug', 'case') as $objectType):?>
+    <?php
+    $objectTypeList['story'] = $radarData['product'];
+    $objectTypeList['task']  = $radarData['project'] > $radarData['devel'] ? $radarData['project'] : $radarData['devel'];
+    $objectTypeList['bug']   = $radarData['qa'];
+    $objectTypeList['case']  = $radarData['qa'];
+    arsort($objectTypeList);
+    ?>
+    <?php foreach(array_keys($objectTypeList) as $objectType):?>
     <section class='dataYearStat' id='<?php echo $objectType;?>Data'>
       <?php if($objectType == 'story') $sectionHeader = $annualDataLang->stories;?>
       <?php if($objectType == 'task')  $sectionHeader = $annualDataLang->tasks;?>
@@ -253,6 +260,7 @@ $(function()
           radius:'65%',
           <?php
           $max = max($radarData);
+          if($max == 0) $max = 1;
           $indicator = array();
           foreach($annualDataLang->radarItems as $radarKey => $radarName)
           {
