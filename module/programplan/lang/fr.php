@@ -54,6 +54,7 @@ $lang->programplan->noData        = 'No Data';
 $lang->programplan->children      = 'Sub Plan';
 $lang->programplan->childrenAB    = 'Child';
 $lang->programplan->confirmDelete = 'Do you want to delete the current plan?';
+$lang->programplan->workloadTips  = 'The subphase workload ratio is split at a percentage of 100 percent';
 
 $lang->programplan->stageCustom = new stdClass();
 $lang->programplan->stageCustom->date = 'Show Date';

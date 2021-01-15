@@ -54,6 +54,7 @@ $lang->programplan->noData        = '暂无数据。';
 $lang->programplan->children      = '二级计划';
 $lang->programplan->childrenAB    = '子';
 $lang->programplan->confirmDelete = '确定要删除当前计划吗？';
+$lang->programplan->workloadTips  = '子阶段工作量占比按百分百的比例进行拆分';
 
 $lang->programplan->stageCustom = new stdClass();
 $lang->programplan->stageCustom->date = '显示日期';

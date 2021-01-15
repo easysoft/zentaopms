@@ -461,13 +461,6 @@ class programplanModel extends model
             if($plan->milestone) $milestone = 1;
         }
 
-        /* The sum of the workload of the child phases cannot be greater than that of the parent phase. */
-        if($parentID && $totalPercent > $parentPercent)
-        {
-            dao::$errors['message'][] = sprintf($this->lang->programplan->error->parentWorkload, $parentPercent . '%');
-            return false;
-        }
-
         if($totalPercent > 100) return dao::$errors['message'][] = $this->lang->programplan->error->percentOver;
 
         $this->loadModel('action');
@@ -651,13 +644,6 @@ class programplanModel extends model
 
             $childrenTotalPercent = $this->getTotalPercent($parentStage, true);
             $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
-
-            /* The sum of the workload of the child phases cannot be greater than that of the parent phase. */
-            if($childrenTotalPercent > $parentPercent)
-            {
-                dao::$errors['message'][] = sprintf($this->lang->programplan->error->parentWorkload, $parentPercent . '%');
-                return false;
-            }
 
             /* If child plan has milestone, update parent plan set milestone eq 0 . */
             if($plan->milestone and $parentStage->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
