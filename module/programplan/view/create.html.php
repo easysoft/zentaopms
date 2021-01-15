@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('browseType', $type);?>
+<style>.icon-help{margin-left: 3px;}</style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
@@ -32,7 +33,12 @@
       <thead>
         <tr class='text-center'>
           <th class='required'><?php echo $name;?></th>
-          <th class='w-100px'><?php echo $lang->programplan->percent;?></th>
+          <th class='w-110px'>
+            <?php echo $lang->programplan->percent;?>
+            <?php if($planID):?>
+            <i class='icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content=<?php echo $lang->programplan->workloadTips;?>></i>
+            <?php endif;?>
+          </th>
           <th class='w-110px <?php echo $hideAttribute?>'><?php echo $lang->programplan->attribute;?></th>
           <th class='w-110px'><?php echo $lang->project->acl;?></th>
           <th class='w-110px'><?php echo $lang->programplan->milestone;?></th>
@@ -173,4 +179,5 @@
     </tr>
   </table>
 </div>
+<script>$('[data-toggle="popover"]').popover();</script>
 <?php include '../../common/view/footer.html.php';?>
