@@ -396,6 +396,7 @@ class doc extends control
      * Edit a doc.
      *
      * @param  int    $docID
+     * @param  bool   $comment
      * @access public
      * @return void
      */
@@ -429,7 +430,32 @@ class doc extends control
 
         $lib  = $this->doc->getLibByID($libID);
         $type = $lib->type;
-        $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->project);
+
+        /* According the from, set menus. */
+        if($this->from == 'product')
+        {
+            $objectID = $lib->product;
+            $this->lang->navGroup->doc  = 'product';
+            $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
+            $this->product->setMenu($this->product->getPairs(), $objectID);
+            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($objectID);
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->noMenuModule[] = 'doc';
+            $this->lang->set('menugroup.doc', 'product');
+        }
+        elseif($this->from == 'project')
+        {
+            $objectID = $lib->project;
+            $this->lang->navGroup->doc  = 'project';
+            $this->lang->doc->menu      = $this->lang->project->menu;
+            $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
+            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
+            $this->lang->set('menugroup.doc', 'project');
+        }
+        else
+        {
+            $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->project);
+        }
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);
@@ -470,8 +496,32 @@ class doc extends control
         $lib  = $this->doc->getLibByID($doc->lib);
         $type = $lib->type;
 
-        /* Set menu. */
-        $this->doc->setMenu($type, $doc->lib, $doc->module, $lib->product, $lib->project);
+        /* According the from, set menus. */
+        if($this->from == 'product')
+        {
+            $objectID = $lib->product;
+            $this->lang->navGroup->doc  = 'product';
+            $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
+            $this->product->setMenu($this->product->getPairs(), $objectID);
+            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($objectID);
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->noMenuModule[] = 'doc';
+            $this->lang->set('menugroup.doc', 'product');
+        }
+        elseif($this->from == 'project')
+        {
+            $objectID = $lib->project;
+            $this->lang->navGroup->doc  = 'project';
+            $this->lang->doc->menu      = $this->lang->project->menu;
+            $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
+            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
+            $this->lang->set('menugroup.doc', 'project');
+        }
+        else
+        {
+            /* Set menu. */
+            $this->doc->setMenu($type, $doc->lib, $doc->module, $lib->product, $lib->project);
+        }
 
         $this->view->title      = "DOC #$doc->id $doc->title - " . $lib->name;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $lib->name);

@@ -30,6 +30,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/markdown.html.php';?>
+<?php if($lang->navGroup->doc == 'doc'):?>
+<style>#mainHeader{height: 0px;}</style>
+<?php endif;?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
 <div id="mainContent" class="main-content">

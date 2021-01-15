@@ -20,7 +20,7 @@
           <div class="dropdown">
             <button class="btn" type="button" data-toggle="dropdown"><i class='icon-cog'></i> <span class="caret"></span></button>
             <ul class='dropdown-menu'>
-              <li><?php common::printLink('tree', 'browse', "libID=$libID&viewType=doc", "<i class='icon icon-cog'></i>" . $lang->doc->manageType);?></li>
+              <li><?php common::printLink('tree', 'browse', "libID=$libID&viewType=doc", "<i class='icon icon-cog'></i>" . $lang->doc->manageType, '', "class='iframe'", '', true);?></li>
               <li><?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>" . $lang->doc->editLib, '', "class='iframe'");?></li>
               <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>" . $lang->doc->deleteLib, 'hiddenwin');?></li>
             </ul>
@@ -127,7 +127,7 @@
         <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
         <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
         <div class="col">
-          <a class="file" href="<?php echo inlink('view', "docID=$doc->id");?>">
+          <a class="file" href="<?php echo inlink('view', "docID=$doc->id&version=0&from={$lang->navGroup->doc}");?>">
             <i class="file-icon icon icon-file-text text-muted"></i>
             <div class="file-name"><?php echo (strpos($doc->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $doc->title;?></div>
             <div class="text-primary file-info"><?php echo zget($users, $doc->addedBy);?></div>
@@ -137,8 +137,8 @@
             <?php if(common::hasPriv('doc', 'collect')):?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID={$doc->id}&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
             <?php endif;?>
-            <?php common::printLink('doc', 'edit', "docID={$doc->id}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
-            <?php common::printLink('doc', 'delete', "docID={$doc->id}", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
+            <?php common::printLink('doc', 'edit', "docID={$doc->id}&comment=false&from={$lang->navGroup->doc}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
+            <?php common::printLink('doc', 'delete', "docID={$doc->id}&confirm=no&from={$lang->navGroup->doc}", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
             <?php endif;?>
           </div>
         </div>

@@ -13,6 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php if($doc->contentType == 'html')     include '../../common/view/kindeditor.html.php';?>
 <?php if($doc->contentType == 'markdown') include '../../common/view/markdown.html.php';?>
+<?php if($lang->navGroup->doc == 'doc'):?>
+<style>#mainHeader{height: 0px;}</style>
+<?php endif;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

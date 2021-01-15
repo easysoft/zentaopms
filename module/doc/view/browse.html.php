@@ -12,9 +12,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<script>
-var browseType = '<?php echo $browseType;?>';
-</script>
+<?php if($lang->navGroup->doc == 'doc'):?>
+<style>#mainHeader{height: 0px;}</style>
+<?php endif;?>
+<?php js::set('browseType', $browseType);?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
 <?php js::set('libID', $libID);?>
 <?php if($this->from != 'doc') js::set('type', 'doc');?>
@@ -46,7 +47,7 @@ var browseType = '<?php echo $browseType;?>';
           <div class="dropdown">
             <button class="btn" type="button" data-toggle="dropdown"><i class='icon-cog'></i> <span class="caret"></span></button>
             <ul class='dropdown-menu'>
-              <li><?php common::printLink('tree', 'browse', "libID=$libID&viewType=doc", "<i class='icon icon-cog'></i>" . $lang->doc->manageType);?></li>
+              <li><?php common::printLink('tree', 'browse', "libID=$libID&viewType=doc", "<i class='icon icon-cog'></i>" . $lang->doc->manageType, '', "class='iframe'", '', true);?></li>
               <li><?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>" . $lang->doc->editLib, '', "class='iframe'");?></li>
               <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>" . $lang->doc->deleteLib, 'hiddenwin');?></li>
             </ul>
@@ -115,7 +116,7 @@ var browseType = '<?php echo $browseType;?>';
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$lib->id&objectType=doclib");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php endif;?>
                 <?php common::printLink('doc', 'editLib', "libID=$lib->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
-                <?php common::printLink('tree', 'browse', "rootID=$lib->id&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
+                <?php common::printLink('tree', 'browse', "rootID=$lib->id&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link iframe'", '', true)?>
               </td>
             </tr>
             <?php endforeach;?>
@@ -158,7 +159,7 @@ var browseType = '<?php echo $browseType;?>';
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
             <tr>
-              <td class="c-name"><?php echo html::a(inlink('view', "docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title=$doc->title");?></td>
+              <td class="c-name"><?php echo html::a(inlink('view', "docID=$doc->id&version=0&from={$lang->navGroup->doc}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title={$doc->title}");?></td>
               <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
               <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'y-m-d');?></td>
@@ -168,8 +169,8 @@ var browseType = '<?php echo $browseType;?>';
                 <?php if(common::hasPriv('doc', 'collect')):?>
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php endif;?>
-                <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link' data-group=$from")?>
-                <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
+                <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false&from={$lang->navGroup->doc}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link' data-group=$from")?>
+                <?php common::printLink('doc', 'delete', "docID=$doc->id&confirm=no&from={$lang->navGroup->doc}", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
                 <?php endif;?>
               </td>
             </tr>

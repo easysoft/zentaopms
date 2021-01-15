@@ -1128,7 +1128,17 @@ class docModel extends model
             $idList    = array();
             $projectID = $this->session->PRJ;
             $executionStatus = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'undone' : 'all';
-            if($type == 'product') $objectList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all');
+
+            /* If it is a project module, query the project related products. */
+            if($type == 'product' && $this->lang->navGroup->doc == 'project')
+            {
+                $objectList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all');
+            }
+            elseif($type == 'product' && $this->lang->navGroup->doc == 'doc')
+            {
+                $objectList = $this->loadModel('product')->getPairs();
+            }
+
             if($type == 'project') $objectList = $this->loadModel('project')->getExecutionsByProject($projectID, $executionStatus, 0, true);
             if(empty($objectList)) return $libs;
 

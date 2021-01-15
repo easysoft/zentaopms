@@ -147,8 +147,8 @@ class zentao
         // Get the random number required for encryption.
         $this->getUserCreateParams();
 
-        $optionalParams['password1']      = md5($optionalParams['password1'] . $this->sessionRand);
-        $optionalParams['password2']      = md5($optionalParams['password2'] . $this->sessionRand);
+        $optionalParams['password1']      = md5($optionalParams['password1']) . $this->sessionRand;
+        $optionalParams['password2']      = md5($optionalParams['password2']) . $this->sessionRand;
         $optionalParams['verifyPassword'] = md5(md5(self::ztPassword) . $this->sessionRand);
         $requestURL['get']                = self::ztURL . '?m=user&f=create&dept=' . $optionalParams['dept'] . '&t=json';
         $requestURL['path_info']          = self::ztURL . '/user-create-' . $optionalParams['dept'] . '.json';

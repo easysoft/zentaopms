@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if($lang->navGroup->doc == 'doc'):?>
+<style>#mainHeader{height: 0px;}</style>
+<?php endif;?>
 <?php $spliter = (empty($this->app->user->feedback) && !$this->cookie->feedbackView) ? true : false;?>
 <div class="main-row <?php if($spliter) echo 'split-row';?> fade" id="mainRow">
   <?php include './side.html.php';?>
@@ -55,7 +58,7 @@
               <?php endif;?>
               <?php common::printLink('doc', 'editLib', "libID=$lib->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
               <?php common::printLink('doc', 'deleteLib', "libID=$lib->id", "<i class='icon icon-close'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
-              <?php common::printLink('tree', 'browse', "rootID=$lib->id&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->doc->manageType}' class='btn btn-link'")?>
+              <?php common::printLink('tree', 'browse', "rootID=$lib->id&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->doc->manageType}' class='btn btn-link iframe'", '', true)?>
             </div>
             <?php endif;?>
           </div>

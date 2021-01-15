@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if($lang->navGroup->doc == 'doc'):?>
+<style>#mainHeader{height: 0px;}</style>
+<?php endif;?>
 <div class="main-row fade <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
   <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>

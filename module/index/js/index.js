@@ -69,9 +69,12 @@
         {
             if(link.prj) return 'project';
 
-            if(methodLowerCase === 'objectlibs' && link.params.$3 == 'product') return 'product';
-            if(methodLowerCase === 'showfiles' && link.params.$1 == 'product') return 'product';
-            if(methodLowerCase === 'browse' && (link.params.from || link.params.$5) == 'product') return 'product';
+            if(methodLowerCase === 'objectlibs' && (link.params.type || link.params.$3) == 'product') return 'product';
+            if(methodLowerCase === 'showfiles'  && (link.params.type || link.params.$1) == 'product') return 'product';
+            if(methodLowerCase === 'browse'     && (link.params.from || link.params.$5) == 'product') return 'product';
+            if(methodLowerCase === 'view'       && (link.params.from || link.params.$3) == 'product') return 'product';
+            if(methodLowerCase === 'edit'       && (link.params.from || link.params.$3) == 'product') return 'product';
+            if(methodLowerCase === 'delete'     && (link.params.from || link.params.$3) == 'product') return 'product';
             return 'doc';
         }
         if(moduleName === 'custom' && ['estimate', 'browsestoryconcept', 'configurescrum'].includes(methodLowerCase))

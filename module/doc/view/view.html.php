@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php if($lang->navGroup->doc == 'doc'):?>
+<style>#mainHeader{height: 0px;}</style>
+<?php endif;?>
 <?php echo css::internal($keTableCSS);?>
 <style>.detail-content .file-image {padding: 0 50px 0 10px;}</style>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
@@ -67,7 +70,7 @@ js::set('docID', $doc->id);
           foreach($versions as $i => $versionTitle)
           {
               $class = $i == $version ? " class='active'" : '';
-              echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id&version=$i"), $versionTitle) . '</li>';
+              echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id&version=$i&from={$lang->navGroup->doc}"), $versionTitle) . '</li>';
           }
           ?>
         </ul>
@@ -144,8 +147,8 @@ js::set('docID', $doc->id);
         <?php
         if(!$doc->deleted)
         {
-            common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
-            common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', 'trash', 'hiddenwin');
+            common::printIcon('doc', 'edit', "docID=$doc->id&comment=false&from={$lang->navGroup->doc}", $doc);
+            common::printIcon('doc', 'delete', "docID=$doc->id&confirm=no&from={$lang->navGroup->doc}", $doc, 'button', 'trash', 'hiddenwin');
         }
         ?>
       </div>

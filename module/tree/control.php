@@ -26,7 +26,6 @@ class tree extends control
     {
         $this->loadModel('product');
 
-
         /* According to the type, set the module root and modules. */
         if(strpos('story|bug|case', $viewType) !== false)
         {
