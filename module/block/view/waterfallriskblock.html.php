@@ -40,11 +40,11 @@
         <?php if($longBlock):?>
         <td class='c-rate'><?php echo $risk->rate?></td>
         <?php
-        $priColor = 'black';
-        if($risk->pri == 'middle') $priColor = 'yellow';
-        if($risk->pri == 'high')   $priColor = 'red';
+        $priColor = '#000000';
+        if($risk->pri == 'middle') $priColor = '#FF9900';
+        if($risk->pri == 'high')   $priColor = '#E53333';
         ?>
-        <td><?php echo "<span class='text-{$priColor}'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
+        <td><?php echo "<span style='color:{$priColor}'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
         <td><?php echo zget($users, $risk->assignedTo, $risk->assignedTo)?></td>
         <td class='c-category'><?php echo zget($lang->risk->categoryList, $risk->category, $risk->category)?></td>
         <?php endif;?>
