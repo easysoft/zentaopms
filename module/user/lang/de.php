@@ -207,6 +207,9 @@ $lang->user->contactFieldList['skype']    = $lang->user->skype;
 $lang->user->contactFieldList['slack']    = $lang->user->slack;
 $lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
 
+$lang->user->executionTypeList['stage']  = 'Stage';
+$lang->user->executionTypeList['sprint'] = 'Iteration';
+
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Kontakt';
 $lang->user->contacts->listName = 'Namensliste';

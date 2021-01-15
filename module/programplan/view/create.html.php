@@ -16,7 +16,8 @@
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
       <?php
-      $title = $programPlan->name . $lang->project->statge . '（' . $programPlan->begin . $lang->project->to . $programPlan->end . '）';
+      $title = $lang->programplan->create;
+      if($planID) $title = $programPlan->name . $lang->project->statge . '（' . $programPlan->begin . $lang->project->to . $programPlan->end . '）';
       echo "<span class='text'>{$title}</span>";
       ?>
     </span>
