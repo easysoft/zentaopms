@@ -887,31 +887,34 @@ class program extends control
             }
         }
 
-        $allProducts = $this->program->getPGMProductPairs($programID);
+        $allProducts   = $this->program->getPGMProductPairs($programID);
+        $parentProgram = $this->program->getPGMByID($programID);
 
         $this->view->title      = $this->lang->program->PRJCreate;
         $this->view->position[] = $this->lang->program->PRJCreate;
 
-        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
-        $this->view->users         = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->copyProjects  = $this->program->getPRJPairsByModel();
-        $this->view->products      = $products;
-        $this->view->allProducts   = array('0' => '') + $allProducts;
-        $this->view->productPlans  = array('0' => '') + $productPlans;
-        $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->programID     = $programID;
-        $this->view->model         = $model;
-        $this->view->name          = $name;
-        $this->view->code          = $code;
-        $this->view->team          = $team;
-        $this->view->acl           = $acl;
-        $this->view->auth          = $auth;
-        $this->view->whitelist     = $whitelist;
-        $this->view->copyProjectID = $copyProjectID;
-        $this->view->from          = $from;
-        $this->view->programList   = $this->program->getParentPairs();
-        $this->view->parentProgram = $this->program->getPGMByID($programID);
-        $this->view->URSRPairs     = $this->loadModel('custom')->getURSRPairs();
+        $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
+        $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->copyProjects   = $this->program->getPRJPairsByModel();
+        $this->view->products       = $products;
+        $this->view->allProducts    = array('0' => '') + $allProducts;
+        $this->view->productPlans   = array('0' => '') + $productPlans;
+        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $this->view->programID      = $programID;
+        $this->view->model          = $model;
+        $this->view->name           = $name;
+        $this->view->code           = $code;
+        $this->view->team           = $team;
+        $this->view->acl            = $acl;
+        $this->view->auth           = $auth;
+        $this->view->whitelist      = $whitelist;
+        $this->view->copyProjectID  = $copyProjectID;
+        $this->view->from           = $from;
+        $this->view->programList    = $this->program->getParentPairs();
+        $this->view->parentProgram  = $parentProgram;
+        $this->view->URSRPairs      = $this->loadModel('custom')->getURSRPairs();
+        $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram);
+        $this->view->budgetUnitList = $this->program->getBudgetUnitList();
 
         $this->display();
     }
@@ -963,6 +966,7 @@ class program extends control
         $productPlans   = array(0 => '');
         $allProducts    = $programID != $project->parent ? $this->program->getPGMProductPairs($programID) : $this->program->getPGMProductPairs($project->parent, 'assign', 'noclosed');
         $linkedProducts = $programID != $project->parent ? array() : $this->project->getProducts($projectID);
+        $parentProgram  = $this->program->getPGMByID($programID);
 
         foreach($linkedProducts as $product)
         {
@@ -989,6 +993,9 @@ class program extends control
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
         $this->view->URSRPairs      = $this->loadModel('custom')->getURSRPairs();
         $this->view->from           = $from;
+        $this->view->parentProgram  = $parentProgram;
+        $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram);
+        $this->view->budgetUnitList = $this->program->getBudgetUnitList();
 
         $this->display();
     }
