@@ -146,7 +146,7 @@ class program extends control
     {
         $this->lang->navGroup->program = 'program';
 
-        $parentProgram = $parentProgramID ? $this->program->getPGMByID($parentProgramID) : '';
+        $parentProgram = $this->program->getPGMByID($parentProgramID);
 
         if($_POST)
         {
