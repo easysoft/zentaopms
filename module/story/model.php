@@ -178,6 +178,9 @@ class storyModel extends model
     /**
      * Create a story.
      *
+     * @param  int    $projectID
+     * @param  int    $bugID
+     * @param  string $from
      * @access public
      * @return int|bool the id of the created story or false when error.
      */
@@ -240,16 +243,11 @@ class storyModel extends model
             $data->verify  = $story->verify;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
+            /* Project or execution linked story. */
             if($projectID != 0 and $story->status != 'draft')
             {
-                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                $this->dao->insert(TABLE_PROJECTSTORY)
-                    ->set('project')->eq($projectID)
-                    ->set('product')->eq($this->post->product)
-                    ->set('story')->eq($storyID)
-                    ->set('version')->eq(1)
-                    ->set('order')->eq($lastOrder + 1)
-                    ->exec();
+                $this->linkStory($projectID, $this->post->product, $storyID);
+                if($projectID != $this->session->PRJ) $this->linkStory($this->session->PRJ, $this->post->product, $storyID);
             }
 
             if(is_array($this->post->URS))
@@ -3731,6 +3729,27 @@ class storyModel extends model
             ->fetchAll();
 
         return $story;
+    }
+
+    /**
+     * Link a story.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function linkStory($projectID, $productID, $storyID)
+    {
+        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $this->dao->insert(TABLE_PROJECTSTORY)
+            ->set('project')->eq($projectID)
+            ->set('product')->eq($productID)
+            ->set('story')->eq($storyID)
+            ->set('version')->eq(1)
+            ->set('order')->eq($lastOrder + 1)
+            ->exec();
     }
 
     /**
