@@ -2310,6 +2310,7 @@ class storyModel extends model
         $type = strtolower($type);
         if($type == 'bysearch')
         {
+            if($this->app->rawModule == 'projectstory') $this->session->projectStoryQuery = $this->session->storyQuery;
             $queryID  = (int)$param;
             $products = $this->loadModel('project')->getProducts($projectID);
 
