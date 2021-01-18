@@ -222,8 +222,7 @@
 
                   if($canBeChanged and common::hasPriv('project', 'unlinkStory', $project))
                   {
-                      $unlinkURL = $this->createLink('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=yes");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->project->unlinkStory}'");
+                      common::printIcon('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
                   }
               }
               ?>
