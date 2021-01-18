@@ -1243,7 +1243,8 @@ class programModel extends model
             ->beginIF($type == 'list')->andWhere('type')->eq('program')->fi()
             ->beginIF($type == 'dropmenu')->andWhere('type')->in('program,project')->fi()
             ->andWhere('status')->ne('closed')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!$this->app->user->admin and $type == 'list')->andWhere('id')->in($this->app->user->view->programs)->fi()
+            O->beginIF(!$this->app->user->admin and $type == 'dropmenu')->andWhere('id')->in($this->app->user->view->programs . ',' . $this->app->user->view->projects)->fi()
             ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
