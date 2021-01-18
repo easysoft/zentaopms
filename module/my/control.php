@@ -358,6 +358,11 @@ class my extends control
     /**
      * My test task.
      *
+     * @param  string $type wait|done
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -393,7 +398,7 @@ class my extends control
     /**
      * My test case.
      *
-     * @param  string $type
+     * @param  string $type assigntome|openedbyme
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
