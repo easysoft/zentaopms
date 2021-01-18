@@ -24,7 +24,7 @@ class projectStory extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=projectStory")));
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=projectstory")));
     }
 
     /**
@@ -63,6 +63,7 @@ class projectStory extends control
      * Get software requirements from product.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  string $browseType
      * @param  int    $param
      * @param  string $storyType
@@ -73,7 +74,7 @@ class projectStory extends control
      * @access public
      * @return void
      */
-    public function story($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->session->set('storyList',$this->app->getURI(true));
         if(empty($productID)) $productID = key($this->products);

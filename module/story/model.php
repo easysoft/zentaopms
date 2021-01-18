@@ -2299,10 +2299,11 @@ class storyModel extends model
      * @param  string $excludeStories
      * @param  object $pager
      * @param  int    $productID
+     * @param  int    $branch
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null, $productID = 0)
+    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null, $productID = 0, $branch = 0)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
 
@@ -2371,6 +2372,7 @@ class storyModel extends model
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($project->type == 'project')
                 ->andWhere('t1.product')->eq($productID)
+                ->beginIF(!empty($branch))->andWhere('t2.branch')->eq($branch)->fi()
                 ->beginIF(isset($statusFeatureList) and in_array($type, array_keys($statusFeatureList)))->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF(isset($otherFeatureList) and in_array($type, array_keys($otherFeatureList)))->andWhere('t2.' . substr($type, 0, -2))->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()

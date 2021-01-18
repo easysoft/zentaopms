@@ -98,6 +98,7 @@ class product extends control
      * Browse a product.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  string $browseType
      * @param  int    $param
      * @param  string $storyType requirement|story
@@ -108,7 +109,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
         $browseType             = strtolower($browseType);
@@ -201,7 +202,7 @@ class product extends control
             }
 
             if($projectStoryBrowseType == 'bybranch') $param = $branch;
-            $stories = $this->story->getProjectStories($this->session->PRJ, $sort, $projectStoryBrowseType, $param, 'story', '', $pager, $productID);
+            $stories = $this->story->getProjectStories($this->session->PRJ, $sort, $projectStoryBrowseType, $param, 'story', '', $pager, $productID, $branch);
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
