@@ -200,10 +200,6 @@ class product extends control
                 foreach($productPlans as $id => $plan) $notLinkPlans[$id] = $plan;
             }
 
-            if(!empty($plans))
-            {
-                foreach($plans as $productID => $plan) $allPlans += $plan;
-            }
             if($projectStoryBrowseType == 'bybranch') $param = $branch;
             $stories = $this->story->getProjectStories($this->session->PRJ, $sort, $projectStoryBrowseType, $param, 'story', '', $pager, $productID);
         }
