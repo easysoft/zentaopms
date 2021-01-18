@@ -247,6 +247,7 @@
     </form>
   </div>
 </div>
+<?php if(isset($project)) js::set('project', $project);?>
 <?php js::set('projectID', $projectID);?>
 <?php js::set('storyModule', $lang->story->module);?>
 <?php js::set('storyType', $type);?>

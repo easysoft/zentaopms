@@ -534,7 +534,7 @@ class custom extends control
                     ->exec();
             }
 
-            die(js::reload('parent'));
+            die(js::locate(inlink('browseStoryConcept'), 'parent'));
         }
     }
 

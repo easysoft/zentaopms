@@ -2107,9 +2107,14 @@ class project extends control
     }
 
     /**
-     * Link stories to a project.
+     * Link stories to an execution.
      *
      * @param  int    $projectID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -2122,9 +2127,10 @@ class project extends control
         $project    = $this->project->getById($projectID);
         $products   = $this->project->getProducts($projectID);
         $browseLink = $this->createLink('project', 'story', "projectID=$projectID");
+        if($project->type == 'project') $browseLink = $this->createLink('projectstory', 'story');
 
         $this->session->set('storyList', $this->app->getURI(true)); // Save session.
-        $this->project->setMenu($this->projects, $project->id);     // Set menu.
+        if($project->type != 'project') $this->project->setMenu($this->projects, $project->id);     // Set menu.
 
         if(empty($products))
         {
@@ -2729,6 +2735,7 @@ class project extends control
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
+        $project     = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $count = 0;
         if(!empty($planStory))
         {
@@ -2745,8 +2752,16 @@ class project extends control
             $planStories = array_keys($planStory);
             $this->project->linkStory($projectID, $planStories, $planProducts);
         }
-        if($count != 0) echo js::alert(sprintf($this->lang->project->haveDraft, $count)) . js::locate($this->createLink('project', 'story', "projectID=$projectID"));
-        die(js::locate(helper::createLink('project', 'story', 'projectID=' . $projectID), 'parent'));
+
+        $moduleName = 'project';
+        $param      = "projectID=$projectID";
+        if($project->type == 'project')
+        {
+            $moduleName = 'projectstory';
+            $param      = '';
+        }
+        if($count != 0) echo js::alert(sprintf($this->lang->project->haveDraft, $count)) . js::locate($this->createLink($moduleName, 'story', $param));
+        die(js::locate(helper::createLink($moduleName, 'story', $param), 'parent'));
     }
 
     /**

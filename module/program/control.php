@@ -158,12 +158,13 @@ class program extends control
         $this->view->title      = $this->lang->program->PGMCreate;
         $this->view->position[] = $this->lang->program->PGMCreate;
 
-        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
-        $this->view->poUsers       = $this->user->getPairs('noclosed|nodeleted|pofirst');
-        $this->view->users         = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->parentProgram = $parentProgramID ? $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($parentProgramID)->fetch() : 0;
-        $this->view->parents       = $this->program->getParentPairs();
-        $this->view->PGMList       = $this->program->getPGMList();
+        $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
+        $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst');
+        $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->parentProgram  = $parentProgramID ? $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($parentProgramID)->fetch() : 0;
+        $this->view->parents        = $this->program->getParentPairs();
+        $this->view->PGMList        = $this->program->getPGMList();
+        $this->view->budgetUnitList = $this->program->getBudgetUnitList();
 
         $this->display();
     }
@@ -200,12 +201,13 @@ class program extends control
         $this->view->title       = $this->lang->program->PGMEdit;
         $this->view->position[]  = $this->lang->program->PGMEdit;
 
-        $this->view->pmUsers = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
-        $this->view->poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst');
-        $this->view->users   = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->program = $program;
-        $this->view->parents = $parents;
-        $this->view->PGMList = $this->program->getPGMList();
+        $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
+        $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst');
+        $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->program        = $program;
+        $this->view->parents        = $parents;
+        $this->view->PGMList        = $this->program->getPGMList();
+        $this->view->budgetUnitList = $this->program->getBudgetUnitList();
 
         $this->display();
     }
@@ -1027,7 +1029,7 @@ class program extends control
             $_POST['PRJ'] = $projectID;
             $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(inLink('PRJGroup', "projectID=$projectID&programID=$programID"), 'parent.parent'));
+            die(js::closeModal('parent.parent'));
         }
 
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;

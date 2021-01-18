@@ -901,7 +901,7 @@ $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->programindex   = 'Index|program|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
-$lang->menu->scrum->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
+$lang->menu->scrum->projectstory   = array('link' => 'Story|projectstory|story', 'subModule' => 'story', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
 $lang->menu->scrum->qa             = 'QA|qa|index';
 $lang->menu->scrum->ci             = 'Code|repo|browse';
@@ -927,7 +927,7 @@ $lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|brows
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|requirement', 'alias' => 'requirement,story,track');
+$lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|story', 'alias' => 'story,track');
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';
 $lang->menu->waterfall->qa             = 'Index|qa|index';
@@ -995,9 +995,8 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => 'Gantt|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => 'Stage|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->projectstory->menu->requirement = array('link' => "{$lang->URCommon}|projectstory|requirement", 'subModule' => '');
-$lang->projectstory->menu->story       = array('link' => "{$lang->SRCommon}|projectstory|story", 'subModule' => '');
-$lang->projectstory->menu->track       = array('link' => 'Track|projectstory|track', 'subModule' => '');
+$lang->projectstory->menu->story = array('link' => "{$lang->SRCommon}|projectstory|story", 'subModule' => 'story,project', 'alias' => 'linkstory');
+$lang->projectstory->menu->track = array('link' => 'Track|projectstory|track', 'subModule' => '');
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'job', 'jenkins', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'stage');

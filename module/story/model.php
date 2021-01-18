@@ -2296,14 +2296,17 @@ class storyModel extends model
      * @param  string $type
      * @param  int    $param
      * @param  string $storyType 
-     * @param  string $excludeStories 
+     * @param  string $excludeStories
      * @param  object $pager
+     * @param  int    $productID
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null)
+    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null, $productID = 0)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
+
+        $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
 
         $type = strtolower($type);
         if($type == 'bysearch')
@@ -2346,13 +2349,18 @@ class storyModel extends model
         else
         {
             $productParam = ($type == 'byproduct' and $param) ? $param : $this->cookie->storyProductParam;
-            $branchParam  = ($type == 'bybranch' and $param)  ? $param : $this->cookie->storyBranchParam;
-            $moduleParam  = ($type == 'bymodule' and $param)  ? $param : $this->cookie->storyModuleParam;
+            $branchParam  = ($type == 'bybranch'  and $param) ? $param : $this->cookie->storyBranchParam;
+            $moduleParam  = ($type == 'bymodule'  and $param) ? $param : $this->cookie->storyModuleParam;
             $modules      = empty($moduleParam) ? array() : $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
             if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
 
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
+            if($project->type == 'project')
+            {
+                $statusFeatureList = $this->lang->projectstory->featureBarList['status'];
+                $otherFeatureList  = $this->lang->projectstory->featureBarList['other'];
+            }
 
             $stories = $this->dao->select('distinct t1.*, t2.*,t3.branch as productBranch,t4.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -2361,10 +2369,19 @@ class storyModel extends model
                 ->where('t1.project')->eq((int)$projectID)
                 ->andWhere('t2.type')->eq($storyType)
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
+                ->beginIF($project->type == 'project')
+                ->andWhere('t1.product')->eq($productID)
+                ->beginIF(isset($statusFeatureList) and in_array($type, array_keys($statusFeatureList)))->andWhere('t2.status')->eq($type)->fi()
+                ->beginIF(isset($otherFeatureList) and in_array($type, array_keys($otherFeatureList)))->andWhere('t2.' . substr($type, 0, -2))->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF($type == 'willclose')->andWhere('t2.stage')->in('developed,released')->andWhere('t2.status')->ne('closed')->fi()
+                ->fi()
+                ->beginIF($project->type != 'project')
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
+                ->beginIF($this->session->projectStoryBrowseType == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->fi()
                 ->beginIF(!empty($branchParam))->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
-                ->beginIF($this->session->projectStoryBrowseType == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager, 't2.id')
@@ -2375,6 +2392,7 @@ class storyModel extends model
         $branches = array();
         foreach($stories as $story)
         {
+            $story->estimate .= $this->lang->story->hour;
             if(empty($story->branch) and $story->productType != 'normal') $branches[$story->productBranch][$story->id] = $story->id;
         }
         foreach($branches as $branchID => $storyIdList)

@@ -3,6 +3,7 @@ $(function()
     if(typeof(resetActive) != 'undefined') return false;
     if(typeof(storyType) == 'undefined') storyType = '';
     if(typeof(rawModule) == 'undefined') rawModule = 'product';
+    if(typeof(project) != 'undefined') rawModule = 'projectstory';
     if(rawModule != 'projectstory')
     {
         $('#navbar .nav li').removeClass('active');

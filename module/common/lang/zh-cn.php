@@ -293,8 +293,8 @@ $lang->my->menu->contacts    = '联系人|my|managecontacts|';
 
 $lang->my->workMenu = new stdclass();
 $lang->my->workMenu->task        = '任务|my|work|mode=task';
-$lang->my->workMenu->story       = "$lang->SRCommon|my|work|mode=story";
 $lang->my->workMenu->requirement = "$lang->URCommon|my|work|mode=requirement";
+$lang->my->workMenu->story       = "$lang->SRCommon|my|work|mode=story";
 $lang->my->workMenu->bug         = 'Bug|my|work|mode=bug';
 $lang->my->workMenu->testcase    = '用例|my|work|mode=testcase&type=assigntome';
 $lang->my->workMenu->testtask    = '测试单|my|work|mode=testtask&type=wait';
@@ -303,8 +303,8 @@ $lang->my->workMenu->risk        = '风险|my|work|mode=risk';
 
 $lang->my->contributeMenu = new stdclass();
 $lang->my->contributeMenu->task        = '任务|my|contribute|mode=task';
-$lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=story";
 $lang->my->contributeMenu->requirement = "$lang->URCommon|my|contribute|mode=requirement";
+$lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=story";
 $lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
 $lang->my->contributeMenu->testcase    = '用例|my|contribute|mode=testcase&type=openedbyme';
 $lang->my->contributeMenu->testtask    = '测试单|my|contribute|mode=testtask&type=done';
@@ -907,7 +907,7 @@ $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->programindex   = '仪表盘|program|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
-$lang->menu->scrum->projectstory   = array('link' => '需求|projectstory|requirement', 'alias' => 'requirement,story,track');
+$lang->menu->scrum->projectstory   = array('link' => '需求|projectstory|story', 'subModule' => 'story', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = '文档|doc|index|';
 $lang->menu->scrum->qa             = '测试|qa|index';
 $lang->menu->scrum->ci             = '代码|repo|browse';
@@ -933,7 +933,7 @@ $lang->menu->waterfall->programplan    = array('link' => '计划|programplan|bro
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => '文档|doc|index|project={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|requirement', 'alias' => 'requirement,story,track');
+$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|story', 'alias' => 'story,track');
 $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代码|repo|browse|';
 $lang->menu->waterfall->qa             = '测试|qa|index';
@@ -1001,9 +1001,8 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->projectstory->menu->requirement = array('link' => "{$lang->URCommon}|projectstory|requirement", 'subModule' => '');
-$lang->projectstory->menu->story       = array('link' => "{$lang->SRCommon}|projectstory|story", 'subModule' => '');
-$lang->projectstory->menu->track       = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
+$lang->projectstory->menu->story = array('link' => "{$lang->SRCommon}|projectstory|story", 'subModule' => 'story,project', 'alias' => 'linkstory');
+$lang->projectstory->menu->track = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');

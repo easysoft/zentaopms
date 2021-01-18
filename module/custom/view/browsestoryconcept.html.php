@@ -41,7 +41,7 @@
               <?php $disabled = $URSR['system'] ? "disabled=disabled" : '';?>
               <?php if(common::hasPriv('custom', 'setDefaultConcept'))  echo html::a($this->createLink('custom', 'setDefaultConcept', "id=$key"), "<i class='icon icon-hand-right'></i>", 'hiddenwin', "class='btn' title={$lang->custom->setDefaultConcept}");?>
               <?php if(common::hasPriv('custom', 'editStoryConcept'))   echo html::a($this->createLink('custom', 'editStoryConcept', "id=$key", '', true), "<i class='icon icon-edit'></i>", '', "class='btn iframe' title={$lang->edit}");?>
-              <?php if(common::hasPriv('custom', 'deleteStoryConcept')) echo html::a($this->createLink('custom', 'deleteStoryConcept', "id=$key"), "<i class='icon icon-trash'></i>", 'hiddenwin', "class='btn' $disabled title={$lang->delete}");?>
+              <?php if(common::hasPriv('custom', 'deleteStoryConcept')) echo html::a($this->createLink('custom', 'deleteStoryConcept', "id=$key"), "<i class='icon icon-trash'></i>", 'hiddenwin', "class='btn' $disabled title={$lang->delete} data-group='system'");?>
             </td>
           </tr>
         <?php endforeach;?>

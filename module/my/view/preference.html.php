@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<style> #submit{margin-top: 40px} </style>
+<style> #submit{margin-top: 45px} </style>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><i class='icon-key'></i> <?php echo $lang->my->preference;?></h2>
