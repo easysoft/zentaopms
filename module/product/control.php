@@ -190,9 +190,9 @@ class product extends control
             $projectPlanList = $this->dao->select('product,plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($this->session->PRJ)->fetchPairs('product', 'plan');
             $notLinkPlans = array();
 
-            foreach($projectPlanList as $productID => $planID)
+            foreach($projectPlanList as $product => $planID)
             {
-                if(isset($productPlans[$productID][$planID])) unset($productPlans[$productID][$planID]);
+                if(isset($productPlans[$product][$planID])) unset($productPlans[$product][$planID]);
             }
 
             foreach($productPlans as $productPlans)
