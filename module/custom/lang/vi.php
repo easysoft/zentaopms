@@ -67,9 +67,10 @@ $lang->custom->tipCostList['CV']  = 'Cost Variance(CV%)';
 $lang->custom->tipRangeList[0]  = 'No';
 $lang->custom->tipRangeList[1]  = 'Yes';
 
-$lang->custom->regionMustNumber = 'The interval must be a number!';
-$lang->custom->tipNotEmpty      = 'The prompt can not be empty!';
-$lang->custom->currencyNotEmpty = 'You have to select one currency at least.';
+$lang->custom->regionMustNumber     = 'The interval must be a number!';
+$lang->custom->tipNotEmpty          = 'The prompt can not be empty!';
+$lang->custom->currencyNotEmpty     = 'You have to select one currency at least.';
+$lang->custom->mainCurrencyNotEmpty = 'The main currency can not bu empty';
 
 $lang->custom->numberError = 'The interval must be greater than zero!';
 
