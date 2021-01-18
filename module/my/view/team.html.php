@@ -37,7 +37,7 @@ include '../../common/view/header.html.php';
         <?php foreach($users as $user):?>
         <tr>
           <td class='c-id'><?php printf('%03d', $user->id);?></td>
-          <td><?php if(!common::printLink('user', 'view', "userID=$user->id&from=my", $user->realname, '', "title='$user->realname'")) echo $user->realname;?></td>
+          <td><?php if(!common::printLink('user', 'view', "userID=$user->id&from=my", $user->realname, '', "title='$user->realname' data-group='my'")) echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
           <td class="w-90px" title='<?php echo zget($lang->user->roleList, $user->role, '');?>'><?php echo zget($lang->user->roleList, $user->role, '');?></td>
           <td class="c-url" title="<?php echo $user->email;?>"><?php echo html::mailto($user->email);?></td>

@@ -213,7 +213,7 @@ class program extends control
         $this->view->PGMList        = $this->program->getPGMList();
         $this->view->budgetUnitList = $this->program->getBudgetUnitList();
         $this->view->parentProgram  = $parentProgram;
-        $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram);
+        $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram) + $program->budget;
 
         $this->display();
     }
@@ -994,7 +994,7 @@ class program extends control
         $this->view->URSRPairs      = $this->loadModel('custom')->getURSRPairs();
         $this->view->from           = $from;
         $this->view->parentProgram  = $parentProgram;
-        $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram);
+        $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram) + $project->budget;
         $this->view->budgetUnitList = $this->program->getBudgetUnitList();
 
         $this->display();

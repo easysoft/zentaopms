@@ -293,7 +293,7 @@ class programModel extends model
             if($program->budget != 0 and $parentProgram->budget != 0)
             {
                 $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
-                if($program->budget > $parentRemainBudget + $program->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                if($program->budget > $parentRemainBudget + $oldProgram->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
         if(dao::isError()) return false;
@@ -1569,7 +1569,7 @@ class programModel extends model
             if($project->budget != 0 and $parentProgram->budget != 0)
             {
                 $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
-                if($project->budget > $parentRemainBudget + $project->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                if($project->budget > $parentRemainBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
 

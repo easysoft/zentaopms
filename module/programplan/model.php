@@ -644,6 +644,7 @@ class programplanModel extends model
 
             $childrenTotalPercent = $this->getTotalPercent($parentStage, true);
             $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
+            if($childrenTotalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
 
             /* If child plan has milestone, update parent plan set milestone eq 0 . */
             if($plan->milestone and $parentStage->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();

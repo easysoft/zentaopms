@@ -57,16 +57,14 @@ EOT;
       <?php if($module == 'program' and $field == 'unitList'):?>
       <table class='table table-form'>
         <tr>
-          <th class='text-left'><?php echo $lang->custom->program->currencySetting;?></th>
+          <th class='<?php echo strpos($this->app->getClientLang(), 'zh') === false ? 'w-120px' : 'w-70px';?> text-left'><?php echo $lang->custom->program->currencySetting;?></th>
         </tr>
         <tr>
-          <td colspan='4'><?php echo html::checkbox('unitList', $lang->program->unitList, $unitList);?></td>
+          <td colspan='5'><?php echo html::checkbox('unitList', $lang->program->unitList, $unitList);?></td>
         </tr>
         <tr>
           <th class='text-left'><?php echo $lang->custom->program->mainCurrency;?></th>
           <td><?php echo html::select('mainCurrency', $lang->program->unitList, $mainCurrency, "class='form-control chosen' required");?></td>
-          <td></td>
-          <td></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center'><?php echo html::submitButton();?></td>
