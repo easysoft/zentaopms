@@ -489,6 +489,32 @@ class fileModel extends model
         }
     }
 
+	/** 
+     * Compress image to config configured size.
+     *
+     * @param  string  $rawImage
+     * @param  string  $target
+     * @param  int     $x
+     * @param  int     $y
+     * @param  int     $width
+     * @param  int     $height
+     * @param  int     $resizeWidth
+     * @param  int     $resizeHeight
+     * @access public
+     * @return void
+     */
+    public function cropImage($rawImage, $target, $x, $y, $width, $height, $resizeWidth = 0, $resizeHeight = 0)
+    {   
+        $this->app->loadClass('phpthumb', true);
+
+        if(!extension_loaded('gd')) return false;
+
+        $croper = phpThumbFactory::create($rawImage);
+        if($resizeWidth > 0) $croper->resize($resizeWidth, $resizeHeight);
+        $croper->crop($x, $y, $width, $height);
+        $croper->save($target);
+    }
+
     /**
      * Paste image in kindeditor at firefox and chrome.
      *

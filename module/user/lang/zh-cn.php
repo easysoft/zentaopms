@@ -52,6 +52,9 @@ $lang->user->verifyPassword   = '您的密码';
 $lang->user->resetPassword    = '忘记密码';
 $lang->user->score            = '积分';
 $lang->user->name             = '名称';
+$lang->user->cropAvatar       = '裁剪头像';
+$lang->user->cropAvatarTip    = '拖拽选框来选择头像裁剪范围';
+$lang->user->cropImageTip     = '所使用的头像图片过小，建议图片大小至少为 48x48，当前图片大小为 %s';
 
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';
