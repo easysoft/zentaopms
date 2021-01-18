@@ -97,9 +97,9 @@
           <td class='c-status' title='<?php echo $projectStatus;?>'>
             <span class="status-project status-<?php echo $execution->status?>"><?php echo $projectStatus;?></span>
           </td>
-          <td><?php echo $execution->hours->totalEstimate;?></td>
-          <td><?php echo $execution->hours->totalConsumed;?></td>
-          <td><?php echo $execution->hours->totalLeft;?></td>
+          <td><?php echo $execution->hours->totalEstimate . ' ' . $config->hourUnit;?></td>
+          <td><?php echo $execution->hours->totalConsumed . ' ' . $config->hourUnit;?></td>
+          <td><?php echo $execution->hours->totalLeft . ' ' . $config->hourUnit;?></td>
           <td class="c-progress">
             <div class="progress progress-text-left">
               <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
