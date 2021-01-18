@@ -113,14 +113,14 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
         else
         {
             $link     = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
-            if($isProjectStroy) $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID={$this->session->PRJ}#open=project");
+            if($isProjectStroy) $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID={$this->session->PRJ}");
             $disabled = '';
             if(!common::hasPriv('story', 'create'))
             {
                 $link     = '###';
                 $disabled = 'disabled';
             }
-            echo html::a($link, $lang->story->createCommon, '', "class='$disabled'");
+            echo html::a($link, $lang->story->createCommon, '', "class='$disabled' data-group='project'");
         }
         ?>
         </li>
@@ -128,8 +128,8 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
         <li <?php echo $batchDisabled;?>>
         <?php
           $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=0&plan=0&type=$storyType");
-          if($isProjectStroy) $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project={$this->session->PRJ}#open=project");
-          echo html::a($batchLink, $lang->story->batchCreate);
+          if($isProjectStroy) $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project={$this->session->PRJ}");
+          echo html::a($batchLink, $lang->story->batchCreatei, '', "data-group='project'");
         ?>
         </li>
       </ul>
