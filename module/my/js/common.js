@@ -2,7 +2,6 @@ $(function()
 {
     if(typeof mode === 'string')
     {
-        if(mode == 'testcase') mode = 'testtask';
         $('#subNavbar li[data-id=' + mode + ']').addClass('active');
     }
     var scp  = $('[data-id="changePassword"] a');

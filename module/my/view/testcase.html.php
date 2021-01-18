@@ -20,9 +20,6 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=testtask&type=wait"), "<span class='text'>{$lang->testtask->wait}</span>", '', "class='btn btn-link'");
-    if($app->rawMethod == 'contribute') echo html::a(inlink($app->rawMethod, "mode=testtask&type=done"), "<span class='text'>{$lang->testtask->done}</span>", '', "class='btn btn-link'");
-    echo "<span class='divider'></span>";
     if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=$mode&type=assigntome"), "<span class='text'>{$lang->testcase->assignToMe}</span>" . ($type == 'assigntome' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assigntome' ? ' btn-active-text' : '') . "'");
     if($app->rawMethod == 'contribute') echo html::a(inlink($app->rawMethod, "mode=$mode&type=openedbyme"), "<span class='text'>{$lang->testcase->openedByMe}</span>" . ($type == 'openedbyme' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedbyme' ? ' btn-active-text' : '') . "'");
     ?>
