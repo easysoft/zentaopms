@@ -1644,8 +1644,8 @@ class testcase extends control
 
                         foreach($steps as $step)
                         {
-                            $step = trim($step);
-                            if(empty($step)) continue;
+                            $trimedStep = trim($step);
+                            if(empty($trimedStep)) continue;
                             if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out))
                             {
                                 $num     = $out[1];

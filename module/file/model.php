@@ -542,7 +542,7 @@ class fileModel extends model
 
         $content = file_get_contents($fileName);
         /* Fix bug #890. */
-        $content = str_replace(array("\r\n","\r"), "\n", $content);
+        $content = str_replace(array("\r\n", "\r"), "\n", $content);
         $lines   = explode("\n", $content);
 
         $col  = -1;
@@ -550,7 +550,6 @@ class fileModel extends model
         $data = array();
         foreach($lines as $line)
         {
-            $line    = trim($line);
             $markNum = substr_count($line, '"') - substr_count($line, '\"');
             if(substr($line, -1) != ',' and (($markNum % 2 == 1 and $col != -1) or ($markNum % 2 == 0 and substr($line, -2) != ',"' and $col == -1))) $line .= ',';
             $line = str_replace(',"",', ',,', $line);
