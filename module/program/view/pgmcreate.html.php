@@ -66,10 +66,14 @@
           <th><?php echo $lang->program->PGMBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php if($parentProgram) $parentProgramNote = $lang->program->PGMParentBudget . ($parentProgram->budget != 0 ? $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, '') : $lang->program->future);?>
-              <?php echo html::input('budget', '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($parentProgram ? "placeholder=$parentProgramNote" : ''));?>
+              <?php $placeholder = $parentProgram->budget != 0 ? 'placeholder=' . $lang->program->PGMParentBudget . $remainBudget : '';?>
+              <?php echo html::input('budget', '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
+              <?php if($parentProgram):?>
+              <span class='input-group-addon fix-border'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
+              <?php else:?>
               <span class='input-group-addon fix-border'></span>
-              <?php echo html::select('budgetUnit', $budgetUnitList, empty($parentProgram->budgetUnit) ? $config->program->mainCurrency : $parentProgram->budgetUnit, "class='form-control'");?>
+              <?php echo html::select('budgetUnit', $budgetUnitList, $config->program->mainCurrency, "class='form-control'");?>
+              <?php endif;?>
             </div>
           </td>
           <td>

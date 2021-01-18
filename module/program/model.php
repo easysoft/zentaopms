@@ -178,13 +178,8 @@ class programModel extends model
                 /* The budget of a child program cannot beyond the remaining budget of the parent program. */
                 if(isset($program->budget) and $parentProgram->budget != 0)
                 {
-                    $childGrade     = $parentProgram->grade + 1;
-                    $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROJECT)
-                        ->where('path')->like("%{$program->parent}%")
-                        ->andWhere('grade')->eq($childGrade)
-                        ->fetch('sumBudget');
-
-                    if($program->budget > $parentProgram->budget - $childSumBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                    $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
+                    if($program->budget > $parentRemainBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
                 }
 
                 if(dao::isError()) return false;
@@ -297,14 +292,8 @@ class programModel extends model
             /* The budget of a child program cannot beyond the remaining budget of the parent program. */
             if($program->budget != 0 and $parentProgram->budget != 0)
             {
-                $childGrade     = $parentProgram->grade + 1;
-                $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROJECT)
-                    ->where('path')->like("%{$program->parent}%")
-                    ->andWhere('grade')->eq($childGrade)
-                    ->andWhere('id')->ne($programID)
-                    ->fetch('sumBudget');
-
-                if($program->budget > $parentProgram->budget - $childSumBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
+                if($program->budget > $parentRemainBudget + $program->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
         if(dao::isError()) return false;
@@ -675,6 +664,26 @@ class programModel extends model
         foreach(explode(',', $this->config->program->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->program->unitList, $unit, '');
 
         return $budgetUnitList;
+    }
+
+    /**
+     * Get parent remain budget.
+     *
+     * @param  object  $parentProgram
+     * @access public
+     * @return int
+     */
+    public function getParentRemainBudget($parentProgram)
+    {
+        if(empty($parentProgram)) return;
+
+        $childGrade     = $parentProgram->grade + 1;
+        $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROJECT)
+            ->where('path')->like("%{$parentProgram->id}%")
+            ->andWhere('grade')->eq($childGrade)
+            ->fetch('sumBudget');
+
+        return $parentProgram->budget - $childSumBudget;
     }
 
     /**

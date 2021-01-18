@@ -146,6 +146,8 @@ class program extends control
     {
         $this->lang->navGroup->program = 'program';
 
+        $parentProgram = $parentProgramID ? $this->program->getPGMByID($parentProgramID) : '';
+
         if($_POST)
         {
             $projectID = $this->program->PGMCreate();
@@ -161,10 +163,11 @@ class program extends control
         $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->parentProgram  = $parentProgramID ? $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($parentProgramID)->fetch() : 0;
+        $this->view->parentProgram  = $parentProgram;
         $this->view->parents        = $this->program->getParentPairs();
         $this->view->PGMList        = $this->program->getPGMList();
         $this->view->budgetUnitList = $this->program->getBudgetUnitList();
+        $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram);
 
         $this->display();
     }
@@ -181,6 +184,7 @@ class program extends control
         $this->lang->navGroup->program = 'program';
 
         $program = $this->program->getPGMByID($programID);
+        $parentProgram = $program->parent ? $this->program->getPGMByID($program->parent) : '';
 
         if($_POST)
         {
@@ -208,6 +212,8 @@ class program extends control
         $this->view->parents        = $parents;
         $this->view->PGMList        = $this->program->getPGMList();
         $this->view->budgetUnitList = $this->program->getBudgetUnitList();
+        $this->view->parentProgram  = $parentProgram;
+        $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram);
 
         $this->display();
     }
