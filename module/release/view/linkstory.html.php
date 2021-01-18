@@ -56,7 +56,7 @@
           </td>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td><?php echo zget($users, $story->assignedTo);?></td>
-          <td><?php echo $story->estimate;?></td>
+          <td><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
           <td><span class='status-story status-<?php echo $story->status?>'><?php echo $this->processStatus('story', $story);?></span></td>
           <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
         </tr>
