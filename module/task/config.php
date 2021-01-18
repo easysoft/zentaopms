@@ -87,7 +87,7 @@ $config->task->datatable->fieldList['consumed']['required'] = 'no';
 
 $config->task->datatable->fieldList['left']['title']    = 'leftAB';
 $config->task->datatable->fieldList['left']['fixed']    = 'no';
-$config->task->datatable->fieldList['left']['width']    = '70';
+$config->task->datatable->fieldList['left']['width']    = '80';
 $config->task->datatable->fieldList['left']['required'] = 'no';
 
 $config->task->datatable->fieldList['progress']['title']    = 'progressAB';
