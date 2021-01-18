@@ -799,8 +799,8 @@ class projectModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetch('total');
 
-            if($type == 'create')       $percentTotal = $percent + $oldPercentTotal;
-            if($oldProject->grade == 1) $percentTotal = $oldPercentTotal - $oldProject->percent + $this->post->percent;
+            if($type == 'create') $percentTotal = $percent + $oldPercentTotal;
+            if(!empty($oldProject) and $oldProject->grade == 1) $percentTotal = $oldPercentTotal - $oldProject->percent + $this->post->percent;
 
             if($percentTotal >100)
             {
@@ -815,9 +815,9 @@ class projectModel extends model
             $childrenTotalPercent = $this->dao->select('SUM(percent) as total')->from(TABLE_PROJECT)->where('parent')->eq($oldProject->parent)->andWhere('deleted')->eq(0)->fetch('total');
             $childrenTotalPercent = $childrenTotalPercent - $oldProject->percent + $this->post->percent;
 
-            if($childrenTotalPercent > $parentPlan->percent)
+            if($childrenTotalPercent > 100)
             {
-                dao::$errors['parent'] = sprintf($this->lang->programplan->error->parentWorkload, $parentPlan->percent . '%');
+                dao::$errors['parent'] = sprintf($this->lang->project->workloadTotal, $childrenTotalPercent . '%');
                 return false;
             }
         }

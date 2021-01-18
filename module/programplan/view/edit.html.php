@@ -22,16 +22,15 @@
         <tbody>
           <tr>
             <th class="w-100px"><?php echo $lang->programplan->parent;?></th>
-            <td class="w-p35-f"><?php echo html::select('parent', $parentStage, $plan->parent, "class='form-control chosen '");?></td>
+            <td colspan='2'><?php echo html::select('parent', $parentStage, $plan->parent, "class='form-control chosen '");?></td>
           </tr>
           <tr>
             <th class='w-100px'><?php echo $lang->programplan->name;?> </th>
-            <td class='w-p35-f'><?php echo html::input('name', $plan->name, "class='form-control'");?></td>
-            <td></td><td></td>
+            <td colspan='2'><?php echo html::input('name', $plan->name, "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->programplan->percent;?> </th>
-            <td>
+            <td colspan='2'>
               <div class='input-group'>
                 <?php echo html::input('percent', $plan->percent, "class='form-control'");?>
                 <div class='input-group-addon'>%</span>
@@ -40,12 +39,12 @@
           </tr>
           <tr class="<?php if($plan->grade == 2) echo "hidden";?>" id="attributeType">
             <th><?php echo $lang->programplan->attribute;?> </th>
-            <td><?php echo html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'");?></td>
+            <td colspan='2'><?php echo html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'");?></td>
           </tr>
           <?php if($plan->setMilestone):?>
           <tr>
             <th><?php echo $lang->programplan->milestone;?> </th>
-            <td><?php echo html::radio('milestone', $lang->programplan->milestoneList, $plan->milestone);?></td>
+            <td colspan='2'><?php echo html::radio('milestone', $lang->programplan->milestoneList, $plan->milestone);?></td>
           </tr>
           <?php else:?>
             <?php echo html::hidden('milestone', $plan->milestone);?>
@@ -53,28 +52,32 @@
           <tr>
             <th><?php echo $lang->project->acl;?> </th>
             <?php $class = $plan->grade == 2 ? "disabled='disabled'" : '';?>
-            <td><?php echo html::select('acl', $lang->project->aclList, $plan->acl, "class='form-control' $class");?></td>
+            <td colspan='2'><?php echo html::select('acl', $lang->project->aclList, $plan->acl, "class='form-control' $class");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->programplan->begin;?> </th>
-            <td><?php echo html::input('begin', $plan->begin, "class='form-control form-date'");?></td>
+            <th><?php echo $lang->programplan->planDateRange;?> </th>
+            <td colspan='2'>
+              <div class="input-group title-group">
+                <?php echo html::input('begin', $plan->begin, "class='form-control form-date'");?>
+                <span class="input-group-addon fix-border br-0"><?php echo $lang->project->to;?></span>
+                <?php echo html::input('end', $plan->end, "class='form-control form-date'");?>
+              </div>
+            </td>
           </tr>
           <tr>
-            <th><?php echo $lang->programplan->end;?> </th>
-            <td><?php echo html::input('end', $plan->end, "class='form-control form-date'");?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->programplan->realBegan;?> </th>
-            <td><?php echo html::input('realBegan', $plan->realBegan, "class='form-control form-date'");?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->programplan->realEnd;?> </th>
-            <td><?php echo html::input('realEnd', $plan->realEnd, "class='form-control form-date'");?></td>
+            <th><?php echo $lang->programplan->realDateRange;?> </th>
+            <td colspan='2'>
+              <div class="input-group title-group">
+                <?php echo html::input('realBegan', $plan->realBegan, "class='form-control form-date'");?>
+                <span class="input-group-addon fix-border br-0"><?php echo $lang->project->to;?></span>
+                <?php echo html::input('realEnd', $plan->realEnd, "class='form-control form-date'");?>
+              </div>
+            </td>
           </tr>
           <?php if(isset($this->config->qcVersion)):?>
           <tr>
             <th><?php echo $lang->programplan->output;?> </th>
-            <td colspan='2'><?php echo html::select('output[]', $documentList, $plan->output, "class='form-control chosen ' multiple");?></td>
+            <td colspan='4'><?php echo html::select('output[]', $documentList, $plan->output, "class='form-control chosen ' multiple");?></td>
           </tr>
           <?php endif;?>
           <tr>
