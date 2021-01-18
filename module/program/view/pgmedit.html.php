@@ -44,11 +44,14 @@
           <th><?php echo $lang->program->PGMBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php $parentProgram = zget($PGMList, $program->parent, '');?>
-              <?php if($parentProgram) $parentProgramNote = $lang->program->PGMParentBudget . ($parentProgram->budget != 0 ? $parentProgram->budget . zget($lang->program->unitList, $parentProgram->budgetUnit, '') : $lang->program->future);?>
-              <?php echo html::input('budget', $program->budget != 0 ? $program->budget : '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($program->budget == 0 ? 'disabled ' : '') . ($parentProgram ? "placeholder=$parentProgramNote " : ''));?>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->PGMParentBudget . $remainBudget : '';?>
+              <?php echo html::input('budget', $program->budget != 0 ? $program->budget : '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($program->budget == 0 ? 'disabled ' : '') . $placeholder);?>
+              <?php if($parentProgram):?>
+              <span class='input-group-addon'><?php echo zget($budgetUnitList, $program->budgetUnit);?></span>
+              <?php else:?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $budgetUnitList, $program->budgetUnit, "class='form-control'");?>
+              <?php endif;?>
             </div>
           </td>
           <td>

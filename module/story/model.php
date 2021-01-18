@@ -178,6 +178,9 @@ class storyModel extends model
     /**
      * Create a story.
      *
+     * @param  int    $projectID
+     * @param  int    $bugID
+     * @param  string $from
      * @access public
      * @return int|bool the id of the created story or false when error.
      */
@@ -240,16 +243,11 @@ class storyModel extends model
             $data->verify  = $story->verify;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
+            /* Project or execution linked story. */
             if($projectID != 0 and $story->status != 'draft')
             {
-                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                $this->dao->insert(TABLE_PROJECTSTORY)
-                    ->set('project')->eq($projectID)
-                    ->set('product')->eq($this->post->product)
-                    ->set('story')->eq($storyID)
-                    ->set('version')->eq(1)
-                    ->set('order')->eq($lastOrder + 1)
-                    ->exec();
+                $this->linkStory($projectID, $this->post->product, $storyID);
+                if($projectID != $this->session->PRJ) $this->linkStory($this->session->PRJ, $this->post->product, $storyID);
             }
 
             if(is_array($this->post->URS))
@@ -2299,10 +2297,11 @@ class storyModel extends model
      * @param  string $excludeStories
      * @param  object $pager
      * @param  int    $productID
+     * @param  int    $branch
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null, $productID = 0)
+    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null, $productID = 0, $branch = 0)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
 
@@ -2371,6 +2370,7 @@ class storyModel extends model
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($project->type == 'project')
                 ->andWhere('t1.product')->eq($productID)
+                ->beginIF(!empty($branch))->andWhere('t2.branch')->eq($branch)->fi()
                 ->beginIF(isset($statusFeatureList) and in_array($type, array_keys($statusFeatureList)))->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF(isset($otherFeatureList) and in_array($type, array_keys($otherFeatureList)))->andWhere('t2.' . substr($type, 0, -2))->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
@@ -2392,7 +2392,6 @@ class storyModel extends model
         $branches = array();
         foreach($stories as $story)
         {
-            $story->estimate .= ' ' . $this->config->hourUnit;
             if(empty($story->branch) and $story->productType != 'normal') $branches[$story->productBranch][$story->id] = $story->id;
         }
         foreach($branches as $branchID => $storyIdList)
@@ -3730,6 +3729,27 @@ class storyModel extends model
             ->fetchAll();
 
         return $story;
+    }
+
+    /**
+     * Link a story.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function linkStory($projectID, $productID, $storyID)
+    {
+        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $this->dao->insert(TABLE_PROJECTSTORY)
+            ->set('project')->eq($projectID)
+            ->set('product')->eq($productID)
+            ->set('story')->eq($storyID)
+            ->set('version')->eq(1)
+            ->set('order')->eq($lastOrder + 1)
+            ->exec();
     }
 
     /**
