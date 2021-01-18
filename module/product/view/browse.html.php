@@ -129,7 +129,7 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
         <?php
           $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=0&plan=0&type=$storyType");
           if($isProjectStroy) $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project={$this->session->PRJ}");
-          echo html::a($batchLink, $lang->story->batchCreatei, '', "data-group='project'");
+          echo html::a($batchLink, $lang->story->batchCreate, '', "data-group='project'");
         ?>
         </li>
       </ul>
