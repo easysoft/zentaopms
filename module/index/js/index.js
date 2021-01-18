@@ -361,6 +361,7 @@
         reload:     reloadTab,
         updateUrl:  updateTabUrl,
         getGroup:   getGroupFromUrl,
+        getLastTab: getLastTab,
         openedTabs: openedTabs,
         groupsMap:  groupsMap
     };
