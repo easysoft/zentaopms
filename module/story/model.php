@@ -2392,7 +2392,6 @@ class storyModel extends model
         $branches = array();
         foreach($stories as $story)
         {
-            $story->estimate .= ' ' . $this->config->hourUnit;
             if(empty($story->branch) and $story->productType != 'normal') $branches[$story->productBranch][$story->id] = $story->id;
         }
         foreach($branches as $branchID => $storyIdList)
