@@ -36,7 +36,7 @@
           <th class='w-110px'>
             <?php echo $lang->programplan->percent;?>
             <?php if($planID):?>
-            <i class='icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content=<?php echo $lang->programplan->workloadTips;?>></i>
+            <i class='icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-container="body" data-content=<?php echo $lang->programplan->workloadTips;?>></i>
             <?php endif;?>
           </th>
           <th class='w-110px <?php echo $hideAttribute?>'><?php echo $lang->programplan->attribute;?></th>

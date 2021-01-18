@@ -94,6 +94,7 @@ class custom extends control
             {
                 $data = fixer::input('post')->join('unitList', ',')->get();
                 if(empty($data->unitList)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->currencyNotEmpty));
+                if(empty($data->mainCurrency)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->mainCurrencyNotEmpty));
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
             elseif($module == 'story' and $field == 'review')
