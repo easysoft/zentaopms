@@ -178,6 +178,9 @@ class storyModel extends model
     /**
      * Create a story.
      *
+     * @param  int    $projectID
+     * @param  int    $bugID
+     * @param  string $from
      * @access public
      * @return int|bool the id of the created story or false when error.
      */
@@ -244,11 +247,7 @@ class storyModel extends model
             if($projectID != 0 and $story->status != 'draft')
             {
                 $this->linkStory($projectID, $this->post->product, $storyID);
-            }
-
-            if($projectID != $this->session->PRJ)
-            {
-                $this->linkStory($this->session->PRJ, $this->post->product, $storyID);
+                if($projectID != $this->session->PRJ) $this->linkStory($this->session->PRJ, $this->post->product, $storyID);
             }
 
             if(is_array($this->post->URS))
