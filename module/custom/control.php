@@ -361,7 +361,6 @@ class custom extends control
             $this->loadModel('setting');
             $data = fixer::input('post')
                 ->setIF(!isset($_POST['efficiency']), 'efficiency', 1)
-                ->remove('scaleFactor')
                 ->get();
 
             /* Judgment of required items. */
@@ -377,6 +376,7 @@ class custom extends control
             }
 
             $this->setting->setItem('system.custom.hourPoint', $data->hourPoint);
+            $this->setting->setItem('system.custom.scaleFactor', $data->scaleFactor);
             $this->setting->setItem('system.custom.cost', $data->cost);
             $this->setting->setItem('system.custom.efficiency', $data->efficiency);
             $this->setting->setItem('system.custom.days', $data->days);
@@ -401,11 +401,12 @@ class custom extends control
         $this->view->position[]  = $this->lang->custom->common;
         $this->view->position[]  = $this->lang->custom->estimateConfig;
 
-        $this->view->unit       = $unit;
-        $this->view->cost       = zget($this->config->custom, 'cost', '');
-        $this->view->efficiency = zget($this->config->custom, 'efficiency', '');
-        $this->view->hours      = zget($this->config->project, 'defaultWorkhours', '');
-        $this->view->days       = zget($this->config->custom, 'days', '');
+        $this->view->unit        = $unit;
+        $this->view->cost        = zget($this->config->custom, 'cost', '');
+        $this->view->efficiency  = zget($this->config->custom, 'efficiency', '');
+        $this->view->scaleFactor = zget($this->config->custom, 'scaleFactor', '');
+        $this->view->hours       = zget($this->config->project, 'defaultWorkhours', '');
+        $this->view->days        = zget($this->config->custom, 'days', '');
         $this->display();
     } 
 

@@ -31,7 +31,7 @@ $lang->custom->system[] = 'estimate';
           <td>
             <div class='input-group w-300px'>
               <span class='input-group-addon'><?php echo "=";?></span>
-              <?php echo html::input('scaleFactor', '', "class='form-control' required");?>
+              <?php echo html::input('scaleFactor', $scaleFactor, "class='form-control' required");?>
               <span class='input-group-addon unify-padding'></span>
             </div>
           </td>
