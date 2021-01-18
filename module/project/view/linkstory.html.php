@@ -18,6 +18,11 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->linkStory;?></span></span>
+    <?php if($stories and ($this->app->rawModule == 'project')):?>
+    <span class='btn btn-link'><span class='text'><?php echo $lang->project->linkPRJStoryTip;?></span></span>
+    <?php elseif($this->app->rawModule == 'project'):?>
+    <span class='btn btn-link'><span class='text'><?php echo $lang->project->linkAllStoryTip;?></span></span>
+    <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printBack($this->server->http_referer, 'btn btn-link');?>
