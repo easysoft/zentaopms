@@ -67,7 +67,7 @@ $lang->product->confirmDelete    = " Bạn có muốn xóa {$lang->productCommon
 $lang->product->errorNoProduct   = "Không có {$lang->productCommon} được tạo!";
 $lang->product->accessDenied     = "Bạn không có quyền truy cập tới  {$lang->productCommon} này.";
 $lang->product->PGMChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
-$lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer these projects to the modified program set.";
+$lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
