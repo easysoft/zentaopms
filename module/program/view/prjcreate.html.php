@@ -51,9 +51,14 @@
           <th><?php echo $lang->program->PRJBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('budget', '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? ' required' : ''));?>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->PGMParentBudget . $remainBudget : '';?>
+              <?php echo html::input('budget', '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
+              <?php if($parentProgram):?>
+              <span class='input-group-addon'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
+              <?php else:?>
               <span class='input-group-addon'></span>
-              <?php echo html::select('budgetUnit', $lang->program->unitList, empty($parentProgram->budgetUnit) ? 'wanyuan' : $parentProgram->budgetUnit, "class='form-control'");?>
+              <?php echo html::select('budgetUnit', $budgetUnitList, $config->program->mainCurrency, "class='form-control'");?>
+              <?php endif;?>
             </div>
           </td>
           <td>

@@ -1389,13 +1389,8 @@ class programModel extends model
             /* The budget of a child project cannot beyond the remaining budget of the parent program. */
             if(isset($project->budget) and $parentProgram->budget != 0)
             {
-                $childGrade     = $parentProgram->grade + 1;
-                $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROJECT)
-                    ->where('path')->like("%{$project->parent}%")
-                    ->andWhere('grade')->eq($childGrade)
-                    ->fetch('sumBudget');
-
-                if($project->budget > $parentProgram->budget - $childSumBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
+                if($project->budget > $parentRemainBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
 
             /* Judge products not empty. */
@@ -1573,14 +1568,8 @@ class programModel extends model
             /* The budget of a child project cannot beyond the remaining budget of the parent program. */
             if($project->budget != 0 and $parentProgram->budget != 0)
             {
-                $childGrade     = $parentProgram->grade + 1;
-                $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROJECT)
-                    ->where('path')->like("%{$project->parent}%")
-                    ->andWhere('grade')->eq($childGrade)
-                    ->andWhere('id')->ne($projectID)
-                    ->fetch('sumBudget');
-
-                if($project->budget > $parentProgram->budget - $childSumBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
+                if($project->budget > $parentRemainBudget + $project->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
 
