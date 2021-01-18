@@ -2392,7 +2392,7 @@ class storyModel extends model
         $branches = array();
         foreach($stories as $story)
         {
-            $story->estimate .= ' ' . $this->lang->story->hour;
+            $story->estimate .= ' ' . $this->config->hourUnit;
             if(empty($story->branch) and $story->productType != 'normal') $branches[$story->productBranch][$story->id] = $story->id;
         }
         foreach($branches as $branchID => $storyIdList)
@@ -3310,6 +3310,10 @@ class storyModel extends model
                 $title  = $story->sourceNote;
                 $class .= ' text-ellipsis';
             }
+            else if($id == 'estimate')
+            {
+                $title = $story->estimate . ' ' . $this->config->hourUnit;
+            }
             else if($id == 'reviewedBy')
             {
                 $reviewedBy = '';
@@ -3385,7 +3389,7 @@ class storyModel extends model
                 echo '</span>';
                 break;
             case 'estimate':
-                echo $story->estimate . ' ' . $this->lang->story->hour;
+                echo $story->estimate . ' ' . $this->config->hourUnit;
                 break;
             case 'stage':
                 if(isset($storyStages[$story->id]) and !empty($branches))

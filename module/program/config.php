@@ -93,13 +93,13 @@ $config->program->datatable->fieldList['teamCount']['sort']     = 'no';
 
 $config->program->datatable->fieldList['PRJEstimate']['title']    = 'PRJEstimate';
 $config->program->datatable->fieldList['PRJEstimate']['fixed']    = 'no';
-$config->program->datatable->fieldList['PRJEstimate']['width']    = '50';
+$config->program->datatable->fieldList['PRJEstimate']['width']    = '70';
 $config->program->datatable->fieldList['PRJEstimate']['required'] = 'no';
 $config->program->datatable->fieldList['PRJEstimate']['sort']     = 'no';
 
 $config->program->datatable->fieldList['PRJConsume']['title']    = 'PRJConsume';
 $config->program->datatable->fieldList['PRJConsume']['fixed']    = 'no';
-$config->program->datatable->fieldList['PRJConsume']['width']    = '50';
+$config->program->datatable->fieldList['PRJConsume']['width']    = '70';
 $config->program->datatable->fieldList['PRJConsume']['required'] = 'no';
 $config->program->datatable->fieldList['PRJConsume']['sort']     = 'no';
 

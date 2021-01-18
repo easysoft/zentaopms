@@ -152,10 +152,12 @@ class router extends baseRouter
      */
     public function setCommonLang()
     {
-        if(!defined('ITERATION_KEY')) define('ITERATION_KEY', 0);
-        if(!defined('SPRINT_KEY'))    define('SPRINT_KEY', 1);
-        if(!defined('STAGE_KEY'))     define('STAGE_KEY', 2);
-        if(!defined('PRODUCT_KEY'))   define('PRODUCT_KEY', 0);
+        if(!defined('ITERATION_KEY'))     define('ITERATION_KEY', 0);
+        if(!defined('SPRINT_KEY'))        define('SPRINT_KEY', 1);
+        if(!defined('STAGE_KEY'))         define('STAGE_KEY', 2);
+        if(!defined('PRODUCT_KEY'))       define('PRODUCT_KEY', 0);
+        if(!defined('STORYPOINT_KEY'))    define('STORYPOINT_KEY', 1);
+        if(!defined('FUNCTIONPOINT_KEY')) define('FUNCTIONPOINT_KEY', 2);
 
         global $lang, $app;
         $sprintConcept = $hourPoint = false;
@@ -187,6 +189,11 @@ class router extends baseRouter
             if($setting->key == 'hourPoint')      $hourKey    = $setting->value;
             if($setting->key == 'URSR')           $URSR       = $setting->value;
         }
+
+        /* Record hour unit. */
+        $config->hourUnit = 'H';
+        if($hourKey == STORYPOINT_KEY)    $config->hourUnit = 'SP';
+        if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'FP';
 
         $model = new stdclass();
         $model->model = 'scrum';
