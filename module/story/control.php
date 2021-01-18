@@ -345,7 +345,8 @@ class story extends control
             }
             else
             {
-                
+                $this->app->rawModule = 'project';
+                $this->lang->navGroup->story = 'project';
             }
             $this->view->project = $prj;
         }
