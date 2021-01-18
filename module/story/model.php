@@ -2392,7 +2392,7 @@ class storyModel extends model
         $branches = array();
         foreach($stories as $story)
         {
-            $story->estimate .= $this->lang->story->hour;
+            $story->estimate .= ' ' . $this->lang->story->hour;
             if(empty($story->branch) and $story->productType != 'normal') $branches[$story->productBranch][$story->id] = $story->id;
         }
         foreach($branches as $branchID => $storyIdList)
@@ -3385,7 +3385,7 @@ class storyModel extends model
                 echo '</span>';
                 break;
             case 'estimate':
-                echo $story->estimate;
+                echo $story->estimate . ' ' . $this->lang->story->hour;
                 break;
             case 'stage':
                 if(isset($storyStages[$story->id]) and !empty($branches))

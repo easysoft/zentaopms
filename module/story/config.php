@@ -97,7 +97,7 @@ $config->story->datatable->fieldList['status']['required'] = 'no';
 
 $config->story->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->story->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->story->datatable->fieldList['estimate']['width']    = '65';
+$config->story->datatable->fieldList['estimate']['width']    = '80';
 $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->story->datatable->fieldList['stage']['title']    = 'stageAB';
