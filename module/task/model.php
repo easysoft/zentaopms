@@ -590,6 +590,7 @@ class taskModel extends model
             {
                 if(!$createAction) return $task;
 
+                if($parentTask->story) $this->loadModel('story')->setStage($parentTask->story);
                 $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
                 $changes = common::createChanges($oldParentTask, $newParentTask);
                 $action  = '';
