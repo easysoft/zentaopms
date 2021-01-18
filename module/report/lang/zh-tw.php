@@ -194,8 +194,8 @@ $lang->report->annualData->todoStatus['all']    = '所有待辦';
 $lang->report->annualData->todoStatus['undone'] = '未完成';
 $lang->report->annualData->todoStatus['done']   = '已完成';
 
-$lang->report->annualData->radarItems['product'] = $lang->productCommon;
-$lang->report->annualData->radarItems['project'] = $lang->projectCommon;
+$lang->report->annualData->radarItems['product'] = '產品';
+$lang->report->annualData->radarItems['project'] = '項目';
 $lang->report->annualData->radarItems['devel']   = "研發";
 $lang->report->annualData->radarItems['qa']      = "測試";
 $lang->report->annualData->radarItems['other']   = "其他";

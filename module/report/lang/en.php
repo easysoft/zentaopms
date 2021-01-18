@@ -194,8 +194,8 @@ $lang->report->annualData->todoStatus['all']    = 'All';
 $lang->report->annualData->todoStatus['undone'] = 'Undone';
 $lang->report->annualData->todoStatus['done']   = 'Done';
 
-$lang->report->annualData->radarItems['product'] = $lang->productCommon;
-$lang->report->annualData->radarItems['project'] = $lang->projectCommon;
+$lang->report->annualData->radarItems['product'] = "Product";
+$lang->report->annualData->radarItems['project'] = "Project";
 $lang->report->annualData->radarItems['devel']   = "Development";
 $lang->report->annualData->radarItems['qa']      = "QA";
 $lang->report->annualData->radarItems['other']   = "Other";
