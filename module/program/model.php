@@ -1326,7 +1326,8 @@ class programModel extends model
     public function createPRJManageLink($project)
     {
         $link = $project->type == 'program' ? helper::createLink('program', 'PRJbrowse', "programID={$project->id}&status=all") : helper::createLink('program', 'index', "projectID={$project->id}", '', '', $project->id);
-        return html::a($link, $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
+        $icon = $project->type == 'program' ? "<i class='icon icon-folder-open-o'></i> " : "<i class='icon icon-project'></i> ";
+        return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
     /**
