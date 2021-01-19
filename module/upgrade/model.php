@@ -4525,7 +4525,7 @@ class upgradeModel extends model
             $data['budgetUnit'] = 'CNY';
             $data['budget']     = str_replace(',', '', $budget->budget);
             if($budget->budgetUnit == 'wanyuan') $data['budget']     = (float)$data['budget'] * 10000;
-            if($budget->budgetUnit == 'dollars') $data['budgetUnit'] = 'USD';
+            if($budget->budgetUnit == 'dollar')  $data['budgetUnit'] = 'USD';
 
             if($data) $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($id)->exec();
         }
