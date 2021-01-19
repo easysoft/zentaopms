@@ -14,8 +14,13 @@
 <div id='mainContent'>
   <div class='cell'>
     <div class='main-header text-center'>
-      <span class='user-name'><?php echo $user->realname;?></span>
+      <span class="avatar avatar bg-secondary avatar-circle">A</span>
+      <span class='user-name'><strong><?php echo $user->realname;?></strong></span>
       <span class='user-role'><?php echo zget($lang->user->roleList, $user->role);?></span>
+      <form method='post' action=<?php echo inlink('uploadAvatar');?> id='avatarForm' enctype='multipart/form-data'>
+        <input type="file" name="files" id="files" class="form-control hidden">
+        <?php echo html::a('javascript:void(0);', $lang->my->uploadAvatar, '', "class='btn btn-avatar' id='avatarUploadBtn' data-placement='right'");?>
+      </form>
     </div>
     <div class='row'>
       <div class='user-title'><?php echo $lang->user->basicInfo;?></div>

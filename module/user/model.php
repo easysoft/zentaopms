@@ -1146,6 +1146,23 @@ class userModel extends model
         $this->dao->update(TABLE_USER)->set('ranzhi')->eq('')->where('account')->eq($account)->exec();
     }
 
+	/** 
+     * Upload avatar.
+     * 
+     * @access public
+     * @return void
+     */
+    public function uploadAvatar()
+    {   
+        $uploadResult = $this->loadModel('file')->saveUpload('avatar');
+        if(!$uploadResult) return array('result' => 'fail', 'message' => $this->lang->fail);
+
+        $fileIdList = array_keys($uploadResult);
+        $file = $this->file->getByID($fileIdList[0]);
+        $this->dao->update(TABLE_USER)->set('avatar')->eq($file->webPath)->where('account')->eq($this->app->user->account)->exec();
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('user', 'cropavatar', "image={$file->id}"));
+    }
+
     /**
      * Get contact list of a user.
      *

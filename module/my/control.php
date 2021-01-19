@@ -862,6 +862,21 @@ class my extends control
     }
 
     /**
+     * Upload avatar. 
+     *
+     * @access public
+     * @return void
+     */
+    public function uploadAvatar()
+    {
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {   
+            $result = $this->loadModel('user')->uploadAvatar();
+            $this->send($result);
+        }   
+    }
+
+    /**
      * Unbind ranzhi
      *
      * @param  string $confirm

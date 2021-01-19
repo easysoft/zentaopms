@@ -35,6 +35,7 @@ $lang->my->noTodo          = 'No todos yet. ';
 $lang->my->noData          = 'No %s yet. ';
 $lang->my->storyChanged    = "Story Changed";
 $lang->my->hours           = "Hours/day";
+$lang->my->uploadAvatar    = 'Upload Avatar';
 
 $lang->my->myExecutions = "My Stage/Sprint/Iteration";
 $lang->my->name         = 'Name';
