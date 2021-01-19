@@ -88,4 +88,6 @@ $lang->search->modules['productplan'] = '计划';
 $lang->search->modules['program']     = '项目集';
 $lang->search->modules['project']     = '项目';
 $lang->search->modules['execution']   = '迭代/阶段';
-$lang->search->modules['story']       = '用需/软需';
+$lang->search->modules['story']       = $lang->URCommon . '/' . $lang->SRCommon;
+$lang->search->modules['issue']       = '问题';
+$lang->search->modules['risk']        = '风险';

@@ -83,7 +83,7 @@ body.menu-hide {padding-left: 0;}
 #searchbox .dropdown-menu > li {display: none}
 #searchbox .dropdown-menu > li.search-type-all {width: 100%; display: block;}
 #searchbox .dropdown-menu > li:hover {position: relative;}
-#searchbox .dropdown-menu.show-quick-go.with-active {position: absolute; top: -358px; max-height: 355px; padding-top: 30px;}
+#searchbox .dropdown-menu.show-quick-go.with-active {position: absolute; top: -395px; max-height: 392px; padding-top: 30px;}
 #searchbox .dropdown-menu.show-quick-go > li {display: block;}
 #searchbox .dropdown-menu.show-quick-go > li.active {width: 100%; position: absolute; top: 0; left: 0; right: 0;}
 #searchbox .dropdown-menu>li.active>a, #searchbox .dropdown-menu>li.selected>a { position: relative; color: #fff; background-color: #16a8f8;}

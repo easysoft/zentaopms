@@ -6,7 +6,7 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     issue
- * @version     $Id: edit.html.php 4488 2013-02-27 02:54:49Z chencongzhi520@gmail.com $
+ * @version     $Id: view.html.php 4488 2013-02-27 02:54:49Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>

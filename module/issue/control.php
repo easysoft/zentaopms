@@ -488,8 +488,10 @@ class issue extends control
     public function view($issueID)
     {
         /* Set actions and get issue by id. */
-        $this->commonAction($issueID, 'issue');
         $issue = $this->issue->getByID($issueID);
+        $this->session->PRJ = $issue->PRJ;
+
+        $this->commonAction($issueID, 'issue');
         if(!$issue) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->view->title      = $this->lang->issue->common . $this->lang->colon . $issue->title;

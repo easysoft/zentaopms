@@ -205,6 +205,8 @@ class search extends control
         $this->session->set('effortList',      $uri);
         $this->session->set('reportList',      $uri);
         $this->session->set('testsuiteList',   $uri);
+        $this->session->set('issueList',       false);
+        $this->session->set('riskList',        false);
         $this->session->set('searchIngWord',   $words);
         $this->session->set('searchIngType',   $type);
 
