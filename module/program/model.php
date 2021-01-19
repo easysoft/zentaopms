@@ -1684,7 +1684,10 @@ class programModel extends model
                     echo $PRJProgram;
                     break;
                 case 'PM':
-                    echo zget($users, $project->PM);
+                    $user   = $this->loadModel('user')->getByID($project->PM, 'account');
+                    $userID = !empty($user) ? $user->id : '';
+                    $PMLink = helper::createLink('user', 'profile', "userID=$userID", '', true);
+                    echo empty($project->PM) ? '' : html::a($PMLink, zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");
                     break;
                 case 'begin':
                     echo $project->begin;

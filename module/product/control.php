@@ -84,13 +84,24 @@ class product extends control
 
         $this->app->loadLang('my');
         $this->app->loadLang('program');
-        $this->view->projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $PRJMine);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
-        $this->view->position[] = $this->products[$productID];
-        $this->view->position[] = $this->lang->product->project;
-        $this->view->productID  = $productID;
-        $this->view->status     = $status;
+        /* Get PM id list. */
+        $accounts     = array();
+        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $PRJMine);
+        foreach($projectStats as $project)
+        {
+            if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
+        }
+        $PMList = $this->user->getListByAccounts($accounts, 'account');
+
+        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
+        $this->view->position[]   = $this->products[$productID];
+        $this->view->position[]   = $this->lang->product->project;
+        $this->view->projectStats = $projectStats;
+        $this->view->PMList       = $PMList;
+        $this->view->productID    = $productID;
+        $this->view->status       = $status;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
