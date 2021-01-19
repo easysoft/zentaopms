@@ -293,12 +293,15 @@ function setBudgetTipsAndAclList(parentProgramID)
 {
     if(parentProgramID != 0)
     {
-        parentProgram = PGMList[parentProgramID];
-        programBudget = parentProgram.budget;
-        PGMBudgetUnit = budgetUnitList[parentProgram.budgetUnit];
+        $.get(createLink('program', 'ajaxGetParentRemainBudget', "parentProgramID=" + parentProgramID), function(remainBudget)
+        {
+            parentProgram = PGMList[parentProgramID];
+            programBudget = parentProgram.budget;
+            PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
-        budgetNotes = programBudget != 0 ? (programBudget + PGMBudgetUnit) : future;
-        $('#budget').attr('placeholder', PGMParentBudget + budgetNotes);
+            budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + remainBudget) : '';
+            $('#budget').attr('placeholder', budgetNotes);
+        });
         $('.aclBox').html($('#subPGMAcl').html());
     }
     else

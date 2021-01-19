@@ -37,6 +37,8 @@ function addItem(obj)
  */
 function deleteItem(obj)
 {
+    if($('#whitelistForm .table tbody').children().length < 2) return false;
+
     var $tr = $(obj).parent().parent();
     var val = $tr.find('input[name^="realnames"]').val();
     showItem(val);
