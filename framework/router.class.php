@@ -185,9 +185,9 @@ class router extends baseRouter
 
         foreach($commonSettings as $setting)
         {
-            if($setting->key == 'sprintConcept')  $projectKey = $setting->value;
-            if($setting->key == 'hourPoint')      $hourKey    = $setting->value;
-            if($setting->key == 'URSR')           $URSR       = $setting->value;
+            if($setting->key == 'sprintConcept') $projectKey = $setting->value;
+            if($setting->key == 'hourPoint')     $hourKey    = $setting->value;
+            if($setting->key == 'URSR')          $URSR       = $setting->value;
         }
 
         /* Record hour unit. */
@@ -203,8 +203,8 @@ class router extends baseRouter
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
         $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
-        $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$$projectKey];
-        $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]  : $this->config->hourPointCommonList['en'][(int)$hourKey];
+        $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$projectKey];
+        $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]) ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey] : $this->config->hourPointCommonList['en'][(int)$hourKey];
 
         /* User preference init. */
         $config->URSR        = $URSR;
