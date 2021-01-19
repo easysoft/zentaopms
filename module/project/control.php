@@ -640,6 +640,11 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  string $orderBy
+     * @param  string $type
+     * @param  string $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */

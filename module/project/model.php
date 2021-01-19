@@ -2088,7 +2088,7 @@ class projectModel extends model
      * @param array $products
      *
      * @access public
-     * @return mixed
+     * @return bool
      */
     public function linkStory($projectID, $stories = array(), $products = array())
     {
