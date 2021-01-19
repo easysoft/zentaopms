@@ -1775,6 +1775,29 @@ class projectModel extends model
             $existedProducts[$productID] = true;
         }
 
+        /* Link the stories of the plans to the project. */
+        foreach($plans as $productID => $planID)
+        {
+            $planStories = $planProducts = array();
+            $planStory   = $this->loadModel('story')->getPlanStories($planID);
+            $count = 0;
+            if(!empty($planStory))
+            {
+                foreach($planStory as $id => $story)
+                {
+                    if($story->status == 'draft')
+                    {
+                        $count++;
+                        unset($planStory[$id]);
+                        continue;
+                    }
+                    $planProducts[$story->id] = $story->product;
+                }
+                $planStories = array_keys($planStory);
+                $this->linkStory($projectID, $planStories, $planProducts);
+            }
+        }
+
         /* Delete the execution linked products that is not linked with the project. */
         $executions = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq((int)$projectID)->fetchPairs('id');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
@@ -2081,6 +2104,26 @@ class projectModel extends model
     }
 
     /**
+     * project link plan.
+     *
+     * @param  int    $projectID
+     * @param  int    $planID
+     * @access public
+     * @return void
+     */
+//    public function linkPlan($projectID, $planID)
+//    {
+//        $plan = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->eq($planID)->fetch();
+//
+//        $data          = new stdclass();
+//        $data->project = $projectID;
+//        $data->product = $plan->product;
+//        $data->branch  = $plan->branch;
+//        $data->plan    = $plan->id;
+//        $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
+//    }
+
+    /**
      * Link story.
      *
      * @param int   $projectID
@@ -2115,7 +2158,8 @@ class projectModel extends model
             $data->order   = ++$lastOrder;
             $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
             $this->story->setStage($storyID);
-            $this->action->create('story', $storyID, 'linked2project', '', $projectID);
+            $action = $projectID == $this->session->PRJ ? 'linked2prj' : 'linked2project';
+            $this->action->create('story', $storyID, $action, '', $projectID);
         }
     }
 

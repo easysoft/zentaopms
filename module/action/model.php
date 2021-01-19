@@ -243,6 +243,12 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('project', 'story') ? html::a(helper::createLink('project', 'story', "projectID=$action->extra"), $name) : $name;
             }
+            elseif($actionName == 'linked2prj')
+            {
+                $name      = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
+                $productID = trim($action->product, ',');
+                if($name) $action->extra = common::hasPriv('project', 'story') ? html::a(helper::createLink('projectstory', 'story', "productID=$productID"), $name) : $name;
+            }
             elseif($actionName == 'linked2plan')
             {
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
@@ -276,6 +282,12 @@ class actionModel extends model
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('project', 'story') ? html::a(helper::createLink('project', 'story', "projectID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
+            }
+            elseif($actionName == 'unlinkedfromprj')
+            {
+                $name      = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
+                $productID = trim($action->product, ',');
+                if($name) $action->extra = common::hasPriv('project', 'story') ? html::a(helper::createLink('projectstory', 'story', "productID=$productID"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
             elseif($actionName == 'unlinkedfrombuild')
             {

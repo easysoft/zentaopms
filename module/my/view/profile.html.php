@@ -14,7 +14,18 @@
 <div id='mainContent'>
   <div class='cell'>
     <div class='main-header text-center'>
-      <span class="avatar avatar bg-secondary avatar-circle">A</span>
+      <span class="avatar avatar bg-secondary avatar-circle">
+      <?php 
+      if($user->avatar)
+      {
+          echo html::image($app->user->avatar);
+      }
+      else
+      {
+          echo strtoupper($app->user->account[0]);
+      }
+      ?>
+      </span>
       <span class='user-name'><strong><?php echo $user->realname;?></strong></span>
       <span class='user-role'><?php echo zget($lang->user->roleList, $user->role);?></span>
       <?php if(!isset($fromModule)):?>
