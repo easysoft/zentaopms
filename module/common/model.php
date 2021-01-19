@@ -276,15 +276,19 @@ class commonModel extends model
             $isGuest = $app->user->account == 'guest';
 
             echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
-            echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account[0]) . "</div>\n";
+            echo "<div class='avatar avatar bg-secondary avatar-circle'>";
+            echo $app->user->avatar ? html::image($app->user->avatar) : strtoupper($app->user->account[0]);
+            echo "</div>\n";
             echo '</a>';
             echo "<ul class='dropdown-menu pull-right'>";
             if(!$isGuest)
             {
                 $noRole = (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role])) ? '' : ' no-role';
                 echo '<li class="user-profile-item">';
-                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='600' class='iframe $noRole'" . '>';
-                echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account[0]) . "</div>\n";
+                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='800' class='iframe $noRole'" . '>';
+                echo "<div class='avatar avatar bg-secondary avatar-circle'>";
+                echo $app->user->avatar ? html::image($app->user->avatar) : strtoupper($app->user->account[0]);
+                echo "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
@@ -744,45 +748,21 @@ class commonModel extends model
      */
     public static function printSearchBox()
     {
-        global $app, $config, $lang;
-        $moduleName  = $app->getModuleName();
-        $methodName  = $app->getMethodName();
-        $searchObject = $moduleName;
-
-        if($moduleName == 'product')
-        {
-            if($methodName == 'browse') $searchObject = 'story';
-        }
-        elseif($moduleName == 'project')
-        {
-            if(strpos('task|story|bug|build', $methodName) !== false) $searchObject = $methodName;
-        }
-        elseif($moduleName == 'my' or $moduleName == 'user')
-        {
-            $searchObject = $methodName;
-            if($methodName == 'execution') $searchObject = 'project';
-        }
-        if(empty($lang->searchObjects[$searchObject])) $searchObject = 'bug';
-
-        echo "<div id='searchbox'>";
-        echo "<div class='input-group'>";
+        global $lang;
+        $searchObject = 'bug';
         echo "<div class='input-group-btn'>";
-        echo "<a data-toggle='dropdown' class='btn btn-link'><span id='searchTypeName'>" . $lang->searchObjects[$searchObject] . "</span> <span class='caret'></span></a>";
         echo html::hidden('searchType', $searchObject);
         echo "<ul id='searchTypeMenu' class='dropdown-menu'>";
         foreach ($lang->searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
-            if($key == 'program') $key   = 'program-pgmproduct';
-            if($key == 'project') $key   = 'program-index';
+            if($key == 'program')   $key = 'program-pgmproduct';
+            if($key == 'project')   $key = 'program-index';
             if($key == 'execution') $key = 'project-view';
+
             echo "<li $class><a href='javascript:$.setSearchType(\"$key\");' data-value='{$key}'>{$value}</a></li>";
         }
         echo '</ul></div>';
-        echo "<input id='searchInput' class='form-control search-input' type='search' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) $.gotoObject();' placeholder='" . $lang->searchTips . "'/>";
-        echo '</div>';
-        echo "<a href='javascript:$.gotoObject();' class='btn btn-link' id='searchGo'>GO!</a>";
-        echo "</div>\n";
     }
 
     /**

@@ -325,7 +325,7 @@ class storyModel extends model
     }
 
     /**
-     * Create a batch stories.
+     * Batch create stories.
      *
      * @access public
      * @return int|bool the id of the created story or false when error.

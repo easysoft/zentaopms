@@ -134,6 +134,12 @@ class story extends control
             }
             $actionID = $this->action->create('story', $storyID, $action, '', $extra);
 
+            if($projectID != 0)
+            {
+                if($projectID != $this->session->PRJ) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $projectID);
+                $this->loadModel('action')->create('story', $storyID, 'linked2prj', '', $this->session->PRJ);
+            }
+
             if($todoID > 0)
             {
                 $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
@@ -169,7 +175,7 @@ class story extends control
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, true);
                 $project            = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
                 $moduleName         = $project->type == 'project' ? 'projectstory' : 'project';
-                $param              = $project->type == 'project' ? "PRJ=$projectID" : "projectID=$projectID&orderBy=id_desc&browseType=unclosed";
+                $param              = $project->type == 'project' ? "productID=$productID" : "projectID=$projectID&orderBy=id_desc&browseType=unclosed";
                 $response['locate'] = $this->createLink($moduleName, 'story', $param);
             }
             if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
@@ -371,6 +377,8 @@ class story extends control
 
             $stories = array();
             foreach($mails as $mail) $stories[] = $mail->storyID;
+
+            /* Project or execution linked stories. */
             if($project)
             {
                 $this->loadModel('project')->linkStory($project, $stories);
@@ -394,7 +402,7 @@ class story extends control
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, false);
                 $moduleName = $prj->type == 'project' ? 'projectstory' : 'project';
-                $param      = $prj->type == 'project' ? "PRJ=$project#open=project" : "projectID=$project&orderBy=id_desc&browseType=unclosed";
+                $param      = $prj->type == 'project' ? "productID=$productID" : "projectID=$project&orderBy=id_desc&browseType=unclosed";
                 $link       = $this->createLink($moduleName, 'story', $param);
                 die(js::locate($link, 'parent'));
             }

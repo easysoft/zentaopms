@@ -65,6 +65,6 @@ $lang->programplan->stageCustom->task = '显示任务';
 $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"工作量比例"必须为数字';
 $lang->programplan->error->planFinishSmall = '"计划完成时间"必须大于"计划开始时间"';
-$lang->programplan->error->percentOver     = '"工作量占比"累计不应当超过100%';
+$lang->programplan->error->percentOver     = '工作量占比累计不应当超过100%';
 $lang->programplan->error->createdTask     = '已分解任务,不可添加子阶段';
 $lang->programplan->error->parentWorkload  = '子阶段的工作量之和不能大于父阶段的工作量:%s';

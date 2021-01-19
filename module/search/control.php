@@ -130,4 +130,101 @@ class search extends control
     {
         $this->dao->update(TABLE_USERQUERY)->set('shortcut')->eq(0)->where('id')->eq($queryID)->exec();
     }
+
+    /**
+     * Build All index.
+     * 
+     * @access public
+     * @return void
+     */
+    public function buildIndex($type = '', $lastID = 0)
+    {
+        if(helper::isAjaxRequest())
+        {
+            $result = $this->search->buildAllIndex($type, $lastID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(isset($result['finished']) and $result['finished'])
+            {
+                $this->send(array('result' => 'finished', 'message' => $this->lang->search->buildSuccessfully));
+            }
+            else
+            {
+                $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, zget($this->lang->searchObjects, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']), $result['count']),'next' => inlink('buildIndex', "type={$result['type']}&lastID={$result['lastID']}") ));
+            }
+        }
+
+        $this->lang->search->menu = $this->lang->admin->menu;
+        $this->lang->menugroup->search = 'admin';
+
+        $this->view->title = $this->lang->search->buildIndex;
+        $this->display();
+    }
+
+    /**
+     * index
+     *
+     * @param  int $recTotal
+     * @param  int $pageID
+     *
+     * @access public
+     * @return void
+     */
+    public function index($recTotal = 0, $pageID = 1)
+    {
+        $this->lang->admin->menu->search = "{$this->lang->search->common}|search|index";
+
+        if(empty($words)) $words = $this->get->words;
+        if(empty($words)) $words = $this->post->words;
+        if(empty($words) and ($recTotal != 0 or $pageID != 1)) $words = $this->session->searchIngWord;
+        $words = strip_tags(strtolower($words));
+
+        if(empty($type)) $type = $this->get->type;
+        if(empty($type)) $type = $this->post->type;
+        if(empty($type) and ($recTotal != 0 or $pageID != 1)) $type = $this->session->searchIngType;
+        $type = (empty($type) or $type[0] == 'all') ? 'all' : $type;
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $this->config->search->recPerPage, $pageID);
+
+        /* Set session. */
+        $uri  = inlink('index', "recTotal=$recTotal&pageID=$pageID");
+        $uri .= strpos($uri, '?') === false ? '?' : '&';
+        $uri .= 'words=' . $words;
+        $this->session->set('bugList',         $uri);
+        $this->session->set('buildList',       $uri);
+        $this->session->set('caseList',        $uri);
+        $this->session->set('docList',         $uri);
+        $this->session->set('productList',     $uri);
+        $this->session->set('productPlanList', $uri);
+        $this->session->set('projectList',     $uri);
+        $this->session->set('releaseList',     $uri);
+        $this->session->set('storyList',       $uri);
+        $this->session->set('taskList',        $uri);
+        $this->session->set('testtaskList',    $uri);
+        $this->session->set('todoList',        $uri);
+        $this->session->set('effortList',      $uri);
+        $this->session->set('reportList',      $uri);
+        $this->session->set('testsuiteList',   $uri);
+        $this->session->set('issueList',       false);
+        $this->session->set('riskList',        false);
+        $this->session->set('searchIngWord',   $words);
+        $this->session->set('searchIngType',   $type);
+
+        $begin = time();
+        $this->view->results = $this->search->getList($words, $pager, $type);
+
+        if(strpos($this->server->http_referer, 'search') === false)
+        {
+            $this->session->set('referer', $this->server->http_referer);
+        }
+
+        $this->view->consumed = time() - $begin;
+        $this->view->title    = $this->lang->search->index;
+        $this->view->type     = $type;
+        $this->view->pager    = $pager;
+        $this->view->words    = $words;
+        $this->view->referer  = $this->session->referer;
+
+        $this->display();
+    }
 }

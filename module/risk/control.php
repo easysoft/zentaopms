@@ -134,13 +134,14 @@ class risk extends control
     public function view($riskID)
     {
         $this->loadModel('action');
+        $risk = $this->risk->getById($riskID);
+        $this->session->PRJ = $risk->PRJ;
 
         $this->view->title      = $this->lang->risk->common . $this->lang->colon . $this->lang->risk->view;
         $this->view->position[] = $this->lang->risk->view;
-
-        $this->view->risk    = $this->risk->getById($riskID);
-        $this->view->actions = $this->action->getList('risk', $riskID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->risk       = $risk;
+        $this->view->actions    = $this->action->getList('risk', $riskID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }

@@ -60,8 +60,11 @@
           <?php endif;?>
           <td class='text-left'><?php echo $project->begin;?></td>
           <td class='text-left'><?php echo $project->end == '0000-00-00' ? '' : $project->end;?></td>
-          <td class='text-left'><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>
-          <td><?php echo zget($users, $project->PM);?></td>
+          <td class='text-left'><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $lang->program->future;?></td>
+          <td>
+            <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
+            <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='800'");?>
+          </td>
           <td class='c-actions'>
             <?php if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);?>
             <?php if($project->status == 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>

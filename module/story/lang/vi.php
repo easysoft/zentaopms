@@ -279,6 +279,8 @@ $lang->story->action->linked2plan         = array('main' => '$date, liên kết 
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ kế hoạch <strong>$extra</strong>.');
 $lang->story->action->linked2project      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới ' . $lang->executionCommon . ' <strong>$extra</strong>.');
 $lang->story->action->unlinkedfromproject = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ ' . $lang->executionCommon . ' <strong>$extra</strong>.');
+$lang->story->action->linked2prj          = array('main' => '$date, liên kết bởi <strong>$actor</strong> tớ project <strong>$extra</strong>.');
+$lang->story->action->unlinkedfromprj     = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ project <strong>$extra</strong>.');
 $lang->story->action->linked2build        = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Bản dựng <strong>$extra</strong>');
 $lang->story->action->unlinkedfrombuild   = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ bản dựng <strong>$extra</strong>.');
 $lang->story->action->linked2release      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Phát hành <strong>$extra</strong>');

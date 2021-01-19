@@ -46,7 +46,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php
-    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&projectID=$project->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export'");
+    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&projectID=$project->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export' data-group='project'");
 
     if(common::canModify('project', $project))
     {

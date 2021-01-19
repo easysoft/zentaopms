@@ -174,6 +174,9 @@ if(!defined('TABLE_BUDGET'))             define('TABLE_BUDGET', '`' . $config->d
 if(!defined('TABLE_HOLIDAY'))            define('TABLE_HOLIDAY', '`' . $config->db->prefix . 'holiday`');
 if(!defined('TABLE_WEEKLYREPORT'))       define('TABLE_WEEKLYREPORT', '`' . $config->db->prefix . 'weeklyreport`');
 
+if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
+if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
+
 $config->objectTables['product']     = TABLE_PRODUCT;
 $config->objectTables['story']       = TABLE_STORY;
 $config->objectTables['productplan'] = TABLE_PRODUCTPLAN;

@@ -78,14 +78,23 @@ class program extends control
             $programs = $this->program->getPGMList($status, $orderBy, null, true);
         }
 
+        /* Get PM id list. */
+        $accounts = array();
+        foreach($programs as $program)
+        {
+            if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
+        }
+        $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
+
         $this->view->title       = $this->lang->program->PGMBrowse;
         $this->view->position[]  = $this->lang->program->PGMBrowse;
 
         $this->view->programs    = $programs;
         $this->view->status      = $status;
         $this->view->orderBy     = $orderBy;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users       = $this->user->getPairs('noletter');
         $this->view->programType = $programType;
+        $this->view->PMList      = $PMList;
 
         $this->display();
     }
@@ -710,6 +719,20 @@ class program extends control
             $html .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . "</a></div>"; 
         }
         echo $html;
+    }
+
+    /**
+     * Ajax get parent remain budget.
+     *
+     * @param  int    $parentProgramID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetParentRemainBudget($parentProgramID)
+    {
+        $parentProgram = $this->program->getPGMByID($parentProgramID);
+        $remainBudget  = $this->program->getParentRemainBudget($parentProgram);
+        echo number_format($remainBudget, 2);
     }
 
     /**

@@ -114,6 +114,8 @@ $lang->dev->tableList['ci']               = '持续集成';
 $lang->dev->tableList['compile']          = '构建';
 $lang->dev->tableList['jenkins']          = 'Jenkins';
 $lang->dev->tableList['job']              = '构建任务';
+$lang->dev->tableList['searchdict']       = '搜索字典';
+$lang->dev->tableList['searchindex']      = '搜索索引';
 
 $lang->dev->groupList['my']      = '我的地盘';
 $lang->dev->groupList['product'] = $lang->productCommon;
@@ -125,6 +127,7 @@ $lang->dev->groupList['company'] = '组织';
 $lang->dev->groupList['repo']    = '持续集成';
 $lang->dev->groupList['api']     = 'API';
 $lang->dev->groupList['message'] = '消息';
+$lang->dev->groupList['search']  = '搜索';
 
 $lang->dev->endGroupList['admin']  = '后台';
 $lang->dev->endGroupList['system'] = '系统';

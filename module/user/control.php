@@ -57,6 +57,9 @@ class user extends control
      */
     public function todo($userID, $fromModule = 'user', $type = 'today', $status = 'all', $orderBy='date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $user = $this->user->getById($userID, 'id');
+        if(empty($user)) die(js::error($this->lang->notFound) . js::locate('back'));
+
         /* Set thie url to session. */
         $uri = $this->app->getURI(true);
         $this->session->set('todoList', $uri);
@@ -71,7 +74,6 @@ class user extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Get user, totos. */
-        $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
         $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
@@ -518,7 +520,8 @@ class user extends control
         $this->view->personalData = $this->user->getPersonalData($user->account);
         $this->view->userList     = $this->user->setUserList($users, $userID, $fromModule);
 
-        $this->display();
+        if(isonlybody())  $this->display('my', 'profile');
+        if(!isonlybody()) $this->display();
     }
 
     /**
