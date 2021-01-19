@@ -267,7 +267,7 @@ $lang->project->noProject           = "暂时没有{$lang->executionCommon}。";
 $lang->project->noMembers           = '暂时没有团队成员。';
 $lang->project->workloadTotal       = "工作量占比累计不应当超过100%, 当前产品下的工作量之和为:%s";
 $lang->project->linkPRJStoryTip     = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
-$lang->project->linkAllStoryTip     = "(项目下还未关联{$lang->SRCommon}，可直接关联该迭代/阶段所关联产品的{$lang->SRCommon})";
+$lang->project->linkAllStoryTip     = "(项目下还未关联{$lang->SRCommon}，可直接关联该迭代/阶段/冲刺所关联产品的{$lang->SRCommon})";
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "您确定删除{$lang->executionCommon}[%s]吗？";
