@@ -53,7 +53,7 @@
           <td><?php echo isset($project->programName) ? $project->programName : '';?></td>
           <td>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
-            <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
+            <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='800'");?>
           </td>
           <td><?php echo $project->begin;?></td>
           <td><?php echo $project->end;?></td>

@@ -579,13 +579,20 @@ class customModel extends model
 
         $data = fixer::input('post')->get();
         $requiredFields = array();
-        if(!empty($data->requiredFields))
+        if(!empty($systemFields))
         {
-            foreach($data->requiredFields as $method => $fields)
+            foreach($systemFields as $method => $fields)
             {
                 $systemField = $this->config->$moduleName->$method->requiredFields;
 
-                $fields = join(',', $fields);
+                /* Keep the original required fields when the fields is empty. */
+                if(!isset($data->requiredFields[$method]))
+                {
+                    $requiredFields[$method]['requiredFields'] = $systemField;
+                    continue;
+                }
+
+                $fields = join(',', $data->requiredFields[$method]);
                 foreach(explode(',', $systemField) as $field)
                 {
                     $field = trim($field);
@@ -597,7 +604,6 @@ class customModel extends model
         }
 
         $this->loadModel('setting');
-        $this->setting->deleteItems("owner=system&module={$moduleName}");
         $this->setting->setItems("system.{$moduleName}", $requiredFields);
     }
 

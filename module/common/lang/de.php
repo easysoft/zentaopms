@@ -246,6 +246,8 @@ $lang->searchObjects['program']     = 'Program';
 $lang->searchObjects['project']     = 'Project';
 $lang->searchObjects['execution']   = $lang->sprintCommon;
 $lang->searchObjects['user']        = 'User';
+$lang->searchObjects['issue']       = 'Issue';
+$lang->searchObjects['risk']        = 'Risk';
 $lang->searchTips                   = 'ID (strg+g)';
 
 /* Code formats for import. */

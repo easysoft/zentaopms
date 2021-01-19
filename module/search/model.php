@@ -568,7 +568,7 @@ class searchModel extends model
                 $module = 'deploy';
                 $method = 'viewstep';
             }
-            $record->url = helper::createLink($module, $method, "id={$record->objectID}");
+            $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
         }
 
         foreach($results as $object)

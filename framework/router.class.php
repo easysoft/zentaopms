@@ -161,7 +161,6 @@ class router extends baseRouter
 
         global $lang, $app;
         $sprintConcept = $hourPoint = false;
-
         /* Get config from DB. */
         if($this->dbh and !empty($this->config->db->name))
         {
@@ -185,9 +184,9 @@ class router extends baseRouter
 
         foreach($commonSettings as $setting)
         {
-            if($setting->key == 'sprintConcept')  $projectKey = $setting->value;
-            if($setting->key == 'hourPoint')      $hourKey    = $setting->value;
-            if($setting->key == 'URSR')           $URSR       = $setting->value;
+            if($setting->key == 'sprintConcept') $projectKey = $setting->value;
+            if($setting->key == 'hourPoint')     $hourKey    = $setting->value;
+            if($setting->key == 'URSR')          $URSR       = $setting->value;
         }
 
         /* Record hour unit. */
@@ -203,8 +202,8 @@ class router extends baseRouter
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
         $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
-        $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$$projectKey];
-        $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]  : $this->config->hourPointCommonList['en'][(int)$hourKey];
+        $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$projectKey];
+        $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]) ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey] : $this->config->hourPointCommonList['en'][(int)$hourKey];
 
         /* User preference init. */
         $config->URSR        = $URSR;
@@ -214,7 +213,7 @@ class router extends baseRouter
 
         /* Get user preference. */
         $account     = isset($this->session->user->account) ? $this->session->user->account : '';
-        $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'URSR')")->fetchAll();
+        if($this->dbh and !empty($this->config->db->name)) $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'URSR')")->fetchAll();
         foreach($userSetting as $setting)
         {
              if($setting->key == 'URSR')        $config->URSR        = $setting->value;

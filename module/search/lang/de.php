@@ -88,4 +88,6 @@ $lang->search->modules['productplan'] = 'Plan';
 $lang->search->modules['program']     = 'Program';
 $lang->search->modules['project']     = 'Project';
 $lang->search->modules['execution']   = 'Iteration/Phase';
-$lang->search->modules['story']       = 'US/SR';
+$lang->search->modules['story']       = $lang->URCommon . '/' . $lang->SRCommon;
+$lang->search->modules['issue']       = 'Issue';
+$lang->search->modules['risk']        = 'Risk';

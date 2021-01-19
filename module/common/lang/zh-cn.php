@@ -246,6 +246,8 @@ $lang->searchObjects['program']     = '项目集';
 $lang->searchObjects['project']     = '项目';
 $lang->searchObjects['execution']   = $lang->sprintCommon;
 $lang->searchObjects['user']        = '用户';
+$lang->searchObjects['issue']       = '问题';
+$lang->searchObjects['risk']        = '风险';
 $lang->searchTips                   = '编号(ctrl+g)';
 
 /* 导入支持的编码格式。*/
