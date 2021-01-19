@@ -2158,7 +2158,8 @@ class projectModel extends model
             $data->order   = ++$lastOrder;
             $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
             $this->story->setStage($storyID);
-            $this->action->create('story', $storyID, 'linked2project', '', $projectID);
+            $action = $projectID == $this->session->PRJ ? 'linked2prj' : 'linked2project';
+            $this->action->create('story', $storyID, $action, '', $projectID);
         }
     }
 

@@ -2756,6 +2756,7 @@ class project extends control
             }
             $planStories = array_keys($planStory);
             $this->project->linkStory($projectID, $planStories, $planProducts);
+            if($projectID != $this->session->PRJ) $this->project->linkStory($this->session->PRJ, $planStories, $planProducts);
         }
 
         $moduleName = 'project';
