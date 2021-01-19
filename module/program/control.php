@@ -722,6 +722,20 @@ class program extends control
     }
 
     /**
+     * Ajax get parent remain budget.
+     *
+     * @param  int    $parentProgramID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetParentRemainBudget($parentProgramID)
+    {
+        $parentProgram = $this->program->getPGMByID($parentProgramID);
+        $remainBudget  = $this->program->getParentRemainBudget($parentProgram);
+        echo number_format($remainBudget, 2);
+    }
+
+    /**
      * Update program order.
      *
      * @access public
