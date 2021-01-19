@@ -1795,6 +1795,7 @@ class projectModel extends model
                 }
                 $planStories = array_keys($planStory);
                 $this->linkStory($projectID, $planStories, $planProducts);
+                $this->linkStory($this->session->PRJ, $planStories, $planProducts);
             }
         }
 
@@ -2166,7 +2167,9 @@ class projectModel extends model
     /**
      * Link all stories by project.
      *
-     * @param $projectID
+     * @param  int    $projectID
+     * @access public
+     * @return void
      */
     public function linkStories($projectID)
     {
@@ -2200,6 +2203,7 @@ class projectModel extends model
             }
         }
         $this->linkStory($projectID, $planStories, $planProducts);
+        $this->linkStory($this->session->PRJ, $planStories, $planProducts);
         if($count != 0) echo js::alert(sprintf($this->lang->project->haveDraft, $count)) . js::locate(helper::createLink('project', 'create', "productID=&projectID=$projectID"));
     }
 
