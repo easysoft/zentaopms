@@ -377,7 +377,13 @@ class story extends control
 
             $stories = array();
             foreach($mails as $mail) $stories[] = $mail->storyID;
-            if($project) $this->loadModel('project')->linkStory($project, $stories);
+
+            /* Project or execution linked stories. */
+            if($project)
+            {
+                $this->loadModel('project')->linkStory($project, $stories);
+                if($project != $this->session->PRJ) $this->loadModel('project')->linkStory($this->session->PRJ, $stories);
+            }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
             if($storyID and !empty($mails))
