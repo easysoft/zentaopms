@@ -518,7 +518,8 @@ class user extends control
         $this->view->personalData = $this->user->getPersonalData($user->account);
         $this->view->userList     = $this->user->setUserList($users, $userID, $fromModule);
 
-        $this->display();
+        if(isonlybody())  $this->display('my', 'profile');
+        if(!isonlybody()) $this->display();
     }
 
     /**

@@ -17,10 +17,12 @@
       <span class="avatar avatar bg-secondary avatar-circle">A</span>
       <span class='user-name'><strong><?php echo $user->realname;?></strong></span>
       <span class='user-role'><?php echo zget($lang->user->roleList, $user->role);?></span>
+      <?php if(!isset($fromModule)):?>
       <form method='post' action=<?php echo inlink('uploadAvatar');?> id='avatarForm' enctype='multipart/form-data'>
         <input type="file" name="files" id="files" class="form-control hidden">
         <?php echo html::a('javascript:void(0);', $lang->my->uploadAvatar, '', "class='btn btn-avatar' id='avatarUploadBtn' data-placement='right'");?>
       </form>
+      <?php endif;?>
     </div>
     <div class='row'>
       <div class='user-title'><?php echo $lang->user->basicInfo;?></div>
@@ -116,10 +118,12 @@
     </div>
   </div>
   <div class='main-actions'>
+    <?php if(!isset($fromModule)):?>
     <div class='btn-toolbar'>
       <?php common::printLink('my', 'changepassword', "", $lang->changePassword, '', "title={$lang->changePassword} class='btn'");?>
       <?php common::printLink('my', 'editprofile', "", $lang->user->editProfile, '', "title={$lang->user->editProfile} class='btn'");?>
     </div>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
