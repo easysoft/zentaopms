@@ -810,7 +810,7 @@ class programModel extends model
      */
     public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
     {
-        if($currentModule == 'program' && $currentMethod != 'index') return;
+        if($currentModule == 'program' && ($currentMethod != 'index' && $currentMethod != 'prjview')) return;
 
         $this->loadModel('project');
         $currentProjectName = $this->lang->program->common;
@@ -838,7 +838,7 @@ class programModel extends model
      */
     public function getPRJMainAction($module, $method)
     {
-        if($module == 'program' and $method != 'index') return '';
+        if($module == 'program' and ($method != 'index' and $method != 'prjview')) return '';
         return common::hasPriv('program', 'prjbrowse') ? html::a(helper::createLink('program', 'prjbrowse'), $this->lang->moreLink, '', "class='btn btn-link'") : '';
     }
 
@@ -1134,6 +1134,69 @@ class programModel extends model
             $stats[] = $project;
         }
         return $stats;
+    }
+
+    /**
+     * Get project workhour info. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function getPRJWorkhour($projectID)
+    {
+        $executions = $this->loadModel('project')->getExecutionPairs($projectID); 
+
+        $total = $this->dao->select('
+            ROUND(SUM(estimate), 2) AS totalEstimate,
+            ROUND(SUM(consumed), 2) AS totalConsumed,
+            ROUND(SUM(`left`), 2) AS totalLeft')
+            ->from(TABLE_TASK)
+            ->where('project')->in(array_keys($executions))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->fetch();
+        $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
+            ->where('project')->in(array_keys($executions))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->andWhere('status')->in('closed,cancel')
+            ->fetch('totalLeft');
+
+        $workhour = new stdclass();
+        $workhour->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->in(array_keys($executions))->andWhere('type')->eq('project')->fetch('totalHours');
+        $workhour->totalEstimate = round($total->totalEstimate, 1);
+        $workhour->totalConsumed = round($total->totalConsumed, 1);
+        $workhour->totalLeft     = round($total->totalLeft - $closedTotalLeft, 1);
+
+        return $workhour;
+    }
+
+    /**
+     * Get project stat data .
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function getPRJStatData($projectID)
+    {
+        $executions = $this->loadModel('project')->getExecutionPairs($projectID); 
+        $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
+            ->where('t2.project')->eq($projectID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetch('storyCount');
+
+        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('project')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetch('taskCount');
+        $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('project')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetch('bugCount');
+
+        $statData = new stdclass();
+        $statData->storyCount = $storyCount;
+        $statData->taskCount  = $taskCount;
+        $statData->bugCount   = $bugCount;
+
+        return $statData;
     }
 
     /**

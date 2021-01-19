@@ -16,6 +16,7 @@ $config->program->editor->prjclose    = array('id' => 'comment', 'tools' => 'sim
 $config->program->editor->prjsuspend  = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->program->editor->prjstart    = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->program->editor->prjactivate = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->program->editor->prjview     = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->program->list = new stdclass();
 $config->program->list->exportFields = 'id,name,code,template,product,status,begin,end,budget,PM,end,desc';

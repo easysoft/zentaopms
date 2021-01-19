@@ -24,7 +24,7 @@ $config->search->fields->build->id         = 'id';
 $config->search->fields->build->title      = 'name';
 $config->search->fields->build->content    = 'desc,filePath,scmPath';
 $config->search->fields->build->addedDate  = 'date';
-$config->search->fields->build->editedDate = 'lastEditedDate';
+$config->search->fields->build->editedDate = 'date';
 
 $config->search->fields->case = new stdclass();
 $config->search->fields->case->id         = 'id';

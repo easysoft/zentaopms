@@ -1024,6 +1024,40 @@ class program extends control
     }
 
     /**
+     * View a project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function PRJView($projectID = 0)
+    {
+        $this->lang->navGroup->program = 'project';
+        $this->app->loadLang('bug');
+
+        $products = $this->loadModel('product')->getProductsByProject($projectID);;
+        $linkedBranches = array();
+        foreach($products as $product)
+        {    
+            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
+        }
+
+        $this->view->title        = $this->lang->program->PRJView; 
+        $this->view->position     = $this->lang->program->PRJView;
+        $this->view->projectID    = $projectID;
+        $this->view->project      = $this->program->getPRJByID($projectID);
+        $this->view->products     = $products;
+        $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->statData     = $this->program->getPRJStatData($projectID);
+        $this->view->workhour     = $this->program->getPRJWorkhour($projectID);
+        $this->view->planGroup    = $this->loadModel('project')->getPlans($products);;
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
+
+        $this->display();
+    }
+
+    /**
      * Project browse groups.
      *
      * @param  int    $projectID
