@@ -467,6 +467,7 @@ class my extends control
         $this->app->loadLang('project');
 
         $this->app->session->set('programList', $this->app->getURI(true));
+        $this->app->session->set('PRJBrowse', $this->app->getURI(true));
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);

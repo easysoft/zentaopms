@@ -77,7 +77,7 @@
               <?php if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
               </ul>
             </div>
-            <?php common::printIcon('program', 'PRJEdit',          "projectID=$project->id", $project, 'list', 'edit', '',  '', false, "data-group='project'");?>
+            <?php common::printIcon('program', 'PRJEdit',          "projectID=$project->id&programID=$project->parent", $project, 'list', 'edit', '',  '', false, "data-group='project'");?>
             <?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', false, "data-group='project'");?>
             <?php common::printIcon('program', 'PRJGroup',         "projectID=$project->id", $project, 'list', 'lock', '',  '', false, "data-group='project'");?>
             <div class='btn-group'>
