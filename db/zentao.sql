@@ -1232,7 +1232,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `realname` varchar(100) NOT NULL default '',
   `nickname` char(60) NOT NULL default '',
   `commiter` varchar(100) NOT NULL,
-  `avatar` char(30) NOT NULL default '',
+  `avatar` text NOT NULL,
   `birthday` date NOT NULL default '0000-00-00',
   `gender` enum('f','m') NOT NULL default 'f',
   `email` char(90) NOT NULL default '',
