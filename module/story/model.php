@@ -244,11 +244,7 @@ class storyModel extends model
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
             /* Project or execution linked story. */
-            if($projectID != 0 and $story->status != 'draft')
-            {
-                $this->linkStory($projectID, $this->post->product, $storyID);
-                if($projectID != $this->session->PRJ) $this->linkStory($this->session->PRJ, $this->post->product, $storyID);
-            }
+            if($projectID != 0 and $story->status != 'draft') $this->linkStory($projectID, $this->post->product, $storyID);
 
             if(is_array($this->post->URS))
             {
@@ -325,7 +321,7 @@ class storyModel extends model
     }
 
     /**
-     * Create a batch stories.
+     * Batch create stories.
      *
      * @access public
      * @return int|bool the id of the created story or false when error.

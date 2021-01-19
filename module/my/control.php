@@ -472,10 +472,20 @@ class my extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Get PM id list. */
+        $accounts = array();
+        $projects = $this->user->getProjects($this->app->user->account, 'project', $status, $pager);
+        foreach($projects as $project)
+        {
+            if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
+        }
+        $PMList = $this->user->getListByAccounts($accounts, 'account');
+
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
         $this->view->position[] = $this->lang->my->project;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects   = $this->user->getProjects($this->app->user->account, 'project', $status, $pager);
+        $this->view->projects   = $projects;
+        $this->view->PMList     = $PMList;
         $this->view->pager      = $pager;
         $this->view->status     = $status;
         $this->display();
