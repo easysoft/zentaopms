@@ -2305,6 +2305,7 @@ class storyModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
 
+        if(!$projectID) return array();
         $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
 
         $type = strtolower($type);

@@ -12,7 +12,7 @@
         <canvas width='400' height='120' data-responsive='true'></canvas>
       </div>
     </div>
-    <div class='chart-unit'><?php echo "({$lang->project->workHour})";?></div>
+    <div class='chart-unit'><?php echo "({$lang->hourCommon})";?></div>
     <div class='chart-legend'>
       <span class="barline line-pv">PV</span>
       <span class="barline line-ev">EV</span>
