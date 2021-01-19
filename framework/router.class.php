@@ -161,7 +161,6 @@ class router extends baseRouter
 
         global $lang, $app;
         $sprintConcept = $hourPoint = false;
-
         /* Get config from DB. */
         if($this->dbh and !empty($this->config->db->name))
         {
@@ -214,7 +213,7 @@ class router extends baseRouter
 
         /* Get user preference. */
         $account     = isset($this->session->user->account) ? $this->session->user->account : '';
-        $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'URSR')")->fetchAll();
+        if($this->dbh and !empty($this->config->db->name)) $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'URSR')")->fetchAll();
         foreach($userSetting as $setting)
         {
              if($setting->key == 'URSR')        $config->URSR        = $setting->value;
