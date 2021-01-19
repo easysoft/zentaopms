@@ -78,14 +78,23 @@ class program extends control
             $programs = $this->program->getPGMList($status, $orderBy, null, true);
         }
 
+        /* Get PM id list. */
+        $accounts = array();
+        foreach($programs as $program)
+        {
+            if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
+        }
+        $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
+
         $this->view->title       = $this->lang->program->PGMBrowse;
         $this->view->position[]  = $this->lang->program->PGMBrowse;
 
         $this->view->programs    = $programs;
         $this->view->status      = $status;
         $this->view->orderBy     = $orderBy;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users       = $this->user->getPairs('noletter');
         $this->view->programType = $programType;
+        $this->view->PMList      = $PMList;
 
         $this->display();
     }

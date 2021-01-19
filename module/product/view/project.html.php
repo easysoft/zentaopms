@@ -51,7 +51,10 @@
           <td><?php printf('%03d', $project->id);?></td>
           <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');?></td>
           <td><?php echo isset($project->programName) ? $project->programName : '';?></td>
-          <td><?php echo $project->PM;?></td>
+          <td>
+            <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
+            <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
+          </td>
           <td><?php echo $project->begin;?></td>
           <td><?php echo $project->end;?></td>
           <?php $status = $this->processStatus('project', $project);?>
