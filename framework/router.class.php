@@ -199,10 +199,12 @@ class router extends baseRouter
         $model->model = 'scrum';
         if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
 
+        $iterationKey = $projectKey;
         if(isset($model->model) && $model->model == 'waterfall') $projectKey = STAGE_KEY;
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
         $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
+        $lang->iterationCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$iterationKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$iterationKey] : $this->config->executionCommonList['en'][(int)$iterationKey];
         $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$projectKey];
         $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]) ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey] : $this->config->hourPointCommonList['en'][(int)$hourKey];
 
