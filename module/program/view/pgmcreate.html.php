@@ -35,7 +35,7 @@
 <?php js::set('holders', $lang->project->placeholder);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('longTime', $lang->program->PRJLongTime);?>
-<?php js::set('budgetUnitList', $lang->program->unitList);?>
+<?php js::set('currencySymbol', $lang->program->currencySymbol);?>
 <?php js::set('PGMParentBudget', $lang->program->PGMParentBudget);?>
 <?php js::set('future', $lang->program->future);?>
 <?php js::set('PGMList', $PGMList);?>
@@ -66,7 +66,7 @@
           <th><?php echo $lang->program->PGMBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->PGMParentBudget . $remainBudget : '';?>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->PGMParentBudget . zget($lang->program->currencySymbol, $parentProgram->budgetUnit) . $remainBudget : '';?>
               <?php echo html::input('budget', '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon fix-border'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
