@@ -199,17 +199,10 @@ class product extends control
         {
             $products     = $this->product->getProductsByProject($this->session->PRJ);
             $productPlans = $this->loadModel('project')->getPlans($products);
-            $projectPlanList = $this->dao->select('product,plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($this->session->PRJ)->fetchPairs('product', 'plan');
-            $notLinkPlans = array();
-
-            foreach($projectPlanList as $product => $planID)
+            $allPlans     = array();
+            foreach($productPlans as $productPlan)
             {
-                if(isset($productPlans[$product][$planID])) unset($productPlans[$product][$planID]);
-            }
-
-            foreach($productPlans as $productPlans)
-            {
-                foreach($productPlans as $id => $plan) $notLinkPlans[$id] = $plan;
+                foreach($productPlan as $id => $plan) $allPlans[$id] = $plan;
             }
 
             if($projectStoryBrowseType == 'bybranch') $param = $branch;
@@ -261,7 +254,7 @@ class product extends control
         $this->view->moduleID      = $moduleID;
         $this->view->stories       = $stories;
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
-        $this->view->notLinkPlans  = isset($notLinkPlans) ? $notLinkPlans : array();
+        $this->view->allPlans      = isset($allPlans) ? $allPlans : array();
         $this->view->summary       = $this->product->summary($stories, $storyType);
         $this->view->moduleTree    = $moduleTree;
         $this->view->parentModules = $this->tree->getParents($moduleID);

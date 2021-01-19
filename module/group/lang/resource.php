@@ -487,13 +487,13 @@ $lang->productplan->methodOrder[60] = 'batchEdit';
 
 /* Project Story. */
 $lang->resource->projectstory = new stdclass();
-$lang->resource->projectstory->requirement = 'requirement';
-$lang->resource->projectstory->story       = 'story';
-$lang->resource->projectstory->track       = 'track';
+$lang->resource->projectstory->story     = 'story';
+$lang->resource->projectstory->track     = 'track';
+$lang->resource->projectstory->linkStory = 'linkStory';
 
-$lang->productplan->methodOrder[5]  = 'requirement';
-$lang->productplan->methodOrder[10] = 'story';
-$lang->productplan->methodOrder[15] = 'track';
+$lang->productplan->methodOrder[5]  = 'story';
+$lang->productplan->methodOrder[10] = 'track';
+$lang->productplan->methodOrder[15] = 'linkStory';
 
 /* Release. */
 $lang->resource->release = new stdclass();

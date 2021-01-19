@@ -664,6 +664,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 20_0_beta3');
             $this->execSQL($this->getUpgradeFile('20.0.beta3'));
             $this->addPriv20_0_bata3();
+            $this->adjustBudgetUnit();
             $this->appendExec('20_0_beta3');
         }
 
@@ -4503,6 +4504,32 @@ class upgradeModel extends model
                 ->exec();
             $this->saveLogs($this->dao->get());
         }
+        return true;
+    }
+
+    /**
+     * Adjust budget units and values.
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustBudgetUnit()
+    {
+        $budgets = $this->dao->select('id,budget,budgetUnit')->from(TABLE_PROJECT)
+            ->where('type')->in('project,program')
+            ->fetchAll('id');
+
+        foreach($budgets as $id => $budget)
+        {
+            $data = array();
+            $data['budgetUnit'] = 'CNY';
+            $data['budget']     = str_replace(',', '', $budget->budget);
+            if($budget->budgetUnit == 'wanyuan') $data['budget']     = (float)$data['budget'] * 10000;
+            if($budget->budgetUnit == 'dollar')  $data['budgetUnit'] = 'USD';
+
+            if($data) $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($id)->exec();
+        }
+
         return true;
     }
 }
