@@ -631,6 +631,12 @@ class commonModel extends model
 
         /* If program, return.*/
         if($moduleName == 'program' and strpos($methodName, 'prj') !== false) $lang->program->menu = $lang->PRJ->menu;
+        if($moduleName == 'program' and $methodName == 'prjview') 
+        {
+            $moduleIndex = array_search('program', $lang->noMenuModule);
+            if($moduleIndex !== false) unset($lang->noMenuModule[$moduleIndex]);
+            $lang->navGroup->program = 'project';
+        }
         if($moduleName == 'product' and $methodName == 'create') return;
 
         /* Set the main main menu. */
@@ -696,25 +702,7 @@ class commonModel extends model
                         if(isset($subMenuItem->link['vars']))   $subParams = $subMenuItem->link['vars'];
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
-                        if($subMenuItem->name == 'program')
-                        {
-                            /* Print program sub menu.*/
-                            global $dbh;
-                            $program    = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
-                            $subActive .= 'dropdown-submenu';
-                            $subLink = 'javascript:;';
-                            $subProgram .= "<ul class='dropdown-menu'>";
-                            $subProgram .= '<li>' . html::a(helper::createLink('program', 'prjedit', "projectID={$app->session->PRJ}&programID={$program->parent}"), "<i class=icon-edit></i> " . "<span class='text'>{$lang->program->PRJEdit}</span>", '', "class='btn btn-link'") . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjgroup', "projectID={$app->session->PRJ}", $program, 'button', 'group', '', '', '', '', $lang->program->PRJGroup) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjmanageMembers', "projectID={$app->session->PRJ}", $program, 'button', 'persons', '', '', '', '', $lang->program->PRJManageMembers) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjstart', "projectID={$app->session->PRJ}", $program, 'button', 'play', '', 'iframe', true, '', $lang->program->PRJStart) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjactivate', "projectID={$app->session->PRJ}", $program, 'button', 'magic', '', 'iframe', true, '', $lang->program->PRJActivate) . '</li>';
-                            $subProgram .= '<li>' . self::buildIconButton('program', 'prjsuspend', "projectID={$app->session->PRJ}", $program, 'button', 'pause', '', 'iframe', true, '', $lang->program->PRJSuspend) . '</li>';
-                            $subProgram .= "</ul>";
-                        }
-
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
-
                         $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . $subProgram . '</li>';
                     }
 
@@ -725,7 +713,7 @@ class commonModel extends model
                 }
 
                 /* Disable links to more buttons. */
-                if($menuItem->name == 'projectsetting' || $menuItem->name == 'other') $link='javascript:void(0);';
+                if($menuItem->name == 'other') $link='javascript:void(0);';
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
 
@@ -779,7 +767,7 @@ class commonModel extends model
         $moduleName = $app->rawModule;
         $methodName = $app->rawMethod;
         $mainMenu   = $moduleName;
-        if($moduleName == 'program') return;
+        if($moduleName == 'program' and $methodName != 'prjview') return;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
 
         /* Set main menu by group. */
@@ -787,7 +775,7 @@ class commonModel extends model
         if($moduleName == 'admin') return;
         if($group == 'repo' || $group == 'ops' || $group == 'feedback') return;
         if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
-        if($group == 'project') self::getProgramModuleMenu($moduleName);
+        if($group == 'project') self::getProgramModuleMenu($moduleName, $methodName);
         if($group == 'product')
         {
             $lang->product->menu = $lang->product->setMenu;
@@ -1744,7 +1732,7 @@ EOD;
         $method = strtolower($method);
 
         /* More menus do not require permission control. */
-        if($module == 'project' && ($method == 'other' || $method == 'setting')) return true;
+        if($module == 'project' && $method == 'other') return true;
 
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
@@ -2418,21 +2406,24 @@ EOD;
      * Get program module menu by model.
      *
      * @param  varchar $moduleName
+     * @param  varchar $methodName
      * @static
      * @access public
      * @return string
      */
-    public static function getProgramModuleMenu($moduleName)
+    public static function getProgramModuleMenu($moduleName, $methodName)
     {
         global $app, $lang, $dbh;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
         if(empty($program)) return;
         if($program->model == 'waterfall')
         {
+            if($moduleName == 'program' and $methodName == 'prjview') $lang->program->menu = $lang->waterfall->setMenu;
             $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
         }
         if($program->model == 'scrum')
         {
+            if($moduleName == 'program' and $methodName == 'prjview') $lang->program->menu = $lang->scrum->setMenu;
             unset($lang->stakeholder->menu->issue);
             unset($lang->stakeholder->menu->plan);
             unset($lang->stakeholder->menu->expectation);

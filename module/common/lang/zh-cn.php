@@ -924,7 +924,7 @@ $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
-$lang->menu->scrum->projectsetting = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list');
+$lang->menu->scrum->projectsetting = array('link' => '设置|program|prjview|project={PROJECT}');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
@@ -933,8 +933,8 @@ $lang->scrum->subMenu->other->issue       = array('link' => '问题|issue|browse
 $lang->scrum->subMenu->other->risk        = array('link' => '风险|risk|browse|', 'subModule' => 'risk');
 $lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
 
-$lang->scrum->subMenu->projectsetting = new stdclass();
-$lang->scrum->subMenu->projectsetting->program = '项目|program|PRJEdit|';
+$lang->scrum->setMenu = new stdclass();
+$lang->scrum->setMenu->view = array('link' => '概况|program|prjview|project={PROJECT}');
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
@@ -950,7 +950,7 @@ $lang->menu->waterfall->qa             = '测试|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc');
-$lang->menu->waterfall->projectsetting = array('link' => '设置|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'workestimation,durationestimation,budget,pssp');
+$lang->menu->waterfall->projectsetting = array('link' => '设置|program|prjview|project={PROJECT}', 'subModule' => 'workestimation,durationestimation,budget,pssp');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
@@ -959,9 +959,11 @@ $lang->waterfall->subMenu->other->issue = array('link' => '问题|issue|browse|'
 $lang->waterfall->subMenu->other->risk  = array('link' => '风险|risk|browse|', 'subModule' => 'risk');
 $lang->waterfall->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
 
-$lang->waterfall->subMenu->projectsetting = new stdclass();
-$lang->waterfall->subMenu->projectsetting->workestimation = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'durationestimation,budget');
-$lang->waterfall->subMenu->projectsetting->program        = '项目|program|PRJEdit|';
+$lang->waterfall->setMenu = new stdclass();
+$lang->waterfall->setMenu->view           = array('link' => '概况|program|prjview|project={PROJECT}');
+$lang->waterfall->setMenu->workestimation = '工作量估算|workestimation|index|project={PROJECT}';
+$lang->waterfall->setMenu->duration       = array('link' => '工期估算|durationestimation|index|project={PROJECT}', 'subModule' => 'durationestimation');
+$lang->waterfall->setMenu->budget         = array('link' => '费用估算|budget|summary|', 'subModule' => 'budget');
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
@@ -998,15 +1000,12 @@ $lang->waterfallproduct->menu   = new stdclass();
 $lang->durationestimation->menu = new stdclass();
 $lang->projectstory->menu       = new stdclass();
 
+$lang->workestimation->menu     = $lang->waterfall->setMenu;
+$lang->durationestimation->menu = $lang->waterfall->setMenu;
+$lang->budget->menu             = $lang->waterfall->setMenu;
+
 $lang->stakeholder->menu->list  = array('link' => '干系人列表|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
 $lang->stakeholder->menu->issue = array('link' => '问题管理|stakeholder|issue|');
-
-$lang->workestimation->menu->index    = '工作量估算|workestimation|index|project={PROJECT}';
-$lang->workestimation->menu->duration = array('link' => '工期估算|durationestimation|index|project={PROJECT}', 'subModule' => 'durationestimation');
-$lang->workestimation->menu->budget   = array('link' => '费用估算|budget|summary|', 'subModule' => 'budget');
-
-$lang->durationestimation->menu = $lang->workestimation->menu;
-$lang->budget->menu = $lang->workestimation->menu;
 
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');

@@ -323,7 +323,7 @@ class productModel extends model
      */
     public function getProductsByProject($projectID, $status = 'all')
     {
-        return $this->dao->select('t2.*')
+        return $this->dao->select('t1.branch, t1.plan, t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
