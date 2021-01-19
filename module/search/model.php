@@ -564,18 +564,31 @@ class searchModel extends model
             $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
             $method = 'view';
             if($module == 'deploystep')
-            {   
+            {
                 $module = 'deploy';
                 $method = 'viewstep';
             }
-            $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
-        }
 
-        foreach($results as $object)
-        {
-            if($object->objectType == 'program')   $object->url = str_replace('m=program&f=view&',   'm=program&f=view&',  $object->url);
-            if($object->objectType == 'project')   $object->url = str_replace('m=project&f=view&',   'm=program&f=index&', $object->url);
-            if($object->objectType == 'execution') $object->url = str_replace('m=execution&f=view&', 'm=project&f=view&',  $object->url);
+            if(strpos(',task,bug,case,build,release,testtask,testsuite,testreport,issue,risk,', ",$module,") !== false)
+            {
+                if(!isset($this->config->objectTables[$record->objectType])) continue;
+                $table       = $this->config->objectTables[$record->objectType];
+                $projectID   = $this->dao->select('PRJ')->from($table)->where('id')->eq($record->objectID)->fetch('PRJ');
+                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $projectID);
+            }
+            elseif($module == 'execution')
+            {
+                $projectID   = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($record->objectID)->fetch('project');
+                $record->url = helper::createLink('project', $method, "id={$record->objectID}", '', false, $projectID);
+            }
+            elseif($module == 'project')
+            {
+                $record->url = helper::createLink('program', 'index', "id={$record->objectID}", '', false, 0, true);
+            }
+            else
+            {
+                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+            }
         }
 
         return $this->checkPriv($results, $pager);
@@ -695,22 +708,25 @@ class searchModel extends model
         $start   = max(0, $pos - ($length / 2));
         $summary = join(' ', array_slice($content, $start, $length));
         $summary = str_replace(' <spanclass', '<span class', $summary);
- 
+
         return $this->decode($summary);
     }
 
     /**
      * Check product and project priv.
-     * 
-     * @param  array    $results 
+     *
+     * @param  array    $results
+     * @param  object   $pager
      * @access public
      * @return array
      */
     public function checkPriv($results, $pager = null)
     {
         $this->loadModel('doc');
-        $products = $this->app->user->view->products;
-        $projects = $this->app->user->view->sprints;
+        $products   = $this->app->user->view->products;
+        $programs   = $this->app->user->view->programs;
+        $projects   = $this->app->user->view->projects;
+        $executions = $this->app->user->view->sprints;
 
         $objectPairs = array();
         $noPrivNum   = 0;
@@ -751,11 +767,33 @@ class searchModel extends model
                     }
                 }
             }
+            elseif($objectType == 'program')
+            {
+                foreach($objectIdList as $programID => $recordID)
+                {
+                    if(strpos(",$programs,", ",$programID,") === false)
+                    {
+                        unset($results[$recordID]);
+                        $noPrivNum++;
+                    }
+                }
+            }
             elseif($objectType == 'project')
             {
                 foreach($objectIdList as $projectID => $recordID)
                 {
                     if(strpos(",$projects,", ",$projectID,") === false)
+                    {
+                        unset($results[$recordID]);
+                        $noPrivNum++;
+                    }
+                }
+            }
+            elseif($objectType == 'execution')
+            {
+                foreach($objectIdList as $executionID => $recordID)
+                {
+                    if(strpos(",$executions,", ",$executionID,") === false)
                     {
                         unset($results[$recordID]);
                         $noPrivNum++;
@@ -843,7 +881,7 @@ class searchModel extends model
             foreach($objectProjects as $projectID => $idList)
             {
                 if(empty($projectID)) continue;
-                if(strpos(",$projects,", ",$projectID,") === false)
+                if(strpos(",$executions,", ",$projectID,") === false)
                 {
                     foreach($idList as $object)
                     {
