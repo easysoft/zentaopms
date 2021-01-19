@@ -77,6 +77,7 @@ ALTER TABLE `zt_project` DROP `storyConcept`;
 ALTER TABLE `zt_product` DROP `storyConcept`;
 
 ALTER TABLE `zt_user` CHANGE `avatar` `avatar` text NOT NULL AFTER `commiter`;
+ALTER TABLE `zt_project` CHANGE `budgetUnit` `budgetUnit` char(30) NOT NULL  DEFAULT 'CNY' AFTER `budget`;
 
 -- DROP TABLE IF EXISTS `zt_searchindex`;
 CREATE TABLE IF NOT EXISTS `zt_searchindex` (
