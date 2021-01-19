@@ -279,6 +279,8 @@ $lang->story->action->linked2plan         = array('main' => '$date, verknüpft v
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Plan <strong>$extra</strong>.');
 $lang->story->action->linked2project      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit ' . $lang->executionCommon . ' <strong>$extra</strong>.');
 $lang->story->action->unlinkedfromproject = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> mit ' . $lang->executionCommon . ' <strong>$extra</strong>.');
+$lang->story->action->linked2prj          = array('main' => '$date, verknüpft von <strong>$actor</strong> mit project <strong>$extra</strong>.');
+$lang->story->action->unlinkedfromprj     = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> mit project <strong>$extra</strong>.');
 $lang->story->action->linked2build        = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Build <strong>$extra</strong>');
 $lang->story->action->unlinkedfrombuild   = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Build <strong>$extra</strong>.');
 $lang->story->action->linked2release      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Release <strong>$extra</strong>');

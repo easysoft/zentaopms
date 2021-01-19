@@ -400,7 +400,7 @@ class story extends control
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, false);
                 $moduleName = $prj->type == 'project' ? 'projectstory' : 'project';
-                $param      = $prj->type == 'project' ? "PRJ=$project#open=project" : "projectID=$project&orderBy=id_desc&browseType=unclosed";
+                $param      = $prj->type == 'project' ? "productID=$productID" : "projectID=$project&orderBy=id_desc&browseType=unclosed";
                 $link       = $this->createLink($moduleName, 'story', $param);
                 die(js::locate($link, 'parent'));
             }
