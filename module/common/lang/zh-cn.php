@@ -208,7 +208,7 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => '全局设置|subject|browse|', 'subModule' => 'holiday,custom');
+$lang->system->menu->company   = array('link' => '全局设置|subject|browse|', 'subModule' => 'holiday');
 $lang->system->menu->scrum     = array('link' => '敏捷模型|custom|configurescrum|');
 $lang->system->menu->waterfall = array('link' => '瀑布模型|stage|settype|');
 
@@ -225,7 +225,11 @@ $lang->holiday->menu = $lang->subject->menu;
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
 
-/* 查询条中可以选择的对象列表。*/
+$lang->searchTips = '';
+$lang->searchAB   = '搜索';
+
+/* 查询中可以选择的对象列表。*/
+$lang->searchObjects['all']         = '全部';
 $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = "{$lang->SRCommon}";
 $lang->searchObjects['task']        = '任务';
@@ -241,6 +245,7 @@ $lang->searchObjects['testreport']  = '测试报告';
 $lang->searchObjects['program']     = '项目集';
 $lang->searchObjects['project']     = '项目';
 $lang->searchObjects['execution']   = $lang->sprintCommon;
+$lang->searchObjects['user']        = '用户';
 $lang->searchTips                   = '编号(ctrl+g)';
 
 /* 导入支持的编码格式。*/
@@ -343,18 +348,18 @@ $lang->story->menu = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->task      = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
-$lang->project->menu->kanban    = array('link' => '看板|project|kanban|projectID=%s');
-$lang->project->menu->burn      = array('link' => '燃尽图|project|burn|projectID=%s');
-$lang->project->menu->view      = array('link' => '视图|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
-$lang->project->menu->story     = array('link' => "{$lang->SRCommon}|project|story|projectID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->bug       = array('link' => 'Bug|project|bug|projectID=%s');
-$lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask  = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
-$lang->project->menu->doc       = array('link' => '文档|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
-$lang->project->menu->team      = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->more      = array('link' => '更多|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->task     = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
+$lang->project->menu->kanban   = array('link' => '看板|project|kanban|projectID=%s');
+$lang->project->menu->burn     = array('link' => '燃尽图|project|burn|projectID=%s');
+$lang->project->menu->view     = array('link' => '视图|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->story    = array('link' => "{$lang->SRCommon}|project|story|projectID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
+$lang->project->menu->bug      = array('link' => 'Bug|project|bug|projectID=%s');
+$lang->project->menu->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
+$lang->project->menu->doc      = array('link' => '文档|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
+$lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
+$lang->project->menu->team     = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->more     = array('link' => '更多|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
 $lang->project->subMenu = new stdclass();
 $lang->project->subMenu->view = new stdclass();
@@ -564,6 +569,9 @@ $lang->admin->subMenu->data->trash  = '回收站|action|trash';
 $lang->admin->subMenu->system = new stdclass();
 $lang->admin->subMenu->system->cron     = array('link' => '定时|cron|index', 'subModule' => 'cron');
 $lang->admin->subMenu->system->timezone = array('link' => '时区|custom|timezone', 'subModule' => 'custom');
+
+$lang->admin->subMenu->system->buildIndex = array('link' => '重建索引|search|buildindex|');
+$lang->admin->subMenuOrder->system[15] = 'buildIndex';
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();

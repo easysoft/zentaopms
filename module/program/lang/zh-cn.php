@@ -110,6 +110,24 @@ $lang->program->unitList['NZD'] = '新西兰元';
 $lang->program->unitList['THB'] = '泰国铢';
 $lang->program->unitList['SGD'] = '新加坡元';
 
+$lang->program->currencySymbol['CNY'] = '￥';
+$lang->program->currencySymbol['USD'] = '$';
+$lang->program->currencySymbol['HKD'] = 'HK$';
+$lang->program->currencySymbol['NTD'] = 'NT$';
+$lang->program->currencySymbol['EUR'] = '€';
+$lang->program->currencySymbol['DEM'] = 'DEM';
+$lang->program->currencySymbol['CHF'] = '₣';
+$lang->program->currencySymbol['FRF'] = '₣';
+$lang->program->currencySymbol['GBP'] = '£';
+$lang->program->currencySymbol['NLG'] = 'ƒ';
+$lang->program->currencySymbol['CAD'] = '$';
+$lang->program->currencySymbol['RUR'] = '₽';
+$lang->program->currencySymbol['INR'] = '₹';
+$lang->program->currencySymbol['AUD'] = 'A$';
+$lang->program->currencySymbol['NZD'] = 'NZ$';
+$lang->program->currencySymbol['THB'] = '฿';
+$lang->program->currencySymbol['SGD'] = 'S$';
+
 $lang->program->modelList['scrum']     = "Scrum";
 $lang->program->modelList['waterfall'] = "瀑布";
 

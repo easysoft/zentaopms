@@ -56,10 +56,13 @@ js::set('defaultOpen', $open);
       <!--<a href='javascript:void(0)' class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>-->
       <div id="globalSearchDiv">
         <div class="input-group">
-          <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example" id="searchboxExample">
-            <input id="globalSearchInput" type="search" class="form-control search-input" placeholder="<?php echo $lang->index->search;?>">
+          <div id='searchbox'>
+            <?php echo common::printSearchBox();?>
           </div>
-          <span class="input-group-btn">
+          <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example" id="searchboxExample">
+            <input id="globalSearchInput" type="search" onclick="this.value=''" onkeydown="if(event.keyCode==13) $.gotoObject();" class="form-control search-input" placeholder="<?php echo $lang->index->search;?>" autocomplete="off">
+          </div>
+          <span class="input-group-btn" onclick="javascript:$.gotoObject();">
             <button id="globalSearchButton" class="btn btn-secondary" type="button"><i class="icon icon-search"></i></button>
           </span>
         </div>
@@ -67,4 +70,6 @@ js::set('defaultOpen', $open);
     </div>
   </div>
 </div>
+<?php js::set('searchAB', $lang->searchAB);?>
+<?php js::set('searchObjectList', implode(',', array_keys($lang->searchObjects)));?>
 <?php include '../../common/view/footer.lite.html.php';?>

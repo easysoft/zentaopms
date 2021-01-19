@@ -12,6 +12,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <div id="mainMenu" class="clearfix">
+  <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
@@ -22,6 +23,7 @@
   <div class="btn-toolbar pull-right">
     <?php common::printLink('product', 'create', "programID=$program->id", '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>
+  <?php endif;?>
 </div>
 <div id="mainContent" class="main-row fade">
   <?php if(empty($products)):?>
@@ -33,7 +35,7 @@
     <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo $this->createLink('product', 'batchEdit', "programID=$program->id");?>'>
       <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
-      <table id="productList" class="table has-sort-head table-fixed">
+      <table id="productList" class="table has-sort-head table-bordered table-fixed">
         <?php $vars = "programID=$program->id&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr class="text-center">

@@ -83,6 +83,8 @@ $config->dev->group['repo']           = 'repo';
 $config->dev->group['repofiles']      = 'repo';
 $config->dev->group['repohistory']    = 'repo';
 $config->dev->group['repobranch']     = 'repo';
+$config->dev->group['searchindex']    = 'search';
+$config->dev->group['searchdict']     = 'search';
 
 $config->dev->tableMap['storyspec']      = 'story';
 $config->dev->tableMap['storystage']     = 'story';
@@ -110,6 +112,7 @@ $config->dev->tableMap['suitecase']      = 'testcase';
 $config->dev->tableMap['repofiles']      = 'repo';
 $config->dev->tableMap['repohistory']    = 'repo';
 $config->dev->tableMap['repobranch']     = 'repo';
+$config->dev->tableMap['searchindex']    = 'search';
 
 $config->dev->postParams['story']['create']['product']       = 'int';
 $config->dev->postParams['story']['create']['title']         = 'string';

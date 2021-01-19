@@ -69,6 +69,8 @@ class actionModel extends model
 
         $this->loadModel('message')->send($objectType, $objectID, $actionType, $actionID, $actor);
 
+        $this->saveIndex($objectType, $objectID, $actionType);
+
         return $actionID;
     }
 
@@ -1184,5 +1186,56 @@ class actionModel extends model
             ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
             ->fetch('count');
         return $count > 0;
+    }
+
+    /**
+     * Save global search object index information.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $actionType
+     * @access public
+     * @return bool
+     */
+    public function saveIndex($objectType, $objectID, $actionType)
+    {
+        $this->loadModel('search');
+        $actionType = strtolower($actionType);
+        if(!isset($this->config->search->fields->$objectType)) return true;
+        if(strpos($this->config->search->buildAction, ",{$actionType},") === false and empty($_POST['comment'])) return true;
+        if($actionType == 'deleted' or $actionType == 'erased') return $this->search->deleteIndex($objectType, $objectID);
+
+        $field = $this->config->search->fields->$objectType;
+        $query = $this->search->buildIndexQuery($objectType, $testDeleted = false);
+        $data  = $query->andWhere('t1.' . $field->id)->eq($objectID)->fetch();
+        if(empty($data)) return true;
+
+        $data->comment = '';
+        if($objectType == 'effort' and $data->objectType == 'task') return true;
+        if($objectType == 'case')
+        {
+            $caseStep     = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($objectID)->andWhere('version')->eq($data->version)->fetchAll();
+            $data->desc   = '';
+            $data->expect = '';
+            foreach($caseStep as $step)
+            {
+                $data->desc   .= $step->desc . "\n";
+                $data->expect .= $step->expect . "\n";
+            }
+        }
+
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->eq($objectID)
+            ->orderBy('id asc')
+            ->fetchAll();
+        foreach($actions as $action)
+        {
+            if($action->action == 'opened') $data->{$field->addedDate} = $action->date;
+            $data->{$field->editedDate} = $action->date;
+            if(!empty($action->comment)) $data->comment .= $action->comment . "\n";
+        }
+
+        $this->search->saveIndex($objectType, $data);
     }
 }

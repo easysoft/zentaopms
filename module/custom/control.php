@@ -351,6 +351,7 @@ class custom extends control
         $this->app->loadConfig('project');
         $this->lang->custom->menu = $this->lang->subject->menu;
         $this->lang->navGroup->custom = 'system';
+        $this->lang->system->menu->company['subModule'] .= ',custom';
         $key = array_search('custom', $this->lang->noMenuModule);
         unset($this->lang->noMenuModule[$key]);
 

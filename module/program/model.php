@@ -176,6 +176,7 @@ class programModel extends model
                 if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
 
                 /* The budget of a child program cannot beyond the remaining budget of the parent program. */
+                $program->budgetUnit = $parentProgram->budgetUnit;
                 if(isset($program->budget) and $parentProgram->budget != 0)
                 {
                     $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
@@ -290,6 +291,7 @@ class programModel extends model
             }
 
             /* The budget of a child program cannot beyond the remaining budget of the parent program. */
+            $program->budgetUnit = $parentProgram->budgetUnit;
             if($program->budget != 0 and $parentProgram->budget != 0)
             {
                 $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
@@ -1387,6 +1389,7 @@ class programModel extends model
             }
 
             /* The budget of a child project cannot beyond the remaining budget of the parent program. */
+            $project->budgetUnit = $parentProgram->budgetUnit;
             if(isset($project->budget) and $parentProgram->budget != 0)
             {
                 $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
@@ -1566,6 +1569,7 @@ class programModel extends model
             }
 
             /* The budget of a child project cannot beyond the remaining budget of the parent program. */
+            $project->budgetUnit = $parentProgram->budgetUnit;
             if($project->budget != 0 and $parentProgram->budget != 0)
             {
                 $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
@@ -1699,7 +1703,7 @@ class programModel extends model
                     echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->program->statusList, $project->status) . "</span>";
                     break;
                 case 'PRJBudget':
-                    echo $project->budget != 0 ? $project->budget . zget($this->lang->program->unitList, $project->budgetUnit) : $this->lang->program->future;
+                    echo $project->budget != 0 ? zget($this->lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $this->lang->program->future;
                     break;
                 case 'teamCount':
                     echo $project->teamCount;
