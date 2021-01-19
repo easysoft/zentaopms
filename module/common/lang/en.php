@@ -131,6 +131,11 @@ $lang->typeAB       = 'Type';
 $lang->common = new stdclass();
 $lang->common->common = 'Common Module';
 
+global $config;
+list($programModule, $programMethod) = explode('-', $config->programLink);
+list($productModule, $productMethod) = explode('-', $config->productLink);
+list($projectModule, $projectMethod) = explode('-', $config->projectLink);
+
 /* Main menu. */
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
@@ -220,7 +225,11 @@ $lang->holiday->menu = $lang->subject->menu;
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
 
+$lang->searchTips = '';
+$lang->searchAB   = 'Search';
+
 /* Object list in search form. */
+$lang->searchObjects['all']         = 'All';
 $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Story';
 $lang->searchObjects['task']        = 'Task';
@@ -236,6 +245,7 @@ $lang->searchObjects['testreport']  = 'Test Report';
 $lang->searchObjects['program']     = 'Program';
 $lang->searchObjects['project']     = 'Project';
 $lang->searchObjects['execution']   = $lang->sprintCommon;
+$lang->searchObjects['user']        = 'User';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* Code formats for import. */
@@ -338,18 +348,18 @@ $lang->story->menu = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
-$lang->project->menu->kanban    = array('link' => 'Kanban|project|kanban|projectID=%s');
-$lang->project->menu->burn      = array('link' => 'Burndown|project|burn|projectID=%s');
-$lang->project->menu->view      = array('link' => 'View|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
-$lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->bug       = array('link' => 'Bug|project|bug|projectID=%s');
-$lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask  = array('link' => 'Request|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
-$lang->project->menu->doc       = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
-$lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->more      = array('link' => 'More|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->task     = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
+$lang->project->menu->kanban   = array('link' => 'Kanban|project|kanban|projectID=%s');
+$lang->project->menu->burn     = array('link' => 'Burndown|project|burn|projectID=%s');
+$lang->project->menu->view     = array('link' => 'View|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->story    = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
+$lang->project->menu->bug      = array('link' => 'Bug|project|bug|projectID=%s');
+$lang->project->menu->build    = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->testtask = array('link' => 'Request|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
+$lang->project->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
+$lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
+$lang->project->menu->team     = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->more     = array('link' => 'More|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
 $lang->project->subMenu = new stdclass();
 $lang->project->subMenu->view = new stdclass();
@@ -560,6 +570,9 @@ $lang->admin->subMenu->system = new stdclass();
 $lang->admin->subMenu->system->cron     = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
 $lang->admin->subMenu->system->timezone = array('link' => 'Timezone|custom|timezone', 'subModule' => 'custom');
 
+$lang->admin->subMenu->system->buildIndex = array('link' => 'Full Text Search|search|buildindex|');
+$lang->admin->subMenuOrder->system[15] = 'buildIndex';
+
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
 $lang->action    = new stdclass();
@@ -619,6 +632,7 @@ $lang->navGroup = new stdclass();
 $lang->navGroup->my     = 'my';
 $lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
+$lang->navGroup->score  = 'my';
 
 $lang->navGroup->personnel = 'program';
 
@@ -999,6 +1013,6 @@ $lang->projectstory->menu->story = array('link' => "{$lang->SRCommon}|projectsto
 $lang->projectstory->menu->track = array('link' => 'Track|projectstory|track', 'subModule' => '');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'job', 'jenkins', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'stage');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');

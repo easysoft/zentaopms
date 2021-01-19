@@ -643,9 +643,9 @@ class task extends control
         else
         {
             $story = $this->story->getById($task->story, $task->storyVersion);
-            $task->storySpec     = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->spec);
-            $task->storyVerify   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
-            $task->storyFiles    = $this->loadModel('file')->getByObject('story', $task->story);
+            $task->storySpec   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->spec);
+            $task->storyVerify = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
+            $task->storyFiles  = $this->loadModel('file')->getByObject('story', $task->story);
         }
 
         if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
@@ -664,15 +664,15 @@ class task extends control
         $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->view;
 
-        $this->view->title       = $title;
-        $this->view->position    = $position;
-        $this->view->project     = $project;
-        $this->view->task        = $task;
-        $this->view->actions     = $this->loadModel('action')->getList('task', $taskID);
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
-        $this->view->product     = $this->tree->getProduct($task->module);
-        $this->view->modulePath  = $this->tree->getParents($task->module);
+        $this->view->title      = $title;
+        $this->view->position   = $position;
+        $this->view->project    = $project;
+        $this->view->task       = $task;
+        $this->view->actions    = $this->loadModel('action')->getList('task', $taskID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
+        $this->view->product    = $this->tree->getProduct($task->module);
+        $this->view->modulePath = $this->tree->getParents($task->module);
         $this->display();
     }
 

@@ -1370,17 +1370,21 @@ $lang->report->methodOrder[20] = 'workload';
 
 /* Search. */
 $lang->resource->search = new stdclass();
-$lang->resource->search->buildForm    = 'buildForm';
-$lang->resource->search->buildQuery   = 'buildQuery';
-$lang->resource->search->saveQuery    = 'saveQuery';
-$lang->resource->search->deleteQuery  = 'deleteQuery';
-$lang->resource->search->select       = 'select';
+$lang->resource->search->buildForm   = 'buildForm';
+$lang->resource->search->buildQuery  = 'buildQuery';
+$lang->resource->search->saveQuery   = 'saveQuery';
+$lang->resource->search->deleteQuery = 'deleteQuery';
+$lang->resource->search->select      = 'select';
+$lang->resource->search->index       = 'index';
+$lang->resource->search->buildIndex  = 'buildIndex';
 
 $lang->search->methodOrder[5]  = 'buildForm';
 $lang->search->methodOrder[10] = 'buildQuery';
 $lang->search->methodOrder[15] = 'saveQuery';
 $lang->search->methodOrder[20] = 'deleteQuery';
 $lang->search->methodOrder[25] = 'select';
+$lang->search->methodOrder[30] = 'index';
+$lang->search->methodOrder[35] = 'buildIndex';
 
 /* Admin. */
 $lang->resource->admin = new stdclass();

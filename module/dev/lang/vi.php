@@ -114,6 +114,8 @@ $lang->dev->tableList['ci']               = 'CI';
 $lang->dev->tableList['compile']          = 'Compile';
 $lang->dev->tableList['jenkins']          = 'Jenkins';
 $lang->dev->tableList['job']              = 'Job';
+$lang->dev->tableList['searchdict']       = 'Search dict';
+$lang->dev->tableList['searchindex']      = 'Search index';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;
@@ -125,6 +127,7 @@ $lang->dev->groupList['company'] = 'Doanh nghiệp';
 $lang->dev->groupList['repo']    = 'CI';
 $lang->dev->groupList['api']     = 'API';
 $lang->dev->groupList['message'] = 'Tin nhắn';
+$lang->dev->groupList['search']  = 'Tìm kiếm';
 
 $lang->dev->endGroupList['admin']  = 'Quản trị';
 $lang->dev->endGroupList['system'] = 'Hệ thống';

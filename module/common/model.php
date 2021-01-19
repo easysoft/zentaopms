@@ -748,45 +748,21 @@ class commonModel extends model
      */
     public static function printSearchBox()
     {
-        global $app, $config, $lang;
-        $moduleName  = $app->getModuleName();
-        $methodName  = $app->getMethodName();
-        $searchObject = $moduleName;
-
-        if($moduleName == 'product')
-        {
-            if($methodName == 'browse') $searchObject = 'story';
-        }
-        elseif($moduleName == 'project')
-        {
-            if(strpos('task|story|bug|build', $methodName) !== false) $searchObject = $methodName;
-        }
-        elseif($moduleName == 'my' or $moduleName == 'user')
-        {
-            $searchObject = $methodName;
-            if($methodName == 'execution') $searchObject = 'project';
-        }
-        if(empty($lang->searchObjects[$searchObject])) $searchObject = 'bug';
-
-        echo "<div id='searchbox'>";
-        echo "<div class='input-group'>";
+        global $lang;
+        $searchObject = 'bug';
         echo "<div class='input-group-btn'>";
-        echo "<a data-toggle='dropdown' class='btn btn-link'><span id='searchTypeName'>" . $lang->searchObjects[$searchObject] . "</span> <span class='caret'></span></a>";
         echo html::hidden('searchType', $searchObject);
         echo "<ul id='searchTypeMenu' class='dropdown-menu'>";
         foreach ($lang->searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
-            if($key == 'program') $key   = 'program-pgmproduct';
-            if($key == 'project') $key   = 'program-index';
+            if($key == 'program')   $key = 'program-pgmproduct';
+            if($key == 'project')   $key = 'program-index';
             if($key == 'execution') $key = 'project-view';
+
             echo "<li $class><a href='javascript:$.setSearchType(\"$key\");' data-value='{$key}'>{$value}</a></li>";
         }
         echo '</ul></div>';
-        echo "<input id='searchInput' class='form-control search-input' type='search' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) $.gotoObject();' placeholder='" . $lang->searchTips . "'/>";
-        echo '</div>';
-        echo "<a href='javascript:$.gotoObject();' class='btn btn-link' id='searchGo'>GO!</a>";
-        echo "</div>\n";
     }
 
     /**

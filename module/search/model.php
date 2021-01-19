@@ -491,4 +491,546 @@ class searchModel extends model
         }
         return $query;
     }
+
+    /**
+     * get search results of keywords.
+     * 
+     * @param  string    $keywords 
+     * @param  object    $pager 
+     * @param  string    $type
+     * @access public
+     * @return array
+     */
+    public function getList($keywords, $pager, $type)
+    {
+        $spliter = $this->app->loadClass('spliter');
+        $words   = explode(' ', self::unify($keywords, ' '));
+
+        $against = '';
+        $againstCond   = '';
+        $likeCondition = '';
+        foreach($words as $word)
+        {
+            $splitedWords = $spliter->utf8Split($word);
+
+            $trimedWord     = trim($splitedWords['words']);
+            $against       .= '"' . $trimedWord . '" '; 
+            $againstCond   .= '+"' . $trimedWord . '" '; 
+            if(is_numeric($word) and strlen($word) == 5) $againstCond .= "-\" $word \" ";
+
+            $likeWord      = is_numeric($word) ? $word : $trimedWord;
+            if(is_numeric($word) and strlen($word) < 5) $likeWord = str_pad("|$likeWord|", 5, '_');
+            $condition = "OR title like '%{$likeWord}%' OR content like '%{$likeWord}%'";
+            if(is_numeric($word) and strlen($word) == 5) $condition = "OR title REGEXP '[^ ]{$likeWord}[^ ]' OR content REGEXP '[^ ]{$likeWord}[^ ]'";
+            $likeCondition .= $condition;
+        }
+        
+        $words = str_replace('"', '', $against);
+        $words = str_pad($words, 5, '_');
+
+        $allowedObject = array();
+        if($type != 'all')
+        {
+            foreach($type as $module) $allowedObject[] = $module;
+        }
+        else
+        {
+            foreach($this->config->search->fields as $objectType => $fields)
+            {
+                $module = $objectType;
+                if($module == 'case') $module = 'testcase';
+                if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
+                if($module == 'caselib' and common::hasPriv('caselib', 'view')) $allowedObject[] = $objectType;
+            }
+        }
+
+        $scoreColumn = "((1 * (MATCH(title) AGAINST('{$against}' IN BOOLEAN MODE))) + (0.6 * (MATCH(content) AGAINST('{$against}' IN BOOLEAN MODE))) )";
+        $results = $this->dao->select("*, {$scoreColumn} as score")
+            ->from(TABLE_SEARCHINDEX)
+            ->where("(MATCH(title) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 or MATCH(content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 $likeCondition)")
+            ->andWhere('objectType')->in($allowedObject)
+            ->andWhere('addedDate')->le(helper::now())
+            ->orderBy('score_desc, editedDate_desc')
+            ->page($pager)
+            ->fetchAll('id');
+
+        foreach($results as $record)
+        {
+            $record->title   = str_replace('</span> ', '</span>', $this->decode($this->markKeywords($record->title, $words)));
+            $record->title   = str_replace('_', '', $record->title);
+            $record->summary = str_replace('</span> ', '</span>', $this->getSummary($record->content, $words));
+            $record->summary = str_replace('_', '', $record->summary);
+
+            $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
+            $method = 'view';
+            if($module == 'deploystep')
+            {   
+                $module = 'deploy';
+                $method = 'viewstep';
+            }
+            $record->url = helper::createLink($module, $method, "id={$record->objectID}");
+        }
+
+        foreach($results as $object)
+        {
+            if($object->objectType == 'program')   $object->url = str_replace('m=program&f=view&',   'm=program&f=view&',  $object->url);
+            if($object->objectType == 'project')   $object->url = str_replace('m=project&f=view&',   'm=program&f=index&', $object->url);
+            if($object->objectType == 'execution') $object->url = str_replace('m=execution&f=view&', 'm=project&f=view&',  $object->url);
+        }
+
+        return $this->checkPriv($results, $pager);
+    }
+
+    /**
+     * Save an index item.
+     * 
+     * @param  string    $objectType article|blog|page|product|thread|reply|
+     * @param  int       $objectID 
+     * @access public
+     * @return void
+     */
+    public function saveIndex($objectType, $object)
+    {
+        $fields = $this->config->search->fields->{$objectType};
+        if(empty($fields)) return true;
+
+        $index = new stdclass();
+        $index->objectID   = $object->{$fields->id};
+        $index->objectType = $objectType;
+        $index->title      = $object->{$fields->title};
+        $index->addedDate  = isset($object->{$fields->addedDate}) ? $object->{$fields->addedDate} : '0000-00-00 00:00:00';
+        $index->editedDate = isset($object->{$fields->editedDate}) ? $object->{$fields->editedDate} : '0000-00-00 00:00:00';
+
+        $index->content = '';
+        $contentFields  = explode(',', $fields->content . ',comment');
+        foreach($contentFields as $field)
+        {   
+            if(empty($field)) continue;
+            $index->content .= $object->$field;
+        }   
+
+        $spliter = $this->app->loadClass('spliter');
+
+        $titleSplited   = $spliter->utf8Split($index->title);
+        $index->title   = $titleSplited['words'];
+        $contentSplited = $spliter->utf8Split(strip_tags($index->content));
+        $index->content = $contentSplited['words'];
+
+        $this->saveDict($titleSplited['dict'] + $contentSplited['dict']);
+        $this->dao->replace(TABLE_SEARCHINDEX)->data($index)->exec();
+        return true;
+    }
+
+    /**
+     * Save dict info. 
+     * 
+     * @param  array    $words 
+     * @access public
+     * @return void
+     */
+    public function saveDict($dict)
+    {
+        foreach($dict as $key => $value)
+        {
+            if(!is_numeric($key) or empty($value) or strlen($key) != 5) continue;
+            $this->dao->replace(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
+        }
+    }
+
+    /**
+     * Transfer unicode to words.
+     * 
+     * @param  string    $string 
+     * @access public
+     * @return void
+     */
+    public function decode($string)
+    {
+        static $dict;
+        if(empty($dict))
+        {
+            $dict = $this->dao->select("concat(`key`, ' ') as `key`, value")->from(TABLE_SEARCHDICT)->fetchPairs();
+            $dict['|'] = '';
+        }
+        if(strpos($string, ' ') === false) return zget($dict, $string . ' ');
+        return trim(str_replace(array_keys($dict), array_values($dict), $string . ' '));
+    }
+
+    /**
+     * Get summary of results.
+     * 
+     * @param  string    $content 
+     * @param  string    $words 
+     * @access public
+     * @return string
+     */
+    public function getSummary($content, $words)
+    {
+        $length = $this->config->search->summaryLength;
+        if(strlen($content) <= $length) return $this->decode($this->markKeywords($content, $words));
+
+        $content = $this->markKeywords($content, $words);
+        preg_match_all("/\<span class='text-danger'\>.*\<\/span\>/U", $content, $matches);
+
+        if(empty($matches[0])) return $this->decode($this->markKeywords(substr($content, 0, $length), $words));
+
+        $matches = $matches[0];
+        $score   = 0;
+        $needle  = '';
+        foreach($matches as $matched) 
+        {
+            if(strlen($matched) > $score) 
+            {
+                $content = str_replace($needle, strip_tags($needle), $content);
+                $needle  = $matched;
+                $score   = strlen($matched);
+            }
+        }
+
+        $content = str_replace('<span class', ' <spanclass', $content);
+        $content = explode(' ', $content);
+
+        $pos     = array_search(str_replace('<span class', '<spanclass', $needle), $content);
+
+        $start   = max(0, $pos - ($length / 2));
+        $summary = join(' ', array_slice($content, $start, $length));
+        $summary = str_replace(' <spanclass', '<span class', $summary);
+ 
+        return $this->decode($summary);
+    }
+
+    /**
+     * Check product and project priv.
+     * 
+     * @param  array    $results 
+     * @access public
+     * @return array
+     */
+    public function checkPriv($results, $pager = null)
+    {
+        $this->loadModel('doc');
+        $products = $this->app->user->view->products;
+        $projects = $this->app->user->view->projects;
+
+        $objectPairs = array();
+        $noPrivNum   = 0;
+        foreach($results as $record) $objectPairs[$record->objectType][$record->objectID] = $record->id;
+
+        foreach($objectPairs as $objectType => $objectIdList)
+        {
+            $objectProducts = array();
+            $objectProjects = array();
+            if(!isset($this->config->objectTables[$objectType])) continue;
+            $table = $this->config->objectTables[$objectType];
+            if(strpos(',bug,case,productplan,release,story,testtask,', ",$objectType,") !== false)
+            {
+               $objectProducts = $this->dao->select('id,product')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('product', 'id');
+            }
+            elseif(strpos(',build,task,testreport,', ",$objectType,") !== false)
+            {
+               $objectProjects = $this->dao->select('id,project')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('project', 'id');
+            }
+            elseif($objectType == 'effort')
+            {
+                $efforts = $this->dao->select('id,product,project')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll();
+                foreach($efforts as $effort)
+                {
+                    $objectProjects[$effort->project][$effort->id] = $effort;
+                    $effortProducts = explode(',', trim($effort->product, ','));
+                    foreach($effortProducts as $effortProduct) $objectProducts[$effortProduct][$effort->id] = $effort;
+                }
+            }
+            elseif($objectType == 'product')
+            {
+                foreach($objectIdList as $productID => $recordID)
+                {
+                    if(strpos(",$products,", ",$productID,") === false)
+                    {
+                        unset($results[$recordID]);
+                        $noPrivNum++;
+                    }
+                }
+            }
+            elseif($objectType == 'project')
+            {
+                foreach($objectIdList as $projectID => $recordID)
+                {
+                    if(strpos(",$projects,", ",$projectID,") === false)
+                    {
+                        unset($results[$recordID]);
+                        $noPrivNum++;
+                    }
+                }
+            }
+            elseif($objectType == 'doc')
+            {
+                $objectDocs = $this->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchAll('id');
+                $privLibs = array();
+                foreach($objectIdList as $docID => $recordID)
+                {
+                    if(!isset($objectDocs[$docID]) or !$this->doc->checkPrivDoc($objectDocs[$docID]))
+                    {
+                        unset($results[$recordID]);
+                        $noPrivNum++;
+                        continue;
+                    }
+                    $objectDoc = $objectDocs[$docID];
+                    $privLibs[$objectDoc->lib] = $objectDoc->lib;
+                }
+
+                $libs = $this->doc->getLibs('all');
+                $objectDocLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('id')->in($privLibs)
+                    ->andWhere('id')->in(array_keys($libs))
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchPairs('id', 'id');
+                foreach($objectDocs as $docID => $doc)
+                {
+                    $libID = $doc->lib;
+                    if(!isset($objectDocLibs[$libID]))
+                    {
+                        $recordID = $objectIdList[$docID];
+                        unset($results[$recordID]);
+                        $noPrivNum++;
+                    }
+                }
+
+            }
+            elseif($objectType == 'todo')
+            {
+                $objectTodos = $this->dao->select('id')->from($table)->where('id')->in(array_keys($objectIdList))->andWhere("private")->eq(1)->fetchPairs('id', 'id');
+                foreach($objectTodos as $todoID)
+                {
+                    if(isset($objectIdList[$todoID]))
+                    {
+                        $recordID = $objectIdList[$todoID];
+                        unset($results[$recordID]);
+                        $noPrivNum++;
+                    }
+                }
+            }
+            elseif($objectType == 'testsuite')
+            {
+                $objectSuites = $this->dao->select('id')->from($table)->where('id')->in(array_keys($objectIdList))
+                    ->andWhere("type")->eq('private')
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchPairs('id', 'id');
+                foreach($objectSuites as $suiteID)
+                {
+                    if(isset($objectIdList[$suiteID]))
+                    {
+                        $recordID = $objectIdList[$suiteID];
+                        unset($results[$recordID]);
+                        $noPrivNum++;
+                    }
+                }
+            }
+
+            foreach($objectProducts as $productID => $idList)
+            {
+                if(empty($productID)) continue;
+                if(strpos(",$products,", ",$productID,") === false)
+                {
+                    foreach($idList as $object)
+                    {
+                        $recordID = $objectIdList[$object->id];
+                        unset($results[$recordID]);
+                        $noPrivNum++;
+                    }
+                }
+            }
+            foreach($objectProjects as $projectID => $idList)
+            {
+                if(empty($projectID)) continue;
+                if(strpos(",$projects,", ",$projectID,") === false)
+                {
+                    foreach($idList as $object)
+                    {
+                        $recordID = $objectIdList[$object->id];
+                        unset($results[$recordID]);
+                        $noPrivNum++;
+                    }
+                }
+            }
+        }
+        if($noPrivNum > 0) $pager->recTotal = $pager->recTotal - $noPrivNum;
+        return $results;
+    }
+
+    /**
+     * Mark keywords in content.
+     * 
+     * @param  string    $content 
+     * @param  string    $keywords 
+     * @access public
+     * @return void
+     */
+    public function markKeywords($content, $keywords)
+    {
+        $words = explode(' ', trim($keywords, ' '));
+        $markedWords = array();
+
+        foreach($words as $key => $word)
+        {
+            if(preg_match('/^\|[0-9]+\|$/', $word))
+            {
+                $words[$key] = trim($word, '|');
+            }
+            elseif(is_numeric($word))
+            {
+                $words[$key] = $word . ' ';
+            }
+            else
+            {
+                $words[$key] = strlen($word) == 5 ? str_replace('_', '', $word) : $word;
+            }
+            $markedWords[] = "<span class='text-danger'>" . $this->decode($word) . "</span > ";
+        }
+
+        $content = str_replace($words, $markedWords, $content . ' ');
+        $content = str_replace("</span > <span class='text-danger'>", '', $content);
+        $content = str_replace("</span >", '</span>', $content);
+
+        return $content;
+    }
+
+    public function buildIndexQuery($type, $testDeleted = true)
+    {
+        $table = $this->config->objectTables[$type];
+        if($type == 'story')
+        {
+            $query = $this->dao->select('DISTINCT t1.*,t2.spec,t2.verify')->from($table)->alias('t1')->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')->where('t1.deleted')->eq(0)->andWhere('t1.version=t2.version');
+        }
+        elseif($type == 'doc')
+        {
+            $query = $this->dao->select('DISTINCT t1.*,t2.content,t2.digest')->from($table)->alias('t1')->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc')->where('t1.deleted')->eq(0)->andWhere('t1.version=t2.version');
+        }
+        else
+        {
+            $data = '';
+            if($testDeleted) $data = $this->dao->select('*')->from($table)->limit(1)->fetch();
+
+            $query = $this->dao->select('t1.*')->from($table)->alias('t1')
+                ->where('1')
+                ->beginIF(isset($data->deleted))->andWhere('t1.deleted')->eq(0)->fi();
+        }
+        return $query;
+    }
+
+    /**
+     * Build all search index.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function buildAllIndex($type = '', $lastID = 0)
+    {
+        $limit      = 100;
+        $nextObject = false;
+        if(empty($type))
+        {
+            $this->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
+            $this->dao->delete()->from(TABLE_SEARCHDICT)->exec();
+            try
+            {
+                $this->dbh->exec('ALTER TABLE ' . TABLE_SEARCHINDEX . ' auto_increment=1');
+            }
+            catch(Exception $e){}
+            $type = key($this->config->search->fields);
+        }
+
+        foreach($this->config->search->fields as $module => $field)
+        {
+            if($module != $type and !$nextObject) continue;
+            if($module == $type) $nextObject = true;
+            if(!isset($this->config->objectTables[$module])) continue;
+
+            while(true)
+            {
+                $query    = $this->buildIndexQuery($module);
+                $dataList = $query->beginIF($lastID)->andWhere('t1.id')->gt($lastID)->fi()->limit($limit)->fetchAll('id');
+                if(empty($dataList))
+                {
+                    $lastID = 0;
+                    break;
+                }
+
+                if($module == 'case') $caseStep = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in(array_keys($dataList))->fetchGroup('case', 'id');
+                $actions = $this->dao->select('*')->from(TABLE_ACTION)
+                    ->where('objectType')->eq($module)
+                    ->andWhere('objectID')->in(array_keys($dataList))
+                    ->orderBy('date asc')
+                    ->fetchGroup('objectID', 'id');
+
+                $files = $this->dao->select('id,objectID,title,extension')->from(TABLE_FILE)
+                    ->where('objectType')->eq($module)
+                    ->andWhere('objectID')->in(array_keys($dataList))
+                    ->orderBy('id asc')
+                    ->fetchGroup('objectID', 'id');
+
+                foreach($dataList as $id => $data)
+                {
+                    $data->comment = '';
+                    if(isset($actions[$id]))
+                    {
+                        foreach($actions[$id] as $action)
+                        {
+                            if($action->action == 'opened')$data->{$field->addedDate} = $action->date;
+                            $data->{$field->editedDate} = $action->date;
+                            if(!empty($action->comment)) $data->comment .= $action->comment . "\n";
+                        }
+                    }
+
+                    if(isset($files[$id]))
+                    {
+                        foreach($files[$id] as $file)
+                        {
+                            if(!empty($file->title)) $data->comment .= $file->title . '.' . $file->extension . "\n";
+                        }
+                    }
+
+                    if($module == 'case')
+                    {
+                        $data->desc   = '';
+                        $data->expect = '';
+                        if(isset($caseStep[$id]))
+                        {
+                            foreach($caseStep[$id] as $step)
+                            {
+                                if($step->version != $data->version) continue;
+                                $data->desc   .= $step->desc . "\n";
+                                $data->expect .= $step->expect . "\n";
+                            }
+                        }
+                    }
+                }
+
+                foreach($dataList as $data) $this->saveIndex($module, $data);
+                return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
+            }
+        }
+        return array('finished' => true);
+    }
+
+    /**
+     * Delete index of an object.
+     * 
+     * @param  string    $objectType 
+     * @param  int       $objectID 
+     * @access public
+     * @return void
+     */
+    public function deleteIndex($objectType, $objectID)
+    {
+        $this->dao->delete()->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->exec();
+        return !dao::isError();
+    }
+
+    public static function unify($string, $to = ',')
+    {   
+        $labels = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
+        $string = str_replace($labels, $to, $string);
+        return preg_replace("/[{$to}]+/", $to, trim($string, $to));
+    }   
 }
