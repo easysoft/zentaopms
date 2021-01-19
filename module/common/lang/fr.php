@@ -203,7 +203,7 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => 'Global Settings|subject|browse|', 'subModule' => 'holiday,custom');
+$lang->system->menu->company   = array('link' => 'Global Settings|subject|browse|', 'subModule' => 'holiday');
 $lang->system->menu->scrum     = array('link' => 'Scrum Model|custom|configurescrum|');
 $lang->system->menu->waterfall = array('link' => 'Waterfall Model|stage|settype|');
 

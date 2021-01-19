@@ -208,7 +208,7 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => '全局设置|subject|browse|', 'subModule' => 'holiday,custom');
+$lang->system->menu->company   = array('link' => '全局设置|subject|browse|', 'subModule' => 'holiday');
 $lang->system->menu->scrum     = array('link' => '敏捷模型|custom|configurescrum|');
 $lang->system->menu->waterfall = array('link' => '瀑布模型|stage|settype|');
 
