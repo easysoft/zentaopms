@@ -710,7 +710,7 @@ class searchModel extends model
     {
         $this->loadModel('doc');
         $products = $this->app->user->view->products;
-        $projects = $this->app->user->view->projects;
+        $projects = $this->app->user->view->sprints;
 
         $objectPairs = array();
         $noPrivNum   = 0;
