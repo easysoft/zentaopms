@@ -210,7 +210,7 @@ $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
 $lang->system->menu->company   = array('link' => 'Global Settings|subject|browse|', 'subModule' => 'holiday');
 $lang->system->menu->scrum     = array('link' => 'Scrum Model|custom|configurescrum|');
-$lang->system->menu->waterfall = array('link' => 'Waterfall Model|stage|settype|');
+$lang->system->menu->waterfall = array('link' => 'Waterfall Model|stage|settype|', 'alias' => 'browse');
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
