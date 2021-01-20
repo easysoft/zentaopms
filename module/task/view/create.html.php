@@ -297,6 +297,6 @@
 <?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php js::set('projectID', $project->id);?>
 <script>
-$(function() {parent.$('body.hide-modal-close').removeClass('hide-modal-close'); })
+$(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>
 <?php include '../../common/view/footer.html.php';?>
