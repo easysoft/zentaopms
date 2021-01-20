@@ -378,7 +378,7 @@ $lang->project->subMenu->more->whitelist = array('link' => 'Whitelist|project|wh
 $lang->project->subMenu->more->action    = array('link' => 'Verlauf|project|dynamic|projectID=%s');
 $lang->project->subMenu->more->view      = array('link' => 'Übersicht|project|view|projectID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 
-$lang->project->dividerMenu = ',project,programplan,projectbuild,story,other,';
+$lang->project->dividerMenu = ',project,programplan,projectbuild,story,doc,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
