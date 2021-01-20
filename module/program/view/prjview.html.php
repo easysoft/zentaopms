@@ -123,7 +123,7 @@
           <div class="detail">
             <div class="detail-title"><strong><?php echo $lang->project->acl;?></strong></div>
             <div class="detail-content">
-              <p><?php echo $lang->project->aclList[$project->acl];?></p>
+              <p><?php echo $lang->program->PGMPRJAclList[$project->acl];?></p>
             </div>
           </div>
           <?php $this->printExtendFields($project, 'div', "position=right&inForm=0&inCell=1");?>
@@ -143,17 +143,18 @@
         if(!$project->deleted)
         {
             echo "<div class='divider'></div>";
-            common::printIcon('project', 'start',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
-            common::printIcon('project', 'activate', "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
-            common::printIcon('project', 'putoff',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
-            common::printIcon('project', 'suspend',  "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
-            common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
+            common::printIcon('program', 'PRJStart',    "projectID=$project->id", $project, 'button', 'play', '', 'iframe', true);
+            common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'button', 'group', '', 'iframe', true);
+            common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'button', 'lock');
+            common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'button', 'magic', '', 'iframe', true);
+            common::printIcon('program', 'PRJSuspend',  "projectID=$project->id", $project, 'button', 'pause', '', 'iframe', true);
+            common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'button', 'off', '', 'iframe', true);
 
             echo $this->buildOperateMenu($project, 'view');
 
             echo "<div class='divider'></div>";
-            common::printIcon('project', 'edit', $params, $project);
-            common::printIcon('project', 'delete', $params, $project, 'button', 'trash', 'hiddenwin');
+            common::printIcon('program', 'PRJEdit', $params, $project, 'button', 'edit');
+            common::printIcon('program', 'PRJDelete', $params, $project, 'button', 'trash', 'hiddenwin');
         }
         ?>
       </div>
