@@ -199,11 +199,6 @@ class product extends control
         {
             $products     = $this->product->getProductsByProject($this->session->PRJ);
             $productPlans = $this->loadModel('project')->getPlans($products);
-            $allPlans     = array();
-            foreach($productPlans as $productPlan)
-            {
-                foreach($productPlan as $id => $plan) $allPlans[$id] = $plan;
-            }
 
             if($projectStoryBrowseType == 'bybranch') $param = $branch;
             $stories = $this->story->getProjectStories($this->session->PRJ, $sort, $projectStoryBrowseType, $param, 'story', '', $pager, $productID, $branch);
@@ -254,7 +249,7 @@ class product extends control
         $this->view->moduleID      = $moduleID;
         $this->view->stories       = $stories;
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
-        $this->view->allPlans      = isset($allPlans) ? $allPlans : array();
+        $this->view->productPlans  = isset($productPlans) ? $productPlans : array();
         $this->view->summary       = $this->product->summary($stories, $storyType);
         $this->view->moduleTree    = $moduleTree;
         $this->view->parentModules = $this->tree->getParents($moduleID);

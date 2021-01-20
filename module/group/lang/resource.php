@@ -191,6 +191,7 @@ $lang->resource->program->PRJSuspend           = 'PRJSuspend';
 $lang->resource->program->PRJClose             = 'PRJClose';
 $lang->resource->program->PRJActivate          = 'PRJActivate';
 $lang->resource->program->PRJDelete            = 'PRJDelete';
+$lang->resource->program->PRJView              = 'PRJView';
 $lang->resource->program->PRJWhitelist         = 'PRJWhitelist';
 $lang->resource->program->PRJAddWhitelist      = 'PRJAddWhitelist';
 $lang->resource->program->unbindWhielist       = 'unbindWhielist';
@@ -232,11 +233,12 @@ $lang->program->methodOrder[155] = 'PRJClose';
 $lang->program->methodOrder[160] = 'PRJActivate';
 $lang->program->methodOrder[165] = 'PRJUpdateOrder';
 $lang->program->methodOrder[170] = 'PRJDelete';
-$lang->program->methodOrder[175] = 'PRJWhitelist';
-$lang->program->methodOrder[180] = 'PRJAddWhitelist';
-$lang->program->methodOrder[185] = 'unbindWhielist';
-$lang->program->methodOrder[190] = 'PRJManageProducts';
-$lang->program->methodOrder[195] = 'view';
+$lang->program->methodOrder[175] = 'PRJView';
+$lang->program->methodOrder[180] = 'PRJWhitelist';
+$lang->program->methodOrder[185] = 'PRJAddWhitelist';
+$lang->program->methodOrder[190] = 'unbindWhielist';
+$lang->program->methodOrder[195] = 'PRJManageProducts';
+$lang->program->methodOrder[200] = 'view';
 
 /* Personnel . */
 $lang->resource->personnel = new stdclass();

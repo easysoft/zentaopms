@@ -455,7 +455,7 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
       </div>
       <div class="modal-body">
         <div class='input-group'>
-          <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
+          <?php echo html::select('plan', $productPlans[$productID], '', "class='form-control chosen' id='plan'");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->project->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
         </div>
       </div>

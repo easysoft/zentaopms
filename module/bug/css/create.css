@@ -38,7 +38,6 @@ html[lang='en'] #deadlineTd .input-group-addon{padding: 5px 18px}
 .title-group .chosen-container {width: 1%!important; min-width: 70px;}
 .title-group #severity + .chosen-container > .chosen-single {border-radius: 0!important;}
 .title-group #pri + .chosen-container > .chosen-single {border-top-left-radius: 0!important; border-bottom-left-radius: 0!important;}
-.title-group .has-icon-right{min-width:700px}
 #mainContent .center-block{padding-bottom:40px;}
 
 #typeBox {width:180px;}
