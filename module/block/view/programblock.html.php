@@ -35,7 +35,7 @@
         </td>
         <?php if($longBlock):?>
         <td><?php echo $project->teamCount;?></td>
-        <td><?php echo $project->consumed . ' ' . $config->hourUnit;?></td>
+        <td><?php echo $project->consumed;?></td>
         <td><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>
         <td><?php echo $project->leftStories;?></td>
         <td><?php echo $project->leftTasks;?></td>

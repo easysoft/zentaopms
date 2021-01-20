@@ -1729,9 +1729,6 @@ class programModel extends model
                 $title = "title='{$PRJProgram}'";
             }
 
-            if($id == 'PRJEstimate') $title = "title={$project->hours->totalEstimate}{$this->config->hourUnit}";
-            if($id == 'PRJConsume')  $title = "title={$project->hours->totalConsumed}{$this->config->hourUnit}";
-
             echo "<td class='c-name " . $class . "' $title>";
             switch($id)
             {
@@ -1769,10 +1766,10 @@ class programModel extends model
                     echo $project->teamCount;
                     break;
                 case 'PRJEstimate':
-                    echo $project->hours->totalEstimate . ' ' . $this->config->hourUnit;
+                    echo $project->hours->totalEstimate;
                     break;
                 case 'PRJConsume':
-                    echo $project->hours->totalConsumed . ' ' . $this->config->hourUnit;
+                    echo $project->hours->totalConsumed;
                     break;
                 case 'PRJSurplus':
                     echo $project->hours->totalLeft;
