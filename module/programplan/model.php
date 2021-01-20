@@ -896,10 +896,11 @@ class programplanModel extends model
         /* Remove the currently edited stage. */
         if(isset($parentStage[$planID])) unset($parentStage[$planID]);
 
+        $plan = $this->getByID($planID);
         foreach($parentStage as $key => $stage)
         {
             $isCreate = $this->isCreateTask($key);
-            if($isCreate === false) unset($parentStage[$key]);
+            if($isCreate === false and $key != $plan->parent) unset($parentStage[$key]);
         }
         $parentStage[0] = $this->lang->programplan->emptyParent;
         ksort($parentStage);
