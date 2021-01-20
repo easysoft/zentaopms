@@ -144,8 +144,6 @@
         {
             echo "<div class='divider'></div>";
             common::printIcon('program', 'PRJStart',    "projectID=$project->id", $project, 'button', 'play', '', 'iframe', true);
-            common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'button', 'group', '', 'iframe', true);
-            common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'button', 'lock');
             common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'button', 'magic', '', 'iframe', true);
             common::printIcon('program', 'PRJSuspend',  "projectID=$project->id", $project, 'button', 'pause', '', 'iframe', true);
             common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'button', 'off', '', 'iframe', true);

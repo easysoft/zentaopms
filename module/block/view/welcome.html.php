@@ -46,7 +46,7 @@
       <div class="row tiles">
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myTask?></div>
-          <div class="tile-amount"><?php echo empty($tasks) ? 0 : html::a($this->createLink('my', 'task', 'type=assignedTo'), (int)$tasks);?></div>
+          <div class="tile-amount"><?php echo empty($tasks) ? 0 : html::a($this->createLink('my', 'work', 'mode=task'), (int)$tasks);?></div>
           <?php if(!empty($delay['task'])):?>
           <div class="tile-info">
           <span class="label label-danger label-outline"><?php echo $lang->block->delayed . ' ' . $delay['task']?></span>
@@ -55,7 +55,7 @@
         </div>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myBug?></div>
-          <div class="tile-amount"><?php echo empty($bugs) ? 0 : html::a($this->createLink('my', 'bug', 'type=assignedTo'), (int)$bugs);?></div>
+          <div class="tile-amount"><?php echo empty($bugs) ? 0 : html::a($this->createLink('my', 'work', 'mode=bug'), (int)$bugs);?></div>
           <?php if(!empty($delay['bug'])):?>
           <div class="tile-info">
           <span class="label label-danger label-outline"><?php echo $lang->block->delayed . ' ' . $delay['bug']?></span>
@@ -64,7 +64,7 @@
         </div>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->myStory?></div>
-          <div class="tile-amount"><?php echo empty($stories) ? 0 : html::a($this->createLink('my', 'story', 'type=assignedTo'), (int)$stories);?></div>
+          <div class="tile-amount"><?php echo empty($stories) ? 0 : html::a($this->createLink('my', 'work', 'mode=story'), (int)$stories);?></div>
         </div>
       </div>
     </div>

@@ -155,7 +155,6 @@ class program extends control
     public function PGMCreate($parentProgramID = 0)
     {
         $this->lang->navGroup->program = 'program';
-
         $parentProgram = $this->program->getPGMByID($parentProgramID);
 
         if($_POST)
@@ -795,6 +794,7 @@ class program extends control
      */
     public function PRJBrowse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->lang->program->menu = $this->lang->PRJ->menu;
         $this->lang->program->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
         $this->app->session->set('PRJBrowse', $this->app->getURI(true));
         $this->app->session->set('whitelist', $this->app->getURI(true));
@@ -859,7 +859,7 @@ class program extends control
      */
     public function PRJCreate($model = 'waterfall', $programID = 0, $from = 'PRJ', $copyProjectID = '')
     {
-        if($from == 'PGM') $this->lang->PRJ->menu = $this->lang->program->menu;
+        if($from == 'PRJ') $this->lang->program->menu = $this->lang->PRJ->menu;
 
         if($_POST)
         {
@@ -962,7 +962,17 @@ class program extends control
         $this->loadModel('productplan');
 
         /* Navigation stay in program when enter from program list. */
-        if($from == 'pgmbrowse') $this->lang->PRJ->menu = $this->lang->program->menu;
+        if($from == 'PRJ') 
+        {
+            $this->lang->program->menu = $this->lang->waterfall->setMenu;
+            $moduleIndex = array_search('program', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+            $this->lang->navGroup->program = 'project';
+        }
+        if($from == 'pgmbrowse') 
+        {
+            $this->lang->navGroup->program = 'program';
+        }
         if($from == 'pgmproject')
         {
             $this->app->rawMethod = 'pgmproject';
@@ -1036,8 +1046,11 @@ class program extends control
      */
     public function PRJView($projectID = 0)
     {
-        $this->lang->navGroup->program = 'project';
         $this->app->loadLang('bug');
+        $this->lang->navGroup->program = 'project';
+        $this->lang->program->menu = $this->lang->waterfall->setMenu;
+        $moduleIndex = array_search('program', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
         $products = $this->loadModel('product')->getProductsByProject($projectID);;
         $linkedBranches = array();
@@ -1071,6 +1084,11 @@ class program extends control
      */
     public function PRJGroup($projectID = 0, $programID = 0)
     {
+        $this->lang->navGroup->program = 'project';
+        $this->lang->program->menu = $this->lang->waterfall->setMenu;
+        $moduleIndex = array_search('program', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
         $position[] = $this->lang->group->browse;
 
@@ -1123,6 +1141,11 @@ class program extends control
      */
     public function PRJManageView($groupID, $projectID, $programID)
     {
+        $this->lang->navGroup->program = 'project';
+        $this->lang->program->menu = $this->lang->waterfall->setMenu;
+        $moduleIndex = array_search('program', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         if($_POST)
         {
             $this->group->updateView($groupID);
@@ -1156,6 +1179,11 @@ class program extends control
      */
     public function PRJManagePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
+        $this->lang->navGroup->program = 'project';
+        $this->lang->program->menu = $this->lang->waterfall->setMenu;
+        $moduleIndex = array_search('program', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         if($type == 'byGroup')
         {
             $groupID = $param;
@@ -1221,6 +1249,11 @@ class program extends control
      */
     public function PRJManageMembers($projectID, $dept = '')
     {
+        $this->lang->navGroup->program = 'project';
+        $this->lang->program->menu = $this->lang->waterfall->setMenu;
+        $moduleIndex = array_search('program', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
@@ -1565,13 +1598,19 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PRJWhitelist($projectID = 0, $programID = 0, $module='program', $from = '', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function PRJWhitelist($projectID = 0, $programID = 0, $module = 'program', $from = 'PRJ', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if($from == 'pgmbrowse') $this->lang->PRJ->menu = $this->lang->program->menu;
+        if($from == 'PRJ') 
+        {
+            $this->lang->navGroup->program = 'project';
+            $this->lang->program->menu = $this->lang->waterfall->setMenu;
+            $moduleIndex = array_search('program', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        }
         if($from == 'pgmproject')
         {
             $this->app->rawMethod = 'pgmproject';
-            $this->lang->navGroup->program       = 'program';
+            $this->lang->navGroup->program     = 'program';
             $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
             $this->program->setPGMViewMenu($programID);
         }
@@ -1589,10 +1628,16 @@ class program extends control
      * @access public
      * @return void
      */
-    public function PRJAddWhitelist($projectID = 0, $deptID = 0, $programID = 0, $from = '')
+    public function PRJAddWhitelist($projectID = 0, $deptID = 0, $programID = 0, $from = 'PRJ')
     {
         /* Navigation stay in program when enter from program list. */
-        if($from == 'pgmbrowse') $this->lang->PRJ->menu = $this->lang->program->menu;
+        if($from == 'PRJ') 
+        {
+            $this->lang->navGroup->program = 'project';
+            $this->lang->program->menu = $this->lang->waterfall->setMenu;
+            $moduleIndex = array_search('program', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        }
         if($from == 'pgmproject')
         {
             $this->app->rawMethod = 'pgmproject';
@@ -1628,7 +1673,13 @@ class program extends control
     public function PRJManageProducts($projectID, $programID = 0, $from = 'PRJ')
     {
         /* Navigation stay in program when enter from program list. */
-        if($from == 'pgmbrowse') $this->lang->PRJ->menu = $this->lang->program->menu;
+        if($from == 'PRJ') 
+        {
+            $this->lang->navGroup->program = 'project';
+            $this->lang->program->menu = $this->lang->waterfall->setMenu;
+            $moduleIndex = array_search('program', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        }
         if($from == 'pgmproject')
         {
             $this->app->rawMethod = 'pgmproject';

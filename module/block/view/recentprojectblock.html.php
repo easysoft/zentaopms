@@ -49,10 +49,10 @@
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='context-dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right cards-menu'>
-                <li><?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'button', 'group');?></li>
-                <li><?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'button', 'persons');?></li>
+                <li><?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'button', 'group', '', '', '', '', '', $project->id);?></li>
+                <li><?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'button', 'persons', '', '', '', '', '', $project->id);?></li>
                 <li><?php common::printicon('program', 'PRJActivate', "projectid=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'PRJEdit',    "projectID=$project->id", $project, 'button', ' icon-edit');?></li>
+                <li><?php common::printIcon('program', 'PRJEdit',    "projectID=$project->id", $project, 'button', ' icon-edit', '', '', '', '', '', $project->id);?></li>
                 <li><?php common::printIcon('program', 'PRJStart',   "projectID=$project->id", $project, 'button', ' icon-play', '', 'iframe', true);?></li>
                 <li><?php common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'button', ' icon-pause', '', 'iframe', true);?></li>
                 <li><?php common::printIcon('program', 'PRJClose',   "projectID=$project->id", $project, 'button', ' icon-off', '', 'iframe', true);?></li>

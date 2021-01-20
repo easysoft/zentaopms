@@ -629,14 +629,6 @@ class commonModel extends model
     {
         global $app, $lang, $config;
 
-        /* If program, return.*/
-        if($moduleName == 'program' and strpos($methodName, 'prj') !== false) $lang->program->menu = $lang->PRJ->menu;
-        if($moduleName == 'program' and $methodName == 'prjview') 
-        {
-            $moduleIndex = array_search('program', $lang->noMenuModule);
-            if($moduleIndex !== false) unset($lang->noMenuModule[$moduleIndex]);
-            $lang->navGroup->program = 'project';
-        }
         if($moduleName == 'product' and $methodName == 'create') return;
 
         /* Set the main main menu. */
@@ -767,7 +759,6 @@ class commonModel extends model
         $moduleName = $app->rawModule;
         $methodName = $app->rawMethod;
         $mainMenu   = $moduleName;
-        if($moduleName == 'program' and $methodName != 'prjview') return;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
 
         /* Set main menu by group. */
@@ -2418,12 +2409,11 @@ EOD;
         if(empty($program)) return;
         if($program->model == 'waterfall')
         {
-            if($moduleName == 'program' and $methodName == 'prjview') $lang->program->menu = $lang->waterfall->setMenu;
             $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
         }
         if($program->model == 'scrum')
         {
-            if($moduleName == 'program' and $methodName == 'prjview') $lang->program->menu = $lang->scrum->setMenu;
+            $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
             unset($lang->stakeholder->menu->issue);
             unset($lang->stakeholder->menu->plan);
             unset($lang->stakeholder->menu->expectation);
