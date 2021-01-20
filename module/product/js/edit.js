@@ -26,11 +26,11 @@ $(function()
             if(singleLinkProjects) alert(PGMChangeTip);
             if(multipleLinkProjects && confirm(confirmChangePGM))
             {
-                $('#comfirmChange').val('yes');
+                $('#confirmChange').val('yes');
             }
             else
             {
-                $('#comfirmChange').val('no');
+                $('#confirmChange').val('no');
             }
         }
     })

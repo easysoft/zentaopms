@@ -545,7 +545,7 @@ class productModel extends model
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,comfirmChange')
+            ->remove('uid,confirmChange')
             ->get();
 
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
@@ -1516,11 +1516,11 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function updateProjects($projects, $programID, $comfirmChange = 'no')
+    public function updateProjects($projects, $programID, $confirmChange = 'no')
     {
         foreach($projects as $project)
         {
-            if((count($project->product) == 1) or $comfirmChange == 'yes')
+            if((count($project->product) == 1) or $confirmChange == 'yes')
             {
                 $this->dao->update(TABLE_PROJECT)
                     ->set('parent')->eq($programID)

@@ -33,7 +33,7 @@
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
             <td><?php echo html::select('program', $programs, $product->program, "class='form-control chosen'");?></td>
-            <td><?php echo html::hidden('comfirmChange', 'no');?></td>
+            <td><?php echo html::hidden('confirmChange', 'no');?></td>
           </tr>
           <?php endif;?>
           <tr>
