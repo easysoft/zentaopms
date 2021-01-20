@@ -25,7 +25,7 @@
     <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printBack($this->server->http_referer, 'btn btn-link');?>
+    <?php common::printBack($this->createLink($this->app->rawModule, 'story'), 'btn btn-link');?>
   </div>
 </div>
 <div id="mainContent">

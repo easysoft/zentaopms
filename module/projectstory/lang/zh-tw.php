@@ -4,7 +4,7 @@ $lang->projectstory->index       = '需求主頁';
 $lang->projectstory->story       = $lang->generalSR;
 $lang->projectstory->track       = '跟蹤矩陣';
 $lang->projectstory->linkStory   = '關聯' . $lang->SRCommon;
-$lang->projectstory->unLinkStory = '移除' . $lang->SRCommon;
+$lang->projectstory->unlinkStory = '移除' . $lang->SRCommon;
 
 global $app;
 $app->loadLang('product');

@@ -492,12 +492,12 @@ $lang->resource->projectstory = new stdclass();
 $lang->resource->projectstory->story       = 'story';
 $lang->resource->projectstory->track       = 'track';
 $lang->resource->projectstory->linkStory   = 'linkStory';
-$lang->resource->projectstory->unLinkStory = 'unLinkStory';
+$lang->resource->projectstory->unlinkStory = 'unlinkStory';
 
 $lang->productplan->methodOrder[5]  = 'story';
 $lang->productplan->methodOrder[10] = 'track';
 $lang->productplan->methodOrder[15] = 'linkStory';
-$lang->productplan->methodOrder[20] = 'unLinkStory';
+$lang->productplan->methodOrder[20] = 'unlinkStory';
 
 /* Release. */
 $lang->resource->release = new stdclass();

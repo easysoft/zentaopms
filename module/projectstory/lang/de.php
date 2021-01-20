@@ -4,7 +4,7 @@ $lang->projectstory->index       = 'Fordern Sie Homepage';
 $lang->projectstory->story       = $lang->generalSR;
 $lang->projectstory->track       = 'Matrix der Verfolgung';
 $lang->projectstory->linkStory   = 'Linked' . $lang->SRCommon;
-$lang->projectstory->unLinkStory = 'UnLinked' . $lang->SRCommon;
+$lang->projectstory->unlinkStory = 'Unlinked' . $lang->SRCommon;
 
 global $app;
 $app->loadLang('product');
