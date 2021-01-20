@@ -991,7 +991,7 @@ class program extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $locateLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse');
+            $locateLink = inLink('PRJView', "projectID=$projectID");
             if($from == 'pgmbrowse')  $locateLink = inLink('PGMBrowse');
             if($from == 'pgmproject') $locateLink = inLink('PGMProject', "programID=$programID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
@@ -1705,7 +1705,7 @@ class program extends control
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            $locateLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJBrowse');
+            $locateLink = inLink('PRJManageProducts', "projectID=$projectID");
             if($from == 'pgmbrowse')  $locateLink = inLink('PGMBrowse');
             if($from == 'pgmproject') $locateLink = inLink('PGMProject', "programID=$programID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));

@@ -28,7 +28,7 @@
 <div id='mainContent' class='main-row fade'>
   <div class='main-col'>
     <?php if(!empty($whitelist)):?>
-    <form class='main-table table-user' data-ride='table' action='' method='post' id='userListForm'>
+    <form class='main-table table-user' action='' method='post' id='userListForm'>
       <table class='table has-sort-head' id='userList'>
         <thead>
         <tr>

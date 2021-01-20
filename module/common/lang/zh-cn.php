@@ -924,7 +924,7 @@ $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
-$lang->menu->scrum->projectsetting = array('link' => '设置|program|prjview|project={PROJECT}', 'subModule' => 'workestimation,durationestimation,budget,pssp', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv');
+$lang->menu->scrum->projectsetting = array('link' => '设置|program|prjview|project={PROJECT}', 'subModule' => 'workestimation,durationestimation,budget,pssp', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
@@ -957,7 +957,7 @@ $lang->menu->waterfall->qa             = '测试|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc');
-$lang->menu->waterfall->projectsetting = array('link' => '设置|program|prjview|project={PROJECT}', 'subModule' => 'workestimation,durationestimation,budget,pssp', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv');
+$lang->menu->waterfall->projectsetting = array('link' => '设置|program|prjview|project={PROJECT}', 'subModule' => 'workestimation,durationestimation,budget,pssp', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
