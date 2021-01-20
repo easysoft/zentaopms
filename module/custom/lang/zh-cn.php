@@ -230,5 +230,10 @@ $lang->custom->conceptOptions->hourPoint['0'] = '工时';
 $lang->custom->conceptOptions->hourPoint['1'] = '故事点';
 $lang->custom->conceptOptions->hourPoint['2'] = '功能点';
 
+$lang->custom->conceptOptions->estimateUnit      = array();
+$lang->custom->conceptOptions->estimateUnit['0'] = '工时(H)';
+$lang->custom->conceptOptions->estimateUnit['1'] = '故事点(SP)';
+$lang->custom->conceptOptions->estimateUnit['2'] = '功能点(FP)';
+
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = '设置项目概念';

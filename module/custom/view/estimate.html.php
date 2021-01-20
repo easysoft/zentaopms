@@ -23,7 +23,7 @@ $lang->custom->system[] = 'estimate';
       <table class='table table-form mw-900px'>
         <tr>
           <th class='thWidth'><?php echo $lang->custom->estimateUnit;?></th>
-          <td class='w-350px'><?php echo html::radio('hourPoint', $lang->custom->conceptOptions->hourPoint, $unit);?></td>
+          <td class='w-350px'><?php echo html::radio('hourPoint', $lang->custom->conceptOptions->estimateUnit, $unit);?></td>
           <td></td>
         </tr>
         <tr class='hidden' id='convertRelations'>

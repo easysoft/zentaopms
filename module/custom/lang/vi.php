@@ -230,5 +230,10 @@ $lang->custom->conceptOptions->hourPoint['0'] = 'giờ';
 $lang->custom->conceptOptions->hourPoint['1'] = 'Điểm';
 $lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';
 
+$lang->custom->conceptOptions->estimateUnit      = array();
+$lang->custom->conceptOptions->estimateUnit['0'] = 'Stunde(H)';
+$lang->custom->conceptOptions->estimateUnit['1'] = 'Story Point(SP)';
+$lang->custom->conceptOptions->estimateUnit['2'] = 'Function Point(FP)';
+
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = 'Set concept';
