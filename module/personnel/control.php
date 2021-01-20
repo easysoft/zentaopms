@@ -114,11 +114,6 @@ class personnel extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Set back link. */
-        if($from == 'pgmbrowse')  $goback = $this->createLink('program', 'PGMBrowse');
-        if($from == 'pgmproject') $goback = $this->createLink('program', 'PGMProject', "programID=$programID");
-        if($from == 'PRJ')        $goback = $this->createLink('program', 'PRJBrowse');
-
         $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->position[] = $this->lang->personnel->whitelist;
 
@@ -127,7 +122,6 @@ class personnel extends control
         $this->view->whitelist = $this->personnel->getWhitelist($objectID, $objectType, $orderBy, $pager);
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->module    = $module;
-        $this->view->goback    = isset($goback) ? $goback : '';
         $this->view->programID = $programID;
         $this->view->from      = $from;
 
@@ -156,13 +150,8 @@ class personnel extends control
             $this->personnel->addWhitelist($objectType, $objectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
-            $locateLink = $this->createLink($module, 'whitelist', "objectID=$objectID");
-            if($module == 'program')
-            {
-                $openModule = $from == 'PRJ' ? 'project' : 'program';
-                $locateLink = $this->createLink('program', 'PRJWhitelist', "objectID=$objectID&programID=$programID&module=$module&from=$from") . "#open=$openModule";
-            }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+            $openModule = $module == 'program' ? ($from == 'PRJ' || $from == 'my' ? '#open=project' : '#open=program') : '';
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->whitelistBrowse . $openModule));
         }
 
         $this->loadModel('dept');

@@ -84,7 +84,7 @@
           <td colspan='6' class='text-left form-actions'>
             <?php echo html::submitButton(); ?>
             <?php $gobackURL = $this->session->whitelistBrowse;?>
-            <?php $dataGroup = $module == 'program' ? ($from == 'PRJ' ? "data-group='project'" : "data-group='program'") : '';?>
+            <?php $dataGroup = $module == 'program' ? ($from == 'PRJ' || $from == 'my' ? "data-group='project'" : "data-group='program'") : '';?>
             <?php echo empty($gobackURL) ? html::backButton() : html::a($gobackURL, $lang->goback, '', "class='btn btn-back btn-wide' $dataGroup");?>
           </td>
         </tr>
