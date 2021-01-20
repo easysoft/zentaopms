@@ -453,7 +453,7 @@ class groupModel extends model
             $data = new stdclass();
             $data->group   = $groupID;
             $data->account = $account;
-            $data->program = implode($programs[$account], ',');
+            $data->PRJ     = implode($programs[$account], ',');
 
             $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
             foreach($programs[$account] as $programID) 

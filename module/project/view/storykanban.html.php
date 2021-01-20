@@ -80,7 +80,7 @@ $account = $this->app->user->account;
                     <?php if($canBeChanged and common::hasPriv('project', 'unlinkStory')):?>
                     <div class='pull-right'><?php echo html::a($this->createLink('project', 'unlinkStory', "projectID=$projectID&story=$story->id"), "<i class='icon icon-unlink icon-sm'></i>", 'hiddenwin', "title='{$lang->project->unlinkStory}'");?></div>
                     <?php endif;?>
-                    <div class='pull-right text-muted story-estimate' title='<?php echo $lang->story->estimate?>'><?php echo $story->estimate . 'h ';?></div>
+                    <div class='pull-right text-muted story-estimate' title='<?php echo $lang->story->estimate?>'><?php echo $story->estimate . "$config->hourUnit ";?></div>
                   </div>
                 </div>
                 <?php endforeach?>

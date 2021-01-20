@@ -1716,10 +1716,10 @@ class programModel extends model
             }
 
             $PRJProgram = '';
-            if($id == 'PRJProgram')
+            if($id == 'PRJProgram' and $project->parent != 0)
             {
                 $programList  = $this->getPGMPairs();
-                $programIndex = strpos($project->path, $programID);
+                $programIndex = $programID ? strpos($project->path, (string)$programID) : 0;
                 $projectIndex = strpos($project->path, $project->id);
                 $programPath  = explode(',' , substr($project->path, $programIndex, $projectIndex - $programIndex));
                 foreach($programPath as $program)

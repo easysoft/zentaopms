@@ -25,7 +25,7 @@
     <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printBack($this->server->http_referer, 'btn btn-link');?>
+    <?php common::printBack($this->createLink($this->app->rawModule, 'story'), 'btn btn-link');?>
   </div>
 </div>
 <div id="mainContent">
@@ -81,7 +81,7 @@
         <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
         <?php endif;?>
         <td><?php echo zget($users, $story->openedBy);?></td>
-        <td class='text-center'><?php echo $story->estimate;?></td>
+        <td class='text-center'><?php echo $story->estimate . $config->hourUnit;?></td>
       </tr>
       <?php $storyCount++;?>
       <?php endforeach;?>

@@ -143,16 +143,16 @@
         if(!$project->deleted)
         {
             echo "<div class='divider'></div>";
-            common::printIcon('program', 'PRJStart',    "projectID=$project->id", $project, 'button', 'play', '', 'iframe', true);
-            common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'button', 'magic', '', 'iframe', true);
-            common::printIcon('program', 'PRJSuspend',  "projectID=$project->id", $project, 'button', 'pause', '', 'iframe', true);
-            common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'button', 'off', '', 'iframe', true);
+            common::printIcon('program', 'PRJStart',    "projectID=$project->id", $project, 'button', 'play', '', 'iframe', true, '', $lang->project->start);
+            common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'button', 'magic', '', 'iframe', true, '', $lang->project->activate);
+            common::printIcon('program', 'PRJSuspend',  "projectID=$project->id", $project, 'button', 'pause', '', 'iframe', true, '', $lang->project->suspend);
+            common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'button', 'off', '', 'iframe', true, '', $lang->close);
 
             echo $this->buildOperateMenu($project, 'view');
 
             echo "<div class='divider'></div>";
-            common::printIcon('program', 'PRJEdit', $params, $project, 'button', 'edit');
-            common::printIcon('program', 'PRJDelete', $params, $project, 'button', 'trash', 'hiddenwin');
+            common::printIcon('program', 'PRJEdit', $params, $project, 'button', 'edit', '', '', '', '', $lang->close);
+            common::printIcon('program', 'PRJDelete', $params, $project, 'button', 'trash', 'hiddenwin', '', '', '', $lang->delete);
         }
         ?>
       </div>

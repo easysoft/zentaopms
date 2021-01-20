@@ -252,6 +252,6 @@
 <?php js::set('storyModule', $lang->story->module);?>
 <?php js::set('storyType', $type);?>
 <script>
-$(function() {parent.$('body.hide-modal-close').removeClass('hide-modal-close'); })
+$(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>
 <?php include '../../common/view/footer.html.php';?>

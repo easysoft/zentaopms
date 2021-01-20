@@ -4,7 +4,7 @@ $lang->projectstory->index       = 'Exigences Accueil';
 $lang->projectstory->story       = $lang->generalSR;
 $lang->projectstory->track       = 'Matrice de suivi';
 $lang->projectstory->linkStory   = 'Linked' . $lang->SRCommon;
-$lang->projectstory->unLinkStory = 'UnLinked' . $lang->SRCommon;
+$lang->projectstory->unlinkStory = 'Unlinked' . $lang->SRCommon;
 
 global $app;
 $app->loadLang('product');

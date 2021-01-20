@@ -58,7 +58,7 @@
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
           <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
           <td><?php echo zget($users, $story->openedBy);?></td>
-          <td><?php echo $story->estimate;?></td>
+          <td><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
           <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
         </tr>
