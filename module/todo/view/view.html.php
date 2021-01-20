@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
+<style>.chosen-container .chosen-results{max-height: 170px; overflow-y: initial;}</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <div class="page-title">

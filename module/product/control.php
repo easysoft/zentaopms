@@ -376,7 +376,7 @@ class product extends control
             /* Change the projects set of the program. */
             if(($_POST['program'] != $product->program) and $projects)
             {
-                $this->product->updateProjects($projects, $_POST['program'], $_POST['comfirmChange']);
+                $this->product->updateProjects($projects, $_POST['program'], $_POST['confirmChange']);
             }
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));

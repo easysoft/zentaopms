@@ -210,7 +210,7 @@ $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
 $lang->system->menu->company   = array('link' => 'Global Settings|subject|browse|', 'subModule' => 'holiday');
 $lang->system->menu->scrum     = array('link' => 'Scrum Model|custom|configurescrum|');
-$lang->system->menu->waterfall = array('link' => 'Waterfall Model|stage|settype|');
+$lang->system->menu->waterfall = array('link' => 'Waterfall Model|stage|settype|', 'alias' => 'browse');
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
@@ -378,7 +378,7 @@ $lang->project->subMenu->more->whitelist = array('link' => 'Whitelist|project|wh
 $lang->project->subMenu->more->action    = array('link' => 'Lịch sử|project|dynamic|projectID=%s');
 $lang->project->subMenu->more->view      = array('link' => 'Tổng quan|project|view|projectID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 
-$lang->project->dividerMenu = ',project,programplan,projectbuild,story,other,';
+$lang->project->dividerMenu = ',project,programplan,projectbuild,story,doc,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();

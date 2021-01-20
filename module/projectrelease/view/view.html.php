@@ -22,7 +22,7 @@
     <div class='page-title'>
       <span class='label label-id'><?php echo $release->id;?></span>
       <span class='text' title='<?php echo $release->name;?>'><?php echo $release->name;?></span>
-      <?php $flagIcon = $release->marker ? "<icon class='icon icon-flag-alt' title='{$lang->release->marker}'></icon> " : '';?>
+      <?php $flagIcon = $release->marker ? "<icon class='icon icon-flag red' title='{$lang->release->marker}'></icon> " : '';?>
       <?php echo $flagIcon;?>
       <?php if($release->deleted):?>
       <span class='label label-danger'><?php echo $lang->release->deleted;?></span>

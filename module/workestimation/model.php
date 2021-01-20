@@ -46,7 +46,10 @@ class workestimationModel extends model
      */
     public function save($projectID)
     {
-        $data = fixer::input('post')->setDefault('PRJ', $projectID)->get();
+        $data = fixer::input('post')
+            ->setDefault('PRJ', $projectID)
+            ->setIF(!isset($_POST['productivity']), 'productivity', 1)
+            ->get();
 
         $budget = $this->getBudget($projectID);
         if(!empty($budget)) $data->id = $budget->id;

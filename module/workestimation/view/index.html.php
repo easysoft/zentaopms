@@ -36,10 +36,11 @@
             <th><?php echo $lang->workestimation->productivity;?></th>
             <td>
               <div class='input-group'>
-                <?php echo html::input('productivity', zget($budget, 'productivity', ''), "class='form-control'");?>
+                <?php $disabled = $hourPoint == 0 ? 'disabled' : '';?>
+                <?php echo html::input('productivity', zget($budget, 'productivity', ''), "class='form-control' $disabled");?>
                 <span class='input-group-addon unify-padding'>
                 <?php
-                  if($hourPoint == 0) echo $lang->custom->unitList['efficiency'] . $lang->hourCommon;
+                  if($hourPoint == 0) echo $lang->hourCommon;
                   if($hourPoint == 1) echo $lang->custom->unitList['efficiency'] . $lang->hourCommon;
                   if($hourPoint == 2) echo $lang->custom->unitList['manhour'] . $lang->custom->unitList['loc'];
                 ?>
