@@ -182,7 +182,7 @@ class programplanModel extends model
             $data = new stdclass();
             $data->id         = $plan->id;
             $data->type       = 'plan';
-            $data->text       = empty($plan->milestone) ? $plan->name : $isMilestone . $plan->name;
+            $data->text       = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone ;
             $data->percent    = $plan->percent;
             $data->attribute  = zget($this->lang->stage->typeList, $plan->attribute);
             $data->milestone  = zget($this->lang->programplan->milestoneList, $plan->milestone);
