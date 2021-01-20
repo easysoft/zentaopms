@@ -173,8 +173,7 @@
             </td>
             <td class='c-user' title='<?php echo zget($users, $story->openedBy);?>'><?php echo zget($users, $story->openedBy);?></td>
             <td class='c-user' title='<?php echo zget($users, $story->assignedTo);?>'><?php echo zget($users, $story->assignedTo);?></td>
-            <?php $unit = zget($this->config->custom, 'hourPoint', '1');?>
-            <td class='c-estimate' title="<?php echo $story->estimate . ' ' . $lang->custom->conceptOptions->hourPoint[$unit];?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+            <td class='c-estimate' title="<?php echo $story->estimate . ' ' . $lang->custom->conceptOptions->hourPoint[$config->custom->hourPoint];?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
             <?php $status = $this->processStatus('story', $story);?>
             <td class='c-status' title='<?php echo $status;?>'>
               <span class='status-story status-<?php echo $story->status;?>'><?php echo $status;?></span>

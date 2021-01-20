@@ -3314,8 +3314,7 @@ class storyModel extends model
             }
             else if($id == 'estimate')
             {
-                $unit = zget($this->config->custom, 'hourPoint', '1');
-                $title = $story->estimate . ' ' . $this->lang->custom->conceptOptions->hourPoint[$unit];
+                $title = $story->estimate . ' ' . $this->lang->custom->conceptOptions->hourPoint[$this->config->custom->hourPoint];
             }
             else if($id == 'reviewedBy')
             {

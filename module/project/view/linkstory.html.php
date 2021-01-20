@@ -81,7 +81,7 @@
         <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
         <?php endif;?>
         <td><?php echo zget($users, $story->openedBy);?></td>
-        <td class='text-center'><?php echo $story->estimate . $config->hourUnit;?></td>
+        <td class='text-center' title="<?php echo $story->estimate . ' ' . $lang->custom->conceptOptions->hourPoint[$config->custom->hourPoint];?>"><?php echo $story->estimate . $config->hourUnit;?></td>
       </tr>
       <?php $storyCount++;?>
       <?php endforeach;?>
