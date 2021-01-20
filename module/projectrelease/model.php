@@ -179,7 +179,8 @@ class projectreleaseModel extends model
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->create->requiredFields, 'notempty')
-            ->check('name', 'unique', "product = {$release->product} AND branch = {$release->branch} AND deleted = '0'");
+            ->check('name', 'unique', "product = {$release->product} AND branch = {$release->branch} AND deleted = '0'")
+            ->exec();
 
         if(dao::isError())
         {
