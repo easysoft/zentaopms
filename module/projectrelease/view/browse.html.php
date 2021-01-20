@@ -62,7 +62,7 @@
         <td><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td>
           <?php 
-          $flagIcon = $release->marker ? "<icon class='icon icon-flag-alt' title='{$lang->release->marker}'></icon> " : '';
+          $flagIcon = $release->marker ? "<icon class='icon icon-flag red' title='{$lang->release->marker}'></icon> " : '';
           echo html::a(inlink('view', "release=$release->id"), $release->name) . $flagIcon;
           ?>
         </td>

@@ -736,7 +736,7 @@ class programplanModel extends model
                 echo sprintf('%03d', $plan->id);
                 break;
             case 'name':
-                $milestoneFlag = $plan->milestone ? " <i class='icon icon-flag' title={$this->lang->programplan->milestone} style='color:red'></i>" : '';
+                $milestoneFlag = $plan->milestone ? " <i class='icon icon-flag red' title={$this->lang->programplan->milestone}'></i>" : '';
                 if($plan->grade > 1) echo '<span class="label label-badge label-light" title="' . $this->lang->programplan->children . '">' . $this->lang->programplan->childrenAB . '</span> ';
                 echo $plan->name . $milestoneFlag;
                 if(!empty($plan->children)) echo '<a class="plan-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
