@@ -46,7 +46,7 @@
         <td class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
         <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->PRJ), $task->name)?></td>
         <?php if($longBlock):?>
-        <td class='c-estimate text-center'><?php echo $task->estimate . ' ' . $config->hourUnit;?></td>
+        <td class='c-estimate text-center'><?php echo $task->estimate;?></td>
         <td class='c-deadline'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
         <?php endif;?>
         <?php $status = $this->processStatus('task', $task);?>

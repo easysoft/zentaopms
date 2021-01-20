@@ -89,14 +89,14 @@
               <?php if($program->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
             </ul>
           </div>
-          <?php common::printIcon('program', 'PRJEdit', "projectID=$program->id&programID=$program->parent&from=pgmbrowse", $program, 'list', 'edit', '', '', '', "data-group='program'");?>
-          <?php common::printIcon('program', 'PRJManageMembers', "projectID=$program->id", $program, 'list', 'group', '', '', '', 'data-group="program"');?>
-          <?php common::printIcon('program', 'PRJGroup',         "projectID=$program->id", $program, 'list', 'lock', '', '', '', 'data-group="program"');?>
+          <?php common::printIcon('program', 'PRJEdit', "projectID=$program->id&programID=$program->parent&from=pgmbrowse", $program, 'list', 'edit', '', '', '', "data-group='program'", '', $program->id);?>
+          <?php common::printIcon('program', 'PRJManageMembers', "projectID=$program->id", $program, 'list', 'group', '', '', '', 'data-group="program"', '', $program->id);?>
+          <?php common::printIcon('program', 'PRJGroup',         "projectID=$program->id", $program, 'list', 'lock', '', '', '', 'data-group="program"', '', $program->id);?>
           <div class='btn-group'>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
-              <?php common::printIcon('program', 'PRJManageProducts', "projectID=$program->id&programID=0&from=pgmbrowse", $program, 'list', 'link', '', '', '', "data-group='program'");?>
-              <?php common::printIcon('program', 'PRJWhitelist',      "projectID=$program->id&programID=0&module=program&from=pgmbrowse", $program, 'list', 'shield-check', '', '', '', "data-group='program'");?>
+              <?php common::printIcon('program', 'PRJManageProducts', "projectID=$program->id&programID=0&from=pgmbrowse", $program, 'list', 'link', '', '', '', "data-group='program'", '', $program->id);?>
+              <?php common::printIcon('program', 'PRJWhitelist',      "projectID=$program->id&programID=0&module=program&from=pgmbrowse", $program, 'list', 'shield-check', '', '', '', "data-group='program'", '', $program->id);?>
               <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
             </ul>
           </div>

@@ -810,8 +810,6 @@ class programModel extends model
      */
     public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
     {
-        if($currentModule == 'program' && ($currentMethod != 'index' && $currentMethod != 'prjview')) return;
-
         $this->loadModel('project');
         $currentProjectName = $this->lang->program->common;
         if($projectID)
@@ -838,7 +836,6 @@ class programModel extends model
      */
     public function getPRJMainAction($module, $method)
     {
-        if($module == 'program' and ($method != 'index' and $method != 'prjview')) return '';
         return common::hasPriv('program', 'prjbrowse') ? html::a(helper::createLink('program', 'prjbrowse'), $this->lang->moreLink, '', "class='btn btn-link'") : '';
     }
 
@@ -1732,9 +1729,6 @@ class programModel extends model
                 $title = "title='{$PRJProgram}'";
             }
 
-            if($id == 'PRJEstimate') $title = "title={$project->hours->totalEstimate}{$this->config->hourUnit}";
-            if($id == 'PRJConsume')  $title = "title={$project->hours->totalConsumed}{$this->config->hourUnit}";
-
             echo "<td class='c-name " . $class . "' $title>";
             switch($id)
             {
@@ -1772,10 +1766,10 @@ class programModel extends model
                     echo $project->teamCount;
                     break;
                 case 'PRJEstimate':
-                    echo $project->hours->totalEstimate . ' ' . $this->config->hourUnit;
+                    echo $project->hours->totalEstimate;
                     break;
                 case 'PRJConsume':
-                    echo $project->hours->totalConsumed . ' ' . $this->config->hourUnit;
+                    echo $project->hours->totalConsumed;
                     break;
                 case 'PRJSurplus':
                     echo $project->hours->totalLeft;
@@ -1799,15 +1793,15 @@ class programModel extends model
 
                     $from       = $project->from == 'PRJ' ? 'PRJ' : 'pgmproject';
                     $openModule = $project->from == 'PRJ' ? 'project' : 'program';
-                    common::printIcon('program', 'PRJEdit', "projectID=$project->id&programID=$project->parent&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$openModule");
-                    common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group');
-                    common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock');
+                    common::printIcon('program', 'PRJEdit', "projectID=$project->id&programID=$project->parent&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$openModule", '', $project->id);
+                    common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', '', '', $project->id);
+                    common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', '', '', $project->id);
 
                     echo "<div class='btn-group'>";
                     echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                     echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$programID&from=$from", $project, 'list', 'link', '', 'btn-action', '', "data-group=$openModule");
-                    common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$programID&module=program&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-group=$openModule");
+                    common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$programID&from=$from", $project, 'list', 'link', '', 'btn-action', '', "data-group=$openModule", '', $project->id);
+                    common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$programID&module=program&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-group=$openModule", '', $project->id);
                     if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
                     echo "</ul>";
                     echo "</div>";

@@ -24,14 +24,14 @@
       <canvas width="100" height="100" style="width: 100px; height: 100px;"></canvas>
       <div class="progress-info">
       <small><?php echo $lang->product->all;?></small>
-      <strong><?php echo empty($total) ? 0 : html::a($this->createLink('product', 'all', "program=0&browseType=all"), $total);?></strong>
+      <strong><?php echo empty($total) ? 0 : html::a($this->createLink('product', 'all', "browseType=all"), $total);?></strong>
       </div>
     </div>
   </div>
   <div class="col-6 text-middle">
     <ul class="list-unstyled status-list">
-    <li><span class="status-product status-unclosed"><?php echo $lang->product->statusList['normal'];?></span> &nbsp; <strong><?php echo empty($normal) ? 0 : html::a($this->createLink('product', 'all', "program=0&browseType=noclosed"), $normal);?></strong></li>
-    <li><span class="status-product status-closed"><?php echo $lang->product->statusList['closed'];?></span> &nbsp; <strong><?php echo empty($closed) ? 0 : html::a($this->createLink('product', 'all', "program=0&browseType=closed"), $closed);?></strong></li>
+    <li><span class="status-product status-unclosed"><?php echo $lang->product->statusList['normal'];?></span> &nbsp; <strong><?php echo empty($normal) ? 0 : html::a($this->createLink('product', 'all', "browseType=noclosed"), $normal);?></strong></li>
+    <li><span class="status-product status-closed"><?php echo $lang->product->statusList['closed'];?></span> &nbsp; <strong><?php echo empty($closed) ? 0 : html::a($this->createLink('product', 'all', "browseType=closed"), $closed);?></strong></li>
     </ul>
   </div>
 </div>
