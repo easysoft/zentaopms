@@ -644,7 +644,7 @@ class testtask extends control
 
         $this->view->task         = $task;
         $this->view->projects     = $this->product->getProjectPairs($productID);
-        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = 'notrunk');
+        $this->view->builds       = $this->loadModel('build')->getProjectBuildPairs($task->project, $productID, $branch = 0, $params = 'noempty,notrunk', $task->build);
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
