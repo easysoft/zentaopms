@@ -53,7 +53,7 @@ $lang->my->menuOrder[55] = 'contacts';
 $lang->todo->menuOrder = $lang->my->menuOrder;
 
 /* product menu order. */
-$lang->product->menuOrder[5] = 'requirement';
+$lang->product->menuOrder[5]  = 'requirement';
 $lang->product->menuOrder[10] = 'story';
 $lang->product->menuOrder[15] = 'track';
 $lang->product->menuOrder[20] = 'plan';

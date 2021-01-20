@@ -2173,11 +2173,20 @@ class projectModel extends model
      */
     public function unlinkStory($projectID, $storyID)
     {
+        $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        if($project->type == 'project')
+        {
+            $executions         = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($projectID)->fetchAll('id');
+            $projectStoryList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll('story');
+            $executionStoryList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchAll('story');
+            $storyIntersect     = array_intersect(array_keys($projectStoryList), array_keys($executionStoryList));
+            if(in_array($storyID, $storyIntersect)) die(js::alert($this->lang->project->notAllowedUnlinkStory));
+        }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->limit(1)->exec();
 
-        $order  = 1;
-        $storys = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order')->fetchAll();
-        foreach($storys as $projectstory)
+        $order   = 1;
+        $stories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order')->fetchAll();
+        foreach($stories as $projectstory)
         {
             if($projectstory->order != $order) $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('project')->eq($projectID)->andWhere('story')->eq($projectstory->story)->exec();
             $order++;

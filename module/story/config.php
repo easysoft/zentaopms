@@ -170,7 +170,7 @@ $config->story->datatable->fieldList['version']['fixed']    = 'no';
 $config->story->datatable->fieldList['version']['width']    = '60';
 $config->story->datatable->fieldList['version']['required'] = 'no';
 
-global $lang;
+global $lang, $app;
 $config->story->datatable->fieldList['taskCount']['title']    = 'T';
 $config->story->datatable->fieldList['taskCount']['fixed']    = 'no';
 $config->story->datatable->fieldList['taskCount']['width']    = '30';
@@ -194,5 +194,5 @@ $config->story->datatable->fieldList['caseCount']['name']     = $lang->story->ca
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
-$config->story->datatable->fieldList['actions']['width']    = '180';
+$config->story->datatable->fieldList['actions']['width']    = $app->rawModule == 'projectstory' ? '200' : '180';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';

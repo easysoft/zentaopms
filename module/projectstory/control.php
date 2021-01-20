@@ -131,5 +131,19 @@ class projectStory extends control
     {
         echo $this->fetch('project', 'linkStory', "projectID=$projectID&browseType=$browseType&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
+
+    /**
+     * Unlink a story.
+     *
+     * @param  int    $projectID
+     * @param  int    $storyID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function unlinkStory($projectID, $storyID, $confirm = 'no')
+    {
+        echo $this->fetch('project', 'unlinkStory', "projectID=$projectID&storyID=$storyID&confirm=$confirm");
+    }
 }
 

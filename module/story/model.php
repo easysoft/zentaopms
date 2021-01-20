@@ -3266,16 +3266,17 @@ class storyModel extends model
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('story', $story);
 
-        $canBatchEdit         = common::hasPriv('story', 'batchEdit');
-        $canBatchClose        = common::hasPriv('story', 'batchClose');
-        $canBatchReview       = common::hasPriv('story', 'batchReview');
-        $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
-        $canBatchChangeBranch = common::hasPriv('story', 'batchChangeBranch');
-        $canBatchChangeModule = common::hasPriv('story', 'batchChangeModule');
-        $canBatchChangePlan   = common::hasPriv('story', 'batchChangePlan');
-        $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
+        $canBatchEdit         = common::hasPriv('story',        'batchEdit');
+        $canBatchClose        = common::hasPriv('story',        'batchClose');
+        $canBatchReview       = common::hasPriv('story',        'batchReview');
+        $canBatchChangeStage  = common::hasPriv('story',        'batchChangeStage');
+        $canBatchChangeBranch = common::hasPriv('story',        'batchChangeBranch');
+        $canBatchChangeModule = common::hasPriv('story',        'batchChangeModule');
+        $canBatchChangePlan   = common::hasPriv('story',        'batchChangePlan');
+        $canBatchAssignTo     = common::hasPriv('story',        'batchAssignTo');
+        $canBatchUnlinkStory  = common::hasPriv('projectstory', 'unlinkStory');
 
-        $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo);
+        $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlinkStory);
 
         $canView   = common::hasPriv('story', 'view');
         $storyLink = helper::createLink('story', 'view', "storyID=$story->id");
@@ -3484,6 +3485,7 @@ class storyModel extends model
                     common::printIcon('story', 'edit',       $vars, $story, 'list');
                     common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
                     common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id", $story, 'list', 'treemap-alt', '', '', '', '', $this->lang->story->subdivide);
+                    if($this->app->rawModule == 'projectstory') common::printIcon('projectstory', 'unlinkStory', "projectID={$this->session->PRJ}&storyID=$story->id", '', 'list', 'unlink', 'hiddenwin');
                 }
                 else
                 {

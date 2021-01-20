@@ -1,9 +1,10 @@
 <?php
-$lang->projectstory->common    = 'Project Requirements';
-$lang->projectstory->index     = 'Request Home';
-$lang->projectstory->story     = $lang->generalSR;
-$lang->projectstory->track     = 'Tracking Matrix';
-$lang->projectstory->linkStory = 'Linked' . $lang->SRCommon;
+$lang->projectstory->common      = 'Project Requirements';
+$lang->projectstory->index       = 'Request Home';
+$lang->projectstory->story       = $lang->generalSR;
+$lang->projectstory->track       = 'Tracking Matrix';
+$lang->projectstory->linkStory   = 'Linked' . $lang->SRCommon;
+$lang->projectstory->unLinkStory = 'UnLinked' . $lang->SRCommon;
 
 global $app;
 $app->loadLang('product');

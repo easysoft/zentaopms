@@ -2174,7 +2174,7 @@ class project extends control
         }
 
         /* Build the search form. */
-        $actionURL    = $this->createLink('project', 'linkStory', "projectID=$projectID&browseType=bySearch&queryID=myQueryID");
+        $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "projectID=$projectID&browseType=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->project->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory');
 
@@ -2237,7 +2237,8 @@ class project extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->project->confirmUnlinkStory, $this->createLink('project', 'unlinkstory', "projectID=$projectID&storyID=$storyID&confirm=yes")));
+            $tip = $this->app->rawModule == 'projectstory' ? $this->lang->project->confirmUnlinkProjectStory : $this->lang->project->confirmUnlinkStory;
+            die(js::confirm($tip, $this->createLink('project', 'unlinkstory', "projectID=$projectID&storyID=$storyID&confirm=yes")));
         }
         else
         {
