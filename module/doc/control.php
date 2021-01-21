@@ -402,7 +402,7 @@ class doc extends control
     {
         if(!empty($_POST))
         {
-            if($comment == false)
+            if($comment == false || $comment == 'false')
             {
                 $result = $this->doc->update($docID);
                 if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
