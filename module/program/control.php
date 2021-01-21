@@ -965,14 +965,14 @@ class program extends control
         $this->loadModel('productplan');
 
         /* Navigation stay in program when enter from program list. */
-        if($from == 'PRJ') 
+        if($from == 'PRJ')
         {
             $this->lang->program->menu = $this->lang->waterfall->setMenu;
             $moduleIndex = array_search('program', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
             $this->lang->navGroup->program = 'project';
         }
-        if($from == 'pgmbrowse') 
+        if($from == 'pgmbrowse')
         {
             $this->lang->navGroup->program = 'program';
         }
@@ -1006,6 +1006,18 @@ class program extends control
         $linkedProducts = $programID != $project->parent ? array() : $this->project->getProducts($projectID);
         $parentProgram  = $this->program->getPGMByID($programID);
 
+        /* If the story of the product which linked the execution under the project, you don't allow to remove the product. */
+        $projectStories     = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll('story');
+        $projectStoryIdList = array_keys($projectStories);
+        $notRemoveProducts  = array();
+        foreach($linkedProducts as $productID => $linkedProduct)
+        {
+            $productStories     = $this->loadModel('story')->getProductStories($productID);
+            $productStoryIdList = array_keys($productStories);
+            $storyIntersect     = array_intersect($projectStoryIdList, $productStoryIdList);
+            if(!empty($storyIntersect)) array_push($notRemoveProducts, $productID);
+        }
+
         foreach($linkedProducts as $product)
         {
             if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
@@ -1020,20 +1032,21 @@ class program extends control
         $this->view->title      = $this->lang->program->PRJEdit;
         $this->view->position[] = $this->lang->program->PRJEdit;
 
-        $this->view->PMUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->project        = $project;
-        $this->view->programList    = $this->program->getParentPairs();
-        $this->view->programID      = $programID;
-        $this->view->allProducts    = array('0' => '') + $allProducts;
-        $this->view->productPlans   = $productPlans;
-        $this->view->linkedProducts = $linkedProducts;
-        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
-        $this->view->URSRPairs      = $this->loadModel('custom')->getURSRPairs();
-        $this->view->from           = $from;
-        $this->view->parentProgram  = $parentProgram;
-        $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram) + $project->budget;
-        $this->view->budgetUnitList = $this->program->getBudgetUnitList();
+        $this->view->PMUsers           = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->users             = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->project           = $project;
+        $this->view->programList       = $this->program->getParentPairs();
+        $this->view->programID         = $programID;
+        $this->view->allProducts       = array('0' => '') + $allProducts;
+        $this->view->productPlans      = $productPlans;
+        $this->view->linkedProducts    = $linkedProducts;
+        $this->view->notRemoveProducts = $notRemoveProducts;
+        $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
+        $this->view->URSRPairs         = $this->loadModel('custom')->getURSRPairs();
+        $this->view->from              = $from;
+        $this->view->parentProgram     = $parentProgram;
+        $this->view->remainBudget      = $this->program->getParentRemainBudget($parentProgram) + $project->budget;
+        $this->view->budgetUnitList    = $this->program->getBudgetUnitList();
 
         $this->display();
     }

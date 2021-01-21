@@ -269,6 +269,7 @@ $lang->project->confirmUnlinkMember       = "您確定從該{$lang->executionCom
 $lang->project->confirmUnlinkStory        = "您確定從該{$lang->executionCommon}中移除該{$lang->SRCommon}嗎？";
 $lang->project->confirmUnlinkProjectStory = "您確定從該項目中移除該{$lang->SRCommon}嗎？";
 $lang->project->notAllowedUnlinkStory     = "該{$lang->SRCommon}已經與項目下{$lang->executionCommon}相關聯，請從{$lang->executionCommon}中移除後再操作。";
+$lang->project->notAllowRemoveProducts    = "該產品中的需求已與該{$lang->executionCommon}進行了關聯，請取消關聯後再操作。";
 $lang->project->errorNoLinkedProducts     = "該{$lang->executionCommon}沒有關聯的{$lang->productCommon}，系統將轉到{$lang->productCommon}關聯頁面";
 $lang->project->errorSameProducts         = "{$lang->executionCommon}不能關聯多個相同的{$lang->productCommon}。";
 $lang->project->accessDenied              = "您無權訪問該{$lang->executionCommon}！";

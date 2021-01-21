@@ -26,7 +26,7 @@
           <?php if(isset($linkedProducts[$productID])):?>
           <?php $isDisabled = in_array($productID, $notRemoveProducts) ? "disabled='disabled'" : '';?>
           <?php $title      = in_array($productID, $notRemoveProducts) ? $lang->program->notAllowRemoveProducts : $productName;?>
-          <?php $checked = 'checked';?>
+          <?php $checked    = 'checked';?>
           <div class='col-sm-4'>
             <div class='product <?php echo $checked . (isset($branchGroups[$productID]) ? ' has-branch' : '')?>'>
               <div class="checkbox-primary" title='<?php echo $title;?>'>

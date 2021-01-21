@@ -1288,6 +1288,19 @@ class project extends control
 
         $linkedProducts = $this->project->getProducts($project->id);
         $linkedBranches = array();
+
+        /* If the story of the product which linked the execution, you don't allow to remove the product. */
+        $projectStories     = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll('story');
+        $projectStoryIdList = array_keys($projectStories);
+        $notRemoveProducts  = array();
+        foreach($linkedProducts as $productID => $linkedProduct)
+        {
+            $productStories     = $this->loadModel('story')->getProductStories($productID);
+            $productStoryIdList = array_keys($productStories);
+            $storyIntersect     = array_intersect($projectStoryIdList, $productStoryIdList);
+            if(!empty($storyIntersect)) array_push($notRemoveProducts, $productID);
+        }
+
         foreach($linkedProducts as $product)
         {
             if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
@@ -1326,21 +1339,22 @@ class project extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $project->RD, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
-        $this->view->title          = $title;
-        $this->view->position       = $position;
-        $this->view->projects       = $projects;
-        $this->view->project        = $project;
-        $this->view->poUsers        = $poUsers;
-        $this->view->pmUsers        = $pmUsers;
-        $this->view->qdUsers        = $qdUsers;
-        $this->view->rdUsers        = $rdUsers;
-        $this->view->users          = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->groups         = $this->loadModel('group')->getPairs();
-        $this->view->allProducts    = $allProducts;
-        $this->view->linkedProducts = $linkedProducts;
-        $this->view->productPlans   = $productPlans;
-        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
-        $this->view->isStage        = $PRJData->model == 'waterfall' ? true : false;
+        $this->view->title             = $title;
+        $this->view->position          = $position;
+        $this->view->projects          = $projects;
+        $this->view->project           = $project;
+        $this->view->poUsers           = $poUsers;
+        $this->view->pmUsers           = $pmUsers;
+        $this->view->qdUsers           = $qdUsers;
+        $this->view->rdUsers           = $rdUsers;
+        $this->view->users             = $this->user->getPairs('nodeleted|noclosed');
+        $this->view->groups            = $this->loadModel('group')->getPairs();
+        $this->view->allProducts       = $allProducts;
+        $this->view->linkedProducts    = $linkedProducts;
+        $this->view->notRemoveProducts = $notRemoveProducts;
+        $this->view->productPlans      = $productPlans;
+        $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
+        $this->view->isStage           = $PRJData->model == 'waterfall' ? true : false;
         $this->display();
     }
 
@@ -1994,6 +2008,19 @@ class project extends control
         $allProducts     = $this->product->getProductPairsByProject($project->project);
         $linkedProducts  = $this->project->getProducts($project->id);
         $linkedBranches  = array();
+
+        /* If the story of the product which linked the execution, you don't allow to remove the product. */
+        $projectStories     = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll('story');
+        $projectStoryIdList = array_keys($projectStories);
+        $notRemoveProducts  = array();
+        foreach($linkedProducts as $productID => $linkedProduct)
+        {
+            $productStories     = $this->loadModel('story')->getProductStories($productID);
+            $productStoryIdList = array_keys($productStories);
+            $storyIntersect     = array_intersect($projectStoryIdList, $productStoryIdList);
+            if(!empty($storyIntersect)) array_push($notRemoveProducts, $productID);
+        }
+
         // Merge allProducts and linkedProducts for closed product.
         foreach($linkedProducts as $product)
         {
@@ -2002,12 +2029,13 @@ class project extends control
         }
 
         /* Assign. */
-        $this->view->title          = $title;
-        $this->view->position       = $position;
-        $this->view->allProducts    = $allProducts;
-        $this->view->project        = $project;
-        $this->view->linkedProducts = $linkedProducts;
-        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
+        $this->view->title             = $title;
+        $this->view->position          = $position;
+        $this->view->allProducts       = $allProducts;
+        $this->view->project           = $project;
+        $this->view->linkedProducts    = $linkedProducts;
+        $this->view->notRemoveProducts = $notRemoveProducts;
+        $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 
         $this->display();
     }

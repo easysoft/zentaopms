@@ -20,6 +20,8 @@
 <?php js::set('PGMChangeTips', $lang->program->PGMChangeTips);?>
 <?php js::set('longTime', $lang->program->PRJLongTime);?>
 <?php js::set('from', $from);?>
+<?php js::set('notRemoveProducts', $notRemoveProducts)?>
+<?php js::set('tip', $lang->program->notAllowRemoveProducts);?>
 <?php $aclList = $project->parent ? $lang->program->PGMPRJAclList : $lang->program->PRJAclList;?>
 <?php $requiredFields = $config->program->PRJEdit->requiredFields;?>
 <div id='mainContent' class='main-content'>

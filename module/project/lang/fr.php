@@ -275,6 +275,7 @@ $lang->project->confirmUnlinkMember       = "Voulez-vous retirer cet utilisateur
 $lang->project->confirmUnlinkStory        = "Voulez-vous retirer cette Story du {$lang->executionCommon} ?";
 $lang->project->confirmUnlinkProjectStory = "Do you want to unlink this Story from the project?";
 $lang->project->notAllowedUnlinkStory     = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the project. Remove it from the {$lang->executionCommon}, then try again.";
+$lang->project->notAllowRemoveProducts    = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
 $lang->project->errorNoLinkedProducts     = "Aucun {$lang->productCommon} n'est associé à ce {$lang->executionCommon}. Vous allez être redirigé vers la page {$lang->productCommon} pour en associer un.";
 $lang->project->errorSameProducts         = "Ce {$lang->executionCommon} ne peut pas être associé deux fois au même {$lang->productCommon}. Imaginez un peu les résultats !";
 $lang->project->accessDenied              = "Votre accès au {$lang->executionCommon} est refusé ! Désolé.";

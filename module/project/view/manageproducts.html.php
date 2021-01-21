@@ -25,11 +25,13 @@
           <?php $class = $project->grade == 2 ? "disabled='disabled'" : '';?>
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
-          <?php $checked = 'checked';?>
+          <?php $isDisabled = in_array($productID, $notRemoveProducts) ? "disabled='disabled'" : '';?>
+          <?php $title      = in_array($productID, $notRemoveProducts) ? $lang->project->notAllowRemoveProducts : $productName;?>
+          <?php $checked    = 'checked';?>
           <div class='col-sm-4'>
             <div class='product <?php echo $checked . (isset($branchGroups[$productID]) ? ' has-branch' : '')?>'>
-              <div class="checkbox-primary" title='<?php echo $productName;?>'>
-                <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' $checked $class id='products{$productID}'>";?>
+              <div class="checkbox-primary" title='<?php echo $title;?>'>
+                <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' $checked $class id='products{$productID}' $isDisabled>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $productName;?>'><?php echo $productName;?></label>
               </div>
               <?php if(isset($branchGroups[$productID])) echo html::select("branch[$productID]", $branchGroups[$productID], $linkedProducts[$productID]->branch, "class='form-control chosen' $class");?>

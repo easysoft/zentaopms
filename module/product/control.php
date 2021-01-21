@@ -124,7 +124,6 @@ class product extends control
     {
         /* Lower browse type. */
         $browseType             = strtolower($browseType);
-        $projectStoryBrowseType = $browseType;
 
         /* Load datatable. */
         $this->loadModel('datatable');
@@ -200,8 +199,8 @@ class product extends control
             $products     = $this->product->getProductsByProject($this->session->PRJ);
             $productPlans = $this->loadModel('project')->getPlans($products);
 
-            if($projectStoryBrowseType == 'bybranch') $param = $branch;
-            $stories = $this->story->getProjectStories($this->session->PRJ, $sort, $projectStoryBrowseType, $param, 'story', '', $pager, $productID, $branch);
+            if($browseType == 'bybranch') $param = $branch;
+            $stories = $this->story->getProjectStories($this->session->PRJ, $sort, $browseType, $param, 'story', '', $pager, $productID, $branch);
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
