@@ -59,8 +59,8 @@
             echo '</button>';
             echo "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
             $storyModuleID = (int)$this->cookie->storyModuleParam;
-            if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id#open=project"), $lang->story->create, '', "data-group='project'") . '</li>';
-            if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id#open=project"), $lang->story->batchCreate, '', "data-group='project'") . '</li>';
+            if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->create, '', "data-group='project'") . '</li>';
+            if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->batchCreate, '', "data-group='project'") . '</li>';
             echo '</ul>';
             echo '</div>';
         }

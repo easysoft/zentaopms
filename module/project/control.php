@@ -2215,7 +2215,7 @@ class project extends control
             $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
 
-        if($project->project != 0) $stories = $this->story->getProjectStoryPairs($project->project);
+        if($project->project != 0) $projectStories = $this->story->getProjectStoryPairs($project->project);
 
         $prjStories = $this->story->getProjectStoryPairs($projectID);
         foreach($allStories as $id => $story)
@@ -2223,7 +2223,7 @@ class project extends control
             if(isset($prjStories[$story->id])) unset($allStories[$id]);
 
             if($story->parent < 0) unset($allStories[$id]);
-            if(!empty($stories) and !isset($stories[$story->id])) unset($allStories[$id]);
+            if(!empty($projectStories) and !isset($projectStories[$story->id])) unset($allStories[$id]);
         }
 
         /* Pager. */
@@ -2237,18 +2237,18 @@ class project extends control
         $position[] = html::a($browseLink, $project->name);
         $position[] = $this->lang->project->linkStory;
 
-        $this->view->title        = $title;
-        $this->view->position     = $position;
-        $this->view->project      = $project;
-        $this->view->products     = $products;
-        $this->view->stories      = empty($stories) ? '' : $stories;
-        $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
-        $this->view->pager        = $pager;
-        $this->view->browseType   = $browseType;
-        $this->view->productType  = $productType;
-        $this->view->modules      = $modules;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->branchGroups = $branchGroups;
+        $this->view->title          = $title;
+        $this->view->position       = $position;
+        $this->view->project        = $project;
+        $this->view->products       = $products;
+        $this->view->projectStories = empty($projectStories) ? '' : $projectStories;
+        $this->view->allStories     = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
+        $this->view->pager          = $pager;
+        $this->view->browseType     = $browseType;
+        $this->view->productType    = $productType;
+        $this->view->modules        = $modules;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->branchGroups   = $branchGroups;
         $this->display();
     }
 
