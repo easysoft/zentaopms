@@ -1,1 +1,2 @@
-.row > .col-sm-12:first-child {padding-bottom: 20px;}
+.block-dynamic .panel-body {height: 230px; overflow: auto; position: relative;}
+.block-team div.col-xs-6{white-space: nowrap; overflow: hidden;}

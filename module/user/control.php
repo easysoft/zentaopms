@@ -389,8 +389,8 @@ class user extends control
         /* Change the menu when in my module. */
         $this->resetMenu($fromModule);
 
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
-        $this->view->position[] = $this->lang->user->project;
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
+        $this->view->position[] = $this->lang->user->execution;
         $this->view->fromModule = $fromModule;
         $this->view->tabID      = 'project';
         $this->view->executions = $this->user->getProjects($account, array('sprint', 'stage'), 'all', $pager);
