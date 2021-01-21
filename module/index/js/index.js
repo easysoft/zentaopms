@@ -75,6 +75,7 @@
             if(methodLowerCase === 'view'       && (link.params.from || link.params.$3) == 'product') return 'product';
             if(methodLowerCase === 'edit'       && (link.params.from || link.params.$3) == 'product') return 'product';
             if(methodLowerCase === 'delete'     && (link.params.from || link.params.$3) == 'product') return 'product';
+            if(methodLowerCase === 'create'     && (link.params.from || link.params.$4) == 'product') return 'product';
             return 'doc';
         }
         if(moduleName === 'custom' && ['estimate', 'browsestoryconcept', 'configurescrum'].includes(methodLowerCase))

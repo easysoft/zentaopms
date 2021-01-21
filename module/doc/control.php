@@ -309,9 +309,7 @@ class doc extends control
      *
      * @param  int|string   $libID
      * @param  int          $moduleID
-     * @param  int          $productID
-     * @param  int          $projectID
-     * @param  string       $from
+     * @param  string       $docType
      * @access public
      * @return void
      */

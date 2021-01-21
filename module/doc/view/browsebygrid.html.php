@@ -31,7 +31,7 @@
             <ul class='dropdown-menu'>
               <?php foreach($lang->doc->typeList as $typeKey => $typeName):?>
               <?php $class = strpos($config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';?>
-              <li><?php echo html::a($this->createLink('doc', 'create', "libID=$libID&moduleID=$moduleID&type=$typeKey"), $typeName, '', "class='$class'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'create', "libID=$libID&moduleID=$moduleID&type=$typeKey&from={$lang->navGroup->doc}"), $typeName, '', "class='$class'");?></li>
               <?php endforeach;?>
             </ul>
           </div>
@@ -50,7 +50,7 @@
         <?php if($libID):?>
         <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
         <?php if(common::hasPriv('doc', 'create')):?>
-        <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}&moduleID=$moduleID"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
+        <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}&moduleID=$moduleID&type=&from={$lang->navGroup->doc}"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
         <?php endif;?>
         <?php elseif($browseType == 'byediteddate'):?>
         <span class="text-muted"><?php echo $lang->doc->noEditedDoc;?></span>
