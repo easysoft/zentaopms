@@ -184,7 +184,9 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
       <p>
         <span class="text-muted"><?php echo $storyType == 'story' ? $lang->story->noStory : $lang->story->noRequirement;?></span>
         <?php if(common::canModify('product', $product) and common::hasPriv('story', 'create')):?>
-        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->createCommon, '', "class='btn btn-info'");?>
+        <?php $projectID  = $this->app->rawModule == 'projectstory' ? $this->session->PRJ : 0;?>
+        <?php $openModule = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
+        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->createCommon, '', "class='btn btn-info' data-group='$openModule'");?>
         <?php endif;?>
       </p>
     </div>
