@@ -1056,6 +1056,8 @@ class program extends control
         $moduleIndex = array_search('program', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
+        $this->app->session->set('PRJEdit', $this->app->getURI(true));
+
         $products = $this->loadModel('product')->getProductsByProject($projectID);;
         $linkedBranches = array();
         foreach($products as $product)
