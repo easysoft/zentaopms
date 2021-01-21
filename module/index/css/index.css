@@ -103,7 +103,7 @@ body.menu-hide {padding-left: 0;}
 
 @media screen and (max-height: 768px)
 {
-  .version-name {width: 25%;}
+  .version-name {width: 25%; text-overflow:ellipsis; white-space: nowrap;}
   .version-date {width: 20%; color: #8a8a8a;}
   .version-explain {width: 25%; color: #8a8a8a; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;}
   .version-actions {width: 30%;}

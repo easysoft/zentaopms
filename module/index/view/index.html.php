@@ -98,7 +98,7 @@ js::set('defaultOpen', $open);
           <tbody>
             <?php foreach($latestVersionList as $version):?>
             <tr>
-              <td class='version-name'><?php echo $lang->zentaoPMS . $version->name;?></td>
+              <td class='version-name' title='<?php echo $lang->zentaoPMS . $version->name;?>'><?php echo $lang->zentaoPMS . $version->name;?></td>
               <td class='version-date'><?php echo $version->date;?></td>
               <td class='version-explain' title='<?php echo $version->explain;?>'><?php echo $version->explain;?></td>
               <td class='version-actions text-center'>

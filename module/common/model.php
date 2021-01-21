@@ -177,6 +177,7 @@ class commonModel extends model
         if($module == 'sso' and $method == 'gettodolist') return true;
         if($module == 'block' and $method == 'main' and isset($_GET['hash'])) return true;
         if($module == 'file' and $method == 'read') return true;
+        if($module == 'index' and $method == 'changelog') return true;
 
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
