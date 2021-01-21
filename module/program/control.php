@@ -52,9 +52,6 @@ class program extends control
      *
      * @param  varchar $status
      * @param  varchar $orderBy
-     * @param  int     $recTotal
-     * @param  int     $recPerPage
-     * @param  int     $pageID
      * @access public
      * @return void
      */
