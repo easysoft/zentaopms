@@ -22,7 +22,7 @@ $lang->stage->common  = '阶段';
 $lang->stage->id      = '编号';
 $lang->stage->name    = '阶段名称';
 $lang->stage->type    = '阶段分类';
-$lang->stage->percent = '工作量比例';
+$lang->stage->percent = '工作量占比';
 $lang->stage->setType = '阶段类型';
 
 $lang->stage->typeList['request'] = '需求';

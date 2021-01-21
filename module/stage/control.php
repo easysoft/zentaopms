@@ -18,7 +18,7 @@ class stage extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = "id_desc")
+    public function browse($orderBy = "id_asc")
     {
         $this->view->stages      = $this->stage->getStages($orderBy);
         $this->view->orderBy     = $orderBy;
