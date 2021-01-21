@@ -77,14 +77,14 @@
               <?php if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
               </ul>
             </div>
-            <?php common::printIcon('program', 'PRJEdit', "projectID=$project->id&programID=$project->parent", $project, 'list', 'edit', '',  '', false, "data-group='project'");?>
+            <?php common::printIcon('program', 'PRJEdit', "projectID=$project->id&programID=$project->parent&from=PRJ", $project, 'list', 'edit', '',  '', false, "data-group='project'");?>
             <?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', false, "data-group='project'");?>
             <?php common::printIcon('program', 'PRJGroup',         "projectID=$project->id", $project, 'list', 'lock', '',  '', false, "data-group='project'");?>
             <div class='btn-group'>
               <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
               <ul class='dropdown-menu pull-right text-center' role='menu'>
-                <?php common::printIcon('program', 'PRJManageProducts', "projectID=$project->id", $project, 'list', 'link', '', '', false, "data-group='project'");?>
-                <?php common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$project->parent&module=program&from=my", $project, 'list', 'shield-check', '', '', false, "data-group='project'");?>
+                <?php common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$project->parent&from=PRJ", $project, 'list', 'link', '', '', false, "data-group='project'");?>
+                <?php common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$project->parent&module=program&from=PRJ", $project, 'list', 'shield-check', '', '', false, "data-group='project'");?>
                 <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
               </ul>
             </div>

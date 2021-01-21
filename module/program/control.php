@@ -66,6 +66,7 @@ class program extends control
         if(common::hasPriv('program', 'pgmcreate')) $this->lang->pageActions = html::a($this->createLink('program', 'pgmcreate'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PGMCreate, '', "class='btn btn-secondary'");
 
         $this->app->session->set('programList', $this->app->getURI(true));
+        $this->app->session->set('PRJEdit', $this->app->getURI(true));
         $this->app->session->set('whitelist', $this->app->getURI(true));
         $this->app->session->set('PRJManageProducts', $this->app->getURI(true));
 
@@ -418,6 +419,7 @@ class program extends control
         if(!$programID) $this->locate($this->createLink('program', 'PGMbrowse')); 
         setCookie("lastPGM", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
+        $this->app->session->set('PRJEdit', $this->app->getURI(true));
         $this->app->session->set('whitelist', $this->app->getURI(true));
         $this->app->session->set('PRJManageProducts', $this->app->getURI(true));
 
@@ -799,6 +801,7 @@ class program extends control
         $this->lang->program->menu = $this->lang->PRJ->menu;
         $this->lang->program->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
         $this->app->session->set('PRJBrowse', $this->app->getURI(true));
+        $this->app->session->set('PRJEdit', $this->app->getURI(true));
         $this->app->session->set('whitelist', $this->app->getURI(true));
         $this->app->session->set('PRJManageProducts', $this->app->getURI(true));
         $this->loadModel('datatable');
@@ -994,9 +997,7 @@ class program extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $locateLink = inLink('PRJView', "projectID=$projectID");
-            if($from == 'pgmbrowse')  $locateLink = inLink('PGMBrowse');
-            if($from == 'pgmproject') $locateLink = inLink('PGMProject', "programID=$programID");
+            $locateLink = $this->session->PRJEdit ? $this->session->PRJEdit : inLink('PRJView', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
@@ -1719,7 +1720,7 @@ class program extends control
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
             $locateLink = $this->session->PRJManageProducts ? $this->session->PRJManageProducts : inLink('PRJManageProducts', "projectID=$projectID");
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->PRJManageProducts));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
         $this->loadModel('product');
