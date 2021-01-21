@@ -85,7 +85,7 @@
               <ul class='dropdown-menu pull-right text-center' role='menu'>
                 <?php common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$project->parent&from=PRJ", $project, 'list', 'link', '', '', false, "data-group='project'", '', $project->id);?>
                 <?php common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$project->parent&module=program&from=PRJ", $project, 'list', 'shield-check', '', '', false, "data-group='project'", '', $project->id);?>
-                <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}'");?>
+                <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}' data-group='my'");?>
               </ul>
             </div>
           </td>

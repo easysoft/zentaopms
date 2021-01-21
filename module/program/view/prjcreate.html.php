@@ -35,7 +35,7 @@
           <th class='w-120px'><?php echo $lang->program->PGMParent;?></th>
           <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
           <td>
-            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content=<?php echo $lang->program->PGMTips;?>></icon>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->program->PGMTips;?>"></icon>
           </td>
           <td></td>
         </tr>

@@ -39,12 +39,6 @@
           <th><?php echo $lang->program->PRJName;?></th>
           <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td><td></td><td></td>
         </tr>
-        <?php if($project->model == 'waterfall'):?>
-        <tr>
-          <th><?php echo $lang->program->PRJCategory;?></th>
-          <td><?php echo html::select('product', $lang->program->PRJCategoryList, $project->product, "class='form-control'");?></td><td></td><td></td>
-        </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->program->PRJPM;?></th>
           <td><?php echo html::select('PM', $PMUsers, $project->PM, "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
