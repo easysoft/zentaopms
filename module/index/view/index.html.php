@@ -78,10 +78,10 @@ js::set('defaultOpen', $open);
       <table class='table has-sort-head'>
         <thead>
           <tr>
-            <th class='w-60px'><?php echo $lang->index->versionName;?></th>
-            <th class='w-40px'><?php echo $lang->index->releaseDate;?></th>
-            <th class='w-160px'><?php echo $lang->index->explain;?></th>
-            <th class='w-50px text-center'><?php echo $lang->index->actions;?></th>
+            <th class='version-name'><?php echo $lang->index->versionName;?></th>
+            <th class='version-date'><?php echo $lang->index->releaseDate;?></th>
+            <th class='version-explain'><?php echo $lang->index->explain;?></th>
+            <th class='version-actions text-center'><?php echo $lang->index->actions;?></th>
           </tr>
         </thead>
       </table>
@@ -96,10 +96,10 @@ js::set('defaultOpen', $open);
           <tbody>
             <?php foreach($latestVersionList as $version):?>
             <tr>
-              <td class='w-60px'><?php echo $lang->zentaoPMS . $version->name;?></td>
-              <td class='w-40px upgrade-conten'><?php echo $version->date;?></td>
-              <td class='w-160px upgrade-conten'><?php echo $version->explain;?></td>
-              <td class='w-50px text-center'>
+              <td class='version-name'><?php echo $lang->zentaoPMS . $version->name;?></td>
+              <td class='version-date'><?php echo $version->date;?></td>
+              <td class='version-explain' title='<?php echo $version->explain;?>'><?php echo $version->explain;?></td>
+              <td class='version-actions text-center'>
                 <a href="<?php echo $version->link;?>" class='btn btn-link' target='_blank' style='color: #16a8f8;'><?php echo $lang->index->upgrade;?></a>
                 <a href="<?php echo inLink('changeLog', 'version=' . $version->name);?>" class="btn btn-link iframe" data-width="800"><?php echo $lang->index->log;?></strong></a>
               </td>
