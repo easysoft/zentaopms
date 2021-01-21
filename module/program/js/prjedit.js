@@ -9,6 +9,13 @@ $(function()
     adjustPlanBoxMargin();
 });
 
+/**
+ * Set aclList.
+ *
+ * @param  int   $programID
+ * @access public
+ * @return void
+ */
 function setAclList(programID)
 {
     if(programID != 0)
@@ -21,6 +28,12 @@ function setAclList(programID)
     }
 }
 
+/**
+ * Set parent program.
+ *
+ * @access public
+ * @return void
+ */
 function setParentProgram()
 {
     var parentProgram = $("#parent").val();
