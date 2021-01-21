@@ -833,6 +833,11 @@ class story extends control
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($product->id);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
         $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+        if($this->app->rawModule == 'projectstory')
+        {
+              $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
+              $this->lang->product->menu = $this->lang->menu->{$project->model};
+        }
 
         if($from == 'project')
         {

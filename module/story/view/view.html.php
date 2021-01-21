@@ -33,8 +33,8 @@
         <?php
         for($i = $story->version; $i >= 1; $i --)
         {
-      	  $class = $i == $version ? " class='active'" : '';
-      	  echo '<li' . $class .'>' . html::a(inlink('view', "storyID=$story->id&version=$i"), '#' . $i) . '</li>';
+            $class = $i == $version ? " class='active'" : '';
+            echo '<li' . $class .'>' . html::a(inlink('view', "storyID=$story->id&version=$i"), '#' . $i) . '</li>';
         }
         ?>
         </ul>
@@ -48,7 +48,16 @@
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('product', $product)): ?>
-    <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}", "<i class='icon icon-plus'></i>" . $lang->story->create, '', "class='btn btn-primary'"); ?>
+    <?php
+    $otherParam = '';
+    $openModule = 'product';
+    if($this->app->rawModule == 'projectstory')
+    {
+        $otherParam = "storyID=&projectID={$this->session->PRJ}";
+        $openModule = 'project';
+    }
+    ?>
+    <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam", "<i class='icon icon-plus'></i>" . $lang->story->create, '', "class='btn btn-primary' data-group='$openModule'"); ?>
     <?php endif;?>
   </div>
   <?php endif;?>
@@ -523,6 +532,7 @@ js::set('moduleID', $story->module);
 js::set('storyType', $story->type);
 js::set('unlink', $lang->story->unlink);
 js::set('cancel', $lang->cancel);
+js::set('rawModule', $this->app->rawModule);
 ?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

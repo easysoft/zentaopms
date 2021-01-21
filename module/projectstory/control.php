@@ -116,6 +116,18 @@ class projectStory extends control
     }
 
     /**
+     * View a story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function view($storyID)
+    {
+        echo $this->fetch('story', 'view', "storyID=$storyID");
+    }
+
+    /**
      * Link stories to a project.
      *
      * @param  int    $projectID
