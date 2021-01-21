@@ -1062,6 +1062,10 @@ class program extends control
             if($product->branch) $linkedBranches[$product->branch] = $product->branch;
         }
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 30, 1);
+
         $this->view->title        = $this->lang->program->PRJView; 
         $this->view->position     = $this->lang->program->PRJView;
         $this->view->projectID    = $projectID;
@@ -1069,10 +1073,12 @@ class program extends control
         $this->view->products     = $products;
         $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
         $this->view->statData     = $this->program->getPRJStatData($projectID);
         $this->view->workhour     = $this->program->getPRJWorkhour($projectID);
         $this->view->planGroup    = $this->loadModel('project')->getPlans($products);;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
 
         $this->display();
     }

@@ -13,7 +13,104 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class="main-row">
-  <div class="col-12 main-col">
+  <div class="col-8 main-col">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="panel block-dynamic" style="height: 280px">
+          <div class="panel-heading">
+            <div class="panel-title"><?php echo $lang->project->latestDynamic;?></div>
+            <nav class="panel-actions nav nav-default">
+              <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+            </nav>
+          </div>
+          <div class="panel-body scrollbar-hover">
+            <ul class="timeline timeline-tag-left no-margin">
+              <?php foreach($dynamics as $action):?>
+              <li <?php if($action->major) echo "class='active'";?>>
+                <div class='text-ellipsis'>
+                  <span class="timeline-tag"><?php echo $action->date;?></span>
+                  <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . "<span class='label-action'>{$action->actionLabel}</span>" . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName, '', "title='$action->objectName'");?></span>
+                </div>
+              </li>
+              <?php endforeach;?>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel block-team" style="height: 280px">
+          <div class="panel-heading">
+            <div class="panel-title"><?php echo $lang->project->relatedMember;?></div>
+            <nav class="panel-actions nav nav-default">
+              <li><?php common::printLink('program', 'PRJManageMembers', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+            </nav>
+          </div>
+          <div class="panel-body">
+            <div class="row row-grid">
+              <?php $i = 9; $j = 0;?>
+              <?php if($project->PM):?>
+              <?php $i--;?>
+              <?php unset($teamMembers[$project->PM]);?>
+              <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->PM);?> <span class="text-muted">（<?php echo $lang->project->PM;?>）</span></div>
+              <?php endif;?>
+              <?php if($project->PO):?>
+              <?php $i--;?>
+              <?php unset($teamMembers[$project->PO]);?>
+              <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->PO);?> <span class="text-muted">（<?php echo $lang->project->PO;?>）</span></div>
+              <?php endif;?>
+              <?php if($project->QD):?>
+              <?php $i--;?>
+              <?php unset($teamMembers[$project->QD]);?>
+              <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->QD);?> <span class="text-muted">（<?php echo $lang->project->QD;?>）</span></div>
+              <?php endif;?>
+              <?php if($project->RD):?>
+              <?php $i--;?>
+              <?php unset($teamMembers[$project->RD]);?>
+              <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->RD);?> <span class="text-muted">（<?php echo $lang->project->RD;?>）</span></div>
+              <?php endif;?>
+
+              <?php foreach($teamMembers as $teamMember):?>
+              <?php if($j > $i) break;?>
+              <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $teamMember->account);?></div>
+              <?php $j++;?>
+              <?php endforeach;?>
+              <div class="col-xs-6">
+                <?php common::printLink('program', 'PRJManageMembers', "projectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->project->manageMembers, '', "class='text-muted'");?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <?php $blockHistory = true;?>
+        <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>
+        <?php include '../../common/view/action.html.php';?>
+      </div>
+    </div>
+    <div class='main-actions'>
+      <div class="btn-toolbar">
+        <?php
+        $params = "project=$project->id";
+        common::printBack(inlink('prjbrowse'));
+        if(!$project->deleted)
+        {
+            echo "<div class='divider'></div>";
+            common::printIcon('program', 'PRJStart',    "projectID=$project->id", $project, 'button', 'play', '', 'iframe', true, '', $lang->project->start);
+            common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'button', 'magic', '', 'iframe', true, '', $lang->project->activate);
+            common::printIcon('program', 'PRJSuspend',  "projectID=$project->id", $project, 'button', 'pause', '', 'iframe', true, '', $lang->project->suspend);
+            common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'button', 'off', '', 'iframe', true, '', $lang->close);
+
+            echo $this->buildOperateMenu($project, 'view');
+
+            echo "<div class='divider'></div>";
+            common::printIcon('program', 'PRJEdit', $params, $project, 'button', 'edit', '', '', '', '', $lang->close);
+            common::printIcon('program', 'PRJDelete', $params, $project, 'button', 'trash', 'hiddenwin', '', '', '', $lang->delete);
+        }
+        ?>
+      </div>
+    </div>
+  </div>
+  <div class="col-4 side-col">
     <div class="row">
       <div class="col-sm-12">
         <div class="cell">
@@ -128,33 +225,6 @@
           </div>
           <?php $this->printExtendFields($project, 'div', "position=right&inForm=0&inCell=1");?>
         </div>
-      </div>
-      <div class="col-sm-12">
-        <?php $blockHistory = true;?>
-        <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>
-        <?php include '../../common/view/action.html.php';?>
-      </div>
-    </div>
-    <div class='main-actions'>
-      <div class="btn-toolbar">
-        <?php
-        $params = "project=$project->id";
-        common::printBack(inlink('prjbrowse'));
-        if(!$project->deleted)
-        {
-            echo "<div class='divider'></div>";
-            common::printIcon('program', 'PRJStart',    "projectID=$project->id", $project, 'button', 'play', '', 'iframe', true, '', $lang->project->start);
-            common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'button', 'magic', '', 'iframe', true, '', $lang->project->activate);
-            common::printIcon('program', 'PRJSuspend',  "projectID=$project->id", $project, 'button', 'pause', '', 'iframe', true, '', $lang->project->suspend);
-            common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'button', 'off', '', 'iframe', true, '', $lang->close);
-
-            echo $this->buildOperateMenu($project, 'view');
-
-            echo "<div class='divider'></div>";
-            common::printIcon('program', 'PRJEdit', $params, $project, 'button', 'edit', '', '', '', '', $lang->close);
-            common::printIcon('program', 'PRJDelete', $params, $project, 'button', 'trash', 'hiddenwin', '', '', '', $lang->delete);
-        }
-        ?>
       </div>
     </div>
   </div>
