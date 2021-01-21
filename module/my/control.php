@@ -579,6 +579,16 @@ class my extends control
         $this->display();
     }
 
+    /**
+     * My team.
+     *
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
     public function team($orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         /* Set the pager. */
