@@ -40,7 +40,7 @@
             <td calss="c-id">         <?php printf('%03d', $design->id);?></td>
             <td class="c-type">       <?php echo zget($lang->design->typeList, $design->type);?></td>
             <td class="c-name" title="<?php echo $design->name;?>"><?php echo html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name);?></td>
-            <td class="c-createdBy">  <?php echo $design->createdBy;?></td>
+            <td class="c-createdBy">  <?php echo zget($users, $design->createdBy);?></td>
             <td class="c-createdDate"><?php echo substr($design->createdDate, 0, 11);?></td>
             <td class="c-assignedTo"> <?php echo $this->design->printAssignedHtml($design, $users);?></td>
             <td class='c-actions text-center'>

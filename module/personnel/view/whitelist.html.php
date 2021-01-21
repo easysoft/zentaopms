@@ -61,7 +61,7 @@
           <td class='c-actions'>
             <?php
             $deleteClass = common::hasPriv($module, 'unbindWhielist') ? 'btn' : 'btn disabled';
-            echo html::a($this->createLink($module, 'unbindWhielist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->personnel->delete}' class='{$deleteClass}'");
+            echo html::a($this->createLink($module, 'unbindWhielist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->personnel->delete}' class='{$deleteClass}' $openModule");
             ?>
           </td>
         </tr>

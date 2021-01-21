@@ -81,3 +81,25 @@ $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = 'Basic Info';
 $lang->my->form->lblContact = 'Contact Info';
 $lang->my->form->lblAccount = 'Account Info';
+
+$lang->my->programLink = 'Program Default Page';
+$lang->my->productLink = 'Product Default Page'; 
+$lang->my->projectLink = 'Project Default Page';
+
+$lang->my->programLinkList = array();
+//$lang->my->programLinkList['program-home']     = 'The default access to the program home page, you can understand the company’s overall strategic planning status';
+$lang->my->programLinkList['program-pgmbrowse']  = 'By default, you go to the program list, where you can view all of the programs';
+//$lang->my->programLinkList['program-pgmindex'] = 'By default, you go to the most recent program dashboard to see the current program overview';
+$lang->my->programLinkList['program-pgmproject'] = 'By default, you go to the list of items in the most recent program, and you can view all items under the current program';
+
+$lang->my->productLinkList = array();
+$lang->my->productLinkList['product-index']     = 'The default access to the product home page, you can understand the company’s overall product status';
+$lang->my->productLinkList['product-all']       = 'By default, you go to the product list, where you can view all the products';
+$lang->my->productLinkList['product-dashboard'] = 'By default, go to the latest product dashboard to see the current product overview';
+$lang->my->productLinkList['product-browse']    = 'By default, go to the list of requirements for the most recent product and see the requirements under the current product';
+
+$lang->my->projectLinkList = array();
+//$lang->my->projectLinkList['program-home']    = 'The default access to the project home page, you can understand the overall project status of the company';
+$lang->my->projectLinkList['program-prjbrowse'] = 'By default, you go to the project list, where you can view all the projects';
+$lang->my->projectLinkList['program-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
+$lang->my->projectLinkList['project-task']      = 'By default, you go to the task list for the most recent project iteration to see the task information for the current iteration';

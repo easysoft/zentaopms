@@ -26,6 +26,7 @@ class design extends control
         parent::__construct($moduleName, $methodName);
         $products = array();
         $this->loadModel('product');
+        $this->loadModel('task');
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
     }
 
@@ -249,6 +250,9 @@ class design extends control
      */
     public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
+        $design = $this->design->getById($designID);
+        $this->design->setProductMenu($design->product);
+
         /* Get project and date. */
         $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
         $begin   = $begin ? date('Y-m-d', strtotime($begin)) : $project->begin;
