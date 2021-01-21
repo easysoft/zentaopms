@@ -150,8 +150,9 @@ class personnel extends control
             $this->personnel->addWhitelist($objectType, $objectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
+            $locateLink = $this->session->whitelistBrowse ? $this->session->whitelistBrowse : $this->createLink($module, 'whitelist', "objectID=$objectID");
             $openModule = $module == 'program' ? ($from == 'PRJ' || $from == 'my' ? '#open=project' : '#open=program') : '';
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->whitelistBrowse . $openModule));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $openModule));
         }
 
         $this->loadModel('dept');

@@ -67,6 +67,7 @@ class program extends control
 
         $this->app->session->set('programList', $this->app->getURI(true));
         $this->app->session->set('whitelist', $this->app->getURI(true));
+        $this->app->session->set('PRJManageProducts', $this->app->getURI(true));
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
@@ -418,6 +419,7 @@ class program extends control
         setCookie("lastPGM", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $this->app->session->set('whitelist', $this->app->getURI(true));
+        $this->app->session->set('PRJManageProducts', $this->app->getURI(true));
 
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
@@ -798,6 +800,7 @@ class program extends control
         $this->lang->program->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
         $this->app->session->set('PRJBrowse', $this->app->getURI(true));
         $this->app->session->set('whitelist', $this->app->getURI(true));
+        $this->app->session->set('PRJManageProducts', $this->app->getURI(true));
         $this->loadModel('datatable');
 
         /* Load pager and get tasks. */
@@ -1680,6 +1683,10 @@ class program extends control
             $moduleIndex = array_search('program', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         }
+        if($from == 'pgmbrowse')
+        {
+            $this->lang->navGroup->program = 'program';
+        }
         if($from == 'pgmproject')
         {
             $this->app->rawMethod = 'pgmproject';
@@ -1705,10 +1712,8 @@ class program extends control
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            $locateLink = inLink('PRJManageProducts', "projectID=$projectID");
-            if($from == 'pgmbrowse')  $locateLink = inLink('PGMBrowse');
-            if($from == 'pgmproject') $locateLink = inLink('PGMProject', "programID=$programID");
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+            $locateLink = $this->session->PRJManageProducts ? $this->session->PRJManageProducts : inLink('PRJManageProducts', "projectID=$projectID");
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->PRJManageProducts));
         }
 
         $this->loadModel('product');
