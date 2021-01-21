@@ -1138,7 +1138,7 @@ class programModel extends model
      * 
      * @param  int    $projectID 
      * @access public
-     * @return void
+     * @return object 
      */
     public function getPRJWorkhour($projectID)
     {
@@ -1174,7 +1174,7 @@ class programModel extends model
      * 
      * @param  int    $projectID 
      * @access public
-     * @return void
+     * @return object 
      */
     public function getPRJStatData($projectID)
     {
