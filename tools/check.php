@@ -7,6 +7,9 @@ class control {}
 $config = new stdclass();
 $config->global = new stdclass();
 $config->global->flow = 'full';
+$config->programLink  = '-';
+$config->productLink  = '-';
+$config->projectLink  = '-';
 
 /* set module root path and included the resource of group module. */
 $moduleRoot = '../module/';
@@ -14,8 +17,12 @@ include $moduleRoot . '/group/lang/resource.php';
 foreach(glob($moduleRoot . '/group/ext/lang/zh-cn/*.php') as $resourceFile) include $resourceFile;
 foreach(glob('../xuanxuan/module/group/ext/lang/zh-cn/*.php') as $resourceFile) include $resourceFile;
 
-$lang->projectCommon = '';
-$lang->storyCommon   = '';
+$lang->projectCommon   = '';
+$lang->storyCommon     = '';
+$lang->SRCommon        = '';
+$lang->URCommon        = '';
+$lang->productCommon   = '';
+$lang->executionCommon = '';
 
 $whiteList[] = 'report-annualdata';
 $whiteList[] = 'api-getsessionid';
