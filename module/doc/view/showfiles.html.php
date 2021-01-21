@@ -135,7 +135,17 @@
                 }
                 ?>
                 </a>
-                <div class='file-name'><a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>' title='<?php echo substr($file->addedDate, 0, 10)?>'><?php echo $file->title . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a></div>
+                <?php
+                if($type == 'project' && in_array($file->objectType, array('task', 'build')))
+                {
+                    $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
+                }
+                else
+                {
+                    $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID");
+                }
+                ?>
+                <div class='file-name'><a href='<?php echo $objectLink;?>' title='<?php echo substr($file->addedDate, 0, 10)?>'><?php echo $file->title . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a></div>
               </div>
               <div class='actions'>
                 <?php if(common::hasPriv('file', 'delete') and $canBeChanged): ?>

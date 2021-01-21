@@ -1335,8 +1335,21 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
-            $taskIdList  = $this->dao->select('id')->from(TABLE_TASK)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->sprints)->get();
-            $buildIdList = $this->dao->select('id')->from(TABLE_BUILD)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+            $taskPairs  = $this->dao->select('id, PRJ')->from(TABLE_TASK)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->sprints)->fetchPairs('id', 'PRJ');
+            $taskIdList = 0;
+            if(!empty($taskPairs))
+            {
+                $taskIdList = array_keys($taskPairs);
+                $taskIdList = implode(',', $taskIdList);
+            }
+
+            $buildPairs  = $this->dao->select('id, PRJ')->from(TABLE_BUILD)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->sprints)->fetchPairs('id', 'PRJ');
+            $buildIdList = 0;
+            if(!empty($buildPairs))
+            {
+                $buildIdList = array_keys($buildPairs);
+                $buildIdList = implode(',', $buildIdList);
+            }
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
                 ->where('size')->gt('0')
                 ->andWhere("(objectType = 'project' and objectID = $objectID)", true)
@@ -1352,6 +1365,8 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
+            if($type == 'project' && $file->objectType == 'task')  $file->PRJ = $taskPairs[$file->objectID];
+            if($type == 'project' && $file->objectType == 'build') $file->PRJ = $buildPairs[$file->objectID];
             $pathName = $this->file->getRealPathName($file->pathname);
             $file->realPath = $this->file->savePath . $pathName;
             $file->webPath  = $this->file->webPath . $pathName;

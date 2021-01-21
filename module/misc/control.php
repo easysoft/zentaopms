@@ -66,7 +66,8 @@ class misc extends control
     public function checkUpdate($sn = '')
     {
         session_write_close();
-        $link = $this->lang->misc->api . "/updater-getLatest-{$this->config->version}-zentao.html?lang=" . str_replace('-', '_', $this->app->getClientLang());
+        $source = isset($this->config->qcVersion) ? 'qucheng' : 'zentao';
+        $link   = $this->lang->misc->api . "/updater-getLatest-{$this->config->version}-$source.html?lang=" . str_replace('-', '_', $this->app->getClientLang());
         $latestVersionList = common::http($link);
         $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
     }
