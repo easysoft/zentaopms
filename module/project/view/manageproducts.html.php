@@ -37,6 +37,7 @@
               <?php if(isset($branchGroups[$productID])) echo html::select("branch[$productID]", $branchGroups[$productID], $linkedProducts[$productID]->branch, "class='form-control chosen' $class");?>
             </div>
           </div>
+          <?php if(!empty($isDisabled)) echo html::hidden("products[$productID]", $productID);?>
           <?php unset($allProducts[$productID]);?>
           <?php endif;?>
           <?php endforeach;?>
