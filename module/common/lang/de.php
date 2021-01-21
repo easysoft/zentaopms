@@ -1017,6 +1017,13 @@ $lang->programplan->menu->lists = array('link' => 'Stage|programplan|browse|prog
 $lang->projectstory->menu->story = array('link' => "{$lang->SRCommon}|projectstory|story", 'subModule' => 'story,project', 'alias' => 'linkstory');
 $lang->projectstory->menu->track = array('link' => 'Track|projectstory|track', 'subModule' => '');
 
+$lang->design->menu->all      = array('link' => 'All|design|browse|productID={PRODUCT}&browseType=all');
+$lang->design->menu->hlds     = array('link' => 'HLDS|design|browse|productID={PRODUCT}&browseType=HLDS');
+$lang->design->menu->dds      = array('link' => 'DDS|design|browse|productID={PRODUCT}&browseType=DDS');
+$lang->design->menu->dbds     = array('link' => 'DBDS|design|browse|productID={PRODUCT}&browseType=DBDS');
+$lang->design->menu->ads      = array('link' => 'ADS|design|browse|productID={PRODUCT}&browseType=ADS');
+$lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
+
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 

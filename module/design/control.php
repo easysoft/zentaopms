@@ -55,6 +55,19 @@ class design extends control
         $actionURL = $this->createLink('design', 'browse', "productID=$productID&type=bySearch&queryID=myQueryID");
         $this->design->buildSearchForm($queryID, $actionURL);
 
+        /* Print top and right actions. */
+        $this->lang->TRActions  = '<div class="btn-group dropdown-hover">';
+        $this->lang->TRActions .= "<button type='button' class='btn btn-primary'>";
+        $this->lang->TRActions .= "<i class='icon-plus'></i> {$this->lang->design->create} <span class='caret'></span>";
+        $this->lang->TRActions .= '</button>';
+        $this->lang->TRActions .= "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
+
+        if(common::hasPriv('design', 'create'))      $this->lang->TRActions .= '<li>' . html::a($this->createLink('design', 'create', "productID=$productID"), $this->lang->design->create, '', "class='btn btn-link'") . '</li>';
+        if(common::hasPriv('design', 'batchCreate')) $this->lang->TRActions .= '<li>' . html::a($this->createLink('design', 'batchCreate', "productID=$productID"), $this->lang->design->batchCreate, '', "class='btn btn-link'") . '</li>';
+
+        $this->lang->TRActions .= '</ul>';
+        $this->lang->TRActions .= '</div>';
+
         /* Init pager and get designs. */
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init(0, $recPerPage, $pageID);

@@ -12,24 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
-<div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'>
-    <?php
-    foreach($lang->design->featureBar as $key => $label)
-    {
-        if(empty($key)) continue;
-        $active = $key == $type ? 'btn-active-text' : '';
-        $recTotalLabel = $key == $type ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
-        echo html::a(inlink('browse', "productID={$productID}&type=$key"),  "<span class='text'>$label</span>"  . $recTotalLabel, '', "class='btn btn-link $active'");
-    }
-    ?>
-    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->design->byQuery;?></a>
-  </div>
-  <div class='btn-toolbar pull-right'>
-    <?php common::printLink('design', 'batchCreate', "productID=$productID", "<i class='icon icon-plus'></i>" . $lang->design->batchCreate, '', "class='btn btn-primary'");?>
-    <?php common::printLink('design', 'create', "productID=$productID", "<i class='icon icon-plus'></i>" . $lang->design->create, '', "class='btn btn-primary'");?>
-  </div>
-</div>
+<?php js::set('type', strtolower($type));?>
 <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module='design'></div>
 <div id="mainContent" class="main-table">
   <?php if(empty($designs)):?>
