@@ -1719,10 +1719,20 @@ class program extends control
         $this->loadModel('product');
         $project = $this->project->getById($projectID);
 
-
-        $allProducts    = $this->program->getPGMProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts = $this->project->getProducts($project->id);
-        $linkedBranches = array();
+        /* If the story of the product which linked the execution under the project, you don't allow to remove the product. */
+        $allProducts        = $this->program->getPGMProductPairs($project->parent, 'assign', 'noclosed');
+        $linkedProducts     = $this->project->getProducts($project->id);
+        $linkedBranches     = array();
+        $projectStories     = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll('story');
+        $projectStoryIdList = array_keys($projectStories);
+        $notRemoveProducts  = array();
+        foreach($linkedProducts as $productID => $linkedProduct)
+        {
+            $productStories     = $this->loadModel('story')->getProductStories($productID);
+            $productStoryIdList = array_keys($productStories);
+            $storyIntersect     = array_intersect($projectStoryIdList, $productStoryIdList);
+            if(!empty($storyIntersect)) array_push($notRemoveProducts, $productID);
+        }
 
         /* Merge allProducts and linkedProducts for closed product. */
         foreach($linkedProducts as $product)
@@ -1732,11 +1742,12 @@ class program extends control
         }
 
         /* Assign. */
-        $this->view->title          = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
-        $this->view->position[]     = $this->lang->project->manageProducts;
-        $this->view->allProducts    = $allProducts;
-        $this->view->linkedProducts = $linkedProducts;
-        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
+        $this->view->title             = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
+        $this->view->position[]        = $this->lang->project->manageProducts;
+        $this->view->allProducts       = $allProducts;
+        $this->view->linkedProducts    = $linkedProducts;
+        $this->view->notRemoveProducts = $notRemoveProducts;
+        $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 
         $this->display();
     }

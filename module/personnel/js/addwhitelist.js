@@ -1,7 +1,7 @@
 /**
  * Users by department.
  *
- * @param  object  obj
+ * @param  object  dept
  * @return void
  */
 function setDeptUsers(dept)
@@ -70,7 +70,7 @@ function showItem(val)
 /**
  * Hide the clicked item.
  *
- * @param  object ulObj
+ * @param  object select
  * @param  string val
  * @return void
  */
@@ -98,7 +98,7 @@ function changeUsers()
     {
         select = this;
 
-        /* Render the item of the value which is selected before the page loads.*/
+        /* Render the item of the value which is selected before the page loads. */
         $("input[name='realnames[]']").each(function()
         {
             hideItem(select, this.value);
