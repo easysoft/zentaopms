@@ -33,11 +33,13 @@ class index extends control
      */
     public function index($open = '')
     {
+        $latestVersionList = array();
+        if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList);
+
         $this->view->open  = helper::safe64Decode($open);
         $this->view->title = $this->lang->index->common;
 
-        if(!isset($this->config->global->latestVersionList)) $latestVersionList = '[]';
-        $this->view->latestVersionList = json_decode($this->config->global->latestVersionList);
+        $this->view->latestVersionList = $latestVersionList;
         $this->display();
     }
 

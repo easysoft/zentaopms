@@ -17,3 +17,4 @@ $lang->index->actions        = '操作';
 $lang->index->upgrade        = '升级';
 $lang->index->log            = '日志';
 $lang->index->detailed       = '详情';
+$lang->index->please         = '请访问官网';

@@ -64,9 +64,13 @@ body.menu-hide {padding-left: 0;}
 #globalSearchDiv{width:50%; float: right; margin-right: 4px;}
 @media screen and (max-height: 768px)
 {
-  #globalSearchDiv{width:60%;}
+  #globalSearchDiv{width: 60%;}
 }
-#globalSearchDiv .input-group{width: 70%; float: right; margin-top: 2px;}
+#globalSearchDiv .input-group{width: 82%; float: right; margin-top: 2px;}
+@media screen and (max-height: 768px)
+{
+  #globalSearchDiv .input-group{width: 100%;}
+}
 #globalSearchInput{height: 28px; padding-left: 10px;}
 #globalSearchButton{height: 28px;}
 

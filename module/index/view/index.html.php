@@ -88,8 +88,10 @@ js::set('defaultOpen', $open);
       <div id="latestVersionList">
         <?php if(empty($latestVersionList)):?>
         <div class="table-empty-tip" style='padding: 66px 10px;'>
-          <?php echo $lang->noData;?>
-          <a href='<?php echo $lang->website;?>' class="btn btn-info" target='_blank'><?php echo $lang->zentaoPMS?></a>
+          <h6>
+            <?php echo $lang->noData;?>
+            <span class="label label-badge label-info label-outline"><?php echo $lang->index->please . ': '. $lang->website;?></span>
+          </h6>
         </div>
         <?php else:?>
         <table class='table has-sort-head'>
