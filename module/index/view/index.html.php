@@ -51,7 +51,7 @@ js::set('defaultOpen', $open);
   <ul id='bars' class='nav nav-default'></ul>
   <div id='poweredBy'>
     <div id="globalBarLogo">
-      <?php echo $lang->proVersion;?>
+      <a href='javascript:void(0)' id='proLink' class='btn btn-link' style='color: red;'><?php echo $lang->index->upgrade;?> <i class='text-danger icon-pro-version'></i></a>
       <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $config->version;?>'><i class="icon icon-zentao" style="font-size: 24px;"></i></a>
       <!--<a href='javascript:void(0)' class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>-->
       <div id="globalSearchDiv">
@@ -66,6 +66,48 @@ js::set('defaultOpen', $open);
             <button id="globalSearchButton" class="btn btn-secondary" type="button"><i class="icon icon-search"></i></button>
           </span>
         </div>
+      </div>
+    </div>
+    <div id='upgradeContent' class='main-table'>
+      <div class='main-header' style='padding: 5px 20px 5px 15px;'>
+        <h2>
+          <?php echo $lang->index->upgradeVersion;?>
+          <span class="label label-badge label-primary label-outline"><?php echo $lang->index->currentVersion . ': ' . $lang->zentaoPMS . $config->version;?></span>
+        </h2>
+      </div>
+      <table class='table has-sort-head'>
+        <thead>
+          <tr>
+            <th class='w-60px'><?php echo $lang->index->versionName;?></th>
+            <th class='w-40px'><?php echo $lang->index->releaseDate;?></th>
+            <th class='w-160px'><?php echo $lang->index->explain;?></th>
+            <th class='w-50px text-center'><?php echo $lang->index->actions;?></th>
+          </tr>
+        </thead>
+      </table>
+      <div id="latestVersionList">
+        <?php if(empty($latestVersionList)):?>
+        <div class="table-empty-tip" style='padding: 66px 10px;'>
+          <?php echo $lang->noData;?>
+          <a href='<?php echo $lang->website;?>' class="btn btn-info" target='_blank'><?php echo $lang->zentaoPMS?></a>
+        </div>
+        <?php else:?>
+        <table class='table has-sort-head'>
+          <tbody>
+            <?php foreach($latestVersionList as $version):?>
+            <tr>
+              <td class='w-60px'><?php echo $lang->zentaoPMS . $version->name;?></td>
+              <td class='w-40px upgrade-conten'><?php echo $version->date;?></td>
+              <td class='w-160px upgrade-conten'><?php echo $version->explain;?></td>
+              <td class='w-50px text-center'>
+                <a href="<?php echo $version->link;?>" class='btn btn-link' target='_blank' style='color: #16a8f8;'><?php echo $lang->index->upgrade;?></a>
+                <a href="<?php echo inLink('changeLog', 'version=' . $version->name);?>" class="btn btn-link iframe" data-width="800"><?php echo $lang->index->log;?></strong></a>
+              </td>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+        <?php endif;?>
       </div>
     </div>
   </div>

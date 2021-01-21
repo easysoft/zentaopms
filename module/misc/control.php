@@ -63,12 +63,12 @@ class misc extends control
      * @access public
      * @return void
      */
-    public function checkUpdate($sn)
+    public function checkUpdate($sn = '')
     {
         session_write_close();
-        $link = $this->lang->misc->api . "/updater-isLatest-{$this->config->version}-{$sn}.html?lang=" . str_replace('-', '_', $this->app->getClientLang());
-        $this->view->note = file_get_contents($link);
-        $this->display();
+        $link = $this->lang->misc->api . "/updater-getLatest-{$this->config->version}-zentao.html?lang=" . str_replace('-', '_', $this->app->getClientLang());
+        $latestVersionList = common::http($link);
+        $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
     }
 
     /**

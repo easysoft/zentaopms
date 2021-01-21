@@ -779,7 +779,6 @@ $lang->pager->pageOfTotal  = '第 <strong>{page}</strong>/<strong>{totalPage}</s
 $lang->colorPicker = new stdclass();
 $lang->colorPicker->errorTip = '不是有效的颜色值';
 
-$lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='btn btn-link'><span class='label label-primary'>升级</span></a>";
 $lang->downNotify     = "下载桌面提醒";
 $lang->client         = "客户端";
 $lang->downloadClient = "下载客户端";

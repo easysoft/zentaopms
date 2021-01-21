@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `zt_config` (
   `module` varchar(30) NOT NULL,
   `section` char(30) NOT NULL default '',
   `key` char(30) NOT NULL default '',
-  `value` text NOT NULL,
+  `value` longtext NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `unique` (`owner`,`module`,`section`,`key`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

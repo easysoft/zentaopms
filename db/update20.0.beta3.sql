@@ -118,3 +118,5 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (9, 'search', 'index'),
 (10, 'search', 'index'),
 (1, 'search', 'buildIndex');
+
+ALTER TABLE `zt_config` MODIFY COLUMN `value` longtext NOT NULL AFTER `key`;

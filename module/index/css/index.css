@@ -59,7 +59,7 @@ body.menu-hide {padding-left: 0;}
 #userNav li.open>a{background:#0c64eb}
 #userNav li.divider{opacity: .24; border-top: 1px solid; height: 2px;}
 #userNav .dropdown-submenu:focus > a, #userNav .dropdown-submenu:hover > a {background-color: rgba(0,0,0,.2);}
-#poweredBy{width: 55%; position: absolute; top: 4px; right: 0; padding: 0;}
+#poweredBy{width: 40%; position: absolute; top: 4px; right: 0; padding: 0;}
 
 #globalSearchDiv{width:50%; float: right; margin-right: 4px;}
 @media screen and (max-height: 768px)
@@ -88,3 +88,7 @@ body.menu-hide {padding-left: 0;}
 #searchbox .dropdown-menu.show-quick-go > li.active {width: 100%; position: absolute; top: 0; left: 0; right: 0;}
 #searchbox .dropdown-menu>li.active>a, #searchbox .dropdown-menu>li.selected>a { position: relative; color: #fff; background-color: #16a8f8;}
 #searchbox .dropdown-menu>li.selected>a:after {position: absolute; top: 2px; right: 4px; display: block; font-family: ZentaoIcon; font-size: 18px; font-size: 14px; font-style: normal; font-weight: 400; font-variant: normal; line-height: 1; line-height: 20px; text-transform: none; content: "\e5ca"; speak: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
+
+#upgradeContent {display:none; position: absolute; right: 30px; top: -290px; height:282px; background-color: #fff; left: 0px; padding: 5px 0; border: 1px solid rgba(0,0,0,.15); border-color: rgba(0,0,0,.1); opacity: 1; border-radius: 4px; box-shadow: 0 6px 12px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.1);}
+#latestVersionList {height: 190px; overflow: auto;}
+.upgrade-conten {color: #8a8a8a}

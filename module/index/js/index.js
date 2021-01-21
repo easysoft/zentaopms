@@ -604,6 +604,26 @@ $(function()
     });
 
     $(document).on('click', hideMenu);
+
+    $(document).on('click', function()
+    {
+        $("#upgradeContent").hide();
+    });
+
+    $("#upgradeContent").click(function(event)
+    {
+        event.stopPropagation();
+    });
+
+    $("#proLink").click(function(event)
+    {
+        var $upgradeContent = $('#upgradeContent').toggle();
+        if(!$upgradeContent.is(':hidden'))
+        {
+            getLatestVersion();
+            event.stopPropagation();
+        }
+    });
 });
 
 /* Change the search object according to the module and method. */
@@ -629,4 +649,10 @@ function changeSearchObject()
 
     $("#searchType").val(searchType);
     return searchType;
+}
+
+function getLatestVersion()
+{
+    $('#globalSearchInput').click();
+    $('#upgradeContent').toggle();
 }

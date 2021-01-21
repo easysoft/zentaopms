@@ -779,7 +779,6 @@ $lang->pager->pageOfTotal  = "Page <strong>{page}</strong> of <strong>{totalPage
 $lang->colorPicker = new stdclass();
 $lang->colorPicker->errorTip = 'Not a valid color value';
 
-$lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='btn btn-link'><span class='label label-primary'>Upgrade</span></a>";
 $lang->downNotify     = "Download Desktop Notification";
 $lang->client         = "Desktop";
 $lang->downloadClient = "Download ZenTao Desktop";

@@ -33,9 +33,27 @@ class index extends control
      */
     public function index($open = '')
     {
-
         $this->view->open  = helper::safe64Decode($open);
         $this->view->title = $this->lang->index->common;
+
+        if(!isset($this->config->global->latestVersionList)) $latestVersionList = '[]';
+        $this->view->latestVersionList = json_decode($this->config->global->latestVersionList);
+        $this->display();
+    }
+
+    /**
+     * Get the log record according to the version.
+     *
+     * @param  string $version
+     * @access public
+     * @return void
+     */
+    public function changeLog($version = '')
+    {
+        $latestVersionList = json_decode($this->config->global->latestVersionList);
+        $version           = $latestVersionList->$version;
+
+        $this->view->version = $version;
         $this->display();
     }
 
