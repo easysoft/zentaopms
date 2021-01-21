@@ -41,7 +41,7 @@
           <?php echo $totalData[$projectID]->consumed ? html::a($this->createLink('project', 'index', 'locate=no'), $totalData[$projectID]->consumed) : 0;?>
           </div>
           <div class="tile-info">
-          <span class="extra-tips"><?php echo $lang->block->estimatedHours;?> <?php echo $totalData[$projectID]->estimate . ' ' . $config->hourUnit;?></span>
+          <span class="extra-tips"><?php echo $lang->block->estimatedHours;?> <?php echo $totalData[$projectID]->estimate;?></span>
           </div>
         </div>
         <div class="col-4 tile">
