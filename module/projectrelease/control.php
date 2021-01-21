@@ -81,8 +81,6 @@ class projectrelease extends control
     /**
      * Create a release.
      * 
-     * @param  int    $productID 
-     * @param  int    $branch 
      * @access public
      * @return void
      */
