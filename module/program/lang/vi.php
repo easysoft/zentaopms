@@ -5,6 +5,7 @@ $lang->program->PRJIndex             = 'Dashboard';
 $lang->program->PRJHome              = 'Home';
 $lang->program->PRJCreate            = 'Create Project';
 $lang->program->PRJEdit              = 'Edit';
+$lang->program->PRJView              = 'Project View';
 $lang->program->PRJBatchEdit         = 'Batch Edit';
 $lang->program->PRJBrowse            = 'Projects';
 $lang->program->PRJAll               = 'All';

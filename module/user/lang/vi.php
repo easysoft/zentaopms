@@ -52,6 +52,9 @@ $lang->user->verifyPassword   = 'Mật khẩu';
 $lang->user->resetPassword    = 'Quên mật khẩu?';
 $lang->user->score            = 'Điểm';
 $lang->user->name             = 'Name';
+$lang->user->cropAvatar       = 'Crop Avatar';
+$lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
+$lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
 
 $lang->user->legendBasic        = 'Thông tin cơ bản';
 $lang->user->legendContribution = 'Đóng góp';

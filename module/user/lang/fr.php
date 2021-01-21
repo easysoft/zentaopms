@@ -52,6 +52,9 @@ $lang->user->verifyPassword   = 'Mot de Passe';
 $lang->user->resetPassword    = 'Password oublié ?';
 $lang->user->score            = 'Score';
 $lang->user->name             = 'Name';
+$lang->user->cropAvatar       = 'Crop Avatar';
+$lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
+$lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
 
 $lang->user->legendBasic        = 'Informations de Base';
 $lang->user->legendContribution = 'Contribution';

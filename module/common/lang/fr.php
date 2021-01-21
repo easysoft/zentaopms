@@ -923,7 +923,7 @@ $lang->menu->scrum->ci             = 'Code|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->scrum->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
-$lang->menu->scrum->projectsetting = array('link' => 'Setting|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list');
+$lang->menu->scrum->projectsetting = array('link' => 'Setting|program|prjview|project={PROJECT}', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
@@ -933,7 +933,11 @@ $lang->scrum->subMenu->other->risk        = array('link' => 'Risk|risk|browse|',
 $lang->scrum->subMenu->other->stakeholder = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->scrum->setMenu = new stdclass();
-$lang->scrum->setMenu->view = array('link' => 'View|program|prjview|project={PROJECT}');
+$lang->scrum->setMenu->view      = array('link' => 'View|program|prjview|project={PROJECT}');
+$lang->scrum->setMenu->products  = array('link' => 'Product|program|PRJManageProducts|project={PROJECT}', 'alias' => 'prjmanageproducts');
+$lang->scrum->setMenu->group     = array('link' => 'Priv Group|program|PRJGroup|project={PROJECT}', 'alias' => 'prjgroup,prjmanageview,prjmanagepriv');
+$lang->scrum->setMenu->members   = array('link' => 'Member|program|PRJManageMembers|project={PROJECT}', 'alias' => 'prjmanagemembers');
+$lang->scrum->setMenu->whitelist = array('link' => 'White List|program|PRJWhitelist|project={PROJECT}', 'subModule' => 'personnel');
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
@@ -948,21 +952,19 @@ $lang->menu->waterfall->ci             = 'Code|repo|browse|';
 $lang->menu->waterfall->qa             = 'Index|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
-$lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
-$lang->menu->waterfall->projectsetting = array('link' => 'Setting|project|setting', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'workestimation,durationestimation,budget,pssp');
+$lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc,workestimation,durationestimation,budget,pssp');
+$lang->menu->waterfall->projectsetting = array('link' => 'Setting|program|prjview|project={PROJECT}', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
 $lang->waterfall->subMenu->other = new stdclass();
+$lang->waterfall->subMenu->other->estimation  = array('link' => 'Estimation|workestimation|index|program=%s', 'subModule' => 'workestimation,durationestimation,budget');
 $lang->waterfall->subMenu->other->issue       = array('link' => 'Issue|issue|browse|', 'subModule' => 'issue');
 $lang->waterfall->subMenu->other->risk        = array('link' => 'Risk|risk|browse|', 'subModule' => 'risk');
 $lang->waterfall->subMenu->other->stakeholder = array('link' => 'Stakeholder|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->waterfall->setMenu = new stdclass();
-$lang->waterfall->setMenu->view           = array('link' => 'View|program|prjview|project={PROJECT}');
-$lang->waterfall->setMenu->workestimation = 'Work Estimation|workestimation|index|project={PROJECT}';
-$lang->waterfall->setMenu->duration       = array('link' => 'Duration|durationestimation|index|project={PROJECT}', 'subModule' => 'durationestimation');
-$lang->waterfall->setMenu->budget         = array('link' => 'Budget|budget|summary|', 'subModule' => 'budget');
+$lang->waterfall->setMenu = $lang->scrum->setMenu; 
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
@@ -999,15 +1001,15 @@ $lang->waterfallproduct->menu   = new stdclass();
 $lang->durationestimation->menu = new stdclass();
 $lang->projectstory->menu       = new stdclass();
 
-$lang->stakeholder->menu->list  = array('link' => 'Stakeholder List|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
-$lang->stakeholder->menu->issue = array('link' => 'Issue|stakeholder|issue|');
-
-$lang->workestimation->menu->index    = 'Workload|workestimation|index|program={PROJECT}';
-$lang->workestimation->menu->duration = array('link' => 'Duration|durationestimation|index|program={PROJECT}', 'subModule' => 'durationestimation');
-$lang->workestimation->menu->budget   = array('link' => 'Budget|budget|summary|', 'subModule' => 'budget');
+$lang->workestimation->menu->workestimation = 'Work Estimation|workestimation|index|project={PROJECT}';
+$lang->workestimation->menu->duration       = array('link' => 'Duration Estimation|durationestimation|index|project={PROJECT}', 'subModule' => 'durationestimation');
+$lang->workestimation->menu->budget         = array('link' => 'Budget|budget|summary|', 'subModule' => 'budget');
 
 $lang->durationestimation->menu = $lang->workestimation->menu;
-$lang->budget->menu = $lang->workestimation->menu;
+$lang->budget->menu             = $lang->workestimation->menu;
+
+$lang->stakeholder->menu->list  = array('link' => 'Stakeholder List|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
+$lang->stakeholder->menu->issue = array('link' => 'Issue|stakeholder|issue|');
 
 $lang->programplan->menu->gantt = array('link' => 'Gantt|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => 'Stage|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
