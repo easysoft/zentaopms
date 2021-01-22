@@ -140,6 +140,7 @@
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' $class onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
+              <?php if(in_array($product->id, $notRemoveProducts)) echo html::hidden("products[$i]", $product->id);?>
               <?php $i++;?>
               <?php endforeach;?>
               <?php if(!$isStage):?>
