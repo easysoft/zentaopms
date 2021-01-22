@@ -315,7 +315,7 @@ class bug extends control
 
             $this->executeHooks($bugID);
 
-            /* If link from no head then reload*/
+            /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));

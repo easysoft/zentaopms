@@ -604,7 +604,7 @@ class my extends control
         $user   = $this->loadModel('user')->getById($this->app->user->account, 'account');
         $deptID = $user->dept;
         $users  = $this->loadModel('company')->getUsers('inside', 'bydept', 0, $deptID, $sort, $pager);
-        foreach($users as $user) unset($user->password); //Remove passwd.
+        foreach($users as $user) unset($user->password); // Remove passwd.
 
         $this->view->title      = $this->lang->my->team;
         $this->view->position[] = $this->lang->my->team;

@@ -130,7 +130,7 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            /* If link from no head then reload*/
+            /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             /* Locate the browser. */
