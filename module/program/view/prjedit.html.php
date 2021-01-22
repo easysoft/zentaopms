@@ -109,6 +109,7 @@
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
+              <?php if(in_array($product->id, $notRemoveProducts)) echo html::hidden("products[$i]", $product->id);?>
               <?php $i++;?>
               <?php endforeach;?>
               <div class='col-sm-4 <?php if($programID) echo 'required';?>' style="padding-right: 6px;">
