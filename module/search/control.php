@@ -62,7 +62,9 @@ class search extends control
 
     /**
      * Save search query.
-     * 
+     *
+     * @param  string  $module
+     * @param  string  $onMenuBar
      * @access public
      * @return void
      */
@@ -97,7 +99,7 @@ class search extends control
     }
 
     /**
-     * AJAX: get search query.
+     * Ajax get search query.
      *
      * @param  string $module
      * @param  int    $queryID
@@ -134,6 +136,8 @@ class search extends control
     /**
      * Build All index.
      * 
+     * @param  string  $type
+     * @param  int     $lastID
      * @access public
      * @return void
      */
@@ -161,11 +165,10 @@ class search extends control
     }
 
     /**
-     * index
+     * Global search results home page.
      *
      * @param  int $recTotal
      * @param  int $pageID
-     *
      * @access public
      * @return void
      */

@@ -933,6 +933,14 @@ class searchModel extends model
         return $content;
     }
 
+    /**
+     * Build index query.
+     *
+     * @param  string   $type
+     * @param  bool     $testDelete
+     * @access public
+     * @return string
+     */
     public function buildIndexQuery($type, $testDeleted = true)
     {
         $table = $this->config->objectTables[$type];
@@ -959,6 +967,8 @@ class searchModel extends model
     /**
      * Build all search index.
      * 
+     * @param  string    $type
+     * @param  int       $lastID
      * @access public
      * @return bool
      */
@@ -1065,10 +1075,18 @@ class searchModel extends model
         return !dao::isError();
     }
 
+    /**
+     * Unified processing of search keywords.
+     *
+     * @param  string    $string
+     * @param  string    $to
+     * @access public
+     * @return void
+     */
     public static function unify($string, $to = ',')
-    {   
+    {
         $labels = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
         $string = str_replace($labels, $to, $string);
         return preg_replace("/[{$to}]+/", $to, trim($string, $to));
-    }   
+    }
 }
