@@ -11,6 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+.pri-low {color: #000000;}
+.pri-middle {color: #FF9900;}
+.pri-high {color: #E53333;}
+</style>
 <?php js::set('mode', $mode);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -58,11 +63,11 @@
           <td><?php echo $risk->identifiedDate == '0000-00-00' ? '' : $risk->identifiedDate;?></td>
           <td><?php echo $risk->rate;?></td>
           <?php
-          $priColor = '#000000';
-          if($risk->pri == 'middle') $priColor = '#FF9900';
-          if($risk->pri == 'high')   $priColor = '#E53333';
+          $priColor = 'pri-low';
+          if($risk->pri == 'middle') $priColor = 'pri-middle';
+          if($risk->pri == 'high')   $priColor = 'pri-high';
           ?>
-          <td><?php echo "<span style='color: $priColor'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
+          <td><?php echo "<span class='$priColor'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
           <td><?php echo $this->risk->printAssignedHtml($risk, $users);;?></td>
           <td><?php echo zget($lang->risk->categoryList, $risk->category);?></td>
           <td class='c-actions'>

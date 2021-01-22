@@ -4,6 +4,9 @@
 <style>
 .block-risks .c-pri {width: 45px;text-align: center;}
 .block-risks .c-status {width: 80px;}
+.pri-low {color: #000000;}
+.pri-middle {color: #FF9900;}
+.pri-high {color: #E53333;}
 </style>
 <div class='panel-body has-table scrollbar-hover'>
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-risks <?php if(!$longBlock) echo 'block-sm';?>'>
@@ -40,11 +43,11 @@
         <?php if($longBlock):?>
         <td class='c-rate'><?php echo $risk->rate?></td>
         <?php
-        $priColor = '#000000';
-        if($risk->pri == 'middle') $priColor = '#FF9900';
-        if($risk->pri == 'high')   $priColor = '#E53333';
+        $priColor = 'pri-low';
+        if($risk->pri == 'middle') $priColor = 'pri-middle';
+        if($risk->pri == 'high')   $priColor = 'pri-high';
         ?>
-        <td><?php echo "<span style='color: $priColor'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
+        <td><?php echo "<span class='$priColor'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
         <td><?php echo zget($users, $risk->assignedTo, $risk->assignedTo)?></td>
         <td class='c-category'><?php echo zget($lang->risk->categoryList, $risk->category, $risk->category)?></td>
         <?php endif;?>
