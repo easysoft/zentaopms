@@ -26,9 +26,9 @@
       }
       ?>
       </span>
+      <?php if(!isset($fromModule)):?>
       <span class='user-name'><strong><?php echo $user->realname;?></strong></span>
       <span class='user-role'><?php echo zget($lang->user->roleList, $user->role);?></span>
-      <?php if(!isset($fromModule)):?>
       <form method='post' action=<?php echo inlink('uploadAvatar');?> id='avatarForm' enctype='multipart/form-data'>
         <input type="file" name="files" id="files" class="form-control hidden">
         <?php echo html::a('javascript:void(0);', $lang->my->uploadAvatar, '', "class='btn btn-avatar' id='avatarUploadBtn' data-placement='right'");?>
