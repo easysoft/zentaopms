@@ -90,7 +90,7 @@ js::set('defaultOpen', $open);
         <div class="table-empty-tip" style='padding: 66px 10px;'>
           <h6>
             <?php echo $lang->noData;?>
-            <span class="label label-badge label-info label-outline"><?php echo $lang->index->please . ': '. $lang->website;?></span>
+            <span class="label label-badge label-info label-outline"><?php echo $lang->index->website . ': '. $lang->website;?></span>
           </h6>
         </div>
         <?php else:?>

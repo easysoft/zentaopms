@@ -69,6 +69,7 @@ class misc extends control
         $source = isset($this->config->qcVersion) ? 'qucheng' : 'zentao';
         $lang   = str_replace('-', '_', $this->app->getClientLang());
         $link   = $this->lang->misc->api . "/updater-getLatest-{$this->config->version}-$source-$lang.html";
+
         $latestVersionList = common::http($link);
         $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
     }

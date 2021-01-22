@@ -17,4 +17,4 @@ $lang->index->actions        = 'Operating';
 $lang->index->upgrade        = 'Upgrade';
 $lang->index->log            = 'Log';
 $lang->index->detailed       = 'Details';
-$lang->index->please         = 'Please visit the official website';
+$lang->index->website        = 'Please visit the official website';

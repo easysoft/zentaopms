@@ -17,3 +17,4 @@ $lang->index->actions        = '操作';
 $lang->index->upgrade        = '升級';
 $lang->index->log            = '日誌';
 $lang->index->detailed       = '詳情';
+$lang->index->website        = '請訪問官網';
