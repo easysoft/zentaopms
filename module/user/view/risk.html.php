@@ -62,7 +62,7 @@
           if($risk->pri == 'middle') $priColor = '#FF9900';
           if($risk->pri == 'high')   $priColor = '#E53333';
           ?>
-          <td><?php echo "<span style='color:{$priColor}'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
+          <td><?php echo "<span style='color: $priColor'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
           <td><?php echo zget($lang->risk->categoryList, $risk->category);?></td>
         </tr>
         <?php endforeach;?>

@@ -24,11 +24,12 @@ class todoModel extends model
         $objectType = $this->post->type;
         $hasObject  = in_array($objectType, array('bug', 'task', 'story', 'issue', 'risk', 'review', 'testtask', 'feedback'));
 
+        if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->setDefault('idvalue', 0)
             ->cleanInt('pri, begin, end, private')
-            ->setIF($hasObject && $objectType,  'idvalue', $this->post->$objectType)
+            ->setIF($hasObject && $objectType,  'idvalue', $idvalue)
             ->setIF($this->post->date == false,  'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->begin == false or $this->post->end   == false, 'end',   '2400')
@@ -174,11 +175,12 @@ class todoModel extends model
 
         $objectType = $this->post->type;
         $hasObject  = in_array($objectType, array('bug', 'task', 'story', 'issue', 'risk', 'review', 'testtask', 'feedback'));
+        if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
         $todo = fixer::input('post')
             ->cleanInt('pri, begin, end, private')
             ->add('account', $oldTodo->account)
             ->setIF(in_array($this->post->type, array('bug', 'task', 'story')), 'name', '')
-            ->setIF($hasObject && $objectType,  'idvalue', $this->post->$objectType)
+            ->setIF($hasObject && $objectType,  'idvalue', $idvalue)
             ->setIF($this->post->date  == false, 'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')

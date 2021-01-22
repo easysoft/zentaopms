@@ -2207,7 +2207,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (2, 'user', 'manageContacts'),
 (2, 'user', 'profile'),
 (2, 'user', 'cropAvatar'),
-(2, 'user', 'cropAvatar'),
 (2, 'user', 'project'),
 (2, 'user', 'story'),
 (2, 'user', 'task'),

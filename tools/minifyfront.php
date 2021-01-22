@@ -35,12 +35,19 @@ $themeRoot  = $baseDir . '/www/theme/';
 
 /* Iinclude config and lang file to get langs and themes. */
 $config = new stdclass();
+$config->programLink  = '-';
+$config->productLink  = '-';
+$config->projectLink  = '-';
 include $baseDir . '/config/config.php';
 
 $lang = new stdclass();
-$lang->productCommon = '';
-$lang->projectCommon = '';
-$lang->storyCommon   = '';
+$lang->productCommon   = '';
+$lang->projectCommon   = '';
+$lang->storyCommon     = '';
+$lang->SRCommon        = '';
+$lang->URCommon        = '';
+$lang->productCommon   = '';
+$lang->executionCommon = '';
 include $baseDir . '/module/common/lang/zh-cn.php';
 $langs  = array_keys($config->langs);
 $themes = array_keys($lang->themes);
