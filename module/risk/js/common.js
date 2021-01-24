@@ -14,16 +14,16 @@ $(function()
         if(5 < rate && rate <= 12)   pri = 'middle';
         if(15 <= rate && rate <= 25) pri = 'high';
 
-        if(pri == 'low')    priColor = '#000000';
-        if(pri == 'middle') priColor = '#FF9900';
-        if(pri == 'high')   priColor = '#E53333';
+        if(pri == 'low')    priColor = 'pri-low';
+        if(pri == 'middle') priColor = 'pri-middle';
+        if(pri == 'high')   priColor = 'pri-high';
 
         $('#rate').val(rate);
         $('#pri').val(pri);
         $('#pri').trigger("chosen:updated")
         $('#pri').chosen();
         $('#pri').attr('disabled', true);
-        $('#priValue .chosen-container-single .chosen-single>span').attr("style", 'color:' + priColor);
+        $('#priValue .chosen-container-single .chosen-single>span').attr("class", priColor);
         $('input[name="pri"]').remove();
         $('#pri').after("<input type='hidden' name='pri' value='" + pri + "'/>");
     }
