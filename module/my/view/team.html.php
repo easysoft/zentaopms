@@ -22,14 +22,14 @@ include '../../common/view/header.html.php';
         <tr>
           <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-          <th><?php common::printOrderlink('realname', $orderBy, $vars, $lang->user->realname);?></th>
-          <th><?php common::printOrderLink('account', $orderBy, $vars, $lang->user->account);?></th>
-          <th class="w-90px"><?php common::printOrderLink('role', $orderBy, $vars, $lang->user->role);?></th>
-          <th class="c-url"><?php common::printOrderLink('email', $orderBy, $vars, $lang->user->email);?></th>
-          <th class="c-type"><?php common::printOrderLink('gender', $orderBy, $vars, $lang->user->gender);?></th>
-          <th><?php common::printOrderLink('phone', $orderBy, $vars, $lang->user->phone);?></th>
-          <th><?php !empty($this->config->isINT) ? common::printOrderLink('skype', $orderBy, $vars, $lang->user->skype) : common::printOrderLink('qq', $orderBy, $vars, $lang->user->qq);?></th>
-          <th class="c-date"><?php common::printOrderLink('last', $orderBy, $vars, $lang->user->last);?></th>
+          <th class='c-name'><?php common::printOrderlink('realname', $orderBy, $vars, $lang->user->realname);?></th>
+          <th class='w-120px'><?php common::printOrderLink('account', $orderBy, $vars, $lang->user->account);?></th>
+          <th class="w-80px"><?php common::printOrderLink('role', $orderBy, $vars, $lang->user->role);?></th>
+          <th class="w-150px"><?php common::printOrderLink('email', $orderBy, $vars, $lang->user->email);?></th>
+          <th class="w-80px"><?php common::printOrderLink('gender', $orderBy, $vars, $lang->user->gender);?></th>
+          <th class='w-100px'><?php common::printOrderLink('phone', $orderBy, $vars, $lang->user->phone);?></th>
+          <th class='w-100px'><?php !empty($this->config->isINT) ? common::printOrderLink('skype', $orderBy, $vars, $lang->user->skype) : common::printOrderLink('qq', $orderBy, $vars, $lang->user->qq);?></th>
+          <th class="w-100px"><?php common::printOrderLink('last', $orderBy, $vars, $lang->user->last);?></th>
           <th class="w-90px"><?php common::printOrderLink('visits', $orderBy, $vars, $lang->user->visits);?></th>
         </tr>
         </thead>
