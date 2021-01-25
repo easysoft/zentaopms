@@ -8,6 +8,9 @@
 .block-risks .c-category {width: 80px;}
 .block-risks .c-status {width: 80px;}
 .block-risks.block-sm .c-status {text-align: center;}
+.pri-low {color: #000000;}
+.pri-middle {color: #FF9900;}
+.pri-high {color: #E53333;}
 </style>
 <div class='panel-body has-table scrollbar-hover'>
   <table class='table table-borderless table-fixed table-fixed-head table-hover tablesorter block-risks <?php if(!$longBlock) echo 'block-sm'?>'>
@@ -32,7 +35,12 @@
         <td class='c-id-xs'><?php echo sprintf('%03d', $risk->id);?></td>
         <td class='c-name' title='<?php echo $risk->name?>'><?php echo html::a($this->createLink('risk', 'view', "riskID=$risk->id", '', '', $risk->PRJ), $risk->name)?></td>
         <?php if($longBlock):?>
-        <td class='c-pri'><?php echo zget($lang->risk->priList, $risk->pri)?></td>
+        <?php
+        $priColor = 'pri-low';
+        if($risk->pri == 'middle') $priColor = 'pri-middle';
+        if($risk->pri == 'high')   $priColor = 'pri-high';
+        ?>
+        <td class='c-pri'><?php echo "<span class='$priColor'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
         <td class='c-category'><?php echo zget($lang->risk->categoryList, $risk->category)?></td>
         <td class='c-identifiedDate'><?php echo $risk->identifiedDate == '0000-00-00' ? '' : $risk->identifiedDate;?></td>
         <?php endif;?>
