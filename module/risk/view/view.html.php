@@ -110,7 +110,8 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->risk->pri;?></th>
-                  <td><span class='label-pri <?php echo 'label-pri-' . $risk->pri;?>' title='<?php echo zget($lang->risk->priList, $risk->pri)?>'><?php echo zget($lang->risk->priList, $risk->pri)?></span></td>
+                  <?php $pri = $risk->pri == 'low' ? '3' : ($risk->pri == 'middle' ? '2' : '1');?>
+                  <td><span class='label-pri <?php echo 'label-pri-' . $pri;?>' title='<?php echo zget($lang->risk->priList, $risk->pri)?>'><?php echo zget($lang->risk->priList, $risk->pri)?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->risk->identifiedDate;?></th>
