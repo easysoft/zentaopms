@@ -18,13 +18,13 @@ $(document).ready(function()
             $('#scaleFactor + span').text(workingHours);
             $('#efficiency + span').text(workingHours);
             $('#efficiency').val("1");
-            $('#efficiency').attr('disabled', 'diabled');
+            $('.efficiency').addClass('hidden');
         }
 
         if($(this).val() == 1 || $(this).val() == 2)
         {
             $('#efficiency').val('');
-            $('#efficiency').removeAttr('disabled');
+            $('.efficiency').removeClass('hidden');
             if($(this).val() == 1)
             {
                 $('#scaleFactor + span').text(storyPoint);

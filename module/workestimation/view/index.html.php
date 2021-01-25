@@ -32,12 +32,12 @@
             <td></td>
             <td></td>
           </tr>
-          <tr>
+          <?php $hidden = $hourPoint == 0 ? 'hidden' : '';?>
+          <tr class="efficiency <?php echo $hidden?>">
             <th><?php echo $lang->workestimation->productivity;?></th>
             <td>
               <div class='input-group'>
-                <?php $disabled = $hourPoint == 0 ? 'disabled' : '';?>
-                <?php echo html::input('productivity', zget($budget, 'productivity', ''), "class='form-control' $disabled");?>
+                <?php echo html::input('productivity', zget($budget, 'productivity', ''), "class='form-control'");?>
                 <span class='input-group-addon unify-padding'>
                 <?php
                   if($hourPoint == 0) echo $lang->hourCommon;
