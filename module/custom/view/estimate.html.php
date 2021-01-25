@@ -42,15 +42,20 @@ $lang->custom->system[] = 'estimate';
           <td>
             <div class='input-group w-300px'>
               <?php
-              if($unit == 0) echo html::input('efficiency', $efficiency, "class='form-control' disabled");
-              if($unit != 0) echo html::input('efficiency', $efficiency, "class='form-control'");
+              $disabled = $unit == 0 ? 'disabled' : '';
+              echo html::input('efficiency', $efficiency, "class='form-control' $disabled");
               ?>
               <span class='input-group-addon unify-padding'>
-              <?php
-                if($unit == 0) echo $lang->custom->conceptOptions->hourPoint[0];
-                if($unit == 1) echo $lang->custom->unitList['efficiency'] . $lang->custom->conceptOptions->hourPoint[1];
-                if($unit == 2) echo $lang->custom->unitList['efficiency'] . $lang->custom->conceptOptions->hourPoint[2];
-              ?>
+                <?php
+                if($unit == 0)
+                {
+                    echo $lang->custom->conceptOptions->hourPoint[0];
+                }
+                else
+                {
+                    echo $lang->custom->unitList['efficiency'] . $lang->custom->conceptOptions->hourPoint[$unit];
+                }
+                ?>
               </span>
             </div>
           </td>
