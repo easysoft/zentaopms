@@ -72,7 +72,7 @@
               <span class='input-group-addon fix-border'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
               <?php else:?>
               <span class='input-group-addon fix-border'></span>
-              <?php echo html::select('budgetUnit', $budgetUnitList, $config->program->mainCurrency, "class='form-control'");?>
+              <?php echo html::select('budgetUnit', $budgetUnitList, $config->program->defaultCurrency, "class='form-control'");?>
               <?php endif;?>
             </div>
           </td>

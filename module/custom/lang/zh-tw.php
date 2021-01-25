@@ -45,7 +45,7 @@ $lang->custom->configureScrum     = "敏捷自定義";
 
 $lang->custom->object['program'] = '項目';
 $lang->custom->program->currencySetting    = '貨幣設置';
-$lang->custom->program->mainCurrency       = '主要貨幣';
+$lang->custom->program->defaultCurrency    = '默認貨幣';
 $lang->custom->program->fields['unitList'] = '預算單位';
 
 $lang->custom->unitList['efficiency'] = '工時/';
@@ -64,10 +64,10 @@ $lang->custom->tipCostList['CV']  = '成本偏差率(CV%)';
 $lang->custom->tipRangeList[0]  = '否';
 $lang->custom->tipRangeList[1]  = '是';
 
-$lang->custom->regionMustNumber     = '區間必須是數字';
-$lang->custom->tipNotEmpty          = '提示語不能為空';
-$lang->custom->currencyNotEmpty     = '至少選擇一種貨幣';
-$lang->custom->mainCurrencyNotEmpty = '主要貨幣不能為空';
+$lang->custom->regionMustNumber = '區間必須是數字';
+$lang->custom->tipNotEmpty      = '提示語不能為空';
+$lang->custom->currencyNotEmpty = '至少選擇一種貨幣';
+$lang->custom->defaultNotEmpty  = '默認貨幣不能為空';
 
 $lang->custom->numberError = '區間必須大於零';
 

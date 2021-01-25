@@ -16,8 +16,8 @@ $(function()
 
 $('[name*=unitList]').change(function()
 {
-    var mainCurrency = $('#mainCurrency').val();
-    $('#mainCurrency').empty().append('<option></option>');
+    var defaultCurrency = $('#defaultCurrency').val();
+    $('#defaultCurrency').empty().append('<option></option>');
     $('[name*=unitList]').each(function()
     {
         if($(this).prop('checked'))
@@ -26,12 +26,12 @@ $('[name*=unitList]').change(function()
             var firstStr = $(this).val() + '">';
 
             text = text.substring(text.lastIndexOf(firstStr) + firstStr.length, text.lastIndexOf('<'));
-            $('#mainCurrency').append("<option value='" + $(this).val() + "'>" + text + '</option>');
+            $('#defaultCurrency').append("<option value='" + $(this).val() + "'>" + text + '</option>');
                                                                                 }
     });
 
-     $('#mainCurrency').val(mainCurrency);
-     $("#mainCurrency").trigger("chosen:updated");
+     $('#defaultCurrency').val(defaultCurrency);
+     $("#defaultCurrency").trigger("chosen:updated");
 });
 
 $('[name*=unitList]').change();

@@ -67,10 +67,10 @@ $lang->custom->tipCostList['CV']  = '成本偏差率(CV%)';
 $lang->custom->tipRangeList[0]  = '否';
 $lang->custom->tipRangeList[1]  = '是';
 
-$lang->custom->regionMustNumber     = '区间必须是数字';
-$lang->custom->tipNotEmpty          = '提示语不能为空';
-$lang->custom->currencyNotEmpty     = '至少选择一种货币';
-$lang->custom->mainCurrencyNotEmpty = '主要货币不能为空';
+$lang->custom->regionMustNumber = '区间必须是数字';
+$lang->custom->tipNotEmpty      = '提示语不能为空';
+$lang->custom->currencyNotEmpty = '至少选择一种货币';
+$lang->custom->defaultNotEmpty  = '默认货币不能为空';
 
 $lang->custom->numberError = '区间必须大于零';
 
@@ -91,7 +91,7 @@ $lang->custom->object['block']    = '区块';
 
 $lang->custom->program = new stdClass();
 $lang->custom->program->currencySetting    = '货币设置';
-$lang->custom->program->mainCurrency       = '主要货币';
+$lang->custom->program->defaultCurrency    = '默认货币';
 $lang->custom->program->fields['unitList'] = '预算单位';
 
 $lang->custom->story = new stdClass();
