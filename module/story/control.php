@@ -1359,6 +1359,9 @@ class story extends control
             $this->product->setMenu($products, $productID, $branch);
         }
 
+        /* Save session. */
+        $this->session->set('storyList', $this->app->getURI(true));
+
         /* Load pager and get tracks. */
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
