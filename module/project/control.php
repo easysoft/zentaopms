@@ -2160,7 +2160,7 @@ class project extends control
         $project    = $this->project->getById($projectID);
         $products   = $this->project->getProducts($projectID);
         $browseLink = $this->createLink('project', 'story', "projectID=$projectID");
-        if($project->type == 'project') $browseLink = $this->createLink('projectstory', 'story');
+        if($project->type == 'project') $browseLink = $this->createLink('projectstory', 'story', "productID={$this->session->product}");
 
         $this->session->set('storyList', $this->app->getURI(true)); // Save session.
         if($project->type != 'project') $this->project->setMenu($this->projects, $project->id);     // Set menu.
