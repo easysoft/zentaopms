@@ -12,7 +12,6 @@
 ?>
 <?php
 include '../../common/view/datatable.fix.html.php';
-include '../../common/view/datatable.html.php';
 js::set('confirmDelete', $lang->programplan->confirmDelete);
 ?>
 <style>
@@ -41,19 +40,18 @@ js::set('confirmDelete', $lang->programplan->confirmDelete);
   $widths['leftWidth']  = 300;
   $columns = 0;
   ?>
-  <table class='table has-sort-head datatable' id='programplanList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-checkbox-name='programplanList[]'>
+  <table class='table has-sort-head' id='programplanList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-checkbox-name='programplanList[]'>
     <thead>
       <tr>
-      <?php
-      foreach($setting as $key => $value)
-      {
-          if($value->show)
-          {
-              $this->datatable->printHead($value, $orderBy, $vars, false);
-              $columns ++;
-          }
-      }
-      ?>
+        <th class='w-50px'><?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
+        <th>               <?php common::printOrderLink('name',      $orderBy, $vars, $lang->programplan->name);?></th>
+        <th class='w-90px'><?php common::printOrderLink('percent',   $orderBy, $vars, $lang->programplan->percent);?></th>
+        <th class='w-80px'><?php common::printOrderLink('attribute', $orderBy, $vars, $lang->programplan->attribute);?></th>
+        <th class='w-90px'><?php common::printOrderLink('begin',     $orderBy, $vars, $lang->programplan->begin);?></th>
+        <th class='w-90px'><?php common::printOrderLink('end',       $orderBy, $vars, $lang->programplan->end);?></th>
+        <th class='w-90px'><?php common::printOrderLink('realBegan', $orderBy, $vars, $lang->programplan->realBegan);?></th>
+        <th class='w-90px'><?php common::printOrderLink('realEnd',   $orderBy, $vars, $lang->programplan->realEnd);?></th>
+        <th class='w-150px text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
