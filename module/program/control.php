@@ -63,7 +63,6 @@ class program extends control
         if(common::hasPriv('program', 'pgmcreate')) $this->lang->pageActions = html::a($this->createLink('program', 'pgmcreate'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PGMCreate, '', "class='btn btn-secondary'");
 
         $this->app->session->set('programList', $this->app->getURI(true));
-        $this->app->session->set('whitelist', $this->app->getURI(true));
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
@@ -415,7 +414,6 @@ class program extends control
         setCookie("lastPGM", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $this->app->session->set('PGMProject', $this->app->getURI(true));
-        $this->app->session->set('whitelist', $this->app->getURI(true));
 
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
@@ -795,7 +793,6 @@ class program extends control
         $this->lang->program->menu = $this->lang->PRJ->menu;
         $this->lang->program->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
         $this->app->session->set('PRJBrowse', $this->app->getURI(true));
-        $this->app->session->set('whitelist', $this->app->getURI(true));
         $this->loadModel('datatable');
 
         /* Load pager and get tasks. */
