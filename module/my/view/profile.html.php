@@ -18,11 +18,11 @@
       <?php 
       if($user->avatar)
       {
-          echo html::image($app->user->avatar);
+          echo html::image($user->avatar);
       }
       else
       {
-          echo strtoupper($app->user->account[0]);
+          echo strtoupper($user->account[0]);
       }
       ?>
       </span>
