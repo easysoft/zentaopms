@@ -37,7 +37,7 @@
     }
     ?>
     </div>
-    <?php if($canBeChanged and $productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'></i> " . $lang->project->createStory, '', "class='btn btn-primary' class='btn btn-link export' data-group='project'");?>
+    <?php //if($canBeChanged and $productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'></i> " . $lang->project->createStory, '', "class='btn btn-primary' class='btn btn-link export' data-group='project'");?>
   </div>
 </div>
 <?php
