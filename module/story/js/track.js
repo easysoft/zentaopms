@@ -1,4 +1,4 @@
 $(function()
 {
-    if(rawModule == 'projectstory') $("#subNavbar .nav li[data-id='story']").removeClass('active');
+    if(rawModule == 'projectstory') $("#navbar .nav li[data-id='projectstory']").removeClass('active');
 })

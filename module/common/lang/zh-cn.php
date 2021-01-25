@@ -946,9 +946,10 @@ $lang->menu->waterfall->programplan    = array('link' => '计划|programplan|bro
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => '文档|doc|index|project={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|story', 'alias' => 'story,track');
+$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|story', 'alias' => 'story');
 $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代码|repo|browse|';
+$lang->menu->waterfall->track          = '矩阵|projectstory|track';
 $lang->menu->waterfall->qa             = '测试|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
@@ -1014,9 +1015,6 @@ $lang->stakeholder->menu->issue = array('link' => '问题管理|stakeholder|issu
 $lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '阶段列表|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->projectstory->menu->story = array('link' => "{$lang->SRCommon}|projectstory|story", 'subModule' => 'story,project', 'alias' => 'linkstory');
-$lang->projectstory->menu->track = array('link' => '跟踪矩阵|projectstory|track', 'subModule' => '');
-
 $lang->design->menu->all      = array('link' => '所有|design|browse|productID={PRODUCT}&browseType=all');
 $lang->design->menu->hlds     = array('link' => '概要设计|design|browse|productID={PRODUCT}&browseType=HLDS');
 $lang->design->menu->dds      = array('link' => '详细设计|design|browse|productID={PRODUCT}&browseType=DDS');
@@ -1025,6 +1023,6 @@ $lang->design->menu->ads      = array('link' => '接口设计|design|browse|prod
 $lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');

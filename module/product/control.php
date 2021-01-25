@@ -196,8 +196,8 @@ class product extends control
         $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         if($this->app->rawModule == 'projectstory')
         {
-            $products     = $this->product->getProductsByProject($this->session->PRJ);
-            $productPlans = $this->loadModel('project')->getPlans($products);
+            $projectProducts = $this->product->getProductsByProject($this->session->PRJ);
+            $productPlans    = $this->loadModel('project')->getPlans($projectProducts);
 
             if($browseType == 'bybranch') $param = $branch;
             $stories = $this->story->getProjectStories($this->session->PRJ, $sort, $browseType, $param, 'story', '', $pager, $productID, $branch);
@@ -239,36 +239,37 @@ class product extends control
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
 
         /* Assign. */
-        $this->view->title         = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
-        $this->view->position[]    = $this->products[$productID];
-        $this->view->position[]    = $this->lang->product->browse;
-        $this->view->productID     = $productID;
-        $this->view->product       = $this->product->getById($productID);
-        $this->view->productName   = $this->products[$productID];
-        $this->view->moduleID      = $moduleID;
-        $this->view->stories       = $stories;
-        $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
-        $this->view->productPlans  = isset($productPlans) ? $productPlans : array();
-        $this->view->summary       = $this->product->summary($stories, $storyType);
-        $this->view->moduleTree    = $moduleTree;
-        $this->view->parentModules = $this->tree->getParents($moduleID);
-        $this->view->pager         = $pager;
-        $this->view->users         = $this->user->getPairs('noletter|pofirst|nodeleted');
-        $this->view->orderBy       = $orderBy;
-        $this->view->browseType    = $browseType;
-        $this->view->modules       = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
-        $this->view->moduleID      = $moduleID;
-        $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
-        $this->view->branch        = $branch;
-        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
-        $this->view->storyStages   = $this->product->batchGetStoryStage($stories);
-        $this->view->setModule     = true;
-        $this->view->storyTasks    = $storyTasks;
-        $this->view->storyBugs     = $storyBugs;
-        $this->view->storyCases    = $storyCases;
-        $this->view->param         = $param;
-        $this->view->products      = $this->products;
-        $this->view->storyType     = $storyType;
+        $this->view->title           = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
+        $this->view->position[]      = $this->products[$productID];
+        $this->view->position[]      = $this->lang->product->browse;
+        $this->view->productID       = $productID;
+        $this->view->product         = $this->product->getById($productID);
+        $this->view->productName     = $this->products[$productID];
+        $this->view->moduleID        = $moduleID;
+        $this->view->stories         = $stories;
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
+        $this->view->productPlans    = isset($productPlans) ? $productPlans : array();
+        $this->view->summary         = $this->product->summary($stories, $storyType);
+        $this->view->moduleTree      = $moduleTree;
+        $this->view->parentModules   = $this->tree->getParents($moduleID);
+        $this->view->pager           = $pager;
+        $this->view->users           = $this->user->getPairs('noletter|pofirst|nodeleted');
+        $this->view->orderBy         = $orderBy;
+        $this->view->browseType      = $browseType;
+        $this->view->modules         = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+        $this->view->moduleID        = $moduleID;
+        $this->view->moduleName      = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->branch          = $branch;
+        $this->view->branches        = $this->loadModel('branch')->getPairs($productID);
+        $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
+        $this->view->setModule       = true;
+        $this->view->storyTasks      = $storyTasks;
+        $this->view->storyBugs       = $storyBugs;
+        $this->view->storyCases      = $storyCases;
+        $this->view->param           = $param;
+        $this->view->products        = $this->products;
+        $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
+        $this->view->storyType       = $storyType;
         $this->display();
     }
 

@@ -80,8 +80,7 @@ class projectStory extends control
         if(empty($productID)) $productID = key($this->products);
 
         $this->lang->menugroup->product = 'projectstory';
-        $this->lang->projectstory->menu->story['subModule'] = 'product';
-        $this->projectstory->setMenu($this->products, $productID, $branch);
+        $this->lang->menu->projectstory['subModule'] = 'product';
 
         $this->lang->story->title             = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
         $this->lang->story->createRequirement = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->createRequirement);

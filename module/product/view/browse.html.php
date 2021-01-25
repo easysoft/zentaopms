@@ -40,6 +40,19 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
     </div>
   </div>
   <div class="btn-toolbar pull-left">
+    <?php if($this->app->rawModule == 'projectstory'): ?>
+    <div class='btn-group'>
+      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $productName;?>'><?php echo $productName;?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+        <?php
+        foreach($projectProducts as $product)
+        {
+            echo "<li>" . html::a($this->createLink('projectstory', 'story', "productID=$product->id&branch=0&browseType=$browseType"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
+        }
+        ?>
+      </ul>
+    </div>
+    <?php endif;?>
     <?php
     foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
     {

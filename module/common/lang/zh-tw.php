@@ -918,9 +918,10 @@ $lang->menu->waterfall->programplan    = array('link' => '計劃|programplan|bro
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => '文檔|doc|index|project={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => '報告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|story', 'alias' => 'story,track');
+$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|story', 'alias' => 'story');
 $lang->menu->waterfall->design         = '設計|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代碼|repo|browse|';
+$lang->menu->waterfall->track          = '矩陣|projectstory|track';
 $lang->menu->waterfall->qa             = '測試|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => '發佈|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
@@ -986,10 +987,7 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = array('link' => '甘特圖|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => '階段列表|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->projectstory->menu->story = array('link' => "{$lang->SRCommon}|projectstory|story", 'subModule' => 'story,project', 'alias' => 'linkstory');
-$lang->projectstory->menu->track = array('link' => '跟蹤矩陣|projectstory|track', 'subModule' => '');
-
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'stage');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');

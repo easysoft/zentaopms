@@ -946,9 +946,10 @@ $lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|brows
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|story', 'alias' => 'story,track');
+$lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|story', 'alias' => 'story');
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';
+$lang->menu->waterfall->track          = 'Track|projectstory|track';
 $lang->menu->waterfall->qa             = 'Index|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
@@ -1014,9 +1015,6 @@ $lang->stakeholder->menu->issue = array('link' => 'Issue|stakeholder|issue|');
 $lang->programplan->menu->gantt = array('link' => 'Gantt|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = array('link' => 'Stage|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
-$lang->projectstory->menu->story = array('link' => "{$lang->SRCommon}|projectstory|story", 'subModule' => 'story,project', 'alias' => 'linkstory');
-$lang->projectstory->menu->track = array('link' => 'Track|projectstory|track', 'subModule' => '');
-
 $lang->design->menu->all      = array('link' => 'All|design|browse|productID={PRODUCT}&browseType=all');
 $lang->design->menu->hlds     = array('link' => 'HLDS|design|browse|productID={PRODUCT}&browseType=HLDS');
 $lang->design->menu->dds      = array('link' => 'DDS|design|browse|productID={PRODUCT}&browseType=DDS');
@@ -1025,6 +1023,6 @@ $lang->design->menu->ads      = array('link' => 'ADS|design|browse|productID={PR
 $lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');
