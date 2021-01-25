@@ -16,11 +16,25 @@
       </p>
     </div>
     <?php else:?>
+    <?php $style = $this->app->rawModule == 'projectstory' ? "style='overflow: unset;'" : '';?>
     <div class='main-table' data-ride="table">
       <table class='table table-bordered' id="trackList">
         <thead>
           <tr>
-            <th><?php echo $lang->story->requirement;?></th>
+            <th <?php echo $style;?>>
+              <?php if($this->app->rawModule == 'projectstory'): ?>
+              <div class="dropdown">
+                <?php echo html::a('javascript:;', "<i class='icon icon-product'></i>". $projectProducts[$productID]->name . '<span class="caret"></span>', '', 'class="dropdown-toggle" data-toggle="dropdown"');?>
+                <ul class="dropdown-menu">
+                  <?php foreach($projectProducts as $product): ?>
+                  <li><?php echo html::a($this->createLink('projectstory', 'track', "productID=$product->id"), $product->name);?></li>
+                  <?php endforeach;?>
+                </ul>
+              </div>
+              <?php else:?>
+              <?php echo $lang->story->requirement;?>
+              <?php endif;?>
+            </th>
             <th><?php echo $lang->story->story;?></th>
             <th><?php echo $lang->story->design;?></th>
             <th><?php echo $lang->story->case;?></th>
