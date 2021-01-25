@@ -37,13 +37,13 @@ $lang->custom->system[] = 'estimate';
           </td>
           <td></td>
         </tr>
-        <tr>
+        <?php $hidden = $unit == 0 ? 'hidden' : '';?>
+        <tr class="efficiency <?php echo $hidden;?>">
           <th class='w-150px'><?php echo $lang->custom->estimateEfficiency;?></th>
           <td>
             <div class='input-group w-300px'>
               <?php
-              $disabled = $unit == 0 ? 'disabled' : '';
-              echo html::input('efficiency', $efficiency, "class='form-control' $disabled");
+              echo html::input('efficiency', $efficiency, "class='form-control'");
               ?>
               <span class='input-group-addon unify-padding'>
                 <?php
