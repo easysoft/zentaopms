@@ -53,7 +53,7 @@ class custom extends control
             $this->app->loadConfig($module);
             $unitList = zget($this->config->$module, 'unitList', '');
             $this->view->unitList     = explode(',', $unitList);
-            $this->view->mainCurrency = zget($this->config->$module, 'mainCurrency', 'rmb');
+            $this->view->mainCurrency = zget($this->config->$module, 'mainCurrency', 'CNY');
         }
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
@@ -387,7 +387,7 @@ class custom extends control
             /* Update story estimate field. */
             if($unit != $_POST['hourPoint'])
             {
-                $stories = $this->dao->select('*')->from(TABLE_STORY)->fetchAll();
+                $stories = $this->dao->select('id,estimate')->from(TABLE_STORY)->fetchAll();
                 foreach($stories as $story)
                 {
                     $this->dao->update(TABLE_STORY)->set('estimate')->eq($story->estimate * $this->post->scaleFactor)->where('id')->eq($story->id)->exec();
@@ -460,6 +460,7 @@ class custom extends control
 
     /**
      * Edit story concept.
+     * @param  int    $key
      * 
      * @access public
      * @return void
@@ -489,6 +490,7 @@ class custom extends control
 
     /**
      * Delete story concept.
+     * @param  int    $key
      * 
      * @access public
      * @return void
@@ -502,6 +504,8 @@ class custom extends control
 
     /**
      * Delete story concept.
+     * @param  int    $key
+     * @param  string $confirm yse|no
      * 
      * @access public
      * @return void
