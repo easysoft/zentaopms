@@ -163,7 +163,7 @@ class projectreleaseModel extends model
                 $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
                 $this->dao->insert(TABLE_BUILD)->data($build)
                     ->autoCheck()
-                    ->check('name', 'unique', "product = {$productID} AND branch = {$branch} AND deleted = '0'")
+                    ->check('name', 'unique', "product = '{$productID}' AND branch = '{$branch}' AND deleted = '0'")
                     ->batchCheck($this->config->release->create->requiredFields, 'notempty')
                     ->exec();
                 if(dao::isError()) return false;
