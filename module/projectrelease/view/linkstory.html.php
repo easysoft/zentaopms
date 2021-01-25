@@ -31,7 +31,7 @@
           <th class='text-left'><?php echo $lang->story->title;?></th>
           <th class='c-user'>  <?php echo $lang->openedByAB;?></th>
           <th class='c-user'>  <?php echo $lang->assignedToAB;?></th>
-          <th class='w-60px'>  <?php echo $lang->story->estimateAB;?></th>
+          <th class='w-70px'>  <?php echo $lang->story->estimateAB;?></th>
           <th class='c-status'><?php echo $lang->statusAB;?></th>
           <th class='w-80px'><?php echo $lang->story->stageAB;?></th>
         </tr>
