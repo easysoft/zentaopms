@@ -52,8 +52,8 @@ class custom extends control
         {
             $this->app->loadConfig($module);
             $unitList = zget($this->config->$module, 'unitList', '');
-            $this->view->unitList     = explode(',', $unitList);
-            $this->view->mainCurrency = zget($this->config->$module, 'mainCurrency', 'CNY');
+            $this->view->unitList        = explode(',', $unitList);
+            $this->view->defaultCurrency = zget($this->config->$module, 'defaultCurrency', 'CNY');
         }
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
@@ -94,7 +94,7 @@ class custom extends control
             {
                 $data = fixer::input('post')->join('unitList', ',')->get();
                 if(empty($data->unitList)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->currencyNotEmpty));
-                if(empty($data->mainCurrency)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->mainCurrencyNotEmpty));
+                if(empty($data->defaultCurrency)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->defaultNotEmpty));
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
             elseif($module == 'story' and $field == 'review')

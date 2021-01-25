@@ -63,8 +63,8 @@ EOT;
           <td colspan='5'><?php echo html::checkbox('unitList', $lang->program->unitList, $unitList);?></td>
         </tr>
         <tr>
-          <th class='text-left'><?php echo $lang->custom->program->mainCurrency;?></th>
-          <td><?php echo html::select('mainCurrency', $lang->program->unitList, $mainCurrency, "class='form-control chosen' required");?></td>
+          <th class='text-left'><?php echo $lang->custom->program->defaultCurrency;?></th>
+          <td><?php echo html::select('defaultCurrency', $lang->program->unitList, $defaultCurrency, "class='form-control chosen' required");?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center'><?php echo html::submitButton();?></td>
