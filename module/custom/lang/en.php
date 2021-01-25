@@ -49,7 +49,7 @@ $lang->custom->deleteStoryConcept = "Delete story Concept";
 $lang->custom->configureScrum     = "Scrum Model Custom";
 $lang->custom->URConcept          = "UR Concept";
 $lang->custom->SRConcept          = "SR Concept";
-$lang->custom->one                = "One";
+$lang->custom->one                = " One";
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';

@@ -3316,7 +3316,7 @@ class storyModel extends model
             }
             else if($id == 'estimate')
             {
-                $title = $story->estimate . ' ' . $this->lang->custom->conceptOptions->hourPoint[$this->config->custom->hourPoint];
+                $title = $story->estimate . ' ' . $this->lang->hourCommon;
             }
             else if($id == 'reviewedBy')
             {
