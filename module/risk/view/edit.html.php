@@ -12,6 +12,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<style>
+.pri-low {color: #000000;}
+.pri-middle {color: #FF9900;}
+.pri-high {color: #E53333;}
+</style>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
