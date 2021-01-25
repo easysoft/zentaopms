@@ -114,6 +114,11 @@ class personnel extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Set back link. */
+        $goback = $this->session->PRJBrowse ? $this->session->PRJBrowse : $this->createLink('program', 'PRJWhitelist', "projectID=$objectID");
+        if($from == 'pgmbrowse')  $goback = $this->createLink('program', 'PGMBrowse');
+        if($from == 'pgmproject') $goback = $this->session->PGMProject ? $this->session->PGMProject : $this->createLink('program', 'PGMProject', "programID=$programID");
+
         $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->position[] = $this->lang->personnel->whitelist;
 
@@ -122,6 +127,7 @@ class personnel extends control
         $this->view->whitelist = $this->personnel->getWhitelist($objectID, $objectType, $orderBy, $pager);
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->module    = $module;
+        $this->view->goback    = $goback;
         $this->view->programID = $programID;
         $this->view->from      = $from;
 
