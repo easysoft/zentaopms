@@ -1,10 +1,10 @@
 .body-modal .main-header{padding: 13px 0px 0px 0;}
-.cell{height:440px;}
+.cell{height:420px;}
 .row table{width: 100%;}
 .row th{width: 20%; line-height: 30px; padding-right: 20px; text-align: right; font-weight: 500;}
 .row td{width: 30%; text-align: left; font-weight: 700;}
 .main-actions{margin: 20px 0 20px 0; text-align: center;}
-.user-title{margin: 20px 10px -10px 10px; font-size: 14px; font-weight: bold; padding-left: 10px;}
+.user-title{margin: 10px 10px -10px 10px; font-size: 14px; font-weight: bold; padding-left: 10px;}
 .avatar { display: inline-block; width: 50px; height: 50px; line-height: 50px;}
 .user-name{margin-left: 15px}
 .user-name, .user-role{font-size: 16px; vertical-align: top;}
