@@ -50,7 +50,7 @@
 
     if(common::canModify('project', $project))
     {
-        $this->lang->story->create = $this->lang->project->createStory;
+        /*$this->lang->story->create = $this->lang->project->createStory;
         if($productID and !$this->loadModel('story')->checkForceReview())
         {
             echo "<div class='btn-group dropdown-hover'>";
@@ -63,7 +63,7 @@
             if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->batchCreate, '', "data-group='project'") . '</li>';
             echo '</ul>';
             echo '</div>';
-        }
+        }*/
 
         if(commonModel::isTutorialMode())
         {
