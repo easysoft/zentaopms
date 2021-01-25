@@ -118,10 +118,7 @@
                 return 'project';
             }
         }
-        if(moduleName === 'user' && (link.params.fromModule || link.params.$2) == 'my')
-        {
-            return 'my';
-        }
+        if(moduleName === 'user' && (link.params.fromModule || link.params.$2) == 'my') return 'my';
 
         group = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return groupsMap[group] ? group : '';
