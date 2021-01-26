@@ -59,6 +59,7 @@ function loadAll(productID)
         loadProductBuilds(productID);
         loadProductplans(productID);
         loadProductStories(productID);
+        loadTestTasks(productID);
     }
 }
 
@@ -314,12 +315,14 @@ function loadProjectRelated(projectID)
         loadProjectStories(projectID);
         loadProjectBuilds(projectID);
         loadAssignedTo(projectID);
+        loadTestTasks($('#product').val(), projectID);
     }
     else
     {
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         loadProductStories($('#product').val());
         loadProductBuilds($('#product').val());
+        loadTestTasks($('#product').val());
     }
 }
 
@@ -457,7 +460,7 @@ var oldAssignedTo      = $("#assignedTo").find("option:selected").val();
  */
 function loadAssignedTo(projectID, selectedUser)
 {
-    selectedUser = (typeof selectedUser == undefined) ? '' : $('#assignedTo').val();
+    selectedUser = (typeof(selectedUser) == 'undefined') ? '' : $('#assignedTo').val();
     link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + selectedUser);
     $.get(link, function(data)
     {
@@ -468,6 +471,30 @@ function loadAssignedTo(projectID, selectedUser)
         var defaultAssignedTo = $('#assignedTo').val();
         if(defaultAssignedTo !== oldAssignedTo && selectedUser == '') $('#assignedTo').append(defaultOption);
         $('#assignedTo').chosen();
+    });
+}
+
+var oldTestTaskTitle = $("#testtask").find("option:selected").text();
+var oldTestTask      = $("#testtask").find("option:selected").val();
+
+/**
+ * Load test tasks.
+ * 
+ * @param  int $productID 
+ * @param  int $projectID 
+ * @access public
+ * @return void
+ */
+function loadTestTasks(productID, projectID)
+{
+    if(typeof(projectID) == 'undefined') projectID = 0;
+    link = createLink('testtask', 'ajaxGetTestTasks', 'productID=' + productID + '&projectID=' + projectID);
+    $.get(link, function(data)
+    {
+        var defaultOption = '<option title="' + oldTestTaskTitle + '" value="' + oldTestTask + '" selected="selected">' + oldTestTaskTitle + '</option>';
+        $('#testtaskBox').html(data);
+        $('#testtask').append(defaultOption);
+        $('#testtask').chosen();
     });
 }
 

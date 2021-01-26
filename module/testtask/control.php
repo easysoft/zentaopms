@@ -1234,4 +1234,18 @@ class testtask extends control
         $this->view->productID = $productID;
         $this->display();
     }
+
+    /**
+     * ajax get test tasks 
+     * 
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTestTasks($productID, $projectID = 0)
+    {
+        $pairs = $this->testtask->getPairs($productID, $projectID);
+        die(html::select('testtask', $pairs, '', "class='form-control chosen'"));
+    }
 }
