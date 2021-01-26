@@ -115,7 +115,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (11, 'user',         'cropAvatar');
 
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'unitList', 'CNY,USD');
-REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'mainCurrency', 'CNY');
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'defaultCurrency', 'CNY');
 
 ALTER TABLE `zt_project` DROP `storyConcept`;
 ALTER TABLE `zt_product` DROP `storyConcept`;
