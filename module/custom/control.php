@@ -363,8 +363,6 @@ class custom extends control
             $this->loadModel('setting');
             $data = fixer::input('post')->get();
 
-            /* Judgment of required items. */
-
             $this->setting->setItem('system.custom.hourPoint', $data->hourPoint);
             $this->setting->setItem('system.custom.scaleFactor', $data->scaleFactor);
             $this->setting->setItem('system.custom.cost', $data->cost);
