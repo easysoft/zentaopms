@@ -162,9 +162,9 @@
             <?php if($type != 'finishedBy'): ?>
             <td class='c-user'><?php echo zget($users, $child->finishedBy);?></td>
             <?php endif;?>
-            <td class='c-hours'><?php echo round($child->estimate, 1);?></td>
-            <td class='c-hours'><?php echo round($child->consumed, 1);?></td>
-            <td class='c-hours'><?php echo round($child->left, 1);?></td>
+            <td class='c-hours' title="<?php echo round($child->estimate, 1) . ' ' . $lang->project->workHour;?>"><?php echo round($child->estimate, 1) . ' ' . $lang->project->workHourUnit;?></td>
+            <td class='c-hours' title="<?php echo round($child->consumed, 1) . ' ' . $lang->project->workHour;?>"><?php echo round($child->consumed, 1) . ' ' . $lang->project->workHourUnit;?></td>
+            <td class='c-hours' title="<?php echo round($child->left,     1) . ' ' . $lang->project->workHour;?>"><?php echo round($child->left,     1) . ' ' . $lang->project->workHourUnit;?></td>
             <td class='c-status'>
               <?php $storyChanged = (!empty($child->storyStatus) and $child->storyStatus == 'active' and $child->latestStoryVersion > $child->storyVersion and !in_array($child->status, array('cancel', 'closed')));?>
               <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->my->storyChanged}</span>") : print("<span class='status-task status-{$child->status}'> " . $this->processStatus('task', $child) . "</span>");?>
