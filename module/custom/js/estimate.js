@@ -52,6 +52,8 @@ $(document).ready(function()
 function setScaleFactor()
 {
     var scaleFactor = $('#convertFactor').val();
+
+    /* Judgment of required items. */
     if(!scaleFactor)
     {
         alert(notempty);
