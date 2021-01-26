@@ -18,8 +18,6 @@
       <?php
       $that = zget($lang->user->thirdPerson, $user->gender);
       echo "<li class='active'>" . html::a($this->createLink('user', 'testtask', "userID={$user->id}&fromModule=$fromModule"), sprintf($lang->user->testTask2Him, $that)) . "</li>";
-      echo "<li>" . html::a($this->createLink('user', 'testcase', "userID={$user->id}&fromModule=$fromModule&type=case2Him"),  sprintf($lang->user->case2Him, $that)) . "</li>";
-      echo "<li>" . html::a($this->createLink('user', 'testcase', "userID={$user->id}&fromModule=$fromModule&type=caseByHim"), sprintf($lang->user->caseByHim, $that)) . "</li>";
       ?>
     </ul>
   </nav>

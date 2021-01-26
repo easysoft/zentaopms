@@ -116,9 +116,9 @@ $lang->user->closedBy    = '由%s关闭';
 $lang->user->reviewedBy  = '由%s评审';
 $lang->user->canceledBy  = '由%s取消';
 
-$lang->user->testTask2Him = '%s负责的版本';
-$lang->user->case2Him     = '给%s的用例';
-$lang->user->caseByHim    = '%s建的用例';
+$lang->user->testTask2Him = '%s负责的';
+$lang->user->case2Him     = '指派给%s';
+$lang->user->caseByHim    = '由%s创建';
 
 $lang->user->errorDeny    = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
 $lang->user->errorView    = "抱歉，您无权访问『<b>%s</b>』视图。请联系管理员获取权限。点击后退返回上页。";

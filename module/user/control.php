@@ -106,6 +106,7 @@ class user extends control
      *
      * @param  int    $userID
      * @param  string $fromModule
+     * @param  string $storyType
      * @param  string $type
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -113,7 +114,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function story($userID, $fromModule = 'user', $type = 'assignedTo', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($userID, $fromModule = 'user', $storyType = 'story', $type = 'assignedTo', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('storyList', $this->app->getURI(true));
@@ -135,9 +136,10 @@ class user extends control
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
         $this->view->position[] = $this->lang->user->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($account, $type, 'id_desc', $pager);
+        $this->view->stories    = $this->loadModel('story')->getUserStories($account, $type, 'id_desc', $pager, $storyType);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->fromModule = $fromModule;
+        $this->view->storyType  = $storyType;
         $this->view->type       = $type;
         $this->view->user       = $user;
         $this->view->pager      = $pager;

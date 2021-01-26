@@ -17,7 +17,6 @@
     <ul class='nav nav-default'>
       <?php
       $that = zget($lang->user->thirdPerson, $user->gender);
-      echo "<li id='testtaskTab'>" . html::a($this->createLink('user', 'testtask', "userID={$user->id}&fromModule=$fromModule"), sprintf($lang->user->testTask2Him, $that)) . "</li>";
     
       $active = $type == 'case2Him' ? 'active' : '';
       echo "<li class='$active'>" . html::a($this->createLink('user', 'testcase', "userID={$user->id}&fromModule=$fromModule&type=case2Him"),  sprintf($lang->user->case2Him, $that)) . "</li>";

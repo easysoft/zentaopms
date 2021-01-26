@@ -111,9 +111,9 @@ $lang->user->closedBy    = '由%s關閉';
 $lang->user->reviewedBy  = '由%s評審';
 $lang->user->canceledBy  = '由%s取消';
 
-$lang->user->testTask2Him = '%s負責的版本';
-$lang->user->case2Him     = '給%s的用例';
-$lang->user->caseByHim    = '%s建的用例';
+$lang->user->testTask2Him = '%s負責的';
+$lang->user->case2Him     = '指派給%s';
+$lang->user->caseByHim    = '由%s創建';
 
 $lang->user->errorDeny    = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。點擊後退返回上頁。";
 $lang->user->errorView    = "抱歉，您無權訪問『<b>%s</b>』視圖。請聯繫管理員獲取權限。點擊後退返回上頁。";
