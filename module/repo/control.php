@@ -465,7 +465,10 @@ class repo extends control
         $this->repo->setMenu($this->repos, $repoID);
         $this->repo->setBackSession();
         if($repoID == 0) $repoID = $this->session->repoID;
-        $repo  = $this->repo->getRepoByID($repoID);
+        $repo = $this->repo->getRepoByID($repoID);
+
+        /* Save session. */
+        $this->session->set('revisionList', $this->app->getURI(true));
 
         $this->scm->setEngine($repo);
         $log = $this->scm->log('', $revision, $revision);

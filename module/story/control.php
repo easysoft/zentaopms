@@ -1360,7 +1360,13 @@ class story extends control
         }
 
         /* Save session. */
-        $this->session->set('storyList', $this->app->getURI(true));
+        $this->session->set('storyList',    $this->app->getURI(true));
+        $this->session->set('designList',   $this->app->getURI(true));
+        $this->session->set('bugList',      $this->app->getURI(true));
+        $this->session->set('caseList',     $this->app->getURI(true));
+        $this->session->set('bugList',      $this->app->getURI(true));
+        $this->session->set('revisionList', $this->app->getURI(true));
+
 
         /* Load pager and get tracks. */
         $this->app->loadClass('pager', $static = true);

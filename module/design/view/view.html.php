@@ -13,7 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('design', 'browse', "productID=$design->product"), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
+    <?php $browseLink = $app->session->designList != false ? $app->session->designList : $this->createLink('design', 'browse', "productID=$design->product");?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <div class="page-title">
       <span class="label label-id"><?php echo $design->id?></span>
