@@ -63,7 +63,7 @@
           <td class='text-left'><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $lang->program->future;?></td>
           <td>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
-            <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='800'");?>
+            <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
           </td>
           <td class='c-actions'>
             <?php if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);?>
