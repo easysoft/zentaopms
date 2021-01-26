@@ -4,18 +4,23 @@ $(document).ready(function()
     $('input[name="hourPoint"]').change(function()
     {
         /* Show or hide conversion relation fields. */
-        if($(this).val() == unit)
+        if($(this).val() != unit)
         {
-            $('#convertRelations').addClass('hidden');
-        }
-        else
-        {
-            $('#convertRelations').removeClass('hidden');
+            if($(this).val() == 0) var hourPoint = workingHours;
+            if($(this).val() == 1) var hourPoint = storyPoint;
+            if($(this).val() == 2) var hourPoint = functionPoint;
+
+            convertRelationTitle = convertRelationTitle.replace('%s', hourPoint);
+            convertRelationTips  = convertRelationTips.replace(/%s/g, hourPoint);
+            $('#factor + span').text(hourPoint);
+
+            $('#title').text(convertRelationTitle);
+            $('#tips').text(convertRelationTips);
+            $('#convertRelations').modal({show: true});
         }
 
         if($(this).val() == 0)
         {
-            $('#scaleFactor + span').text(workingHours);
             $('#efficiency + span').text(workingHours);
             $('#efficiency').val("1");
             $('.efficiency').addClass('hidden');
@@ -27,15 +32,37 @@ $(document).ready(function()
             $('.efficiency').removeClass('hidden');
             if($(this).val() == 1)
             {
-                $('#scaleFactor + span').text(storyPoint);
                 $('#efficiency + span').text(efficiency + storyPoint);
             }
 
             if($(this).val() == 2)
             {
-                $('#scaleFactor + span').text(functionPoint);
                 $('#efficiency + span').text(efficiency + functionPoint);
             }
         }
     });
 });
+
+/**
+ * Set scale factor.
+ *
+ * @access public
+ * @return void
+ */
+function setScaleFactor()
+{
+    var scaleFactor = $('#factor').val();
+    if(!scaleFactor)
+    {
+        alert(notempty);
+    }
+    else if(isNaN(scaleFactor))
+    {
+        alert(notNumber);
+    }
+    else
+    {
+        $('#scaleFactor').val(scaleFactor);
+        $('#convertRelations').modal('hide');
+    }
+}

@@ -364,16 +364,6 @@ class custom extends control
             $data = fixer::input('post')->get();
 
             /* Judgment of required items. */
-            if(($unit != $_POST['hourPoint']) and empty($_POST['scaleFactor']))
-            {
-                dao::$errors['scaleFactor'] = sprintf($this->lang->error->notempty, $this->lang->custom->convertRelations);
-                $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
-            elseif(($unit != $_POST['hourPoint']) and !is_numeric($_POST['scaleFactor']))
-            {
-                dao::$errors['scaleFactor'] = sprintf($this->lang->error->float, $this->lang->custom->convertRelations);
-                $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
 
             $this->setting->setItem('system.custom.hourPoint', $data->hourPoint);
             $this->setting->setItem('system.custom.scaleFactor', $data->scaleFactor);
