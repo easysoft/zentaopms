@@ -50,6 +50,20 @@ class programModel extends model
     }
 
     /**
+     * Get program option.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPGMOption()
+    {
+        return $this->dao->select('id,name')->from(TABLE_PROGRAM)
+            ->where('type')->eq('program')
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
+    }
+
+    /**
      * Get the product associated with the program.
      *
      * @param  int     $programID
@@ -1718,7 +1732,7 @@ class programModel extends model
             $PRJProgram = '';
             if($id == 'PRJProgram' and $project->parent != 0)
             {
-                $programList  = $this->getPGMPairs();
+                $programList  = $this->getPGMOption();
                 $programIndex = $programID ? strpos($project->path, (string)$programID) : 0;
                 $projectIndex = strpos($project->path, $project->id);
                 $programPath  = explode(',' , substr($project->path, $programIndex, $projectIndex - $programIndex));
