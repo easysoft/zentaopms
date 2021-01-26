@@ -1,6 +1,7 @@
 <?php
 $lang->projectstory->common      = 'Exigences du projet';
 $lang->projectstory->index       = 'Exigences Accueil';
+$lang->projectstory->view        = 'Story Detail';
 $lang->projectstory->story       = $lang->generalSR;
 $lang->projectstory->track       = 'Matrice de suivi';
 $lang->projectstory->linkStory   = 'Linked' . $lang->SRCommon;

@@ -491,6 +491,7 @@ $lang->productplan->methodOrder[60] = 'batchEdit';
 $lang->resource->projectstory = new stdclass();
 $lang->resource->projectstory->story       = 'story';
 $lang->resource->projectstory->track       = 'track';
+$lang->resource->projectstory->view        = 'view';
 $lang->resource->projectstory->linkStory   = 'linkStory';
 $lang->resource->projectstory->unlinkStory = 'unlinkStory';
 
