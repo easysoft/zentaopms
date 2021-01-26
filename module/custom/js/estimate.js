@@ -12,7 +12,7 @@ $(document).ready(function()
 
             convertRelationTitle = convertRelationTitle.replace('%s', hourPoint);
             convertRelationTips  = convertRelationTips.replace(/%s/g, hourPoint);
-            $('#factor + span').text(hourPoint);
+            $('#convertFactor + span').text(hourPoint);
 
             $('#title').text(convertRelationTitle);
             $('#tips').text(convertRelationTips);
