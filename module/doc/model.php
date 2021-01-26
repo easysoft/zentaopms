@@ -1368,7 +1368,7 @@ class docModel extends model
             if($type == 'project' && $file->objectType == 'task')  $file->PRJ = $taskPairs[$file->objectID];
             if($type == 'project' && $file->objectType == 'build') $file->PRJ = $buildPairs[$file->objectID];
 
-            $pathName = $this->file->getRealPathName($file->pathname);
+            $pathName       = $this->file->getRealPathName($file->pathname);
             $file->realPath = $this->file->savePath . $pathName;
             $file->webPath  = $this->file->webPath  . $pathName;
         }
