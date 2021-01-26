@@ -224,7 +224,7 @@ $(function()
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&moduleID={0}&branch={1}"); ?>',
                 title: '<?php echo $title;?>',
-                template: '<a><?php echo $viewType == 'line' ? '' : '<i class="icon-treemap-alt"></i>';?></a>',
+                template: '<a><?php echo $viewType == 'line' ? '' : '<i class="icon-split"></i>';?></a>',
             }
         },
         action: function(event)

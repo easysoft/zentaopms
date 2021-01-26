@@ -125,7 +125,7 @@
 
                     common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true, '', '', $task->PRJ);
                     common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list', '', '', '', '', 'data-group="project"', '', $task->PRJ);
-                    common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'treemap-alt', '', '', '', 'data-group="project"', $this->lang->task->children, $task->PRJ);
+                    common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'split', '', '', '', 'data-group="project"', $this->lang->task->children, $task->PRJ);
                 }
             }
             ?>
@@ -187,7 +187,7 @@
 
                       common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true, '', '', $child->PRJ);
                       common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list', '', '', '', '', 'data-group="project"', '', $child->PRJ);
-                      common::printIcon('task', 'batchCreate', "project=$child->project&storyID=$child->story&moduleID=$child->module&taskID=$child->id&ifame=0", $child, 'list', 'treemap-alt', '', '', '', 'data-group="project"', $this->lang->task->children, $child->PRJ);
+                      common::printIcon('task', 'batchCreate', "project=$child->project&storyID=$child->story&moduleID=$child->module&taskID=$child->id&ifame=0", $child, 'list', 'split', '', '', '', 'data-group="project"', $this->lang->task->children, $child->PRJ);
                   }
               }
               ?>

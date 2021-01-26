@@ -173,7 +173,7 @@ $(function()
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browsetask', "rootID=$rootID&viewType=task&moduleID={0}"); ?>',
                 title: '<?php echo $lang->tree->child ?>',
-                template: '<a href="javascript:;"><i class="icon icon-treemap-alt"></i></a>'
+                template: '<a href="javascript:;"><i class="icon icon-split"></i></a>'
             }
         },
         action: function(event)

@@ -74,7 +74,7 @@
             </ul>
           </div>
           <?php common::printIcon('program', 'PGMEdit',   "programID=$program->id", '', 'list', 'edit');?>
-          <?php common::printIcon('program', 'PGMCreate', "programID=$program->id", '', 'list', 'treemap-alt', '', '', '', '', $this->lang->program->PGMChildren);?>
+          <?php common::printIcon('program', 'PGMCreate', "programID=$program->id", '', 'list', 'split', '', '', '', '', $this->lang->program->PGMChildren);?>
           <?php if(common::hasPriv('program', 'PGMDelete')) echo html::a($this->createLink("program", "PGMDelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PGMDelete}'");?>
 
           <?php else:?>

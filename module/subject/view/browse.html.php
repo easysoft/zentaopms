@@ -144,7 +144,7 @@ $(function()
             {
                 linkTemplate: '<?php echo helper::createLink('subject', 'browse', "moduleID={0}"); ?>',
                 title: '<?php echo $title;?>',
-                template: '<a><?php echo '<i class="icon-treemap-alt"></i>';?></a>',
+                template: '<a><?php echo '<i class="icon-split"></i>';?></a>',
             }
         },
         action: function(event)
