@@ -569,11 +569,9 @@ $lang->admin->subMenu->data->backup = array('link' => '备份|backup|index', 'su
 $lang->admin->subMenu->data->trash  = '回收站|action|trash';
 
 $lang->admin->subMenu->system = new stdclass();
-$lang->admin->subMenu->system->cron     = array('link' => '定时|cron|index', 'subModule' => 'cron');
-$lang->admin->subMenu->system->timezone = array('link' => '时区|custom|timezone', 'subModule' => 'custom');
-
+$lang->admin->subMenu->system->cron       = array('link' => '定时|cron|index', 'subModule' => 'cron');
+$lang->admin->subMenu->system->timezone   = array('link' => '时区|custom|timezone', 'subModule' => 'custom');
 $lang->admin->subMenu->system->buildIndex = array('link' => '重建索引|search|buildindex|');
-$lang->admin->subMenuOrder->system[15] = 'buildIndex';
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();

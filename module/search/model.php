@@ -607,6 +607,8 @@ class searchModel extends model
         $fields = $this->config->search->fields->{$objectType};
         if(empty($fields)) return true;
 
+        if($objectType == 'doc' && isset($this->config->bizVersion)) $object = $this->appendFiles($object);
+
         $index = new stdclass();
         $index->objectID   = $object->{$fields->id};
         $index->objectType = $objectType;
@@ -1088,5 +1090,36 @@ class searchModel extends model
         $labels = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
         $string = str_replace($labels, $to, $string);
         return preg_replace("/[{$to}]+/", $to, trim($string, $to));
+    }
+
+    /**
+     * Append document content to the document.
+     *
+     * @param  string    $object
+     * @access public
+     * @return void
+     */
+    public function appendFiles($object)
+    {
+        $docFiles = $this->dao->select('files')->from(TABLE_DOCCONTENT)->where('doc')->eq($object->id)->orderBy('version')->limit(1)->fetch('files');
+        if(empty($docFiles)) return $object;
+
+        $allDocFiles = $this->loadModel('file')->getByObject('doc', $object->id);
+        if(!isset($object->comment)) $object->comment = '';
+        foreach($allDocFiles as $file)
+        {
+            if(strpos(",$docFiles,", ",{$file->id},") === false) continue;
+            if(strpos('docx|doc', $file->extension) !== false)
+            {
+                $convertedFile = $this->file->convertOffice($file, 'txt');
+                if($convertedFile) $object->comment .= file_get_contents($convertedFile);
+            }
+            if($file->extension == 'txt')
+            {
+                $object->comment .= file_get_contents($file->realPath);
+            }
+        }
+
+        return $object;
     }
 }

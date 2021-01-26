@@ -1125,8 +1125,8 @@ class docModel extends model
                 $nonzeroLibs = $this->dao->select('lib,count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->groupBy('lib')->having('count')->ne(0)->fetchPairs('lib', 'lib');
             }
 
-            $idList    = array();
-            $projectID = $this->session->PRJ;
+            $idList          = array();
+            $projectID       = $this->session->PRJ;
             $executionStatus = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'undone' : 'all';
 
             /* If it is a project module, query the project related products. */
@@ -1367,9 +1367,10 @@ class docModel extends model
         {
             if($type == 'project' && $file->objectType == 'task')  $file->PRJ = $taskPairs[$file->objectID];
             if($type == 'project' && $file->objectType == 'build') $file->PRJ = $buildPairs[$file->objectID];
+
             $pathName = $this->file->getRealPathName($file->pathname);
             $file->realPath = $this->file->savePath . $pathName;
-            $file->webPath  = $this->file->webPath . $pathName;
+            $file->webPath  = $this->file->webPath  . $pathName;
         }
 
         return $files;

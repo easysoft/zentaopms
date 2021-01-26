@@ -180,6 +180,7 @@ $lang->admin->subMenuOrder->data[5]     = 'backup';
 $lang->admin->subMenuOrder->data[10]    = 'trash';
 $lang->admin->subMenuOrder->system[5]   = 'cron';
 $lang->admin->subMenuOrder->system[10]  = 'timezone';
+$lang->admin->subMenuOrder->system[15]  = 'buildIndex';
 
 $lang->convert->menuOrder   = $lang->admin->menuOrder;
 $lang->upgrade->menuOrder   = $lang->admin->menuOrder;
