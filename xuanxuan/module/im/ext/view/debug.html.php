@@ -13,7 +13,9 @@
 <?php
     if($source == 'x_php')
     {
+        helper::cd(dirname(dirname(dirname(__FILE__))) . '/view/');
         include 'xdebug.html.php';
+        helper::cd();
         return;
     }
 ?>

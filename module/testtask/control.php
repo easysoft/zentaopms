@@ -644,7 +644,7 @@ class testtask extends control
 
         $this->view->task         = $task;
         $this->view->projects     = $this->product->getProjectPairs($productID);
-        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = 'notrunk');
+        $this->view->builds       = $this->loadModel('build')->getProjectBuildPairs($task->project, $productID, $branch = 0, $params = 'noempty,notrunk', $task->build);
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
@@ -1233,5 +1233,19 @@ class testtask extends control
         $this->view->users     = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->view->productID = $productID;
         $this->display();
+    }
+
+    /**
+     * ajax get test tasks 
+     * 
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTestTasks($productID, $projectID = 0)
+    {
+        $pairs = $this->testtask->getPairs($productID, $projectID);
+        die(html::select('testtask', $pairs, '', "class='form-control chosen'"));
     }
 }

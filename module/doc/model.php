@@ -143,7 +143,7 @@ class docModel extends model
      * @param  string $extra
      * @param  string $appendLibs
      * @access public
-     * @return void
+     * @return array
      */
     public function getLibs($type = '', $extra = '', $appendLibs = '')
     {
@@ -166,6 +166,7 @@ class docModel extends model
 
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
+                ->beginIF(strpos($extra, 'noBook') !== false)->andWhere('type')->ne('book')->fi()
                 ->beginIF(strpos($extra, 'unclosedProject') !== false)
                 ->andWhere('project', true)->eq('0')
                 ->orWhere('project')->in($unclosedProjects)
@@ -1223,7 +1224,7 @@ class docModel extends model
             }
             else
             {
-                $hasProject  = $this->dao->select('DISTINCT t1.product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                $hasProject  = $this->dao->select('DISTINCT t1.product, count(t1.project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->eq($objectID)
                     ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()

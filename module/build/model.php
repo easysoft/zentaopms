@@ -116,6 +116,7 @@ class buildModel extends model
      * @param  int    $projectID
      * @param  int    $productID
      * @param  string $params       noempty|notrunk, can be a set of them
+     * @param  int    $buildID
      * @access public
      * @return array
      */

@@ -87,7 +87,19 @@ function setAssignedTo(moduleID, productID)
 
 $(function()
 {
+    var productID  = $('#product').val();
+    var moduleID   = $('#module').val();
+    var assignedto = $('#assignedTo').val();
+    changeProductConfirmed = true;
+    oldStoryID             = $('#story').val() || 0;
+    oldProjectID           = 0;
+    oldOpenedBuild         = '';
+    oldTaskID              = $('#oldTaskID').val() || 0;
+
     if($('#project').val()) loadProjectRelated($('#project').val());
+    if(!assignedto) setTimeout(function(){setAssignedTo(moduleID, productID)}, 500);
+    notice();
+
 
     $('[data-toggle=tooltip]').tooltip();
 

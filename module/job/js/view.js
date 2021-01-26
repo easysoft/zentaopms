@@ -38,4 +38,13 @@ $(function()
         $('.group-collapse-all').show();
         $(this).hide();
     });
+
+    $('#tabsNav .nav-tabs').on('shown.zui.tab', function(e)
+    {
+        setTimeout(function()
+        {
+            var modalHeight = $('body').height();
+            parent.$('#triggerModal .modal-body').height(modalHeight);
+        }, 300);
+    });
 })

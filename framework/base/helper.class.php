@@ -327,7 +327,8 @@ class baseHelper
             }
 
             /* Check decrypted password. Judge whether there is garbled code. */
-            if(json_encode($decryptedPassword) === 'null') $decryptedPassword = '';
+            $jsoned = json_encode($decryptedPassword);
+            if($jsoned === 'null' or empty($jsoned)) $decryptedPassword = '';
         }
         if(empty($decryptedPassword)) $decryptedPassword = $password;
 

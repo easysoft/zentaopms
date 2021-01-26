@@ -64,7 +64,7 @@
         <?php if($suite->type == 'private') echo "<span class='label label-info label-badge'>{$lang->testsuite->authorList['private']}</span> ";?>
         <?php echo html::a(inlink('view', "suiteID=$suite->id"), $suite->name);?>
       </td>
-      <td><?php echo $suite->desc;?></td>
+      <td class='c-desc'><?php echo $suite->desc;?></td>
       <td><?php echo zget($users, $suite->addedBy);?></td>
       <td><?php echo $suite->addedDate;?></td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $suite) . "</td>";?>

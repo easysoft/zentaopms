@@ -259,12 +259,13 @@ class baseModel
         if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['common'] . 'class/' . $extensionName . '.class.php';
 
+        /* 设置扩展类的名字。Set the extension class name. */
+        $extensionClass = $extensionName . ucfirst($moduleName);
+        if(isset($this->$extensionClass)) return $this->$extensionClass;
+
         /* 载入父类。Try to import parent model file auto and then import the extension file. */
         if(!class_exists($moduleName . 'Model')) helper::import($this->app->getModulePath($this->appName, $moduleName) . 'model.php');
         if(!helper::import($extensionFile)) return false;
-
-        /* 设置扩展类的名字。Set the extension class name. */
-        $extensionClass = $extensionName . ucfirst($moduleName);
         if(!class_exists($extensionClass)) return false;
 
         /* 实例化扩展类。Create an instance of the extension class and return it. */
