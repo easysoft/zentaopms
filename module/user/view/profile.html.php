@@ -76,6 +76,7 @@
           <td><?php foreach($groups as $group) echo $group->name . ' ';?></td>
         </tr>
       </table>
+      <div class='line'></div>
       <table>
         <tr>
           <th><?php echo $lang->user->mobile;?></th>
@@ -97,6 +98,7 @@
         </tr>
       </table>
       <?php if(!isonlybody()):?>
+      <div class='line'></div>
       <table>
         <tr>
           <th><?php echo $lang->user->commiter;?></th>
