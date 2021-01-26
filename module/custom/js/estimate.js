@@ -51,7 +51,7 @@ $(document).ready(function()
  */
 function setScaleFactor()
 {
-    var scaleFactor = $('#factor').val();
+    var scaleFactor = $('#convertFactor').val();
     if(!scaleFactor)
     {
         alert(notempty);

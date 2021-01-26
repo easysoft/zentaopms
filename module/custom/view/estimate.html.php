@@ -5,8 +5,8 @@
 <?php js::set('efficiency', $lang->custom->unitList['efficiency']);?>
 <?php js::set('convertRelationTitle', $lang->custom->convertRelationTitle);?>
 <?php js::set('convertRelationTips', $lang->custom->convertRelationTips);?>
-<?php js::set('notempty', sprintf($this->lang->error->notempty, $this->lang->custom->scaleFactor));?>
-<?php js::set('notNumber', sprintf($this->lang->error->float, $this->lang->custom->scaleFactor));?>
+<?php js::set('notempty', sprintf($this->lang->error->notempty, $this->lang->custom->convertFactor));?>
+<?php js::set('notNumber', sprintf($this->lang->error->float, $this->lang->custom->convertFactor));?>
 <?php js::set('unit', $unit);?>
 <?php
 $lang->custom->object   = array();
@@ -115,7 +115,7 @@ $lang->custom->system[] = 'estimate';
               <td>
                 <div class='input-group w-300px'>
                   <span class='input-group-addon'><?php echo "=";?></span>
-                  <?php echo html::input('factor', $scaleFactor, "class='form-control' required");?>
+                  <?php echo html::input('convertFactor', $scaleFactor, "class='form-control' required");?>
                   <span class='input-group-addon unify-padding'></span>
                 </div>
               </td>
