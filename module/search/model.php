@@ -524,11 +524,12 @@ class searchModel extends model
             if(is_numeric($word) and strlen($word) == 5) $condition = "OR title REGEXP '[^ ]{$likeWord}[^ ]' OR content REGEXP '[^ ]{$likeWord}[^ ]'";
             $likeCondition .= $condition;
         }
-        
+
         $words = str_replace('"', '', $against);
         $words = str_pad($words, 5, '_');
 
         $allowedObject = array();
+
         if($type != 'all')
         {
             foreach($type as $module) $allowedObject[] = $module;
@@ -540,7 +541,9 @@ class searchModel extends model
                 $module = $objectType;
                 if($module == 'case') $module = 'testcase';
                 if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
-                if($module == 'caselib' and common::hasPriv('caselib', 'view')) $allowedObject[] = $objectType;
+                if($module == 'caselib'   and common::hasPriv('caselib', 'view'))  $allowedObject[] = $objectType;
+                if($module == 'execution' and common::haspriv('project', 'view'))  $allowedobject[] = $objectType;
+                if($module == 'project'   and common::haspriv('program', 'index')) $allowedobject[] = $objectType;
             }
         }
 
@@ -569,7 +572,7 @@ class searchModel extends model
                 $method = 'viewstep';
             }
 
-            if(strpos(',task,bug,case,build,release,testtask,testsuite,testreport,issue,risk,', ",$module,") !== false)
+            if(strpos(',task,bug,testcase,build,release,testtask,testsuite,testreport,issue,risk,', ",$module,") !== false)
             {
                 if(!isset($this->config->objectTables[$record->objectType])) continue;
                 $table       = $this->config->objectTables[$record->objectType];
@@ -731,6 +734,8 @@ class searchModel extends model
      */
     public function checkPriv($results, $pager = null)
     {
+        if($this->app->user->admin) return $results;
+
         $this->loadModel('doc');
         $products   = $this->app->user->view->products;
         $programs   = $this->app->user->view->programs;
@@ -842,7 +847,6 @@ class searchModel extends model
                         $noPrivNum++;
                     }
                 }
-
             }
             elseif($objectType == 'todo')
             {

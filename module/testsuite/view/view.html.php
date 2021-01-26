@@ -147,6 +147,7 @@
       </form>
     </div>
   </div>
+  <?php if(!isonlybody()):?>
   <div class='side-col col-4'>
     <div class='cell'>
       <div class='detail'>
@@ -161,5 +162,6 @@
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

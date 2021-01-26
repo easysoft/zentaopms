@@ -15,9 +15,11 @@
 <?php include '../../common/view/chart.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php if(!isonlybody()):?>
     <?php $browseLink  = $this->session->reportList != false ? $app->session->reportList : $browseLink;?>
     <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-primary'");?>
     <div class='divider'></div>
+    <?php endif;?>
     <div class='page-title'>
       <span class='label label-id'><?php echo $report->id;?></span>
       <span class='text' title='<?php echo $report->title;?>'><?php echo $report->title;?></span>

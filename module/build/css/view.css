@@ -3,3 +3,5 @@
 #unlinkStoryList, #unlinkBugList {border-top: 1px solid #cbd0db;}
 .page-title .dropdown-menu{top: 20px; left: 170px;}
 .page-title .text>a{font-weight: 700}
+
+.body-modal #mainContent {min-height: 200px;}

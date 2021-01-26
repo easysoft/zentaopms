@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div id='mainContent' class="main-row">
+<div id='mainContent' class="main-row" <?php if(isonlybody()) echo 'style="padding-top: 0px;"';?>>
   <div class="col-12 main-col">
     <div class="row">
       <div class="col-sm-12">

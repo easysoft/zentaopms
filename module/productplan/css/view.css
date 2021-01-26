@@ -23,3 +23,4 @@
 ol, ul { padding-left: 20px; }
 #tabsNav .tab-pane>.main-table {border-radius: 0;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
+.body-modal #mainContent {min-height: 240px;}

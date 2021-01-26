@@ -399,7 +399,9 @@
       <div class='tabs'>
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
+          <?php if($story->type == 'story'):?>
           <li><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
+          <?php endif;?>
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
         <div class='tab-content'>
@@ -419,6 +421,8 @@
               <?php if(!empty($relations)) echo html::a('javascript:void(0)', $lang->story->unlink . $linkLang, '', "class='btn btn-info' id='unlinkStory'");?></li>
             </ul>
           </div>
+
+          <?php if($story->type == 'story'):?>
           <div class='tab-pane active' id='legendProjectAndTask'>
             <ul class="list-unstyled">
               <?php
@@ -443,6 +447,7 @@
               ?>
             </ul>
           </div>
+          <?php endif;?>
           <div class="tab-pane" id='legendRelated'>
             <table class="table table-data">
               <tbody>

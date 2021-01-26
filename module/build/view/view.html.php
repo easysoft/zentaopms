@@ -46,6 +46,7 @@ tbody tr td:first-child input{display:none;}
       <?php endif; ?>
     </div>
   </div>
+  <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
     <?php
     if(!$build->deleted and $canBeChanged)
@@ -57,6 +58,7 @@ tbody tr td:first-child input{display:none;}
     }
     ?>
   </div>
+  <?php endif;?>
 </div>
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
