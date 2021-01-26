@@ -576,10 +576,17 @@ class searchModel extends model
                 $projectID   = $this->dao->select('PRJ')->from($table)->where('id')->eq($record->objectID)->fetch('PRJ');
                 $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $projectID);
             }
+            elseif($module == 'story')
+            {
+                $story             = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
+                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+                $record->extraType = $story->type;
+            }
             elseif($module == 'execution')
             {
-                $projectID   = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($record->objectID)->fetch('project');
-                $record->url = helper::createLink('project', $method, "id={$record->objectID}", '', false, $projectID);
+                $project           = $this->dao->select('id,type,project')->from(TABLE_PROJECT)->where('id')->eq($record->objectID)->fetch();
+                $record->url       = helper::createLink('project', $method, "id={$record->objectID}", '', false, $project->project);
+                $record->extraType = $project->type;
             }
             elseif($module == 'project')
             {

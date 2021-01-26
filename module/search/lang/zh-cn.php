@@ -87,7 +87,12 @@ $lang->search->modules['testreport']  = '报告';
 $lang->search->modules['productplan'] = '计划';
 $lang->search->modules['program']     = '项目集';
 $lang->search->modules['project']     = '项目';
-$lang->search->modules['execution']   = '迭代/阶段';
-$lang->search->modules['story']       = $lang->URCommon . '/' . $lang->SRCommon;
+$lang->search->modules['execution']   = $lang->execution->common;
+$lang->search->modules['story']       = '需求';
 $lang->search->modules['issue']       = '问题';
 $lang->search->modules['risk']        = '风险';
+
+$lang->search->objectTypeList['story']       = $lang->SRCommon;
+$lang->search->objectTypeList['requirement'] = $lang->URCommon;
+$lang->search->objectTypeList['stage']       = $lang->execution->stage;
+$lang->search->objectTypeList['sprint']      = $lang->execution->sprint;

@@ -1,12 +1,12 @@
 <?php
 /**
- * The search module zh-tw file of ZenTaoPMS.
+ * The search module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
- * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
+ * @version     $Id: zh-cn.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->search->common        = '搜索';
@@ -51,3 +51,48 @@ $lang->search->null = '空';
 
 $lang->userquery        = new stdclass();
 $lang->userquery->title = '標題';
+
+$lang->searchObjects['todo']      = '待辦';
+$lang->searchObjects['effort']    = '日誌';
+$lang->searchObjects['testsuite'] = '套件';
+
+$lang->search->objectType = '對象類型';
+$lang->search->objectID   = '對象編號';
+$lang->search->content    = '內容';
+$lang->search->addedDate  = '添加時間';
+
+$lang->search->index      = '全文檢索';
+$lang->search->buildIndex = '重建索引';
+$lang->search->preview    = '預覽';
+
+$lang->search->result            = '搜索結果';
+$lang->search->buildSuccessfully = '初始化搜索索引成功';
+$lang->search->executeInfo       = '為您找到相關結果%s個，耗時%s秒';
+$lang->search->buildResult       = '創建 %s 索引, 新增  %s 條記錄；';
+
+$lang->search->modules['all']         = '全部';
+$lang->search->modules['task']        = '任務';
+$lang->search->modules['bug']         = 'Bug';
+$lang->search->modules['case']        = '用例';
+$lang->search->modules['doc']         = '文檔';
+$lang->search->modules['todo']        = '待辦';
+$lang->search->modules['build']       = 'Build';
+$lang->search->modules['effort']      = '日誌';
+$lang->search->modules['caselib']     = '測試庫';
+$lang->search->modules['product']     = $lang->productCommon;
+$lang->search->modules['release']     = '發佈';
+$lang->search->modules['testtask']    = '測試單';
+$lang->search->modules['testsuite']   = '測試套件';
+$lang->search->modules['testreport']  = '報告';
+$lang->search->modules['productplan'] = '計劃';
+$lang->search->modules['program']     = '項目集';
+$lang->search->modules['project']     = '項目';
+$lang->search->modules['execution']   = $lang->execution->common;
+$lang->search->modules['story']       = '需求';
+$lang->search->modules['issue']       = '問題';
+$lang->search->modules['risk']        = '風險';
+
+$lang->search->objecttypelist['story']       = $lang->srcommon;
+$lang->search->objecttypelist['requirement'] = $lang->urcommon;
+$lang->search->objecttypelist['stage']       = $lang->execution->stage;
+$lang->search->objecttypelist['sprint']      = $lang->execution->sprint;
