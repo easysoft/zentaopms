@@ -23,7 +23,14 @@
               <?php
               $objectType = $object->objectType == 'case' ? 'testcase' : $object->objectType;
               echo html::a($object->url, $object->title, '', 'title="' . strip_tags($object->title) . '"');
-              echo "<small class=''>[{$lang->searchObjects[$objectType]} #{$object->objectID}]</small> ";
+              if($objectType == 'story' || $objectType == 'execution')
+              {
+                  echo "<small class=''>[{$lang->search->objectTypeList[$object->extraType]} #{$object->objectID}]</small> ";
+              }
+              else
+              {
+                  echo "<small class=''>[{$lang->searchObjects[$objectType]} #{$object->objectID}]</small> ";
+              }
               ?>
             </h4>
           </div>

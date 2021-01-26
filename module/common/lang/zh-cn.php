@@ -120,6 +120,8 @@ $lang->sprintCommon = '迭代/阶段';
 
 $lang->execution = new stdclass();
 $lang->execution->common = '执行';
+$lang->execution->sprint = '迭代';
+$lang->execution->stage  = '阶段';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
@@ -231,7 +233,7 @@ $lang->searchAB   = '搜索';
 /* 查询中可以选择的对象列表。*/
 $lang->searchObjects['all']         = '全部';
 $lang->searchObjects['bug']         = 'Bug';
-$lang->searchObjects['story']       = "{$lang->SRCommon}";
+$lang->searchObjects['story']       = '需求';
 $lang->searchObjects['task']        = '任务';
 $lang->searchObjects['testcase']    = '用例';
 $lang->searchObjects['product']     = $lang->productCommon;
@@ -244,7 +246,7 @@ $lang->searchObjects['caselib']     = '用例库';
 $lang->searchObjects['testreport']  = '测试报告';
 $lang->searchObjects['program']     = '项目集';
 $lang->searchObjects['project']     = '项目';
-$lang->searchObjects['execution']   = $lang->sprintCommon;
+$lang->searchObjects['execution']   = $lang->execution->common;
 $lang->searchObjects['user']        = '用户';
 $lang->searchObjects['issue']       = '问题';
 $lang->searchObjects['risk']        = '风险';

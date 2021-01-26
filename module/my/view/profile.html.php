@@ -36,7 +36,6 @@
       <?php endif;?>
     </div>
     <div class='row'>
-      <div class='user-title'><?php echo $lang->user->basicInfo;?></div>
       <table>
         <tr>
           <th><?php echo $lang->user->realname;?></th>
@@ -78,31 +77,18 @@
           <td><?php foreach($groups as $group) echo $group->name . ' ';?></td>
         </tr>
       </table>
-      <div class='user-title'><?php echo $lang->user->contactInfo;?></div>
       <table>
         <tr>
           <th><?php echo $lang->user->mobile;?></th>
           <td><?php echo $user->mobile;?></td>
-          <th><?php echo $lang->user->skype;?></th>
-          <td><?php if($user->skype) echo html::a("callto://$user->skype", $user->skype);?></td>
+          <th><?php echo $lang->user->weixin;?></th>
+          <td><?php echo $user->weixin;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->phone;?></th>
           <td><?php echo $user->phone;?></td>
-          <th><?php echo $lang->user->whatsapp;?></th>
-          <td><?php echo $user->whatsapp;?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->user->weixin;?></th>
-          <td><?php echo $user->weixin;?></td>
-          <th><?php echo $lang->user->slack;?></th>
-          <td><?php echo $user->slack;?></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->user->qq;?></th>
           <td><?php echo $user->qq;?></td>
-          <th><?php echo $lang->user->dingding;?></th>
-          <td><?php echo $user->dingding;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->zipcode;?></th>
@@ -111,19 +97,30 @@
           <td title='<?php echo $user->address;?>'><?php echo $user->address;?></td>
         </tr>
       </table>
-      <div class='user-title'><?php echo $lang->user->else;?></div>
       <table>
         <tr>
           <th><?php echo $lang->user->commiter;?></th>
           <td><?php echo $user->commiter;?></td>
+          <th><?php echo $lang->user->skype;?></th>
+          <td><?php if($user->skype) echo html::a("callto://$user->skype", $user->skype);?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->user->visits;?></th>
           <td><?php echo $user->visits;?></td>
+          <th><?php echo $lang->user->whatsapp;?></th>
+          <td><?php echo $user->whatsapp;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->last;?></th>
+          <td><?php echo $user->last;?></td>
+          <th><?php echo $lang->user->slack;?></th>
+          <td><?php echo $user->slack;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->ip;?></th>
           <td><?php echo $user->ip;?></td>
-          <th><?php echo $lang->user->last;?></th>
-          <td><?php echo $user->last;?></td>
+          <th><?php echo $lang->user->dingding;?></th>
+          <td><?php echo $user->dingding;?></td>
         </tr>
       </table>
     </div>

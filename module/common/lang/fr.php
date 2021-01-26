@@ -120,6 +120,8 @@ $lang->sprintCommon = 'Iteration/Phase';
 
 $lang->execution = new stdclass();
 $lang->execution->common = 'Execution';
+$lang->execution->sprint = 'Iteration';
+$lang->execution->stage  = 'Phase';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
@@ -244,7 +246,7 @@ $lang->searchObjects['caselib']     = 'Case Library';
 $lang->searchObjects['testreport']  = 'CR de Test';
 $lang->searchObjects['program']     = 'Program';
 $lang->searchObjects['project']     = 'Project';
-$lang->searchObjects['execution']   = $lang->sprintCommon;
+$lang->searchObjects['execution']   = $lang->execution->common;
 $lang->searchObjects['user']        = 'User';
 $lang->searchObjects['issue']       = 'Issue';
 $lang->searchObjects['risk']        = 'Risk';

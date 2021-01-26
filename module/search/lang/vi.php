@@ -87,7 +87,12 @@ $lang->search->modules['testreport']  = 'Báo cáo Test';
 $lang->search->modules['productplan'] = 'Kế hoạch';
 $lang->search->modules['program']     = 'Program';
 $lang->search->modules['project']     = 'Project';
-$lang->search->modules['execution']   = 'Iteration/Phase';
-$lang->search->modules['story']       = $lang->URCommon . '/' . $lang->SRCommon;
+$lang->search->modules['execution']   = $lang->execution->common;
+$lang->search->modules['story']       = 'Story';
 $lang->search->modules['issue']       = 'Issue';
 $lang->search->modules['risk']        = 'Risk';
+
+$lang->search->objectTypeList['story']       = $lang->SRCommon;
+$lang->search->objectTypeList['requirement'] = $lang->URCommon;
+$lang->search->objectTypeList['stage']       = $lang->execution->stage;
+$lang->search->objectTypeList['sprint']      = $lang->execution->sprint;

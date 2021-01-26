@@ -87,7 +87,12 @@ $lang->search->modules['testreport']  = 'Testing Report';
 $lang->search->modules['productplan'] = 'Plan';
 $lang->search->modules['program']     = 'Program';
 $lang->search->modules['project']     = 'Project';
-$lang->search->modules['execution']   = 'Iteration/Phase';
-$lang->search->modules['story']       = $lang->URCommon . '/' . $lang->SRCommon;
+$lang->search->modules['execution']   = $lang->execution->common;
+$lang->search->modules['story']       = 'Story';
 $lang->search->modules['issue']       = 'Issue';
 $lang->search->modules['risk']        = 'Risk';
+
+$lang->search->objecttypelist['story']       = $lang->srcommon;
+$lang->search->objecttypelist['requirement'] = $lang->urcommon;
+$lang->search->objecttypelist['stage']       = $lang->execution->stage;
+$lang->search->objecttypelist['sprint']      = $lang->execution->sprint;
