@@ -83,10 +83,11 @@
             <?php printf('%03d', $task->id);?>
           </td>
           <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
-          <td class='c-name' title='<?php echo $task->name?>'>
+          <td class='c-name <?php if(!empty($task->children)) echo 'has-child';?>' title='<?php echo $task->name?>'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->PRJ), $task->name, null, "style='color: $task->color' data-group='project'");?>
+            <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
           <td class='c-project'><?php echo zget($projects, $task->PRJ, '');?></td>
           <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'task', "projectid=$task->project", '', '', $task->PRJ), $task->projectName, '', "data-group='project'");?></td>
@@ -130,6 +131,71 @@
             ?>
           </td>
         </tr>
+        <?php if(!empty($task->children)):?>
+          <?php $i = 0;?>
+          <?php foreach($task->children as $key => $child):?>
+          <?php $class  = $i == 0 ? ' table-child-top' : '';?>
+          <?php $class .= ($i + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
+          <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
+            <td class="c-id">
+              <?php if($canBatchEdit or $canBatchClose):?>
+              <div class="checkbox-primary">
+                <input type='checkbox' name='taskIDList[]' value='<?php echo $child->id;?>' <?php if(!$canBeChanged) echo 'disabled';?>/>
+                <label></label>
+              </div>
+              <?php endif;?>
+              <?php printf('%03d', $child->id);?>
+            </td>
+            <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->task->priList, $child->pri);?>'><?php echo zget($lang->task->priList, $child->pri);?></span></td>
+            <td class='c-name' title='<?php echo $child->name?>'>
+              <?php if($child->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
+              <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->PRJ), $child->name, null, "style='color: $child->color' data-group='project'");?>
+            </td>
+            <td class='c-project'><?php echo zget($projects, $child->PRJ, '');?></td>
+            <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('project', 'task', "projectid=$child->project", '', '', $child->PRJ), $child->projectName, '', "data-group='project'");?></td>
+            <?php if($type != 'openedBy'): ?>
+            <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
+            <?php endif;?>
+            <?php if($type != 'assignedTo'): ?>
+            <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($child, $users);?></td>
+            <?php endif;?>
+            <?php if($type != 'finishedBy'): ?>
+            <td class='c-user'><?php echo zget($users, $child->finishedBy);?></td>
+            <?php endif;?>
+            <td class='c-hours'><?php echo round($child->estimate, 1);?></td>
+            <td class='c-hours'><?php echo round($child->consumed, 1);?></td>
+            <td class='c-hours'><?php echo round($child->left, 1);?></td>
+            <td class='c-status'>
+              <?php $storyChanged = (!empty($child->storyStatus) and $child->storyStatus == 'active' and $child->latestStoryVersion > $child->storyVersion and !in_array($child->status, array('cancel', 'closed')));?>
+              <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->my->storyChanged}</span>") : print("<span class='status-task status-{$child->status}'> " . $this->processStatus('task', $child) . "</span>");?>
+            </td>
+            <td class='c-actions'>
+              <?php
+              if($canBeChanged)
+              {
+                  if($child->needConfirm)
+                  {
+                      $this->lang->task->confirmStoryChange = $this->lang->confirm;
+                      common::printIcon('task', 'confirmStoryChange', "taskid=$child->id", '', 'list', '', 'hiddenwin', '', '', '', '', $child->PRJ);
+                  }
+                  else
+                  {
+                      if($child->status != 'pause') common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->PRJ);
+                      if($child->status == 'pause') common::printIcon('task', 'restart', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->PRJ);
+                      common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->PRJ);
+                      common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->PRJ);
+
+                      common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true, '', '', $child->PRJ);
+                      common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list', '', '', '', '', 'data-group="project"', '', $child->PRJ);
+                      common::printIcon('task', 'batchCreate', "project=$child->project&storyID=$child->story&moduleID=$child->module&taskID=$child->id&ifame=0", $child, 'list', 'treemap-alt', '', '', '', 'data-group="project"', $this->lang->task->children, $child->PRJ);
+                  }
+              }
+              ?>
+            </td>
+          </tr>
+          <?php $i ++;?>
+          <?php endforeach;?>
+          <?php endif;?>
         <?php endforeach;?>
       </tbody>
     </table>
@@ -180,32 +246,32 @@ $(function()
             $rows.each(function()
             {
                 var $row = $(this);
-                var data = $row.data();
-                taskIdList.push(data.id);
-            })
-
-            $rows.each(function()
-            {
-                var $row = $(this);
                 if ($originTable)
                 {
                     $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
                 }
                 var data = $row.data();
+                taskIdList.push(data.id);
+
                 var status = data.status;
                 if(status === 'wait') checkedWait++;
                 if(status === 'doing') checkedDoing++;
 
-                var parentID = tasks[$row.data('id')].parent;
                 var canStatistics = false;
-
-                if(parentID <= 0)
+                if(!$row.hasClass('table-children'))
                 {
                     canStatistics = true;
                 }
                 else
                 {
-                    if(taskIdList.indexOf(parseInt(parentID)) < 0) canStatistics = true;
+                    var parentID = 0;
+                    var classes  = $row.attr('class').split(' ');
+                    for(i in classes)
+                    {
+                        if(classes[i].indexOf('parent-') >= 0) parentID = classes[i].replace('parent-', '');
+                    }
+
+                    if(parentID && taskIdList.indexOf(parseInt(parentID)) < 0) canStatistics = true;
                 }
 
                 if(canStatistics)
