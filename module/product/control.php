@@ -123,7 +123,7 @@ class product extends control
     public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
-        $browseType             = strtolower($browseType);
+        $browseType = strtolower($browseType);
 
         /* Load datatable. */
         $this->loadModel('datatable');

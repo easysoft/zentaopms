@@ -2926,6 +2926,11 @@ class taskModel extends model
                 if(!empty($task->children)) $class .= ' has-child';
             }
             if($id == 'story') $title = " title='{$task->storyTitle}'";
+            if($id == 'estimate' || $id == 'consumed' || $id == 'left')
+            {
+                $value = round($task->$id, 1);
+                $title = " title='{$value} {$this->lang->project->workHour}'";
+            }
 
             echo "<td class='" . $class . "'" . $title . ">";
             if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('task', $task, $id);
@@ -2963,13 +2968,13 @@ class taskModel extends model
                 $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");
                 break;
             case 'estimate':
-                echo round($task->estimate, 1);
+                echo round($task->estimate, 1) . ' ' . $this->lang->project->workHourUnit;
                 break;
             case 'consumed':
-                echo round($task->consumed, 1);
+                echo round($task->consumed, 1) . ' ' . $this->lang->project->workHourUnit;
                 break;
             case 'left':
-                echo round($task->left, 1);
+                echo round($task->left, 1)     . ' ' . $this->lang->project->workHourUnit;
                 break;
             case 'progress':
                 echo "{$task->progress}%";

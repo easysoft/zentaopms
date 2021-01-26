@@ -31,6 +31,7 @@ $lang->project->to             = 'Tới';
 $lang->project->days           = 'Ngày khả dụng';
 $lang->project->day            = ' ngày';
 $lang->project->workHour       = 'giờ';
+$lang->project->workHourUnit   = 'H';
 $lang->project->totalHours     = 'Giờ khả dụng';
 $lang->project->totalDays      = 'Ngày khả dụng';
 $lang->project->status         = 'Tình trạng';

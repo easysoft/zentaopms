@@ -31,6 +31,7 @@ $lang->project->to             = 'An';
 $lang->project->days           = 'Manntage';
 $lang->project->day            = 'Tag';
 $lang->project->workHour       = 'Stunden';
+$lang->project->workHourUnit   = 'H';
 $lang->project->totalHours     = 'Arbeitsstunden';
 $lang->project->totalDays      = 'Arbeitstage';
 $lang->project->status         = 'Status';

@@ -31,6 +31,7 @@ $lang->project->to             = 'à';
 $lang->project->days           = 'Budget Jours';
 $lang->project->day            = ' Jours';
 $lang->project->workHour       = ' Heures';
+$lang->project->workHourUnit   = 'H';
 $lang->project->totalHours     = 'Budget (Heure)';
 $lang->project->totalDays      = 'Budget (Jour)';
 $lang->project->status         = 'Statut';

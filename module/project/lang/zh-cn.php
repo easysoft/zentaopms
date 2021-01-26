@@ -31,6 +31,7 @@ $lang->project->to             = '至';
 $lang->project->days           = '可用工作日';
 $lang->project->day            = '天';
 $lang->project->workHour       = '工时';
+$lang->project->workHourUnit   = 'H';
 $lang->project->totalHours     = '可用工时';
 $lang->project->totalDays      = '可用工日';
 $lang->project->status         = $lang->executionCommon . '状态';
