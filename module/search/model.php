@@ -574,12 +574,18 @@ class searchModel extends model
                 $method = 'viewstep';
             }
 
-            if(strpos(',task,bug,testcase,build,release,testtask,testsuite,testreport,issue,risk,', ",$module,") !== false)
+            if(strpos(',task,bug,testcase,build,release,testtask,testsuite,testreport,risk,', ",$module,") !== false)
             {
                 if(!isset($this->config->objectTables[$record->objectType])) continue;
                 $table       = $this->config->objectTables[$record->objectType];
                 $projectID   = $this->dao->select('PRJ')->from($table)->where('id')->eq($record->objectID)->fetch('PRJ');
                 $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $projectID);
+            }
+            elseif($module == 'issue')
+            {
+                $issue             = $this->dao->select('id,PRJ,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
+                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->PRJ);
+                $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
             }
             elseif($module == 'story')
             {
