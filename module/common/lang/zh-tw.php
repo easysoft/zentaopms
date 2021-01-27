@@ -918,10 +918,10 @@ $lang->menu->waterfall->programplan    = array('link' => '計劃|programplan|bro
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => '文檔|doc|index|project={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => '報告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|story', 'alias' => 'story');
+$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|story');
 $lang->menu->waterfall->design         = '設計|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代碼|repo|browse|';
-$lang->menu->waterfall->track          = '矩陣|projectstory|track';
+$lang->menu->waterfall->track          = array('link' => '矩陣|projectstory|track', 'alias' => 'track');
 $lang->menu->waterfall->qa             = '測試|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => '發佈|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');

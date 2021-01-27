@@ -946,10 +946,10 @@ $lang->menu->waterfall->programplan    = array('link' => '计划|programplan|bro
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => '文档|doc|index|project={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|story', 'alias' => 'story');
+$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|story');
 $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代码|repo|browse|';
-$lang->menu->waterfall->track          = '矩阵|projectstory|track';
+$lang->menu->waterfall->track          = array('link' => '矩阵|projectstory|track', 'alias' => 'track');
 $lang->menu->waterfall->qa             = '测试|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');

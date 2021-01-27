@@ -946,10 +946,10 @@ $lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|brows
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|program={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|program={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|story', 'alias' => 'story');
+$lang->menu->waterfall->projectstory   = array('link' => 'Story|projectstory|story');
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Code|repo|browse|';
-$lang->menu->waterfall->track          = 'Track|projectstory|track';
+$lang->menu->waterfall->track          = array('link' => 'Track|projectstory|track', 'alias' => 'track');
 $lang->menu->waterfall->qa             = 'Index|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
