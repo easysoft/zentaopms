@@ -737,9 +737,10 @@ class commonModel extends model
         foreach ($lang->searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
-            if($key == 'program')   $key = 'program-pgmproduct';
-            if($key == 'project')   $key = 'program-index';
-            if($key == 'execution') $key = 'project-view';
+            if($key == 'program')    $key = 'program-pgmproduct';
+            if($key == 'project')    $key = 'program-index';
+            if($key == 'execution')  $key = 'project-view';
+            if($key == 'deploystep') $key = 'deploy-viewstep';
 
             echo "<li $class><a href='javascript:$.setSearchType(\"$key\");' data-value='{$key}'>{$value}</a></li>";
         }
