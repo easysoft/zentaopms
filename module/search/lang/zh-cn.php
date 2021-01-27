@@ -92,7 +92,9 @@ $lang->search->modules['story']       = '需求';
 $lang->search->modules['issue']       = '问题';
 $lang->search->modules['risk']        = '风险';
 
-$lang->search->objectTypeList['story']       = $lang->SRCommon;
-$lang->search->objectTypeList['requirement'] = $lang->URCommon;
-$lang->search->objectTypeList['stage']       = $lang->execution->stage;
-$lang->search->objectTypeList['sprint']      = $lang->executionCommon;
+$lang->search->objectTypeList['story']            = $lang->SRCommon;
+$lang->search->objectTypeList['requirement']      = $lang->URCommon;
+$lang->search->objectTypeList['stage']            = $lang->execution->stage;
+$lang->search->objectTypeList['sprint']           = $lang->executionCommon;
+$lang->search->objectTypeList['commonIssue']      = '问题';
+$lang->search->objectTypeList['stakeholderIssue'] = '干系人问题';
