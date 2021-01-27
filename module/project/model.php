@@ -2176,11 +2176,9 @@ class projectModel extends model
         $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         if($project->type == 'project')
         {
-            $executions         = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($projectID)->fetchAll('id');
-            $projectStoryList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll('story');
-            $executionStoryList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchAll('story');
-            $storyIntersect     = array_intersect(array_keys($projectStoryList), array_keys($executionStoryList));
-            if(in_array($storyID, $storyIntersect)) die(js::alert($this->lang->project->notAllowedUnlinkStory));
+            $executions       = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($projectID)->fetchAll('id');
+            $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
+            if(!empty($executionStories)) die(js::alert($this->lang->project->notAllowedUnlinkStory));
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->limit(1)->exec();
 
