@@ -33,7 +33,7 @@
     <?php
     $canBeChanged = common::canBeChanged('release', $release);
 
-    if(!$release->deleted and $canBeChanged)
+    if(!$release->deleted and $canBeChanged and !isonlybody())
     {
         echo $this->buildOperateMenu($release, 'view');
 
