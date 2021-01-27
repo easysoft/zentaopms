@@ -185,7 +185,7 @@ class webhook extends control
         }
 
         $webhook = $this->webhook->getById($id);
-        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser')
+        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishu')
         {
             echo js::alert($this->lang->webhook->note->bind);
             die(js::locate($this->createLink('webhook', 'browse')));
@@ -212,6 +212,12 @@ class webhook extends control
             $wechatApi  = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
             $response = $wechatApi->getAllUsers();
         }
+        elseif($webhook->type == 'feishu')
+        {
+            $this->app->loadClass('feishuapi', true);
+            $feishuApi  = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
+            $response = $feishuApi->getAllUsers();
+        }
 
         if($response['result'] == 'fail')
         {
@@ -225,10 +231,10 @@ class webhook extends control
             die(js::locate($this->createLink('webhook', 'browse')));
         }
 
-        $dingUsers   = $response['data'];
+        $oauthUsers  = $response['data'];
         $bindedPairs = $this->webhook->getBoundUsers($id);
         $useridPairs = array('' => '');
-        foreach($dingUsers as $name => $userid) $useridPairs[$userid] = $name;
+        foreach($oauthUsers as $name => $userid) $useridPairs[$userid] = $name;
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -248,7 +254,7 @@ class webhook extends control
         $this->view->position[] = $this->lang->webhook->bind;
 
         $this->view->webhook       = $webhook;
-        $this->view->dingUsers     = $dingUsers;
+        $this->view->oauthUsers    = $oauthUsers;
         $this->view->useridPairs   = $useridPairs;
         $this->view->users         = $users;
         $this->view->pager         = $pager;

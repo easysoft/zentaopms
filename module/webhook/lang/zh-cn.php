@@ -40,6 +40,7 @@ $lang->webhook->typeList['dinggroup']   = '钉钉群通知机器人';
 $lang->webhook->typeList['dinguser']    = '钉钉工作消息通知';
 $lang->webhook->typeList['wechatgroup'] = '企业微信群机器人';
 $lang->webhook->typeList['wechatuser']  = '企业微信应用消息';
+$lang->webhook->typeList['feishu']      = '飞书工作消息通知';
 $lang->webhook->typeList['default']     = '其他';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
@@ -57,6 +58,11 @@ $lang->webhook->wechatCorpSecret = '应用的凭证密钥';
 $lang->webhook->wechatAgentId    = '企业应用的ID';
 $lang->webhook->wechatUserid     = '微信用户';
 $lang->webhook->wechatBindStatus = '微信绑定状态';
+
+$lang->webhook->feishuAppId       = '飞书App ID';
+$lang->webhook->feishuAppSecret   = '飞书App Secret';
+$lang->webhook->feishuUserid      = '飞书用户';
+$lang->webhook->feishuBindStatus  = '飞书绑定状态';
 
 $lang->webhook->zentaoUser  = '禅道用户';
 
