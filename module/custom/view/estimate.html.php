@@ -7,6 +7,7 @@
 <?php js::set('convertRelationTips', $lang->custom->convertRelationTips);?>
 <?php js::set('notempty', sprintf($this->lang->error->notempty, $this->lang->custom->convertFactor));?>
 <?php js::set('notNumber', sprintf($this->lang->error->float, $this->lang->custom->convertFactor));?>
+<?php js::set('saveTips', $lang->custom->saveTips);?>
 <?php js::set('unit', $unit);?>
 <?php
 $lang->custom->object   = array();
@@ -95,6 +96,7 @@ $lang->custom->system[] = 'estimate';
           <td colspan='2' class='text-center'>
             <?php echo html::hidden('scaleFactor', '')?>
             <?php echo html::submitButton();?>
+            <div class='text-red' id='saveTips'></div>
           </td>
         </tr>
       </table>
@@ -125,9 +127,9 @@ $lang->custom->system[] = 'estimate';
             </tr>
             <tr>
               <td colspan='2' class='text-center'>
-                <?php $gobackURL = $this->createLink('custom', 'estimate');?>
-                <?php echo html::commonButton($lang->save, 'onclick = "setScaleFactor();"', 'btn btn-primary btn-wide');?>
-                <?php echo html::a($gobackURL, $lang->goback, '', "class='btn btn-back btn-wide'");?>
+                <?php $cancelURL = $this->createLink('custom', 'estimate');?>
+                <?php echo html::commonButton($lang->confirm, 'onclick = "setScaleFactor();"', 'btn btn-primary btn-wide');?>
+                <?php echo html::a($cancelURL, $lang->cancel, '', "class='btn btn-back btn-wide'");?>
               </td>
             </tr>
           </table>

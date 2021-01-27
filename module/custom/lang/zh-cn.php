@@ -50,7 +50,7 @@ $lang->custom->configureScrum       = "敏捷模型自定义";
 $lang->custom->URConcept            = "用需概念";
 $lang->custom->SRConcept            = "软需概念";
 $lang->custom->oneUnit              = "一个{$lang->hourCommon}";
-$lang->custom->convertRelationTitle = "{$lang->hourCommon}转换为%s的换算系数";
+$lang->custom->convertRelationTitle = "请先设置{$lang->hourCommon}转换为%s的换算系数";
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -73,6 +73,7 @@ $lang->custom->tipNotEmpty         = '提示语不能为空';
 $lang->custom->currencyNotEmpty    = '至少选择一种货币';
 $lang->custom->defaultNotEmpty     = '默认货币不能为空';
 $lang->custom->convertRelationTips = "{$lang->hourCommon}转换为%s后，历史数据将被统一转换为%s";
+$lang->custom->saveTips            = '点击保存后，则以当前%s为默认估算单位';
 
 $lang->custom->numberError = '区间必须大于零';
 

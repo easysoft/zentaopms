@@ -50,7 +50,7 @@ $lang->custom->configureScrum       = "Scrum Model Custom";
 $lang->custom->URConcept            = "UR Concept";
 $lang->custom->SRConcept            = "SR Concept";
 $lang->custom->oneUnit              = "One {$lang->hourCommon}";
-$lang->custom->convertRelationTitle = "Conversion factor of {$lang->hourCommon} converted to %s";
+$lang->custom->convertRelationTitle = "Please set the conversion factor of {$lang->hourCommon} to %s first";
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -73,6 +73,7 @@ $lang->custom->tipNotEmpty         = 'The prompt can not be empty!';
 $lang->custom->currencyNotEmpty    = 'You have to select one currency at least.';
 $lang->custom->defaultNotEmpty     = 'The default currency can not be empty';
 $lang->custom->convertRelationTips = "After {$lang->hourCommon} is converted to %s, historical data will be uniformly converted to %s";
+$lang->custom->saveTips            = 'After clicking save, the current %s will be used as the default estimation unit';
 
 $lang->custom->numberError = 'The interval must be greater than zero!';
 

@@ -3,20 +3,26 @@ $(document).ready(function()
     $('#estimateTab').addClass('btn-active-text');
     $('input[name="hourPoint"]').change(function()
     {
-        /* Show or hide conversion relation fields. */
+
+        $('#saveTips').text('');
+        /* Set the title and prompt information. */
         if($(this).val() != unit)
         {
             if($(this).val() == 0) var hourPoint = workingHours;
             if($(this).val() == 1) var hourPoint = storyPoint;
             if($(this).val() == 2) var hourPoint = functionPoint;
 
-            convertRelationTitle = convertRelationTitle.replace('%s', hourPoint);
-            convertRelationTips  = convertRelationTips.replace(/%s/g, hourPoint);
-            $('#convertFactor + span').text(hourPoint);
+            convertTitle = convertRelationTitle.replace('%s', hourPoint);
+            convertTips  = convertRelationTips.replace(/%s/g, hourPoint);
+            submitTips   = saveTips.replace(/%s/g, hourPoint);
 
-            $('#title').text(convertRelationTitle);
-            $('#tips').text(convertRelationTips);
+            $('#title').text(convertTitle);
+            $('#tips').text(convertTips);
+            $('#convertFactor + span').text(hourPoint);
+            $('#saveTips').text(submitTips);
+
             $('#convertRelations').modal({show: true});
+
         }
 
         if($(this).val() == 0)
