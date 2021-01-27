@@ -1543,6 +1543,9 @@ class task extends control
                 $task->canceledDate   = substr($task->canceledDate,   0, 10);
                 $task->closedDate     = substr($task->closedDate,     0, 10);
                 $task->lastEditedDate = substr($task->lastEditedDate, 0, 10);
+                $task->estimate       = $task->estimate . $this->lang->project->workHourUnit;
+                $task->consumed       = $task->consumed . $this->lang->project->workHourUnit;
+                $task->left           = $task->left     . $this->lang->project->workHourUnit;
 
                 /* Set related files. */
                 $task->files = '';
