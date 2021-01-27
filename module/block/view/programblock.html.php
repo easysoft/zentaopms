@@ -35,8 +35,8 @@
         </td>
         <?php if($longBlock):?>
         <td><?php echo $project->teamCount;?></td>
-        <td><?php echo $project->consumed;?></td>
-        <td><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>
+        <td title="<?php echo $project->consumed . ' ' . $lang->project->workHour;?>"><?php echo $project->consumed . ' ' . $lang->project->workHourUnit;?></td>
+        <td><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $lang->program->future;?></td>
         <td><?php echo $project->leftStories;?></td>
         <td><?php echo $project->leftTasks;?></td>
         <td><?php echo $project->leftBugs;?></td>

@@ -51,9 +51,9 @@
           <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
           <?php endif;?>
         </td>
-        <td class="c-hours"><?php echo $execution->hours->totalEstimate;?></td>
-        <td class="c-hours"><?php echo $execution->hours->totalConsumed;?></td>
-        <td class="c-hours"><?php echo $execution->hours->totalLeft;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalEstimate . ' ' . $lang->project->workHour;?>"><?php echo $execution->hours->totalEstimate . ' ' . $lang->project->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalConsumed . ' ' . $lang->project->workHour;?>"><?php echo $execution->hours->totalConsumed . ' ' . $lang->project->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalLeft     . ' ' . $lang->project->workHour;?>"><?php echo $execution->hours->totalLeft     . ' ' . $lang->project->workHourUnit;?></td>
         <?php endif;?>
         <td class="c-progress">
           <div class="progress progress-text-left">

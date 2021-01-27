@@ -62,9 +62,9 @@
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', false, $task->PRJ), $task->name, null, "style='color: $task->color'");?>
           </td>
-          <td><?php echo $task->estimate;?></td>
-          <td><?php echo $task->consumed;?></td>
-          <td><?php echo $task->left;?></td>
+          <td class='hours' title="<?php echo $task->estimate . ' ' . $lang->project->workHour;?>"><?php echo $task->estimate . ' ' . $lang->project->workHourUnit;?></td>
+          <td class='hours' title="<?php echo $task->consumed . ' ' . $lang->project->workHour;?>"><?php echo $task->consumed . ' ' . $lang->project->workHourUnit;?></td>
+          <td class='hours' title="<?php echo $task->left     . ' ' . $lang->project->workHour;?>"><?php echo $task->left     . ' ' . $lang->project->workHourUnit;?></td>
           <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
           <td class='<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></td>
         </tr>

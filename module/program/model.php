@@ -1743,6 +1743,10 @@ class programModel extends model
                 $title = "title='{$PRJProgram}'";
             }
 
+            if($id == 'PRJEstimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->project->workHour}'";
+            if($id == 'PRJConsume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->project->workHour}'";
+            if($id == 'PRJSurplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->project->workHour}'";
+
             echo "<td class='c-name " . $class . "' $title>";
             switch($id)
             {
@@ -1780,13 +1784,13 @@ class programModel extends model
                     echo $project->teamCount;
                     break;
                 case 'PRJEstimate':
-                    echo $project->hours->totalEstimate;
+                    echo $project->hours->totalEstimate . ' ' . $this->lang->project->workHourUnit;
                     break;
                 case 'PRJConsume':
-                    echo $project->hours->totalConsumed;
+                    echo $project->hours->totalConsumed . ' ' . $this->lang->project->workHourUnit;
                     break;
                 case 'PRJSurplus':
-                    echo $project->hours->totalLeft;
+                    echo $project->hours->totalLeft     . ' ' . $this->lang->project->workHourUnit;
                     break;
                 case 'PRJProgress':
                     echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}%</div></div>";

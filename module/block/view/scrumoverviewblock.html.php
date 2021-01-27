@@ -37,18 +37,19 @@
         </div>
         <div class="col-4 tile">
           <div class="overview-title"><i class="icon icon-clock"></i> <?php echo $lang->block->consumedHours;?></div>
-          <div class="tile-amount">
-          <?php echo $totalData[$projectID]->consumed ? html::a($this->createLink('project', 'index', 'locate=no'), $totalData[$projectID]->consumed) : 0;?>
+          <div class="tile-amount" title="<?php echo $totalData[$projectID]->consumed . $lang->project->workHour;?>">
+          <?php echo $totalData[$projectID]->consumed ? html::a($this->createLink('project', 'index', 'locate=no'), $totalData[$projectID]->consumed . $lang->project->workHourUnit) : 0;?>
           </div>
           <div class="tile-info">
-          <span class="extra-tips"><?php echo $lang->block->estimatedHours;?> <?php echo $totalData[$projectID]->estimate;?></span>
+          <span class="extra-tips"><?php echo $lang->block->estimatedHours . ' ' . $totalData[$projectID]->estimate . $lang->project->workHour;?></span>
           </div>
         </div>
         <div class="col-4 tile">
           <div class="overview-title"><i class="icon icon-cost"></i> <?php echo $lang->block->spent;?></div>
-          <div class="tile-amount">￥0</div>
+          <?php $budget = $totalData[$projectID]->budget != 0 ? zget($lang->program->currencySymbol, $totalData[$projectID]->budgetUnit) . number_format($totalData[$projectID]->budget, 2) : $lang->program->future;?>
+          <div class="tile-amount"><?php echo $budget;?></div>
           <div class="tile-info">
-          <span class="extra-tips"><?php echo $lang->block->budget;?> ￥<?php echo $totalData[$projectID]->budget . ' ' . zget($lang->program->unitList, $totalData[$projectID]->budgetUnit);?></span>
+          <span class="extra-tips"><?php echo $lang->block->budget . ' ' . $budget;?></span>
           </div>
         </div>
       </div>

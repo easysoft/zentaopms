@@ -24,3 +24,4 @@
 .is-firefox .group-header:before {content: ' '; position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: #fff; z-index: 0;}
 .is-firefox .group-header > a,
 .is-firefox .group-header > .groupSummary {position: relative; z-index: 1;}
+.c-hours {white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}

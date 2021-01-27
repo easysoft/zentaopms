@@ -128,7 +128,7 @@ $dataType = '';
             </tr>
             <tr>
               <td align='center'><?php echo $lang->task->leftThisTime?></td>
-              <td align='center'><?php if($content->left) echo $content->left?></td>
+              <td align='center'><?php if($content->left) echo $content->left . $lang->project->workHourUnit;?></td>
               <td></td>
               <td></td>
               <td></td>
