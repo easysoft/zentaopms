@@ -74,7 +74,7 @@
               ?>
             </div>
           </td>
-          <?php $endValue = $program->end == LONG_TIME ? 999 : '';?>
+          <?php $endValue = $program->end == LONG_TIME ? 999 : (strtotime($program->end) - strtotime($program->begin)) / 3600 / 24 + 1;?>
           <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , $endValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr>

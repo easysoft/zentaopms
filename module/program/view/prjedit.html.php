@@ -79,7 +79,7 @@
               ?>
             </div>
           </td>
-          <?php $deltaValue = $project->end == LONG_TIME ? 999 : '';?>
+          <?php $deltaValue = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;?>
           <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <?php if($project->model == 'scrum'):?>
