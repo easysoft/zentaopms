@@ -423,7 +423,7 @@
           </div>
 
           <?php if($story->type == 'story'):?>
-          <div class='tab-pane active' id='legendProjectAndTask'>
+          <div class='tab-pane' id='legendProjectAndTask'>
             <ul class="list-unstyled">
               <?php
               foreach($story->tasks as $projectTasks)
