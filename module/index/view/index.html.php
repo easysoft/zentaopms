@@ -11,7 +11,6 @@
 ?>
 <?php
 include '../../common/view/header.lite.html.php';
-
 $this->app->loadConfig('sso');
 if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);
 
@@ -20,6 +19,9 @@ js::set('tabsLang', $lang->index->tab);
 js::set('menuItems', commonModel::getMainNavList($app->rawModule));
 js::set('defaultOpen', $open);
 ?>
+<?php if($this->config->bizVersion):?>
+<style>#searchbox .dropdown-menu.show-quick-go.with-active {top: -465px; max-height: 462px;}</style>
+<?php endif;?>
 <div id='menu'>
   <nav id='menuNav' data-group='<?php echo $app->rawModule; ?>'>
     <ul class='nav nav-default' id='menuMainNav'>

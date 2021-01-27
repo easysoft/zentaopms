@@ -89,7 +89,7 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->PRJ), $task->name, null, "style='color: $task->color' data-group='project'");?>
             <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
-          <td class='c-project'><?php echo zget($projects, $task->PRJ, '');?></td>
+          <td class='c-project' title="<?php echo zget($projects, $task->PRJ, '');?>"><?php echo zget($projects, $task->PRJ, '');?></td>
           <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'task', "projectid=$task->project", '', '', $task->PRJ), $task->projectName, '', "data-group='project'");?></td>
           <?php if($type != 'openedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>

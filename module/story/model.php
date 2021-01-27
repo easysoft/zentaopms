@@ -3278,8 +3278,8 @@ class storyModel extends model
 
         $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlinkStory);
 
-        $canView    = common::hasPriv('story', 'view');
         $module     = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';
+        $canView    = common::hasPriv($module, 'view');
         $openModule = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
         $storyLink  = helper::createLink($module, 'view', "storyID=$story->id");
         $account    = $this->app->user->account;
