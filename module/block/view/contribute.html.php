@@ -8,11 +8,11 @@
       </div>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdRequirements;?></div>
-        <div class="tile-amount"><?php echo empty($data['createdRequirements']) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=requirement'), (int)$data['createdRequirements']);?></div>
+        <div class="tile-amount"><?php echo empty($data['createdRequirements']) ? 0 : (int)$data['createdRequirements'];?></div>
       </div>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdStories;?></div>
-        <div class="tile-amount"><?php echo empty($data['createdStories']) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=story'), (int)$data['createdStories']);?></div>
+        <div class="tile-amount"><?php echo empty($data['createdStories']) ? 0 : (int)$data['createdStories'];?></div>
       </div>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->finishedTasks;?></div>
@@ -20,7 +20,7 @@
       </div>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdBugs;?></div>
-        <div class="tile-amount"><?php echo empty($data['createdBugs']) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=bug'), (int)$data['createdBugs']);?></div>
+        <div class="tile-amount"><?php echo empty($data['createdBugs']) ? 0 : (int)$data['createdBugs'];?></div>
       </div>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->resolvedBugs;?></div>
@@ -28,7 +28,7 @@
       </div>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdCases;?></div>
-        <div class="tile-amount"><?php echo empty($data['createdCases']) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=testcase&type=openedbyme'), (int)$data['createdCases']);?></div>
+        <div class="tile-amount"><?php echo empty($data['createdCases']) ? 0 : (int)$data['createdCases'];?></div>
       </div>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdRisks;?></div>

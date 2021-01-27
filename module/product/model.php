@@ -545,7 +545,7 @@ class productModel extends model
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,confirmChange')
+            ->remove('uid,changeProjects')
             ->get();
 
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
@@ -1510,22 +1510,47 @@ class productModel extends model
     /**
      * Change the projects set of the program.
      *
-     * @param  object $projects
-     * @param  int    $programID
-     * @param  string $confirm
+     * @param  int   $productID
+     * @param  array $singleLinkProjects
+     * @param  array $multipleLinkProjects
      * @access public
      * @return void
      */
-    public function updateProjects($projects, $programID, $confirmChange = 'no')
+    public function updateProjects($productID, $singleLinkProjects = array(), $multipleLinkProjects = array())
     {
-        foreach($projects as $project)
+        $programID = $_POST['program'];
+        foreach($singleLinkProjects as $id => $project)
         {
-            if((count($project->product) == 1) or $confirmChange == 'yes')
+            if($project)
             {
                 $this->dao->update(TABLE_PROJECT)
                     ->set('parent')->eq($programID)
-                    ->set('path')->eq(',' . $programID . ',' . $project->id . ',')
-                    ->where('id')->eq($project->id)
+                    ->set('path')->eq(',' . $programID . ',' . $id . ',')
+                    ->where('id')->eq($id)
+                    ->exec();
+            }
+        }
+
+        foreach($multipleLinkProjects as $id => $project)
+        {
+            if(strpos($_POST['changeProjects'], ',' . $id . ',') !== false)
+            {
+                $this->dao->delete()->from(TABLE_PROJECTPRODUCT)
+                    ->where('project')->eq($id)
+                    ->andWhere('product')->ne($productID)
+                    ->exec();
+
+                $this->dao->update(TABLE_PROJECT)
+                    ->set('parent')->eq($programID)
+                    ->set('path')->eq(',' . $programID . ',' . $id . ',')
+                    ->where('id')->eq($id)
+                    ->exec();
+            }
+            else
+            {
+                $this->dao->delete()->from(TABLE_PROJECTPRODUCT)
+                    ->where('project')->eq($id)
+                    ->andWhere('product')->eq($productID)
                     ->exec();
             }
         }

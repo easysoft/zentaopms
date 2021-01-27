@@ -72,7 +72,17 @@
               <tr>
                 <td class="text-center"><?php echo sprintf('%03d', $file->id);?></td>
                 <td class="c-url">
-                  <a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>'><?php echo $file->title . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a>
+                  <?php
+                  if($type == 'project' && in_array($file->objectType, array('task', 'build')))
+                  {
+                      $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
+                  }
+                  else
+                  {
+                      $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID");
+                  }
+                  ?>
+                  <a href='<?php echo $objectLink;?>'><?php echo $file->title . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a>
                 </td>
                 <td> <?php echo $file->pathname;?> </td>
                 <td class="text-center"><?php echo $file->extension;?></td>

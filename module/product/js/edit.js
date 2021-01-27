@@ -3,35 +3,26 @@ $(function()
     $('#program').change(function()
     {
         var programID = $(this).val();
-        if(programID != oldProgramID && projects)
+        if(programID != oldProgramID && (!canChangePGM || singleLinkProjects.length !== 0 || multipleLinkProjects.length !== 0))
         {
-            var singleLinkProjects   = '';
-            var multipleLinkProjects = '';
-            for(var i in projects)
+            $('#changeProgram').modal({show: true});
+            if(!canChangePGM)
             {
-                var project = projects[i];
-
-                if(Object.getOwnPropertyNames(project.product).length == 1)
-                {
-                    singleLinkProjects += '【' + project.name + '】';
-                }
-                else
-                {
-                    multipleLinkProjects += '【' +  project.name + '】';
-                }
-            }
-
-            PGMChangeTip     = PGMChangeTip.replace("%s", singleLinkProjects);
-            confirmChangePGM = confirmChangePGM.replace("%s", multipleLinkProjects);
-            if(singleLinkProjects) alert(PGMChangeTip);
-            if(multipleLinkProjects && confirm(confirmChangePGM))
-            {
-                $('#confirmChange').val('yes');
-            }
-            else
-            {
-                $('#confirmChange').val('no');
+                $('#program').val(oldProgramID);
+                $('#program').trigger("chosen:updated");
             }
         }
     })
 });
+
+function setChangeProjects()
+{
+    var projects = ',';
+    $("input[name^='projects']:checked").each(function()
+    {
+        projects += $(this).val() + ',';
+        $('#changeProjects').val(projects);
+    });
+
+    $('#changeProgram').modal('hide');
+}

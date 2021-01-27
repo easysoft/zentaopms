@@ -9,28 +9,29 @@
  * @version     $Id: en.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->common       = $lang->productCommon;
-$lang->product->index        = $lang->productCommon . 'Home';
-$lang->product->browse       = 'Story Liste';
-$lang->product->dynamic      = 'Verlauf';
-$lang->product->view         = 'Übersicht';
-$lang->product->edit         = "{$lang->productCommon} bearbeiten";
-$lang->product->batchEdit    = 'Mehrere bearbeiten';
-$lang->product->create       = "Erstelle {$lang->productCommon}";
-$lang->product->delete       = "Lösche {$lang->productCommon}";
-$lang->product->deleted      = 'Gelöscht';
-$lang->product->close        = 'Schließen';
-$lang->product->closeAction  = "Close {$lang->productCommon}";
-$lang->product->select       = "Auswahl {$lang->productCommon}";
-$lang->product->mine         = 'Meine Zuständigkeiten:';
-$lang->product->other        = 'Andere:';
-$lang->product->closed       = 'Geschlossen';
-$lang->product->updateOrder  = 'Ranking';
-$lang->product->orderAction  = "Rank {$lang->productCommon}";
-$lang->product->all          = "Alle {$lang->productCommon}";
-$lang->product->export       = 'Exportiere Daten';
-$lang->product->exportAction = "Export {$lang->productCommon}";
-$lang->product->dashboard    = 'Dashboard';
+$lang->product->common        = $lang->productCommon;
+$lang->product->index         = $lang->productCommon . 'Home';
+$lang->product->browse        = 'Story Liste';
+$lang->product->dynamic       = 'Verlauf';
+$lang->product->view          = 'Übersicht';
+$lang->product->edit          = "{$lang->productCommon} bearbeiten";
+$lang->product->batchEdit     = 'Mehrere bearbeiten';
+$lang->product->create        = "Erstelle {$lang->productCommon}";
+$lang->product->delete        = "Lösche {$lang->productCommon}";
+$lang->product->deleted       = 'Gelöscht';
+$lang->product->close         = 'Schließen';
+$lang->product->closeAction   = "Close {$lang->productCommon}";
+$lang->product->select        = "Auswahl {$lang->productCommon}";
+$lang->product->mine          = 'Meine Zuständigkeiten:';
+$lang->product->other         = 'Andere:';
+$lang->product->closed        = 'Geschlossen';
+$lang->product->updateOrder   = 'Ranking';
+$lang->product->orderAction   = "Rank {$lang->productCommon}";
+$lang->product->all           = "Alle {$lang->productCommon}";
+$lang->product->export        = 'Exportiere Daten';
+$lang->product->exportAction  = "Export {$lang->productCommon}";
+$lang->product->dashboard     = 'Dashboard';
+$lang->product->changeProgram = "{$lang->productCommon} confirmation of the scope of influence of adjustment of the program set";
 
 $lang->product->basicInfo = 'Basis Info';
 $lang->product->otherInfo = 'Andere Info';
@@ -67,6 +68,7 @@ $lang->product->confirmDelete    = " Möchten Sie {$lang->productCommon} lösche
 $lang->product->errorNoProduct   = "Kein {$lang->productCommon} erstellt!";
 $lang->product->accessDenied     = "Sie haben keinen Zugriff auf {$lang->productCommon}.";
 $lang->product->PGMChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
+$lang->product->notChangePGMTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
 $lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
 
 $lang->product->id             = 'ID';
