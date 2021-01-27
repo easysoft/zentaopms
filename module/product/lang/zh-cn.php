@@ -9,28 +9,29 @@
  * @version     $Id: zh-cn.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->common       = $lang->productCommon . '视图';
-$lang->product->index        = $lang->productCommon . '主页';
-$lang->product->browse       = "{$lang->SRCommon}列表";
-$lang->product->dynamic      = '产品动态';
-$lang->product->view         = "{$lang->productCommon}概况";
-$lang->product->edit         = "编辑{$lang->productCommon}";
-$lang->product->batchEdit    = '批量编辑';
-$lang->product->create       = "添加{$lang->productCommon}";
-$lang->product->delete       = "删除{$lang->productCommon}";
-$lang->product->deleted      = '已删除';
-$lang->product->close        = '关闭';
-$lang->product->closeAction  = "关闭{$lang->productCommon}";
-$lang->product->select       = "请选择{$lang->productCommon}";
-$lang->product->mine         = '我负责：';
-$lang->product->other        = '其他：';
-$lang->product->closed       = '已关闭';
-$lang->product->updateOrder  = '排序';
-$lang->product->orderAction  = "{$lang->productCommon}排序";
-$lang->product->all          = "所有{$lang->productCommon}";
-$lang->product->export       = '导出数据';
-$lang->product->exportAction = "导出{$lang->productCommon}";
-$lang->product->dashboard    = "{$lang->productCommon}仪表盘";
+$lang->product->common        = $lang->productCommon . '视图';
+$lang->product->index         = $lang->productCommon . '主页';
+$lang->product->browse        = "{$lang->SRCommon}列表";
+$lang->product->dynamic       = '产品动态';
+$lang->product->view          = "{$lang->productCommon}概况";
+$lang->product->edit          = "编辑{$lang->productCommon}";
+$lang->product->batchEdit     = '批量编辑';
+$lang->product->create        = "添加{$lang->productCommon}";
+$lang->product->delete        = "删除{$lang->productCommon}";
+$lang->product->deleted       = '已删除';
+$lang->product->close         = '关闭';
+$lang->product->closeAction   = "关闭{$lang->productCommon}";
+$lang->product->select        = "请选择{$lang->productCommon}";
+$lang->product->mine          = '我负责：';
+$lang->product->other         = '其他：';
+$lang->product->closed        = '已关闭';
+$lang->product->updateOrder   = '排序';
+$lang->product->orderAction   = "{$lang->productCommon}排序";
+$lang->product->all           = "所有{$lang->productCommon}";
+$lang->product->export        = '导出数据';
+$lang->product->exportAction  = "导出{$lang->productCommon}";
+$lang->product->dashboard     = "{$lang->productCommon}仪表盘";
+$lang->product->changeProgram = "{$lang->productCommon}调整所属项目集影响范围确认";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
@@ -66,8 +67,9 @@ $lang->product->assignToNullBugsTitle = '未指派Bug';
 $lang->product->confirmDelete    = " 您确定删除该{$lang->productCommon}吗？";
 $lang->product->errorNoProduct   = "还没有创建{$lang->productCommon}！";
 $lang->product->accessDenied     = "您无权访问该{$lang->productCommon}";
-$lang->product->PGMChangeTip     = "该{$lang->productCommon}关联的项目：%s将一同转移到修改后的项目集下。";
-$lang->product->confirmChangePGM = "该{$lang->productCommon}关联的项目：%s还关联了其他产品，是否将项目一同转移到修改后的项目集下。";
+$lang->product->PGMChangeTip     = "如下项目只关联了该{$lang->productCommon}， 将直接转移至新项目集下。";
+$lang->product->notChangePGMTip  = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到如下项目，请取消关联后再操作";
+$lang->product->confirmChangePGM = "如下项目既关联了该{$lang->productCommon}又关联了其他{$lang->productCommon}，请确认是否继续关联该{$lang->productCommon}，勾选后将取消与其他{$lang->productCommon}的关联关系，同时转移至新项目集下。";
 
 $lang->product->id             = '编号';
 $lang->product->program        = "所属项目集";

@@ -9,28 +9,29 @@
  * @version  $Id: vi.php 5091 2013-07-10 06:06:46Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->product->common       = $lang->productCommon;
-$lang->product->index        = 'Trang '.$lang->productCommon;
-$lang->product->browse       = 'Danh sách câu chuyện';
-$lang->product->dynamic      = 'Lịch sử';
-$lang->product->view         = "Chi tiết {$lang->productCommon}";
-$lang->product->edit         = "Sửa {$lang->productCommon}";
-$lang->product->batchEdit    = 'Sửa hàng loạt';
-$lang->product->create       = "Tạo {$lang->productCommon}";
-$lang->product->delete       = "Xóa {$lang->productCommon}";
-$lang->product->deleted      = 'Đã xóa';
-$lang->product->close        = "Đóng";
-$lang->product->closeAction  = "Đóng {$lang->productCommon}";
-$lang->product->select       = "Chọn {$lang->productCommon}";
-$lang->product->mine         = 'Của bạn:';
-$lang->product->other        = 'Khác:';
-$lang->product->closed       = 'Đã đóng';
-$lang->product->updateOrder  = 'Sắp xếp';
-$lang->product->orderAction  = "Đánh giá {$lang->productCommon}";
-$lang->product->all          = "Tất cả {$lang->productCommon}";
-$lang->product->export       = 'Xuất';
-$lang->product->exportAction = "Xuất {$lang->productCommon}";
-$lang->product->dashboard    = "Dashboard";
+$lang->product->common        = $lang->productCommon;
+$lang->product->index         = 'Trang '.$lang->productCommon;
+$lang->product->browse        = 'Danh sách câu chuyện';
+$lang->product->dynamic       = 'Lịch sử';
+$lang->product->view          = "Chi tiết {$lang->productCommon}";
+$lang->product->edit          = "Sửa {$lang->productCommon}";
+$lang->product->batchEdit     = 'Sửa hàng loạt';
+$lang->product->create        = "Tạo {$lang->productCommon}";
+$lang->product->delete        = "Xóa {$lang->productCommon}";
+$lang->product->deleted       = 'Đã xóa';
+$lang->product->close         = "Đóng";
+$lang->product->closeAction   = "Đóng {$lang->productCommon}";
+$lang->product->select        = "Chọn {$lang->productCommon}";
+$lang->product->mine          = 'Của bạn:';
+$lang->product->other         = 'Khác:';
+$lang->product->closed        = 'Đã đóng';
+$lang->product->updateOrder   = 'Sắp xếp';
+$lang->product->orderAction   = "Đánh giá {$lang->productCommon}";
+$lang->product->all           = "Tất cả {$lang->productCommon}";
+$lang->product->export        = 'Xuất';
+$lang->product->exportAction  = "Xuất {$lang->productCommon}";
+$lang->product->dashboard     = "Dashboard";
+$lang->product->changeProgram = "{$lang->productCommon} confirmation of the scope of influence of adjustment of the program set";
 
 $lang->product->basicInfo = 'Thông tin cơ bản';
 $lang->product->otherInfo = 'Thông tin khác';
@@ -67,6 +68,7 @@ $lang->product->confirmDelete    = " Bạn có muốn xóa {$lang->productCommon
 $lang->product->errorNoProduct   = "Không có {$lang->productCommon} được tạo!";
 $lang->product->accessDenied     = "Bạn không có quyền truy cập tới  {$lang->productCommon} này.";
 $lang->product->PGMChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
+$lang->product->notChangePGMTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
 $lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
 
 $lang->product->id             = 'ID';

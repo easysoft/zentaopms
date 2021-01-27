@@ -356,16 +356,38 @@ class product extends control
         $product = $this->product->getById($productID);
 
         /* Get the projects linked with this product. */
-        $projects     = array();
+        $notRemoveProduct     = array();
+        $linkStoriesProjects  = array();
+        $canChangePGM         = true;
+        $singleLinkProjects   = array();
+        $multipleLinkProjects = array();
+
+        $notRemoveProduct = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('product')->eq($productID)->fetchPairs('project', 'product');
+        if(!empty($notRemoveProduct)) $canChangePGM = false;
+
         $projectPairs = $this->product->getProjectPairsByProduct($productID);
+
         if(!empty($projectPairs))
         {
             foreach($projectPairs as $projectID => $projectName)
             {
-                $projects[$projectID] = new stdClass();
-                $projects[$projectID]->id      = $projectID;
-                $projects[$projectID]->name    = $projectName;
-                $projects[$projectID]->product = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+                if($canChangePGM)
+                {
+                    $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+                    if(count($products) == 1)
+                    {
+                        $singleLinkProjects[$projectID] = $projectName;
+                    }
+
+                    if(count($products) > 1)
+                    {
+                        $multipleLinkProjects[$projectID] = $projectName;
+                    }
+                }
+                else
+                {
+                    if(isset($notRemoveProduct[$projectID])) $linkStoriesProjects[$projectID] = $projectName;
+                }
             }
         }
 
@@ -374,9 +396,9 @@ class product extends control
             $changes = $this->product->update($productID);
 
             /* Change the projects set of the program. */
-            if(($_POST['program'] != $product->program) and $projects)
+            if(($_POST['program'] != $product->program) and $singleLinkProjects or $multipleLinkProjects)
             {
-                $this->product->updateProjects($projects, $_POST['program'], $_POST['confirmChange']);
+                $this->product->updateProjects($productID, $singleLinkProjects, $multipleLinkProjects);
             }
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -432,18 +454,21 @@ class product extends control
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->edit;
 
-        $this->view->product    = $product;
-        $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->program    = $this->loadModel('program')->getParentPairs();
-        $this->view->poUsers    = $poUsers;
-        $this->view->poUsers    = $poUsers;
-        $this->view->qdUsers    = $qdUsers;
-        $this->view->rdUsers    = $rdUsers;
-        $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
-        $this->view->projects   = $projects;
-        $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
-        $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
+        $this->view->product              = $product;
+        $this->view->groups               = $this->loadModel('group')->getPairs();
+        $this->view->program              = $this->loadModel('program')->getParentPairs();
+        $this->view->poUsers              = $poUsers;
+        $this->view->poUsers              = $poUsers;
+        $this->view->qdUsers              = $qdUsers;
+        $this->view->rdUsers              = $rdUsers;
+        $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
+        $this->view->programs             = array('') + $this->loadModel('program')->getTopPGMPairs();
+        $this->view->lines                = array('') + $this->loadModel('tree')->getLinePairs();
+        $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
+        $this->view->canChangePGM         = $canChangePGM;
+        $this->view->linkStoriesProjects  = $linkStoriesProjects;
+        $this->view->singleLinkProjects   = $singleLinkProjects;
+        $this->view->multipleLinkProjects = $multipleLinkProjects;
 
         unset($this->lang->product->typeList['']);
         $this->display();

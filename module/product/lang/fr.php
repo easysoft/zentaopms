@@ -9,28 +9,29 @@
  * @version     $Id: en.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        https://www.zentao.pm
  */
-$lang->product->common       = $lang->productCommon;
-$lang->product->index        = 'Accueil ' . $lang->productCommon;
-$lang->product->browse       = 'Liste Stories';
-$lang->product->dynamic      = 'Historique';
-$lang->product->view         = "{$lang->productCommon} Détail";
-$lang->product->edit         = "Editer {$lang->productCommon}";
-$lang->product->batchEdit    = 'Editer par Lot';
-$lang->product->create       = "Créer {$lang->productCommon}";
-$lang->product->delete       = "Supprimer {$lang->productCommon}";
-$lang->product->deleted      = 'Supprimé';
-$lang->product->close        = "Fermer";
-$lang->product->closeAction  = "Fermer {$lang->productCommon}";
-$lang->product->select       = "Choisir {$lang->productCommon}";
-$lang->product->mine         = 'Les miens:';
-$lang->product->other        = 'Autres:';
-$lang->product->closed       = 'Fermés';
-$lang->product->updateOrder  = 'Ordre';
-$lang->product->orderAction  = "Rang {$lang->productCommon}";
-$lang->product->all          = "Tous les {$lang->productCommon}s";
-$lang->product->export       = 'Export';
-$lang->product->exportAction = "Export {$lang->productCommon}";
-$lang->product->dashboard    = "Dashboard";
+$lang->product->common        = $lang->productCommon;
+$lang->product->index         = 'Accueil ' . $lang->productCommon;
+$lang->product->browse        = 'Liste Stories';
+$lang->product->dynamic       = 'Historique';
+$lang->product->view          = "{$lang->productCommon} Détail";
+$lang->product->edit          = "Editer {$lang->productCommon}";
+$lang->product->batchEdit     = 'Editer par Lot';
+$lang->product->create        = "Créer {$lang->productCommon}";
+$lang->product->delete        = "Supprimer {$lang->productCommon}";
+$lang->product->deleted       = 'Supprimé';
+$lang->product->close         = "Fermer";
+$lang->product->closeAction   = "Fermer {$lang->productCommon}";
+$lang->product->select        = "Choisir {$lang->productCommon}";
+$lang->product->mine          = 'Les miens:';
+$lang->product->other         = 'Autres:';
+$lang->product->closed        = 'Fermés';
+$lang->product->updateOrder   = 'Ordre';
+$lang->product->orderAction   = "Rang {$lang->productCommon}";
+$lang->product->all           = "Tous les {$lang->productCommon}s";
+$lang->product->export        = 'Export';
+$lang->product->exportAction  = "Export {$lang->productCommon}";
+$lang->product->dashboard     = "Dashboard";
+$lang->product->changeProgram = "{$lang->productCommon} confirmation of the scope of influence of adjustment of the program set";
 
 $lang->product->basicInfo = 'Infos de Base';
 $lang->product->otherInfo = 'Autres Infos';
@@ -67,6 +68,7 @@ $lang->product->confirmDelete    = "Voulez-vous vraiment supprimer le {$lang->pr
 $lang->product->errorNoProduct   = "Aucun {$lang->productCommon} n'est créé pour l'instant !";
 $lang->product->accessDenied     = "Vous n'avez pas accès au {$lang->productCommon}.";
 $lang->product->PGMChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
+$lang->product->notChangePGMTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
 $lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
 
 $lang->product->id             = 'ID';

@@ -13,10 +13,13 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noProject', false);?>
-<?php js::set('projects', $projects);?>
 <?php js::set('oldProgramID', $product->program);?>
-<?php js::set('PGMChangeTip', $lang->product->PGMChangeTip);?>
-<?php js::set('confirmChangePGM', $lang->product->confirmChangePGM);?>
+<?php js::set('canChangePGM', $canChangePGM);?>
+<?php js::set('singleLinkProjects', $singleLinkProjects);?>
+<?php js::set('multipleLinkProjects', $multipleLinkProjects);?>
+<style>
+#changeProgram td.icon-project{font-size: 14px;}
+</style>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">
@@ -33,7 +36,6 @@
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
             <td><?php echo html::select('program', $programs, $product->program, "class='form-control chosen'");?></td>
-            <td><?php echo html::hidden('confirmChange', 'no');?></td>
           </tr>
           <?php endif;?>
           <tr>
@@ -76,6 +78,7 @@
           </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>
+              <?php echo html::hidden('changeProjects', '');?>
               <?php echo html::submitButton();?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>
@@ -83,6 +86,55 @@
         </tbody>
       </table>
     </form>
+  </div>
+</div>
+<div class="modal fade" id="changeProgram">
+  <div class="modal-dialog mw-600px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <?php if($canChangePGM):?>
+        <h4 class="modal-title"><?php echo $lang->product->changeProgram;?></h4>
+        <?php endif;?>
+      </div>
+      <div class="modal-body">
+        <table class='table table-form'>
+          <?php if(!$canChangePGM):?>
+          <tr>
+            <th class='text-left'><?php echo $lang->product->notChangePGMTip;?></th>
+          </tr>
+          <?php foreach($linkStoriesProjects as $project):?>
+          <tr>
+            <td class="icon-project"><?php echo $project;?></td>
+          </tr>
+          <?php endforeach;?>
+          <?php endif;?>
+          <?php if($singleLinkProjects):?>
+          <tr>
+            <th class='text-left'><?php echo $lang->product->PGMChangeTip;?></th>
+          </tr>
+          <?php foreach($singleLinkProjects as $project):?>
+          <tr>
+            <td class="icon-project"><?php echo $project;?></td>
+          </tr>
+          <?php endforeach;?>
+          <?php endif;?>
+          <?php if($multipleLinkProjects):?>
+          <tr>
+            <th class='text-left'><?php echo $lang->product->confirmChangePGM;?></th>
+          </tr>
+          <tr>
+            <td><?php echo html::checkbox('projects', $multipleLinkProjects);?></td>
+          </tr>
+          <tr>
+            <td class='text-center'>
+              <?php echo html::commonButton($lang->save, 'onclick = "setChangeProjects();"', 'btn btn-primary btn-wide');?>
+            </td>
+          </tr>
+          <?php endif;?>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
