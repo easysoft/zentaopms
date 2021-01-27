@@ -45,7 +45,7 @@
 
           <?php $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");?>
           <?php if($libID == 'project') $libLink = inlink('allLibs', "type=project&product=$object->id");?>
-          <?php if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id");?>
+          <?php if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id&from=$from");?>
 
           <?php $icon = 'icon-folder text-yellow';?>
           <?php if($libID == 'files') $icon = 'icon-paper-clip text-brown';?>
