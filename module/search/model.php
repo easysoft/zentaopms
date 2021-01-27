@@ -541,9 +541,11 @@ class searchModel extends model
                 $module = $objectType;
                 if($module == 'case') $module = 'testcase';
                 if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
-                if($module == 'caselib'   and common::hasPriv('caselib', 'view'))  $allowedObject[] = $objectType;
-                if($module == 'execution' and common::haspriv('project', 'view'))  $allowedobject[] = $objectType;
-                if($module == 'project'   and common::haspriv('program', 'index')) $allowedobject[] = $objectType;
+
+                if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
+                if($module == 'execution'  and common::haspriv('project', 'view'))     $allowedobject[] = $objectType;
+                if($module == 'project'    and common::haspriv('program', 'index'))    $allowedobject[] = $objectType;
+                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
             }
         }
 
@@ -972,6 +974,9 @@ class searchModel extends model
 
             $query = $this->dao->select('t1.*')->from($table)->alias('t1')
                 ->where('1')
+                ->beginIF($type == 'program')->andWhere('type')->eq('program')->fi()
+                ->beginIF($type == 'project')->andWhere('type')->eq('project')->fi()
+                ->beginIF($type == 'execution')->andWhere('type')->in('stage,sprint')->fi()
                 ->beginIF(isset($data->deleted))->andWhere('t1.deleted')->eq(0)->fi();
         }
         return $query;
