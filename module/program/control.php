@@ -459,6 +459,7 @@ class program extends control
     public function PGMStakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->loadModel('user');
+        $this->app->loadLang('user');
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
