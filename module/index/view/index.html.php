@@ -19,7 +19,7 @@ js::set('tabsLang', $lang->index->tab);
 js::set('menuItems', commonModel::getMainNavList($app->rawModule));
 js::set('defaultOpen', $open);
 ?>
-<?php if($this->config->bizVersion):?>
+<?php if(isset($this->config->bizVersion)):?>
 <style>#searchbox .dropdown-menu.show-quick-go.with-active {top: -465px; max-height: 462px;}</style>
 <?php endif;?>
 <div id='menu'>

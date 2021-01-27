@@ -37,7 +37,7 @@ $maxConsumed  = 0;
           <div class='chart-col-item'>
             <div class='progress'>
               <div class='progress-bar' style='width: <?php echo $maxConsumed ? (100 * $project->consumed / $maxConsumed) : 0; ?>%'>
-                <div class='progress-text'><?php echo $project->consumed;?></div>
+                <div class='progress-text' title="<?php echo $project->consumed . $lang->project->workHour;?>"><?php echo $project->consumed . $lang->project->workHourUnit;?></div>
               </div>
             </div>
           </div>

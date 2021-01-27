@@ -96,3 +96,4 @@ $lang->search->objecttypelist['story']       = $lang->srcommon;
 $lang->search->objecttypelist['requirement'] = $lang->urcommon;
 $lang->search->objecttypelist['stage']       = $lang->execution->stage;
 $lang->search->objecttypelist['sprint']      = $lang->execution->sprint;
+$lang->search->objectTypeList['sprint']      = $lang->executionCommon;

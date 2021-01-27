@@ -184,7 +184,7 @@
             <div class='groupSummary small'>
 
             <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHoursAB, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
-            <?php printf($lang->project->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?>
+            <?php printf($lang->project->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate . $lang->project->workHourUnit, $groupConsumed . $lang->project->workHourUnit, $groupLeft . $lang->project->workHourUnit);?>
             </div>
           </div>
         </td>
@@ -202,9 +202,9 @@
         <td class="c-status"><span class='status-task status-<?php echo $task->status;?>'> <?php echo $this->processStatus('task', $task);?></span></td>
         <td class="c-assign"><?php echo "<span class='$assignedToClass'>" . $task->assignedToRealName . "</span>";?></td>
         <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
-        <td class="c-hours em"><?php echo $task->estimate;?></td>
-        <td class="c-hours em"><?php echo $task->consumed;?></td>
-        <td class="c-hours em"><?php echo $task->left;?></td>
+        <td class="c-hours em" title="<?php echo $task->estimate . ' ' . $lang->project->workHour;?>"><?php echo $task->estimate . ' ' . $lang->project->workHourUnit;?></td>
+        <td class="c-hours em" title="<?php echo $task->consumed . ' ' . $lang->project->workHour;?>"><?php echo $task->consumed . ' ' . $lang->project->workHourUnit;?></td>
+        <td class="c-hours em" title="<?php echo $task->left     . ' ' . $lang->project->workHour;?>"><?php echo $task->left     . ' ' . $lang->project->workHourUnit;?></td>
         <td class="c-num em"><?php echo $task->progress . '%';?></td>
         <td class="c-type"><?php echo zget($lang->task->typeList, $task->type);?></td>
         <td class='c-date <?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>

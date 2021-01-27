@@ -53,8 +53,8 @@
           <tr class="text-center">
             <td><?php echo $estimate->id;?></td>
             <td><?php echo $estimate->date;?></td>
-            <td><?php echo $estimate->consumed;?></td>
-            <td><?php echo $estimate->left;?></td>
+            <td title="<?php echo $estimate->consumed . ' ' . $lang->project->workHour;?>"><?php echo $estimate->consumed . ' ' . $lang->project->workHourUnit;?></td>
+            <td title="<?php echo $estimate->left     . ' ' . $lang->project->workHour;?>"><?php echo $estimate->left     . ' ' . $lang->project->workHourUnit;?></td>
             <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
             <?php if(empty($task->team) or $task->assignedTo == $this->app->user->account):?>
             <td align='center' class='c-actions'>
