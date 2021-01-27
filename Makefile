@@ -147,7 +147,7 @@ pms:
 	cat zentaoxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql
 	make package
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
-	rm -fr zentaopms #entaoxx zentaoxx.*.zip
+	rm -fr zentaopms zentaoxx zentaoxx.*.zip
 deb:
 	mkdir buildroot
 	cp -r build/debian/DEBIAN buildroot

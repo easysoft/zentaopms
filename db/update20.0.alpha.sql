@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `zt_issue` (
   `editedDate` datetime NOT NULL,
   `activateBy` varchar(30) NOT NULL,
   `activateDate` date NOT NULL,
-  `closeBy` varchar(30) NOT NULL,
+  `closedBy` varchar(30) NOT NULL,
   `closedDate` date NOT NULL,
   `assignedTo` varchar(30) NOT NULL,
   `assignedBy` varchar(30) NOT NULL,
