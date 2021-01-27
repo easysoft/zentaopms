@@ -57,7 +57,7 @@
           <td><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
           <td class='text-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
           <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
-          <td><?php echo $task->left;?></td>
+          <td title="<?php echo $task->left . ' ' . $lang->project->workHour;?>"><?php echo $task->left . ' ' . $lang->project->workHourUnit;?></td>
           <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
           <td><span class='status-task status-<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></span></td>
           <td class='text-left nobr'>

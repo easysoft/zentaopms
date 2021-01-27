@@ -61,9 +61,9 @@
           <td class='c-status' title='<?php echo $status;?>'>
             <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
           </td>
-          <td><?php echo $project->budget != 0 ? $project->budget . zget($this->lang->program->unitList, $project->budgetUnit) : $this->lang->program->future;?></td>
-          <td class="text-center"><?php echo $project->hours->totalEstimate;?></td>
-          <td class="text-center"><?php echo $project->hours->totalConsumed;?></td>
+          <td><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $this->lang->program->future;?></td>
+          <td class="text-center" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalEstimate . ' ' . $lang->project->workHourUnit;?></td>
+          <td class="text-center" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalConsumed . ' ' . $lang->project->workHourUnit;?></td>
           <td>
             <div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='<?php echo $project->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
               <div class='progress-info'><?php echo $project->hours->progress;?>%</div>

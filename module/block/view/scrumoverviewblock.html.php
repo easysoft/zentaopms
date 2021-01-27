@@ -46,10 +46,10 @@
         </div>
         <div class="col-4 tile">
           <div class="overview-title"><i class="icon icon-cost"></i> <?php echo $lang->block->spent;?></div>
-          <?php $budget = $totalData[$projectID]->budget != 0 ? zget($lang->program->currencySymbol, $totalData[$projectID]->budgetUnit) . number_format($totalData[$projectID]->budget, 2) : $lang->program->future;?>
-          <div class="tile-amount"><?php echo $budget;?></div>
+          <div class="tile-amount">￥0</div>
           <div class="tile-info">
-          <span class="extra-tips"><?php echo $lang->block->budget . ' ' . $budget;?></span>
+            <?php $budget = $totalData[$projectID]->budget != 0 ? zget($lang->program->currencySymbol, $totalData[$projectID]->budgetUnit) . number_format($totalData[$projectID]->budget, 2) : $lang->program->future;?>
+            <span class="extra-tips"><?php echo $lang->block->budget . ' ' . $budget;?></span>
           </div>
         </div>
       </div>

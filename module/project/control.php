@@ -1290,15 +1290,11 @@ class project extends control
         $linkedBranches = array();
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
-        $projectStories     = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll('story');
-        $projectStoryIdList = array_keys($projectStories);
-        $notRemoveProducts  = array();
+        $notRemoveProducts = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            $productStories     = $this->loadModel('story')->getProductStories($productID);
-            $productStoryIdList = array_keys($productStories);
-            $storyIntersect     = array_intersect($projectStoryIdList, $productStoryIdList);
-            if(!empty($storyIntersect)) array_push($notRemoveProducts, $productID);
+            $projectStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('story');
+            if(!empty($projectStories)) array_push($notRemoveProducts, $productID);
         }
 
         foreach($linkedProducts as $product)
@@ -2010,15 +2006,11 @@ class project extends control
         $linkedBranches  = array();
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
-        $projectStories     = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll('story');
-        $projectStoryIdList = array_keys($projectStories);
-        $notRemoveProducts  = array();
+        $notRemoveProducts = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            $productStories     = $this->loadModel('story')->getProductStories($productID);
-            $productStoryIdList = array_keys($productStories);
-            $storyIntersect     = array_intersect($projectStoryIdList, $productStoryIdList);
-            if(!empty($storyIntersect)) array_push($notRemoveProducts, $productID);
+            $projectStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('story');
+            if(!empty($projectStories)) array_push($notRemoveProducts, $productID);
         }
 
         // Merge allProducts and linkedProducts for closed product.
