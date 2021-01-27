@@ -1113,7 +1113,8 @@ class baseFixer
      */
     public function trim($fieldName)
     {
-        if(isset($this->data->$fieldName)) $this->data->$fieldName = trim($this->data->$fieldName);
+        $fields = $this->processFields($fieldName);
+        foreach($fields as $fieldName) $this->data->$fieldName = trim($this->data->$fieldName);
         return $this;
     }
 

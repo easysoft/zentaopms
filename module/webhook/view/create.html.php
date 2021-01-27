@@ -67,6 +67,15 @@
           <td class='required'><?php echo html::input('wechatAgentId', '', "class='form-control'")?></td>
           <td></td>
         </tr>
+        <tr class='feishuTR'>
+          <th><?php echo $lang->webhook->feishuAppId;?></th>
+          <td class='required'><?php echo html::input('feishuAppId', '', "class='form-control'");?></td>
+          <td><?php echo $lang->webhook->note->dingHelp;?></td>
+        </tr>
+        <tr class='feishuTR'>
+          <th><?php echo $lang->webhook->feishuAppSecret;?></th>
+          <td class='required'><?php echo html::input('feishuAppSecret', '', "class='form-control'");?></td>
+        </tr>
         <tr>
           <th><?php echo $lang->webhook->domain;?></th>
           <td><?php echo html::input('domain', common::getSysURL(), "class='form-control'");?></td>

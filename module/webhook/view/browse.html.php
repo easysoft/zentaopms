@@ -35,7 +35,7 @@
           <td class='c-actions text-right'>
             <?php
             if($webhook->type == 'dinguser') common::printIcon('webhook', 'chooseDept', "webhookID=$id", '', 'list', 'link');
-            if($webhook->type == 'wechatuser') common::printIcon('webhook', 'bind', "webhookID=$id", '', 'list', 'link');
+            if($webhook->type == 'wechatuser' or $webhook->type == 'feishu') common::printIcon('webhook', 'bind', "webhookID=$id", '', 'list', 'link');
             common::printIcon('webhook', 'log', "webhookID=$id", '', 'list', 'file-text');
             common::printIcon('webhook', 'edit', "webhookID=$id", '', 'list');
             if(common::hasPriv('webhook', 'delete'))

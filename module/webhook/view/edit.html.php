@@ -29,7 +29,7 @@
           <td><?php echo html::input('name', $webhook->name, "class='form-control'");?></td>
           <td></td>
         </tr>
-        <tr id='urlTR' class='<?php echo in_array($webhook->type, array('dinguser', 'wechatuser')) ? 'hidden' : '';?>'>
+        <tr id='urlTR' class='<?php echo strpos("dinguser|wechatuser|feishu", $webhook->type) !== false ? 'hidden' : '';?>'>
           <th><?php echo $lang->webhook->url;?></th>
           <td><?php echo html::input('url', $webhook->url, "class='form-control'");?></td>
           <td><?php echo zget($lang->webhook->note->typeList, $webhook->type, '');?></td>
@@ -74,12 +74,24 @@
           <td></td>
         </tr>
         <?php endif;?>
+        <?php if($webhook->type == 'feishu'):?>
+        <?php $secret = json_decode($webhook->secret);?>
+        <tr class="feishuTR">
+          <th><?php echo $lang->webhook->feishuAppId;?></th>
+          <td class='required'><?php echo html::input('feishuAppId', $secret->appId, "class='form-control'")?></td>
+        </tr>
+        <tr class="feishuTR">
+          <th><?php echo $lang->webhook->feishuAppSecret;?></th>
+          <td class='required'><?php echo html::input('feishuAppSecret', $secret->appSecret, "class='form-control'")?></td>
+          <td></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->webhook->domain;?></th>
           <td><?php echo html::input('domain', $webhook->domain, "class='form-control'");?></td>
           <td></td>
         </tr>
-        <?php if(!in_array($webhook->type,array('dinggroup', 'dinguser', 'wechatgroup', 'wechatuser'))):?>
+        <?php if(strpos("dinggroup|dinguser|wechatgroup|wechatuser|feishu", $webhook->type) === false):?>
         <tr>
           <th><?php echo $lang->webhook->sendType;?></th>
           <td><?php echo html::select('sendType', $lang->webhook->sendTypeList, $webhook->sendType, "class='form-control'");?></td>

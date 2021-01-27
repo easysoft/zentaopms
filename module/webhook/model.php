@@ -153,12 +153,7 @@ class webhookModel extends model
             ->join('products', ',')
             ->join('projects', ',')
             ->skipSpecial('url')
-            ->trim('agentId')
-            ->trim('appKey')
-            ->trim('appSecret')
-            ->trim('wechatAgentId')
-            ->trim('wechatCorpId')
-            ->trim('wechatCorpSecret')
+            ->trim('agentId,appKey,appSecret,wechatAgentId,wechatCorpId,wechatCorpSecret,feishuAppId,feishuAppSecret')
             ->remove('allParams, allActions')
             ->get();
         $webhook->params = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
@@ -193,10 +188,21 @@ class webhookModel extends model
             $webhook->secret = json_encode($webhook->secret);
             $webhook->url    = $this->config->webhook->wechatApiUrl;
         }
+        elseif($webhook->type == 'feishu')
+        {
+            $webhook->secret = array();
+            $webhook->secret['appId']     = $webhook->feishuAppId;
+            $webhook->secret['appSecret'] = $webhook->feishuAppSecret;
 
-        unset($webhook->wechatCorpId, $webhook->wechatCorpSecret, $webhook->wechatAgentId);
+            if(empty($webhook->feishuAppId))     dao::$errors['feishuAppId']     = sprintf($this->lang->error->notempty, $this->lang->webhook->feishuAppId);
+            if(empty($webhook->feishuAppSecret)) dao::$errors['feishuAppSecret'] = sprintf($this->lang->error->notempty, $this->lang->webhook->feishuAppSecret);
+            if(dao::isError()) return false;
+
+            $webhook->secret = json_encode($webhook->secret);
+            $webhook->url    = $this->config->webhook->feishuApiUrl;
+        }
         
-        $this->dao->insert(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret')
+        $this->dao->insert(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret,wechatCorpId,wechatCorpSecret,wechatAgentId,feishuAppId,feishuAppSecret')
             ->batchCheck($this->config->webhook->create->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
@@ -220,12 +226,7 @@ class webhookModel extends model
             ->join('products', ',')
             ->join('projects', ',')
             ->skipSpecial('url')
-            ->trim('agentId')
-            ->trim('appKey')
-            ->trim('appSecret')
-            ->trim('wechatAgentId')
-            ->trim('wechatCorpId')
-            ->trim('wechatCorpSecret')
+            ->trim('agentId,appKey,appSecret,wechatAgentId,wechatCorpId,wechatCorpSecret,feishuAppId,feishuAppSecret')
             ->remove('allParams, allActions')
             ->get();
         $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
@@ -258,10 +259,20 @@ class webhookModel extends model
 
             $webhook->secret = json_encode($webhook->secret);
         }
+        elseif($webhook->type == 'feishu')
+        {
+            $webhook->secret = array();
+            $webhook->secret['appId']     = $webhook->feishuAppId;
+            $webhook->secret['appSecret'] = $webhook->feishuAppSecret;
 
-        unset($webhook->wechatCorpId, $webhook->wechatCorpSecret, $webhook->wechatAgentId);
+            if(empty($webhook->feishuAppId))     dao::$errors['feishuAppId']     = sprintf($this->lang->error->notempty, $this->lang->webhook->feishuAppId);
+            if(empty($webhook->feishuAppSecret)) dao::$errors['feishuAppSecret'] = sprintf($this->lang->error->notempty, $this->lang->webhook->feishuAppSecret);
+            if(dao::isError()) return false;
 
-        $this->dao->update(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret')
+            $webhook->secret = json_encode($webhook->secret);
+        }
+
+        $this->dao->update(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret,wechatCorpId,wechatCorpSecret,wechatAgentId,feishuAppId,feishuAppSecret')
             ->batchCheck($this->config->webhook->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
@@ -407,6 +418,10 @@ class webhookModel extends model
         {
             $data = $this->getWeixinData($title, $text, $mobile);
         }
+        elseif($webhook->type == 'feishu')
+        {
+            $data = $this->getFeishuData($title, $text);
+        }
         else
         {
             $data = new stdclass();
@@ -533,6 +548,15 @@ class webhookModel extends model
         return $data;
     }
 
+    public function getFeishuData($title, $text)
+    {
+        $data = new stdclass();
+        $data->msg_type = 'text';
+        $data->content['text'] = $text;
+
+        return $data;
+    }
+
     /**
      * Get openID list.
      * 
@@ -571,7 +595,7 @@ class webhookModel extends model
     {
         if(!extension_loaded('curl')) die(helper::jsonEncode($this->lang->webhook->error->curl));
 
-        if($webhook->type == 'dinguser' || $webhook->type == 'wechatuser')
+        if($webhook->type == 'dinguser' || $webhook->type == 'wechatuser' || $webhook->type == 'feishu')
         {
             if(is_string($webhook->secret)) $webhook->secret = json_decode($webhook->secret);
 
@@ -589,6 +613,13 @@ class webhookModel extends model
                 $this->app->loadClass('wechatapi', true);
                 $wechatapi = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
                 $result  = $wechatapi->send($openIdList, $sendData);
+                return json_encode($result);
+            }
+            elseif($webhook->type == 'feishu')
+            {
+                $this->app->loadClass('feishuapi', true);
+                $feishuapi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
+                $result  = $feishuapi->send($openIdList, $sendData);
                 return json_encode($result);
             }
         }

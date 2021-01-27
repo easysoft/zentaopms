@@ -7,6 +7,7 @@ $config->webhook->edit->requiredFields = 'name, url';
 
 $config->webhook->dingapiUrl   = 'https://oapi.dingtalk.com/';
 $config->webhook->wechatApiUrl = 'https://qyapi.weixin.qq.com/cgi-bin/';
+$config->webhook->feishuApiUrl = 'https://open.feishu.cn/open-apis/';
 
 /* Unset entry to hide actions. */
 $config->webhook->objectTypes = array();

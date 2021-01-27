@@ -3,12 +3,13 @@ $(function()
     $('#type').change(function()
     {
         var type = $(this).val();
-        $('#sendTypeTR').toggle(type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup');
+        $('#sendTypeTR').toggle(type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup' && type != 'feishu');
         $('#secretTR').toggle(type == 'dinggroup');
-        $('#urlTR').toggle(type != 'dinguser' && type != 'wechatuser');
+        $('#urlTR').toggle(type != 'dinguser' && type != 'wechatuser' && type != 'feishu');
         $('.dinguserTR').toggle(type == 'dinguser');
         $('.wechatTR').toggle(type == 'wechatuser');
-        $('#paramsTR').toggle(type != 'bearychat' && type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup');
+        $('.feishuTR').toggle(type == 'feishu');
+        $('#paramsTR').toggle(type != 'bearychat' && type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup' && type != 'feishu');
         $('#urlNote').html(urlNote[type]);
     });
 

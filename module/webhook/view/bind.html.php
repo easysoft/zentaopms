@@ -9,9 +9,21 @@
         <thead>
         <tr class='text-center'>
           <th class='text-left' colspan="2"><?php echo $lang->webhook->zentaoUser?></th>
-          <th class='text-left' colspan="2"><?php echo $webhook->type == 'dinguser' ? $lang->webhook->dingUserid : $lang->webhook->wechatUserid;?></th>
+          <th class='text-left' colspan="2">
+            <?php
+            if($webhook->type == 'dinguser')   echo $lang->webhook->dingUserid;
+            if($webhook->type == 'wechatuser') echo $lang->webhook->wechatUserid;
+            if($webhook->type == 'feishu')     echo $lang->webhook->feishuUserid;
+            ?>
+          </th>
           <th class='w-100px'><?php echo $lang->actions;?></th>
-          <th class='w-100px'><?php echo $webhook->type == 'dinguser' ? $lang->webhook->dingBindStatus : $lang->webhook->wechatBindStatus;?></th>
+          <th class='w-100px'>
+            <?php
+            if($webhook->type == 'dinguser')   echo $lang->webhook->dingBindStatus;
+            if($webhook->type == 'wechatuser') echo $lang->webhook->wechatBindStatus;
+            if($webhook->type == 'feishu')     echo $lang->webhook->feishuBindStatus;
+            ?>
+          </th>
         </tr>
         </thead>
         <tbody>
@@ -27,9 +39,9 @@
               $userid     = $bindedUsers[$user->account];
               $bindStatus = 1;
           }
-          elseif(isset($dingUsers[$user->realname]))
+          elseif(isset($oauthUsers[$user->realname]))
           {
-              $userid = $dingUsers[$user->realname];
+              $userid = $oauthUsers[$user->realname];
           }
           ?>
           <td colspan="2">
