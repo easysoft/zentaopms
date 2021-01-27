@@ -23,7 +23,10 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
-        if(version_compare($this->config->installedVersion, '20', '<')) 
+        if((version_compare($this->config->installedVersion, '20', '<') 
+            || strpos($config->version, 'biz') !== false 
+            || strpos($config->version, 'pro') !== false) 
+            && strpos($config->version, 'max') === false)
         {
             /* Judge upgrade step. */
             $upgradeStep = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=upgradeStep');
