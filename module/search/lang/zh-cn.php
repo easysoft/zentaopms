@@ -95,4 +95,4 @@ $lang->search->modules['risk']        = '风险';
 $lang->search->objectTypeList['story']       = $lang->SRCommon;
 $lang->search->objectTypeList['requirement'] = $lang->URCommon;
 $lang->search->objectTypeList['stage']       = $lang->execution->stage;
-$lang->search->objectTypeList['sprint']      = $lang->execution->sprint;
+$lang->search->objectTypeList['sprint']      = $lang->executionCommon;
