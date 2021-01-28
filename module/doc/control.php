@@ -800,12 +800,18 @@ class doc extends control
     /**
      * Show files for product or project.
      *
-     * @param  int    $type
+     * @param  string $type
      * @param  int    $objectID
+     * @param  string $from  product|project|doc
+     * @param  string $viewType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function showFiles($type, $objectID, $viewType = '', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function showFiles($type, $objectID, $from = 'doc', $viewType = '', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList',  $uri);

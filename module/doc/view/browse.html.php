@@ -136,7 +136,7 @@
               <?php if($libType == 'project'):?>
               <td class="c-name"><?php echo html::a(inlink('allLibs', "type=project&product={$currentLib->product}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
               <?php elseif($libType == 'files'):?>
-              <td class="c-name"><?php echo html::a(inlink('showFiles', "type=$type&objectID={$currentLib->$type}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
+              <td class="c-name"><?php echo html::a(inlink('showFiles', "type=$type&objectID={$currentLib->$type}&from=$from"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
               <?php endif;?>
               <td class="c-num"></td>
               <td class="c-user"></td>

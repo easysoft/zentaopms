@@ -93,7 +93,7 @@
           }
           elseif($libType == 'files')
           {
-              $browseLink = inlink('showFiles', "type=$type&objectID={$currentLib->$type}");
+              $browseLink = inlink('showFiles', "type=$type&objectID={$currentLib->$type}&from=$from");
           }
           ?>
           <a class="file" href="<?php echo $browseLink;?>">

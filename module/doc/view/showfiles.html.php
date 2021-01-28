@@ -45,8 +45,9 @@
             </form>
           </div>
           <div class="btn-group">
-            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$lang->doc->browseTypeList['grid']} class='btn btn-icon" . ($viewType != 'list' ? ' text-primary' : '') . "'");?>
-            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "'");?>
+            <?php $from = $lang->navGroup->doc;?>
+            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&from=$from&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$lang->doc->browseTypeList['grid']} class='btn btn-icon" . ($viewType != 'list' ? ' text-primary' : '') . "'");?>
+            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&from=$from&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "'");?>
           </div>
         </nav>
       </div>
