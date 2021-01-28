@@ -6,7 +6,7 @@
 <?php js::set('convertRelationTitle', $lang->custom->convertRelationTitle);?>
 <?php js::set('convertRelationTips', $lang->custom->convertRelationTips);?>
 <?php js::set('notempty', sprintf($this->lang->error->notempty, $this->lang->custom->convertFactor));?>
-<?php js::set('notNumber', sprintf($this->lang->error->float, $this->lang->custom->convertFactor));?>
+<?php js::set('isNumber', sprintf($this->lang->error->float, $this->lang->custom->convertFactor));?>
 <?php js::set('saveTips', $lang->custom->saveTips);?>
 <?php js::set('unit', $unit);?>
 <?php

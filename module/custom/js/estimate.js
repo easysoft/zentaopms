@@ -3,8 +3,8 @@ $(document).ready(function()
     $('#estimateTab').addClass('btn-active-text');
     $('input[name="hourPoint"]').change(function()
     {
-
         $('#saveTips').text('');
+
         /* Set the title and prompt information. */
         if($(this).val() != unit)
         {
@@ -66,7 +66,7 @@ function setScaleFactor()
     }
     else if(isNaN(scaleFactor))
     {
-        alert(notNumber);
+        alert(isNumber);
     }
     else
     {
