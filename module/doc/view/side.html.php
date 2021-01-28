@@ -58,7 +58,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
               <?php if($customLibCount > 0):?>
               <?php echo html::a($this->createLink('doc', 'objectLibs', "type=$tabValue&objectID=$tabMenuID"), $icon . $tabMenuName, '', "class='text-ellipsis' title='{$tabMenuName}'");?>
               <?php else:?>
-              <?php echo html::a($this->createLink('doc', 'browse', "libID=$mainLibID"), $icon . $tabMenuName, '', "class='text-ellipsis' title='{$tabMenuName}'");?>
+              <?php echo html::a($this->createLink('doc', 'browse', "libID=$mainLibID&browseType=all&param=0&orderBy=id_desc&from={$lang->navGroup->doc}"), $icon . $tabMenuName, '', "class='text-ellipsis' title='{$tabMenuName}'");?>
               <?php endif;?>
               <?php if(isset($sideSubLibs[$tabValue][$tabMenuID])):?>
               <ul>

@@ -139,7 +139,7 @@ class tree extends control
         }
         elseif(strpos($viewType, 'doc') !== false)
         {
-            $this->lang->navGroup->tree = 'project';
+            $this->lang->navGroup->tree = $this->lang->navGroup->doc;
             $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
             $this->doc->setMenu($type, $rootID, $currentModuleID);
             $this->lang->tree->menu      = $this->lang->doc->menu;
