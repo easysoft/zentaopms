@@ -1312,11 +1312,41 @@ class docModel extends model
         if($type == 'product')
         {
             $storyIdList      = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
-            $bugIdList        = $this->dao->select('id')->from(TABLE_BUG)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
-            $releaseIdList    = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
             $planIdList       = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
-            $testReportIdList = $this->dao->select('id')->from(TABLE_TESTREPORT)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
-            $caseIdList       = $this->dao->select('id')->from(TABLE_CASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
+
+            $bugIdList        = 0;
+            $releaseIdList    = 0;
+            $testReportIdList = 0;
+            $caseIdList       = 0;
+
+            $bugPairs = $this->dao->select('id, PRJ')->from(TABLE_BUG)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id', 'PRJ');
+            if(!empty($bugPairs))
+            {
+                $bugIdList = array_keys($bugPairs);
+                $bugIdList = implode(',', $bugIdList);
+            }
+
+            $releasePairs = $this->dao->select('id, PRJ')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id', 'PRJ');
+            if(!empty($releasePairs))
+            {
+                $releaseIdList = array_keys($releasePairs);
+                $releaseIdList = implode(',', $releaseIdList);
+            }
+
+            $testReportPairs = $this->dao->select('id, PRJ')->from(TABLE_TESTREPORT)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id', 'PRJ');
+            if(!empty($testReportPairs))
+            {
+                $testReportIdList = array_keys($testReportPairs);
+                $testReportIdList = implode(',', $testReportIdList);
+            }
+
+            $casePairs = $this->dao->select('id, PRJ')->from(TABLE_CASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id', 'PRJ');
+            if(!empty($casePairs))
+            {
+                $caseIdList = array_keys($casePairs);
+                $caseIdList = implode(',', $caseIdList);
+            }
+
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
                 ->where('size')->gt('0')
                 ->andWhere("(objectType = 'product' and objectID = $objectID)", true)
@@ -1365,6 +1395,11 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
+            if($type == 'product' && $file->objectType == 'bug')        $file->PRJ = $bugPairs[$file->objectID];
+            if($type == 'product' && $file->objectType == 'release')    $file->PRJ = $releasePairs[$file->objectID];
+            if($type == 'product' && $file->objectType == 'testreport') $file->PRJ = $testReportPairs[$file->objectID];
+            if($type == 'product' && $file->objectType == 'testcase')   $file->PRJ = $casePairs[$file->objectID];
+
             if($type == 'project' && $file->objectType == 'task')  $file->PRJ = $taskPairs[$file->objectID];
             if($type == 'project' && $file->objectType == 'build') $file->PRJ = $buildPairs[$file->objectID];
 

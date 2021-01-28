@@ -78,6 +78,10 @@
                   {
                       $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
                   }
+                  if($type == 'product' && in_array($file->objectType, array('bug', 'release', 'testcase', 'testreport')))
+                  {
+                      $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
+                  }
                   else
                   {
                       $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID");

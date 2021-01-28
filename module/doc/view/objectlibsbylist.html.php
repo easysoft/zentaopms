@@ -29,7 +29,7 @@
           <?php if($libID == 'project') $libLink = inlink('allLibs', "type=project&product=$object->id");?>
           <?php if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id&from=$from");?>
           <tr>
-            <td class="c-name"><?php echo html::a($libLink, $lib->name, '', "data-group=$from");?></td>
+            <td class="c-name"><?php echo html::a($libLink, $lib->name);?></td>
             <td class="c-num"><?php echo  $lib->allCount . $lang->doc->item;?></td>
             <td class="c-actions">
               <?php if($canBeChanged and $libID != 'project' and $libID != 'files'):?>
