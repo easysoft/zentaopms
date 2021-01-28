@@ -18,7 +18,7 @@
 <?php js::set('singleLinkProjects', $singleLinkProjects);?>
 <?php js::set('multipleLinkProjects', $multipleLinkProjects);?>
 <style>
-#changeProgram td.icon-project{font-size: 14px;}
+#changeProgram i.icon.icon-project{padding-right: 5px;}
 </style>
 <div id="mainContent" class="main-content">
   <div class="center-block">
@@ -105,7 +105,7 @@
           </tr>
           <?php foreach($linkStoriesProjects as $project):?>
           <tr>
-            <td class="icon-project"><?php echo $project;?></td>
+            <td><i class="icon icon-project"></i><?php echo $project;?></td>
           </tr>
           <?php endforeach;?>
           <?php endif;?>
@@ -115,7 +115,7 @@
           </tr>
           <?php foreach($singleLinkProjects as $project):?>
           <tr>
-            <td class="icon-project"><?php echo $project;?></td>
+            <td><i class="icon icon-project"></i><?php echo $project;?></td>
           </tr>
           <?php endforeach;?>
           <?php endif;?>

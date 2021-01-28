@@ -353,18 +353,20 @@ class product extends control
         $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
-        $product = $this->product->getById($productID);
 
-        /* Get the projects linked with this product. */
-        $notRemoveProduct     = array();
-        $linkStoriesProjects  = array();
+        /* Init vars. */
+        $product              = $this->product->getById($productID);
+        $notRemovePRJ         = array();
         $canChangePGM         = true;
         $singleLinkProjects   = array();
         $multipleLinkProjects = array();
+        $linkStoriesProjects  = array();
 
-        $notRemoveProduct = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('product')->eq($productID)->fetchPairs('project', 'product');
-        if(!empty($notRemoveProduct)) $canChangePGM = false;
+        /* Link the projects stories under this product. */
+        $notRemovePRJ = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('product')->eq($productID)->fetchPairs('project', 'product');
+        if(!empty($notRemovePRJ)) $canChangePGM = false;
 
+        /* Get the projects linked with this product. */
         $projectPairs = $this->product->getProjectPairsByProduct($productID);
 
         if(!empty($projectPairs))
@@ -386,7 +388,7 @@ class product extends control
                 }
                 else
                 {
-                    if(isset($notRemoveProduct[$projectID])) $linkStoriesProjects[$projectID] = $projectName;
+                    if(isset($notRemovePRJ[$projectID])) $linkStoriesProjects[$projectID] = $projectName;
                 }
             }
         }
@@ -466,9 +468,9 @@ class product extends control
         $this->view->lines                = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
         $this->view->canChangePGM         = $canChangePGM;
-        $this->view->linkStoriesProjects  = $linkStoriesProjects;
         $this->view->singleLinkProjects   = $singleLinkProjects;
         $this->view->multipleLinkProjects = $multipleLinkProjects;
+        $this->view->linkStoriesProjects  = $linkStoriesProjects;
 
         unset($this->lang->product->typeList['']);
         $this->display();

@@ -1519,39 +1519,43 @@ class productModel extends model
     public function updateProjects($productID, $singleLinkProjects = array(), $multipleLinkProjects = array())
     {
         $programID = $_POST['program'];
-        foreach($singleLinkProjects as $id => $project)
+        foreach($singleLinkProjects as $projectID => $projectName)
         {
-            if($project)
+            if($projectName)
             {
                 $this->dao->update(TABLE_PROJECT)
                     ->set('parent')->eq($programID)
-                    ->set('path')->eq(',' . $programID . ',' . $id . ',')
-                    ->where('id')->eq($id)
+                    ->set('path')->eq(',' . $programID . ',' . $projectID . ',')
+                    ->where('id')->eq($projectID)
                     ->exec();
             }
         }
 
-        foreach($multipleLinkProjects as $id => $project)
+        foreach($multipleLinkProjects as $projectID => $projectName)
         {
-            if(strpos($_POST['changeProjects'], ',' . $id . ',') !== false)
+            if(strpos($_POST['changeProjects'], ',' . $projectID . ',') !== false)
             {
                 $this->dao->delete()->from(TABLE_PROJECTPRODUCT)
-                    ->where('project')->eq($id)
+                    ->where('project')->eq($projectID)
                     ->andWhere('product')->ne($productID)
                     ->exec();
 
                 $this->dao->update(TABLE_PROJECT)
                     ->set('parent')->eq($programID)
-                    ->set('path')->eq(',' . $programID . ',' . $id . ',')
-                    ->where('id')->eq($id)
+                    ->set('path')->eq(',' . $programID . ',' . $projectID . ',')
+                    ->where('id')->eq($projectID)
                     ->exec();
+
+                $this->loadModel('action')->create('project', $projectID, 'Managed', '', $productID);
             }
             else
             {
                 $this->dao->delete()->from(TABLE_PROJECTPRODUCT)
-                    ->where('project')->eq($id)
+                    ->where('project')->eq($projectID)
                     ->andWhere('product')->eq($productID)
                     ->exec();
+                $newProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product','product');
+                $this->loadModel('action')->create('project', $projectID, 'Managed', '', join(',', $newProducts));
             }
         }
     }

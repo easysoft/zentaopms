@@ -15,6 +15,12 @@ $(function()
     })
 });
 
+/**
+ * Set projects of change program.
+ *
+ * @access public
+ * @return void
+ */
 function setChangeProjects()
 {
     var projects = ',';
