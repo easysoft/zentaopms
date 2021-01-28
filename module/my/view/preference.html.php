@@ -11,11 +11,12 @@
  */
 ?>
 <?php if($preferenceSetted):?>
+<style> #submit{margin-top: 45px} </style>
 <?php include '../../common/view/header.html.php';?>
 <?php else:?>
 <?php include '../../common/view/header.lite.html.php';?>
+<style> .table{width: 80%} </style>
 <?php endif;?>
-<style> #submit{margin-top: 45px} </style>
 <?php if($preferenceSetted):?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
