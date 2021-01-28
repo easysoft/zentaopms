@@ -13,9 +13,6 @@
 <?php include "../../common/view/header.html.php"?>
 <style>
 #querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
-.pri-low {color: #000000;}
-.pri-middle {color: #FF9900;}
-.pri-high {color: #E53333;}
 </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toobar pull-left">
