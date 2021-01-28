@@ -1,6 +1,6 @@
 function changeDate(date)
 {
-    location.href = createLink('user', 'todo', 'userID=' + userID + 'from=' + from + '&type=' + date.replace(/\-/g, ''));
+    location.href = createLink('user', 'todo', 'userID=' + userID + '&type=' + date.replace(/\-/g, ''));
 }
 
 $(function()

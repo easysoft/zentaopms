@@ -19,20 +19,20 @@
       <?php
       $that   = zget($lang->user->thirdPerson, $user->gender);
       $active = $type == 'assignedTo' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('issue', "userID={$user->id}&fromModule=$fromModule&type=assignedTo"), sprintf($lang->user->assignedTo, $that)) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('issue', "userID={$user->id}&type=assignedTo"), sprintf($lang->user->assignedTo, $that)) . "</li>";
 
       $active = $type == 'createdBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('issue', "userID={$user->id}&fromModule=$fromModule&type=createdBy"),   sprintf($lang->user->openedBy, $that))   . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('issue', "userID={$user->id}&type=createdBy"),   sprintf($lang->user->openedBy, $that))   . "</li>";
 
       $active = $type == 'closedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('issue', "userID={$user->id}&fromModule=$fromModule&type=closedBy"),   sprintf($lang->user->closedBy, $that)) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('issue', "userID={$user->id}&type=closedBy"),   sprintf($lang->user->closedBy, $that)) . "</li>";
       ?>
     </ul>
   </nav>
 
   <div class='main-table'>
     <table class="table has-sort-head table-fixed" id='issuetable'>
-      <?php $vars = "userID={$user->id}&fromModule=$fromModule&type=$type&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID"; ?>
+      <?php $vars = "userID={$user->id}&type=$type&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID"; ?>
       <thead>
         <tr>
           <th class="c-id w-50px"><?php echo common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>

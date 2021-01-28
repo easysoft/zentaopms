@@ -10,51 +10,51 @@
 
     $label  = "<span class='text'>{$lang->user->schedule}</span>";
     $active = $methodName == 'todo' ? ' btn-active-text' : '';
-    common::printLink('user', 'todo', "userID={$user->id}&fromModule=$fromModule", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'todo', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->task}</span>";
     $active = $methodName == 'task' ? ' btn-active-text' : '';
-    common::printLink('user', 'task', "userID={$user->id}&fromModule=$fromModule", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'task', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->URCommon}</span>";
     $active = ($methodName == 'story' and $storyType == 'requirement') ? ' btn-active-text' : '';
-    common::printLink('user', 'story', "userID={$user->id}&fromModule=$fromModule&storyType=requirement", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'story', "userID={$user->id}&storyType=requirement", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->SRCommon}</span>";
     $active = ($methodName == 'story' and $storyType == 'story')  ? ' btn-active-text' : '';
-    common::printLink('user', 'story', "userID={$user->id}&fromModule=$fromModule&storyType=story", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'story', "userID={$user->id}&storyType=story", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->bug}</span>";
     $active = $methodName == 'bug' ? ' btn-active-text' : '';
-    common::printLink('user', 'bug', "userID={$user->id}&fromModule=$fromModule", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'bug', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->testTask}</span>";
     $active = $methodName == 'testtask' ? ' btn-active-text' : '';
-    common::printLink('user', 'testtask', "userID={$user->id}&fromModule=$fromModule", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'testtask', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->testCase}</span>";
     $active = $methodName == 'testcase' ? ' btn-active-text' : '';
-    common::printLink('user', 'testcase', "userID={$user->id}&fromModule=$fromModule", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'testcase', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->execution}</span>";
     $active = $methodName == 'execution' ? ' btn-active-text' : '';
-    common::printLink('user', 'execution',  "userID={$user->id}&fromModule=$fromModule", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'execution',  "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->issue}</span>";
     $active = ($methodName == 'issue' or $methodName == 'issue')? ' btn-active-text' : '';
-    common::printLink('user', 'issue', "userID={$user->id}&fromModule=$fromModule", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'issue', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->risk}</span>";
     $active = ($methodName == 'risk' or $methodName == 'risk')? ' btn-active-text' : '';
-    common::printLink('user', 'risk', "userID={$user->id}&fromModule=$fromModule", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'risk', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->dynamic}</span>";
     $active = $methodName == 'dynamic' ? ' btn-active-text' : '';
-    common::printLink('user', 'dynamic',  "userID={$user->id}&fromModule=$fromModule&type=today", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'dynamic',  "userID={$user->id}&type=today", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->profile}</span>";
     $active = $methodName == 'profile' ? ' btn-active-text' : '';
-    common::printLink('user', 'profile',  "userID={$user->id}&fromModule=$fromModule", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'profile',  "userID={$user->id}", $label, '', "class='btn btn-link $active'");
     ?>
   </div>
 </div>

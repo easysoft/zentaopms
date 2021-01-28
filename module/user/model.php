@@ -18,18 +18,17 @@ class userModel extends model
      *
      * @param  array    $users
      * @param  string   $account
-     * @param  string   $fromModule
      * @access public
      * @return html
      */
-    public function setUserList($users, $account, $fromModule = 'user')
+    public function setUserList($users, $account)
     {
         if(!isset($users[$account]))
         {
             $user = $this->getById($account);
             if($user and $user->deleted) $users[$account] = zget($user, 'realname', $account);
         }
-        return html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '{$this->app->getMethodName()}', '{$fromModule}')\" class='form-control chosen'");
+        return html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '{$this->app->getMethodName()}')\" class='form-control chosen'");
     }
 
     /**
