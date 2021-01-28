@@ -15,7 +15,13 @@
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
 <?php if($lang->navGroup->doc == 'doc'):?>
-<style>#mainHeader{height: 0px;}</style>
+<style>
+#subHeader {margin-top: -50px; background-color: rgba(0,0,0,0);}
+#pageActions .btn-link { color: #84a2e2; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
+.header-angle-btn {padding: 0;} 
+.header-angle-btn .btn{padding: 6px 12px;}
+.header-angle-btn+.header-angle-btn::after, .header-angle-btn+.header-angle-btn::before {top: -40px;}
+</style>
 <?php endif;?>
 <div class="fade main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
   <?php if($this->from == 'doc'):?>

@@ -24,9 +24,11 @@ class docModel extends model
      */
     public function setMenu($type = '', $libID = 0, $moduleID = 0, $productID = 0, $projectID = 0, $crumb = '')
     {
-        $selectHtml  = "<div class='btn-group angle-btn'>";
-        $selectHtml .= html::a(helper::createLink('doc', 'index'), $this->lang->doc->index, '', "class='btn'");
-        $selectHtml .= '</div>';
+        $btnStyle     = $this->lang->navGroup->doc == 'doc' ? 'header-angle-btn' : 'angle-btn';
+        $isLimitWidth = $this->lang->navGroup->doc == 'doc' ? '' : 'btn-limit';
+        $selectHtml   = "<div class='btn-group $btnStyle'>";
+        $selectHtml  .= html::a(helper::createLink('doc', 'index'), $this->lang->doc->index, '', "class='btn'");
+        $selectHtml  .= '</div>';
 
         if($type)
         {
@@ -49,9 +51,9 @@ class docModel extends model
             if(isset($this->lang->doc->libTypeList[$type]))
             {
                 $mainLib     = $this->lang->doc->libTypeList[$type];
-                $selectHtml .= "<div class='btn-group angle-btn'>";
+                $selectHtml .= "<div class='btn-group $btnStyle'>";
                 $selectHtml .= "<div class='btn-group'>";
-                $selectHtml .= "<a data-toggle='dropdown' class='btn btn-limit' title=$mainLib>" . $mainLib . " <span class='caret'></span></a>";
+                $selectHtml .= "<a data-toggle='dropdown' class='btn $isLimitWidth' title=$mainLib>" . $mainLib . " <span class='caret'></span></a>";
                 $selectHtml .= "<ul class='dropdown-menu'>";
                 foreach($this->lang->doc->libTypeList as $libType => $libName)
                 {
@@ -79,9 +81,9 @@ class docModel extends model
                     }
                     $currentLibName = is_array($currentGroups[$currentLib]) ? $currentGroups[$currentLib]['name'] : $currentGroups[$currentLib];
 
-                    $selectHtml .= "<div class='btn-group angle-btn'>";
+                    $selectHtml .= "<div class='btn-group $btnStyle'>";
                     $selectHtml .= "<div class='btn-group'>";
-                    $selectHtml .= "<a data-toggle='dropdown' class='btn btn-limit' title=$currentLibName>" . $currentLibName . ' <span class="caret"></span></a>';
+                    $selectHtml .= "<a data-toggle='dropdown' class='btn $isLimitWidth' title=$currentLibName>" . $currentLibName . ' <span class="caret"></span></a>';
                     $selectHtml .='<ul class="dropdown-menu">';
                     if($type == 'product' or $type == 'project')
                     {
