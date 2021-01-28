@@ -42,9 +42,9 @@
     <thead>
       <tr>
         <th class='w-id'><?php echo $lang->release->id;?></th>
-        <th><?php echo $lang->release->name;?></th>
-        <th><?php echo $lang->release->project;?></th>
-        <th><?php echo $lang->release->build;?></th>
+        <th class="c-name"><?php echo $lang->release->name;?></th>
+        <th class="w-200px"><?php echo $lang->release->project;?></th>
+        <th class="w-200px"><?php echo $lang->release->build;?></th>
         <?php if($product->type != 'normal'):?>
         <th class='text-center w-100px'><?php echo $lang->product->branch;?></th>
         <?php endif;?>
@@ -65,7 +65,7 @@
         <td>
           <?php 
           $flagIcon = $release->marker ? "<icon class='icon icon-flag red' title='{$lang->release->marker}'></icon> " : '';
-          echo html::a(inlink('view', "release=$release->id"), $release->name) . $flagIcon;
+          echo html::a(inlink('view', "release=$release->id"), $release->name, '', "title='$release->name'") . $flagIcon;
           ?>
         </td>
         <td title='<?php echo $release->PRJName?>'><?php echo $release->PRJName;?></td>
