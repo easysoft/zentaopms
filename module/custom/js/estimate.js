@@ -12,9 +12,9 @@ $(document).ready(function()
             if($(this).val() == 1) var hourPoint = storyPoint;
             if($(this).val() == 2) var hourPoint = functionPoint;
 
-            convertTitle = convertRelationTitle.replace('%s', hourPoint);
-            convertTips  = convertRelationTips.replace(/%s/g, hourPoint);
-            submitTips   = saveTips.replace(/%s/g, hourPoint);
+            var convertTitle = convertRelationTitle.replace('%s', hourPoint);
+            var convertTips  = convertRelationTips.replace(/%s/g, hourPoint);
+            var submitTips   = saveTips.replace(/%s/g, hourPoint);
 
             $('#title').text(convertTitle);
             $('#tips').text(convertTips);
