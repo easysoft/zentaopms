@@ -106,7 +106,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
                 </li>
                 <?php endif;?>
                 <?php if($customLibCount == 0 and !is_numeric($subLibID)):?>
-                <li>
+                <li <?php echo $activeClass;?>>
                 <?php echo html::a($subLibLink, "<i class='icon {$icon}'></i> " . $subLibName, '', "class='text-ellipsis' title='{$subLibName}'");?>
                 </li>
                 <?php endif;?>

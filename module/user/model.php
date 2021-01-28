@@ -1153,7 +1153,7 @@ class userModel extends model
      * @return void
      */
     public function uploadAvatar()
-    {   
+    {
         $uploadResult = $this->loadModel('file')->saveUpload('avatar');
         if(!$uploadResult) return array('result' => 'fail', 'message' => $this->lang->fail);
 
