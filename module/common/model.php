@@ -950,7 +950,7 @@ class commonModel extends model
         if(isset($config->xxserver->installed) and $config->xuanxuan->turnon)
         {
             echo "<li class='dropdown-submenu'>";
-            echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->client . "</a><ul class='dropdown-menu pull-left'>";
+            echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->clientName . "</a><ul class='dropdown-menu pull-left'>";
             echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
             echo '<li>' . html::a($lang->clientHelpLink, $lang->clientHelp, '', "title='$lang->clientHelp' target='_blank'") . '</li>';
             echo '</ul></li>';

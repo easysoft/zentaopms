@@ -134,3 +134,4 @@ $lang->upgrade->fromVersions['12_5_1']      = '12.5.1';
 $lang->upgrade->fromVersions['20_0_alpha1'] = '20.0.alpha1';
 $lang->upgrade->fromVersions['20_0_beta1']  = '20.0.beta1';
 $lang->upgrade->fromVersions['20_0_beta2']  = '20.0.beta2';
+$lang->upgrade->fromVersions['20_0_beta3']  = '20.0.beta3';
