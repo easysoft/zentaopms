@@ -18,7 +18,7 @@
         <form method='post' class='form-ajax' action=<?php echo inlink('uploadAvatar');?> id='avatarForm' enctype='multipart/form-data'>
           <input type="file" name="files" id="files" class="form-control hidden">
           <?php $avatar = $user->avatar ? html::image($user->avatar) : strtoupper($user->account[0]);?>
-          <?php echo html::a('javascript:void(0);', $avatar, '', "class='btn btn-avatar' id='avatarUploadBtn' data-placement='right'");?>
+          <?php echo html::a('javascript:void(0);', $avatar, '', "class='btn-avatar' id='avatarUploadBtn' data-placement='right'");?>
         </form>
       </span>
       <span class='user-name'><strong><?php echo $user->realname;?></strong></span>
