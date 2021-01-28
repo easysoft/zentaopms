@@ -24,9 +24,9 @@ class upgrade extends control
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
         if((version_compare($this->config->installedVersion, '20', '<') 
-            || strpos($config->version, 'biz') !== false 
-            || strpos($config->version, 'pro') !== false) 
-            && strpos($config->version, 'max') === false)
+            || strpos($this->config->installedVersion, 'biz') !== false 
+            || strpos($this->config->installedVersion, 'pro') !== false) 
+            && strpos($this->config->installedVersion, 'max') === false)
         {
             /* Judge upgrade step. */
             $upgradeStep = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=upgradeStep');
