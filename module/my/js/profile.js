@@ -19,3 +19,8 @@ $(document).ready(function()
         $('#files').click();
     });
 });
+
+function uploadAvatar()
+{
+    $('#avatarUploadBtn').trigger('click');
+}

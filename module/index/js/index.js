@@ -118,7 +118,9 @@
                 return 'project';
             }
         }
-        if(moduleName === 'user' && (link.params.fromModule || link.params.$2) == 'my') return 'my';
+
+        var myMethods = 'todocalendar|effortcalendar|todo|task|story|bug|testtask|testcase|execution|issue|risk|dynamic|profile';
+        if(moduleName === 'user' && myMethods.indexOf(methodLowerCase) != -1) return 'my';
 
         group = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return groupsMap[group] ? group : '';

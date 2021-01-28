@@ -32,13 +32,14 @@ class todo extends control
      *
      * @param  string|date $date
      * @param  int         $userID
+     * @param  string      $from todo|feedback
      * @access public
      * @return void
      */
     public function create($date = 'today', $userID = '', $from = 'todo')
     {
-        if($date == 'today') $date = date::today();
-        if($userID == '')   $userID = $this->app->user->id;
+        if($date == 'today') $date   = date::today();
+        if($userID == '')    $userID = $this->app->user->id;
 
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;

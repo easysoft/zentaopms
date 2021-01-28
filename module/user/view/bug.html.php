@@ -19,16 +19,16 @@
       <?php
       $that   = zget($lang->user->thirdPerson, $user->gender);
       $active = $type == 'assignedTo' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "userID={$user->id}&fromModule=$fromModule&type=assignedTo"), sprintf($lang->user->assignedTo, $that)) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "userID={$user->id}&type=assignedTo"), sprintf($lang->user->assignedTo, $that)) . "</li>";
 
       $active = $type == 'openedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "userID={$user->id}&fromModule=$fromModule&type=openedBy"),   sprintf($lang->user->openedBy, $that))   . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "userID={$user->id}&type=openedBy"),   sprintf($lang->user->openedBy, $that))   . "</li>";
 
       $active = $type == 'resolvedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "userID={$user->id}&fromModule=$fromModule&type=resolvedBy"), sprintf($lang->user->resolvedBy, $that)) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "userID={$user->id}&type=resolvedBy"), sprintf($lang->user->resolvedBy, $that)) . "</li>";
 
       $active = $type == 'closedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "userID={$user->id}&fromModule=$fromModule&type=closedBy"),   sprintf($lang->user->closedBy, $that)) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "userID={$user->id}&type=closedBy"),   sprintf($lang->user->closedBy, $that)) . "</li>";
       ?>
     </ul>
   </nav>

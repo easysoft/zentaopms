@@ -14,14 +14,11 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php if($lang->navGroup->doc == 'doc'):?>
 <style>
-#mainHeader {height: 0px;}
-#subHeader {background: #1183fb linear-gradient(-90deg,#0a48d1 0,#1183fb 100%); background-color: #1183fb; border-top-color: #0c64eb; border-bottom-color: #e9f2fb;}
+#subHeader {margin-top: -50px; background-color: rgba(0,0,0,0);}
 #pageActions .btn-link { color: #84a2e2; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
-#pageNav .angle-btn { border: none; background: none; border: rgba(255,255,255,.4) solid 1px; border-right-width: 0px;}
-#pageNav .btn {background-color: none; background: none; color: white; font-size: 13px; font-weight: unset;}
-#pageNav .angle-btn:after {border-left-color: #107df7;}
-#pageNav .btn-group:after {border-left-color: #107df7;}
-#pageNav .btn-group:before {border-left-color: #107df7;}
+.header-angle-btn {padding: 0;}
+.header-angle-btn .btn{padding: 6px 12px;}
+.header-angle-btn+.header-angle-btn::after, .header-angle-btn+.header-angle-btn::before {top: -50px;}
 </style>
 <?php endif;?>
 <?php js::set('browseType', $browseType);?>
@@ -67,7 +64,7 @@
             <ul class='dropdown-menu'>
               <?php foreach($lang->doc->typeList as $typeKey => $typeName):?>
               <?php $class = strpos($config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';?>
-              <li><?php echo html::a($this->createLink('doc', 'create', "libID=$libID&moduleID=$moduleID&type=$typeKey&from={$lang->navGroup->doc}"), $typeName, '', "class='$class' data-group=$from");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'create', "libID=$libID&moduleID=$moduleID&type=$typeKey&from={$lang->navGroup->doc}"), $typeName, '', "class='$class'");?></li>
               <?php endforeach;?>
             </ul>
           </div>
@@ -85,7 +82,7 @@
           <?php if($libID):?>
           <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
           <?php if(common::hasPriv('doc', 'create') and common::canBeChanged('doc', $currentLib)):?>
-          <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}&moduleID=$moduleID&type=&from={$lang->navGroup->doc}"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info' data-group=$from");?>
+          <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}&moduleID=$moduleID&type=&from={$lang->navGroup->doc}"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
           <?php endif;?>
           <?php elseif($browseType == 'byediteddate'):?>
           <span class="text-muted"><?php echo $lang->doc->noEditedDoc;?></span>
@@ -178,7 +175,7 @@
                 <?php if(common::hasPriv('doc', 'collect')):?>
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php endif;?>
-                <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false&from={$lang->navGroup->doc}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link' data-group=$from")?>
+                <?php common::printLink('doc', 'edit', "docID=$doc->id&comment=false&from={$lang->navGroup->doc}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
                 <?php common::printLink('doc', 'delete', "docID=$doc->id&confirm=no&from={$lang->navGroup->doc}", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
                 <?php endif;?>
               </td>

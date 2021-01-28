@@ -92,7 +92,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
             <?php printf('%03d', $user->id);?>
             <?php endif;?>
           </td>
-          <td><?php if(!common::printLink('user', 'view', "userID=$user->id", $user->realname, '', "title='$user->realname'")) echo $user->realname;?></td>
+          <td title="<?php echo $user->realname;?>"><?php echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
           <td class="w-90px" title='<?php echo zget($lang->user->roleList, $user->role, '');?>'><?php echo zget($lang->user->roleList, $user->role, '');?></td>
           <td class="c-url" title="<?php echo $user->email;?>"><?php echo html::mailto($user->email);?></td>

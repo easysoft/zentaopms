@@ -12,7 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php if($lang->navGroup->doc == 'doc'):?>
-<style>#mainHeader{height: 0px;}</style>
+<style>
+#subHeader {margin-top: -50px; background-color: rgba(0,0,0,0);}
+#pageActions .btn-link { color: #84a2e2; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
+.header-angle-btn {padding: 0;} 
+.header-angle-btn .btn{padding: 6px 12px;}
+.header-angle-btn+.header-angle-btn::after, .header-angle-btn+.header-angle-btn::before {top: -50px;}
+</style>
 <?php endif;?>
 <div class="main-row fade <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
   <?php if($this->from == 'doc'):?>
@@ -75,6 +81,10 @@
                 <td class="c-url">
                   <?php
                   if($type == 'project' && in_array($file->objectType, array('task', 'build')))
+                  {
+                      $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
+                  }
+                  if($type == 'product' && in_array($file->objectType, array('bug', 'release', 'testcase', 'testreport')))
                   {
                       $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
                   }

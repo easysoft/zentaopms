@@ -119,6 +119,7 @@
     <div class='btn-toolbar'>
       <?php common::printLink('my', 'changepassword', "", $lang->changePassword, '', "title={$lang->changePassword} class='btn'");?>
       <?php common::printLink('my', 'editprofile', "", $lang->user->editProfile, '', "title={$lang->user->editProfile} class='btn'");?>
+      <?php if(common::hasPriv('my', 'uploadAvatar')) echo html::a('javascript:uploadAvatar();', $lang->my->uploadAvatar, '', "class='btn'");?>
     </div>
     <?php endif;?>
   </div>
