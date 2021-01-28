@@ -86,6 +86,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Letzte Version';
 $lang->misc->feature->detailed = 'Details';
 
+$lang->misc->releaseDate['20.0.beta3']  = '2020-01-08';
 $lang->misc->releaseDate['20.0.beta2']  = '2020-12-18';
 $lang->misc->releaseDate['20.0.beta1']  = '2020-11-30';
 $lang->misc->releaseDate['12.5.1']      = '2020-11-30';
@@ -140,6 +141,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['20.0.beta3'][]  = array('title'=>'Optimize navigation interaction, enhance user experience, upgrade to flagship', 'desc' => '');
 $lang->misc->feature->all['20.0.beta2'][]  = array('title'=>'Zentao 20 beta1，fix bug，process detail', 'desc' => '');
 $lang->misc->feature->all['20.0.beta1'][]  = array('title'=>'Zentao 20 beta，fix bug，process detail', 'desc' => '');
 $lang->misc->feature->all['20.0.alpha1'][] = array('title'=>'Add program, reset priv.', 'desc' => '');
