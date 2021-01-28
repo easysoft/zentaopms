@@ -17,7 +17,7 @@
 #pageActions .btn-link { color: #84a2e2; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
 .header-angle-btn {padding: 0;} 
 .header-angle-btn .btn{padding: 6px 12px;}
-.header-angle-btn+.header-angle-btn::after, .header-angle-btn+.header-angle-btn::before {top: -40px;}
+.header-angle-btn+.header-angle-btn::after, .header-angle-btn+.header-angle-btn::before {top: -50px;}
 </style>
 <?php endif;?>
 <div class="main-row fade <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
