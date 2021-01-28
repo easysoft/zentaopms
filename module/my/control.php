@@ -834,24 +834,20 @@ class my extends control
         {
             foreach($_POST as $key => $value) $this->setting->setItem("{$this->app->user->account}.common.$key", $value);
 
-            die(js::closeModal('parent.parent'));
+            $this->setting->setItem("{$this->app->user->account}.common.preferenceSetted", 1);
+            if(isOnlybody()) die(js::closeModal('parent.parent'));
+
+            die(js::locate($this->createLink('my', 'index'), 'parent'));
         }
 
-        /* Get default URSR. */
-        $URSR = $this->setting->getItem("owner={$this->app->user->account}&module=common&key=URSR");
-
-        /* Get default menu link. */
-        $programLink = $this->setting->getItem("owner={$this->app->user->account}&module=common&key=programLink");
-        $productLink = $this->setting->getItem("owner={$this->app->user->account}&module=common&key=productLink");
-        $projectLink = $this->setting->getItem("owner={$this->app->user->account}&module=common&key=projectLink");
-
-        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;
-        $this->view->position[]  = $this->lang->my->preference;
-        $this->view->URSRList    = $this->loadModel('custom')->getURSRPairs();
-        $this->view->URSR        = $URSR ? $URSR : $this->setting->getItem('owner=system&module=custom&key=URSR');
-        $this->view->programLink = $programLink ? $programLink : 'program-pgmbrowse';
-        $this->view->productLink = $productLink ? $productLink : 'product-all';
-        $this->view->projectLink = $projectLink ? $projectLink : 'program-prjbrowse';
+        $this->view->title            = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;
+        $this->view->position[]       = $this->lang->my->preference;
+        $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
+        $this->view->URSR             = isset($this->config->URSR) ? $this->config->URSR : $this->setting->getItem('owner=system&module=custom&key=URSR');
+        $this->view->programLink      = isset($this->config->programLink) ? $this->config->programLink : 'program-pgmbrowse';
+        $this->view->productLink      = isset($this->config->productLink) ? $this->config->productLink : 'product-all';
+        $this->view->projectLink      = isset($this->config->projectLink) ? $this->config->projectLink : 'program-prjbrowse';
+        $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
         $this->display();
     }
 

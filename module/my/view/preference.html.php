@@ -10,12 +10,24 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if($preferenceSetted):?>
 <?php include '../../common/view/header.html.php';?>
+<?php else:?>
+<?php include '../../common/view/header.lite.html.php';?>
+<?php endif;?>
 <style> #submit{margin-top: 45px} </style>
+<?php if($preferenceSetted):?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><i class='icon-key'></i> <?php echo $lang->my->preference;?></h2>
   </div>
+<?php else:?>
+<div class='container'>
+  <div class='modal-dialog'>
+    <div class='modal-header'>
+      <strong><?php echo $lang->my->preference;?></strong>
+    </div>
+<?php endif;?>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table table-form w-320px'>
       <tr>
@@ -35,9 +47,13 @@
         <td><?php echo html::select('projectLink', $lang->my->projectLinkList, $projectLink, "class='form-control chosen'");?></td>
       </tr>
       <tr>
-        <td colspan='2' class='text-center form-actions'><?php echo html::submitButton() . html::backButton();?></td>
+        <td colspan='2' class='text-center form-actions'><?php echo html::submitButton();?></td>
       </tr>
     </table>
   </form>
 </div>
+<?php if($preferenceSetted):?>
 <?php include '../../common/view/footer.html.php';?>
+<?php else:?>
+<?php include '../../common/view/footer.lite.html.php';?>
+<?php endif;?>

@@ -33,7 +33,7 @@ class control extends baseControl
     {
         parent::__construct($moduleName, $methodName, $appName);
 
-        //if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')) $this->setConcept();
+        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')) $this->setPreference();
 
         if(!isset($this->config->bizVersion)) return false;
 
@@ -77,21 +77,21 @@ class control extends baseControl
     }
 
     /**
-     * Go to concept setting page if concept not setted.
+     * Go to preference setting page if preference not setted.
      * 
      * @access public
      * @return void
      */
-    public function setConcept()
+    public function setPreference()
     {
-        if(empty($this->app->user->admin)) return true;
+        if(empty($this->app->user->account)) return true;
         if($this->app->getModuleName() == 'user' and strpos("login,logout", $this->app->getMethodName()) !== false) return true;
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'changepassword') return true;
+        if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'preference') return true;
 
-        if($this->app->getModuleName() == 'custom' and $this->app->getMethodName() == 'flow') return true;
-        if(!isset($this->config->conceptSetted)) 
+        if(!isset($this->config->preferenceSetted)) 
         {
-            $this->locate(helper::createLink('custom', 'flow'));
+            $this->locate(helper::createLink('my', 'preference'));
         }
     }
 
