@@ -629,42 +629,6 @@ class upgradeModel extends model
         case '12_5_1':
             $this->saveLogs('Execute 12_5_1');
             $this->appendExec('12_5_1');
-        case '20_0_alpha':
-            $this->saveLogs('Execute 20_0_alpha');
-
-            /* Ugrade 12.x when from 20.x. */
-            if(strpos($fromVersion, '20_0') === 0)
-            {
-                $this->execSQL($this->getUpgradeFile('12.4.4'));
-                $this->adjustPriv12_5();
-                $this->appendExec('12_4_4');
-            }
-
-            $this->execSQL($this->getUpgradeFile('20.0.alpha'));
-            $this->setWork2Full();
-            $this->initUserView();
-            $this->appendExec('20_0_alpha');
-        case '20_0_alpha1':
-            $this->saveLogs('Execute 20_0_alpha1');
-
-            $this->execSQL($this->getUpgradeFile('20.0.alpha1'));
-            $this->appendExec('20_0_alpha1');
-        case '20_0_beta1':
-            $this->saveLogs('Execute 20_0_beta1');
-            $this->execSQL($this->getUpgradeFile('20.0.beta1'));
-            $this->processBuildTable();
-            $this->processSprintConcept();
-            $this->appendExec('20_0_beta1');
-        case '20_0_beta2':
-            $this->saveLogs('Execute 20_0_beta2');
-            $this->execSQL($this->getUpgradeFile('20.0.beta2'));
-            $this->adjustBudget();
-            $this->appendExec('20_0_beta2');
-        case '20_0_beta3':
-            $this->saveLogs('Execute 20_0_beta3');
-            $this->execSQL($this->getUpgradeFile('20.0.beta3'));
-            $this->adjustBudgetUnit();
-            $this->appendExec('20_0_beta3');
         }
 
         $this->deletePatch();
@@ -847,10 +811,6 @@ class upgradeModel extends model
             case '12_4_4': $confirmContent .= file_get_contents($this->getUpgradeFile('12.4.4'));
             case '12_5':
             case '12_5_1':
-            case '20_0_alpha' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha'));
-            case '20_0_alpha1': $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.alpha1'));
-            case '20_0_beta1' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.beta1'));
-            case '20_0_beta2' : $confirmContent .= file_get_contents($this->getUpgradeFile('20.0.beta2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
