@@ -12,7 +12,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php if($lang->navGroup->doc == 'doc'):?>
-<style>#mainHeader{height: 0px;}</style>
+<style>
+#mainHeader{height: 0px;}
+#subHeader {background: #1183fb linear-gradient(-90deg,#0a48d1 0,#1183fb 100%); background-color: #1183fb; border-top-color: #0c64eb; border-bottom-color: #e9f2fb;}
+#pageActions .btn-link { color: #84a2e2; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
+</style>
 <?php endif;?>
 <div class='main-row split-row fade' id='mainRow'>
   <?php include './side.html.php';?>

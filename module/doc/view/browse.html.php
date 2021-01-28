@@ -13,7 +13,16 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php if($lang->navGroup->doc == 'doc'):?>
-<style>#mainHeader{height: 0px;}</style>
+<style>
+#mainHeader {height: 0px;}
+#subHeader {background: #1183fb linear-gradient(-90deg,#0a48d1 0,#1183fb 100%); background-color: #1183fb; border-top-color: #0c64eb; border-bottom-color: #e9f2fb;}
+#pageActions .btn-link { color: #84a2e2; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
+#pageNav .angle-btn { border: none; background: none; border: rgba(255,255,255,.4) solid 1px; border-right-width: 0px;}
+#pageNav .btn {background-color: none; background: none; color: white; font-size: 13px; font-weight: unset;}
+#pageNav .angle-btn:after {border-left-color: #107df7;}
+#pageNav .btn-group:after {border-left-color: #107df7;}
+#pageNav .btn-group:before {border-left-color: #107df7;}
+</style>
 <?php endif;?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
