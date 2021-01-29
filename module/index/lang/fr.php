@@ -8,7 +8,7 @@ $lang->index->tab->open   = 'Open';
 $lang->index->tab->reload = 'Reload';
 $lang->index->tab->close  = 'Close';
 
-$lang->index->upgradeVersion = 'Zen Tao Version Upgrade';
+$lang->index->upgradeVersion = 'New version of Zen Tao';
 $lang->index->currentVersion = 'Current Version';
 $lang->index->versionName    = 'Version Name';
 $lang->index->releaseDate    = 'Release Date';
