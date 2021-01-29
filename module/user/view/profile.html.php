@@ -31,7 +31,7 @@
       }
       ?>
       </span>
-      <span class='user-name'><strong><?php echo $user->realname;?></strong></span>
+      <span class='user-name'><?php echo $user->realname;?></span>
       <span class='user-role'><?php echo zget($lang->user->roleList, $user->role);?></span>
     </div>
     <div class='row'>
