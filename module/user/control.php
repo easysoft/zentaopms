@@ -130,10 +130,14 @@ class user extends control
         /* Change the menu when in my module. */
         $this->resetMenu();
 
+        /* Modify story title. */
+        $this->loadModel('story');
+        if($storyType == 'requirement') $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
         $this->view->position[] = $this->lang->user->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($account, $type, 'id_desc', $pager, $storyType);
+        $this->view->stories    = $this->story->getUserStories($account, $type, 'id_desc', $pager, $storyType);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->storyType  = $storyType;
         $this->view->type       = $type;
