@@ -208,6 +208,22 @@ class misc extends control
     }
 
     /**
+     * Show captcha and save to session.
+     * 
+     * @param  string $sessionVar 
+     * @param  string $uuid 
+     * @access public
+     * @return void
+     */
+    public function captcha($sessionVar = 'captcha', $uuid = '')
+    {
+        header('Content-Type: image/jpeg');
+        $captcha = $this->app->loadClass('captcha');
+        $this->session->set($sessionVar, $captcha->getPhrase());
+        $captcha->build()->output();
+    }
+
+    /**
      * Ajax set unfoldID.
      * 
      * @param  int    $objectID 

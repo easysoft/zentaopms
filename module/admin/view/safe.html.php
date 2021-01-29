@@ -47,6 +47,10 @@
           <td colspan='2'><?php echo html::radio('modifyPasswordFirstLogin', $lang->admin->safe->modifyPasswordList, isset($config->safe->modifyPasswordFirstLogin) ? $config->safe->modifyPasswordFirstLogin : 0)?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->admin->safe->loginCaptcha?></th>
+          <td colspan='2'><?php echo html::radio('loginCaptcha', $lang->admin->safe->loginCaptchaList, isset($config->safe->loginCaptcha) ? $config->safe->loginCaptcha : 0)?></td>
+        </tr>
+        <tr>
           <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>

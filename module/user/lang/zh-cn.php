@@ -49,6 +49,7 @@ $lang->user->newPassword      = '新密码';
 $lang->user->verifyPassword   = '您的密码';
 $lang->user->resetPassword    = '忘记密码';
 $lang->user->score            = '积分';
+$lang->user->captcha          = '验证码';
 
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';
@@ -117,6 +118,7 @@ $lang->user->lockWarning  = "您还有%s次尝试机会。";
 $lang->user->loginLocked  = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
 $lang->user->weakPassword = "您的密码强度小于系统设定。";
 $lang->user->errorWeak    = "密码不能使用【%s】这些常用弱口令。";
+$lang->user->errorCaptcha = "验证码不正确！";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研发';

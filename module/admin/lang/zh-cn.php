@@ -54,13 +54,14 @@ $lang->admin->bind->caption = '关联社区帐号';
 $lang->admin->bind->success = "关联账户成功";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common     = '安全策略';
-$lang->admin->safe->set        = '密码安全设置';
-$lang->admin->safe->password   = '密码安全';
-$lang->admin->safe->weak       = '常用弱口令';
-$lang->admin->safe->reason     = '类型';
-$lang->admin->safe->checkWeak  = '弱口令扫描';
-$lang->admin->safe->changeWeak = '修改弱口令密码';
+$lang->admin->safe->common       = '安全策略';
+$lang->admin->safe->set          = '密码安全设置';
+$lang->admin->safe->password     = '密码安全';
+$lang->admin->safe->weak         = '常用弱口令';
+$lang->admin->safe->reason       = '类型';
+$lang->admin->safe->checkWeak    = '弱口令扫描';
+$lang->admin->safe->changeWeak   = '修改弱口令密码';
+$lang->admin->safe->loginCaptcha = '登录使用验证码';
 $lang->admin->safe->modifyPasswordFirstLogin = '首次登录修改密码';
 
 $lang->admin->safe->modeList[0] = '不检查';
@@ -78,6 +79,9 @@ $lang->admin->safe->reasonList['birthday'] = '与生日相同';
 
 $lang->admin->safe->modifyPasswordList[1] = '必须修改';
 $lang->admin->safe->modifyPasswordList[0] = '不强制';
+
+$lang->admin->safe->loginCaptchaList[1] = '是';
+$lang->admin->safe->loginCaptchaList[0] = '否';
 
 $lang->admin->safe->noticeMode   = '系统会在登录、创建和修改用户、修改密码的时候检查用户口令。';
 $lang->admin->safe->noticeStrong = '密码长度越长，含有大写字母或数字或特殊符号越多，密码字母越不重复，安全度越强！';

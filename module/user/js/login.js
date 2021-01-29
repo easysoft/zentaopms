@@ -33,6 +33,7 @@ $(document).ready(function()
         var referer   = $('#referer').val();
         var link      = createLink('user', 'login');
         var keepLogin = $('#keepLoginon').attr('checked') == 'checked' ? 1 : 0;
+        var captcha   = $('#captcha').length == 1 ? $('#captcha').val() : '';
 
         $.ajax
         ({
@@ -47,12 +48,15 @@ $(document).ready(function()
                 'referer' : referer,
                 'verifyRand' : rand,
                 'keepLogin' : keepLogin,
+                'captcha' : captcha
             },
             success:function(data)
             {
                 if(data.result == 'fail') 
                 {
                     alert(data.message);
+                    if($('.captchaBox').length == 1) $('.captchaBox .input-group .input-group-addon img').click();
+                    $.get(createLink('user', 'refreshRandom'), function(data){$('input#verifyRand').val(data)});
                     return false;
                 }
                 else
@@ -64,6 +68,18 @@ $(document).ready(function()
 
         return false;
     });
+
+    /**
+     *  Refresh captcha. 
+     */
+    $('.captchaBox .input-group .input-group-addon img').click(function()
+    {
+       var captchaLink = createLink('misc', 'captcha', "sessionVar=captcha");
+       captchaLink += captchaLink.indexOf('?') ? '?' : '&';
+       captchaLink += 's=' + Math.random();
+
+       $(this).attr('src', captchaLink);
+    })
 });
 
 /**
