@@ -794,6 +794,7 @@ class doc extends control
         $this->view->subLibs = $subLibs;
         $this->view->pager   = $pager;
         $this->view->product = $product;
+        $this->view->from    = $this->lang->navGroup->doc == 'project' ? 'project' : 'doc';
         $this->display();
     }
 

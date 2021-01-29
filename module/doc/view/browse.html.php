@@ -114,7 +114,7 @@
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$lib->id&objectType=doclib");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php endif;?>
                 <?php common::printLink('doc', 'editLib', "libID=$lib->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
-                <?php common::printLink('tree', 'browse', "rootID=$lib->id&type=doc&currentModuleID=0&branch=0&from=$from", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
+                <?php common::printLink('tree', 'browse', "rootID=$lib->id&viewType=doc&currentModuleID=0&branch=0&from=$from", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
               </td>
             </tr>
             <?php endforeach;?>

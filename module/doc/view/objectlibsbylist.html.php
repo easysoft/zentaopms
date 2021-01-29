@@ -40,7 +40,7 @@
               <?php endif;?>
               <?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
               <?php if(empty($lib->main)) common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
-              <?php common::printLink('tree', 'browse', "rootID=$libID&type=doc&currentModuleID=0&branch=0&from=$from", "<i class='icon icon-cog'></i>", '', "title='{$lang->doc->manageType}' class='btn btn-link'")?>
+              <?php common::printLink('tree', 'browse', "rootID=$libID&viewType=doc&currentModuleID=0&branch=0&from=$from", "<i class='icon icon-cog'></i>", '', "title='{$lang->doc->manageType}' class='btn btn-link'")?>
               <?php endif;?>
             </td>
           </tr>
