@@ -59,6 +59,7 @@ class feishuapi
         $users = array();
         $depts = $this->getDepts();
 
+        /* Get users by dept. */
         foreach($depts as $deptID => $count)
         {
             if($deptID and empty($count)) continue;
@@ -77,6 +78,20 @@ class feishuapi
             }
         }
 
+        /* Get users in root. */
+        $pageToken = '';
+        while(true)
+        {
+            $response = $this->queryAPI($this->apiUrl . "contact/v3/users" . ($pageToken ? "?page_token={$pageToken}" : ''), '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+            if(isset($response->data->items))
+            {
+                foreach($response->data->items as $user) $users[$user->name] = $user->open_id;
+            }
+
+            if(!isset($response->data->page_token)) break;
+            $pageToken = $response->data->page_token;
+        }
+
         return array('result' => 'success', 'data' => $users);
     }
 
@@ -90,11 +105,27 @@ class feishuapi
     {
         set_time_limit(0);
 
-        $depts     = array('0' => '0');
+        $depts = array('0' => '0');
+
+        /* Get depts by parent dept. */
         $pageToken = '';
         while(true)
         {
             $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id=0" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=true", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+            if(isset($response->data->items))
+            {
+                foreach($response->data->items as $dept) $depts[$dept->open_department_id] = $dept->member_count;
+            }
+
+            if(!isset($response->data->page_token)) break;
+            $pageToken = $response->data->page_token;
+        }
+
+        /* Get depts by root. */
+        $pageToken = '';
+        while(true)
+        {
+            $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?fetch_child=true" . ($pageToken ? "&page_token={$pageToken}" : ''), '', array(CURLOPT_CUSTOMREQUEST => "GET"));
             if(isset($response->data->items))
             {
                 foreach($response->data->items as $dept) $depts[$dept->open_department_id] = $dept->member_count;
