@@ -12,10 +12,10 @@
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-risks <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr>
-        <th class='c-id'><?php echo $lang->idAB;?></th>
+        <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
         <th class='c-name'><?php echo $lang->risk->name;?></th>
         <?php if($longBlock):?>
-        <th class='w-100px'> <?php echo $lang->risk->strategy;?></th>
+        <th class='w-80px'> <?php echo $lang->risk->strategy;?></th>
         <?php endif;?>
         <th class='w-80px'><?php echo $lang->risk->status;?></th>
         <?php if($longBlock):?>
