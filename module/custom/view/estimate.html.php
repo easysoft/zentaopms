@@ -94,7 +94,7 @@ $lang->custom->system[] = 'estimate';
         </tr>
         <tr>
           <td colspan='2' class='text-center'>
-            <?php echo html::hidden('scaleFactor', '')?>
+            <?php echo html::hidden('scaleFactor', '');?>
             <?php echo html::submitButton();?>
             <div class='text-red' id='saveTips'></div>
           </td>
