@@ -96,6 +96,11 @@ class webhookModel extends model
             {
                 $text = substr($data->markdown->content, 0, strpos($data->markdown->content, '(http'));
             }
+            elseif(isset($data->content))
+            {
+                $text = $data->content->text;
+                $text = substr($text, 0, strpos($text, '(http')) ? substr($text, 0, strpos($text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+            }
             else
             {
                 $text = substr($data->text, 0, strpos($data->text, '(http')) ? substr($data->text, 0, strpos($data->text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
@@ -188,7 +193,7 @@ class webhookModel extends model
             $webhook->secret = json_encode($webhook->secret);
             $webhook->url    = $this->config->webhook->wechatApiUrl;
         }
-        elseif($webhook->type == 'feishu')
+        elseif($webhook->type == 'feishuuser')
         {
             $webhook->secret = array();
             $webhook->secret['appId']     = $webhook->feishuAppId;
@@ -259,7 +264,7 @@ class webhookModel extends model
 
             $webhook->secret = json_encode($webhook->secret);
         }
-        elseif($webhook->type == 'feishu')
+        elseif($webhook->type == 'feishuuser')
         {
             $webhook->secret = array();
             $webhook->secret['appId']     = $webhook->feishuAppId;
@@ -418,7 +423,7 @@ class webhookModel extends model
         {
             $data = $this->getWeixinData($title, $text, $mobile);
         }
-        elseif($webhook->type == 'feishu')
+        elseif($webhook->type == 'feishuuser')
         {
             $data = $this->getFeishuData($title, $text);
         }
@@ -595,7 +600,7 @@ class webhookModel extends model
     {
         if(!extension_loaded('curl')) die(helper::jsonEncode($this->lang->webhook->error->curl));
 
-        if($webhook->type == 'dinguser' || $webhook->type == 'wechatuser' || $webhook->type == 'feishu')
+        if($webhook->type == 'dinguser' || $webhook->type == 'wechatuser' || $webhook->type == 'feishuuser')
         {
             if(is_string($webhook->secret)) $webhook->secret = json_decode($webhook->secret);
 
@@ -615,7 +620,7 @@ class webhookModel extends model
                 $result  = $wechatapi->send($openIdList, $sendData);
                 return json_encode($result);
             }
-            elseif($webhook->type == 'feishu')
+            elseif($webhook->type == 'feishuuser')
             {
                 $this->app->loadClass('feishuapi', true);
                 $feishuapi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
@@ -625,7 +630,7 @@ class webhookModel extends model
         }
 
         $contentType = "Content-Type: {$webhook->contentType};charset=utf-8";
-        if($webhook->type == 'dinggroup' or $webhook->type == 'wechatgroup') $contentType = "Content-Type: application/json";
+        if($webhook->type == 'dinggroup' or $webhook->type == 'wechatgroup' or $webhook->type == 'feishugroup') $contentType = "Content-Type: application/json";
         $header[] = $contentType;
 
         $url = $webhook->url;
@@ -635,6 +640,19 @@ class webhookModel extends model
             $sign = $timestamp . "\n" . $webhook->secret;
             $sign = urlencode(base64_encode(hash_hmac('sha256', $sign, $webhook->secret, true)));
             $url .= "&timestamp={$timestamp}&sign={$sign}";
+        }
+        if($webhook->type == 'feishugroup' and $webhook->secret)
+        {
+            $timestamp = time();
+            $sign = $timestamp . "\n" . $webhook->secret;
+            $sign = base64_encode(hash_hmac('sha256', '', $sign, true));
+
+            $content = array();
+            $content['timestamp'] = $timestamp;
+            $content['sign']      = $sign;
+            $content['msg_type']  = 'text';
+            $content['content']   = json_decode($sendData);
+            $sendData = json_encode($content);
         }
 
         $ch = curl_init();

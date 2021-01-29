@@ -21,8 +21,11 @@ $(function ()
 
 $(".bind").on("click",function()
 {
-    var inputName = this.getAttribute("data-value");
-    $("#saveInput").html();
+    var $obj = $(this);
+    var inputName = $obj.attr("data-value");
     $("#saveInput").html("<input type='hidden' name='" + inputName + "' value=''>");
-    myModalTrigger.show();
+    myModalTrigger.show({shown:function()
+    {
+        $('#triggerModal #userSelect').val($obj.closest('tr').find("[id^=userid]").val()).trigger('chosen:updated');
+    }});
 });

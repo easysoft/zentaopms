@@ -40,7 +40,8 @@ $lang->webhook->typeList['dinggroup']   = '钉钉群通知机器人';
 $lang->webhook->typeList['dinguser']    = '钉钉工作消息通知';
 $lang->webhook->typeList['wechatgroup'] = '企业微信群机器人';
 $lang->webhook->typeList['wechatuser']  = '企业微信应用消息';
-$lang->webhook->typeList['feishu']      = '飞书工作消息通知';
+$lang->webhook->typeList['feishugroup'] = '飞书群通知机器人';
+$lang->webhook->typeList['feishuuser']  = '飞书工作消息通知';
 $lang->webhook->typeList['default']     = '其他';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
