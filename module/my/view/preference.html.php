@@ -15,7 +15,11 @@
 <?php include '../../common/view/header.html.php';?>
 <?php else:?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style> .table{width: 80%} </style>
+<style>
+html,body {height: 100%;}
+.table {width: 80%;}
+.container {height: 100%; display: flex; align-items: center;}
+</style>
 <?php endif;?>
 <?php if($preferenceSetted):?>
 <div id='mainContent' class='main-content'>

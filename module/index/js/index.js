@@ -69,7 +69,7 @@
         {
             if(link.prj) return 'project';
 
-            if(methodLowerCase === 'objectlibs' && (link.params.type || link.params.$3) == 'product') return 'product';
+            if(methodLowerCase === 'objectlibs' && (link.params.from || link.params.$3) == 'product') return 'product';
             if(methodLowerCase === 'showfiles'  && (link.params.from || link.params.$3) == 'product') return 'product';
             if(methodLowerCase === 'browse'     && (link.params.from || link.params.$5) == 'product') return 'product';
             if(methodLowerCase === 'view'       && (link.params.from || link.params.$3) == 'product') return 'product';
@@ -111,7 +111,15 @@
             if(methodLowerCase === 'browse')
             {
                 var viewType = link.params.viewType || link.params.$2;
-                if(['bug', 'case', 'caselib', 'doc'].includes(viewType)) return 'project';
+                if(['bug', 'case', 'caselib'].includes(viewType)) return 'project';
+
+                if(viewType === 'doc' && link.params.from === 'product') return 'product';
+                if(viewType === 'doc' && link.params.from === 'project') return 'project';
+                if(viewType === 'doc' && link.params.from === 'doc')     return 'doc';
+            }
+            else if(methodLowerCase === 'browsetask')
+            {
+                return 'project';
             }
             else if(methodLowerCase === 'browsetask')
             {

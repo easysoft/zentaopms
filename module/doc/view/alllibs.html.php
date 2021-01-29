@@ -56,7 +56,7 @@
               <?php endif;?>
               <?php common::printLink('doc', 'editLib', "libID=$lib->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
               <?php common::printLink('doc', 'deleteLib', "libID=$lib->id", "<i class='icon icon-close'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
-              <?php common::printLink('tree', 'browse', "rootID=$lib->id&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->doc->manageType}' class='btn btn-link iframe'", '', true)?>
+              <?php common::printLink('tree', 'browse', "rootID=$lib->id&type=doc&currentModuleID=0&branch=0&from=$from", "<i class='icon icon-cog'></i>", '', "title='{$lang->doc->manageType}' class='btn btn-link'")?>
             </div>
             <?php endif;?>
           </div>

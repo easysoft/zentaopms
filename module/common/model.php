@@ -178,6 +178,7 @@ class commonModel extends model
         if($module == 'block' and $method == 'main' and isset($_GET['hash'])) return true;
         if($module == 'file' and $method == 'read') return true;
         if($module == 'index' and $method == 'changelog') return true;
+        if($module == 'my' and $method == 'preference') return true;
 
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
@@ -391,6 +392,10 @@ class commonModel extends model
                 if($group == 'program')
                 {
                     $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->PRJ);
+                }
+                elseif($group == 'product' && $menuItem->name == 'doc')
+                {
+                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', 0, true);
                 }
                 else
                 {

@@ -1004,6 +1004,7 @@ class user extends control
             if(!isset($acls['views'][$menu])) $denyType = 'noview';
             $this->view->menu = $menu;
         }
+
         $this->view->denyType = $denyType;
 
         die($this->display());

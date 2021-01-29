@@ -22,7 +22,7 @@ class tree extends control
      * @access public
      * @return void
      */
-    public function browse($rootID, $viewType, $currentModuleID = 0, $branch = 0)
+    public function browse($rootID, $viewType, $currentModuleID = 0, $branch = 0, $from = '')
     {
         $this->loadModel('product');
 
@@ -139,7 +139,45 @@ class tree extends control
         }
         elseif(strpos($viewType, 'doc') !== false)
         {
-            $this->lang->navGroup->tree = 'project';
+            $this->lang->navGroup->tree = 'doc';
+
+            if($from == 'product')
+            {
+                $productID = $lib->product;
+                $this->lang->noMenuModule[] = 'tree';
+                unset($this->lang->product->viewMenu->set['subModule']);
+                $this->lang->navGroup->tree = 'product';
+                $this->lang->product->menu  = $this->lang->product->viewMenu;
+                $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID, 'story');
+                $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+
+                $products = $this->product->getPairs();
+                $this->product->saveState($productID, $products);
+                $this->product->setMenu($products, $productID, $branch);
+            }
+            elseif($from == 'project')
+            {
+                $projectID = $lib->project;
+                $this->lang->navGroup->tree = 'project';
+                $project = $this->loadModel('project')->getById($projectID);
+
+                /* Get all associated products. */
+                $products = $this->project->getProducts($projectID);
+                $this->view->products = $products;
+
+                $projects = $this->project->getExecutionPairs($this->session->PRJ);
+
+                /* Set menu. */
+                $this->project->setMenu($projects, $projectID);
+                $this->lang->tree->menu      = $this->lang->project->menu;
+                $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
+
+                unset($projects[$projectID]);
+                $currentProject = key($projects);
+                $parentModules  = $this->tree->getParents($currentModuleID);
+            }
+
+            if($from == 'doc') $this->lang->navGroup->doc = 'doc';
             $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
             $this->doc->setMenu($type, $rootID, $currentModuleID);
             $this->lang->tree->menu      = $this->lang->doc->menu;
