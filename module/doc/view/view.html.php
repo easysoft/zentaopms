@@ -10,17 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php $pageCSS .= $this->doc->appendNavCSS();?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php if($lang->navGroup->doc == 'doc'):?>
-<style>
-#subHeader {margin-top: -50px; background-color: rgba(0,0,0,0);}
-#pageActions .btn-link { color: #84a2e2; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
-.header-angle-btn {padding: 0;}
-.header-angle-btn .btn{padding: 6px 12px;}
-.header-angle-btn+.header-angle-btn::after, .header-angle-btn+.header-angle-btn::before {top: -50px;}
-</style>
-<?php endif;?>
 <?php echo css::internal($keTableCSS);?>
 <style>.detail-content .file-image {padding: 0 50px 0 10px;}</style>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
