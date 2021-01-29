@@ -117,13 +117,13 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
       <ul class='dropdown-menu'>
         <li>
         <?php
-        $open = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
+        $openModel = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
         if(commonModel::isTutorialMode())
         {
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
-            if($isProjectStroy) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID={$this->session->PRJ} . '#open=project'");
+            if($isProjectStroy) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID={$this->session->PRJ}");
             $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
-            echo html::a($link, $lang->story->createCommon);
+            echo html::a($link, $lang->story->createCommon, '', "data-group='$openModel'");
         }
         else
         {
@@ -135,7 +135,7 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
                 $link     = '###';
                 $disabled = 'disabled';
             }
-            echo html::a($link, $lang->story->createCommon, '', "class='$disabled' data-group='$open'");
+            echo html::a($link, $lang->story->createCommon, '', "class='$disabled' data-group='$openModel'");
         }
         ?>
         </li>
@@ -144,7 +144,7 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
         <?php
           $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=0&plan=0&type=$storyType");
           if($isProjectStroy) $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project={$this->session->PRJ}");
-          echo html::a($batchLink, $lang->story->batchCreate, '', "data-group='$open'");
+          echo html::a($batchLink, $lang->story->batchCreate, '', "data-group='$openModel'");
         ?>
         </li>
       </ul>
