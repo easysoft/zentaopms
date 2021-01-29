@@ -1157,11 +1157,11 @@ class user extends control
         $image = $this->loadModel('file')->getByID($image);
 
         if(!empty($_POST))
-        {   
+        {
             $size = fixer::input('post')->get();
             $this->file->cropImage($image->realPath, $image->realPath, $size->left, $size->top, $size->right - $size->left, $size->bottom - $size->top, $size->scaled ? $size->scaleWidth : 0, $size->scaled ? $size->scaleHeight : 0);
-            $user = $this->user->getById($this->app->user->account);
-            $this->app->user->avatar = $user->avatar;
+            $this->dao->update(TABLE_USER)->set('avatar')->eq($image->webPath)->where('account')->eq($this->app->user->account)->exec();
+            $this->app->user->avatar = $image->webPath;
             exit('success');
         }   
 

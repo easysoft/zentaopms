@@ -24,16 +24,7 @@
         <td>
           <div class="img-cutter fixed-ratio" id="imgCutter" style="max-width: 100%">
             <div class="canvas">
-            <?php
-            if(empty($user->avatar))
-            {
-                echo html::image($image->webPath);
-            }
-            else
-            {
-                echo html::image($user->avatar);
-            }
-            ?>
+              <?php echo html::image($image->webPath);?>
             </div>
             <div class="form-actions">
               <h5 id='avatarCropTip'><?php echo $lang->user->cropAvatarTip;?></h5>
