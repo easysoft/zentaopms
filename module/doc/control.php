@@ -62,8 +62,8 @@ class doc extends control
         $this->view->latestEditedDocs = $this->doc->getDocsByBrowseType(0, 'byediteddate', 0, 0, 'editedDate_desc, id_desc', $pager);
         $this->view->myDocs           = $this->doc->getDocsByBrowseType(0, 'openedbyme', 0, 0, 'addedDate_desc', $pager);
         $this->view->statisticInfo    = $this->doc->getStatisticInfo();
-        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
-        $this->view->doingProjects    = $this->loadModel('project')->getExecutionsByProject($this->projectID, 'undone', 5);
+        $this->view->users            = $this->user->getPairs('noletter');
+        $this->view->doingProjects    = $this->project->getExecutionsByProject($this->projectID, 'undone', 5);
 
         $this->display();
     }
@@ -115,7 +115,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $productID);
-            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);
+            $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
             $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
@@ -151,7 +151,7 @@ class doc extends control
         $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL, $type);
 
         $title   = '';
-        $module  = $moduleID ? $this->loadModel('tree')->getByID($moduleID) : '';
+        $module  = $moduleID ? $this->tree->getByID($moduleID) : '';
         if($module) $title = $module->name;
         if($libID)  $title = html::a(helper::createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID], '');
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
@@ -192,12 +192,12 @@ class doc extends control
         $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, '`order`', $browseType);
         $this->view->docs       = $this->doc->getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager);
         $this->view->attachLibs = $attachLibs;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users      = $this->user->getPairs('noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->type       = $type;
-        $this->view->from       = $from;
+        $this->view->from       = $this->lang->navGroup->doc == 'project' ? 'project' : $from;
         $this->view->pager      = $pager;
         $this->view->libs       = $libs;
         $this->view->currentLib = $libID ? $lib : '';
@@ -220,7 +220,7 @@ class doc extends control
             $libID = $this->doc->createLib();
             if(!dao::isError())
             {
-                $this->loadModel('action')->create('docLib', $libID, 'Created');
+                $this->action->create('docLib', $libID, 'Created');
                 die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent.parent'));
             }
             else
@@ -262,7 +262,7 @@ class doc extends control
             if(dao::isError()) die(js::error(dao::getError()));
             if($changes)
             {
-                $actionID = $this->loadModel('action')->create('docLib', $libID, 'edited');
+                $actionID = $this->action->create('docLib', $libID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
             die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent.parent'));
@@ -349,7 +349,7 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $lib->product);
-            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($lib->product);
+            $this->lang->product->switcherMenu   = $this->product->getSwitcher($lib->product);
             $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
@@ -436,7 +436,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($objectID);
+            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
             $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
@@ -501,7 +501,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($objectID);
+            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
             $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
@@ -529,7 +529,7 @@ class doc extends control
         $this->view->lib        = $lib;
         $this->view->type       = $type;
         $this->view->version    = $version ? $version : $doc->version;
-        $this->view->actions    = $this->loadModel('action')->getList('doc', $docID);
+        $this->view->actions    = $this->action->getList('doc', $docID);
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
         $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
         $this->view->keTableCSS = $this->doc->extractKETableCSS($doc->content);
@@ -603,7 +603,7 @@ class doc extends control
             $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
 
             $file = $this->file->getById($fileID);
-            $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
+            $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
             die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
         }
     }
@@ -744,7 +744,7 @@ class doc extends control
      */
     public function ajaxGetChild($libID, $type = 'module')
     {
-        $childModules = $this->loadModel('tree')->getOptionMenu($libID, 'doc');
+        $childModules = $this->tree->getOptionMenu($libID, 'doc');
         $select = ($type == 'module') ? html::select('module', $childModules, '', "class='form-control chosen'") : html::select('parent', $childModules, '', "class='form-control chosen'");
         die($select);
     }
@@ -782,7 +782,7 @@ class doc extends control
         if($type == 'product' or $type == 'project')
         {
             $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs));
-            if($this->cookie->browseType == 'bylist') $this->view->users = $this->loadModel('user')->getPairs('noletter');
+            if($this->cookie->browseType == 'bylist') $this->view->users = $this->user->getPairs('noletter');
         }
         else
         {
@@ -830,7 +830,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($objectID);
+            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
             $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
@@ -877,7 +877,7 @@ class doc extends control
         $this->view->type         = $type;
         $this->view->object       = $object;
         $this->view->files        = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users        = $this->user->getPairs('noletter');
         $this->view->pager        = $pager;
         $this->view->viewType     = $viewType;
         $this->view->orderBy      = $orderBy;
