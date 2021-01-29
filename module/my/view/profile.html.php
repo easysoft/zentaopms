@@ -21,7 +21,7 @@
           <?php echo html::a('javascript:void(0);', $avatar, '', "class='btn-avatar' id='avatarUploadBtn' data-placement='right'");?>
         </form>
       </span>
-      <span class='user-name'><strong><?php echo $user->realname;?></strong></span>
+      <span class='user-name'><?php echo $user->realname;?></span>
       <span class='user-role'><?php echo zget($lang->user->roleList, $user->role);?></span>
     </div>
     <div class='row'>
