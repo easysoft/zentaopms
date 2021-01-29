@@ -70,7 +70,6 @@
         <tr class='feishuTR'>
           <th><?php echo $lang->webhook->feishuAppId;?></th>
           <td class='required'><?php echo html::input('feishuAppId', '', "class='form-control'");?></td>
-          <td><?php echo $lang->webhook->note->dingHelp;?></td>
         </tr>
         <tr class='feishuTR'>
           <th><?php echo $lang->webhook->feishuAppSecret;?></th>

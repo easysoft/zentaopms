@@ -185,7 +185,7 @@ class webhook extends control
         }
 
         $webhook = $this->webhook->getById($id);
-        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishu')
+        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishuuser')
         {
             echo js::alert($this->lang->webhook->note->bind);
             die(js::locate($this->createLink('webhook', 'browse')));
@@ -212,7 +212,7 @@ class webhook extends control
             $wechatApi  = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
             $response = $wechatApi->getAllUsers();
         }
-        elseif($webhook->type == 'feishu')
+        elseif($webhook->type == 'feishuuser')
         {
             $this->app->loadClass('feishuapi', true);
             $feishuApi  = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);

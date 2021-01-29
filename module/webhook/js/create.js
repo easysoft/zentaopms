@@ -3,13 +3,13 @@ $(function()
     $('#type').change(function()
     {
         var type = $(this).val();
-        $('#sendTypeTR').toggle(type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup' && type != 'feishu');
-        $('#secretTR').toggle(type == 'dinggroup');
-        $('#urlTR').toggle(type != 'dinguser' && type != 'wechatuser' && type != 'feishu');
+        $('#sendTypeTR').toggle(type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup' && type != 'feishuuser' && type != 'feishugroup');
+        $('#secretTR').toggle(type == 'dinggroup' || type == 'feishugroup');
+        $('#urlTR').toggle(type != 'dinguser' && type != 'wechatuser' && type != 'feishuuser');
         $('.dinguserTR').toggle(type == 'dinguser');
         $('.wechatTR').toggle(type == 'wechatuser');
-        $('.feishuTR').toggle(type == 'feishu');
-        $('#paramsTR').toggle(type != 'bearychat' && type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup' && type != 'feishu');
+        $('.feishuTR').toggle(type == 'feishuuser');
+        $('#paramsTR').toggle(type != 'bearychat' && type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup' && type != 'feishuuser' && type != 'feishugroup');
         $('#urlNote').html(urlNote[type]);
     });
 

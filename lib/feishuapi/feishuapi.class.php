@@ -55,15 +55,56 @@ class feishuapi
     public function getAllUsers()
     {
         set_time_limit(0);
-        $users = array();
-        $response = $this->queryAPI($this->apiUrl . "contact/v3/users", json_encode(array('department_id' => 0)), array(CURLOPT_CUSTOMREQUEST => "GET"));
 
-        if(isset($response->data->items))
+        $users = array();
+        $depts = $this->getDepts();
+
+        foreach($depts as $deptID => $count)
         {
-            foreach($response->data->items as $user) $users[$user->name] = $user->open_id;
+            if($deptID and empty($count)) continue;
+
+            $pageToken = '';
+            while(true)
+            {
+                $response = $this->queryAPI($this->apiUrl . "contact/v3/users?department_id={$deptID}" . ($pageToken ? "&page_token={$pageToken}" : ''), '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+                if(isset($response->data->items))
+                {
+                    foreach($response->data->items as $user) $users[$user->name] = $user->open_id;
+                }
+
+                if(!isset($response->data->page_token)) break;
+                $pageToken = $response->data->page_token;
+            }
         }
 
         return array('result' => 'success', 'data' => $users);
+    }
+
+    /**
+     * Get depts.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getDepts()
+    {
+        set_time_limit(0);
+
+        $depts     = array('0' => '0');
+        $pageToken = '';
+        while(true)
+        {
+            $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id=0" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=true", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+            if(isset($response->data->items))
+            {
+                foreach($response->data->items as $dept) $depts[$dept->open_department_id] = $dept->member_count;
+            }
+
+            if(!isset($response->data->page_token)) break;
+            $pageToken = $response->data->page_token;
+        }
+
+        return $depts;
     }
 
     /**

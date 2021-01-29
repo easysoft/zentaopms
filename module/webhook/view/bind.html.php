@@ -13,7 +13,7 @@
             <?php
             if($webhook->type == 'dinguser')   echo $lang->webhook->dingUserid;
             if($webhook->type == 'wechatuser') echo $lang->webhook->wechatUserid;
-            if($webhook->type == 'feishu')     echo $lang->webhook->feishuUserid;
+            if($webhook->type == 'feishuuser') echo $lang->webhook->feishuUserid;
             ?>
           </th>
           <th class='w-100px'><?php echo $lang->actions;?></th>
@@ -21,7 +21,7 @@
             <?php
             if($webhook->type == 'dinguser')   echo $lang->webhook->dingBindStatus;
             if($webhook->type == 'wechatuser') echo $lang->webhook->wechatBindStatus;
-            if($webhook->type == 'feishu')     echo $lang->webhook->feishuBindStatus;
+            if($webhook->type == 'feishuuser') echo $lang->webhook->feishuBindStatus;
             ?>
           </th>
         </tr>
