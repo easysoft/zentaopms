@@ -157,24 +157,9 @@ class tree extends control
             }
             elseif($from == 'project')
             {
-                $projectID = $lib->project;
-                $this->lang->navGroup->tree = 'project';
-                $project = $this->loadModel('project')->getById($projectID);
-
-                /* Get all associated products. */
-                $products = $this->project->getProducts($projectID);
-                $this->view->products = $products;
-
-                $projects = $this->project->getExecutionPairs($this->session->PRJ);
-
-                /* Set menu. */
-                $this->project->setMenu($projects, $projectID);
+                $this->lang->navGroup->tree  = 'project';
                 $this->lang->tree->menu      = $this->lang->project->menu;
                 $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
-
-                unset($projects[$projectID]);
-                $currentProject = key($projects);
-                $parentModules  = $this->tree->getParents($currentModuleID);
             }
 
             if($from == 'doc') $this->lang->navGroup->doc = 'doc';
