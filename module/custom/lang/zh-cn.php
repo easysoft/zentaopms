@@ -148,6 +148,7 @@ $lang->custom->user->fields['deleted']      = '列出已删除用户';
 
 $lang->custom->system = array('required', 'score');
 
+$lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = '关闭的区块';
 
 $lang->custom->currentLang = '适用当前语言';

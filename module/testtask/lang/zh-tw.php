@@ -128,7 +128,7 @@ $lang->testtask->checkLinked       = '請檢查測試單的產品是否與項目
 $lang->testtask->noImportData      = '導入的XML沒有解析出數據。';
 $lang->testtask->unitXMLFormat     = '請選擇Junit XML 格式的檔案。';
 $lang->testtask->titleOfAuto       = "%s 自動化測試";
-$lang->testtask->cannotBeParsed    = '導入的XML文件內容格式錯誤，無法解析。';
+$lang->testtask->cannotBeParsed    = '導入的XML檔案內容格式錯誤，無法解析。';
 
 $lang->testtask->assignedToMe  = '指派給我';
 $lang->testtask->allCases      = '所有用例';

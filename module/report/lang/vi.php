@@ -48,6 +48,12 @@ $lang->report->beginAndEnd      = ' từ';
 $lang->report->dept             = 'Phòng/Ban';
 $lang->report->deviationChart   = 'Biểu đồ chênh lệch '.$lang->executionCommon;
 
+$lang->reportList = new stdclass();
+$lang->reportList->project = new stdclass();
+$lang->reportList->product = new stdclass();
+$lang->reportList->test    = new stdclass();
+$lang->reportList->staff   = new stdclass();
+
 $lang->reportList->project->lists[10] = 'Chênh lệch '.$lang->executionCommon . '|report|projectdeviation';
 $lang->reportList->product->lists[10] = 'Tóm tắt '.$lang->productCommon . '|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Báo cáo Bug|report|bugcreate';

@@ -22,19 +22,20 @@ $lang->my->dynamic         = '我的動態';
 $lang->my->team            = '團隊';
 $lang->my->editProfile     = '修改檔案';
 $lang->my->changePassword  = '修改密碼';
+$lang->my->preference      = '個性化設置';
 $lang->my->unbind          = '解除ZDOO綁定';
 $lang->my->manageContacts  = '維護聯繫人';
 $lang->my->deleteContacts  = '刪除聯繫人';
 $lang->my->shareContacts   = '共享聯繫人列表';
-$lang->my->setStoryConcept = '設置需求概念';
-$lang->my->storyConcept    = '需求概念';
 $lang->my->limited         = '受限操作(只能編輯與自己相關的內容)';
+$lang->my->storyConcept    = '預設需求概念組合';
 $lang->my->score           = '我的積分';
 $lang->my->scoreRule       = '積分規則';
 $lang->my->noTodo          = '暫時沒有待辦。';
 $lang->my->noData          = "暫時沒有%s。";
 $lang->my->storyChanged    = "需求變更";
 $lang->my->hours           = '工時/天';
+$lang->my->uploadAvatar    = '更換頭像';
 
 $lang->my->myExecutions = "我參與的階段/衝刺/迭代";
 $lang->my->name         = '名稱';
@@ -54,10 +55,10 @@ $lang->my->taskMenu->closedByMe   = '由我關閉';
 $lang->my->taskMenu->canceledByMe = '由我取消';
 
 $lang->my->storyMenu = new stdclass();
-$lang->my->storyMenu->assignedToMe = '指給我';
-$lang->my->storyMenu->openedByMe   = '我創建';
-$lang->my->storyMenu->reviewedByMe = '我評審';
-$lang->my->storyMenu->closedByMe   = '我關閉';
+$lang->my->storyMenu->assignedToMe = '指派給我';
+$lang->my->storyMenu->openedByMe   = '由我創建';
+$lang->my->storyMenu->reviewedByMe = '由我評審';
+$lang->my->storyMenu->closedByMe   = '由我關閉';
 
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = '進行中';
@@ -80,3 +81,25 @@ $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = '基本信息';
 $lang->my->form->lblContact = '聯繫信息';
 $lang->my->form->lblAccount = '帳號信息';
+
+$lang->my->programLink = '項目集預設着陸頁';
+$lang->my->productLink = '產品預設着陸頁'; 
+$lang->my->projectLink = '項目預設着陸頁';
+
+$lang->my->programLinkList = array();
+//$lang->my->programLinkList['program-home']     = '預設進入項目集主頁，可以瞭解公司整體的戰略規劃狀況';
+$lang->my->programLinkList['program-pgmbrowse']  = '預設進入項目集列表，可以查看所有的項目集';
+//$lang->my->programLinkList['program-pgmindex'] = '預設進入最近一個項目集儀表盤，可以查看當前項目集概況';
+$lang->my->programLinkList['program-pgmproject'] = '預設進入最近一個項目集的項目列表，可以查看當前項目集下所有項目';
+
+$lang->my->productLinkList = array();
+$lang->my->productLinkList['product-index']     = '預設進入產品主頁，可以瞭解公司整體的產品狀況';
+$lang->my->productLinkList['product-all']       = '預設進入產品列表，可以查看所有的產品';
+$lang->my->productLinkList['product-dashboard'] = '預設進入最近一個產品儀表盤，可以查看當前產品概況';
+$lang->my->productLinkList['product-browse']    = '預設進入最近一個產品的需求列表，可以查看當前產品下的需求信息';
+
+$lang->my->projectLinkList = array();
+//$lang->my->projectLinkList['program-home']    = '預設進入項目主頁，可以瞭解公司整體的項目狀況';
+$lang->my->projectLinkList['program-prjbrowse'] = '預設進入項目列表，可以查看所有的項目';
+$lang->my->projectLinkList['program-index']     = '預設進入最近一個項目儀表盤，可以查看當前項目概況';
+$lang->my->projectLinkList['project-task']      = '預設進入最近一個項目迭代的任務列表，可以查看當前迭代下的任務信息';

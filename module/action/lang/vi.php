@@ -437,6 +437,7 @@ $lang->action->label->design      = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
 
 /* Object type. */
+$lang->action->search = new stdclass();
 $lang->action->search->objectTypeList['']            = ''; 
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
 $lang->action->search->objectTypeList['program']     = 'Program';

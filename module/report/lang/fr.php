@@ -48,6 +48,12 @@ $lang->report->beginAndEnd      = ' de';
 $lang->report->dept             = 'Compartiment';
 $lang->report->deviationChart   = 'Graphique de Dérive du ' . $lang->executionCommon;
 
+$lang->reportList = new stdclass();
+$lang->reportList->project = new stdclass();
+$lang->reportList->product = new stdclass();
+$lang->reportList->test    = new stdclass();
+$lang->reportList->staff   = new stdclass();
+
 $lang->reportList->project->lists[10] = 'Dérive ' . $lang->executionCommon . '|report|projectdeviation';
 $lang->reportList->product->lists[10] = 'Résumé ' . $lang->productCommon . '|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Résumé remontée Bugs|report|bugcreate';

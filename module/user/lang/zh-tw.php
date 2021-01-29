@@ -11,6 +11,8 @@
  */
 $lang->user->common           = '用戶';
 $lang->user->id               = '用戶編號';
+$lang->user->inside           = '內部人員';
+$lang->user->outside          = '外部人員';
 $lang->user->company          = '所屬公司';
 $lang->user->dept             = '部門';
 $lang->user->account          = '用戶名';
@@ -50,6 +52,9 @@ $lang->user->verifyPassword   = '您的密碼';
 $lang->user->resetPassword    = '忘記密碼';
 $lang->user->score            = '積分';
 $lang->user->name             = '名稱';
+$lang->user->cropAvatar       = '剪切頭像';
+$lang->user->cropAvatarTip    = '拖拽選框來選擇頭像剪切範圍';
+$lang->user->cropImageTip     = '所使用的頭像圖片過小，建議圖片大小至少為 48x48，當前圖片大小為 %s';
 
 $lang->user->legendBasic        = '基本資料';
 $lang->user->legendContribution = '個人貢獻';
@@ -147,11 +152,18 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>強</span>";
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
 
-$lang->user->personalData['createdTodos']   = '創建的待辦數';
-$lang->user->personalData['createdStories'] = "創建的{$lang->SRCommon}數";
-$lang->user->personalData['finishedTasks']  = '完成的任務數';
-$lang->user->personalData['resolvedBugs']   = '解決的Bug數';
-$lang->user->personalData['createdCases']   = '創建的用例數';
+$lang->user->personalData['createdTodos']        = '創建的待辦數';
+$lang->user->personalData['createdRequirements'] = "創建的用需/史詩數";
+$lang->user->personalData['createdStories']      = "創建的軟需/故事數";
+$lang->user->personalData['finishedTasks']       = '完成的任務數';
+$lang->user->personalData['createdBugs']         = '提交的Bug數';
+$lang->user->personalData['resolvedBugs']        = '解決的Bug數';
+$lang->user->personalData['createdCases']        = '創建的用例數';
+$lang->user->personalData['createdRisks']        = '創建的風險數';
+$lang->user->personalData['resolvedRisks']       = '解決的風險數';
+$lang->user->personalData['createdIssues']       = '創建的問題數';
+$lang->user->personalData['resolvedIssues']      = '解決的問題數';
+$lang->user->personalData['createdDocs']         = '創建的文檔數';
 
 $lang->user->keepLogin['on']      = '保持登錄';
 $lang->user->loginWithDemoUser    = '使用demo帳號登錄：';

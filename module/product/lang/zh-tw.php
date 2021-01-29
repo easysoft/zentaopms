@@ -9,28 +9,29 @@
  * @version     $Id: zh-tw.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->common       = $lang->productCommon . '視圖';
-$lang->product->index        = $lang->productCommon . '主頁';
-$lang->product->browse       = "{$lang->SRCommon}列表";
-$lang->product->dynamic      = '產品動態';
-$lang->product->view         = "{$lang->productCommon}概況";
-$lang->product->edit         = "編輯{$lang->productCommon}";
-$lang->product->batchEdit    = '批量編輯';
-$lang->product->create       = "添加{$lang->productCommon}";
-$lang->product->delete       = "刪除{$lang->productCommon}";
-$lang->product->deleted      = '已刪除';
-$lang->product->close        = '關閉';
-$lang->product->closeAction  = "關閉{$lang->productCommon}";
-$lang->product->select       = "請選擇{$lang->productCommon}";
-$lang->product->mine         = '我負責：';
-$lang->product->other        = '其他：';
-$lang->product->closed       = '已關閉';
-$lang->product->updateOrder  = '排序';
-$lang->product->orderAction  = "{$lang->productCommon}排序";
-$lang->product->all          = "所有{$lang->productCommon}";
-$lang->product->export       = '導出數據';
-$lang->product->exportAction = "導出{$lang->productCommon}";
-$lang->product->dashboard    = "{$lang->productCommon}儀錶盤";
+$lang->product->common        = $lang->productCommon . '視圖';
+$lang->product->index         = $lang->productCommon . '主頁';
+$lang->product->browse        = "{$lang->SRCommon}列表";
+$lang->product->dynamic       = '產品動態';
+$lang->product->view          = "{$lang->productCommon}概況";
+$lang->product->edit          = "編輯{$lang->productCommon}";
+$lang->product->batchEdit     = '批量編輯';
+$lang->product->create        = "添加{$lang->productCommon}";
+$lang->product->delete        = "刪除{$lang->productCommon}";
+$lang->product->deleted       = '已刪除';
+$lang->product->close         = '關閉';
+$lang->product->closeAction   = "關閉{$lang->productCommon}";
+$lang->product->select        = "請選擇{$lang->productCommon}";
+$lang->product->mine          = '我負責：';
+$lang->product->other         = '其他：';
+$lang->product->closed        = '已關閉';
+$lang->product->updateOrder   = '排序';
+$lang->product->orderAction   = "{$lang->productCommon}排序";
+$lang->product->all           = "所有{$lang->productCommon}";
+$lang->product->export        = '導出數據';
+$lang->product->exportAction  = "導出{$lang->productCommon}";
+$lang->product->dashboard     = "{$lang->productCommon}儀表盤";
+$lang->product->changeProgram = "{$lang->productCommon}調整所屬項目集影響範圍確認";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
@@ -46,6 +47,7 @@ $lang->product->roadmap     = "{$lang->productCommon}路線圖";
 $lang->product->doc         = '文檔列表';
 $lang->product->project     = $lang->executionCommon . '列表';
 $lang->product->build       = '版本列表';
+$lang->product->moreProduct = "更多產品";
 $lang->product->projectInfo = "所有與此產品關聯的項目";
 
 $lang->product->currentExecution      = "當前{$lang->sprintCommon}";
@@ -62,9 +64,12 @@ $lang->product->unResolvedBugsTitle   = '未解決Bug';
 $lang->product->assignToNullBugs      = '未指派Bug';
 $lang->product->assignToNullBugsTitle = '未指派Bug';
 
-$lang->product->confirmDelete  = " 您確定刪除該{$lang->productCommon}嗎？";
-$lang->product->errorNoProduct = "還沒有創建{$lang->productCommon}！";
-$lang->product->accessDenied   = "您無權訪問該{$lang->productCommon}";
+$lang->product->confirmDelete    = " 您確定刪除該{$lang->productCommon}嗎？";
+$lang->product->errorNoProduct   = "還沒有創建{$lang->productCommon}！";
+$lang->product->accessDenied     = "您無權訪問該{$lang->productCommon}";
+$lang->product->PGMChangeTip     = "如下項目只關聯了該{$lang->productCommon}， 將直接轉移至新項目集下。";
+$lang->product->notChangePGMTip  = "該{$lang->productCommon}的{$lang->SRCommon}已經關聯到如下項目，請取消關聯後再操作";
+$lang->product->confirmChangePGM = "如下項目既關聯了該{$lang->productCommon}又關聯了其他{$lang->productCommon}，請確認是否繼續關聯該{$lang->productCommon}，勾選後將取消與其他{$lang->productCommon}的關聯關係，同時轉移至新項目集下。";
 
 $lang->product->id             = '編號';
 $lang->product->program        = "所屬項目集";
@@ -137,7 +142,7 @@ $lang->product->aclList['open']    = "公開(有{$lang->productCommon}視圖權�
 //$lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名單的成員可以訪問)';
 
 $lang->product->acls['private'] = '私有';
-$lang->product->acls['open']    = '公開';
+$lang->product->acls['open']    = "公開";
 
 $lang->product->aclTips['open']    = "有{$lang->productCommon}視圖權限，即可訪問";
 $lang->product->aclTips['private'] = "{$lang->productCommon}相關負責人、所屬項目集的干係人、相關聯項目的團隊成員和干係人可訪問";
@@ -156,7 +161,7 @@ $lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedB
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
 
-$lang->product->featureBar['all']['all']      = $lang->product->allProduct;
+$lang->product->featureBar['all']['all']      = '所有' . $lang->productCommon;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 

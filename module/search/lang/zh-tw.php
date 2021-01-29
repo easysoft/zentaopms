@@ -1,12 +1,12 @@
 <?php
 /**
- * The search module zh-cn file of ZenTaoPMS.
+ * The search module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
- * @version     $Id: zh-cn.php 4129 2013-01-18 01:58:14Z wwccss $
+ * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->search->common        = '搜索';
@@ -96,5 +96,5 @@ $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;
 $lang->search->objectTypeList['stage']            = $lang->execution->stage;
 $lang->search->objectTypeList['sprint']           = $lang->executionCommon;
-$lang->search->objectTypeList['commonIssue']      = '问题';
-$lang->search->objectTypeList['stakeholderIssue'] = '干系人问题';
+$lang->search->objectTypeList['commonIssue']      = '問題';
+$lang->search->objectTypeList['stakeholderIssue'] = '干係人問題';

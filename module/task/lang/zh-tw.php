@@ -55,8 +55,8 @@ $lang->task->allModule           = '所有模組';
 
 $lang->task->common           = '任務';
 $lang->task->id               = '編號';
-$lang->task->program          = '所屬項目';
-$lang->task->project          = '所屬' . $lang->executionCommon;
+$lang->task->project          = '所屬項目';
+$lang->task->execution        = '所屬' . $lang->executionCommon;
 $lang->task->module           = '所屬模組';
 $lang->task->moduleAB         = '模組';
 $lang->task->story            = "相關{$lang->SRCommon}";

@@ -87,9 +87,9 @@ $lang->todo->statusList['closed'] = '已關閉';
 //$lang->todo->statusList['cancel']   = '已取消';
 //$lang->todo->statusList['postpone'] = '已延期';
 
-$lang->todo->priList[3] = 3;
 $lang->todo->priList[1] = 1;
 $lang->todo->priList[2] = 2;
+$lang->todo->priList[3] = 3;
 $lang->todo->priList[4] = 4;
 
 $lang->todo->typeList['custom']   = '自定義';
@@ -118,7 +118,7 @@ $lang->todo->periods['thisWeek']        = '本週';
 $lang->todo->periods['thisMonth']       = '本月';
 $lang->todo->periods['thisYear']        = '本年';
 $lang->todo->periods['assignedToOther'] = '指派他人';
-$lang->todo->periods['cycle']           = '週期';
+$lang->todo->periods['cycle']           = '周期';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, 由 <strong>$actor</strong> $extra。$appendLink', 'extra' => 'reasonList');

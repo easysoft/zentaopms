@@ -1,12 +1,12 @@
 <?php
 /**
- * The programplan module zh-cn file of ZenTaoPMS.
+ * The programplan module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
- * @version     $Id: zh-cn.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->programplan->common        = '項目計劃';
@@ -33,7 +33,7 @@ $lang->programplan->begin            = '計劃開始';
 $lang->programplan->end              = '計劃完成';
 $lang->programplan->realBegan        = '實際開始';
 $lang->programplan->realEnd          = '實際完成';
-$lang->programplan->planDateRange    = '計劃起始日期';
+$lang->programplan->planDateRange    = '計划起始日期';
 $lang->programplan->realDateRange    = '實際起始日期';
 $lang->programplan->output           = '輸出';
 $lang->programplan->openedBy         = '由誰創建';
@@ -56,7 +56,7 @@ $lang->programplan->noData        = '暫無數據。';
 $lang->programplan->children      = '二級計劃';
 $lang->programplan->childrenAB    = '子';
 $lang->programplan->confirmDelete = '確定要刪除當前計劃嗎？';
-$lang->programplan->workloadTips  = '子階段工作量佔比按百分百的比例進行拆分';
+$lang->programplan->workloadTips  = '子階段工作量占比按百分百的比例進行拆分';
 
 $lang->programplan->stageCustom = new stdClass();
 $lang->programplan->stageCustom->date = '顯示日期';

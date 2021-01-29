@@ -48,6 +48,12 @@ $lang->report->beginAndEnd      = '起止時間';
 $lang->report->dept             = '部門';
 $lang->report->deviationChart   = $lang->executionCommon . '偏差曲綫';
 
+$lang->reportList = new stdclass();
+$lang->reportList->project = new stdclass();
+$lang->reportList->product = new stdclass();
+$lang->reportList->test    = new stdclass();
+$lang->reportList->staff   = new stdclass();
+
 $lang->reportList->project->lists[10] = $lang->executionCommon . '偏差報表|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . '彙總表|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug創建表|report|bugcreate';
@@ -71,7 +77,7 @@ $lang->report->taskTotal     = "總任務數";
 $lang->report->manhourTotal  = "總工時";
 $lang->report->validRate     = "有效率";
 $lang->report->validRateTips = "方案為已解決或延期/狀態為已解決或已關閉";
-$lang->report->unplanned     = '未計劃';
+$lang->report->unplanned     = "未計劃";
 $lang->report->workday       = '每天工時';
 $lang->report->diffDays      = '工作日天數';
 
@@ -82,7 +88,7 @@ $lang->report->typeList['line']    = '折線圖';
 
 $lang->report->conditions    = '篩選條件：';
 $lang->report->closedProduct = '關閉' . $lang->productCommon;
-$lang->report->overduePlan   = '過期計劃';
+$lang->report->overduePlan   = "過期計劃";
 
 /* daily reminder. */
 $lang->report->idAB         = 'ID';
@@ -128,7 +134,7 @@ $lang->report->annualData->finishedTask  = '完成任務數';
 $lang->report->annualData->foundBug      = '創建Bug數';
 $lang->report->annualData->resolvedBug   = '解決Bug數';
 $lang->report->annualData->productName   = "{$lang->productCommon}名稱";
-$lang->report->annualData->planCount     = '計劃數';
+$lang->report->annualData->planCount     = "計劃數";
 $lang->report->annualData->storyCount    = "{$lang->SRCommon}數";
 
 $lang->report->annualData->qaData           = "累計創建Bug數和創建用例數";

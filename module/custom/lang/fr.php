@@ -148,6 +148,7 @@ $lang->custom->user->fields['deleted']      = 'Parti';
 
 $lang->custom->system = array('required', 'score');
 
+$lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = 'Bloc Fermé';
 
 $lang->custom->currentLang = 'Langage Courant';

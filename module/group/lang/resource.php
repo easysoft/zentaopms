@@ -73,6 +73,7 @@ $lang->moduleOrder[245] = 'durationestimation';
 
 $lang->moduleOrder[250] = 'subject';
 $lang->moduleOrder[255] = 'holiday';
+$lang->moduleOrder[260] = 'weekly';
 
 $lang->resource = new stdclass();
 
@@ -101,23 +102,39 @@ $lang->resource->my->deleteContacts  = 'deleteContacts';
 $lang->resource->my->score           = 'score';
 $lang->resource->my->unbind          = 'unbind';
 $lang->resource->my->team            = 'team';
+$lang->resource->my->story           = 'story';
+$lang->resource->my->task            = 'task';
+$lang->resource->my->bug             = 'bug';
+$lang->resource->my->testtask        = 'testtask';
+$lang->resource->my->testcase        = 'testcase';
+$lang->resource->my->execution       = 'execution';
+$lang->resource->my->issue           = 'issue';
+$lang->resource->my->risk            = 'risk';
 
-$lang->my->methodOrder[1]  = 'index';
-$lang->my->methodOrder[5]  = 'todo';
-$lang->my->methodOrder[10] = 'work';
-$lang->my->methodOrder[15] = 'contribute';
-$lang->my->methodOrder[20] = 'project';
-$lang->my->methodOrder[25] = 'profile';
-$lang->my->methodOrder[30] = 'uploadAvatar';
-$lang->my->methodOrder[35] = 'preference';
-$lang->my->methodOrder[40] = 'dynamic';
-$lang->my->methodOrder[45] = 'editProfile';
-$lang->my->methodOrder[50] = 'changePassword';
-$lang->my->methodOrder[55] = 'manageContacts';
-$lang->my->methodOrder[60] = 'deleteContacts';
-$lang->my->methodOrder[65] = 'score';
-$lang->my->methodOrder[70] = 'unbind';
-$lang->my->methodOrder[75] = 'team';
+$lang->my->methodOrder[1]   = 'index';
+$lang->my->methodOrder[5]   = 'todo';
+$lang->my->methodOrder[10]  = 'work';
+$lang->my->methodOrder[15]  = 'contribute';
+$lang->my->methodOrder[20]  = 'project';
+$lang->my->methodOrder[25]  = 'profile';
+$lang->my->methodOrder[30]  = 'uploadAvatar';
+$lang->my->methodOrder[35]  = 'preference';
+$lang->my->methodOrder[40]  = 'dynamic';
+$lang->my->methodOrder[45]  = 'editProfile';
+$lang->my->methodOrder[50]  = 'changePassword';
+$lang->my->methodOrder[55]  = 'manageContacts';
+$lang->my->methodOrder[60]  = 'deleteContacts';
+$lang->my->methodOrder[65]  = 'score';
+$lang->my->methodOrder[70]  = 'unbind';
+$lang->my->methodOrder[75]  = 'team';
+$lang->my->methodOrder[80]  = 'story';
+$lang->my->methodOrder[85]  = 'task';
+$lang->my->methodOrder[90]  = 'bug';
+$lang->my->methodOrder[95]  = 'testtask';
+$lang->my->methodOrder[100] = 'testcase';
+$lang->my->methodOrder[105] = 'execution';
+$lang->my->methodOrder[110] = 'issue';
+$lang->my->methodOrder[115] = 'risk';
 
 /* Todo. */
 $lang->resource->todo = new stdclass();
@@ -172,6 +189,7 @@ $lang->resource->program->PGMProject           = 'PGMProject';
 $lang->resource->program->PGMStakeholder       = 'PGMStakeholder';
 $lang->resource->program->createStakeholder    = 'createStakeholder';
 $lang->resource->program->unlinkStakeholder    = 'unlinkStakeholder';
+$lang->resource->program->batchUnlinkStakeholders  = 'batchUnlinkStakeholders';
 $lang->resource->program->export               = 'export';
 $lang->resource->program->index                = 'PRJIndex';
 $lang->resource->program->PRJBrowse            = 'PRJBrowse';
@@ -213,32 +231,33 @@ $lang->program->methodOrder[60]  = 'PGMProject';
 $lang->program->methodOrder[65]  = 'PGMStakeholder';
 $lang->program->methodOrder[67]  = 'createStakeholder';
 $lang->program->methodOrder[70]  = 'unlinkStakeholder';
-$lang->program->methodOrder[75]  = 'export';
-$lang->program->methodOrder[80]  = 'PRJIndex';
-$lang->program->methodOrder[85]  = 'PRJBrowse';
-$lang->program->methodOrder[90]  = 'PRJProgramTitle';
-$lang->program->methodOrder[95]  = 'PRJCreate';
-$lang->program->methodOrder[100] = 'PRJEdit';
-$lang->program->methodOrder[105] = 'PRJGroup';
-$lang->program->methodOrder[110] = 'PRJCreateGroup';
-$lang->program->methodOrder[115] = 'PRJManageView';
-$lang->program->methodOrder[120] = 'PRJManagePriv';
-$lang->program->methodOrder[125] = 'PRJManageMembers';
-$lang->program->methodOrder[130] = 'PRJManageGroupMember';
-$lang->program->methodOrder[135] = 'PRJCopyGroup';
-$lang->program->methodOrder[140] = 'PRJEditGroup';
-$lang->program->methodOrder[145] = 'PRJStart';
-$lang->program->methodOrder[150] = 'PRJSuspend';
-$lang->program->methodOrder[155] = 'PRJClose';
-$lang->program->methodOrder[160] = 'PRJActivate';
-$lang->program->methodOrder[165] = 'PRJUpdateOrder';
-$lang->program->methodOrder[170] = 'PRJDelete';
-$lang->program->methodOrder[175] = 'PRJView';
-$lang->program->methodOrder[180] = 'PRJWhitelist';
-$lang->program->methodOrder[185] = 'PRJAddWhitelist';
-$lang->program->methodOrder[190] = 'unbindWhielist';
-$lang->program->methodOrder[195] = 'PRJManageProducts';
-$lang->program->methodOrder[200] = 'view';
+$lang->program->methodOrder[75]  = 'batchUnlinkStakeholders';
+$lang->program->methodOrder[80]  = 'export';
+$lang->program->methodOrder[85]  = 'PRJIndex';
+$lang->program->methodOrder[90]  = 'PRJBrowse';
+$lang->program->methodOrder[95]  = 'PRJProgramTitle';
+$lang->program->methodOrder[100] = 'PRJCreate';
+$lang->program->methodOrder[105] = 'PRJEdit';
+$lang->program->methodOrder[110] = 'PRJGroup';
+$lang->program->methodOrder[115] = 'PRJCreateGroup';
+$lang->program->methodOrder[120] = 'PRJManageView';
+$lang->program->methodOrder[125] = 'PRJManagePriv';
+$lang->program->methodOrder[130] = 'PRJManageMembers';
+$lang->program->methodOrder[135] = 'PRJManageGroupMember';
+$lang->program->methodOrder[140] = 'PRJCopyGroup';
+$lang->program->methodOrder[145] = 'PRJEditGroup';
+$lang->program->methodOrder[150] = 'PRJStart';
+$lang->program->methodOrder[155] = 'PRJSuspend';
+$lang->program->methodOrder[160] = 'PRJClose';
+$lang->program->methodOrder[165] = 'PRJActivate';
+$lang->program->methodOrder[170] = 'PRJUpdateOrder';
+$lang->program->methodOrder[175] = 'PRJDelete';
+$lang->program->methodOrder[180] = 'PRJView';
+$lang->program->methodOrder[185] = 'PRJWhitelist';
+$lang->program->methodOrder[190] = 'PRJAddWhitelist';
+$lang->program->methodOrder[195] = 'unbindWhielist';
+$lang->program->methodOrder[200] = 'PRJManageProducts';
+$lang->program->methodOrder[205] = 'view';
 
 /* Personnel . */
 $lang->resource->personnel = new stdclass();
@@ -495,10 +514,11 @@ $lang->resource->projectstory->view        = 'view';
 $lang->resource->projectstory->linkStory   = 'linkStory';
 $lang->resource->projectstory->unlinkStory = 'unlinkStory';
 
-$lang->productplan->methodOrder[5]  = 'story';
-$lang->productplan->methodOrder[10] = 'track';
-$lang->productplan->methodOrder[15] = 'linkStory';
-$lang->productplan->methodOrder[20] = 'unlinkStory';
+$lang->projectstory->methodOrder[5]  = 'story';
+$lang->projectstory->methodOrder[10] = 'track';
+$lang->projectstory->methodOrder[15] = 'view';
+$lang->projectstory->methodOrder[20] = 'linkStory';
+$lang->projectstory->methodOrder[25] = 'unlinkStory';
 
 /* Release. */
 $lang->resource->release = new stdclass();
@@ -1148,6 +1168,12 @@ $lang->holiday->methodOrder[5]  = 'browse';
 $lang->holiday->methodOrder[10] = 'create';
 $lang->holiday->methodOrder[15] = 'edit';
 $lang->holiday->methodOrder[20] = 'delete';
+
+/* Weekly. */
+$lang->resource->weekly = new stdclass();
+$lang->resource->weekly->index = 'index';
+
+$lang->holiday->methodOrder[5] = 'index';
 
 /* Custom. */
 $lang->resource->custom = new stdclass();

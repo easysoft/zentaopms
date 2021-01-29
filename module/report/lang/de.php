@@ -48,6 +48,12 @@ $lang->report->beginAndEnd      = ' : von';
 $lang->report->dept             = 'Abteilung';
 $lang->report->deviationChart   = $lang->executionCommon . ' Abweichnungs Chart';
 
+$lang->reportList = new stdclass();
+$lang->reportList->project = new stdclass();
+$lang->reportList->product = new stdclass();
+$lang->reportList->test    = new stdclass();
+$lang->reportList->staff   = new stdclass();
+
 $lang->reportList->project->lists[10] = $lang->executionCommon . ' Abweichnung|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Zusammenfassung|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bugs gemeldet|report|bugcreate';

@@ -197,6 +197,8 @@ $lang->action->label->changestatus        = '修改狀態';
 $lang->action->label->marked              = '編輯了';
 $lang->action->label->linked2project      = "關聯{$lang->executionCommon}";
 $lang->action->label->unlinkedfromproject = "移除{$lang->executionCommon}";
+$lang->action->label->linked2prj          = "關聯項目";
+$lang->action->label->unlinkedfromprj     = "移除項目";
 $lang->action->label->unlinkedfrombuild   = "移除版本";
 $lang->action->label->linked2release      = "關聯發佈";
 $lang->action->label->unlinkedfromrelease = "移除發佈";
@@ -435,6 +437,7 @@ $lang->action->label->design      = '設計|design|view|designID=%s';
 $lang->action->label->stakeholder = '干係人|stakeholder|view|userID=%s';
 
 /* Object type. */
+$lang->action->search = new stdclass();
 $lang->action->search->objectTypeList['']            = '';
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
 $lang->action->search->objectTypeList['program']     = '項目集';
@@ -492,6 +495,8 @@ $lang->action->search->label['changestatus']        = $lang->action->label->chan
 $lang->action->search->label['marked']              = $lang->action->label->marked;
 $lang->action->search->label['linked2project']      = $lang->action->label->linked2project;
 $lang->action->search->label['unlinkedfromproject'] = $lang->action->label->unlinkedfromproject;
+$lang->action->search->label['linked2prj']          = $lang->action->label->linked2prj;
+$lang->action->search->label['unlinkedfromprj']     = $lang->action->label->unlinkedfromprj;
 $lang->action->search->label['started']             = $lang->action->label->started;
 $lang->action->search->label['restarted']           = $lang->action->label->restarted;
 $lang->action->search->label['recordestimate']      = $lang->action->label->recordestimate;

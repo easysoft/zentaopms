@@ -48,6 +48,12 @@ $lang->report->beginAndEnd      = '起止时间';
 $lang->report->dept             = '部门';
 $lang->report->deviationChart   = $lang->executionCommon . '偏差曲线';
 
+$lang->reportList = new stdclass();
+$lang->reportList->project = new stdclass();
+$lang->reportList->product = new stdclass();
+$lang->reportList->test    = new stdclass();
+$lang->reportList->staff   = new stdclass();
+
 $lang->reportList->project->lists[10] = $lang->executionCommon . '偏差报表|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . '汇总表|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug创建表|report|bugcreate';

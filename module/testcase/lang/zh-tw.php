@@ -130,7 +130,7 @@ $lang->testcase->deleteStep   = '刪除';
 $lang->testcase->insertBefore = '之前添加';
 $lang->testcase->insertAfter  = '之後添加';
 
-$lang->testcase->assignToMe   = '給我的用例';
+$lang->testcase->assignToMe   = '指派給我的用例';
 $lang->testcase->openedByMe   = '我建的用例';
 $lang->testcase->allCases     = '所有';
 $lang->testcase->allTestcases = '所有用例';

@@ -14,7 +14,7 @@ $lang->personnel->role       = '角色';
 
 $lang->personnel->name          = '人員名稱';
 $lang->personnel->projects      = '項目數';
-$lang->personnel->executions    = '执行';
+$lang->personnel->executions    = '執行';
 $lang->personnel->workingHours  = '工時';
 $lang->personnel->task          = '任務';
 $lang->personnel->bug           = 'Bug';

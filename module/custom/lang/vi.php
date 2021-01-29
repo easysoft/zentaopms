@@ -148,6 +148,7 @@ $lang->custom->user->fields['deleted']      = 'Người dùng đã xóa';
 
 $lang->custom->system = array('required', 'score');
 
+$lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = 'Đã đóng Block';
 
 $lang->custom->currentLang = 'Ngôn ngữ hiện tại';

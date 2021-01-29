@@ -19,6 +19,7 @@ $lang->productplan->view       = "計劃詳情";
 $lang->productplan->bugSummary = "本頁共 <strong>%s</strong> 個Bug";
 $lang->productplan->basicInfo  = '基本信息';
 $lang->productplan->batchEdit  = '批量編輯';
+$lang->productplan->project    = '項目';
 
 $lang->productplan->batchUnlink      = "批量移除";
 $lang->productplan->linkStory        = "關聯{$lang->SRCommon}";
@@ -29,20 +30,23 @@ $lang->productplan->linkedStories    = $lang->SRCommon;
 $lang->productplan->unlinkedStories  = "未關聯{$lang->SRCommon}";
 $lang->productplan->updateOrder      = '排序';
 $lang->productplan->createChildren   = "創建子計劃";
+$lang->productplan->createExecution  = "創建{$lang->sprintCommon}";
 
 $lang->productplan->linkBug          = "關聯Bug";
 $lang->productplan->unlinkBug        = "移除Bug";
 $lang->productplan->batchUnlinkBug   = "批量移除Bug";
 $lang->productplan->linkedBugs       = 'Bug';
 $lang->productplan->unlinkedBugs     = '未關聯Bug';
-$lang->productplan->unexpired        = '未過期計劃';
-$lang->productplan->all              = '所有計劃';
+$lang->productplan->unexpired        = "未過期計劃";
+$lang->productplan->all              = "所有計劃";
 
 $lang->productplan->confirmDelete      = "您確認刪除該計劃嗎？";
 $lang->productplan->confirmUnlinkStory = "您確認移除該{$lang->SRCommon}嗎？";
 $lang->productplan->confirmUnlinkBug   = "您確認移除該Bug嗎？";
-$lang->productplan->noPlan             = '暫時沒有計劃。';
-$lang->productplan->cannotDeleteParent = '不能刪除父計劃';
+$lang->productplan->noPlan             = "暫時沒有計劃。";
+$lang->productplan->cannotDeleteParent = "不能刪除父計劃";
+$lang->productplan->selectProjects     = "請選擇所屬項目";
+$lang->productplan->nextStep           = "下一步";
 
 $lang->productplan->id         = '編號';
 $lang->productplan->product    = $lang->productCommon;
@@ -51,9 +55,9 @@ $lang->productplan->title      = '名稱';
 $lang->productplan->desc       = '描述';
 $lang->productplan->begin      = '開始日期';
 $lang->productplan->end        = '結束日期';
-$lang->productplan->last       = '上次計劃';
+$lang->productplan->last       = "上次計劃";
 $lang->productplan->future     = '待定';
-$lang->productplan->stories    = "{$lang->SRCommon}數";
+$lang->productplan->stories    = "需求數";
 $lang->productplan->bugs       = 'Bug數';
 $lang->productplan->hour       = $lang->hourCommon;
 $lang->productplan->execution  = $lang->executionCommon;

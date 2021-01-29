@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 /* Actions. */
-$lang->stage->browse      = '瀏覽列表';
+$lang->stage->browse      = '階段列表';
 $lang->stage->create      = '新建';
 $lang->stage->batchCreate = '批量新建';
 $lang->stage->edit        = '編輯';
@@ -22,8 +22,8 @@ $lang->stage->common  = '階段';
 $lang->stage->id      = '編號';
 $lang->stage->name    = '階段名稱';
 $lang->stage->type    = '階段分類';
-$lang->stage->percent = '工作量比例';
-$lang->stage->setType = '設置類型';
+$lang->stage->percent = '工作量占比';
+$lang->stage->setType = '階段類型';
 
 $lang->stage->typeList['request'] = '需求';
 $lang->stage->typeList['design']  = '設計';
