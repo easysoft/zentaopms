@@ -10,10 +10,11 @@
  * @link        http://www.zentao.net
  */
 $lang->misc = new stdclass();
-$lang->misc->common = 'Sonstiges';
-$lang->misc->ping   = 'Ping';
-$lang->misc->api    = 'https://api.zentao.net';
-$lang->misc->enApi  = 'https://api.zentao.pm';
+$lang->misc->common  = 'Sonstiges';
+$lang->misc->ping    = 'Ping';
+$lang->misc->api     = 'https://api.zentao.net';
+$lang->misc->enApi   = 'https://api.zentao.pm';
+$lang->misc->qucheng = 'https://www.qucheng.com';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
