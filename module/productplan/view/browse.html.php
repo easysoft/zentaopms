@@ -63,8 +63,8 @@
         <th class='w-70px'> <?php echo $lang->productplan->stories;?></th>
         <th class='w-60px'> <?php echo $lang->productplan->bugs;?></th>
         <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
-        <th class='w-60px'> <?php echo $lang->productplan->execution;?></th>
-        <th>                <?php echo $lang->productplan->desc;?></th>
+        <th class='w-70px'><?php echo $lang->productplan->execution;?></th>
+        <th><?php echo $lang->productplan->desc;?></th>
         <?php
         $extendFields = $this->productplan->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
