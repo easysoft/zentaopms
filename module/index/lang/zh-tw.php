@@ -8,7 +8,7 @@ $lang->index->tab->open   = '打開';
 $lang->index->tab->reload = '刷新';
 $lang->index->tab->close  = '關閉';
 
-$lang->index->upgradeVersion = '禪道版本升級';
+$lang->index->upgradeVersion = '禪道新版本';
 $lang->index->currentVersion = '當前版本';
 $lang->index->versionName    = '版本名稱';
 $lang->index->releaseDate    = '發佈日期';

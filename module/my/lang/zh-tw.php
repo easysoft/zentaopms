@@ -36,6 +36,9 @@ $lang->my->noData          = "暫時沒有%s。";
 $lang->my->storyChanged    = "需求變更";
 $lang->my->hours           = '工時/天';
 $lang->my->uploadAvatar    = '更換頭像';
+$lang->my->requirement     = "我的{$lang->URCommon}";
+$lang->my->testtask        = '我的測試單';
+$lang->my->testcase        = '我的用例';
 
 $lang->my->myExecutions = "我參與的階段/衝刺/迭代";
 $lang->my->name         = '名稱';
