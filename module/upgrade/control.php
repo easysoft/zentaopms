@@ -152,7 +152,11 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
-            if(version_compare(str_replace('_', '.', $fromVersion), '20', '<') && !isset($this->config->qcVersion)) $this->locate(inlink('mergeTips'));
+            if((version_compare($fromVersion, '20', '<') 
+                || strpos($fromVersion, 'biz') !== false 
+                || strpos($fromVersion, 'pro') !== false) 
+                && strpos($fromVersion, 'max') === false
+                && !isset($this->config->qcVersion)) $this->locate(inlink('mergeTips'));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 
