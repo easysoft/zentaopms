@@ -32,7 +32,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
             <?php if(empty($sideLibs[$tabValue])):?>
             <li>
             <?php
-            if($lang->navGroup->doc == 'project' and $tabValue == 'project')
+            if($lang->navGroup->doc == 'doc' and $tabValue == 'project')
             {
                 echo $lang->noData;
             }
