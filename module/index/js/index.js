@@ -113,9 +113,9 @@
                 var viewType = link.params.viewType || link.params.$2;
                 if(['bug', 'case', 'caselib'].includes(viewType)) return 'project';
 
-                if(viewType === 'doc' && link.params.from === 'product') return 'product';
-                if(viewType === 'doc' && link.params.from === 'project') return 'project';
-                if(viewType === 'doc' && link.params.from === 'doc')     return 'doc';
+                if(viewType === 'doc' && (link.params.from === 'product' || link.params.$5 == 'product')) return 'product';
+                if(viewType === 'doc' && (link.params.from === 'project' || link.params.$5 == 'project')) return 'project';
+                if(viewType === 'doc') return 'doc';
             }
             else if(methodLowerCase === 'browsetask')
             {

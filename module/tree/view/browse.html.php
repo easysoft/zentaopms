@@ -10,16 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
 <?php if($lang->navGroup->doc == 'doc'):?>
-<style>
-#subHeader {margin-top: -50px; background-color: rgba(0,0,0,0);}
-#pageActions .btn-link { color: #84a2e2; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
-.header-angle-btn {padding: 0;}
-.header-angle-btn .btn{padding: 6px 12px;}
-.header-angle-btn+.header-angle-btn::after, .header-angle-btn+.header-angle-btn::before {top: -50px;}
-</style>
+<?php $pageCSS .= $this->doc->appendNavCSS();?>
 <?php endif;?>
+<?php include '../../common/view/header.html.php';?>
 
 <?php if($viewType != 'story'):?>
 <style>
@@ -35,9 +29,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
-    <a href="<?php echo $backLink;?>" class="btn btn-secondary">
-      <i class="icon icon-back icon-sm"></i> <?php echo $lang->goback;?>
-    </a>
+    <?php echo html::a($backLink, '<i class="icon icon-back icon-sm"></i>' . $lang->goback, '', 'class="btn btn-secondary"');?>
     <div class="divider"></div>
     <div class="page-title">
       <?php $rootName = $viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost' ? '' : $root->name;?>

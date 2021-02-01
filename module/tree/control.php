@@ -160,6 +160,9 @@ class tree extends control
                 $this->lang->navGroup->tree  = 'project';
                 $this->lang->tree->menu      = $this->lang->project->menu;
                 $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
+
+                /* The PRJ parameter needs to be present when the tree module belongs to the project grouping. */
+                if($this->session->docList && $this->session->PRJ && strpos($this->session->docList, 'PRJ') === false) $this->session->set('docList', $this->session->docList . '?PRJ=' . $this->session->PRJ);
             }
 
             if($from == 'doc') $this->lang->navGroup->doc = 'doc';
