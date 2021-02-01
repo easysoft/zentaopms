@@ -197,6 +197,11 @@ class testtask extends control
         /* Get test task, and set menu. */
         $task = $this->testtask->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        /* When the session changes, you need to query the related products again. */
+        if($this->session->PRJ != $task->PRJ) $this->view->products = $this->products = $this->product->getProductPairsByProject($task->PRJ);
+        $this->session->PRJ = $task->PRJ;
+
         $productID = $task->product;
         $buildID   = $task->build;
 

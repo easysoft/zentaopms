@@ -1618,9 +1618,12 @@ class project extends control
      */
     public function view($executionID)
     {
-        $this->app->loadLang('program');
         $execution = $this->project->getById($executionID, true);
-        if(!$execution) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        $this->app->loadLang('program');
+        $this->session->PRJ = $execution->project;
 
         /* Project not found to prevent searching for .*/
         if(!isset($this->projects[$execution->id])) $this->projects = $this->project->getExecutionPairs($execution->project, 'all', 'nocode');

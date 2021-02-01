@@ -102,7 +102,7 @@ class programModel extends model
      */
     public function getPGMByID($programID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('`type`')->eq('program')->fetch();
     }
 
     /**
@@ -828,7 +828,7 @@ class programModel extends model
         $currentProjectName = $this->lang->program->common;
         if($projectID)
         {
-            $currentProject     = $this->project->getById($projectID);
+            $currentProject     = $this->getPRJById($projectID);
             $currentProjectName = $currentProject->name;
         }
 
@@ -919,9 +919,9 @@ class programModel extends model
      */
     public function getPRJByID($projectID)
     {
-        if(!$projectID) return false;
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('`type`')->eq('project')->fetch();
+        if(!$project) return false;
 
-        $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         if($project->end == '0000-00-00') $project->end = '';
         return $project;
     }

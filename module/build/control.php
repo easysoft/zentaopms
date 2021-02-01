@@ -161,6 +161,9 @@ class build extends control
      */
     public function view($buildID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
+        $build = $this->build->getByID((int)$buildID, true);
+        if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
+
         /* Set session and load modules. */
         if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
         if($type == 'bug')  $this->session->set('bugList', $this->app->getURI(true));
@@ -172,10 +175,7 @@ class build extends control
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
-        /* Get build, product and bugs. */
-        $build = $this->build->getByID((int)$buildID, true);
-        if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
-
+        /* Get product and bugs. */
         $product = $this->loadModel('product')->getById($build->product);
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 

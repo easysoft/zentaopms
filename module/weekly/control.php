@@ -46,7 +46,7 @@ class weekly extends control
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
-        $this->view->program   = $this->loadModel('project')->getByID($program);
+        $this->view->program   = $this->loadModel('program')->getPRJByID($program);
         $this->view->weekSN    = $this->weekly->getWeekSN($this->view->program->begin, $date);
         $this->view->monday    = $this->weekly->getThisMonday($date);
         $this->view->lastDay   = $this->weekly->getLastDay($date);

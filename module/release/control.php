@@ -140,6 +140,9 @@ class release extends control
      */
     public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
+        $release = $this->release->getById((int)$releaseID, true);
+        if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
+
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true));
         if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true));
 
@@ -150,9 +153,6 @@ class release extends control
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
-        $release = $this->release->getById((int)$releaseID, true);
-        if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
-        
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)
                 ->beginIF($type == 'story')->orderBy($orderBy)->fi()

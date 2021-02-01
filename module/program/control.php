@@ -110,6 +110,9 @@ class program extends control
      */
     public function PGMProduct($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $program = $this->program->getPGMByID($programID);
+        if(empty($program) || $program->type != 'program') die(js::error($this->lang->notFound) . js::locate('back'));
+
         $this->lang->navGroup->program       = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
@@ -122,7 +125,6 @@ class program extends control
         /* Get the top programID. */
         if($programID)
         {
-            $program   = $this->program->getPGMByID($programID);
             $path      = explode(',', $program->path);
             $path      = array_filter($path);
             $programID = current($path);
@@ -763,6 +765,9 @@ class program extends control
      */
     public function index($projectID = 0)
     {
+        $project = $this->program->getPRJByID($projectID);
+        if(empty($project) || $project->type != 'project') die(js::error($this->lang->notFound) . js::locate('back'));
+
         $this->lang->navGroup->program = 'project';
         $projectID = $this->program->savePRJState($projectID, $this->program->getPRJPairs());
 
@@ -771,7 +776,7 @@ class program extends control
 
         $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->PRJIndex;
         $this->view->position[] = $this->lang->program->PRJIndex;
-        $this->view->project    = $this->program->getPRJByID($projectID);
+        $this->view->project    = $project;
 
         $this->display();
     }

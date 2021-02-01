@@ -42,11 +42,10 @@ class projectrelease extends control
     public function commonAction($productID = 0, $branch = 0)
     {
         $this->lang->product->menu         = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         /* Get product and product list by project. */
-        $this->loadModel('product');
-        $products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $products = $this->product->getProductPairsByProject($this->session->PRJ);
         if(!$productID) $productID = key($products);
         $product = $this->product->getById($productID);
 
@@ -54,7 +53,7 @@ class projectrelease extends control
         $this->view->product  = $product;
         $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->branch   = $branch;
-        $this->view->project  = $this->loadModel('project')->getById($this->session->PRJ);
+        $this->view->project  = $this->loadModel('program')->getPRJById($this->session->PRJ);
     }
 
     /**
