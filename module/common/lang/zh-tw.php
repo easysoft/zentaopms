@@ -367,7 +367,7 @@ $lang->project->menu->more     = array('link' => '更多|project|whitelist|proje
 
 $lang->project->subMenu = new stdclass();
 $lang->project->subMenu->view = new stdclass();
-$lang->project->subMenu->view->groupTask = '分組視圖|project|groupTask|projectID=%s';
+$lang->project->subMenu->view->groupTask = '分組視圖|project|grouptask|projectID=%s';
 $lang->project->subMenu->view->tree      = '樹狀圖|project|tree|projectID=%s';
 
 $lang->project->subMenu->qa = new stdclass();

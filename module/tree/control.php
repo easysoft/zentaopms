@@ -231,6 +231,7 @@ class tree extends control
         $this->view->currentModuleID = $currentModuleID;
         $this->view->parentModules   = $parentModules;
         $this->view->branch          = $branch;
+        $this->view->from            = $from;
         $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType);
         $this->view->canBeChanged    = isset($canBeChanged) ? $canBeChanged : true;
         $this->display();

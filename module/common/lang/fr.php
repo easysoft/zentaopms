@@ -367,7 +367,7 @@ $lang->project->menu->more     = array('link' => 'More|project|whitelist|project
 
 $lang->project->subMenu = new stdclass();
 $lang->project->subMenu->view = new stdclass();
-$lang->project->subMenu->view->groupTask = 'Vision Groupée|project|groupTask|projectID=%s';
+$lang->project->subMenu->view->groupTask = 'Vision Groupée|project|grouptask|projectID=%s';
 $lang->project->subMenu->view->tree      = 'Arborescence|project|tree|projectID=%s';
 
 $lang->project->subMenu->qa = new stdclass();
