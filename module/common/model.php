@@ -614,7 +614,7 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public static function printRecentMemu()
+    public static function printRecentMenu()
     {
         global $lang;
         echo "<li class='divider'></li>";
