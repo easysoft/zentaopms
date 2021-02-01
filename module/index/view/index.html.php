@@ -27,7 +27,7 @@ js::set('defaultOpen', $open);
     <ul class='nav nav-default' id='menuMainNav'>
     </ul>
     <ul class='nav nav-default'>
-      <?php commonModel::printRecentMemu();?>
+      <?php commonModel::printRecentMenu();?>
     </ul>
   </nav>
   <div class="table-col col-right">

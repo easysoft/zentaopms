@@ -1745,6 +1745,11 @@ class programModel extends model
                 }
                 $title = "title='{$PRJProgram}'";
             }
+            if($id == 'PRJBudget')
+            {
+                $budget = $project->budget != 0 ? zget($this->lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $this->lang->program->future;
+                $title  = "title='$budget'";
+            }
 
             if($id == 'PRJEstimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->project->workHour}'";
             if($id == 'PRJConsume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->project->workHour}'";
@@ -1781,7 +1786,7 @@ class programModel extends model
                     echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->program->statusList, $project->status) . "</span>";
                     break;
                 case 'PRJBudget':
-                    echo $project->budget != 0 ? zget($this->lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $this->lang->program->future;
+                    echo $budget;
                     break;
                 case 'teamCount':
                     echo $project->teamCount;
