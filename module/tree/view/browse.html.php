@@ -10,16 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
 <?php if($lang->navGroup->doc == 'doc'):?>
-<style>
-#subHeader {margin-top: -50px; background-color: rgba(0,0,0,0);}
-#pageActions .btn-link { color: #84a2e2; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
-.header-angle-btn {padding: 0;}
-.header-angle-btn .btn{padding: 6px 12px;}
-.header-angle-btn+.header-angle-btn::after, .header-angle-btn+.header-angle-btn::before {top: -50px;}
-</style>
+<?php $pageCSS .= $this->doc->appendNavCSS();?>
 <?php endif;?>
+<?php include '../../common/view/header.html.php';?>
 
 <?php if($viewType != 'story'):?>
 <style>
@@ -35,9 +29,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
-    <a href="<?php echo $backLink;?>" class="btn btn-secondary">
-      <i class="icon icon-back icon-sm"></i> <?php echo $lang->goback;?>
-    </a>
+    <?php echo html::a($backLink, '<i class="icon icon-back icon-sm"></i>' . $lang->goback, '', 'class="btn btn-secondary"');?>
     <div class="divider"></div>
     <div class="page-title">
       <?php $rootName = $viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost' ? '' : $root->name;?>
@@ -101,10 +93,10 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
               <?php if($viewType != 'line' && $viewType != 'trainskill' && $viewType != 'trainpost'):?>
               <td class="text-middle text-right with-padding">
                 <?php
-                echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType"), empty($root->name) ? '' : $root->name) . "<i class='icon icon-angle-right muted'></i></span>";
+                echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType&currentModuleID=0&branch=0&from=$from"), empty($root->name) ? '' : $root->name) . "<i class='icon icon-angle-right muted'></i></span>";
                 foreach($parentModules as $module)
                 {
-                    echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType&moduleID=$module->id"), $module->name) . " <i class='icon icon-angle-right muted'></i></span>";
+                    echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType&currentModuleID=$module->id&branch=0&from=$from"), $module->name) . " <i class='icon icon-angle-right muted'></i></span>";
                 }
                 ?>
               </td>
@@ -202,7 +194,7 @@ $(function()
         },
         itemCreator: function($li, item)
         {
-            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}'.format(item.id, item.branch)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
+            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}&from=<?php echo $from;?>'.format(item.id, item.branch)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'bug') $toggle.append('&nbsp; <span class="text-muted">[B]</span>');
             if(item.type === 'case') $toggle.append('&nbsp; <span class="text-muted">[C]</span>');
