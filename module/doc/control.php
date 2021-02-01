@@ -919,6 +919,7 @@ class doc extends control
     {
         $this->from = $from;
         setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        $this->session->set('docList', $this->app->getURI(true));
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
@@ -966,7 +967,7 @@ class doc extends control
 
         $this->view->type         = $type;
         $this->view->object       = $object;
-        $this->view->from         = $from;
+        $this->view->from         = $this->lang->navGroup->doc == 'project' ? 'project' : $from;
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
         $this->display();
