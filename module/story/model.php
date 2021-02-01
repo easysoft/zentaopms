@@ -2290,18 +2290,18 @@ class storyModel extends model
      * Get stories list of a project.
      *
      * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $branch
      * @param  string $orderBy
      * @param  string $type
      * @param  int    $param
      * @param  string $storyType 
      * @param  string $excludeStories
      * @param  object $pager
-     * @param  int    $productID
-     * @param  int    $branch
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null, $productID = 0, $branch = 0)
+    public function getProjectStories($projectID = 0, $productID = 0, $branch = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
 

@@ -200,7 +200,7 @@ class product extends control
             $productPlans    = $this->loadModel('project')->getPlans($projectProducts);
 
             if($browseType == 'bybranch') $param = $branch;
-            $stories = $this->story->getProjectStories($this->session->PRJ, $sort, $browseType, $param, 'story', '', $pager, $productID, $branch);
+            $stories = $this->story->getProjectStories($this->session->PRJ, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
