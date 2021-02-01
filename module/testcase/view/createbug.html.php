@@ -30,7 +30,7 @@ function createBug(obj)
 
     var onlybody    = config.onlybody;
     config.onlybody = 'no';
-    window.open(createLink('bug', 'create', params + ',stepIdList=' + stepIdList), '_blank');
+    window.open(createLink('bug', 'create', params + ',stepIdList=' + stepIdList), '_parent');
     config.onlybody = onlybody;
 }
 
