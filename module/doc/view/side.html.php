@@ -32,8 +32,15 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
             <?php if(empty($sideLibs[$tabValue])):?>
             <li>
             <?php
-            $text = zget($lang->doclib->create, $tabValue, '');
-            if($text and common::hasPriv($tabValue, 'create')) echo html::a($this->createLink($tabValue, 'create', ''), $text, '', "class='text-ellipsis'");
+            if($lang->navGroup->doc == 'project' and $tabValue == 'project')
+            {
+                echo $lang->noData;
+            }
+            else
+            {
+                $text = zget($lang->doclib->create, $tabValue, '');
+                if($text and common::hasPriv($tabValue, 'create')) echo html::a($this->createLink($tabValue, 'create', ''), $text, '', "class='text-ellipsis'");
+            }
             ?>
             </li>
             <?php else:?>
