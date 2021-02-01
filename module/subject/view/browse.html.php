@@ -78,9 +78,8 @@
             </tr>
             <tr>
               <td></td>
-              <td colspan="2" class="form-actions">
+              <td colspan="2" class="form-actions text-center">
                 <?php echo html::submitButton();?>
-                <?php echo html::backButton();?>
                 <?php echo html::hidden('parentModuleID', $currentModuleID);?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
               </td>

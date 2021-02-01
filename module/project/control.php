@@ -714,7 +714,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, 'story', '', $pager);
+        $stories = $this->story->getProjectStories($projectID, 0, 0, $sort, $type, $param, 'story', '', $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $users   = $this->user->getPairs('noletter');
@@ -1692,7 +1692,7 @@ class project extends control
         $project = $this->loadModel('project')->getById($projectID);
         $tasks   = $this->project->getKanbanTasks($projectID, "id");
         $bugs    = $this->loadModel('bug')->getProjectBugs($projectID);
-        $stories = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
+        $stories = $this->loadModel('story')->getProjectStories($projectID, 0, 0, $orderBy);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('project', $project);
@@ -1771,7 +1771,7 @@ class project extends control
 
         if($_POST)
         {
-            $stories    = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
+            $stories    = $this->loadModel('story')->getProjectStories($projectID, 0, 0, $orderBy);
             $storySpecs = $this->story->getStorySpecs(array_keys($stories));
 
             $order = 1;

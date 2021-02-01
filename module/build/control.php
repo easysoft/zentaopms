@@ -432,7 +432,7 @@ class build extends control
         }
         else
         {
-            $allStories = $this->story->getProjectStories($build->project, 't1.`order`_desc', 'byProduct', $build->product, 'story', $build->stories, $pager);
+            $allStories = $this->story->getProjectStories($build->project, 0, 0, 't1.`order`_desc', 'byProduct', $build->product, 'story', $build->stories, $pager);
         }
 
         $this->view->allStories   = $allStories;
