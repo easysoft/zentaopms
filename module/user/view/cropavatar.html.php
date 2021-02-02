@@ -50,7 +50,7 @@ $imgCutter.imgCutter(
     {
         $('#start .avatar, #startMenu .avatar').html('<img src="<?php echo $user->avatar?>?v=' + $.zui.uuid() + '" />');
         if($('#start .avatar, #startMenu .avatar').hasClass('with-text')) $('#start .avatar, #startMenu .avatar').toggleClass('with-text').css('background', 'none');
-        location.href = createLink('my', 'profile');
+        location.href = parent.location.reload(true);
     },
     onSizeError: function(size)
     {
