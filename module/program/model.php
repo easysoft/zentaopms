@@ -449,6 +449,7 @@ class programModel extends model
             ->where('type')->eq('program')
             ->andWhere('grade')->eq(1)
             ->andWhere('status')->ne('closed')
+            ->andWhere('id')->in($this->app->user->view->programs)
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->orderBy('`order`')
