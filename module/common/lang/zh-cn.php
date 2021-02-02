@@ -433,7 +433,7 @@ $lang->testtask->subMenu = $lang->qa->subMenu;
 $lang->testtask->menu->index     = array('link' => '仪表盘|qa|index');
 $lang->testtask->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testtask->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->testtask->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testtask', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
+$lang->testtask->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testtask', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
 $lang->testtask->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->testtask->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
 $lang->testtask->menu->caselib   = array('link' => '用例库|caselib|browse');
