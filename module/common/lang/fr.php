@@ -150,7 +150,7 @@ $lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|custom|es
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 
 $lang->reporting = new stdclass();
-$lang->dividerMenu = ',project,doc,';
+$lang->dividerMenu = ',project,doc,admin,';
 
 /* Program set menu. */
 $lang->program = new stdclass();

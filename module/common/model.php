@@ -617,7 +617,6 @@ class commonModel extends model
     public static function printRecentMenu()
     {
         global $lang;
-        echo "<li class='divider'></li>";
         echo '<li><a id="recentMenu"><i class="icon icon-recent"></i><span class="text">' . $lang->recent . '</span></a></li>';
     }
 
