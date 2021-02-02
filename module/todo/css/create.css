@@ -4,6 +4,5 @@
 .cycleConfig .checkbox-primary{float:left; width:100px;}
 .cycleConfig .tab-pane{padding:8px 0px;}
 .cycleConfig .tab-pane .input-group{width:380px}
-#name{height: 34px}
 .nameBox{display: grid;}
-.chosen-container-single .chosen-single{height: 34px;}
+.pri-selector > .btn {padding: 5px 12px;}
