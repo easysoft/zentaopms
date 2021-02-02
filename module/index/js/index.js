@@ -49,7 +49,7 @@
     /**
      * Get tab group from url
      * @param {String} urlOrModuleName Url string
-     *
+     * @return {String}
      */
     function getGroupFromUrl(urlOrModuleName)
     {
@@ -69,13 +69,10 @@
         {
             if(link.prj) return 'project';
 
-            if(methodLowerCase === 'objectlibs' && (link.params.from || link.params.$3) == 'product') return 'product';
-            if(methodLowerCase === 'showfiles'  && (link.params.from || link.params.$3) == 'product') return 'product';
-            if(methodLowerCase === 'browse'     && (link.params.from || link.params.$5) == 'product') return 'product';
-            if(methodLowerCase === 'view'       && (link.params.from || link.params.$3) == 'product') return 'product';
-            if(methodLowerCase === 'edit'       && (link.params.from || link.params.$3) == 'product') return 'product';
-            if(methodLowerCase === 'delete'     && (link.params.from || link.params.$3) == 'product') return 'product';
-            if(methodLowerCase === 'create'     && (link.params.from || link.params.$4) == 'product') return 'product';
+            if((link.params.from || link.params.$3) == 'product')
+            {
+                if(['objectlibs', 'showfiles', 'browse', 'view', 'edit', 'delete', 'create'].includes(methodLowerCase)) return 'product';
+            }
             return 'doc';
         }
         if(moduleName === 'custom' && ['estimate', 'browsestoryconcept', 'configurescrum'].includes(methodLowerCase))
@@ -116,10 +113,6 @@
                 if(viewType === 'doc' && (link.params.from === 'product' || link.params.$5 == 'product')) return 'product';
                 if(viewType === 'doc' && (link.params.from === 'project' || link.params.$5 == 'project')) return 'project';
                 if(viewType === 'doc') return 'doc';
-            }
-            else if(methodLowerCase === 'browsetask')
-            {
-                return 'project';
             }
             else if(methodLowerCase === 'browsetask')
             {
@@ -298,6 +291,7 @@
      */
     function closeTab(group)
     {
+        group = group || lastOpenedGroup;
         var tab = openedTabs[group];
         if(!tab) return;
 
@@ -508,7 +502,8 @@ function getExecutions()
     }
 }
 
-$.extend({
+$.extend(
+{
     gotoObject:function()
     {
         objectType  = $('#searchType').attr('value');

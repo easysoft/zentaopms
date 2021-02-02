@@ -394,7 +394,7 @@ $lang->qa->menu = new stdclass();
 $lang->qa->menu->index     = array('link' => 'Index|qa|index');
 $lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto');
 $lang->qa->menu->testcase  = array('link' => 'CasTest|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib');
-$lang->qa->menu->testtask  = array('link' => 'Recette|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
+$lang->qa->menu->testtask  = array('link' => 'Recette|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
 $lang->qa->menu->testsuite = array('link' => 'Cahier Recette|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
 $lang->qa->menu->report    = array('link' => 'Rapport|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->qa->menu->caselib   = array('link' => 'Library Recette|caselib|browse', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport');

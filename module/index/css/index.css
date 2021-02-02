@@ -37,7 +37,7 @@ body.menu-hide {padding-left: 0;}
 }
 
 #pages {position: fixed; left: 96px; bottom: 0; right: 0; top: 0;}
-.page-tab {position: absolute; left: 0; bottom: 0; right: 0; top: 0; background-color: #efefef;}
+.page-tab {position: absolute; left: 0; bottom: 40px; right: 0; top: 0; background-color: #efefef;}
 .menu-hide #pages {left: 40px}
 
 #pagesBar {position: fixed; left: 96px; bottom: 0; right: 0; height: 40px; z-index: 1012; background: #fff; border-top: 1px solid #eff1f7;}

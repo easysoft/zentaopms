@@ -48,7 +48,7 @@ include '../../common/view/header.lite.html.php';
     <?php
     $isOnlybody = helper::inOnlyBodyMode();
     unset($_GET['onlybody']);
-    echo html::a($this->createLink('my', 'index'), $lang->my->common, ($isOnlybody ? '_parent' : ''), "class='btn' data-group='my'");
+    echo html::a('javascript:void(0)', $lang->my->common, ($isOnlybody ? '_parent' : ''), 'class="btn show-in-tab" onclick="changeLeftNavigation()"');
     if($refererBeforeDeny) echo html::a(helper::safe64Decode($refererBeforeDeny), $lang->user->goback, ($isOnlybody ? '_parent' : ''), "class='btn'");
     echo html::a($this->createLink('user', 'logout', "referer=" . helper::safe64Encode($denyPage)), $lang->user->relogin, ($isOnlybody ? '_parent' : ''), "class='btn btn-primary'");
     ?>
@@ -56,4 +56,15 @@ include '../../common/view/header.lite.html.php';
   </div>
 </div>
 </body>
+<script>
+/* Click my site to modify the left navigation. */
+function changeLeftNavigation()
+{
+    if(window.parent && window.parent.$.tabs)
+    {
+        window.parent.$.tabs.close();
+        window.parent.$.tabs.open('my');
+    }
+}
+</script>
 </html>
