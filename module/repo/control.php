@@ -96,6 +96,7 @@ class repo extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
+        array_push($this->lang->noMenuModule, 'repo');
         $this->app->loadLang('action');
         $this->repo->setMenu($this->repos, '', false);
 
