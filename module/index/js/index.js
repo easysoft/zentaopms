@@ -121,10 +121,6 @@
             {
                 return 'project';
             }
-            else if(methodLowerCase === 'browsetask')
-            {
-                return 'project';
-            }
         }
 
         var myMethods = 'todocalendar|effortcalendar|todo|task|story|bug|testtask|testcase|execution|issue|risk|dynamic|profile';
