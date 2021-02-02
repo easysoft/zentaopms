@@ -23,6 +23,7 @@ class job extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('ci')->setMenu();
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
     }
 
     /**
@@ -46,9 +47,9 @@ class job extends control
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
         $this->view->position[] = $this->lang->ci->job;
         $this->view->position[] = $this->lang->job->browse;
-
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+
         $this->display();
     }
 
@@ -68,12 +69,7 @@ class job extends control
         }
 
         $this->app->loadLang('action');
-
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[] = $this->lang->job->create;
-
-        $repoList  = $this->loadModel('repo')->getList($this->session->PRJ);
+        $repoList  = $this->loadModel('repo')->getList($this->projectID);
         $repoPairs = array(0 => '');
         $repoTypes = array();
         foreach($repoList as $repo)
@@ -82,9 +78,13 @@ class job extends control
             $repoPairs[$repo->id] = $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
         }
+
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[] = $this->lang->job->create;
         $this->view->repoPairs  = $repoPairs;
         $this->view->repoTypes  = $repoTypes;
-        $this->view->products   = array(0 => '') + $this->loadModel('product')->getPairs('', $this->session->PRJ);
+        $this->view->products   = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
 
         $this->display();
@@ -107,14 +107,10 @@ class job extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
-        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[]  = $this->lang->job->edit;
-
         $repo = $this->loadModel('repo')->getRepoByID($job->repo);
         $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
 
-        $repoList  = $this->repo->getList($this->session->PRJ);
+        $repoList  = $this->repo->getList($this->projectID);
         $repoPairs = array(0 => '', $repo->id => $repo->name);
         $repoTypes[$repo->id] = $repo->SCM;
         foreach($repoList as $repo)
@@ -124,11 +120,14 @@ class job extends control
             $repoTypes[$repo->id] = $repo->SCM;
         }
 
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[] = $this->lang->job->edit;
         $this->view->repoPairs  = $repoPairs;
         $this->view->repoTypes  = $repoTypes;
         $this->view->repoType   = zget($repoTypes, $job->repo, 'Git');
         $this->view->job        = $job;
-        $this->view->products   = array(0 => '') + $this->loadModel('product')->getPairs('', $this->session->PRJ);
+        $this->view->products   = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
         $this->view->jkJobs     = $this->jenkins->getTasks($job->jkHost);
 

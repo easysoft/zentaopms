@@ -96,15 +96,14 @@ class repo extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
-        $this->repo->setMenu($this->repos, '', false);
         $this->app->loadLang('action');
-
-        $this->view->groups   = $this->loadModel('group')->getPairs();
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products = $this->projectID ? $this->loadModel('product')->getProductPairsByProject($this->projectID) : $this->loadModel('product')->getPairs();
+        $this->repo->setMenu($this->repos, '', false);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->position[] = $this->lang->repo->create;
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->view->products   = $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
         $this->display();
     }
