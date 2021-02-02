@@ -150,7 +150,7 @@ $lang->mainNav->system  = '<i class="icon icon-group"></i> 組織|subject|browse
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 後台|admin|index|';
 
 $lang->reporting = new stdclass();
-$lang->dividerMenu = ',project,doc,';
+$lang->dividerMenu = ',project,doc,admin,';
 
 /* Program set menu. */
 $lang->program = new stdclass();
