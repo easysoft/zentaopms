@@ -103,6 +103,9 @@ class tree extends control
         }
         elseif($viewType == 'feedback')
         {
+            $this->lang->navGroup->tree = 'feedback';
+            $this->lang->noMenuModule[] = 'tree';
+
             $this->lang->set('menugroup.tree', 'feedback');
             $this->app->loadLang('feedback');
             $this->lang->tree->menu = $this->lang->feedback->menu;
