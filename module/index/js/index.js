@@ -298,6 +298,7 @@
      */
     function closeTab(group)
     {
+        group = group || lastOpenedGroup;
         var tab = openedTabs[group];
         if(!tab) return;
 
@@ -508,7 +509,8 @@ function getExecutions()
     }
 }
 
-$.extend({
+$.extend(
+{
     gotoObject:function()
     {
         objectType  = $('#searchType').attr('value');

@@ -8,11 +8,6 @@ $.initSidebar();
 
 <?php if($onlybody != 'yes'):?>
 </main><?php /* end '#wrap' in 'header.html.php'. */ ?>
-<footer id='footer'>
-  <div class="container">
-    <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>
-  </div>
-</footer>
 <div id="noticeBox"><?php echo $this->loadModel('score')->getNotice(); ?></div>
 <script>
 <?php $this->app->loadConfig('message');?>
