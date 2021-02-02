@@ -81,8 +81,6 @@
           <div class="required required-wrapper"></div>
           <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' placeholder='{$lang->user->placeholder->verify}'");?>
         </td>
-        <th class='w-140px'></th>
-        <td></td>
       </tr>
     </table>
     <div class='text-center form-actions'><?php echo html::submitButton() . html::backButton();?></div>
