@@ -2298,12 +2298,13 @@ class projectModel extends model
      */
     public function getTeams2Import($account, $currentProject)
     {
+        $project = $this->dao->findById($currentProject)->from(TABLE_PROJECT)->fetch();
         return $this->dao->select('t1.root, t2.name as projectName')
             ->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.account')->eq($account)
             ->andWhere('t1.root')->ne($currentProject)
-            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t1.type')->eq($project->type)
             ->andWhere('t2.deleted')->eq('0')
             ->groupBy('t1.root')
             ->orderBy('t1.root DESC')
