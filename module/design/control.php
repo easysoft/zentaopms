@@ -116,6 +116,7 @@ class design extends control
             $this->send($response);
         }
 
+        array_push($this->lang->noMenuModule, 'design');
         $this->design->setProductMenu($productID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->create;
