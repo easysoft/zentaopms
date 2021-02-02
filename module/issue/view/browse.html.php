@@ -63,7 +63,7 @@
               <td class="c-actions">
                 <?php
                   $params = "issueID=$issue->id";
-                  echo common::printIcon('issue', 'confirm', $params, $issue, 'list', 'start', '', 'iframe', 'yes', '', $lang->issue->confirm);
+                  echo common::printIcon('issue', 'confirm', $params, $issue, 'list', 'ok', '', 'iframe', 'yes', '', $lang->issue->confirm);
                   echo common::printIcon('issue', 'resolve', $params, $issue, 'list', 'checked', '', 'iframe', 'yes', '', $lang->issue->resolve);
                   echo common::printIcon('issue', 'assignTo', $params, $issue, 'list', 'hand-right', '', 'iframe', 'yes', '', $lang->issue->assignTo);
                   echo common::printIcon('issue', 'close', $params, $issue, 'list', 'off', '', 'iframe', 'yes');
