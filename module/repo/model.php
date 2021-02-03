@@ -159,13 +159,7 @@ class repoModel extends model
             }
             else
             {
-                if($projectID)
-                {
-                    foreach($productIdList as $productID)
-                    {
-                        if(strpos(",$repo->product,", ",$productID,") === false) unset($repos[$i]);
-                    }
-                }
+                if($projectID && !in_array($repo->product, $productIdList)) unset($repos[$i]);
             }
         }
 

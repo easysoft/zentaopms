@@ -286,12 +286,14 @@ class my extends control
 
         /* Get tasks. */
         $tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $sort);
+
         $parents = array();
         foreach($tasks as $task)
         {
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+
         foreach($tasks as $task)
         {
             if($task->parent > 0)
