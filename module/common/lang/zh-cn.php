@@ -916,7 +916,7 @@ $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->programindex   = '仪表盘|program|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
-$lang->menu->scrum->projectstory   = array('link' => '需求|projectstory|story', 'subModule' => 'story', 'alias' => 'story,track');
+$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story', 'subModule' => 'story', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = '文档|doc|index|';
 $lang->menu->scrum->qa             = '测试|qa|index';
 $lang->menu->scrum->ci             = '代码|repo|browse';
@@ -946,7 +946,7 @@ $lang->menu->waterfall->programplan    = array('link' => '计划|programplan|bro
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => '文档|doc|index|project={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => '需求|projectstory|story');
+$lang->menu->waterfall->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story');
 $lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = '代码|repo|browse|';
 $lang->menu->waterfall->track          = array('link' => '矩阵|projectstory|track', 'alias' => 'track');
