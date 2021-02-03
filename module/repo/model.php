@@ -142,13 +142,14 @@ class repoModel extends model
      */
     public function getList($projectID = 0, $orderBy = 'id_desc', $pager = null)
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)
-            ->where('deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->page($pager)->fetchAll('id');
-
         /* Get products. */
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
+
+        $repos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->in($productIdList)
+            ->orderBy($orderBy)
+            ->page($pager)->fetchAll('id');
 
         foreach($repos as $i => $repo)
         {

@@ -64,7 +64,7 @@ class repo extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->repoList   = $this->repo->getList(0, $orderBy, $pager);
+        $this->view->repoList   = $this->repo->getList($this->projectID, $orderBy, $pager);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->position[] = $this->lang->repo->common;
