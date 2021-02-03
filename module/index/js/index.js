@@ -120,6 +120,9 @@
             }
         }
 
+        if(moduleName == 'report' && methodLowerCase == 'programsummary') return project;
+        if(moduleName == 'measrecord' && methodLowerCase == 'browse') return project;
+
         var myMethods = 'todocalendar|effortcalendar|todo|task|story|bug|testtask|testcase|execution|issue|risk|dynamic|profile';
         if(moduleName === 'user' && myMethods.indexOf(methodLowerCase) != -1) return 'my';
 
