@@ -710,7 +710,12 @@ class commonModel extends model
                 }
 
                 /* Disable links to more buttons. */
-                if($menuItem->name == 'other') $link='javascript:void(0);';
+                if($menuItem->name == 'other') $link = 'javascript:void(0);';
+
+                /* Avoid highlighting the same navigation method at the same time. */
+                if($currentModule == 'feedback' and $currentMethod == 'admin') $active = '';
+                if($currentModule == 'product' and $currentMethod == 'browse') $active = '';
+                if($currentModule == 'story' and $currentMethod == 'track')    $active = '';
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
 
