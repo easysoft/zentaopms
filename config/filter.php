@@ -234,6 +234,7 @@ $filter->sso->login->get['md5']         = 'reg::md5';
 $filter->sso->login->get['referer']     = 'reg::base64';
 $filter->sso->login->get['status']      = 'code';
 $filter->sso->login->get['token']       = 'reg::md5';
+$filter->sso->login->get['requestType'] = 'reg::word';
 $filter->sso->login->get['sessionid']   = 'reg::base64';
 $filter->sso->logout->get['status']     = 'code';
 $filter->sso->logout->get['token']      = 'reg::md5';
