@@ -110,7 +110,7 @@ class stakeholder extends control
         $this->view->title      = $this->lang->stakeholder->batchCreate;
         $this->view->position[] = $this->lang->stakeholder->batchCreate;
 
-        $this->view->project            = $this->loadModel('program')->getPGMByID($this->session->PRJ);
+        $this->view->project            = $this->loadModel('program')->getPRJByID($this->session->PRJ);
         $this->view->users              = $this->user->getPairs('all|nodeleted|noclosed');
         $this->view->deptUsers          = $deptUsers;
         $this->view->dept               = $dept;
@@ -381,9 +381,11 @@ class stakeholder extends control
     */
     public function expect($expectID)
     {
+        $user = $this->stakeholder->getByID($expectID);
+
         if(!empty($_POST))
         {
-            $expectID = $this->stakeholder->expect();
+            $expectID = $this->stakeholder->expect($user->id);
             if(dao::isError()) die(js::error(dao::getError()));
 
             die(js::closeModal('parent.parent', 'this'));
@@ -391,7 +393,7 @@ class stakeholder extends control
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
         $this->view->position[] = $this->lang->stakeholder->view;
-        $this->view->user       = $this->stakeholder->getByID($expectID);
+        $this->view->user       = $user;
         $this->display();
     }
 

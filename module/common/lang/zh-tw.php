@@ -681,11 +681,12 @@ $lang->navGroup->repo           = 'project';
 $lang->navGroup->job            = 'project';
 $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';
+$lang->navGroup->report         = 'project';
+$lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->durationestimation = 'project';
 
 $lang->navGroup->stage         = 'system';
-$lang->navGroup->measurement   = 'system';
 $lang->navGroup->report        = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';

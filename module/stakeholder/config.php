@@ -2,7 +2,7 @@
 $config->stakeholder->create = new stdclass();
 $config->stakeholder->create->requiredFields = 'name,company';
 $config->stakeholder->expect = new stdclass();
-$config->stakeholder->expect->requiredFields = 'userID,expect,progress';
+$config->stakeholder->expect->requiredFields = 'expect,progress';
 
 $config->stakeholder->editor = new stdclass();
 $config->stakeholder->editor->create       = array('id' => 'nature,analysis,strategy', 'tools' => 'simpleTools');

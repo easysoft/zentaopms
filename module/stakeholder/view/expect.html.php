@@ -32,7 +32,6 @@
         </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>
-            <?php echo html::hidden('userID', $user->id);?>
             <?php echo html::submitButton();?>
           </td>
         </tr>

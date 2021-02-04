@@ -681,11 +681,12 @@ $lang->navGroup->repo           = 'project';
 $lang->navGroup->job            = 'project';
 $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';
+$lang->navGroup->report         = 'project';
+$lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->durationestimation = 'project';
 
 $lang->navGroup->stage         = 'system';
-$lang->navGroup->measurement   = 'system';
 $lang->navGroup->report        = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
@@ -953,7 +954,7 @@ $lang->menu->waterfall->track          = array('link' => '矩阵|projectstory|tr
 $lang->menu->waterfall->qa             = '测试|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
-$lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc,workestimation,durationestimation,budget,pssp');
+$lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc,workestimation,durationestimation,budget,pssp,measrecord');
 $lang->menu->waterfall->projectsetting = array('link' => '设置|program|prjview|project={PROJECT}', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
 
 $lang->waterfall = new stdclass();
