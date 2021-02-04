@@ -624,6 +624,7 @@ class task extends control
     {
         $task = $this->task->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
+        $this->session->PRJ = $task->PRJ;
 
         if($task->fromBug != 0)
         {

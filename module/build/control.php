@@ -163,6 +163,7 @@ class build extends control
     {
         $build = $this->build->getByID((int)$buildID, true);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
+        $this->session->PRJ = $build->PRJ;
 
         /* Set session and load modules. */
         if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
