@@ -429,24 +429,20 @@ class stakeholderModel extends model
     /**
      * Add expect record.
      *
+     * @param  int    $userID
      * @access public
      * @return void
      * @return int
      */
-    public function expect()
+    public function expect($userID)
     {
         $data = fixer::input('post')
+            ->add('userID', $userID)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', date('Y-m-d'))
             ->add('PRJ', $this->session->PRJ)
             ->stripTags($this->config->stakeholder->editor->expect['id'], $this->config->allowedTags)
             ->get();
-
-        if(strpos($this->config->stakeholder->expect->requiredFields, 'userID') !== false and !$this->post->userID)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->common);
-            return false;
-        }
 
         if(strpos($this->config->stakeholder->expect->requiredFields, 'expect') !== false and !$this->post->expect)
         {
