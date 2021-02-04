@@ -92,7 +92,7 @@ class repo extends control
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
+            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID", '', false, $this->projectID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
@@ -769,9 +769,10 @@ class repo extends control
         $this->view->position[] = $this->lang->repo->showSyncCommit;
 
         $latestInDB = $this->repo->getLatestCommit($repoID);
-        $this->view->version = $latestInDB ? (int)$latestInDB->commit : 1;
-        $this->view->repoID  = $repoID;
-        $this->view->branch  = $branch;
+        $this->view->version    = $latestInDB ? (int)$latestInDB->commit : 1;
+        $this->view->repoID     = $repoID;
+        $this->view->branch     = $branch;
+        $this->view->browseLink = $this->repo->createLink('browse', "repoID=$repoID", '', false, $this->projectID);
         $this->display();
     }
 
