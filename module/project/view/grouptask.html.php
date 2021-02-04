@@ -112,10 +112,10 @@
           </div>
         </th>
         <th class="c-id-sm"><?php echo $lang->task->id;?></th>
-        <th class="c-pri"><?php echo $lang->priAB;?></th>
-        <th class="c-name"><?php echo $lang->task->name;?></th>
+        <th class="c-pri w-50px"><?php echo $lang->priAB;?></th>
+        <th class="c-name text-left"><?php echo $lang->task->name;?></th>
         <th class="c-status"><?php echo $lang->task->status;?></th>
-        <th class="c-assign text-left"><?php echo $lang->task->assignedTo;?></th>
+        <th class="text-left w-60px"><?php echo $lang->task->assignedTo;?></th>
         <th class="w-90px"><?php echo $lang->task->finishedBy;?></th>
         <th class="w-60px"><?php echo $lang->task->estimateAB;?></th>
         <th class="w-50px"><?php echo $lang->task->consumedAB;?></th>
@@ -200,7 +200,7 @@
           ?>
         </td>
         <td class="c-status"><span class='status-task status-<?php echo $task->status;?>'> <?php echo $this->processStatus('task', $task);?></span></td>
-        <td class="c-assign"><?php echo "<span class='$assignedToClass'>" . $task->assignedToRealName . "</span>";?></td>
+        <td class="c-assign text-left"><?php echo "<span class='$assignedToClass'>" . $task->assignedToRealName . "</span>";?></td>
         <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
         <td class="c-hours em" title="<?php echo $task->estimate . ' ' . $lang->project->workHour;?>"><?php echo $task->estimate . ' ' . $lang->project->workHourUnit;?></td>
         <td class="c-hours em" title="<?php echo $task->consumed . ' ' . $lang->project->workHour;?>"><?php echo $task->consumed . ' ' . $lang->project->workHourUnit;?></td>
