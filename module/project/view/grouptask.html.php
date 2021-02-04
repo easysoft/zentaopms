@@ -227,7 +227,7 @@
           <div class="table-row segments-list">
           <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
           <?php printf($lang->project->countSummary, $groupSum, $groupDoing, $groupWait);?>
-          <?php printf($lang->project->timeSummary, $groupEstimate, $groupConsumed, $groupLeft);?>
+          <?php printf($lang->project->timeSummary, $groupEstimate . $lang->project->workHourUnit, $groupConsumed . $lang->project->workHourUnit, $groupLeft . $lang->project->workHourUnit);?>
           </div>
         </td>
       </tr>
