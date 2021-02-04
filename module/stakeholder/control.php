@@ -110,7 +110,7 @@ class stakeholder extends control
         $this->view->title      = $this->lang->stakeholder->batchCreate;
         $this->view->position[] = $this->lang->stakeholder->batchCreate;
 
-        $this->view->project            = $this->loadModel('program')->getPGMByID($this->session->PRJ);
+        $this->view->project            = $this->loadModel('program')->getPRJByID($this->session->PRJ);
         $this->view->users              = $this->user->getPairs('all|nodeleted|noclosed');
         $this->view->deptUsers          = $deptUsers;
         $this->view->dept               = $dept;

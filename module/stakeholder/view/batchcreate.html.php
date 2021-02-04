@@ -52,7 +52,7 @@
         <?php endforeach;?>
 
         <?php foreach($parentStakeholders as $stakeholder):?>
-        <?php if(!isset($users[$stakeholder->user])) continue;?>
+        <?php if(!isset($users[$stakeholder->account])) continue;?>
         <tr>
           <td><?php echo html::select("accounts[]", $users, $stakeholder->account, "class='form-control chosen'");?></td>
           <td class='c-actions text-center'>
