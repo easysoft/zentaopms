@@ -353,7 +353,7 @@ class custom extends control
         $this->lang->navGroup->custom = 'system';
         $this->lang->system->menu->company['subModule'] .= ',custom';
         $key = array_search('custom', $this->lang->noMenuModule);
-        unset($this->lang->noMenuModule[$key]);
+        if($key !== false) unset($this->lang->noMenuModule[$key]);
 
         $unit = zget($this->config->custom, 'hourPoint', '1');
 
@@ -412,7 +412,7 @@ class custom extends control
         $this->lang->navGroup->custom = 'system';
         $this->lang->system->menu->company['subModule'] .= ',custom';
         $key = array_search('custom', $this->lang->noMenuModule);
-        unset($this->lang->noMenuModule[$key]);
+        if($key !== false) unset($this->lang->noMenuModule[$key]);
 
         $this->view->title      = $this->lang->custom->browseStoryConcept;
         $this->view->position[] = $this->lang->custom->browseStoryConcept;
