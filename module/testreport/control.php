@@ -410,6 +410,7 @@ class testreport extends control
     {
         $report  = $this->testreport->getById($reportID);
         if(!$report) die(js::error($this->lang->notFound) . js::locate('back'));
+        $this->session->PRJ = $report->PRJ;
 
         $project = $this->project->getById($report->project);
         if($from == 'product' and is_numeric($report->product))

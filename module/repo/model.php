@@ -813,17 +813,18 @@ class repoModel extends model
 
     /**
      * Create link for repo
-     * 
-     * @param  string $method 
-     * @param  string $params 
-     * @param  string $viewType 
-     * @param  bool   $onlybody 
+     *
+     * @param  string $method
+     * @param  string $params
+     * @param  string $viewType
+     * @param  bool   $onlybody
+     * @param  int    $PRJID
      * @access public
      * @return string
      */
-    public function createLink($method, $params = '', $viewType = '', $onlybody = false)
+    public function createLink($method, $params = '', $viewType = '', $onlybody = false, $PRJID = 0)
     {
-        if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType, $onlybody);
+        if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType, $onlybody, $PRJID);
 
         $parsedParams = array();
         parse_str($params, $parsedParams);
@@ -840,7 +841,7 @@ class repoModel extends model
         }
 
         $params = http_build_query($parsedParams);
-        $link   = helper::createLink('repo', $method, $params, $viewType, $onlybody);
+        $link   = helper::createLink('repo', $method, $params, $viewType, $onlybody, $PRJID);
         if(empty($pathParams)) return $link;
 
         $link .= strpos($link, '?') === false ? '?' : '&';
