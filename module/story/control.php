@@ -642,7 +642,7 @@ class story extends control
             /* The stories of a project. */
             $this->lang->navGroup->story = 'project';
             $moduleIndex = array_search('story', $this->lang->noMenuModule);
-            unset($this->lang->noMenuModule[$moduleIndex]);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
             $this->lang->story->menu = $this->lang->project->menu;
 
             $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $projectID);

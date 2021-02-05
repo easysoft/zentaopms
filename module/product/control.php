@@ -429,7 +429,7 @@ class product extends control
         $this->product->setMenu($this->products, $productID);
 
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
-        unset($this->lang->noMenuModule[$moduleIndex]);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
         if($programID)
         {
@@ -602,7 +602,7 @@ class product extends control
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
-        unset($this->lang->noMenuModule[$moduleIndex]);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
