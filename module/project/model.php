@@ -1947,6 +1947,7 @@ class projectModel extends model
 
             $task = new stdClass();
             $task->bug          = $bug;
+            $task->PRJ          = $this->session->PRJ;
             $task->project      = $projectID;
             $task->story        = $bug->story;
             $task->storyVersion = $bug->storyVersion;
