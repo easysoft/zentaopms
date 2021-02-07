@@ -466,6 +466,7 @@
 
         $("#recentMenu").click(function(event)
         {
+            $('#globalSearchInput').click();
             event.stopPropagation();
             getExecutions();
         });
@@ -629,6 +630,17 @@ $(function()
             getLatestVersion();
             event.stopPropagation();
         }
+    });
+
+    $('.has-avatar').hover(function(event)
+    {
+        $('.contextmenu').attr('class', 'contextmenu');
+        $('.contextmenu-menu').attr('class', 'contextmenu-menu fade');
+    });
+
+    $('#bars').mousedown(function()
+    {
+        $('#globalSearchInput').click();
     });
 });
 
