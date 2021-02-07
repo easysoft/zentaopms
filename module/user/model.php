@@ -2414,4 +2414,17 @@ class userModel extends model
 
         return $personalData;
     }
+
+    /**
+     * Reset menu when from my module.
+     *
+     * @access public
+     * @return void
+     */
+    public function resetMenu()
+    {
+        $this->lang->navGroup->user = 'my';
+        $this->lang->admin->menu    = $this->lang->my->menu;
+        $this->lang->noMenuModule[] = 'user';
+    }
 }

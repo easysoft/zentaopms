@@ -659,7 +659,7 @@ function changeSearchObject()
 
     if(tabPageModuleName == 'my' || tabPageModuleName == 'user') var searchType = tabPageMethodName;
 
-    if(searchObjectList.indexOf(searchType) == -1) var searchType = 'bug';
+    if(searchObjectList.indexOf(',' + searchType + ',') == -1) var searchType = 'bug';
 
     if(searchType == 'program')   var searchType = 'program-pgmproduct';
     if(searchType == 'project')   var searchType = 'program-index';

@@ -117,5 +117,5 @@ js::set('defaultOpen', $open);
   </div>
 </div>
 <?php js::set('searchAB', $lang->searchAB);?>
-<?php js::set('searchObjectList', implode(',', array_keys($lang->searchObjects)));?>
+<?php js::set('searchObjectList', ',' . implode(',', array_keys($lang->searchObjects)) . ',');?>
 <?php include '../../common/view/footer.lite.html.php';?>

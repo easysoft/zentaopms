@@ -32,12 +32,12 @@
           <td class='text'><?php echo zget($lang->repo->scmList, $repo->SCM); ?></td>
           <td class='text' title='<?php echo $repo->name; ?>'><?php echo html::a($this->createLink('repo', 'browse', "repoID={$repo->id}"), $repo->name);?></td>
           <td class='text'>
-          <?php 
-		  $productList = explode(',', str_replace(' ', '', $repo->product));
+          <?php
+          $productList = explode(',', str_replace(' ', '', $repo->product));
           if(isset($productList) and $productList[0])
-          {   
+          {
               foreach($productList as $productID) echo ' ' . html::a($this->createLink('product', 'browse', "productID=$productID"), zget($products, $productID, $productID));
-          }   
+          }
           ?>
           </td>
           <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
