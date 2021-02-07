@@ -1984,7 +1984,7 @@ class projectModel extends model
                 return false;
             }
 
-            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
+            if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate) and !empty($task->estimate))
             {
                 dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
                 return false;
