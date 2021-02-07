@@ -1619,7 +1619,6 @@ class project extends control
     public function view($executionID)
     {
         $execution = $this->project->getById($executionID, true);
-
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->app->loadLang('program');

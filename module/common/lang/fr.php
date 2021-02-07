@@ -687,7 +687,6 @@ $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->durationestimation = 'project';
 
 $lang->navGroup->stage         = 'system';
-$lang->navGroup->report        = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';

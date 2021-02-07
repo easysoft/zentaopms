@@ -105,7 +105,7 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
         $openModule = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
         $class = common::hasPriv('story', 'export') ? '' : "class=disabled";
         $misc  = common::hasPriv('story', 'export') ? "class='export' data-group='$openModule'" : "class=disabled";
-        $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&projectID=0&browseType=$browseType") : '#';
+        $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&projectID=0&browseType=$browseType&type=$storyType") : '#';
         echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
       </ul>
