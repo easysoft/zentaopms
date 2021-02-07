@@ -51,7 +51,7 @@
           </tr>
           <tr class='track hidden'>
             <th><?php echo $lang->risk->pri;?></th>
-            <td><?php echo html::select('pri', $lang->risk->priList, $risk->pri, "class='form-control chosen'");?></td>
+            <td id='priValue'><?php echo html::select('pri', $lang->risk->priList, $risk->pri, "class='form-control chosen'");?></td>
           </tr>
           <tr class='track hidden'>
             <th><?php echo $lang->risk->trackedBy;?></th>
