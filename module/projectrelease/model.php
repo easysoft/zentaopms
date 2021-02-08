@@ -293,28 +293,6 @@ class projectreleaseModel extends model
     }
 
     /**
-     * Batch unlink story.
-     * 
-     * @param  int    $releaseID 
-     * @access public
-     * @return void
-     */
-    public function batchUnlinkStory($releaseID)
-    {
-        $storyList = $this->post->storyIdList;
-        if(empty($storyList)) return true;
-
-        $release = $this->getByID($releaseID);
-        $release->stories = ",$release->stories,";
-        foreach($storyList as $storyID) $release->stories = str_replace(",$storyID,", ',', $release->stories);
-        $release->stories = trim($release->stories, ',');
-        $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
-
-        $this->loadModel('action');
-        foreach($this->post->storyIdList as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
-    }
-
-    /**
      * Link bugs.
      * 
      * @param  int    $releaseID 
