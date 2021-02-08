@@ -360,7 +360,6 @@ class releaseModel extends model
      */
     public function batchUnlinkBug($releaseID, $type = 'bug')
     {
-
         $bugList = $this->post->unlinkBugs;
         if(empty($bugList)) return true;
 
