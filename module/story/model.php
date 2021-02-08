@@ -1547,10 +1547,11 @@ class storyModel extends model
      * Batch to task.
      *
      * @param  int    $projectID
+     * @param  int    $PRJID
      * @access public
      * @return bool
      */
-    public function batchToTask($projectID)
+    public function batchToTask($projectID, $PRJID = 0)
     {
         /* load Module and get the data from the post and get the current time. */
         $this->loadModel('action');
@@ -1581,6 +1582,7 @@ class storyModel extends model
 
             $task = new stdclass();
             $task->project    = $projectID;
+            $task->PRJ        = $PRJID;
             $task->name       = $story->title;
             $task->story      = $story->id;
             $task->type       = $data->type;

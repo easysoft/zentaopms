@@ -1189,7 +1189,7 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->story->successToTask;
 
-            $this->story->batchToTask($projectID);
+            $this->story->batchToTask($projectID, $this->session->PRJ);
 
             if(dao::isError())
             {
