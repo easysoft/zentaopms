@@ -596,7 +596,7 @@ class projectrelease extends control
      */
     public function unlinkBug($releaseID, $bugID, $type = 'bug')
     {
-        $this->projectrelease->unlinkBug($releaseID, $bugID, $type);
+        $this->loadModel('release')->unlinkBug($releaseID, $bugID, $type);
 
         /* if ajax request, send result. */
         if($this->server->ajax)

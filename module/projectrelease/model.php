@@ -317,22 +317,4 @@ class projectreleaseModel extends model
         $this->loadModel('action');
         foreach($this->post->bugs as $bugID) $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
     }
-
-    /**
-     * Unlink bug. 
-     * 
-     * @param  int    $releaseID 
-     * @param  int    $bugID 
-     * @param  string $type 
-     * @access public
-     * @return void
-     */
-    public function unlinkBug($releaseID, $bugID, $type = 'bug')
-    {
-        $release = $this->getByID($releaseID);
-        $field = $type == 'bug' ? 'bugs' : 'leftBugs';
-        $release->{$field} = trim(str_replace(",$bugID,", ',', ",{$release->$field},"), ',');
-        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
-        $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromrelease', '', $releaseID);
-    }
 }
