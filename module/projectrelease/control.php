@@ -640,7 +640,7 @@ class projectrelease extends control
      */
     public function changeStatus($releaseID, $status)
     {
-        $this->projectrelease->changeStatus($releaseID, $status);
+        $this->loadModel('release')->changeStatus($releaseID, $status);
         if(dao::isError()) die(js::error(dao::getError()));
         $actionID = $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
         die(js::reload('parent'));

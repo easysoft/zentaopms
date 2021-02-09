@@ -335,18 +335,4 @@ class projectreleaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromrelease', '', $releaseID);
     }
-
-    /**
-     * Change status.
-     * 
-     * @param  int    $releaseID 
-     * @param  string $status 
-     * @access public
-     * @return bool
-     */
-    public function changeStatus($releaseID, $status)
-    {
-        $this->dao->update(TABLE_RELEASE)->set('status')->eq($status)->where('id')->eq($releaseID)->exec();
-        return dao::isError();
-    }
 }
