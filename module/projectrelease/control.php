@@ -495,8 +495,8 @@ class projectrelease extends control
      */
     public function batchUnlinkStory($releaseID)
     {
-        $this->projectrelease->batchUnlinkStory($releaseID);
-        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=story"), 'parent'));
+        $this->loadModel('release')->batchUnlinkStory($releaseID);
+        die(js::locate($this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=story"), 'parent'));
     }
 
     /**
@@ -626,8 +626,8 @@ class projectrelease extends control
      */
     public function batchUnlinkBug($releaseID, $type = 'bug')
     {
-        $this->projectrelease->batchUnlinkBug($releaseID, $type);
-        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=$type"), 'parent'));
+        $this->loadModel('release')->batchUnlinkBug($releaseID, $type);
+        die(js::locate($this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=$type"), 'parent'));
     }
 
     /**

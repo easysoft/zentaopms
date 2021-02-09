@@ -48,6 +48,7 @@ try
 
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // 设置报错处理方式。
     $dbh->exec("SET GLOBAL sql_mode = '';");
+    $dbh->exec("set names 'utf8'");
     $dbh->beginTransaction();
 
     foreach($sqlFilePath as $file)
