@@ -500,9 +500,9 @@ $lang->block->typeList->testtask['done']    = '已测版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['program']->moreLinkList = new stdclass();
-$lang->block->modules['program']->moreLinkList->recentproject  = 'project|prjbrowse|';
-$lang->block->modules['program']->moreLinkList->statistic      = 'project|prjbrowse|';
-$lang->block->modules['program']->moreLinkList->project        = 'project|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->recentproject  = 'program|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->statistic      = 'program|prjbrowse|';
+$lang->block->modules['program']->moreLinkList->project        = 'program|prjbrowse|';
 $lang->block->modules['program']->moreLinkList->cmmireport     = 'weekly|index|';
 $lang->block->modules['program']->moreLinkList->cmmiestimate   = 'workestimation|index|';
 $lang->block->modules['program']->moreLinkList->cmmiissue      = 'issue|browse|';
