@@ -15,11 +15,11 @@ class issue extends control
      * Get issue list data.
      *
      * @param  string $browseType bySearch|open|assignTo|closed|suspended|canceled
-     * @param  int param
-     * @param  string orderBy
-     * @param  int recTotal
-     * @param  int recPerPage
-     * @param  int pageID
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */

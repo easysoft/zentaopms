@@ -278,7 +278,7 @@ class issueModel extends model
     public function close($issueID)
     {
         $oldIssue = $this->getByID($issueID);
-        $issue = fixer::input('post')
+        $issue    = fixer::input('post')
             ->add('closedBy', $this->app->user->account)
             ->add('status', 'closed')
             ->add('assignedTo', 'closed')
