@@ -29,7 +29,7 @@ class repo extends control
 
         /* Set repo menu group. */
         $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID) 
+        if(!$this->projectID)
         {
             $this->lang->navGroup->repo    = 'repo';
             $this->lang->navGroup->jenkins = 'repo';

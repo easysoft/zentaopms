@@ -69,6 +69,7 @@
             <?php if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);?>
             <?php if($project->status == 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
             <?php if($project->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
+            <?php if(common::hasPriv('program','PRJSuspend') || (common::hasPriv('program','PRJClose') && $project->status != 'doing') || (common::hasPriv('program','PRJActivate') && $project->status != 'closed')):?>
             <div class='btn-group'>
               <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
               <ul class='dropdown-menu pull-right text-center' role='menu' style="min-width:auto; padding: 5px 10px;">
@@ -77,9 +78,11 @@
               <?php if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
               </ul>
             </div>
+            <?php endif;?>
             <?php common::printIcon('program', 'PRJEdit', "projectID=$project->id&programID=$project->parent&from=PRJ", $project, 'list', 'edit', '',  '', false, "data-group='project'", '', $project->id);?>
             <?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', false, "data-group='project'", '', $project->id);?>
             <?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'list', 'lock', '',  '', false, "data-group='project'", '', $project->id);?>
+            <?php if(common::hasPriv('program','PRJManageProducts') || common::hasPriv('program','PRJWhitelist') || common::hasPriv('program','PRJDelete')):?>
             <div class='btn-group'>
               <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
               <ul class='dropdown-menu pull-right text-center' role='menu'>
@@ -88,6 +91,7 @@
                 <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}' data-group='my'");?>
               </ul>
             </div>
+            <?php endif;?>
           </td>
         </tr>
         <?php endforeach;?>

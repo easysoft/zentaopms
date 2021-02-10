@@ -14,7 +14,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $browseLink = $app->session->designList != false ? $app->session->designList : $this->createLink('design', 'browse', "productID=$design->product");?>
-    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
+    <?php if(!isonlybody()) echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <div class="page-title">
       <span class="label label-id"><?php echo $design->id?></span>

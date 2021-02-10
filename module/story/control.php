@@ -642,7 +642,7 @@ class story extends control
             /* The stories of a project. */
             $this->lang->navGroup->story = 'project';
             $moduleIndex = array_search('story', $this->lang->noMenuModule);
-            unset($this->lang->noMenuModule[$moduleIndex]);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
             $this->lang->story->menu = $this->lang->project->menu;
 
             $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $projectID);
@@ -1189,7 +1189,7 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->story->successToTask;
 
-            $this->story->batchToTask($projectID);
+            $this->story->batchToTask($projectID, $this->session->PRJ);
 
             if(dao::isError())
             {
@@ -1761,10 +1761,11 @@ class story extends control
      * @param  string $orderBy
      * @param  int    $projectID
      * @param  string $browseType
+     * @param  string $type requirement|story
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $projectID = 0, $browseType = '')
+    public function export($productID, $orderBy, $projectID = 0, $browseType = '', $type = 'story')
     {
         /* format the fields of every story in order to export data. */
         if($_POST)
@@ -2003,7 +2004,7 @@ class story extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $fileName = $this->lang->story->common;
+        $fileName = $type == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
         if($projectID)
         {
             $projectName = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('name');

@@ -583,7 +583,17 @@ class customModel extends model
         {
             foreach($systemFields as $method => $fields)
             {
-                $systemField = $this->config->$moduleName->$method->requiredFields;
+                $optionFields    = isset($this->config->custom->fieldList[$moduleName][$method]) ? explode(',', $this->config->custom->fieldList[$moduleName][$method]) : array();
+                $systemFieldList = explode(',', $this->config->$moduleName->$method->requiredFields);
+                foreach($optionFields as $field)
+                {
+                    if(in_array($field, $systemFieldList))
+                    {
+                        $key = array_search($field, $systemFieldList);
+                        unset($systemFieldList[$key]);
+                    }
+                }
+                $systemField = implode(',', $systemFieldList);
 
                 /* Keep the original required fields when the fields is empty. */
                 if(!isset($data->requiredFields[$method]))

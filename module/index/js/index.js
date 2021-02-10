@@ -120,9 +120,6 @@
             }
         }
 
-        if(moduleName == 'report' && methodLowerCase == 'programsummary') return project;
-        if(moduleName == 'measrecord' && methodLowerCase == 'browse') return project;
-
         var myMethods = 'todocalendar|effortcalendar|todo|task|story|bug|testtask|testcase|execution|issue|risk|dynamic|profile';
         if(moduleName === 'user' && myMethods.indexOf(methodLowerCase) != -1) return 'my';
 
@@ -466,6 +463,7 @@
 
         $("#recentMenu").click(function(event)
         {
+            $('#globalSearchInput').click();
             event.stopPropagation();
             getExecutions();
         });
@@ -630,6 +628,17 @@ $(function()
             event.stopPropagation();
         }
     });
+
+    $('.has-avatar').hover(function(event)
+    {
+        $('.contextmenu').attr('class', 'contextmenu');
+        $('.contextmenu-menu').attr('class', 'contextmenu-menu fade');
+    });
+
+    $('#bars').mousedown(function()
+    {
+        $('#globalSearchInput').click();
+    });
 });
 
 /* Change the search object according to the module and method. */
@@ -647,7 +656,7 @@ function changeSearchObject()
 
     if(tabPageModuleName == 'my' || tabPageModuleName == 'user') var searchType = tabPageMethodName;
 
-    if(searchObjectList.indexOf(searchType) == -1) var searchType = 'bug';
+    if(searchObjectList.indexOf(',' + searchType + ',') == -1) var searchType = 'bug';
 
     if(searchType == 'program')   var searchType = 'program-pgmproduct';
     if(searchType == 'project')   var searchType = 'program-index';

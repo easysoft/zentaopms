@@ -12,6 +12,21 @@
 class report extends control
 {
     /**
+     * Construct.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        /* Set report menu group. */
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        if(!$this->projectID) $this->lang->navGroup->report = 'system';
+    }
+
+    /**
      * The index of report, goto project deviation.
      *
      * @access public

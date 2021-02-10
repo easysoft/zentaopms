@@ -950,7 +950,7 @@ class doc extends control
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
             $productID = $type == 'product' ? $objectID : 0;
             $projectID = $type == 'project' ? $objectID : 0;
-            $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID, $projectID, $crumb);
+            $this->doc->setMenu($type, 0, 0, $productID, $projectID, $crumb);
         }
 
         /* Set Custom. */

@@ -43,7 +43,7 @@ var browseType = '<?php echo $browseType;?>';
           <th class='w-100px <?php echo in_array('pri',        $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->pri;?></th>
           <th class='w-150px <?php echo in_array('assignedTo', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->assignedTo;?></th>
           <th class='w-80px  <?php echo in_array('estimate',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estimate;?></th>
-          <th class='w-120px <?php echo in_array('deadline',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->deadline;?></th>
+          <th class='w-180px <?php echo in_array('deadline',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->deadline;?></th>
         </tr>
       </thead>
       <tbody>
@@ -73,7 +73,7 @@ var browseType = '<?php echo $browseType;?>';
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar show-always">
-        <?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->import, '', 'btn btn-secondary');?>
+        <?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->import, '', 'btn');?>
       </div>
       <div class='btn-toolbar'>
         <?php echo html::backButton('', '', 'btn');?>

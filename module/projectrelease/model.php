@@ -293,28 +293,6 @@ class projectreleaseModel extends model
     }
 
     /**
-     * Batch unlink story.
-     * 
-     * @param  int    $releaseID 
-     * @access public
-     * @return void
-     */
-    public function batchUnlinkStory($releaseID)
-    {
-        $storyList = $this->post->storyIdList;
-        if(empty($storyList)) return true;
-
-        $release = $this->getByID($releaseID);
-        $release->stories = ",$release->stories,";
-        foreach($storyList as $storyID) $release->stories = str_replace(",$storyID,", ',', $release->stories);
-        $release->stories = trim($release->stories, ',');
-        $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
-
-        $this->loadModel('action');
-        foreach($this->post->storyIdList as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
-    }
-
-    /**
      * Link bugs.
      * 
      * @param  int    $releaseID 
@@ -338,62 +316,5 @@ class projectreleaseModel extends model
 
         $this->loadModel('action');
         foreach($this->post->bugs as $bugID) $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
-    }
-
-    /**
-     * Unlink bug. 
-     * 
-     * @param  int    $releaseID 
-     * @param  int    $bugID 
-     * @param  string $type 
-     * @access public
-     * @return void
-     */
-    public function unlinkBug($releaseID, $bugID, $type = 'bug')
-    {
-        $release = $this->getByID($releaseID);
-        $field = $type == 'bug' ? 'bugs' : 'leftBugs';
-        $release->{$field} = trim(str_replace(",$bugID,", ',', ",{$release->$field},"), ',');
-        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
-        $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromrelease', '', $releaseID);
-    }
-
-    /**
-     * Batch unlink bug.
-     * 
-     * @param  int    $releaseID 
-     * @param  string $type 
-     * @access public
-     * @return void
-     */
-    public function batchUnlinkBug($releaseID, $type = 'bug')
-    {
-
-        $bugList = $this->post->unlinkBugs;
-        if(empty($bugList)) return true;
-
-        $release = $this->getByID($releaseID);
-        $field   = $type == 'bug' ? 'bugs' : 'leftBugs';
-        $release->$field = ",{$release->$field},";
-        foreach($bugList as $bugID) $release->$field = str_replace(",$bugID,", ',', $release->$field);
-        $release->$field = trim($release->$field, ',');
-        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
-
-        $this->loadModel('action');
-        foreach($this->post->unlinkBugs as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
-    }
-
-    /**
-     * Change status.
-     * 
-     * @param  int    $releaseID 
-     * @param  string $status 
-     * @access public
-     * @return bool
-     */
-    public function changeStatus($releaseID, $status)
-    {
-        $this->dao->update(TABLE_RELEASE)->set('status')->eq($status)->where('id')->eq($releaseID)->exec();
-        return dao::isError();
     }
 }

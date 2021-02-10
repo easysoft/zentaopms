@@ -1040,6 +1040,8 @@ class taskModel extends model
             if($data->finishedBys[$taskID] == 'ditto') $data->finishedBys[$taskID] = isset($prev['finishedBy']) ? $prev['finishedBy'] : '';
             if($data->canceledBys[$taskID] == 'ditto') $data->canceledBys[$taskID] = isset($prev['canceledBy']) ? $prev['canceledBy'] : '';
             if($data->closedBys[$taskID]   == 'ditto') $data->closedBys[$taskID]   = isset($prev['closedBy'])   ? $prev['closedBy']   : '';
+            if($data->estStarteds[$taskID] == '0000-00-00') $data->estStarteds[$taskID] = '';
+            if($data->deadlines[$taskID]   == '0000-00-00') $data->deadlines[$taskID]   = '';
 
             $prev['module']     = $data->modules[$taskID];
             $prev['type']       = $data->types[$taskID];

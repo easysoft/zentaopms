@@ -79,7 +79,7 @@ class user extends control
         $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
@@ -128,7 +128,7 @@ class user extends control
         $this->lang->set('menugroup.user', 'company');
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         /* Modify story title. */
         $this->loadModel('story');
@@ -177,7 +177,7 @@ class user extends control
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
@@ -224,7 +224,7 @@ class user extends control
         $this->app->loadLang('bug');
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
         $this->view->position[] = $this->lang->user->bug;
@@ -272,7 +272,7 @@ class user extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
         $this->view->position[] = $this->lang->user->testTask;
@@ -320,7 +320,7 @@ class user extends control
         $this->lang->set('menugroup.user', 'company');
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         $cases = array();
         if($type == 'case2Him')
@@ -380,7 +380,7 @@ class user extends control
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
         $this->view->position[] = $this->lang->user->execution;
@@ -422,7 +422,7 @@ class user extends control
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
         $this->view->position[] = $this->lang->user->issue;
@@ -466,7 +466,7 @@ class user extends control
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->risk;
         $this->view->position[] = $this->lang->user->risk;
@@ -495,7 +495,7 @@ class user extends control
         $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->position[]   = $this->lang->user->common;
@@ -1116,7 +1116,7 @@ class user extends control
         $date    = empty($date) ? '' : date('Y-m-d', $date);
 
         /* Change the menu when in my module. */
-        $this->resetMenu();
+        $this->user->resetMenu();
 
         $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', 'all', $date, $direction);
 
@@ -1131,18 +1131,6 @@ class user extends control
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
         $this->view->direction  = $direction;
         $this->display();
-    }
-
-    /**
-     * Reset menu when from my module.
-     *
-     * @access public
-     * @return void
-     */
-    public function resetMenu()
-    {
-        $this->lang->admin->menu    = $this->lang->my->menu;
-        $this->lang->noMenuModule[] = 'user';
     }
 
 	/** 
