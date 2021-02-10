@@ -2792,7 +2792,7 @@ class project extends control
         if($project->type == 'project')
         {
             $moduleName = 'projectstory';
-            $param      = '';
+            $param      = "productID={$_SESSION['product']}";
         }
         if($count != 0) echo js::alert(sprintf($this->lang->project->haveDraft, $count)) . js::locate($this->createLink($moduleName, 'story', $param));
         die(js::locate(helper::createLink($moduleName, 'story', $param), 'parent'));
