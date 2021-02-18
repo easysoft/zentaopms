@@ -335,7 +335,7 @@ class issue extends control
             {
                 $objectID   = $this->issue->createRisk($issueID);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                $objectLink = html::a($this->createLink('risk', 'view', "id=$objectID"), $this->post->name, "data-toggle='modal'");
+                $objectLink = html::a($this->createLink('risk', 'view', "id=$objectID"), $this->post->name, '', "class='iframe'");
                 $comment    = sprintf($this->lang->issue->logComments[$resolution], $objectLink);
 
                 $this->loadModel('action')->create('risk', $objectID, 'Opened', '');
