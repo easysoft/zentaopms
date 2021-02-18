@@ -79,6 +79,7 @@
         {
             return 'system';
         }
+        if(moduleName === 'report') return link.prj ? 'project' : 'system';
         if(moduleName === 'program')
         {
             if(methodLowerCase.indexOf('pgm') === 0) return 'program';
