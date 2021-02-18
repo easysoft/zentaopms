@@ -192,10 +192,13 @@ class product extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $product = $this->product->getById($productID);
+
         /* Get stories. */
         $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         if($this->app->rawModule == 'projectstory')
         {
+            $this->session->set('currentProductType', $product->type);
             $projectProducts = $this->product->getProductsByProject($this->session->PRJ);
             $productPlans    = $this->loadModel('project')->getPlans($projectProducts);
 
@@ -243,7 +246,7 @@ class product extends control
         $this->view->position[]      = $this->products[$productID];
         $this->view->position[]      = $this->lang->product->browse;
         $this->view->productID       = $productID;
-        $this->view->product         = $this->product->getById($productID);
+        $this->view->product         = $product;
         $this->view->productName     = $this->products[$productID];
         $this->view->moduleID        = $moduleID;
         $this->view->stories         = $stories;
