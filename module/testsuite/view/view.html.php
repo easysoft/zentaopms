@@ -60,9 +60,9 @@
                 <?php endif;?>
                 <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></nobr>
               </th>
-              <th class='c-pri'>   <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
-              <th class='w-150px'> <?php common::printOrderLink('module',        $orderBy, $vars, $lang->testcase->module);?></th>
-              <th>                 <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
+              <th class='c-pri w-50px'>   <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
+              <th class='w-100px'> <?php common::printOrderLink('module',        $orderBy, $vars, $lang->testcase->module);?></th>
+              <th class='c-name'>  <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
               <th class='w-90px'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
               <th class='c-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
               <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testcase->lastRunResult);?></th>
@@ -85,7 +85,7 @@
               </td>
               <td><span class='label-pri label-pri-<?php echo $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
               <td class='text-left' title='<?php echo $modules[$case->module]?>'><?php echo $modules[$case->module];?></td>
-              <td class='text-left nobr' title='<?php echo $case->title;?>'>
+              <td class='c-name' title='<?php echo $case->title;?>'>
                 <?php if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span>"?>
                 <?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id&version=$case->caseVersion"), $case->title);?>
               </td>
