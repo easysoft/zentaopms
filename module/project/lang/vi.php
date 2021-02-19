@@ -81,6 +81,7 @@ $lang->project->waitTasks      = 'Waiting Tasks';
 $lang->project->viewByUser     = 'Theo người dùng';
 $lang->project->oneProduct     = "Only one stage can be linked {$lang->productCommon}";
 $lang->project->noLinkProduct  = "Stage not linked {$lang->productCommon}";
+$lang->project->recent         = 'Recent visits: ';
 
 $lang->project->start    = 'Bắt đầu';
 $lang->project->activate = 'Kích hoạt';

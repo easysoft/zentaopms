@@ -81,6 +81,7 @@ $lang->project->waitTasks      = '待處理';
 $lang->project->viewByUser     = '按用戶查看';
 $lang->project->oneProduct     = "階段只能關聯一個{$lang->productCommon}";
 $lang->project->noLinkProduct  = "階段沒有關聯{$lang->productCommon}";
+$lang->project->recent         = '近期访问：';
 
 $lang->project->start    = "開始";
 $lang->project->activate = "激活";

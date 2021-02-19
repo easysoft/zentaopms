@@ -3594,7 +3594,7 @@ class projectModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.status')->ne('closed')
             ->andWhere('t1.deleted')->eq('0')
-            ->orderBy('id_desc')
+            ->orderBy('project_desc, id_desc')
             ->fetchAll();
 
         /* Get the project or product to which the execution belongs. */
@@ -3602,19 +3602,29 @@ class projectModel extends model
         $stageIdList   = array();
         foreach($executions as $execution)
         {
-            if($execution->type == 'stage')  $stageIdList[$execution->id]        = $execution->id;
-            if($execution->type == 'sprint') $projectIdList[$execution->project] = $execution->project;
+            if($execution->type == 'stage') $stageIdList[$execution->id] = $execution->id;
+            $projectIdList[$execution->project] = $execution->project;
         }
         $projectPairs = $this->loadModel('program')->getPRJPairsByIdList($projectIdList);
         $productPairs = $this->getStageLinkProductPairs($stageIdList);
 
+        $recentExecutions = explode('join', $this->cookie->recentExecutions);
+        $allExecution     = array('recent' => array(), 'mine' => array());
         foreach($executions as $execution)
         {
-            if($execution->type == 'stage')  $execution->name = zget($productPairs, $execution->id) . '/' . $execution->name;
+            if($execution->type == 'stage')  $execution->name = zget($projectPairs, $execution->project) . '/' . zget($productPairs, $execution->id) . '/' . $execution->name;
             if($execution->type == 'sprint') $execution->name = zget($projectPairs, $execution->project) . '/' . $execution->name;
+            if(in_array($execution->id, $recentExecutions))
+            {
+                $index = array_search($execution->id, $recentExecutions);
+                $allExecution['recent'][$index] = $execution;
+                continue;
+            }
+            $allExecution['mine'][] = $execution;
         }
 
-        return $executions;
+        ksort($allExecution['recent']);
+        return $allExecution;
     }
 
     /**

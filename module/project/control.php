@@ -117,6 +117,13 @@ class project extends control
         if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
         setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
+        /* Save the recently five executions visited in the cookie. */
+        $recentExecutions = $this->cookie->recentExecutions ? explode('join', $this->cookie->recentExecutions) : array();
+        array_unshift($recentExecutions, $executionID);
+        $recentExecutions = array_unique($recentExecutions);
+        $recentExecutions = array_slice($recentExecutions, 0, 5);
+        setcookie("recentExecutions", implode('join', $recentExecutions), $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         $this->loadModel('tree');
         $this->loadModel('search');
         $this->loadModel('task');
@@ -2471,18 +2478,25 @@ class project extends control
      */
     public function ajaxGetRecentExecutions()
     {
-        $executions = $this->project->getRecentExecutions();
-        if(!empty($executions))
+        $allExecution = $this->project->getRecentExecutions();
+        if(!empty($allExecution))
         {
-            $executionsName = array();
-            foreach($executions as $execution) $executionsName[] = $execution->name;
-            $executionsPinYin = common::convert2Pinyin($executionsName);
-            foreach($executions as $execution)
+            foreach($allExecution as $type => $executionList)
             {
-                $link = helper::createLink('project', 'task', 'executionID=' . $execution->id, '', false, $execution->project);
-                $execution->code = empty($execution->code) ? $execution->name : $execution->code;
-                $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
-                echo html::a($link, '<i class="icon icon-' . $this->lang->icons[$execution->type] . '"></i> ' . $execution->name, '', "class='search-list-item' title='$execution->name' $dataKey");
+                echo '<div class="heading">'. $this->lang->project->$type . '</div>';
+                $color          = $type == 'recent' ? 'text-brown' : '';
+                $executions     = $allExecution[$type];
+                $executionsName = array();
+                foreach($executions as $execution) $executionsName[] = $execution->name;
+                $executionsPinYin = common::convert2Pinyin($executionsName);
+                foreach($executions as $execution)
+                {
+                    $link = helper::createLink('project', 'task', 'executionID=' . $execution->id, '', false, $execution->project);
+                    $execution->code = empty($execution->code) ? $execution->name : $execution->code;
+                    $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
+                    $class   = "class='search-list-item $color' title='$execution->name' $dataKey";
+                    echo html::a($link, '<i class="icon icon-' . $this->lang->icons[$execution->type] . '"></i> ' . $execution->name, '', $class);
+                }
             }
         }
         else
