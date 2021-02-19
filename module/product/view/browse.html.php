@@ -237,6 +237,8 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
           <?php
           foreach($setting as $key => $value)
           {
+              if($storyType == 'requirement' and $value->id == 'plan') $value->show = false;
+
               if($value->show)
               {
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
@@ -393,7 +395,7 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
             </div>
           </div>
           <?php endif;?>
-          <?php if($canBatchChangePlan):?>
+          <?php if($canBatchChangePlan and $storyType == 'story'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->planAB;?> <span class="caret"></span></button>
             <?php
