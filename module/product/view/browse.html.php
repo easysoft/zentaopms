@@ -257,6 +257,7 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
           <?php if(!empty($story->children)):?>
           <?php $i = 0;?> 
           <?php foreach($story->children as $key => $child):?>
+          <?php $child->from = $from;?>
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
