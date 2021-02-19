@@ -829,20 +829,30 @@ class story extends control
         $users        = $this->user->getPairs('noletter');
 
         /* Set the menu. */
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($product->id);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
-        if($this->app->rawModule == 'projectstory')
-        {
-              $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
-              $this->lang->product->menu = $this->lang->menu->{$project->model};
-        }
-
         if($from == 'project')
         {
-            $project = $this->loadModel('project')->getById($param);
-            if($project->status == 'done') $from = '';
+            $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
+            $this->app->rawModule = 'project';
+            $this->lang->navGroup->story = 'project';
+            $this->lang->product->menu   = $this->lang->menu->{$project->model};
+            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $project->id);
+
+            /* If status is done, can not create task from story. */
+            $execution = $this->loadModel('project')->getById($param);
+            if($execution->status == 'done') $from = '';
+        }
+        else
+        {
+            $this->lang->product->menu = $this->lang->product->viewMenu;
+            $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+            $this->lang->product->switcherMenu   = $this->product->getSwitcher($product->id);
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+
+            if($this->app->rawModule == 'projectstory')
+            {
+                $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
+                $this->lang->product->menu = $this->lang->menu->{$project->model};
+            }
         }
 
         $this->executeHooks($storyID);
