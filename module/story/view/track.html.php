@@ -22,7 +22,7 @@
     <div class='main-table' data-ride="table">
       <table class='table table-bordered' id="trackList">
         <thead>
-          <tr>
+          <tr class='text-center'>
             <th <?php echo $style;?>>
               <?php if($this->app->rawModule == 'projectstory'): ?>
               <div class="dropdown">

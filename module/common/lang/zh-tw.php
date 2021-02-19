@@ -183,7 +183,7 @@ $lang->product->menu->list = array('link' => $lang->productCommon . '|product|al
 $lang->product->viewMenu = new stdclass();
 $lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->viewMenu->track       = array('link' => "跟蹤矩陣|story|track|productID=%s");
+$lang->product->viewMenu->track       = array('link' => "矩陣|story|track|productID=%s");
 $lang->product->viewMenu->plan        = array('link' => "計劃|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->viewMenu->release     = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = '路線圖|product|roadmap|productID=%s';

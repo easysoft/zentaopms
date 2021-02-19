@@ -3586,12 +3586,14 @@ class projectModel extends model
         $isView = (empty($this->app->user->view->sprints) || empty($this->app->user->view->projects)) ? false : true;
         if(!$this->app->user->admin && $isView === false) return array();
 
-        $executions = $this->dao->select('id,project,code,name,type')->from(TABLE_PROJECT)
-            ->where('type')->in('stage,sprint')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
-            ->andWhere('status')->ne('closed')
-            ->andWhere('deleted')->eq('0')
+        $executions = $this->dao->select('t1.id,t1.project,t1.code,t1.name,t1.type')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
+            ->where('t1.type')->in('stage,sprint')
+            ->andWhere('t2.account')->eq($this->app->user->account)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
+            ->andWhere('t1.status')->ne('closed')
+            ->andWhere('t1.deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchAll();
 
