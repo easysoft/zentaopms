@@ -1503,7 +1503,7 @@ class program extends control
 
         $this->view->title      = $this->lang->project->close;
         $this->view->position[] = $this->lang->project->close;
-        $this->view->project    = $this->program->getPGMByID($projectID);
+        $this->view->project    = $this->program->getPRJByID($projectID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('project', $projectID);
 
