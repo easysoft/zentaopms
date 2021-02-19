@@ -2528,7 +2528,6 @@ class storyModel extends model
             ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', reviewedBy, ',')")->like("%,$account,%")->fi()
             ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()
             ->fi()
-            ->beginIF($this->app->rawMethod == 'contribute')->andWhere("t1.status")->eq('closed')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

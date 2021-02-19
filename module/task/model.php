@@ -2074,7 +2074,6 @@ class taskModel extends model
             ->orWhere('t1.finishedList')->like("%,{$account},%")
             ->markRight(1)
             ->fi()
-            ->beginIF($this->app->rawMethod == 'contribute')->andWhere("t1.status")->in('closed,done,cancel')->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy')->andWhere("t1.`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
