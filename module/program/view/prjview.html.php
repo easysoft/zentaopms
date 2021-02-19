@@ -51,7 +51,7 @@
               <?php if($project->PM):?>
               <?php $i--;?>
               <?php unset($teamMembers[$project->PM]);?>
-              <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->PM);?> <span class="text-muted">（<?php echo $lang->project->PM;?>）</span></div>
+              <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->PM);?> <span class="text-muted">（<?php echo $lang->program->PRJPM;?>）</span></div>
               <?php endif;?>
               <?php if($project->PO):?>
               <?php $i--;?>
