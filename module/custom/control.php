@@ -517,6 +517,13 @@ class custom extends control
                 ->andWhere('`key`')->eq('URSR')
                 ->fetch('value');
 
+            $this->dao->update(TABLE_CONFIG)
+                ->set('`value`')->eq($defaultConcept)
+                ->where('module')->eq('common')
+                ->andWhere('`key`')->eq('URSR')
+                ->andWhere('`value`')->eq($key)
+                ->exec();
+
             /* Stay default concept. */
             if($defaultConcept == $key)
             {
