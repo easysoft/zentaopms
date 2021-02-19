@@ -726,10 +726,11 @@ class story extends control
      * Change a story.
      *
      * @param  int    $storyID
+     * @param  string $from product|project
      * @access public
      * @return void
      */
-    public function change($storyID)
+    public function change($storyID, $from = 'product')
     {
         if(!empty($_POST))
         {
@@ -749,7 +750,14 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            $module = $from == 'project' ? 'projectstory' : 'story';
+            die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+        }
+
+        if($from == 'project')
+        {
+            $this->app->rawModule = 'projectstory';
+            $this->lang->navGroup->story = 'project';
         }
 
         $this->commonAction($storyID);

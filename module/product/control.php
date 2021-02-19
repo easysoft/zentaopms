@@ -117,10 +117,11 @@ class product extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $from product|project
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $from = 'product')
     {
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -273,6 +274,7 @@ class product extends control
         $this->view->products        = $this->products;
         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
         $this->view->storyType       = $storyType;
+        $this->view->from            = $from;
         $this->display();
     }
 

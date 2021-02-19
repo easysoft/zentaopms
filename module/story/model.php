@@ -3482,7 +3482,7 @@ class storyModel extends model
                         break;
                     }
 
-                    common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
+                    common::printIcon('story', 'change',     $vars . "&from=$story->from", $story, 'list', 'fork', '', '', false, "data-group=$story->from");
                     common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
                     common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit',       $vars, $story, 'list');

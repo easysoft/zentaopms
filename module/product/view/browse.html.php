@@ -251,6 +251,7 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
         <tbody>
           <?php foreach($stories as $story):?>
           <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
+            <?php $story->from = $from;?>
             <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
           </tr>
           <?php if(!empty($story->children)):?>
