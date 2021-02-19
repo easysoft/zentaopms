@@ -95,4 +95,5 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
 </div>
 <?php js::set('storyID', $story->id);?>
 <?php js::set('storyType', $story->type);?>
+<?php js::set('rawModule', $this->app->rawModule);?>
 <?php include '../../common/view/footer.html.php';?>

@@ -528,10 +528,11 @@ class story extends control
      * Edit a story.
      *
      * @param  int    $storyID
+     * @param  string $from product|project
      * @access public
      * @return void
      */
-    public function edit($storyID)
+    public function edit($storyID, $from = 'product')
     {
         if(!empty($_POST))
         {
@@ -552,8 +553,15 @@ class story extends control
             }
             else
             {
-                die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+                $module = $from == 'project' ? 'projectstory' : 'story';
+                die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
             }
+        }
+
+        if($from == 'project')
+        {
+            $this->app->rawModule = 'projectstory';
+            $this->lang->navGroup->story = 'project';
         }
 
         $this->commonAction($storyID);
@@ -931,10 +939,11 @@ class story extends control
      * Review a story.
      *
      * @param  int    $storyID
+     * @param  string $from product|project
      * @access public
      * @return void
      */
-    public function review($storyID)
+    public function review($storyID, $from = 'product')
     {
         $this->product;
         $this->lang->product->menu           = $this->lang->product->viewMenu;
@@ -956,7 +965,8 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+            $module = $from == 'project' ? 'projectstory' : 'story';
+            die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
         }
 
         /* Get story and product. */
@@ -966,7 +976,15 @@ class story extends control
         $this->story->replaceURLang($story->type);
 
         /* Set menu. */
-        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+        if($from == 'project')
+        {
+            $this->app->rawModule = 'projectstory';
+            $this->lang->navGroup->story = 'project';
+        }
+        else
+        {
+            $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+        }
 
         /* Set the review result options. */
         if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);

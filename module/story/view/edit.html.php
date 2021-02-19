@@ -14,6 +14,7 @@
 <?php js::set('oldProductID', $story->product);?>
 <?php js::set('parentStory', !empty($story->children));?>
 <?php js::set('moveChildrenTips', $lang->story->moveChildrenTips);?>
+<?php js::set('rawModule', $this->app->rawModule);?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
