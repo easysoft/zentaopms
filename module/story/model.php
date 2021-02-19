@@ -3644,19 +3644,30 @@ class storyModel extends model
             $stories = empty($stories) ? array() : $stories;
             foreach($stories as $id => $title)
             {
-                $stories[$id]           = new stdclass();
-                $stories[$id]->title    = $title;
-                $stories[$id]->case     = $this->loadModel('testcase')->getStoryCases($id);
-                $stories[$id]->bug      = $this->loadModel('bug')->getStoryBugs($id);
-                $stories[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
-                $stories[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($stories[$id]->design))->fetchPairs();
+                $stories[$id] = new stdclass();
+                $stories[$id]->title     = $title;
+                $stories[$id]->cases     = $this->loadModel('testcase')->getStoryCases($id);
+                $stories[$id]->bugs      = $this->loadModel('bug')->getStoryBugs($id);
+                $stories[$id]->tasks     = $this->loadModel('task')->getStoryTasks($id);
+                $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
+                    ->where('AType')->eq('design')
+                    ->andWhere('BType')->eq('commit')
+                    ->andWhere('AID')->in(array_keys($stories[$id]->designs))
+                    ->fetchPairs();
             }
 
             $requirement->track = $stories;
         }
 
         /* Get no requirements story. */
-        $subdividedStories = $this->dao->select('BID')->from(TABLE_RELATION)->where('AType')->eq('requirement')->andWhere('BType')->eq('story')->andWhere('relation')->eq('subdivideinto')->andWhere('product')->eq($productID)->fetchPairs('BID', 'BID');
+        $subdividedStories = $this->dao->select('BID')->from(TABLE_RELATION)
+            ->where('AType')->eq('requirement')
+            ->andWhere('BType')->eq('story')
+            ->andWhere('relation')->eq('subdivideinto')
+            ->andWhere('product')->eq($productID)
+            ->fetchPairs('BID', 'BID');
+
         $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $subdividedStories);
         if($stories) $pager->recTotal += 1;
 
@@ -3664,13 +3675,19 @@ class storyModel extends model
         {
             foreach($stories as $id => $story)
             {
-                $stories[$id]           = new stdclass();
-                $stories[$id]->title    = $story->title;
-                $stories[$id]->case     = $this->loadModel('testcase')->getStoryCases($id);
-                $stories[$id]->bug      = $this->loadModel('bug')->getStoryBugs($id);
-                $stories[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
-                $stories[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($stories[$id]->design))->fetchPairs();
+                $stories[$id] = new stdclass();
+                $stories[$id]->title     = $story->title;
+                $stories[$id]->cases     = $this->loadModel('testcase')->getStoryCases($id);
+                $stories[$id]->bugs      = $this->loadModel('bug')->getStoryBugs($id);
+                $stories[$id]->tasks     = $this->loadModel('task')->getStoryTasks($id);
+                $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
+                    ->where('AType')->eq('design')
+                    ->andWhere('BType')->eq('commit')
+                    ->andWhere('AID')->in(array_keys($stories[$id]->designs))
+                    ->fetchPairs();
             }
+
             $requirements['noRequirement'] = $stories;
         }
 

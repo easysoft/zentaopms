@@ -1403,7 +1403,6 @@ class story extends control
         $this->session->set('bugList',      $this->app->getURI(true));
         $this->session->set('revisionList', $this->app->getURI(true));
 
-
         /* Load pager and get tracks. */
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
