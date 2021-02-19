@@ -132,8 +132,7 @@ class program extends control
 
         $this->view->title       = $this->lang->program->PGMProduct;
         $this->view->position[]  = $this->lang->program->PGMProduct;
-
-        $this->view->program     = $this->program->getPGMByID($programID);
+        $this->view->program     = $program;
         $this->view->browseType  = $browseType;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;

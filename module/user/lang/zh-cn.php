@@ -52,6 +52,7 @@ $lang->user->verifyPassword   = '您的密码';
 $lang->user->resetPassword    = '忘记密码';
 $lang->user->score            = '积分';
 $lang->user->name             = '名称';
+$lang->user->type             = '用户类型';
 $lang->user->cropAvatar       = '剪切头像';
 $lang->user->cropAvatarTip    = '拖拽选框来选择头像剪切范围';
 $lang->user->cropImageTip     = '所使用的头像图片过小，建议图片大小至少为 48x48，当前图片大小为 %s';
@@ -145,6 +146,9 @@ $lang->user->genderList['f'] = '女';
 $lang->user->thirdPerson['m'] = '他';
 $lang->user->thirdPerson['f'] = '她';
 
+$lang->user->typeList['inside']  = $lang->user->inside;
+$lang->user->typeList['outside'] = $lang->user->outside;
+
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>弱</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>中</span>";
 $lang->user->passwordStrengthList[2] = "<span style='color:green'>强</span>";
@@ -200,6 +204,7 @@ $lang->user->error->dangerPassword = "【ID %s】的密码不能使用【%s】�
 
 $lang->user->error->verifyPassword   = "验证失败，请检查您的系统登录密码是否正确";
 $lang->user->error->originalPassword = "原密码不正确";
+$lang->user->error->companyEmpty     = "公司名称不能为空！";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;

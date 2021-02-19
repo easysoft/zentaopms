@@ -11,6 +11,7 @@
  */
 $lang->company->common   = '组织视图';
 $lang->company->index    = "组织视图首页";
+$lang->company->create   = "添加公司";
 $lang->company->edit     = "编辑公司";
 $lang->company->view     = "公司信息";
 $lang->company->browse   = "用户列表";

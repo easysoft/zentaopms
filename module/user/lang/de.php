@@ -52,6 +52,7 @@ $lang->user->verifyPassword   = 'Ihr Login Passwort';
 $lang->user->resetPassword    = 'Passwort vergessen?';
 $lang->user->score            = 'Score';
 $lang->user->name             = 'Name';
+$lang->user->type             = 'User Type';
 $lang->user->cropAvatar       = 'Crop Avatar';
 $lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
 $lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
@@ -144,6 +145,9 @@ $lang->user->genderList['f'] = 'Weiblich';
 
 $lang->user->thirdPerson['m'] = 'Him';
 $lang->user->thirdPerson['f'] = 'Her';
+
+$lang->user->typeList['inside']  = $lang->user->inside;
+$lang->user->typeList['outside'] = $lang->user->outside;
 
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Schwach</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Gut</span>";

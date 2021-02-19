@@ -52,6 +52,7 @@ $lang->user->verifyPassword   = 'Mật khẩu';
 $lang->user->resetPassword    = 'Quên mật khẩu?';
 $lang->user->score            = 'Điểm';
 $lang->user->name             = 'Name';
+$lang->user->type             = 'User Type';
 $lang->user->cropAvatar       = 'Crop Avatar';
 $lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
 $lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
@@ -144,6 +145,9 @@ $lang->user->genderList['f'] = 'Nữ';
 
 $lang->user->thirdPerson['m'] = 'anh ấy';
 $lang->user->thirdPerson['f'] = 'cô ấy';
+
+$lang->user->typeList['inside']  = $lang->user->inside;
+$lang->user->typeList['outside'] = $lang->user->outside;
 
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Yếu</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Tốt</span>";

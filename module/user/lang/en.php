@@ -52,6 +52,7 @@ $lang->user->verifyPassword   = 'Password';
 $lang->user->resetPassword    = 'Forgot Password?';
 $lang->user->score            = 'Score';
 $lang->user->name             = 'Name';
+$lang->user->type             = 'User Type';
 $lang->user->cropAvatar       = 'Crop Avatar';
 $lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
 $lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
@@ -145,6 +146,9 @@ $lang->user->genderList['f'] = 'Female';
 $lang->user->thirdPerson['m'] = 'Him';
 $lang->user->thirdPerson['f'] = 'Her';
 
+$lang->user->typeList['inside']  = $lang->user->inside;
+$lang->user->typeList['outside'] = $lang->user->outside;
+
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Weak</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Good</span>";
 $lang->user->passwordStrengthList[2] = "<span style='color:green'>Strong</span>";
@@ -200,6 +204,7 @@ $lang->user->error->dangerPassword = "ID %s，Passwords cannot be used with [%s]
 
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
+$lang->user->error->companyEmpty     = "Company name must be not empty.";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;

@@ -89,6 +89,22 @@ class company extends control
         $this->view->param       = $param;
         $this->view->type        = $type;
         $this->view->browseType  = $browseType;
+        $this->view->companies   = $this->company->getOutsideCompanies();
+
+        $this->display();
+    }
+
+    public function create()
+    {
+        if(!empty($_POST))
+        {
+            $this->company->create();
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->title     = $this->lang->company->common . $this->lang->colon . $this->lang->company->create;
+        $this->view->position  = $this->lang->company->create;
 
         $this->display();
     }
@@ -258,5 +274,17 @@ class company extends control
         $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $browseType);
         $this->view->direction    = $direction;
         $this->display();
+    }
+
+    /**
+     * Ajax get outside company.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetOutsideCompany()
+    {
+        $companies = $this->company->getOutsideCompanies();
+        die(html::select('company', $companies, '', "class='form-control chosen'"));
     }
 }

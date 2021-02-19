@@ -241,18 +241,34 @@ class userModel extends model
         if(strtolower($_POST['account']) == 'guest') return false;
 
         $user = fixer::input('post')
-            ->setDefault('join', '0000-00-00' )
-            ->setDefault('type', 'inside' )
+            ->setDefault('join', '0000-00-00')
+            ->setDefault('type', 'inside')
+            ->setDefault('company', 0)
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
-            ->remove('group, password1, password2, verifyPassword, passwordStrength')
+            ->remove('new, group, password1, password2, verifyPassword, passwordStrength')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
         {
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
             return false;
+        }
+
+        if(isset($_POST['new']))
+        {
+            if(empty($user->company))
+            {
+                dao::$errors['company'][] = $this->lang->user->error->companyEmpty;
+                return false;
+            }
+
+            $company = new stdClass();
+            $company->name = $user->company;
+            $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
+
+            $user->company = $this->dao->lastInsertID();
         }
 
         $this->dao->insert(TABLE_USER)->data($user)
@@ -423,7 +439,7 @@ class userModel extends model
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
-            ->remove('password1, password2, groups,verifyPassword, passwordStrength')
+            ->remove('new, password1, password2, groups,verifyPassword, passwordStrength')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
@@ -431,6 +447,22 @@ class userModel extends model
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
             return false;
         }
+
+        if(isset($_POST['new']))
+        {
+            if(empty($user->company))
+            {
+                dao::$errors['company'][] = $this->lang->user->error->companyEmpty;
+                return false;
+            }
+
+            $company = new stdClass();
+            $company->name = $user->company;
+            $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
+
+            $user->company = $this->dao->lastInsertID();
+        }
+
         $requiredFields = array();
         foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
         {
@@ -536,6 +568,7 @@ class userModel extends model
             $users[$id]['realname'] = $data->realname[$id];
             $users[$id]['commiter'] = $data->commiter[$id];
             $users[$id]['email']    = $data->email[$id];
+            $users[$id]['type']     = $data->type[$id];
             $users[$id]['join']     = $data->join[$id];
             $users[$id]['skype']    = $data->skype[$id];
             $users[$id]['qq']       = $data->qq[$id];
