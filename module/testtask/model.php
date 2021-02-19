@@ -280,6 +280,32 @@ class testtaskModel extends model
     }
 
     /**
+     * Get testtask pairs 
+     * 
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @param  string $appendIdList 
+     * @param  string $params         noempty
+     * @access public
+     * @return array
+     */
+    public function getPairs($productID, $projectID = 0, $appendIdList = '', $params = '')
+    {
+        $pairs = $this->dao->select('id,name')->from(TABLE_TESTTASK)
+            ->where('product')->eq((int)$productID)
+            ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
+            ->andWhere('auto')->ne('unit')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id_desc')
+            ->fetchPairs('id', 'name');
+
+        if($appendIdList) $pairs += $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($appendIdList)->fetchPairs('id', 'name');
+        if(strpos($params, 'noempty') === false) $pairs = array(0 => '') + $pairs;
+
+        return $pairs;
+    }
+
+    /**
      * Get task by idList.
      *
      * @param  array    $idList

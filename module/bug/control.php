@@ -738,6 +738,7 @@ class bug extends control
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
         $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
+        $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->project, $bug->testtask);
         $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;

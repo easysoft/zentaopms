@@ -529,6 +529,7 @@ class upgrade extends control
      */
     public function consistency($netConnect = true)
     {
+        set_time_limit(0);
         $alterSQL = $this->upgrade->checkConsistency();
         if(empty($alterSQL))
         {

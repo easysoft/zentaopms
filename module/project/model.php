@@ -448,8 +448,9 @@ class projectModel extends model
 
         /* Get the data from the post. */
         $project = fixer::input('post')
-            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
-            ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
+            ->setIF(helper::isZeroDate($this->post->end), 'end', '')
+            ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
@@ -715,7 +716,7 @@ class projectModel extends model
                 ->fetchAll();
             foreach($tasks as $task)
             {
-                if($task->status == 'wait' and $task->estStarted != '0000-00-00')
+                if($task->status == 'wait' and !helper::isZeroDate($task->estStarted))
                 {
                     $taskDays   = helper::diffDate($task->deadline, $task->estStarted);
                     $taskOffset = helper::diffDate($task->estStarted, $oldProject->begin);
@@ -1175,7 +1176,7 @@ class projectModel extends model
             /* If projectBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
             $begin = $executions[$executionID]->begin;
             $end   = $executions[$executionID]->end;
-            if($begin == '0000-00-00') $begin = $executions[$executionID]->openedDate;
+            if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
             $executionBurns = $this->processBurnData($executionBurns, $itemCounts, $begin, $end);
 
             /* Shorter names. */
@@ -1965,7 +1966,7 @@ class projectModel extends model
             $task->openedBy     = $this->app->user->account;
 
             if($task->estimate !== '') $task->left = $task->estimate;
-            if(strpos($requiredFields, 'deadline') !== false and $task->deadline == '0000-00-00') $task->deadline = '';
+            if(strpos($requiredFields, 'deadline') !== false and helper::isZeroDate($task->deadline)) $task->deadline = '';
             if(!empty($bugToTasks->assignedTo[$key]))
             {
                 $task->assignedTo   = $bugToTasks->assignedTo[$key];
@@ -2605,7 +2606,7 @@ class projectModel extends model
      */
     public function processBurnData($sets, $itemCounts, $begin, $end, $mode = 'noempty')
     {
-        if($end != '0000-00-00')
+        if(!helper::isZeroDate($end))
         {
             $period = helper::diffDate($end, $begin) + 1;
             $counts = $period > $itemCounts ? $itemCounts : $period;

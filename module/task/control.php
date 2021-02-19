@@ -1204,7 +1204,7 @@ class task extends control
         }
 
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
-        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->activate;
+        $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();

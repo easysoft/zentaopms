@@ -865,6 +865,14 @@ class user extends control
                 $this->send($response);
             }
 
+
+            if((!empty($this->config->safe->loginCaptcha) and strtolower($this->post->captcha) != strtolower($this->session->captcha) and $this->app->getViewType() != 'json'))
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->user->errorCaptcha;
+                $this->send($response);
+            }
+
             $user = $this->user->identify($account, $password);
 
             if($user)
@@ -1280,4 +1288,15 @@ class user extends control
         die(json_encode($newUsers));
     }
 
+    /**
+     * Refresh random for login
+     * 
+     * @access public
+     * @return void
+     */
+    public function refreshRandom()
+    {
+        $rand = (string)$this->user->updateSessionRandom();
+        die($rand);
+    }
 }

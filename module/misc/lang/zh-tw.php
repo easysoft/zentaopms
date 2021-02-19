@@ -87,9 +87,8 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
 
-$lang->misc->releaseDate['20.0.beta3']  = '2020-01-08';
-$lang->misc->releaseDate['20.0.beta2']  = '2020-12-18';
-$lang->misc->releaseDate['20.0.beta1']  = '2020-11-30';
+$lang->misc->releaseDate['12.5.3']      = '2021-01-06';
+$lang->misc->releaseDate['12.5.2']      = '2020-12-18';
 $lang->misc->releaseDate['12.5.1']      = '2020-11-30';
 $lang->misc->releaseDate['12.5.stable'] = '2020-11-19';
 $lang->misc->releaseDate['20.0.alpha1'] = '2020-10-30';
@@ -142,11 +141,8 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['20.0.beta3'][]  = array('title'=>'優化導航交互，增強用戶體驗，升級到旗艦版', 'desc' => '');
-$lang->misc->feature->all['20.0.beta2'][]  = array('title'=>'重構組織導航，修復bug，完善細節', 'desc' => '');
-$lang->misc->feature->all['20.0.beta1'][]  = array('title'=>'禪道20beta版本，修復bug，完善細節', 'desc' => '');
-$lang->misc->feature->all['20.0.alpha1'][] = array('title'=>'禪道20版本大更新，重構導航，增加瀑布模型', 'desc' => '<p>增加項目集和項目概念</p><p>將原項目概念變為迭代或階段概念</p><p>增加瀑布開發模板</p>');
-
+$lang->misc->feature->all['12.5.3'][]      = array('title' => '優化年度總結', 'desc' => '');
+$lang->misc->feature->all['12.5.2'][]      = array('title' => '修復Bug', 'desc' => '');
 $lang->misc->feature->all['12.5.1'][]      = array('title' => '修復漏洞。', 'desc' => '');
 $lang->misc->feature->all['12.5.stable'][] = array('title' => '解決bug，完成高優先順序需求。', 'desc' => '');
 

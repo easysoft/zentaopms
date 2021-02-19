@@ -20,6 +20,7 @@ td.delayed{color:#fff; background: #e84e0f!important;}
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
 
 th.c-confirmed {text-align: center;}
+.c-severity{overflow: hidden; white-space: nowrap;}
 .c-id {text-overflow:ellipsis; white-space:nowrap;}
 
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
