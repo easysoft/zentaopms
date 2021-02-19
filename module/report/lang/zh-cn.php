@@ -119,13 +119,13 @@ $lang->report->annualData->baseInfo         = "基本数据";
 $lang->report->annualData->actionData       = "操作数据";
 $lang->report->annualData->contributionData = "贡献数据";
 $lang->report->annualData->radar            = "能力雷达图";
-$lang->report->annualData->projects         = "{$lang->projectCommon}数据";
+$lang->report->annualData->projects         = "{$lang->executionCommon}数据";
 $lang->report->annualData->products         = "{$lang->productCommon}数据";
 $lang->report->annualData->stories          = "需求数据";
 $lang->report->annualData->tasks            = "任务数据";
 $lang->report->annualData->bugs             = "Bug数据";
 $lang->report->annualData->cases            = "用例数据";
-$lang->report->annualData->statusStat       = "{$lang->storyCommon}/任务/Bug状态分布（截止今日）";
+$lang->report->annualData->statusStat       = "{$lang->SRCommon}/任务/Bug状态分布（截止今日）";
 
 $lang->report->annualData->companyUsers     = "公司总人数";
 $lang->report->annualData->deptUsers        = "部门人数";
@@ -150,8 +150,8 @@ $lang->report->annualData->taskMonthActions  = "每月任务操作情况";
 $lang->report->annualData->bugMonthActions   = "每月Bug操作情况";
 $lang->report->annualData->caseMonthActions  = "每月用例操作情况";
 
-$lang->report->annualData->projectFields['name']  = "{$lang->projectCommon}名称";
-$lang->report->annualData->projectFields['story'] = "完成{$lang->storyCommon}数";
+$lang->report->annualData->projectFields['name']  = "{$lang->executionCommon}名称";
+$lang->report->annualData->projectFields['story'] = "完成{$lang->SRCommon}数";
 $lang->report->annualData->projectFields['task']  = "完成任务数";
 $lang->report->annualData->projectFields['bug']   = "解决Bug数";
 
@@ -162,14 +162,14 @@ if(!empty($config->URAndSR))
 {
     $lang->report->annualData->productFields['requirement'] = "创建{$lang->URCommon}数";
 }
-$lang->report->annualData->productFields['story']    = "创建{$lang->storyCommon}数";
+$lang->report->annualData->productFields['story']    = "创建{$lang->SRCommon}数";
 $lang->report->annualData->productFields['finished'] = "完成需求数";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = "需求";
 $lang->report->annualData->objectTypeList['productplan'] = "计划";
 $lang->report->annualData->objectTypeList['release']     = "发布";
-$lang->report->annualData->objectTypeList['project']     = $lang->projectCommon;
+$lang->report->annualData->objectTypeList['project']     = $lang->executionCommon;
 $lang->report->annualData->objectTypeList['task']        = '任务';
 $lang->report->annualData->objectTypeList['repo']        = '代码';
 $lang->report->annualData->objectTypeList['bug']         = 'Bug';

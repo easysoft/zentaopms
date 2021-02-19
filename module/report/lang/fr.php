@@ -119,13 +119,13 @@ $lang->report->annualData->baseInfo         = "Basic Data";
 $lang->report->annualData->actionData       = "Operation Data";
 $lang->report->annualData->contributionData = "Contribution Data";
 $lang->report->annualData->radar            = "Capability Radar Chart";
-$lang->report->annualData->projects         = "{$lang->projectCommon} Data";
+$lang->report->annualData->projects         = "{$lang->executionCommon} Data";
 $lang->report->annualData->products         = "{$lang->productCommon} Data";
 $lang->report->annualData->stories          = "Story Data";
 $lang->report->annualData->tasks            = "Task Data";
 $lang->report->annualData->bugs             = "Bug Data";
 $lang->report->annualData->cases            = "Case Data";
-$lang->report->annualData->statusStat       = "{$lang->storyCommon}/task/bug status distribution (as of today)";
+$lang->report->annualData->statusStat       = "{$lang->SRCommon}/task/bug status distribution (as of today)";
 
 $lang->report->annualData->companyUsers     = "Number of company";
 $lang->report->annualData->deptUsers        = "Number of departments";
@@ -150,7 +150,7 @@ $lang->report->annualData->taskMonthActions  = "Monthly task operation";
 $lang->report->annualData->bugMonthActions   = "Monthly bug operation";
 $lang->report->annualData->caseMonthActions  = "Monthly case operation";
 
-$lang->report->annualData->projectFields['name']  = "{$lang->projectCommon} name";
+$lang->report->annualData->projectFields['name']  = "{$lang->executionCommon} name";
 $lang->report->annualData->projectFields['story'] = "Finished stories";
 $lang->report->annualData->projectFields['task']  = "Finished tasks";
 $lang->report->annualData->projectFields['bug']   = "Resolved bugs";
@@ -166,10 +166,10 @@ $lang->report->annualData->productFields['story']    = "Created stories";
 $lang->report->annualData->productFields['finished'] = "Finished stories";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
-$lang->report->annualData->objectTypeList['story']       = $lang->storyCommon;
+$lang->report->annualData->objectTypeList['story']       = $lang->SRCommon;
 $lang->report->annualData->objectTypeList['productplan'] = "Plan";
 $lang->report->annualData->objectTypeList['release']     = "Release";
-$lang->report->annualData->objectTypeList['project']     = $lang->projectCommon;
+$lang->report->annualData->objectTypeList['project']     = $lang->executionCommon;
 $lang->report->annualData->objectTypeList['task']        = 'Task';
 $lang->report->annualData->objectTypeList['repo']        = 'Code';
 $lang->report->annualData->objectTypeList['bug']         = 'Bug';
