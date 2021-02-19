@@ -895,7 +895,7 @@ class extensionModel extends model
                 $days = isset($order->days) ? $order->days : 0;
                 if($order->type == 'demo') $days = 31;
                 if($order->type == 'year') $days = 365;
-                $startDate  = $order->paidDate != '0000-00-00 00:00:00' ? $order->paidDate : $order->createdDate;
+                $startDate  = !helper::isZeroDate($order->paidDate) ? $order->paidDate : $order->createdDate;
                 if($days) $expiredDate = date('Y-m-d', strtotime($startDate) + $days * 24 * 3600);
             }
             else

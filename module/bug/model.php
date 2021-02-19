@@ -334,9 +334,9 @@ class bugModel extends model
     public function checkDelayBug($bug)
     {
         // Delayed or not?.
-        if($bug->deadline != '0000-00-00')
+        if(!helper::isZeroDate($bug->deadline))
         {
-            if($bug->resolvedDate and substr($bug->resolvedDate, 0, 10) != '0000-00-00')
+            if($bug->resolvedDate and !helper::isZeroDate($bug->resolvedDate))
             {
                 $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
             }
@@ -1339,7 +1339,6 @@ class bugModel extends model
             ->beginIF($projectID)->andWhere('t1.PRJ')->eq($projectID)->fi()
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($this->app->rawMethod == 'contribute')->andWhere("t1.status")->in('resolved,closed')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
@@ -2303,8 +2302,8 @@ class bugModel extends model
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
         /* Fix bug #2878. */
-        if(strpos($bugQuery, '`resolvedDate`') !== false) $bugQuery .= " AND `resolvedDate` != '0000-00-00 00:00:00'";
-        if(strpos($bugQuery, '`closedDate`') !== false)   $bugQuery .= " AND `closedDate` != '0000-00-00 00:00:00'";
+        if(strpos($bugQuery, ' `resolvedDate` ') !== false) $bugQuery = str_replace(' `resolvedDate` ', " `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` ", $bugQuery);
+        if(strpos($bugQuery, ' `closedDate` ') !== false)   $bugQuery = str_replace(' `closedDate` ', " `closedDate` != '0000-00-00 00:00:00' AND `closedDate` ", $bugQuery);
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
@@ -2522,13 +2521,15 @@ class bugModel extends model
                 }
                 break;
             case 'severity':
+                $severityValue     = zget($this->lang->bug->severityList, $bug->severity);
+                $hasCustomSeverity = !is_numeric($severityValue);
                 if($hasCustomSeverity)
                 {
-                    echo "<span class='label-severity-custom' data-severity='{$bug->severity}' title='" . zget($this->lang->bug->severityList, $bug->severity) . "'>" . zget($this->lang->bug->severityList, $bug->severity) . "</span>";
+                    echo "<span class='label-severity-custom' data-severity='{$bug->severity}' title='" . $severityValue . "'>" . $severityValue . "</span>";
                 }
                 else
                 {
-                    echo "<span class='label-severity' data-severity='{$bug->severity}' title='" . zget($this->lang->bug->severityList, $bug->severity) . "'></span>";
+                    echo "<span class='label-severity' data-severity='{$bug->severity}' title='" . $severityValue . "'></span>";
                 }
                 break;
             case 'pri':

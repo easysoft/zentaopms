@@ -29,41 +29,57 @@ $(document).ready(function()
         var passwordStrength = computePasswordStrength(password);
 
         var hasMD5    = typeof(md5) == 'function';
-        var rand      = $('input#verifyRand').val();
         var referer   = $('#referer').val();
         var link      = createLink('user', 'login');
         var keepLogin = $('#keepLoginon').attr('checked') == 'checked' ? 1 : 0;
+        var captcha   = $('#captcha').length == 1 ? $('#captcha').val() : '';
 
-        $.ajax
-        ({
-            url: link,
-            dataType: 'json',
-            method: 'POST',
-            data: 
-            {
-                "account": account, 
-                "password": hasMD5 ? md5(md5(password) + rand) : password,
-                'passwordStrength' : passwordStrength,
-                'referer' : referer,
-                'verifyRand' : rand,
-                'keepLogin' : keepLogin,
-            },
-            success:function(data)
-            {
-                if(data.result == 'fail') 
+        $.get(createLink('user', 'refreshRandom'), function(data)
+        {
+            var rand = data;
+            $.ajax
+            ({
+                url: link,
+                dataType: 'json',
+                method: 'POST',
+                data: 
                 {
-                    alert(data.message);
-                    return false;
-                }
-                else
+                    "account": account, 
+                    "password": hasMD5 ? md5(md5(password) + rand) : password,
+                    'passwordStrength' : passwordStrength,
+                    'referer' : referer,
+                    'verifyRand' : rand,
+                    'keepLogin' : keepLogin,
+                    'captcha' : captcha
+                },
+                success:function(data)
                 {
+                    if(data.result == 'fail') 
+                    {
+                        alert(data.message);
+                        if($('.captchaBox').length == 1) $('.captchaBox .input-group .input-group-addon img').click();
+                        return false;
+                    }
+
                     location.href = data.locate;
                 }
-            }
-        })
+            })
+        });
 
         return false;
     });
+
+    /**
+     *  Refresh captcha. 
+     */
+    $('.captchaBox .input-group .input-group-addon img').click(function()
+    {
+       var captchaLink = createLink('misc', 'captcha', "sessionVar=captcha");
+       captchaLink += captchaLink.indexOf('?') < 0 ? '?' : '&';
+       captchaLink += 's=' + Math.random();
+
+       $(this).attr('src', captchaLink);
+    })
 });
 
 /**

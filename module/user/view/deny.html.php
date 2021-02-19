@@ -55,15 +55,21 @@ include '../../common/view/header.lite.html.php';
     </div>
   </div>
 </div>
+<?php js::set('isOnlybody', $isOnlybody);?>
+<?php js::set('indexLink', helper::createLink('my', 'index'));?>
 </body>
 <script>
 /* Click my site to modify the left navigation. */
 function changeLeftNavigation()
 {
-    if(window.parent && window.parent.$.tabs)
+    if(window.parent && window.parent.$.tabs && isOnlybody)
     {
         window.parent.$.tabs.close();
         window.parent.$.tabs.open('my');
+    }
+    else
+    {
+        window.location.href = indexLink;
     }
 }
 </script>

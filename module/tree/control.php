@@ -312,10 +312,6 @@ class tree extends control
         }
 
         $module = $this->tree->getById($moduleID);
-        if($module->owner == null and $module->root != 0 and $module->type != 'task' and $type != 'doc')
-        {
-            $module->owner = $this->loadModel('product')->getById($module->root)->QD;
-        }
 
         if($type == 'task')
         {

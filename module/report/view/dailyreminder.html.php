@@ -32,7 +32,7 @@
         echo html::a($url . $link, $bug->title);
         ?>
         </td>
-        <td style='padding: 5px; text-align: center; border: 1px solid #e5e5e5;'><?php if($bug->deadline != '0000-00-00') echo $bug->deadline;?></td>
+        <td style='padding: 5px; text-align: center; border: 1px solid #e5e5e5;'><?php if(!helper::isZeroDate($bug->deadline)) echo $bug->deadline;?></td>
       </tr>
       <?php endforeach;?>
     </table>
@@ -60,7 +60,7 @@
         echo html::a($url . $link, $task->name);
         ?>
         </td>
-        <td style='padding: 5px; text-align: center; border: 1px solid #e5e5e5;'><?php if($task->deadline != '0000-00-00') echo $task->deadline;?></td>
+        <td style='padding: 5px; text-align: center; border: 1px solid #e5e5e5;'><?php if(!helper::isZeroDate($task->deadline)) echo $task->deadline;?></td>
       </tr>
       <?php endforeach;?>
     </table>

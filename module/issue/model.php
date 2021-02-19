@@ -164,7 +164,6 @@ class issueModel extends model
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('deleted')->eq('0')
             ->andWhere($type)->eq($account)->fi()
-            ->beginIF($this->app->rawMethod == 'contribute')->andWhere("status")->in('resolved,canceled,closed')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

@@ -366,7 +366,11 @@ class product extends control
         $linkStoriesProjects  = array();
 
         /* Link the projects stories under this product. */
-        $notRemovePRJ = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('product')->eq($productID)->fetchPairs('project', 'product');
+        $notRemovePRJ = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchPairs('project', 'product');
         if(!empty($notRemovePRJ)) $canChangePGM = false;
 
         /* Get the projects linked with this product. */

@@ -93,6 +93,8 @@
                 <th class='thWidth'><?php echo $lang->task->execution;?></th>
                 <td><?php echo html::select('project', $projects, $task->project, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
               </tr>
+              <?php else:?>
+              <?php echo html::hidden('project', $task->project);?>
               <?php endif;?>
               <tr>
                 <th class='thWidth'><?php echo $lang->task->module;?></th>

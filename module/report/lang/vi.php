@@ -109,49 +109,99 @@ $lang->report->proVersion   = '<a href="https://api.zentao.net/goto.php?item=pro
 $lang->report->proVersionEn = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Hãy thử ZenTao Pro để biết thêm!</a>';
 
 $lang->report->annualData = new stdclass();
-$lang->report->annualData->title            = "%s Tóm tắt công việc - %s";
-$lang->report->annualData->baseInfo         = "Thông tin cơ bản";
-$lang->report->annualData->logins           = "Đăng nhập";
-$lang->report->annualData->actions          = "Hành động";
-$lang->report->annualData->efforts          = "Chấm công";
-$lang->report->annualData->consumed         = "Giờ đã làm";
-$lang->report->annualData->foundBugs        = "Bug được tạo";
-$lang->report->annualData->createdCases     = "Tình huống được tạo";
-$lang->report->annualData->involvedProducts = "{$lang->productCommon} liên quan";
-$lang->report->annualData->createdPlans     = "Kế hoạch được tạo";
-$lang->report->annualData->createdStories   = "{$lang->SRCommon} được tạo";
+$lang->report->annualData->title            = "%s work summary in %s";
+$lang->report->annualData->exportByZentao   = "Export By ZenTao";
+$lang->report->annualData->scope            = "Scope";
+$lang->report->annualData->allUser          = "All Users";
+$lang->report->annualData->allDept          = "Whole Company";
+$lang->report->annualData->soFar            = " (%s)";
+$lang->report->annualData->baseInfo         = "Basic Data";
+$lang->report->annualData->actionData       = "Operation Data";
+$lang->report->annualData->contributionData = "Contribution Data";
+$lang->report->annualData->radar            = "Capability Radar Chart";
+$lang->report->annualData->projects         = "{$lang->projectCommon} Data";
+$lang->report->annualData->products         = "{$lang->productCommon} Data";
+$lang->report->annualData->stories          = "Story Data";
+$lang->report->annualData->tasks            = "Task Data";
+$lang->report->annualData->bugs             = "Bug Data";
+$lang->report->annualData->cases            = "Case Data";
+$lang->report->annualData->statusStat       = "{$lang->storyCommon}/task/bug status distribution (as of today)";
 
-$lang->report->annualData->productOverview = "{$lang->productCommon} {$lang->SRCommon} số lượng và Phần trăm";
-$lang->report->annualData->qaOverview      = "Bug {$lang->productCommon} số lượng và Phần trăm";
-$lang->report->annualData->projectOverview = "Tổng quan {$lang->executionCommon}";
-$lang->report->annualData->doneProject     = "{$lang->executionCommon} hoàn thành";
-$lang->report->annualData->doingProject    = "{$lang->executionCommon} đang thực hiện";
-$lang->report->annualData->suspendProject  = "{$lang->executionCommon} bị đình chỉ";
+$lang->report->annualData->companyUsers     = "Number of company";
+$lang->report->annualData->deptUsers        = "Number of departments";
+$lang->report->annualData->logins           = "Login times";
+$lang->report->annualData->actions          = "Number of operations";
+$lang->report->annualData->contributions    = "Number of contributions";
+$lang->report->annualData->consumed         = "Consumed";
+$lang->report->annualData->todos            = "Number of Todos";
 
-$lang->report->annualData->projectName   = "{$lang->executionCommon}";
-$lang->report->annualData->finishedStory = "{$lang->SRCommon} kết thúc";
-$lang->report->annualData->finishedTask  = 'Nhiệm vụ hoàn thành';
-$lang->report->annualData->foundBug      = 'Bug được báo cáo';
-$lang->report->annualData->resolvedBug   = 'Bug được giải quyết';
-$lang->report->annualData->productName   = "{$lang->productCommon}";
-$lang->report->annualData->planCount     = 'Kế hoạch';
-$lang->report->annualData->storyCount    = "{$lang->SRCommon}";
+$lang->report->annualData->storyStatusStat = "Story status distribution";
+$lang->report->annualData->taskStatusStat  = "Task status distribution";
+$lang->report->annualData->bugStatusStat   = "Bug status distribution";
+$lang->report->annualData->caseResultStat  = "Case result distribution";
+$lang->report->annualData->allStory        = "Total";
+$lang->report->annualData->allTask         = "Total";
+$lang->report->annualData->allBug          = "Total";
+$lang->report->annualData->undone          = "Undone";
+$lang->report->annualData->unresolve       = "Unresolve";
 
-$lang->report->annualData->qaData           = "Bug được tạo và Tình huống được tạo";
-$lang->report->annualData->totalCreatedBug  = 'Bug được báo cáo';
-$lang->report->annualData->totalCreatedCase = 'Tình huống được tạo';
+$lang->report->annualData->storyMonthActions = "Monthly story operation";
+$lang->report->annualData->taskMonthActions  = "Monthly task operation";
+$lang->report->annualData->bugMonthActions   = "Monthly bug operation";
+$lang->report->annualData->caseMonthActions  = "Monthly case operation";
 
-$lang->report->annualData->devData           = "Nhiệm vụ hoàn thành và Bug được giải quyết";
-$lang->report->annualData->totalFinishedTask = 'Nhiệm vụ hoàn thành';
-$lang->report->annualData->totalResolvedBug  = 'Bug được giải quyết';
-$lang->report->annualData->totalConsumed     = 'Đã làm';
+$lang->report->annualData->projectFields['name']  = "{$lang->projectCommon} name";
+$lang->report->annualData->projectFields['story'] = "Finished stories";
+$lang->report->annualData->projectFields['task']  = "Finished tasks";
+$lang->report->annualData->projectFields['bug']   = "Resolved bugs";
 
-$lang->report->annualData->poData          = "{$lang->SRCommon} được tạo, Ưu tiên và tình trạng";
-$lang->report->annualData->totalStoryPri   = "{$lang->SRCommon} Ưu tiên";
-$lang->report->annualData->totalStoryStage = "Giai đoạn {$lang->SRCommon}";
+$lang->report->annualData->productFields['name'] = "{$lang->productCommon} name";
+$lang->report->annualData->productFields['plan'] = "Plans";
+global $config;
+if(!empty($config->URAndSR))
+{
+    $lang->report->annualData->productFields['requirement'] = "Created requirements";
+}
+$lang->report->annualData->productFields['story']    = "Created stories";
+$lang->report->annualData->productFields['finished'] = "Finished stories";
 
-$lang->report->annualData->qaStatistics  = "Bug được tạo hàng tháng và Tình huống";
-$lang->report->annualData->poStatistics  = "{$lang->SRCommon} được tạo hàng tháng";
-$lang->report->annualData->devStatistics = "Nhiệm vụ hoàn thành háng tháng, giờ và Bug được giải quyết";
+$lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
+$lang->report->annualData->objectTypeList['story']       = $lang->storyCommon;
+$lang->report->annualData->objectTypeList['productplan'] = "Plan";
+$lang->report->annualData->objectTypeList['release']     = "Release";
+$lang->report->annualData->objectTypeList['project']     = $lang->projectCommon;
+$lang->report->annualData->objectTypeList['task']        = 'Task';
+$lang->report->annualData->objectTypeList['repo']        = 'Code';
+$lang->report->annualData->objectTypeList['bug']         = 'Bug';
+$lang->report->annualData->objectTypeList['build']       = 'Build';
+$lang->report->annualData->objectTypeList['testtask']    = 'TestTask';
+$lang->report->annualData->objectTypeList['case']        = 'Case';
+$lang->report->annualData->objectTypeList['doc']         = 'Document';
 
-$lang->report->annualData->unit = " ";
+$lang->report->annualData->actionList['create']    = 'Created';
+$lang->report->annualData->actionList['edit']      = 'Edited';
+$lang->report->annualData->actionList['close']     = 'Closed';
+$lang->report->annualData->actionList['review']    = 'Reviewed';
+$lang->report->annualData->actionList['gitCommit'] = 'GIT Commited';
+$lang->report->annualData->actionList['svnCommit'] = 'SVN Commited';
+$lang->report->annualData->actionList['start']     = 'Started';
+$lang->report->annualData->actionList['finish']    = 'Finished';
+$lang->report->annualData->actionList['assign']    = 'Assigned';
+$lang->report->annualData->actionList['activate']  = 'Activated';
+$lang->report->annualData->actionList['resolve']   = 'Resolved';
+$lang->report->annualData->actionList['run']       = 'Execute';
+$lang->report->annualData->actionList['change']    = 'Changed';
+$lang->report->annualData->actionList['pause']     = 'Paused';
+$lang->report->annualData->actionList['cancel']    = 'Canceled';
+$lang->report->annualData->actionList['confirm']   = 'Confirmed';
+$lang->report->annualData->actionList['createBug'] = 'Turn to bug';
+
+$lang->report->annualData->todoStatus['all']    = 'All';
+$lang->report->annualData->todoStatus['undone'] = 'Undone';
+$lang->report->annualData->todoStatus['done']   = 'Done';
+
+$lang->report->annualData->radarItems['product'] = "Product";
+$lang->report->annualData->radarItems['project'] = "Project";
+$lang->report->annualData->radarItems['devel']   = "Development";
+$lang->report->annualData->radarItems['qa']      = "QA";
+$lang->report->annualData->radarItems['other']   = "Other";

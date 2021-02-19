@@ -56,6 +56,7 @@ $lang->user->type             = '用户类型';
 $lang->user->cropAvatar       = '剪切头像';
 $lang->user->cropAvatarTip    = '拖拽选框来选择头像剪切范围';
 $lang->user->cropImageTip     = '所使用的头像图片过小，建议图片大小至少为 48x48，当前图片大小为 %s';
+$lang->user->captcha          = '验证码';
 
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';
@@ -128,6 +129,7 @@ $lang->user->lockWarning  = "您还有%s次尝试机会。";
 $lang->user->loginLocked  = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
 $lang->user->weakPassword = "您的密码强度小于系统设定。";
 $lang->user->errorWeak    = "密码不能使用【%s】这些常用弱口令。";
+$lang->user->errorCaptcha = "验证码不正确！";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研发';

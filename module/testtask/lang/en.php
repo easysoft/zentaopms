@@ -100,7 +100,7 @@ $lang->testtask->legendBasicInfo = 'Basic Info';
 
 $lang->testtask->statusList['wait']    = 'Waiting';
 $lang->testtask->statusList['doing']   = 'Doing';
-$lang->testtask->statusList['done']    = 'Done';
+$lang->testtask->statusList['done']    = 'Closed';
 $lang->testtask->statusList['blocked'] = 'Blocked';
 
 $lang->testtask->priList[0] = '';

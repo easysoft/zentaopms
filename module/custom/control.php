@@ -405,7 +405,7 @@ class custom extends control
      * @return void
      */
     public function browseStoryConcept()
-    {   
+    {
         /* Process menu.*/
         $this->app->loadLang('custom');
         $this->lang->custom->menu = $this->lang->subject->menu;
@@ -475,24 +475,23 @@ class custom extends control
     }
 
     /**
-     * Delete story concept.
-     * @param  int    $key
-     * 
+     * Set story concept.
+     *
+     * @param  int   $key
      * @access public
      * @return void
      */
     public function setDefaultConcept($key = 0)
     {
         $this->loadModel('setting')->setItem('system.custom.URSR', $key);
-
-        die(js::locate(inlink('browseStoryConcept'), 'parent'));
+        die(js::reload('parent'));
     }
 
     /**
      * Delete story concept.
+     *
      * @param  int    $key
      * @param  string $confirm yse|no
-     * 
      * @access public
      * @return void
      */

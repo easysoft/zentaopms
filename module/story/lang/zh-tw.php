@@ -162,11 +162,11 @@ $lang->story->needNotReviewList[1] = '不需要評審';
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';
 
-$lang->story->statusList['']          = '';
-$lang->story->statusList['draft']     = '草稿';
-$lang->story->statusList['active']    = '激活';
-$lang->story->statusList['closed']    = '已關閉';
-$lang->story->statusList['changed']   = '已變更';
+$lang->story->statusList['']        = '';
+$lang->story->statusList['draft']   = '草稿';
+$lang->story->statusList['active']  = '激活';
+$lang->story->statusList['closed']  = '已關閉';
+$lang->story->statusList['changed'] = '已變更';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未開始';
@@ -311,10 +311,10 @@ $lang->story->report->charts['storysPerClosedReason']   = '按關閉原因來進
 $lang->story->report->charts['storysPerChange']         = '按變更次數來進行統計';
 
 $lang->story->report->options = new stdclass();
-$lang->story->report->options->graph   = new stdclass();
-$lang->story->report->options->type    = 'pie';
-$lang->story->report->options->width   = 500;
-$lang->story->report->options->height  = 140;
+$lang->story->report->options->graph  = new stdclass();
+$lang->story->report->options->type   = 'pie';
+$lang->story->report->options->width  = 500;
+$lang->story->report->options->height = 140;
 
 $lang->story->report->storysPerProduct      = new stdclass();
 $lang->story->report->storysPerModule       = new stdclass();
