@@ -23,7 +23,7 @@ $unfoldStories = zget($unfoldStories, $productID, array());
 js::set('unfoldStories', $unfoldStories);
 js::set('unfoldAll',     $lang->project->treeLevel['all']);
 js::set('foldAll',       $lang->project->treeLevel['root']);
-js::set('storyType', $storyType);
+js::set('storyType',     $storyType);
 $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
 $isProjectStroy = $this->app->rawModule == 'projectstory';
 ?>
@@ -504,8 +504,8 @@ $('#branch' + branchID).closest('li').addClass('active');
 
 $(function()
 {
-    // Update table summary text
-    <?php $storyCommon = $lang->SRCommon;?>
+    // Update table summary text.
+    <?php $storyCommon = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;?>
     var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
     $('#productStoryForm').table(
     {
