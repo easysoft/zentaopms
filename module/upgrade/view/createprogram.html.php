@@ -62,7 +62,7 @@
   </tr>
   <tr class='PGMParams'>
     <th><?php echo $lang->project->acl;?></th>
-    <td><?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
+    <td><?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, 'open', '', 'block'));?></td>
   </tr>
 </table>
 <div class='table-foot text-center'><?php echo html::submitButton();?></div>
