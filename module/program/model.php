@@ -700,7 +700,7 @@ class programModel extends model
             ->andWhere('grade')->eq($childGrade)
             ->fetch('sumBudget');
 
-        return $parentProgram->budget - $childSumBudget;
+        return (float)$parentProgram->budget - (float)$childSumBudget;
     }
 
     /**
