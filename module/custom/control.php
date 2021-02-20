@@ -505,33 +505,15 @@ class custom extends control
         else
         {
             $lang = $this->app->getClientLang();
-            $this->dao->delete()->from(TABLE_LANG)
-                ->where('lang')->eq($lang) 
-                ->andWhere('section')->eq('URSRList') 
-                ->andWhere('`key`')->eq($key) 
-                ->exec();
+            $this->custom->deleteItems("lang=$lang&section=URSRList&key=$key");
 
-            $defaultConcept = $this->dao->select('`value`')->from(TABLE_CONFIG)
-                ->where('module')->eq('custom')
-                ->andWhere('`key`')->eq('URSR')
-                ->fetch('value');
-
+            $defaultConcept = $this->loadModel('setting')->getItem('owner=system&module=custom&key=URSR');
             $this->dao->update(TABLE_CONFIG)
                 ->set('`value`')->eq($defaultConcept)
                 ->where('module')->eq('common')
                 ->andWhere('`key`')->eq('URSR')
                 ->andWhere('`value`')->eq($key)
                 ->exec();
-
-            /* Stay default concept. */
-            if($defaultConcept == $key)
-            {
-                $this->dao->update(TABLE_CONFIG)
-                    ->set('`value`')->eq(1)
-                    ->where('module')->eq('custom')
-                    ->andWhere('`key`')->eq('URSR')
-                    ->exec();
-            }
 
             die(js::locate(inlink('browseStoryConcept'), 'parent'));
         }

@@ -27,8 +27,8 @@ $lang->personnel->created       = '創建';
 $lang->personnel->finished      = '完成';
 $lang->personnel->wait          = '待處理';
 $lang->personnel->resolved      = '解決';
-$lang->personnel->UR            = '用需';
-$lang->personnel->SR            = '軟需';
+$lang->personnel->UR            = $lang->URCommon;
+$lang->personnel->SR            = $lang->SRCommon;
 
 $lang->personnel->whitelist      = '白名單列表';
 $lang->personnel->addWhitelist   = '添加白名單';

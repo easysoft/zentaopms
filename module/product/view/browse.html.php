@@ -23,10 +23,15 @@ $unfoldStories = zget($unfoldStories, $productID, array());
 js::set('unfoldStories', $unfoldStories);
 js::set('unfoldAll',     $lang->project->treeLevel['all']);
 js::set('foldAll',       $lang->project->treeLevel['root']);
-js::set('storyType', $storyType);
+js::set('storyType',     $storyType);
 $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
+$isProjectStroy = $this->app->rawModule == 'projectstory';
 ?>
+<style>
+.btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
+</style>
 <div id="mainMenu" class="clearfix">
+  <?php if(!$isProjectStroy):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php
@@ -39,6 +44,7 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
       ?>
     </div>
   </div>
+  <?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if($this->app->rawModule == 'projectstory'): ?>
     <div class='btn-group'>
@@ -51,6 +57,16 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
         }
         ?>
       </ul>
+    </div>
+    <div class="btn-group">
+      <a href="javascript:;" class="btn btn-link" style="padding-right: 0;"> <?php echo $moduleName;?> </a>
+      <?php
+      if($moduleID)
+      {
+          $removeLink = $browseType == 'bymodule' ? $this->createLink($this->app->rawModule, $this->app->rawMethod, "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
+          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted btn btn-link' style='padding-left: 0;'");
+      }
+      ?>
     </div>
     <?php endif;?>
     <?php
@@ -110,7 +126,6 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
         ?>
       </ul>
     </div>
-    <?php $isProjectStroy = $this->app->rawModule == 'projectstory';?>
     <?php if(common::canModify('product', $product)):?>
     <div class='btn-group dropdown-hover'>
       <?php echo html::a('javascript:;', "<i class='icon icon-plus'></i> {$lang->story->create} </span><span class='caret'>", '', "class='btn btn-secondary'");?>
@@ -251,11 +266,13 @@ $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory :
         <tbody>
           <?php foreach($stories as $story):?>
           <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
+            <?php $story->from = $from;?>
             <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
           </tr>
           <?php if(!empty($story->children)):?>
           <?php $i = 0;?> 
           <?php foreach($story->children as $key => $child):?>
+          <?php $child->from = $from;?>
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
@@ -487,8 +504,8 @@ $('#branch' + branchID).closest('li').addClass('active');
 
 $(function()
 {
-    // Update table summary text
-    <?php $storyCommon = $lang->SRCommon;?>
+    // Update table summary text.
+    <?php $storyCommon = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;?>
     var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
     $('#productStoryForm').table(
     {

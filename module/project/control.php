@@ -121,6 +121,7 @@ class project extends control
         $this->loadModel('search');
         $this->loadModel('task');
         $this->loadModel('datatable');
+        $this->loadModel('setting');
 
         if(common::hasPriv('project', 'create')) $this->lang->TRActions = html::a($this->createLink('project', 'create', ''), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
@@ -132,6 +133,14 @@ class project extends control
         $executionID = $execution->id;
         $products    = $this->loadModel('product')->getProductPairsByProject($executionID);
         setcookie('preProjectID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        /* Save the recently five executions visited in the cookie. */
+        $recentExecutions = isset($this->config->project->recentExecutions) ? explode(',', $this->config->project->recentExecutions) : array();
+        array_unshift($recentExecutions, $executionID);
+        $recentExecutions = array_unique($recentExecutions);
+        $recentExecutions = array_slice($recentExecutions, 0, 5);
+        $this->setting->setItem($this->app->user->account . 'common.project.recentExecutions', implode(',', $recentExecutions));
+        $this->setting->setItem($this->app->user->account . 'common.project.lastExecution', $executionID);
 
         if($this->cookie->preProjectID != $executionID)
         {
@@ -2471,18 +2480,25 @@ class project extends control
      */
     public function ajaxGetRecentExecutions()
     {
-        $executions = $this->project->getRecentExecutions();
-        if(!empty($executions))
+        $allExecution = $this->project->getRecentExecutions();
+        if(!empty($allExecution))
         {
-            $executionsName = array();
-            foreach($executions as $execution) $executionsName[] = $execution->name;
-            $executionsPinYin = common::convert2Pinyin($executionsName);
-            foreach($executions as $execution)
+            foreach($allExecution as $type => $executionList)
             {
-                $link = helper::createLink('project', 'task', 'executionID=' . $execution->id, '', false, $execution->project);
-                $execution->code = empty($execution->code) ? $execution->name : $execution->code;
-                $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
-                echo html::a($link, '<i class="icon icon-' . $this->lang->icons[$execution->type] . '"></i> ' . $execution->name, '', "class='search-list-item' title='$execution->name' $dataKey");
+                echo '<div class="heading">'. $this->lang->project->$type . '</div>';
+                $color          = $type == 'recent' ? 'text-brown' : '';
+                $executions     = $allExecution[$type];
+                $executionsName = array();
+                foreach($executions as $execution) $executionsName[] = $execution->name;
+                $executionsPinYin = common::convert2Pinyin($executionsName);
+                foreach($executions as $execution)
+                {
+                    $link = helper::createLink('project', 'task', 'executionID=' . $execution->id, '', false, $execution->project);
+                    $execution->code = empty($execution->code) ? $execution->name : $execution->code;
+                    $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
+                    $class   = "class='search-list-item $color' title='$execution->name' $dataKey";
+                    echo html::a($link, '<i class="icon icon-' . $this->lang->icons[$execution->type] . '"></i> ' . $execution->name, '', $class);
+                }
             }
         }
         else
@@ -2545,7 +2561,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function all($status = 'all', $projectID = 0, $orderBy = 'id_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $projectID = 0, $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('programplan');

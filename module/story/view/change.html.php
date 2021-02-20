@@ -89,4 +89,5 @@
 <?php js::set('oldStoryVerify', $story->verify);?>
 <?php js::set('changed', 0);?>
 <?php js::set('storyType', $story->type);?>
+<?php js::set('rawModule', $this->app->rawModule);?>
 <?php include '../../common/view/footer.html.php';?>

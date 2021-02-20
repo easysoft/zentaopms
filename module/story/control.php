@@ -528,10 +528,11 @@ class story extends control
      * Edit a story.
      *
      * @param  int    $storyID
+     * @param  string $from product|project
      * @access public
      * @return void
      */
-    public function edit($storyID)
+    public function edit($storyID, $from = 'product')
     {
         if(!empty($_POST))
         {
@@ -552,8 +553,15 @@ class story extends control
             }
             else
             {
-                die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+                $module = $from == 'project' ? 'projectstory' : 'story';
+                die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
             }
+        }
+
+        if($from == 'project')
+        {
+            $this->app->rawModule = 'projectstory';
+            $this->lang->navGroup->story = 'project';
         }
 
         $this->commonAction($storyID);
@@ -726,10 +734,11 @@ class story extends control
      * Change a story.
      *
      * @param  int    $storyID
+     * @param  string $from product|project
      * @access public
      * @return void
      */
-    public function change($storyID)
+    public function change($storyID, $from = 'product')
     {
         if(!empty($_POST))
         {
@@ -749,7 +758,14 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            $module = $from == 'project' ? 'projectstory' : 'story';
+            die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+        }
+
+        if($from == 'project')
+        {
+            $this->app->rawModule = 'projectstory';
+            $this->lang->navGroup->story = 'project';
         }
 
         $this->commonAction($storyID);
@@ -829,20 +845,30 @@ class story extends control
         $users        = $this->user->getPairs('noletter');
 
         /* Set the menu. */
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($product->id);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
-        if($this->app->rawModule == 'projectstory')
-        {
-              $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
-              $this->lang->product->menu = $this->lang->menu->{$project->model};
-        }
-
         if($from == 'project')
         {
-            $project = $this->loadModel('project')->getById($param);
-            if($project->status == 'done') $from = '';
+            $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
+            $this->app->rawModule = 'project';
+            $this->lang->navGroup->story = 'project';
+            $this->lang->product->menu   = $this->lang->menu->{$project->model};
+            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $project->id);
+
+            /* If status is done, can not create task from story. */
+            $execution = $this->loadModel('project')->getById($param);
+            if($execution->status == 'done') $from = '';
+        }
+        else
+        {
+            $this->lang->product->menu = $this->lang->product->viewMenu;
+            $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+            $this->lang->product->switcherMenu   = $this->product->getSwitcher($product->id);
+            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+
+            if($this->app->rawModule == 'projectstory')
+            {
+                $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
+                $this->lang->product->menu = $this->lang->menu->{$project->model};
+            }
         }
 
         $this->executeHooks($storyID);
@@ -913,10 +939,11 @@ class story extends control
      * Review a story.
      *
      * @param  int    $storyID
+     * @param  string $from product|project
      * @access public
      * @return void
      */
-    public function review($storyID)
+    public function review($storyID, $from = 'product')
     {
         $this->product;
         $this->lang->product->menu           = $this->lang->product->viewMenu;
@@ -938,7 +965,8 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+            $module = $from == 'project' ? 'projectstory' : 'story';
+            die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
         }
 
         /* Get story and product. */
@@ -948,7 +976,15 @@ class story extends control
         $this->story->replaceURLang($story->type);
 
         /* Set menu. */
-        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+        if($from == 'project')
+        {
+            $this->app->rawModule = 'projectstory';
+            $this->lang->navGroup->story = 'project';
+        }
+        else
+        {
+            $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+        }
 
         /* Set the review result options. */
         if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);
@@ -1366,7 +1402,6 @@ class story extends control
         $this->session->set('caseList',     $this->app->getURI(true));
         $this->session->set('bugList',      $this->app->getURI(true));
         $this->session->set('revisionList', $this->app->getURI(true));
-
 
         /* Load pager and get tracks. */
         $this->app->loadClass('pager', $static = true);

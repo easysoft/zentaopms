@@ -3,9 +3,9 @@
   <?php if($programs):?>
   <tr>
     <th><?php echo $lang->upgrade->existPGM;?></th>
-    <td>
+    <td class='required'>
       <div class='input-group'>
-        <?php echo html::select("programs", $programs, '', "class='form-control' onchange='getProjectByProgram(this)'");?>
+        <?php echo html::select("programs", $programs, $programID, "class='form-control' onchange='getProjectByProgram(this)'");?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />
@@ -16,10 +16,10 @@
     </td>
   </tr>
   <?php endif;?>
-  <?php if($projects):?>
+  <?php if(count($projects) > 1):?>
   <tr>
     <th><?php echo $lang->upgrade->existPRJ;?></th>
-    <td>
+    <td class='required'>
       <div class='input-group'>
         <?php echo html::select("projects", $projects, '', "class='form-control'");?>
         <span class='input-group-addon'>
@@ -39,10 +39,6 @@
   <tr class='PGMParams'>
     <th><?php echo $lang->program->PRJName;?></th>
     <td class='required'><?php echo html::input("PRJName", isset($sprintName) ? $sprintName : '', "class='form-control'");?></td>
-  </tr>
-  <tr class='PGMParams'>
-    <th><?php echo $lang->program->PRJCode;?></th>
-    <td><?php echo html::input("code", '', "class='form-control'");?></td>
   </tr>
   <tr class='PGMParams'>
     <th><?php echo $lang->program->PRJPM;?></th>
@@ -66,7 +62,7 @@
   </tr>
   <tr class='PGMParams'>
     <th><?php echo $lang->project->acl;?></th>
-    <td><?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
+    <td><?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, 'open', '', 'block'));?></td>
   </tr>
 </table>
 <div class='table-foot text-center'><?php echo html::submitButton();?></div>

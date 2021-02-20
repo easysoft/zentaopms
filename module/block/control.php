@@ -1315,7 +1315,7 @@ class block extends control
         $count = isset($this->params->count) ? (int)$this->params->count : 15;
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $count, 1);
-        $this->view->executionStats = $this->loadModel('project')->getExecutionStats($this->session->PRJ, $type, 0, 0, 30, 'id_asc', $pager);
+        $this->view->executionStats = $this->loadModel('project')->getExecutionStats($this->session->PRJ, $type, 0, 0, 30, 'id_desc', $pager);
     }
 
     /**

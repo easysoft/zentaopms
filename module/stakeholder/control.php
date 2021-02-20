@@ -215,18 +215,6 @@ class stakeholder extends control
     }
 
     /**  
-     * Ajax get outside company.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetOutsideCompany()
-    {
-        $companys = $this->loadModel('company')->getOutsideCompanies();
-        die(html::select('company', $companys, '', "class='form-control chosen'"));
-    }
-
-    /**  
      * Ajax get control.
      *
      * @access public

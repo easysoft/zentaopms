@@ -298,16 +298,14 @@ class report extends control
         if(empty($userID)) unset($depts[0]);
 
         $accounts = array();
-        if($dept)
-        {
-            $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
-        }
+        if($dept) $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
         if($userID)
         {
             $user = $this->loadModel('user')->getById($userID, 'id');
 			$dept = $user->dept;
             $accounts = array($user->account => ($user->realname ? $user->realname : $user->account));
         }
+        if(empty($accounts)) $accounts = $this->user->getPairs('noletter|noclosed');
         if($accounts) $accounts = array_keys($accounts);
 
         if($dept)

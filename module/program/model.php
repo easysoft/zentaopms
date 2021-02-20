@@ -618,7 +618,7 @@ class programModel extends model
     {
         echo(js::alert($this->lang->program->accessDenied));
 
-        if(!$this->server->http_referer) die(js::locate(helper::createLink('program', 'browse')));
+        if(!$this->server->http_referer) die(js::locate(helper::createLink('program', 'prjbrowse')));
 
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
         if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('program', 'browse')));
@@ -739,7 +739,7 @@ class programModel extends model
             ->andWhere('grade')->eq($childGrade)
             ->fetch('sumBudget');
 
-        return $parentProgram->budget - $childSumBudget;
+        return (float)$parentProgram->budget - (float)$childSumBudget;
     }
 
     /**
@@ -864,6 +864,8 @@ class programModel extends model
      */
     public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
     {
+        $this->session->set('moreProjectLink', $this->app->getURI(true));
+
         $this->loadModel('project');
         $currentProjectName = $this->lang->program->common;
         if($projectID)
@@ -1777,8 +1779,8 @@ class programModel extends model
 
         if($col->show)
         {
-            $class = "c-$id";
             $title = '';
+            $class = "c-$id" . (in_array($id, ['PRJBudget', 'teamCount']) ? ' c-number' : ' c-name');
 
             if($id == 'id') $class .= ' cell-id';
 
@@ -1803,15 +1805,17 @@ class programModel extends model
             }
             if($id == 'PRJBudget')
             {
-                $budget = $project->budget != 0 ? zget($this->lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $this->lang->program->future;
-                $title  = "title='$budget'";
+                $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format($project->budget, 1);
+                $budgetTitle   = $project->budget != 0 ? zget($this->lang->program->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $this->lang->program->future;
+
+                $title = "title='$budgetTitle'";
             }
 
             if($id == 'PRJEstimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->project->workHour}'";
             if($id == 'PRJConsume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->project->workHour}'";
             if($id == 'PRJSurplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->project->workHour}'";
 
-            echo "<td class='c-name " . $class . "' $title>";
+            echo "<td class='$class' $title>";
             switch($id)
             {
                 case 'id':
@@ -1848,7 +1852,7 @@ class programModel extends model
                     echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->program->statusList, $project->status) . "</span>";
                     break;
                 case 'PRJBudget':
-                    echo $budget;
+                    echo $budgetTitle;
                     break;
                 case 'teamCount':
                     echo $project->teamCount;

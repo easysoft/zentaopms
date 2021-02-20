@@ -11,6 +11,7 @@
  */
 $lang->company->common   = 'Unternehmen';
 $lang->company->index    = "Start";
+$lang->company->create   = "Add Company";
 $lang->company->edit     = "Bearbeiten";
 $lang->company->view     = "Unternehmensinfo";
 $lang->company->browse   = "Benutzerliste";

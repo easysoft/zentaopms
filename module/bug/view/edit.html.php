@@ -90,7 +90,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                   <td>
                     <div class='input-group'>
                       <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
-                      <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $bug->branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+                      <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $bug->branch, "onchange='loadBranch();' class='form-control'");?>
                     </div>
                   </td>
                 </tr>

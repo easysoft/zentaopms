@@ -227,6 +227,9 @@ class misc extends control
      */
     public function captcha($sessionVar = 'captcha', $uuid = '')
     {
+        $obLevel = ob_get_level();
+        for($i = 0; $i < $obLevel; $i++) ob_end_clean();
+
         header('Content-Type: image/jpeg');
         $captcha = $this->app->loadClass('captcha');
         $this->session->set($sessionVar, $captcha->getPhrase());

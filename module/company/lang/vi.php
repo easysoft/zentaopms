@@ -11,6 +11,7 @@
  */
 $lang->company->common   = 'Doanh nghiệp';
 $lang->company->index    = "Trang doanh nghiệp";
+$lang->company->create   = "Add Company";
 $lang->company->edit     = "Sửa doanh nghiệp";
 $lang->company->view     = "Thông tin doanh nghiệp";
 $lang->company->browse   = "Danh sách người dùng";

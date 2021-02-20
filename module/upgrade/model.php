@@ -632,6 +632,10 @@ class upgradeModel extends model
         case '12_5_2':
             $this->saveLogs('Execute 12_5_2');
             $this->appendExec('12_5_2');
+        case '15_0':
+            $this->saveLogs('Execute 15_0');
+            $this->execSQL($this->getUpgradeFile('15.0'));
+            $this->appendExec('15_0');
         }
 
         $this->deletePatch();
@@ -815,6 +819,7 @@ class upgradeModel extends model
             case '12_5':
             case '12_5_1':
             case '12_5_2':
+            case '15_0'  : $confirmContent .= file_get_contents($this->getUpgradeFile('15.0'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -4013,7 +4018,12 @@ class upgradeModel extends model
             if(dao::isError()) return false;
 
             $programID = $this->dao->lastInsertId();
-            $this->dao->update(TABLE_PROJECT)->set('grade')->eq(1)->set('path')->eq(",{$programID},")->where('id')->eq($programID)->exec();
+            $this->dao->update(TABLE_PROGRAM)
+                ->set('grade')->eq(1)
+                ->set('path')->eq(",{$programID},")
+                ->set('`order`')->eq($programID * 5)
+                ->where('id')->eq($programID)
+                ->exec();
         }
         else
         {
@@ -4029,7 +4039,6 @@ class upgradeModel extends model
             $project->name          = $data->PRJName;
             $project->type          = 'project';
             $project->model         = 'scrum';
-            $project->code          = $data->code;
             $project->parent        = $programID;
             $project->status        = 'wait';
             $project->begin         = $data->begin;
@@ -4042,7 +4051,6 @@ class upgradeModel extends model
             $project->acl           = $data->acl;
 
             $this->lang->project->name  = $this->lang->program->PRJName;
-            $this->lang->project->code  = $this->lang->program->PRJCode;
 
             $this->dao->insert(TABLE_PROJECT)->data($project)
                 ->batchcheck('name', 'notempty')
@@ -4051,7 +4059,12 @@ class upgradeModel extends model
             if(dao::isError()) return false;
 
             $projectID = $this->dao->lastInsertId();
-            $this->dao->update(TABLE_PROJECT)->set('grade')->eq(2)->set('path')->eq(",{$programID},{$projectID},")->where('id')->eq($projectID)->exec();
+            $this->dao->update(TABLE_PROJECT)
+                ->set('grade')->eq(2)
+                ->set('path')->eq(",{$programID},{$projectID},")
+                ->set('`order`')->eq($projectID * 5)
+                ->where('id')->eq($projectID)
+                ->exec();
         }
         else
         {
@@ -4073,6 +4086,8 @@ class upgradeModel extends model
      */
     public function processMergedData($programID, $projectID, $productIdList = array(), $sprintIdList = array())
     {
+        if(!$projectID) die(js::alert($this->lang->upgrade->projectEmpty));
+
         /* Product linked objects. */
         $this->dao->update(TABLE_STORY)->set('PRJ')->eq($programID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_RELEASE)->set('PRJ')->eq($programID)->where('product')->in($productIdList)->exec();
@@ -4086,6 +4101,18 @@ class upgradeModel extends model
         /* Project linked objects. */
         $this->dao->update(TABLE_TASK)->set('PRJ')->eq($projectID)->where('project')->in($sprintIdList)->exec();
         $this->dao->update(TABLE_DOC)->set('PRJ')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($sprintIdList) . ')')->exec();
+
+        /* Put sprint stories into project story mdoule. */
+        $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
+            ->where('project')->in($sprintIdList)
+            ->fetchAll();
+
+        foreach($sprintStories as $sprintStory)
+        {
+            $projectStory = $sprintStory;
+            $projectStory->project = $projectID;
+            $this->dao->insert(TABLE_PROJECTSTORY)->data($projectStory)->exec();
+        }
 
         /* Compute product acl. */
         $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();

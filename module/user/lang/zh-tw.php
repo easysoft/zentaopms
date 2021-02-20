@@ -52,6 +52,7 @@ $lang->user->verifyPassword   = '您的密碼';
 $lang->user->resetPassword    = '忘記密碼';
 $lang->user->score            = '積分';
 $lang->user->name             = '名稱';
+$lang->user->type             = '用戶類型';
 $lang->user->cropAvatar       = '剪切頭像';
 $lang->user->cropAvatarTip    = '拖拽選框來選擇頭像剪切範圍';
 $lang->user->cropImageTip     = '所使用的頭像圖片過小，建議圖片大小至少為 48x48，當前圖片大小為 %s';
@@ -144,6 +145,9 @@ $lang->user->genderList['f'] = '女';
 
 $lang->user->thirdPerson['m'] = '他';
 $lang->user->thirdPerson['f'] = '她';
+
+$lang->user->typeList['inside']  = $lang->user->inside;
+$lang->user->typeList['outside'] = $lang->user->outside;
 
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>弱</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>中</span>";

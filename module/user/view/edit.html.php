@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::import($jsRoot . 'md5.js');?>
+<?php js::set('type', $user->type);?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">
@@ -28,22 +29,30 @@
         <tr>
           <th class='w-140px'><?php echo $lang->user->realname;?></th>
           <td class='w-p40'><?php echo html::input('realname', $user->realname, "class='form-control'");?></td>
-          <th class='w-130px'><?php echo $lang->user->join;?></th>
-          <td><?php echo html::input('join', formatTime($user->join), "class='form-control form-date'");?></td>  
+          <th class='w-130px'><?php echo $lang->user->role;?></th>
+          <td><?php echo html::select('role', $lang->user->roleList, $user->role, "class='form-control'");?></td>
         </tr>
-        <tr>
           <th class='w-140px'><?php echo $lang->user->dept;?></th>
           <td class='w-p40'><?php echo html::select('dept', $depts, $user->dept, "class='form-control chosen'");?></td>
-          <th><?php echo $lang->user->role;?></th>
-          <td><?php echo html::select('role', $lang->user->roleList, $user->role, "class='form-control'");?></td>
+          <th><?php echo $lang->user->join;?></th>
+          <td><?php echo html::input('join', formatTime($user->join), "class='form-control form-date'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->group->priv;?></th>
-          <td colspan='3'><?php echo html::select('groups[]', $groups, $userGroups, 'size=3 multiple=multiple class="form-control chosen"');?></td>
+          <td><?php echo html::select('groups[]', $groups, $userGroups, 'size=3 multiple=multiple class="form-control chosen"');?></td>
+          <th><?php echo $lang->user->company;?></th>
+          <td>
+            <div class='input-group'>
+            <?php echo html::select('company', $companies, $user->company, "class='form-control chosen'");?>
+            <span class='input-group-addon'><?php echo html::checkBox('new', $lang->company->create);?></span>
+            </div>
+          </td>
         </tr>
         <tr>
+          <th><?php echo $lang->user->type;?></th>
+          <td><?php echo html::radio('type', $lang->user->typeList , $user->type, "onclick='changeType(this.value)'");?></td>
           <th><?php echo $lang->user->gender;?></th>
-          <td colspan="3"><?php echo html::radio('gender', (array)$lang->user->genderList, $user->gender);?></td>
+          <td><?php echo html::radio('gender', (array)$lang->user->genderList, $user->gender);?></td>
         </tr>
       </table>
       <table align='center' class='table table-form'>

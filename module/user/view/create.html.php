@@ -25,6 +25,19 @@
       <table align='center' class="table table-form">
         <?php $thClass = common::checkNotCN() ? 'w-enVerifyPassword' : 'w-verifyPassword';?>
         <tr>
+          <th class='<?php echo $thClass?>'><?php echo $lang->user->type;?></th>
+          <td colspan='2'><?php echo html::radio('type', $lang->user->typeList , 'inside', "onclick='changeType(this.value)'");?></td>
+        </tr>
+        <tr id='companyBox' class='hide'>
+          <th><?php echo $lang->user->company;?></th>
+          <td>
+            <div class='input-group'>
+            <?php echo html::select('company', $companies, '', "class='form-control chosen'");?>
+            <span class='input-group-addon'><?php echo html::checkBox('new', $lang->company->create);?></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
           <th class='<?php echo $thClass?>'><?php echo $lang->user->dept;?></th>
           <td class='w-p40'><?php echo html::select('dept', $depts, $deptID, "class='form-control chosen'");?></td>
         </tr>

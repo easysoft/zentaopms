@@ -98,6 +98,8 @@ $lang->program->changeProgramTip       = '修改项目集后，该项目关联�
 $lang->program->linkedProjectsTip      = '关联的项目如下';
 $lang->program->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';
 
+$lang->program->tenThousand = '万';
+
 $lang->program->unitList['CNY'] = '人民币';
 $lang->program->unitList['USD'] = '美元';
 $lang->program->unitList['HKD'] = '港元';
@@ -116,7 +118,7 @@ $lang->program->unitList['NZD'] = '新西兰元';
 $lang->program->unitList['THB'] = '泰国铢';
 $lang->program->unitList['SGD'] = '新加坡元';
 
-$lang->program->currencySymbol['CNY'] = '￥';
+$lang->program->currencySymbol['CNY'] = '¥';
 $lang->program->currencySymbol['USD'] = '$';
 $lang->program->currencySymbol['HKD'] = 'HK$';
 $lang->program->currencySymbol['NTD'] = 'NT$';

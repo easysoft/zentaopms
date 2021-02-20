@@ -49,6 +49,7 @@
             <th class='<?php echo $minWidth?> required'><?php echo $lang->user->account;?></th>
             <th class='<?php echo $minWidth?> required'><?php echo $lang->user->realname;?></th>
             <th class='w-120px'><?php echo $lang->user->role;?></th>
+            <th class='w-120px'><?php echo $lang->user->type;?></th>
             <th class='<?php echo $minWidth . zget($visibleFields, 'commiter', ' hidden')?>'><?php echo $lang->user->commiter;?></th>
             <th class='<?php echo $minWidth . zget($visibleFields, 'email', ' hidden')?>'>   <?php echo $lang->user->email;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'join', ' hidden')?>'>         <?php echo $lang->user->join;?></th>
@@ -72,6 +73,7 @@
         <?php
         $dept  = ($first and empty($user->dept)) ? 0 : (empty($user->dept) ? 'ditto' : $user->dept); 
         $role  = ($first and empty($user->role)) ? 0 : (empty($user->role) ? 'ditto' : $user->role); 
+        $type  = empty($user->type) ? 'inside' : $user->type;
         $first = false;
         ?>
         <tr class='text-center'>
@@ -80,6 +82,7 @@
           <td><?php echo html::input("account[$user->id]",  $user->account, "class='form-control'");?></td>
           <td><?php echo html::input("realname[$user->id]", $user->realname, "class='form-control'");?></td>
           <td><?php echo html::select("role[$user->id]",    $lang->user->roleList, $role, "class='form-control'");?></td>
+          <td><?php echo html::select("type[$user->id]",    $lang->user->typeList, $type, "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'commiter', 'hidden')?>'><?php echo html::input("commiter[$user->id]", $user->commiter, "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'email', 'hidden')?>'>   <?php echo html::input("email[$user->id]",    $user->email, "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'join', 'hidden')?>'>    <?php echo html::input("join[$user->id]",     $user->join, "class='form-control form-date'");?></td>

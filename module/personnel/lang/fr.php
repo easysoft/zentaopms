@@ -27,8 +27,8 @@ $lang->personnel->created       = 'Created';
 $lang->personnel->finished      = 'Finished';
 $lang->personnel->wait          = 'Pending';
 $lang->personnel->resolved      = 'Resolved';
-$lang->personnel->UR            = 'UR';
-$lang->personnel->SR            = 'SR';
+$lang->personnel->UR            = $lang->URCommon;
+$lang->personnel->SR            = $lang->SRCommon;
 
 $lang->personnel->whitelist      = 'Whitelist';
 $lang->personnel->addWhitelist   = 'Add Whitelist';

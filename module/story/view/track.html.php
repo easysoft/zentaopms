@@ -38,6 +38,7 @@
               <?php endif;?>
             </th>
             <th><?php echo $lang->story->story;?></th>
+            <th><?php echo $lang->story->tasks;?></th>
             <th><?php echo $lang->story->design;?></th>
             <th><?php echo $lang->story->case;?></th>
             <th><?php echo $lang->story->repoCommit;?></th>
@@ -61,24 +62,29 @@
             <?php if($i != 1) echo '<tr>';?>
               <td style='padding-left: 10px;'><?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '',"title='$story->title' data-group='$openModel'");?></td>
               <td>
-                <?php foreach($story->design as $designID => $design):?>
+                <?php foreach($story->tasks as $taskID => $task):?>
+                <?php echo html::a($this->createLink('task', 'view', "taskID=$taskID"), $task->name, '', "title='$task->name'") . '<br/>';?>
+                <?php endforeach;?>
+              </td>
+              <td>
+                <?php foreach($story->designs as $designID => $design):?>
                 <?php echo html::a($this->createLink('design', 'view', "designID=$designID"), $design->name, '', "title='$design->name'") . '<br/>';?> 
                 <?php endforeach;?>
               </td>
               <td>
-                <?php foreach($story->case as $caseID => $case):?>
+                <?php foreach($story->cases as $caseID => $case):?>
                 <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', false, $case->PRJ), $case->title, '', "title='$case->title'") . '<br/>';?> 
                 <?php endforeach;?>
               </td>
               <td>
-                <?php foreach($story->revision as $revision => $repoID):?>
+                <?php foreach($story->revisions as $revision => $repoID):?>
                 <?php 
                 echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision) . '<br/>';
                 ?> 
                 <?php endforeach;?>
               </td>
               <td>
-                <?php foreach($story->bug as $bugID => $bug):?>
+                <?php foreach($story->bugs as $bugID => $bug):?>
                 <?php echo html::a($this->createLink('bug', 'view', "bugID=$bugID"), $bug->title, '', "title='$bug->title'") . '<br/>';?>
                 <?php endforeach;?>
               </td>

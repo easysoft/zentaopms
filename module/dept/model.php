@@ -384,7 +384,7 @@ class deptModel extends model
      * Get user pairs of a department.
      *
      * @param  int    $deptID
-     * @param  string $params
+     * @param  string $params  userid|outside|all
      * @access public
      * @return array
      */
@@ -392,9 +392,11 @@ class deptModel extends model
     {
         $childDepts = $this->getAllChildID($deptID);
         $keyField   = strpos($params, 'useid') !== false ? 'id' : 'account';
+        $type       = (strpos($params, 'outside') !== false) ? 'outside' : 'inside';
 
         return $this->dao->select("$keyField, realname")->from(TABLE_USER)
             ->where('deleted')->eq(0)
+            ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($deptID)->andWhere('dept')->in($childDepts)->fi()
             ->orderBy('account')
             ->fetchPairs();
