@@ -435,7 +435,7 @@ class upgrade extends control
 
         $this->view->title    = $this->lang->upgrade->mergeProgram;
         $this->view->programs = $programs;
-        $this->view->projects = $this->upgrade->getProjectPairsByProgram(key($programs));
+        $this->view->projects = array('' => '') + $this->upgrade->getProjectPairsByProgram(key($programs));
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->display();
@@ -478,7 +478,7 @@ class upgrade extends control
      */
     public function ajaxGetProjectPairsByProgram($programID = 0)
     {
-        $projects = $this->upgrade->getProjectPairsByProgram($programID);
+        $projects = array('' => '') + $this->upgrade->getProjectPairsByProgram($programID);
         die(html::select('projects', $projects, '', 'class="form-control"'));
     }
 

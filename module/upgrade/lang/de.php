@@ -87,6 +87,7 @@ $lang->upgrade->repo      = 'Repo';
 $lang->upgrade->mergeRepo = 'Merge Repo';
 
 $lang->upgrade->newProgram         = 'Create';
+$lang->upgrade->projectEmpty       = 'Project must be not empty.';
 $lang->upgrade->mergeSummary       = "Dear users, there are %s products and %s iterations in your system waiting for Migration. By System Calculation, we recommend your migration plan as follows, you can also adjust according to your own situation:";
 $lang->upgrade->mergeByProductLine = "PRODUCTLINE-BASED iterations: Consolidate the entire product line and the products and iterations below it into one large project.";
 $lang->upgrade->mergeByProduct     = "PRODUCT-BASED iterations: You can select multiple products and their lower iterations to merge into a large project, or you can select a product to merge its lower iterations into a larger project";
