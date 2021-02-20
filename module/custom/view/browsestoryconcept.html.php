@@ -23,23 +23,24 @@
       <table class='table table-form'>
         <thead>
           <tr>
+            <?php if(common::hasPriv('custom', 'setDefaultConcept')):?>
+            <th class='w-60px text-center'><?php echo $lang->custom->default;?> </th>
+            <?php endif;?>
             <th class='text-left'><?php echo $lang->custom->URConcept;?> </th>
             <th class='text-left'><?php echo $lang->custom->SRConcept;?> </th>
-            <th class='w-100px text-center'><?php echo $lang->custom->buildin;?> </th>
-            <th class='w-100px text-center'><?php echo $lang->custom->isDefault;?> </th>
             <th class='w-100px text-left'><?php echo $lang->actions;?> </th>
           </tr>
         </thead>
         <tbody>
         <?php foreach($URSRList as $key => $URSR):?>
           <tr>
+            <?php if(common::hasPriv('custom', 'setDefaultConcept')):?>
+            <td class='text-center'><input type="radio" name='default' value='<?php echo $key;?>' <?php if($key == $config->custom->URSR) echo 'checked';?>></td>
+            <?php endif;?>
             <td class='text-left'><?php echo $URSR['URName'];?></td>
             <td class='text-left'><?php echo $URSR['SRName'];?></td>
-            <td class='text-center'><?php echo zget($lang->custom->tipRangeList, $URSR['system'], '');?></td>
-            <td class='text-center'><?php if($key == $config->custom->URSR) echo "<i class='icon icon-check'></i>";?></td>
             <td class='c-actions'>
               <?php $disabled = $key == $config->custom->URSR ? "disabled=disabled" : '';?>
-              <?php if(common::hasPriv('custom', 'setDefaultConcept'))  echo html::a($this->createLink('custom', 'setDefaultConcept', "id=$key"), "<i class='icon icon-hand-right'></i>", 'hiddenwin', "class='btn' title={$lang->custom->setDefaultConcept}");?>
               <?php if(common::hasPriv('custom', 'editStoryConcept'))   echo html::a($this->createLink('custom', 'editStoryConcept', "id=$key", '', true), "<i class='icon icon-edit'></i>", '', "class='btn iframe' title={$lang->edit}");?>
               <?php if(common::hasPriv('custom', 'deleteStoryConcept')) echo html::a($this->createLink('custom', 'deleteStoryConcept', "id=$key"), "<i class='icon icon-trash'></i>", 'hiddenwin', "class='btn' $disabled title={$lang->delete} data-group='system'");?>
             </td>
@@ -49,4 +50,11 @@
       </table>
   </div>
 </div>
+<script>
+$("input[name='default']").change(function()
+{
+    var checked = $(this).val();
+    hiddenwin.location.href = createLink('custom', 'setDefaultConcept', 'key=' + checked);
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>
