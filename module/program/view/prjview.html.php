@@ -103,7 +103,7 @@
             echo $this->buildOperateMenu($project, 'view');
 
             echo "<div class='divider'></div>";
-            common::printIcon('program', 'PRJEdit', $params . "&programID=$project->parent", $project, 'button', 'edit', '', '', '', '', $lang->edit);
+            common::printIcon('program', 'PRJEdit', $params, $project, 'button', 'edit', '', '', '', '', $lang->edit);
             common::printIcon('program', 'PRJDelete', $params, $project, 'button', 'trash', 'hiddenwin', '', '', '', $lang->delete);
         }
         ?>

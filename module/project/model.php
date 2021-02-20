@@ -1737,19 +1737,19 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function updateProducts($projectID)
+    public function updateProducts($projectID, $products = '')
     {
         $this->loadModel('user');
+        $products           = isset($_POST['products']) ? $_POST['products'] : $products;
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
         $members = array_keys($this->getTeamMembers($projectID));
-        if(!isset($_POST['products']))
+        if(empty($products))
         {
             $this->user->updateUserView(array_keys($oldProjectProducts), 'product', $members);
             return true;
         }
 
-        $products = $_POST['products'];
         $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
         $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();;
 

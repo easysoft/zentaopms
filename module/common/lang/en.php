@@ -160,7 +160,7 @@ $lang->program->menu->browse = array('link' => 'Program|program|pgmbrowse|', 'al
 
 $lang->PRJ = new stdclass();
 $lang->PRJ->menu = new stdclass();
-$lang->PRJ->menu->browse = array('link' => 'Project|program|prjbrowse|', 'alias' => 'prjcreate,prjedit,prjgroup,prjmanagepriv,prjmanageview,prjmanagemembers');
+$lang->PRJ->menu->browse = array('link' => 'Project|program|prjbrowse|', 'alias' => 'prjcreate,prjedit,prjgroup,prjmanagepriv,prjmanageview,prjmanagemembers,prjbatchedit');
 
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => 'Product|program|pgmproduct|program=%s', 'alias' => 'view');

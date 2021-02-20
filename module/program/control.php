@@ -951,16 +951,18 @@ class program extends control
      * Edit a project.
      *
      * @param  int    $projectID
-     * @param  int    $programID
      * @param  string $from  PRJ|pgmbrowse|pgmproject
      * @access public
      * @return void
      */
-    public function PRJEdit($projectID = 0, $programID = 0, $from = 'PRJ')
+    public function PRJEdit($projectID = 0, $from = 'PRJ')
     {
         $this->app->loadLang('custom');
         $this->app->loadLang('project');
         $this->loadModel('productplan');
+
+        $project   = $this->program->getPRJByID($projectID);
+        $programID = $project->parent;
 
         /* Navigation stay in program when enter from program list. */
         if($from == 'PRJ')
@@ -998,12 +1000,11 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
-        $project = $this->program->getPRJByID($projectID);
 
         $linkedBranches = array();
         $productPlans   = array(0 => '');
-        $allProducts    = $programID != $project->parent ? $this->program->getPGMProductPairs($programID) : $this->program->getPGMProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts = $programID != $project->parent ? array() : $this->project->getProducts($projectID);
+        $allProducts    = $this->program->getPGMProductPairs($project->parent, 'assign', 'noclosed');
+        $linkedProducts = $this->project->getProducts($projectID);
         $parentProgram  = $this->program->getPGMByID($programID);
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
@@ -1043,6 +1044,33 @@ class program extends control
         $this->view->parentProgram     = $parentProgram;
         $this->view->remainBudget      = $this->program->getParentRemainBudget($parentProgram) + $project->budget;
         $this->view->budgetUnitList    = $this->program->getBudgetUnitList();
+
+        $this->display();
+    }
+
+    /**
+     * Batch edit projects.
+     *
+     * @param  string $from
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function PRJBatchEdit($from = 'prjbrowse', $programID = 0)
+    {
+        if($from == 'pgmproject')
+        {
+            $this->app->rawMethod = 'pgmproject';
+            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
+            $this->program->setPGMViewMenu($programID);
+        }
+
+        if($from == 'prjbrowse')
+        {
+            $this->lang->program->menu = $this->lang->PRJ->menu;
+        }
+
+        $projectIdList = $this->post->projectIdList;
 
         $this->display();
     }
@@ -1779,5 +1807,43 @@ class program extends control
         if(!$program) die(js::error($this->lang->notFound) . js::locate('back'));
 
         echo $this->fetch('program', 'PGMProduct', "programID=$programID");
+    }
+
+    /**
+     * AJAX: Check products.
+     *
+     * @param  int    $programID
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function ajaxCheckProduct($programID, $projectID)
+    {
+        $project   = $this->program->getPRJByID($projectID);
+        $oldTopPGM = $this->program->getTopPGMByID($project->parent);
+        $newTopPGM = $this->program->getTopPGMByID($programID);
+
+        if($oldTopPGM == $newTopPGM) die();
+
+        $response  = array();
+        $response['result'] = true;
+
+        $multiLinkedProducts = $this->program->getMultiLinkedProducts($projectID);
+        if($multiLinkedProducts)
+        {
+            $multiLinkedProjects = array();
+            foreach($multiLinkedProducts as $productID => $product)
+            {
+                $multiLinkedProjects[$productID] = $this->loadModel('product')->getProjectPairsByProduct($productID);
+            }
+            $response['result']              = false;
+            $response['message']             = $multiLinkedProducts;
+            $response['multiLinkedProjects'] = $multiLinkedProjects;
+        }
+        else
+        {
+            $response['message']   = $this->lang->program->changeProgramTip;
+        }
+        die(json_encode($response));
     }
 }

@@ -79,7 +79,7 @@
               </ul>
             </div>
             <?php endif;?>
-            <?php common::printIcon('program', 'PRJEdit', "projectID=$project->id&programID=$project->parent&from=PRJ", $project, 'list', 'edit', '',  '', false, "data-group='project'", '', $project->id);?>
+            <?php common::printIcon('program', 'PRJEdit', "projectID=$project->id&from=PRJ", $project, 'list', 'edit', '',  '', false, "data-group='project'", '', $project->id);?>
             <?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', false, "data-group='project'", '', $project->id);?>
             <?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'list', 'lock', '',  '', false, "data-group='project'", '', $project->id);?>
             <?php if(common::hasPriv('program','PRJManageProducts') || common::hasPriv('program','PRJWhitelist') || common::hasPriv('program','PRJDelete')):?>
