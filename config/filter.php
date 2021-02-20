@@ -175,7 +175,6 @@ $filter->program->ajaxgetpgmdropmenu->cookie['showClosed'] = 'code';
 $filter->project->default->cookie['lastProject']      = 'int';
 $filter->project->default->cookie['lastPRJ']          = 'int';
 $filter->project->default->cookie['projectMode']      = 'code';
-$filter->project->default->cookie['recentExecutions'] = 'code';
 $filter->project->story->cookie['storyModuleParam']   = 'int';
 $filter->project->story->cookie['storyPreProjectID']  = 'int';
 $filter->project->story->cookie['storyProductParam']  = 'int';
@@ -186,7 +185,6 @@ $filter->project->task->cookie['preProjectID']        = 'int';
 $filter->project->task->cookie['productBrowseParam']  = 'int';
 $filter->project->task->cookie['projectTaskOrder']    = 'reg::orderBy';
 $filter->project->task->cookie['windowWidth']         = 'int';
-$filter->project->task->cookie['recentExecutions'] = 'code';
 $filter->project->export->cookie['checkedItem']       = 'reg::checked';
 
 $filter->qa->default->cookie['lastProduct']  = 'int';

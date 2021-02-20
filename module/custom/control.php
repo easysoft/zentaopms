@@ -507,8 +507,9 @@ class custom extends control
             $lang = $this->app->getClientLang();
             $this->custom->deleteItems("lang=$lang&section=URSRList&key=$key");
 
+            $defaultConcept = $this->loadModel('setting')->getItem('owner=system&module=custom&key=URSR');
             $this->dao->update(TABLE_CONFIG)
-                ->set('`value`')->eq($this->config->URSR)
+                ->set('`value`')->eq($defaultConcept)
                 ->where('module')->eq('common')
                 ->andWhere('`key`')->eq('URSR')
                 ->andWhere('`value`')->eq($key)
