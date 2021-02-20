@@ -4018,7 +4018,12 @@ class upgradeModel extends model
             if(dao::isError()) return false;
 
             $programID = $this->dao->lastInsertId();
-            $this->dao->update(TABLE_PROJECT)->set('grade')->eq(1)->set('path')->eq(",{$programID},")->where('id')->eq($programID)->exec();
+            $this->dao->update(TABLE_PROGRAM)
+                ->set('grade')->eq(1)
+                ->set('path')->eq(",{$programID},")
+                ->set('`order`')->eq($programID * 5)
+                ->where('id')->eq($programID)
+                ->exec();
         }
         else
         {
@@ -4054,7 +4059,12 @@ class upgradeModel extends model
             if(dao::isError()) return false;
 
             $projectID = $this->dao->lastInsertId();
-            $this->dao->update(TABLE_PROJECT)->set('grade')->eq(2)->set('path')->eq(",{$programID},{$projectID},")->where('id')->eq($projectID)->exec();
+            $this->dao->update(TABLE_PROJECT)
+                ->set('grade')->eq(2)
+                ->set('path')->eq(",{$programID},{$projectID},")
+                ->set('`order`')->eq($projectID * 5)
+                ->where('id')->eq($projectID)
+                ->exec();
         }
         else
         {
