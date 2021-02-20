@@ -208,6 +208,7 @@ $lang->resource->program->PRJStart             = 'PRJStart';
 $lang->resource->program->PRJSuspend           = 'PRJSuspend';
 $lang->resource->program->PRJClose             = 'PRJClose';
 $lang->resource->program->PRJActivate          = 'PRJActivate';
+$lang->resource->program->PRJUpdateOrder       = 'PRJUpdateOrder';
 $lang->resource->program->PRJDelete            = 'PRJDelete';
 $lang->resource->program->PRJView              = 'PRJView';
 $lang->resource->program->PRJWhitelist         = 'PRJWhitelist';
