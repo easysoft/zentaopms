@@ -185,13 +185,14 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function mergeProgram($type = 'productline')
+    public function mergeProgram($type = 'productline', $programID = 0)
     {
         $this->session->set('upgrading', true);
         $this->app->loadLang('program');
 
         if($_POST)
         {
+            $programID = 0;
             if($type == 'productline')
             {
                 $linkedProducts = array();
@@ -281,7 +282,7 @@ class upgrade extends control
                 }
             }
 
-            die(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type"), 'parent'));
+            die(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type&programID=$programID"), 'parent'));
         }
 
         /* Get no merged product and project count. */
@@ -433,11 +434,12 @@ class upgrade extends control
 
         $programs = $this->upgrade->getProgramPairs();
 
-        $this->view->title    = $this->lang->upgrade->mergeProgram;
-        $this->view->programs = $programs;
-        $this->view->projects = array('' => '') + $this->upgrade->getProjectPairsByProgram(key($programs));
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noempty');
-        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->title     = $this->lang->upgrade->mergeProgram;
+        $this->view->programs  = $programs;
+        $this->view->programID = $programID;
+        $this->view->projects  = array('' => '') + $this->upgrade->getProjectPairsByProgram(key($programs));
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noempty');
+        $this->view->groups    = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
