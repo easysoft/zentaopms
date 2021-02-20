@@ -276,12 +276,18 @@ class projectModel extends model
      */
     public function saveState($executionID, $executions)
     {
+        /* When the cookie and session do not exist, get it from the database. */
+        if(empty($executionID) && isset($this->config->project->lastExecution) && isset($executions[$this->config->project->lastExecution]))
+        {
+            $this->session->set('project', $this->config->project->lastExecution);
+            return $this->session->project;
+        }
+
         if($executionID > 0) $this->session->set('project', (int)$executionID);
         if($executionID == 0 and $this->cookie->lastProject) 
         {
             /* Project link is project-task. */
             $executionID = (int)$this->cookie->lastProject;
-            $executions  = $this->getExecutionPairs($this->session->PRJ);
             $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
             $this->session->set('project', $executionID);
         }
@@ -3608,7 +3614,7 @@ class projectModel extends model
         $projectPairs = $this->loadModel('program')->getPRJPairsByIdList($projectIdList);
         $productPairs = $this->getStageLinkProductPairs($stageIdList);
 
-        $recentExecutions = explode('join', $this->cookie->recentExecutions);
+        $recentExecutions = isset($this->config->project->recentExecutions) ? explode(',', $this->config->project->recentExecutions) : array();
         $allExecution     = array('recent' => array(), 'mine' => array());
         foreach($executions as $execution)
         {

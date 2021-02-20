@@ -117,17 +117,11 @@ class project extends control
         if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
         setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        /* Save the recently five executions visited in the cookie. */
-        $recentExecutions = $this->cookie->recentExecutions ? explode('join', $this->cookie->recentExecutions) : array();
-        array_unshift($recentExecutions, $executionID);
-        $recentExecutions = array_unique($recentExecutions);
-        $recentExecutions = array_slice($recentExecutions, 0, 5);
-        setcookie("recentExecutions", implode('join', $recentExecutions), $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
         $this->loadModel('tree');
         $this->loadModel('search');
         $this->loadModel('task');
         $this->loadModel('datatable');
+        $this->loadModel('setting');
 
         if(common::hasPriv('project', 'create')) $this->lang->TRActions = html::a($this->createLink('project', 'create', ''), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
@@ -139,6 +133,14 @@ class project extends control
         $executionID = $execution->id;
         $products    = $this->loadModel('product')->getProductPairsByProject($executionID);
         setcookie('preProjectID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        /* Save the recently five executions visited in the cookie. */
+        $recentExecutions = isset($this->config->project->recentExecutions) ? explode(',', $this->config->project->recentExecutions) : array();
+        array_unshift($recentExecutions, $executionID);
+        $recentExecutions = array_unique($recentExecutions);
+        $recentExecutions = array_slice($recentExecutions, 0, 5);
+        $this->setting->setItem($this->app->user->account . 'common.project.recentExecutions', implode(',', $recentExecutions));
+        $this->setting->setItem($this->app->user->account . 'common.project.lastExecution', $executionID);
 
         if($this->cookie->preProjectID != $executionID)
         {
