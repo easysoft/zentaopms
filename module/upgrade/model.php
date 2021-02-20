@@ -4025,7 +4025,6 @@ class upgradeModel extends model
             $project->name          = $data->PRJName;
             $project->type          = 'project';
             $project->model         = 'scrum';
-            $project->code          = $data->code;
             $project->parent        = $programID;
             $project->status        = 'wait';
             $project->begin         = $data->begin;
@@ -4038,7 +4037,6 @@ class upgradeModel extends model
             $project->acl           = $data->acl;
 
             $this->lang->project->name  = $this->lang->program->PRJName;
-            $this->lang->project->code  = $this->lang->program->PRJCode;
 
             $this->dao->insert(TABLE_PROJECT)->data($project)
                 ->batchcheck('name', 'notempty')

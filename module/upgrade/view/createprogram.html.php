@@ -41,10 +41,6 @@
     <td class='required'><?php echo html::input("PRJName", isset($sprintName) ? $sprintName : '', "class='form-control'");?></td>
   </tr>
   <tr class='PGMParams'>
-    <th><?php echo $lang->program->PRJCode;?></th>
-    <td><?php echo html::input("code", '', "class='form-control'");?></td>
-  </tr>
-  <tr class='PGMParams'>
     <th><?php echo $lang->program->PRJPM;?></th>
     <td><?php echo html::select('PM', array('' => '') + $users, '', "class='form-control chosen'");?></td>
   </tr>
