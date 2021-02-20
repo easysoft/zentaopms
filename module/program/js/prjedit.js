@@ -20,7 +20,7 @@ $(function()
 
             if(data && !data.result)
             {
-                $('#promptTable td').remove();
+                $('#promptTable tbody tr').remove();
                 for(var i in data.message)
                 {
                     var product = data.message[i];

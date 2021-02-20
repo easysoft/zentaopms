@@ -415,6 +415,7 @@ class program extends control
         setCookie("lastPGM", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $this->app->session->set('PGMProject', $this->app->getURI(true));
+        $this->app->session->set('projectList', $this->app->getURI(true));
 
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
@@ -799,6 +800,7 @@ class program extends control
         if($this->session->moreProjectLink) $this->lang->program->mainMenuAction = html::a($this->session->moreProjectLink, '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
         $this->app->session->set('PRJBrowse', $this->app->getURI(true));
         $this->loadModel('datatable');
+        $this->session->set('projectList', $this->app->getURI(true));
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -1069,7 +1071,18 @@ class program extends control
             $this->lang->program->menu = $this->lang->PRJ->menu;
         }
 
-        $projectIdList = $this->post->projectIdList;
+        $projectIdList = $this->post->projectIdList ? $this->post->projectIdList : die(js::locate($this->session->projectList, 'parent'));
+        $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+
+        foreach($projects as $project) $appendPMUsers[$project->PM] = $project->PM;
+
+        $this->view->title         = $this->lang->program->batchEdit;
+        $this->view->position[]    = $this->lang->program->batchEdit;
+
+        $this->view->projectIdList = $projectIdList;
+        $this->view->projects      = $projects;
+        $this->view->programList   = $this->program->getParentPairs();
+        $this->view->PMUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $appendPMUsers);
 
         $this->display();
     }

@@ -183,9 +183,12 @@
       </div>
       <div class="modal-body">
         <table class='table table-form' id='promptTable'>
-          <tr>
-            <th class='text-left'><?php echo $lang->program->multiLinkedProductsTip;?></th>
-          </tr>
+          <thead>
+            <tr>
+              <th class='text-left'><?php echo $lang->program->multiLinkedProductsTip;?></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
         </table>
       </div>
     </div>
