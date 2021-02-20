@@ -481,7 +481,7 @@ class upgrade extends control
     public function ajaxGetProjectPairsByProgram($programID = 0)
     {
         $projects = array('' => '') + $this->upgrade->getProjectPairsByProgram($programID);
-        die(html::select('projects', $projects, '', 'class="form-control"'));
+        die(html::select('projects', $projects, '', 'class="form-control prj-exist"'));
     }
 
     /**

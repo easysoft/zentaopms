@@ -1,44 +1,44 @@
 <table class='table table-form'>
   <caption class='strong'><?php echo $lang->upgrade->program;?></caption>
-  <?php if($programs):?>
   <tr>
-    <th><?php echo $lang->upgrade->existPGM;?></th>
+    <th>
+      <span class="pgm-exist hidden"><?php echo $lang->upgrade->existPGM;?></span>
+      <span class="pgm-no-exist"><?php echo $lang->program->PGMName;?></span></th>
+    </th>
     <td class='required'>
       <div class='input-group'>
-        <?php echo html::select("programs", $programs, $programID, "class='form-control' onchange='getProjectByProgram(this)'");?>
+        <?php echo html::select("programs", $programs, $programID, "class='form-control hidden pgm-exist' onchange='getProjectByProgram(this)'");?>
+        <?php echo html::input("PGMName", isset($programName) ? $programName : '', "class='form-control pgm-no-exist'");?>
+        <?php if(count(programs)):?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />
             <label for="newProgram0"><?php echo $lang->upgrade->newProgram;?></label>
           </div>
         </span>
+        <?php endif;?>
       </div>
     </td>
   </tr>
-  <?php endif;?>
-  <?php if(count($projects) > 1):?>
   <tr>
-    <th><?php echo $lang->upgrade->existPRJ;?></th>
+    <th>
+      <span class="prj-exist hidden"><?php echo $lang->upgrade->existPRJ;?></span>
+      <span class="prj-no-exist"><?php echo $lang->program->PRJName;?></span></th>
+</th>
     <td class='required'>
       <div class='input-group'>
-        <?php echo html::select("projects", $projects, '', "class='form-control'");?>
+        <?php echo html::select("projects", $projects, '', "class='form-control hidden prj-exist'");?>
+        <?php echo html::input("PRJName", isset($sprintName) ? $sprintName : '', "class='form-control prj-no-exist'");?>
+        <?php if(count($projects)):?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProject" value="0" checked onchange="toggleProject(this)" id="newProject0" />
             <label for="newProject0"><?php echo $lang->upgrade->newProgram;?></label>
           </div>
         </span>
+        <?php endif;?>
       </div>
     </td>
-  </tr>
-  <?php endif;?>
-  <tr class='PGMParams'>
-    <th class='w-90px'><?php echo $lang->program->PGMName;?></th>
-    <td class='required'><?php echo html::input("PGMName", isset($programName) ? $programName : '', "class='form-control'");?></td>
-  </tr>
-  <tr class='PGMParams'>
-    <th><?php echo $lang->program->PRJName;?></th>
-    <td class='required'><?php echo html::input("PRJName", isset($sprintName) ? $sprintName : '', "class='form-control'");?></td>
   </tr>
   <tr class='PGMParams'>
     <th><?php echo $lang->program->PRJPM;?></th>

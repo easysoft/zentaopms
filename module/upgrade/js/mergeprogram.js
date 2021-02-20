@@ -119,6 +119,7 @@ function getProjectByProgram(obj)
         if($('#newProject0').is(':checked'))
         {
             $('#projects').attr('disabled', 'disabled');
+            $('#projects').addClass('hidden');
         }
     })
 }
@@ -128,24 +129,21 @@ function toggleProgram(obj)
     var $obj       = $(obj);
     if($obj.length == 0) return false;
 
-    var $programs  = $obj.closest('table').find('#programs');
-    var $PGMParams = $obj.closest('table').find('.PGMParams');
+    var $programs = $obj.closest('table').find('#programs');
     if($obj.prop('checked'))
     {
+        $('form .pgm-no-exist').removeClass('hidden');
+        $('form .pgm-exist').addClass('hidden');
+        $programs.attr('disabled', 'disabled');
+
         $('form #newProject0').prop('checked', true);
         toggleProject($('form #newProject0'));
-
-        $('#PGMName').closest('tr').show();
-        $programs.attr('disabled', 'disabled');
-        $PGMParams.removeClass('hidden');
     }
     else
     {
-        $('#PGMName').closest('tr').hide();
+        $('form .pgm-exist').removeClass('hidden');
+        $('form .pgm-no-exist').addClass('hidden');
         $programs.removeAttr('disabled');
-        $PGMParams.addClass('hidden');
-
-        toggleProject($('form #newProject0'));
     }
 }
 
@@ -155,20 +153,26 @@ function toggleProject(obj)
     if($obj.length == 0) return false;
 
     var $projects  = $obj.closest('table').find('#projects');
+    var $programs  = $obj.closest('table').find('#programs');
     var $PGMParams = $obj.closest('table').find('.PGMParams');
     if($obj.prop('checked'))
     {
-        $projects.attr('disabled', 'disabled');
+        $('form .prj-no-exist').removeClass('hidden');
+        $('form .prj-exist').addClass('hidden');
         $PGMParams.removeClass('hidden');
-        if(!$('form #newProgram0').prop('checked')) $('#PGMName').closest('tr').hide();
+        $projects.attr('disabled', 'disabled');
     }
     else
     {
-        $projects.removeAttr('disabled');
+        $('form .prj-exist').removeClass('hidden');
+        $('form .prj-no-exist').addClass('hidden');
         $PGMParams.addClass('hidden');
+        $projects.removeAttr('disabled');
 
         $('form #newProgram0').prop('checked', false);
-        $('#programs').removeAttr('disabled');
+        toggleProgram($('form #newProgram0'));
+
+        getProjectByProgram(programs);
     }
 }
 
