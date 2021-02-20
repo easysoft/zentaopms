@@ -369,12 +369,19 @@ class product extends control
         $notRemovePRJ = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('project')
             ->andWhere('t2.deleted')->eq('0')
             ->fetchPairs('project', 'product');
+
         if(!empty($notRemovePRJ)) $canChangePGM = false;
 
         /* Get the projects linked with this product. */
-        $projectPairs = $this->product->getProjectPairsByProduct($productID);
+        $projectPairs = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchPairs();
 
         if(!empty($projectPairs))
         {
