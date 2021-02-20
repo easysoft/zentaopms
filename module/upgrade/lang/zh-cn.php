@@ -87,6 +87,7 @@ $lang->upgrade->repo      = '版本库';
 $lang->upgrade->mergeRepo = '归并版本库';
 
 $lang->upgrade->newProgram         = '新建';
+$lang->upgrade->projectEmpty       = '所属项目不能为空！';
 $lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个产品，%s个迭代等待迁移。";
 $lang->upgrade->mergeByProductLine = "以产品线组织的产品和迭代：将整个产品线及其下面的产品和迭代归并到一个项目集和项目中，也可以分开归并。";
 $lang->upgrade->mergeByProduct     = "以产品组织的迭代：可以选择多个产品及其下面的迭代归并到一个项目集和项目中，也可以选择某一个产品将其下面所属的迭代归并到项目集和项目中。";

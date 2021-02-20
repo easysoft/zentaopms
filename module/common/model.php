@@ -164,13 +164,14 @@ class commonModel extends model
      */
     public function isOpenMethod($module, $method)
     {
-        if($module == 'user' and strpos('login|logout|deny|reset', $method) !== false) return true;
+        if($module == 'user' and strpos('login|logout|deny|reset|refreshrandom', $method) !== false) return true;
         if($module == 'api'  and $method == 'getsessionid') return true;
         if($module == 'misc' and $method == 'checktable') return true;
         if($module == 'misc' and $method == 'qrcode') return true;
         if($module == 'misc' and $method == 'about') return true;
         if($module == 'misc' and $method == 'checkupdate') return true;
         if($module == 'misc' and $method == 'ping')  return true;
+        if($module == 'misc' and $method == 'captcha')  return true;
         if($module == 'sso' and $method == 'login')  return true;
         if($module == 'sso' and $method == 'logout') return true;
         if($module == 'sso' and $method == 'bind') return true;

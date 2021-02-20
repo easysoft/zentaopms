@@ -75,7 +75,7 @@
             }
             return 'doc';
         }
-        if(moduleName === 'custom' && ['estimate', 'browsestoryconcept', 'configurescrum'].includes(methodLowerCase))
+        if(moduleName === 'custom' && ['estimate', 'browsestoryconcept', 'configurescrum', 'setdefaultconcept'].includes(methodLowerCase))
         {
             return 'system';
         }

@@ -276,12 +276,18 @@ class projectModel extends model
      */
     public function saveState($executionID, $executions)
     {
+        /* When the cookie and session do not exist, get it from the database. */
+        if(empty($executionID) && isset($this->config->project->lastExecution) && isset($executions[$this->config->project->lastExecution]))
+        {
+            $this->session->set('project', $this->config->project->lastExecution);
+            return $this->session->project;
+        }
+
         if($executionID > 0) $this->session->set('project', (int)$executionID);
         if($executionID == 0 and $this->cookie->lastProject) 
         {
             /* Project link is project-task. */
             $executionID = (int)$this->cookie->lastProject;
-            $executions  = $this->getExecutionPairs($this->session->PRJ);
             $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
             $this->session->set('project', $executionID);
         }
@@ -448,8 +454,9 @@ class projectModel extends model
 
         /* Get the data from the post. */
         $project = fixer::input('post')
-            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
-            ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
+            ->setIF(helper::isZeroDate($this->post->end), 'end', '')
+            ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
@@ -715,7 +722,7 @@ class projectModel extends model
                 ->fetchAll();
             foreach($tasks as $task)
             {
-                if($task->status == 'wait' and $task->estStarted != '0000-00-00')
+                if($task->status == 'wait' and !helper::isZeroDate($task->estStarted))
                 {
                     $taskDays   = helper::diffDate($task->deadline, $task->estStarted);
                     $taskOffset = helper::diffDate($task->estStarted, $oldProject->begin);
@@ -1175,7 +1182,7 @@ class projectModel extends model
             /* If projectBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
             $begin = $executions[$executionID]->begin;
             $end   = $executions[$executionID]->end;
-            if($begin == '0000-00-00') $begin = $executions[$executionID]->openedDate;
+            if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
             $executionBurns = $this->processBurnData($executionBurns, $itemCounts, $begin, $end);
 
             /* Shorter names. */
@@ -1965,7 +1972,7 @@ class projectModel extends model
             $task->openedBy     = $this->app->user->account;
 
             if($task->estimate !== '') $task->left = $task->estimate;
-            if(strpos($requiredFields, 'deadline') !== false and $task->deadline == '0000-00-00') $task->deadline = '';
+            if(strpos($requiredFields, 'deadline') !== false and helper::isZeroDate($task->deadline)) $task->deadline = '';
             if(!empty($bugToTasks->assignedTo[$key]))
             {
                 $task->assignedTo   = $bugToTasks->assignedTo[$key];
@@ -2605,7 +2612,7 @@ class projectModel extends model
      */
     public function processBurnData($sets, $itemCounts, $begin, $end, $mode = 'noempty')
     {
-        if($end != '0000-00-00')
+        if(!helper::isZeroDate($end))
         {
             $period = helper::diffDate($end, $begin) + 1;
             $counts = $period > $itemCounts ? $itemCounts : $period;
@@ -3585,13 +3592,15 @@ class projectModel extends model
         $isView = (empty($this->app->user->view->sprints) || empty($this->app->user->view->projects)) ? false : true;
         if(!$this->app->user->admin && $isView === false) return array();
 
-        $executions = $this->dao->select('id,project,code,name,type')->from(TABLE_PROJECT)
-            ->where('type')->in('stage,sprint')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
-            ->andWhere('status')->ne('closed')
-            ->andWhere('deleted')->eq('0')
-            ->orderBy('id_desc')
+        $executions = $this->dao->select('t1.id,t1.project,t1.code,t1.name,t1.type')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
+            ->where('t1.type')->in('stage,sprint')
+            ->andWhere('t2.account')->eq($this->app->user->account)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
+            ->andWhere('t1.status')->ne('closed')
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy('project_desc, id_desc')
             ->fetchAll();
 
         /* Get the project or product to which the execution belongs. */
@@ -3599,19 +3608,29 @@ class projectModel extends model
         $stageIdList   = array();
         foreach($executions as $execution)
         {
-            if($execution->type == 'stage')  $stageIdList[$execution->id]        = $execution->id;
-            if($execution->type == 'sprint') $projectIdList[$execution->project] = $execution->project;
+            if($execution->type == 'stage') $stageIdList[$execution->id] = $execution->id;
+            $projectIdList[$execution->project] = $execution->project;
         }
         $projectPairs = $this->loadModel('program')->getPRJPairsByIdList($projectIdList);
         $productPairs = $this->getStageLinkProductPairs($stageIdList);
 
+        $recentExecutions = isset($this->config->project->recentExecutions) ? explode(',', $this->config->project->recentExecutions) : array();
+        $allExecution     = array('recent' => array(), 'mine' => array());
         foreach($executions as $execution)
         {
-            if($execution->type == 'stage')  $execution->name = zget($productPairs, $execution->id) . '/' . $execution->name;
+            if($execution->type == 'stage')  $execution->name = zget($projectPairs, $execution->project) . '/' . zget($productPairs, $execution->id) . '/' . $execution->name;
             if($execution->type == 'sprint') $execution->name = zget($projectPairs, $execution->project) . '/' . $execution->name;
+            if(in_array($execution->id, $recentExecutions))
+            {
+                $index = array_search($execution->id, $recentExecutions);
+                $allExecution['recent'][$index] = $execution;
+                continue;
+            }
+            $allExecution['mine'][] = $execution;
         }
 
-        return $executions;
+        ksort($allExecution['recent']);
+        return $allExecution;
     }
 
     /**

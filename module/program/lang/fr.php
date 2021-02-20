@@ -111,7 +111,7 @@ $lang->program->unitList['NZD'] = 'New Zealand';
 $lang->program->unitList['THB'] = 'Thai Baht';
 $lang->program->unitList['SGD'] = 'Singapore';
 
-$lang->program->currencySymbol['CNY'] = '￥';
+$lang->program->currencySymbol['CNY'] = '¥';
 $lang->program->currencySymbol['USD'] = '$';
 $lang->program->currencySymbol['HKD'] = 'HK$';
 $lang->program->currencySymbol['NTD'] = 'NT$';

@@ -302,6 +302,7 @@ class control extends baseControl
         if(!isset($this->config->bizVersion)) return false;
         if(empty($_POST)) return false;
 
+        $flow    = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($this->moduleName)->fetch();
         $fields  = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
         $layouts = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
         $rules   = $this->dao->select('*')->from(TABLE_WORKFLOWRULE)->orderBy('id_desc')->fetchAll('id');
@@ -330,10 +331,29 @@ class control extends baseControl
                 }
                 elseif($rule->type == 'system' and isset($_POST[$field->field]))
                 {
-                    $checkFunc = 'check' . $rule->rule;
-                    if(validater::$checkFunc($_POST[$field->field]) === false)
+                    $pass = true;
+                    if($rule->rule == 'unique')
+                    {
+                        if(!empty($_POST[$field->field]))
+                        {
+                            $sqlClass = new sql();
+                            $sql      = "SELECT COUNT(*) AS count FROM $flow->table WHERE `$field->field` = " . $sqlClass->quote(fixer::input('post')->get($field->field));
+                            if(isset($_POST['id'])) $sql .= ' AND `id` != ' . (int)$_POST['id'];
+
+                            $row = $this->dbh->query($sql)->fetch();
+                            if($row->count != 0) $pass = false;
+                        }
+                    }
+                    else
+                    {
+                        $checkFunc = 'check' . $rule->rule;
+                        if(validater::$checkFunc($_POST[$field->field]) === false) $pass = false;
+                    }
+
+                    if(!$pass)
                     {
                         $error = zget($this->lang->error, $rule->rule, '');
+                        if($rule->rule == 'unique') $error = sprintf($error, $field->name, $_POST[$field->field]);
                         if($error) $error = sprintf($error, $field->name);
                         if(empty($error)) $error = sprintf($this->lang->error->reg, $field->name, $rule->rule);
 

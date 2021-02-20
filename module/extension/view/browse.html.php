@@ -38,7 +38,7 @@
             }
             if($extension->status == 'installed' and !empty($extension->upgradeLink))
             {
-                echo html::a($extension->upgradeLink, $lang->extension->upgrade, '', "class='btn iframe'");
+                echo html::a($extension->upgradeLink, $lang->extension->upgrade, '', "class='btn iframe' data-height='500px'");
             }
 
             if($extension->type != 'patch')

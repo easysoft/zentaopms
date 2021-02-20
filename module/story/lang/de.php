@@ -162,11 +162,11 @@ $lang->story->needNotReviewList[1] = 'Need Not Review';
 $lang->story->useList[0] = 'Ja';
 $lang->story->useList[1] = 'Nein';
 
-$lang->story->statusList['']          = '';
-$lang->story->statusList['draft']     = 'Entwurf';
-$lang->story->statusList['active']    = 'Aktiv';
-$lang->story->statusList['closed']    = 'Geschlossen';
-$lang->story->statusList['changed']   = 'Geändert';
+$lang->story->statusList['']        = '';
+$lang->story->statusList['draft']   = 'Entwurf';
+$lang->story->statusList['active']  = 'Aktiv';
+$lang->story->statusList['closed']  = 'Geschlossen';
+$lang->story->statusList['changed'] = 'Geändert';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'Wartend';
@@ -240,11 +240,11 @@ $lang->story->legendSpec           = 'Beschreibung';
 $lang->story->legendVerify         = 'Akzeptanz';
 $lang->story->legendMisc           = 'Sonstiges ';
 
-$lang->story->lblChange            = 'Ändern';
-$lang->story->lblReview            = 'Prüfen';
-$lang->story->lblActivate          = 'Aktivieren';
-$lang->story->lblClose             = 'Close';
-$lang->story->lblTBC               = 'Task/Bug/Case';
+$lang->story->lblChange   = 'Ändern';
+$lang->story->lblReview   = 'Prüfen';
+$lang->story->lblActivate = 'Aktivieren';
+$lang->story->lblClose    = 'Close';
+$lang->story->lblTBC      = 'Task/Bug/Case';
 
 $lang->story->checkAffection       = 'Impact';
 $lang->story->affectedProjects     = '' . $lang->executionCommon;
@@ -267,10 +267,10 @@ $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved 
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 
 $lang->story->form = new stdclass();
-$lang->story->form->area      = 'Story Bereich';
-$lang->story->form->desc      = 'Welche Story ist es? Was sind die Abnahmebedingungen?';
-$lang->story->form->resource  = 'Wer plant die Resourcen? Wie lange wird das dauern?';
-$lang->story->form->file      = 'Wenn Dateien zu dieser Story gehören, laden Sie diese bIttr hoch.';
+$lang->story->form->area     = 'Story Bereich';
+$lang->story->form->desc     = 'Welche Story ist es? Was sind die Abnahmebedingungen?';
+$lang->story->form->resource = 'Wer plant die Resourcen? Wie lange wird das dauern?';
+$lang->story->form->file     = 'Wenn Dateien zu dieser Story gehören, laden Sie diese bIttr hoch.';
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed            = array('main' => '$date, geprüft von <strong>$actor</strong>. Das Ergebnis ist <strong>$extra</strong>.', 'extra' => 'reviewResultList');
@@ -297,24 +297,24 @@ $lang->story->report->select = 'Storys gruppieren nach';
 $lang->story->report->create = 'Erzeugen';
 $lang->story->report->value  = 'Story Anzahl';
 
-$lang->story->report->charts['storysPerProduct']        = 'nach ' . $lang->productCommon;
-$lang->story->report->charts['storysPerModule']         = 'nach Modul';
-$lang->story->report->charts['storysPerSource']         = 'nach Source';
-$lang->story->report->charts['storysPerPlan']           = 'nach Plan';
-$lang->story->report->charts['storysPerStatus']         = 'nach Status';
-$lang->story->report->charts['storysPerStage']          = 'nach Phase';
-$lang->story->report->charts['storysPerPri']            = 'nach Priorität';
-$lang->story->report->charts['storysPerEstimate']       = 'nach Stunden';
-$lang->story->report->charts['storysPerOpenedBy']       = 'nach Ersteller';
-$lang->story->report->charts['storysPerAssignedTo']     = 'nach Zuständiger';
-$lang->story->report->charts['storysPerClosedReason']   = 'nach Grund';
-$lang->story->report->charts['storysPerChange']         = 'nach Änderungszeit';
+$lang->story->report->charts['storysPerProduct']      = 'nach ' . $lang->productCommon;
+$lang->story->report->charts['storysPerModule']       = 'nach Modul';
+$lang->story->report->charts['storysPerSource']       = 'nach Source';
+$lang->story->report->charts['storysPerPlan']         = 'nach Plan';
+$lang->story->report->charts['storysPerStatus']       = 'nach Status';
+$lang->story->report->charts['storysPerStage']        = 'nach Phase';
+$lang->story->report->charts['storysPerPri']          = 'nach Priorität';
+$lang->story->report->charts['storysPerEstimate']     = 'nach Stunden';
+$lang->story->report->charts['storysPerOpenedBy']     = 'nach Ersteller';
+$lang->story->report->charts['storysPerAssignedTo']   = 'nach Zuständiger';
+$lang->story->report->charts['storysPerClosedReason'] = 'nach Grund';
+$lang->story->report->charts['storysPerChange']       = 'nach Änderungszeit';
 
 $lang->story->report->options = new stdclass();
-$lang->story->report->options->graph   = new stdclass();
-$lang->story->report->options->type    = 'pie';
-$lang->story->report->options->width   = 500;
-$lang->story->report->options->height  = 140;
+$lang->story->report->options->graph  = new stdclass();
+$lang->story->report->options->type   = 'pie';
+$lang->story->report->options->width  = 500;
+$lang->story->report->options->height = 140;
 
 $lang->story->report->storysPerProduct      = new stdclass();
 $lang->story->report->storysPerModule       = new stdclass();

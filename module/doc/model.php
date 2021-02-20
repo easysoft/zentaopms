@@ -145,7 +145,7 @@ class docModel extends model
      * @param  string $extra
      * @param  string $appendLibs
      * @access public
-     * @return void
+     * @return array
      */
     public function getLibs($type = '', $extra = '', $appendLibs = '')
     {

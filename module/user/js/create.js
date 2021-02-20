@@ -1,3 +1,31 @@
+$(function()
+{
+    $("input[name='new[]']").change(function()
+    {
+        if($(this).prop('checked'))
+        {
+            $('#company').replaceWith("<input name='company' id='company' class='form-control'/>");
+            $('#company_chosen').remove();
+        }
+        else
+        {
+            var link = createLink('company', 'ajaxGetOutsideCompany');
+            $.post(link, function(data)
+            {
+                $('#company').replaceWith(data);
+                $('#company').chosen();
+            })
+        }
+    })
+})
+
+/**
+ * Change group when change role.
+ *
+ * @param  role $role
+ * @access public
+ * @return void
+ */
 function changeGroup(role)
 {
     if(role && roleGroup[role])
@@ -9,6 +37,27 @@ function changeGroup(role)
         $('#group').val(''); 
     }
     $('#group').trigger("chosen:updated");
+}
+
+/**
+ * Show or hide companies based on user type.
+ *
+ * @param  type $type
+ * @access public
+ * @return void
+ */
+function changeType(type)
+{
+    if(type == 'inside')
+    {
+        $('#companyBox').addClass('hide');
+        $('#dept, #join, #commiter').closest('tr').removeClass('hide');
+    }
+    else
+    {
+        $('#companyBox').removeClass('hide');
+        $('#dept, #join, #commiter').closest('tr').addClass('hide');
+    }
 }
 
 $(function()

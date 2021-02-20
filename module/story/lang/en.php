@@ -162,11 +162,11 @@ $lang->story->needNotReviewList[1] = 'Need Not Review';
 $lang->story->useList[0] = 'Yes';
 $lang->story->useList[1] = 'No';
 
-$lang->story->statusList['']          = '';
-$lang->story->statusList['draft']     = 'Draft';
-$lang->story->statusList['active']    = 'Active';
-$lang->story->statusList['closed']    = 'Closed';
-$lang->story->statusList['changed']   = 'Changed';
+$lang->story->statusList['']        = '';
+$lang->story->statusList['draft']   = 'Draft';
+$lang->story->statusList['active']  = 'Active';
+$lang->story->statusList['closed']  = 'Closed';
+$lang->story->statusList['changed'] = 'Changed';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'Waiting';
@@ -240,11 +240,11 @@ $lang->story->legendSpec           = 'Description';
 $lang->story->legendVerify         = 'Acceptance';
 $lang->story->legendMisc           = 'Misc.';
 
-$lang->story->lblChange            = 'Change';
-$lang->story->lblReview            = 'Review';
-$lang->story->lblActivate          = 'Activate';
-$lang->story->lblClose             = 'Close';
-$lang->story->lblTBC               = 'Task/Bug/Case';
+$lang->story->lblChange   = 'Change';
+$lang->story->lblReview   = 'Review';
+$lang->story->lblActivate = 'Activate';
+$lang->story->lblClose    = 'Close';
+$lang->story->lblTBC      = 'Task/Bug/Case';
 
 $lang->story->checkAffection       = 'Influence';
 $lang->story->affectedProjects     = '' . $lang->executionCommon . 's';
@@ -267,10 +267,10 @@ $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved 
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 
 $lang->story->form = new stdclass();
-$lang->story->form->area      = 'Scope';
-$lang->story->form->desc      = 'What story is it? What is the acceptance?';
-$lang->story->form->resource  = 'Who will allocate resources? How long does it take?';
-$lang->story->form->file      = 'If any file that is linked to a story, please click Here to upload it.';
+$lang->story->form->area     = 'Scope';
+$lang->story->form->desc     = 'What story is it? What is the acceptance?';
+$lang->story->form->resource = 'Who will allocate resources? How long does it take?';
+$lang->story->form->file     = 'If any file that is linked to a story, please click Here to upload it.';
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed            = array('main' => '$date, recorded by <strong>$actor</strong>. The result is <strong>$extra</strong>.', 'extra' => 'reviewResultList');
@@ -297,24 +297,24 @@ $lang->story->report->select = 'Select Report Type';
 $lang->story->report->create = 'Create Report';
 $lang->story->report->value  = 'Reports';
 
-$lang->story->report->charts['storysPerProduct']        = 'Group by ' . $lang->productCommon . ' Story';
-$lang->story->report->charts['storysPerModule']         = 'Group by Module Story';
-$lang->story->report->charts['storysPerSource']         = 'Group by Story Source';
-$lang->story->report->charts['storysPerPlan']           = 'Group by Plan';
-$lang->story->report->charts['storysPerStatus']         = 'Group by Status';
-$lang->story->report->charts['storysPerStage']          = 'Group by Phase';
-$lang->story->report->charts['storysPerPri']            = 'Group by Priority';
-$lang->story->report->charts['storysPerEstimate']       = 'Group by Estimates';
-$lang->story->report->charts['storysPerOpenedBy']       = 'Group by CreatedBy';
-$lang->story->report->charts['storysPerAssignedTo']     = 'Group by AssignedTo';
-$lang->story->report->charts['storysPerClosedReason']   = 'Group by Closed Reason';
-$lang->story->report->charts['storysPerChange']         = 'Group by Changed Story';
+$lang->story->report->charts['storysPerProduct']      = 'Group by ' . $lang->productCommon . ' Story';
+$lang->story->report->charts['storysPerModule']       = 'Group by Module Story';
+$lang->story->report->charts['storysPerSource']       = 'Group by Story Source';
+$lang->story->report->charts['storysPerPlan']         = 'Group by Plan';
+$lang->story->report->charts['storysPerStatus']       = 'Group by Status';
+$lang->story->report->charts['storysPerStage']        = 'Group by Phase';
+$lang->story->report->charts['storysPerPri']          = 'Group by Priority';
+$lang->story->report->charts['storysPerEstimate']     = 'Group by Estimates';
+$lang->story->report->charts['storysPerOpenedBy']     = 'Group by CreatedBy';
+$lang->story->report->charts['storysPerAssignedTo']   = 'Group by AssignedTo';
+$lang->story->report->charts['storysPerClosedReason'] = 'Group by Closed Reason';
+$lang->story->report->charts['storysPerChange']       = 'Group by Changed Story';
 
 $lang->story->report->options = new stdclass();
-$lang->story->report->options->graph   = new stdclass();
-$lang->story->report->options->type    = 'pie';
-$lang->story->report->options->width   = 500;
-$lang->story->report->options->height  = 140;
+$lang->story->report->options->graph  = new stdclass();
+$lang->story->report->options->type   = 'pie';
+$lang->story->report->options->width  = 500;
+$lang->story->report->options->height = 140;
 
 $lang->story->report->storysPerProduct      = new stdclass();
 $lang->story->report->storysPerModule       = new stdclass();

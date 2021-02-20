@@ -1201,4 +1201,18 @@ class testtask extends control
         if($id) die(html::select("testtasks[$id]", $testTasks, '', 'class="form-control"'));
         die(html::select('testtask', $testTasks, '', 'class=form-control'));
     }
+
+    /**
+     * Ajax get test tasks 
+     * 
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTestTasks($productID, $projectID = 0)
+    {
+        $pairs = $this->testtask->getPairs($productID, $projectID);
+        die(html::select('testtask', $pairs, '', "class='form-control chosen'"));
+    }
 }

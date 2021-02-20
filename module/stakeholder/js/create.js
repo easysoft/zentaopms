@@ -51,7 +51,7 @@ $(function()
         }
         else
         {
-            var link = createLink('stakeholder', 'ajaxGetOutsideCompany'); 
+            var link = createLink('company', 'ajaxGetOutsideCompany');
             $.post(link, function(data)
             {
                 $('#company').replaceWith(data);        

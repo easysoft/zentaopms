@@ -81,6 +81,7 @@ $lang->project->waitTasks      = '待处理';
 $lang->project->viewByUser     = '按用户查看';
 $lang->project->oneProduct     = "阶段只能关联一个{$lang->productCommon}";
 $lang->project->noLinkProduct  = "阶段没有关联{$lang->productCommon}";
+$lang->project->recent         = '近期访问：';
 
 $lang->project->start    = "开始";
 $lang->project->activate = "激活";

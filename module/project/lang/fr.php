@@ -81,6 +81,7 @@ $lang->project->waitTasks      = 'Waiting Tasks';
 $lang->project->viewByUser     = 'Par Utilisateur';
 $lang->project->oneProduct     = "Only one stage can be linked {$lang->productCommon}";
 $lang->project->noLinkProduct  = "Stage not linked {$lang->productCommon}";
+$lang->project->recent         = 'Recent visits: ';
 
 $lang->project->start    = 'Démarrer';
 $lang->project->activate = 'Activer';

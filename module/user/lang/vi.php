@@ -52,6 +52,7 @@ $lang->user->verifyPassword   = 'Mật khẩu';
 $lang->user->resetPassword    = 'Quên mật khẩu?';
 $lang->user->score            = 'Điểm';
 $lang->user->name             = 'Name';
+$lang->user->type             = 'User Type';
 $lang->user->cropAvatar       = 'Crop Avatar';
 $lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
 $lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
@@ -145,6 +146,9 @@ $lang->user->genderList['f'] = 'Nữ';
 $lang->user->thirdPerson['m'] = 'anh ấy';
 $lang->user->thirdPerson['f'] = 'cô ấy';
 
+$lang->user->typeList['inside']  = $lang->user->inside;
+$lang->user->typeList['outside'] = $lang->user->outside;
+
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Yếu</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Tốt</span>";
 $lang->user->passwordStrengthList[2] = "<span style='color:green'>Mạnh</span>";
@@ -237,5 +241,5 @@ $lang->user->noticeResetFile = "<h5>Liên hệ quản trị viên để thiết 
  <li>Nếu tập tin đã tồn tại, xóa và tạo lại.</li>
  </ol>";
 $lang->user->notice4Safe = "Warning: Weak password of one click package detected";
-$lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
-$lang->user->process4DB  = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
+$lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
+$lang->user->process4DB  = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";

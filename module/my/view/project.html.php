@@ -43,7 +43,7 @@
           <?php endif;?>
           <th class='w-100px'><?php echo $lang->program->begin;?></th>
           <th class='w-100px'><?php echo $lang->program->end;?></th>
-          <th class='w-100px'><?php echo $lang->program->PRJBudget;?></th>
+          <th class='text-right w-100px'><?php echo $lang->program->PRJBudget;?></th>
           <th class='w-100px'><?php echo $lang->program->PRJPM;?></th>
           <th class='text-center w-180px'><?php echo $lang->actions;?></th>
         </tr>
@@ -60,7 +60,8 @@
           <?php endif;?>
           <td class='text-left'><?php echo $project->begin;?></td>
           <td class='text-left'><?php echo $project->end == '0000-00-00' ? '' : $project->end;?></td>
-          <td class='text-left'><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $lang->program->future;?></td>
+          <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format($project->budget, 1);?>
+          <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $lang->program->future;?></td>
           <td>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
             <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>

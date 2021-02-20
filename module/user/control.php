@@ -575,6 +575,7 @@ class user extends control
         $this->view->roleGroup = $roleGroup;
         $this->view->deptID    = $deptID;
         $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
 
         $this->display();
     }
@@ -663,6 +664,7 @@ class user extends control
         $this->view->user       = $user;
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->userGroups = implode(',', array_keys($userGroups));
+        $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->fetchPairs('id', 'name');
 
         $this->view->rand = $this->user->updateSessionRandom();
@@ -862,6 +864,14 @@ class user extends control
                 $response['result']  = 'fail';
                 $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
                 if($this->app->getViewType() == 'json') die(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $failReason))));
+                $this->send($response);
+            }
+
+
+            if((!empty($this->config->safe->loginCaptcha) and strtolower($this->post->captcha) != strtolower($this->session->captcha) and $this->app->getViewType() != 'json'))
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->user->errorCaptcha;
                 $this->send($response);
             }
 
@@ -1280,4 +1290,15 @@ class user extends control
         die(json_encode($newUsers));
     }
 
+    /**
+     * Refresh random for login
+     * 
+     * @access public
+     * @return void
+     */
+    public function refreshRandom()
+    {
+        $rand = (string)$this->user->updateSessionRandom();
+        die($rand);
+    }
 }

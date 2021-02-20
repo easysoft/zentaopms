@@ -986,7 +986,7 @@ class productModel extends model
                 unset($plans[$planID]);
                 continue;
             }
-            if(($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) or $plan->end == '2030-01-01') continue;
+            if((!helper::isZeroDate($plan->end) and strtotime($plan->end) - time() <= 0) or $plan->end == '2030-01-01') continue;
             $orderedPlans[$plan->end][] = $plan;
         }
 

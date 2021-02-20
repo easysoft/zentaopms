@@ -88,7 +88,7 @@ $config->program->datatable->fieldList['PRJBudget']['required'] = 'yes';
 
 $config->program->datatable->fieldList['teamCount']['title']    = 'teamCount';
 $config->program->datatable->fieldList['teamCount']['fixed']    = 'no';
-$config->program->datatable->fieldList['teamCount']['width']    = '60';
+$config->program->datatable->fieldList['teamCount']['width']    = '40';
 $config->program->datatable->fieldList['teamCount']['required'] = 'no';
 $config->program->datatable->fieldList['teamCount']['sort']     = 'no';
 

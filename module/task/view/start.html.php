@@ -48,7 +48,7 @@
         </tr>
         <tr>
           <th class='w-90px'><?php echo $lang->task->realStarted;?></th>
-          <td class='w-p25-f'><div class='datepicker-wrapper datepicker-date'><?php echo html::input('realStarted', $task->realStarted == '0000-00-00 00:00:00' ? helper::now() : $task->realStarted, "class='form-control form-datetime' data-picker-position='bottom-right'");?></div></td>
+          <td class='w-p25-f'><div class='datepicker-wrapper datepicker-date'><?php echo html::input('realStarted', helper::isZeroDate($task->realStarted) ? helper::now() : $task->realStarted, "class='form-control form-datetime' data-picker-position='bottom-right'");?></div></td>
           <td></td>
         </tr>
         <tr>

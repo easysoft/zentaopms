@@ -100,7 +100,7 @@ $lang->testtask->legendBasicInfo = '基本信息';
 
 $lang->testtask->statusList['wait']    = '未開始';
 $lang->testtask->statusList['doing']   = '進行中';
-$lang->testtask->statusList['done']    = '已完成';
+$lang->testtask->statusList['done']    = '已關閉';
 $lang->testtask->statusList['blocked'] = '被阻塞';
 
 $lang->testtask->priList[0] = '';

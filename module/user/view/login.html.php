@@ -41,6 +41,17 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
                   <th><?php echo $lang->user->password;?></th>
                   <td><input class='form-control' type='password' name='password' /></td>
                 </tr>
+                <?php if(!empty($this->config->safe->loginCaptcha)):?>
+                <tr>
+                  <th><?php echo $lang->user->captcha;?></th>
+                  <td class='captchaBox'>
+                    <div class='input-group'>
+                      <?php echo html::input('captcha', '', "class='form-control'");?>
+                      <span class='input-group-addon'><img src="<?php echo $this->createLink('misc', 'captcha', "sessionVar=captcha");?>" /></span>
+                    </div>
+                  </td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th></th>
                   <td id="keeplogin"><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td>
@@ -52,7 +63,6 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
                   echo html::submitButton($lang->login, '', 'btn btn-primary');
                   if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
                   echo html::hidden('referer', $referer);
-                  echo html::hidden('verifyRand', $rand);
                   echo html::a(inlink('reset'), $lang->user->resetPassword);
                   ?>
                   </td>

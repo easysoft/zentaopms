@@ -662,6 +662,19 @@ class actionModel extends model
             if($this->app->user->admin) $condition = 1; 
         }
 
+        /* If is project, select its related. */
+        $executions = array();
+        $products   = array();
+        if(is_numeric($projectID))
+        {
+            $project = $this->loadModel('program')->getPRJByID($projectID);
+            if($project->type == 'project')
+            {
+                $executions = $this->loadModel('project')->getExecutionPairs($projectID);
+                $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
+            }
+        }
+
         $this->loadModel('doc');
         $libs = $this->doc->getLibs('all');
         $docs = $this->doc->getPrivDocs(array_keys($libs), 0, 'all');
@@ -677,6 +690,8 @@ class actionModel extends model
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
+            ->beginIF(!empty($executions))->markLeft()->orWhere('project')->in(array_keys($executions))->fi()->markRight()
+            ->beginIF(!empty($products))->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
