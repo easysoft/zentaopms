@@ -93,6 +93,8 @@ $lang->program->morePRJ            = '更多項目';
 $lang->program->productNotEmpty  = '請關聯產品或創建產品。';
 $lang->program->existProductName = '產品名稱已存在。';
 
+$lang->program->tenThousand = '萬';
+
 $lang->program->unitList['CNY'] = '人民幣';
 $lang->program->unitList['USD'] = '美元';
 $lang->program->unitList['HKD'] = '港元';
@@ -111,7 +113,7 @@ $lang->program->unitList['NZD'] = '新西蘭元';
 $lang->program->unitList['THB'] = '泰國銖';
 $lang->program->unitList['SGD'] = '新加坡元';
 
-$lang->program->currencySymbol['CNY'] = '￥';
+$lang->program->currencySymbol['CNY'] = '¥';
 $lang->program->currencySymbol['USD'] = '$';
 $lang->program->currencySymbol['HKD'] = 'HK$';
 $lang->program->currencySymbol['NTD'] = 'NT$';
