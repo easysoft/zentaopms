@@ -1722,11 +1722,10 @@ class programModel extends model
 
         if($col->show)
         {
-            $class = "c-$id";
             $title = '';
+            $class = "c-$id" . (in_array($id, ['PRJBudget', 'teamCount']) ? ' c-number' : ' c-name');
 
             if($id == 'idAB') $class .= ' cell-id';
-
             if($id == 'PRJName')
             {
                 $class .= ' text-left';
@@ -1748,15 +1747,17 @@ class programModel extends model
             }
             if($id == 'PRJBudget')
             {
-                $budget = $project->budget != 0 ? zget($this->lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $this->lang->program->future;
-                $title  = "title='$budget'";
+                $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format($project->budget, 1);
+                $budgetTitle   = $project->budget != 0 ? zget($this->lang->program->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $this->lang->program->future;
+
+                $title = "title='$budgetTitle'";
             }
 
             if($id == 'PRJEstimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->project->workHour}'";
             if($id == 'PRJConsume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->project->workHour}'";
             if($id == 'PRJSurplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->project->workHour}'";
 
-            echo "<td class='c-name " . $class . "' $title>";
+            echo "<td class='$class' $title>";
             switch($id)
             {
                 case 'idAB':
@@ -1787,7 +1788,7 @@ class programModel extends model
                     echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->program->statusList, $project->status) . "</span>";
                     break;
                 case 'PRJBudget':
-                    echo $budget;
+                    echo $budgetTitle;
                     break;
                 case 'teamCount':
                     echo $project->teamCount;
