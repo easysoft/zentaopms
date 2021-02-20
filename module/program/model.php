@@ -825,6 +825,8 @@ class programModel extends model
      */
     public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
     {
+        $this->session->set('moreProjectLink', $this->app->getURI(true));
+
         $this->loadModel('project');
         $currentProjectName = $this->lang->program->common;
         if($projectID)
