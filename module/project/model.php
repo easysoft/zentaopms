@@ -1490,6 +1490,7 @@ class projectModel extends model
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOnlyCondition', true);
             $this->session->set('taskOrderBy', $sort);
+            $this->session->set('taskBrowseList', array());
 
             $tasks = $this->getSearchTasks($taskQuery, $pager, $sort);
         }

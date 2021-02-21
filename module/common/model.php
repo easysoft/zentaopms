@@ -1469,35 +1469,50 @@ EOD;
      */
     public function getPreAndNextObject($type, $objectID)
     {
-        $preAndNextObject       = new stdClass();
-        $preAndNextObject->pre  = '';
-        $preAndNextObject->next = '';
-
-        /* Get objectIDList. */
-        $table             = $this->config->objectTables[$type];
+        /* Get SQL. */
         $queryCondition    = $type . 'QueryCondition';
         $typeOnlyCondition = $type . 'OnlyCondition';
-        $queryCondition = $this->session->$queryCondition;
+        $queryCondition    = $this->session->$queryCondition;
+
+        $table   = $this->config->objectTables[$type];
         $orderBy = $type . 'OrderBy';
         $orderBy = $this->session->$orderBy;
         if(empty($queryCondition) or $this->session->$typeOnlyCondition)
         {
-            $queryObjects = $this->dao->select('*')->from($table)->where('id')->eq($objectID)
-                ->beginIF($queryCondition != false)->orWhere($queryCondition)->fi()
+            $sql = $this->dao->select('*')->from($table)
+                ->beginIF($queryCondition != false)->where($queryCondition)->fi()
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
-                ->query();
+                ->get();
         }
         else
         {
-            $queryObjects = $this->dao->query($queryCondition . (empty($orderBy) ? '' : " ORDER BY $orderBy"));
+            $sql = $queryCondition . (empty($orderBy) ? '' : " ORDER BY $orderBy");
         }
 
-        $preObj  = false;
-        while($object = $queryObjects->fetch())
+        /* Get objectIDList. */
+        $objectIdListKey  = $type . 'BrowseList';
+        $existsObjectList = $this->session->$objectIdListKey;
+        if(empty($existsObjectList) or $existsObjectList['sql'] != $sql)
         {
-            $key = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? 'case' : 'id';
-            $id  = $object->$key;
+            $queryObjects = $this->dao->query($sql);
+            $objectList   = array();
+            while($object = $queryObjects->fetch())
+            {
+                $key = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? 'case' : 'id';
+                $id  = $object->$key;
+                $objectList[$id] = $object;
+            }
+            $this->session->set($objectIdListKey, array('sql' => $sql, 'objectList' => $objectList));
+            $existsObjectList = $this->session->$objectIdListKey;
+        }
 
+        $preAndNextObject       = new stdClass();
+        $preAndNextObject->pre  = '';
+        $preAndNextObject->next = '';
+
+        $preObj = false;
+        foreach($existsObjectList['objectList'] as $id => $object)
+        {
             /* Get next object. */
             if($preObj === true)
             {
@@ -1514,8 +1529,6 @@ EOD;
             if($preObj !== true) $preObj = $object;
         }
 
-        $existObject = $type . 'PreAndNext';
-        $this->session->set($existObject, array('objectID' => $objectID, 'preAndNextObject' => $preAndNextObject));
         return $preAndNextObject;
     }
 
@@ -1561,6 +1574,7 @@ EOD;
             if($onlyCondition) $orderBy = str_replace('t1.', '', $orderBy);
         }
         $this->session->set($objectType . 'OrderBy', $orderBy);
+        $this->session->set($objectType . 'BrowseList', array());
     }
 
     /**
