@@ -2,7 +2,7 @@ body {padding-left: 96px}
 
 #menu {position: fixed; left: 0; top: 0; bottom: 0; background-color: #3C495C; width: 96px; z-index: 1015;}
 #menuNav {position: absolute; top: 0; bottom: 80px; width: 100%;}
-#menu .nav > li {float: none; padding: 4px 8px;}
+#menu .nav > li {float: none; padding: 2px 8px;}
 #menu .nav > li > a {color: #fff; line-height: 20px; padding: 8px 6px; border-radius: 2px; white-space: nowrap;}
 #menu .nav > li > a > .icon {display: inline-block; font-size: 16px;}
 #menu .nav > li > a > .icon + .text {margin-left: 4px}
