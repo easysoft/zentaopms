@@ -141,7 +141,7 @@ class upgrade extends control
                 || strpos($fromVersion, 'biz') !== false
                 || strpos($fromVersion, 'pro') !== false)
                 && strpos($fromVersion, 'max') === false
-                && !isset($this->config->qcVersion)) $this->locate(inlink('guideTo15', "fromVersion=$fromVersion"));
+                && !isset($this->config->qcVersion)) $this->locate(inlink('to15Guide', "fromVersion=$fromVersion"));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 
@@ -157,7 +157,7 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function guideTo15($fromVersion)
+    public function to15Guide($fromVersion)
     {
         if($_POST)
         {
@@ -168,6 +168,7 @@ class upgrade extends control
             if($after15mode == 'new') $this->locate(inlink('mergeTips'));
         }
 
+        $this->view->title = $this->lang->upgrade->to15Guide;
         $this->display();
     }
 
@@ -469,6 +470,8 @@ class upgrade extends control
         if(empty($repos))
         {
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
+
+            if($this->config->version == $this->config->installedVersion) die(js::locate($this->createLink('custom', 'mode')));
             die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
         }
 

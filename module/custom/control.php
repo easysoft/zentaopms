@@ -595,6 +595,34 @@ class custom extends control
     }
 
     /**
+     * Set Mode.
+     * 
+     * @access public
+     * @return void
+     */
+    public function mode()
+    {
+        if($_POST)
+        {
+            $after15mode = fixer::input('post')->get('after15mode');
+            $this->loadModel('setting')->setItem('system.custom.after15mode', $after15mode);
+            if($after15mode == 'new') $this->locate($this->createLink('upgrade', 'mergeTips'));
+        }
+
+        $after15mode = zget($this->config->custom, 'after15mode', 'old');
+        if($after15mode == 'new')
+        {
+            if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') $this->locate($this->createLink('upgrade', 'mergeProgram'));
+
+            unset($_SESSION['upgrading']);
+            $this->locate(inlink('index'));
+        }
+
+        $this->app->loadLang('upgrade');
+        $this->display();
+    }
+
+    /**
      * Ajax save custom fields.
      * 
      * @param  string $module 
