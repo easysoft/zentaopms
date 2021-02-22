@@ -12,6 +12,7 @@
 $lang->product->common        = $lang->productCommon;
 $lang->product->index         = 'Accueil ' . $lang->productCommon;
 $lang->product->browse        = 'Liste Stories';
+$lang->product->product       = "Liste {$lang->productCommon}";
 $lang->product->dynamic       = 'Historique';
 $lang->product->view          = "{$lang->productCommon} Détail";
 $lang->product->edit          = "Editer {$lang->productCommon}";

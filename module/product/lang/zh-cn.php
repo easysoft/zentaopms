@@ -12,6 +12,7 @@
 $lang->product->common        = $lang->productCommon . '视图';
 $lang->product->index         = $lang->productCommon . '主页';
 $lang->product->browse        = "{$lang->SRCommon}列表";
+$lang->product->product       = "{$lang->productCommon}列表";
 $lang->product->dynamic       = '产品动态';
 $lang->product->view          = "{$lang->productCommon}概况";
 $lang->product->edit          = "编辑{$lang->productCommon}";
