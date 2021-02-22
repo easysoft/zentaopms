@@ -1240,6 +1240,9 @@ class productModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        $linePairs = $this->getLinePairs();
+        foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');
+
         $stories = $this->dao->select('product, status, type, count(status) AS count')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)

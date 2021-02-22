@@ -24,7 +24,7 @@
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
-  <?php if(empty($programs)):?>
+  <?php if(empty($productStructure)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span></p>
   </div>
@@ -61,27 +61,51 @@
           </tr>
         </thead>
         <tbody id="productTableList">
-        <?php foreach($programs as $programID => $program):?>
+        <?php foreach($productStructure as $programID => $program):?>
         <?php
         $trAttrs  = "data-id='program.$programID' data-parent='0' data-nested='true'";
         $trClass  = 'is-top-level table-nest-child';
         $trAttrs .= " class='$trClass'";
         ?>
-          <?php if($program->name):?>
+          <?php if(isset($program['programName'])):?>
           <tr <?php echo $trAttrs;?>>
             <td colspan="14">
               <span class="table-nest-icon icon table-nest-toggle"></span>
-              <?php echo $program->name?>
+              <?php echo $program['programName']?>
             </td>
           </tr>
+          <?php unset($program['programName']);?>
           <?php endif;?>
-          <?php foreach($program->products as $product):?>
+
+          <?php foreach($program as $lineID => $line):?>
+          <?php if(isset($line['lineName'])):?>
+          <?php
+              $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
+              $trClass .= ' is-nest-child  table-nest';
+              $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,$lineID'";
+          ?>
+          <tr <?php echo $trAttrs;?>>
+            <td colspan="14">
+              <span class="table-nest-icon icon table-nest-toggle"></span>
+              <?php echo $line['lineName']?>
+            </td>
+          </tr>
+          <?php unset($line['lineName']);?>
+          <?php endif;?>
+
+          <?php foreach($line['products'] as $productID => $product):?>
           <?php
           $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
           $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
 
           $trClass = '';
-          if($product->programName)
+          if($product->line)
+          {
+              $trAttrs  = "data-id='$product->id' data-parent='line.$product->line'";
+              $trClass .= ' is-nest-child  table-nest';
+              $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='line.$product->program,$product->line,$product->id'";
+          }
+          elseif($product->program)
           {
               $trAttrs  = "data-id='$product->id' data-parent='program.$product->program'";
               $trClass .= ' is-nest-child  table-nest';
@@ -118,6 +142,7 @@
               <?php endif;?>
             </td>
           </tr>
+          <?php endforeach;?>
           <?php endforeach;?>
         <?php endforeach;?>
         </tbody>

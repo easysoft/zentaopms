@@ -985,23 +985,24 @@ class product extends control
         $this->session->set('productList', $this->app->getURI(true));
 
         /* Init vars. */
-        $programs     = array();
-        $productStats = $this->product->getStats($orderBy, '', $browseType, '', 'story');
+        $productStructure = array();
+        $productStats     = $this->product->getStats($orderBy, '', $browseType, '', 'story');
 
         foreach($productStats as $product)
         {
-            $programs[$product->program]->products[$product->id] = $product;
-            if($product->program !== 0) $programs[$product->program]->name = $product->programName;
+            $productStructure[$product->program][$product->line]['products'][$product->id]      = $product;
+            if($product->line) $productStructure[$product->program][$product->line]['lineName'] = $product->lineName;
+            if($product->program) $productStructure[$product->program]['programName']           = $product->programName;
         }
 
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;
 
-        $this->view->recTotal     = count($productStats);
-        $this->view->productStats = $productStats;
-        $this->view->programs     = $programs;
-        $this->view->orderBy      = $orderBy;
-        $this->view->browseType   = $browseType;
+        $this->view->recTotal         = count($productStats);
+        $this->view->productStats     = $productStats;
+        $this->view->productStructure = $productStructure;
+        $this->view->orderBy          = $orderBy;
+        $this->view->browseType       = $browseType;
 
         $this->display();
     }
