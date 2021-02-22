@@ -469,7 +469,7 @@ class programModel extends model
         if(empty($programID)) return $topPGM;
 
         $program = $this->getPGMByID($programID);
-        list($topPGM) = explode(',', trim($program->path, ','));
+        if(!empty($program))list($topPGM) = explode(',', trim($program->path, ','));
         return $topPGM;
     }
 
@@ -488,6 +488,7 @@ class programModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.product')->in($linkedProducts)
             ->andWhere('t1.project')->ne($projectID)
+            ->andWhere('t2.type')->eq('project')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->fetchPairs('id', 'name');
@@ -1709,7 +1710,6 @@ class programModel extends model
             }
         }
 
-
         /* Judge products not empty. */
         $linkedProductsCount = 0;
         foreach($_POST['products'] as $product)
@@ -1757,6 +1757,54 @@ class programModel extends model
 
             return common::createChanges($oldProject, $project);
         }
+    }
+
+    /**
+     * Batch update products.
+     *
+     * @access public
+     * @return array
+     */
+    public function PRJBatchUpdate()
+    {
+        $projects    = array();
+        $allChanges  = array();
+        $data        = fixer::input('post')->get();
+        $oldProjects = $this->getPRJByIdList($this->post->projectIdList);
+        $nameList    = array();
+
+        foreach($data->projectIdList as $projectID)
+        {
+            $projectName   = $data->names[$projectID];
+            $parentProgram = $data->parents[$projectID];
+
+            $projectID = (int)$projectID;
+            $projects[$projectID] = new stdClass();
+            $projects[$projectID]->name   = $projectName;
+            $projects[$projectID]->parent = $parentProgram;
+            $projects[$projectID]->PM     = $data->PMs[$projectID];
+
+            /* Check unique name for edited projects. */
+            if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID .  sprintf($this->lang->error->unique, $this->lang->program->PRJName, $projectName);
+            $nameList[$projectName] = $projectName;
+        }
+
+        foreach($projects as $projectID => $project)
+        {
+            $oldProject = $oldProjects[$projectID];
+            $this->dao->update(TABLE_PROJECT)
+                ->data($project)
+                ->autoCheck()
+                ->batchCheck($this->config->program->PRJEdit->requiredFields , 'notempty')
+                ->check('name', 'unique', "id NOT " . helper::dbIN($data->projectIdList) . " and deleted='0'")
+                ->where('id')->eq($projectID)
+                ->exec();
+
+            if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
+
+            $allChanges[$projectID] = common::createChanges($oldProject, $project);
+        }
+        return $allChanges;
     }
 
     /**

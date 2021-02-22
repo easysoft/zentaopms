@@ -26,7 +26,7 @@
             <div class='scroll-handle'>
             <?php if(isset($productGroups[$productID])):?>
             <?php foreach($productGroups[$productID] as $sprint):?>
-            <?php echo html::checkBox("sprints[$productID]", array($sprint->id => "{$sprint->name}"), $isChecked ? $sprint->id : '', "data-product='{$productID}' data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-pm='{$sprint->PM}'");?>
+            <?php echo html::checkBox("sprints[$productID]", array($sprint->id => "{$sprint->name}"), $isChecked ? $sprint->id : '', "data-product='{$productID}' data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
             <?php echo html::hidden("sprintIdList[$productID][$sprint->id]", $sprint->id);?>
             <?php endforeach;?>
             <?php endif;?>
@@ -38,7 +38,7 @@
       </div>
     </div>
   </div>
-  <div class='table-col divider strong'></div>
+  <div class='table-col divider strong'><i class='icon icon-angle-double-right'></i></div>
   <div class='table-col pgmWidth' id='programBox'>
     <div class='cell'>
       <?php include "./createprogram.html.php";?>
