@@ -178,7 +178,7 @@ $lang->personnel->menu->putinto    = array('link' => "投入人员|personnel|put
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 $lang->product->menu->home = '主页|product|index|';
-$lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
+$lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit,manageline');
 
 $lang->product->viewMenu = new stdclass();
 $lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');

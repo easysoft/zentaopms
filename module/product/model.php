@@ -646,6 +646,41 @@ class productModel extends model
         if(!dao::isError()) return common::createChanges($oldProduct, $product);
     }
 
+    public function manageLine()
+    {
+        $data = fixer::input('post')->get();
+
+        $line = new stdClass();
+        $line->type   = 'line';
+        $line->parent = 0;
+        $line->grade  = 1;
+
+        $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
+        $maxOrder = $maxOrder ? $maxOrder : 0;
+        foreach($data->modules as $id => $name)
+        {
+            if(!$name) continue;
+            $line->name  = strip_tags(trim($name)); 
+            $line->root  = $data->programs[$id]; 
+
+            if(is_numeric($id))
+            {
+                $maxOrder += 10;
+                $line->order = $maxOrder;
+
+                $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+                $lineID = $this->dao->lastInsertID();
+                $path   = ",$lineID,";
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+            }
+            else
+            {
+                $lineID = str_replace('id', '', $id);
+                $this->dao->update(TABLE_MODULE)->data($line)->where('id')->eq($lineID)->exec();
+            }
+        }
+    }
+
     /**
      * Get stories.
      *
