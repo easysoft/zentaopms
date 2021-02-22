@@ -11,6 +11,8 @@
  */
 class report extends control
 {
+    public $projectID = 0;
+
     /**
      * Construct.
      *
@@ -23,7 +25,14 @@ class report extends control
 
         /* Set report menu group. */
         $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID) $this->lang->navGroup->report = 'system';
+        if(!$this->projectID) $this->lang->navGroup->report = 'report';
+        if($this->lang->navGroup->report == 'project' && $this->config->maxVersion)
+        {
+            $index = array_search('report', $this->lang->noMenuModule);
+            unset($this->lang->noMenuModule[$index]);
+            $this->lang->report->menu = $this->lang->report->projectMenu;
+        }
+        if(isset($this->config->proVersion) &&$this->lang->navGroup->report == 'report') $this->lang->report->mainMenuAction = html::a(helper::createLink('report', 'custom'), $this->lang->crystal->custom, '', "class='btn btn-link'");
     }
 
     /**
@@ -98,8 +107,8 @@ class report extends control
         $this->view->end        = $end;
         $this->view->bugs       = $this->report->getBugs($begin, $end, $product, $project);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-        $this->view->projects   = array('' => '') + $this->loadModel('project')->getExecutionPairs($this->session->PRJ);
-        $this->view->products   = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->PRJ);
+        $this->view->projects   = array('' => '') + $this->loadModel('project')->getExecutionPairs();
+        $this->view->products   = array('' => '') + $this->loadModel('product')->getPairs();
         $this->view->project    = $project;
         $this->view->product    = $product;
         $this->view->submenu    = 'test';
@@ -254,20 +263,20 @@ class report extends control
     }
 
     /**
-     * Show annual data
+     * Show annual data.
      *
-     * @param  string $year 
-     * @param  string $dept 
-     * @param  string $userID 
+     * @param  string $year
+     * @param  string $dept
+     * @param  string $userID
      * @access public
      * @return void
      */
     public function annualData($year = '', $dept = '', $userID = '')
-	{
-		$this->app->loadLang('story');
-		$this->app->loadLang('task');
-		$this->app->loadLang('bug');
-		$this->app->loadLang('testcase');
+    {
+        $this->app->loadLang('story');
+        $this->app->loadLang('task');
+        $this->app->loadLang('bug');
+        $this->app->loadLang('testcase');
 
         $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
         $currentYear = date('Y');
@@ -302,7 +311,7 @@ class report extends control
         if($userID)
         {
             $user = $this->loadModel('user')->getById($userID, 'id');
-			$dept = $user->dept;
+            $dept = $user->dept;
             $accounts = array($user->account => ($user->realname ? $user->realname : $user->account));
         }
         if(empty($accounts)) $accounts = $this->user->getPairs('noletter|noclosed');

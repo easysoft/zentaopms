@@ -1,6 +1,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/chart.html.php';?>
+<?php $chartData = array('labels' => array(), 'data' => array());?>
 <div id='mainContent' class='main-row'>
   <div class='side-col col-lg'>
     <?php include 'blockreportlist.html.php';?>
@@ -47,7 +48,6 @@
               </tr>
             </thead>
             <tbody>
-              <?php $chartData = array();?>
               <?php foreach($projects as $id  =>$project):?>
               <tr class="text-center">
                 <td><?php echo $id;?></td>

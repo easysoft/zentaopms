@@ -2306,7 +2306,7 @@ EOD;
             $lang->report->menu = $lang->measurement->menu;
         }
         if($group == 'doclib') return;
-        if($group == 'reporting')
+        if($group == 'report')
         {
             $lang->menu      = $lang->report->menu;
             $lang->menuOrder = $lang->report->menuOrder;

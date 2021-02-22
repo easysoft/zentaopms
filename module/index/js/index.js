@@ -79,7 +79,18 @@
         {
             return 'system';
         }
-        if(moduleName === 'report') return link.prj ? 'project' : 'system';
+
+        if(moduleName === 'report')
+        {
+            if(['usereport', 'editreport', 'deletereport', 'custom'].includes(methodLowerCase) && link.params.from)
+            {
+                return 'system';
+            }
+            else
+            {
+                return link.prj ? 'project' : 'report';
+            }
+        }
         if(moduleName === 'program')
         {
             if(methodLowerCase.indexOf('pgm') === 0) return 'program';

@@ -668,7 +668,7 @@ class actionModel extends model
         if(is_numeric($projectID))
         {
             $project = $this->loadModel('program')->getPRJByID($projectID);
-            if($project->type == 'project')
+            if(!empty($project) && $project->type == 'project')
             {
                 $executions = $this->loadModel('project')->getExecutionPairs($projectID);
                 $products   = $this->loadModel('product')->getProductPairsByProject($projectID);

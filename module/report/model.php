@@ -100,7 +100,7 @@ class reportModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
             ->andWhere('t2.status')->eq('closed')
@@ -617,7 +617,7 @@ class reportModel extends model
      * Get user effort stat in this error.
      * 
      * @param  array  $accounts
-     * @param  int    $year 
+     * @param  int    $year
      * @access public
      * @return object
      */

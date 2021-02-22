@@ -7,9 +7,13 @@ include 'chosen.html.php';
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
-<?php $isProgram = (zget($lang->navGroup, $app->rawModule) == 'program');?>
-<?php $isProduct = (zget($lang->navGroup, $app->rawModule) == 'product');?>
-<?php $isProject = (zget($lang->navGroup, $app->rawModule) == 'project');?>
+<?php
+$rawModule = zget($lang->navGroup, $app->rawModule);
+$isProgram = $rawModule == 'program';
+$isProduct = $rawModule == 'product';
+$isProject = $rawModule == 'project';
+$isReport  = $rawModule == 'report';
+?>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
@@ -23,6 +27,7 @@ include 'chosen.html.php';
         <?php if($isProgram) echo isset($lang->program->mainMenuAction) ? $lang->program->mainMenuAction : '';?>
         <?php if($isProject) echo $this->loadModel('program')->getPRJMainAction($app->rawModule, $app->rawMethod);?>
         <?php if($isProduct) echo isset($lang->product->mainMenuAction) ? $lang->product->mainMenuAction : '';?>
+        <?php if($isReport)  echo isset($lang->report->mainMenuAction) ? $lang->report->mainMenuAction : '';?>
       </div>
     </div>
   </div>

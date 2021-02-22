@@ -104,7 +104,7 @@ class programModel extends model
      */
     public function getPGMByID($programID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq((int)$programID)->andWhere('`type`')->eq('program')->fetch();
+        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('`type`')->eq('program')->fetch();
     }
 
     /**

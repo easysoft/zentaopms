@@ -144,13 +144,15 @@ $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
 $lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> Program|program|pgmbrowse|';
 $lang->mainNav->product = '<i class="icon icon-menu-project"></i> Product|product|index|';
 $lang->mainNav->project = '<i class="icon icon-file"></i> Project|program|prjbrowse|';
+$lang->mainNav->qa      = '<i class="icon icon-test"></i> Test|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> Code|repo|browse|';
+$lang->mainNav->report  = "<i class='icon icon-statistic'></i> Statistic|report|productsummary|";
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> Doc|doc|index|';
 $lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 
 $lang->reporting = new stdclass();
-$lang->dividerMenu = ',project,doc,admin,';
+$lang->dividerMenu = ',qa,report,admin,';
 
 /* Program set menu. */
 $lang->program = new stdclass();
@@ -509,7 +511,7 @@ $lang->report->menu = new stdclass();
 
 $lang->report->menu->annual  = array('link' => 'Annual Summary|report|annualData|year=&dept=&userID=' . (isset($_SESSION['user']) ? zget($_SESSION['user'], 'id', 0) : 0), 'target' => '_blank');
 $lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
-$lang->report->menu->prj     = array('link' => $lang->executionCommon . '|report|projectdeviation');
+$lang->report->menu->project = array('link' => $lang->executionCommon . '|report|projectdeviation');
 $lang->report->menu->test    = array('link' => 'Recette|report|bugcreate', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Entreprise|report|workload');
 
@@ -1023,6 +1025,6 @@ $lang->design->menu->ads      = array('link' => 'ADS|design|browse|productID={PR
 $lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');

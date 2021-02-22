@@ -3,8 +3,10 @@ $lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[10] = 'program';
 $lang->mainNav->menuOrder[15] = 'product';
 $lang->mainNav->menuOrder[20] = 'project';
+$lang->mainNav->menuOrder[23] = 'qa';
 $lang->mainNav->menuOrder[25] = 'repo';
 $lang->mainNav->menuOrder[30] = 'doc';
+$lang->mainNav->menuOrder[35] = 'report';
 $lang->mainNav->menuOrder[60] = 'system';
 $lang->mainNav->menuOrder[70] = 'admin';
 
@@ -125,7 +127,7 @@ $lang->doc->menuOrder[30] = 'create';
 /* report menu order. */
 $lang->report->menuOrder[5]  = 'annual';
 $lang->report->menuOrder[10] = 'product';
-$lang->report->menuOrder[15] = 'prj';
+$lang->report->menuOrder[15] = 'project';
 $lang->report->menuOrder[20] = 'test';
 $lang->report->menuOrder[25] = 'staff';
 
