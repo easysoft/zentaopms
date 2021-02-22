@@ -1872,7 +1872,7 @@ class programModel extends model
             }
             if($id == 'PRJBudget')
             {
-                $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format($project->budget, 1);
+                $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format((float)$project->budget, 1);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->program->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $this->lang->program->future;
 
                 $title = "title='$budgetTitle'";

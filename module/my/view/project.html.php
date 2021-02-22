@@ -60,7 +60,7 @@
           <?php endif;?>
           <td class='text-left'><?php echo $project->begin;?></td>
           <td class='text-left'><?php echo $project->end == '0000-00-00' ? '' : $project->end;?></td>
-          <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format($project->budget, 1);?>
+          <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format((float)$project->budget, 1);?>
           <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $lang->program->future;?></td>
           <td>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
