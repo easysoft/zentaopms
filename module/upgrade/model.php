@@ -4320,6 +4320,7 @@ class upgradeModel extends model
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertID();
+                $this->loadModel('action')->create('product', $productID, 'openedbysystem');
 
                 $this->dao->update(TABLE_REPO)->set('product')->eq($productID)->where('id')->eq($repoID)->exec();
             }
