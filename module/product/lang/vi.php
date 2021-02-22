@@ -12,6 +12,7 @@
 $lang->product->common        = $lang->productCommon;
 $lang->product->index         = 'Trang '.$lang->productCommon;
 $lang->product->browse        = 'Danh sách câu chuyện';
+$lang->product->product       = "{$lang->productCommon} List";
 $lang->product->dynamic       = 'Lịch sử';
 $lang->product->view          = "Chi tiết {$lang->productCommon}";
 $lang->product->edit          = "Sửa {$lang->productCommon}";
