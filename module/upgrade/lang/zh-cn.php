@@ -49,21 +49,16 @@ $lang->upgrade->noticeSQL      = '检查到你的数据库跟标准不一致，�
 $lang->upgrade->afterDeleted   = '以上文件未能删除， 删除后刷新！';
 $lang->upgrade->mergeProgram   = '数据迁移';
 $lang->upgrade->mergeTips      = '数据迁移提示';
-$lang->upgrade->to20Demo       = '查看20版本Demo';
-$lang->upgrade->demoURL        = 'http://zentao20.demo.zentao.net';
-$lang->upgrade->videoURL       = 'https://qc.zentao.net/zentao20.mp4';
-$lang->upgrade->to20Tips       = '禅道20版本升级提示';
-$lang->upgrade->to20Button     = '我已经做好备份，开始升级吧！';
-$lang->upgrade->to20TipsHeader = "<p>尊敬的用户，感谢对禅道的支持。自20版本开始，禅道全面升级成为通用的项目管理平台。相关介绍请看如下视频(如视频无法正常播放，请直接访问 <a href='http://zentao20.demo.zentao.net/zentao20.mp4' target='_blank'><u>禅道20版本介绍</u></a>)：</p><br />";
-$lang->upgrade->to20Desc       = <<<EOD
-<div class='text-warning' style='width:60%; margin: auto;'>
-  <p>友情提示：</p>
-  <ol>
-    <li>您可以先安装一个20版本的禅道，体验一下里边的概念和流程。</li>
-    <li>20版本禅道改动比较大，升级之前请做好备份。</li>
-    <li>请放心升级，即使第一次升级不到位，后续还可以再调整，不会影响系统数据。</li>
-  </ol>
-</div>
+$lang->upgrade->to15Guide      = '升级15版本后引导';
+$lang->upgrade->to15Desc       = <<<EOD
+<p>尊敬的用户，禅道从15版本开始对导航和概念做了调整，主要改动如下：</p>
+<ol>
+<li>增加了项目集概念。一个项目集可以包括多个产品和多个项目。</li>
+<li>细分了项目和迭代概念，一个项目可以包含多个迭代。</li>
+<li>导航增加了左侧菜单并支持多页面操作。</li>
+</ol>
+<p>您可以在线体验最新版本的功能以决定是否启用的模式：<a href='http://zentaomax.demo.zentao.net' target='_blank'>演示链接</a>。</p>
+<p>请问您计划如何使用禅道的新版本呢？</p>
 EOD;
 $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>接下来我们会把之前历史产品和迭代数据迁移到项目集和项目下，迁移的方案如下：</p><br />
@@ -76,6 +71,12 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <h4>方案四：关联多个产品的迭代</h4>
 <p>可以选择这些迭代归属于某个新项目下。</p>
 EOD;
+
+$lang->upgrade->to15Mode['old'] = '保持老版本的习惯';
+$lang->upgrade->to15Mode['new'] = '全新项目集管理模式';
+
+$lang->upgrade->selectedModeTips['old'] = '后续您还可以在后台-自定义里面切换为全新项目集管理的模式。';
+$lang->upgrade->selectedModeTips['new'] = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';
 
 $lang->upgrade->line      = '产品线';
 $lang->upgrade->program   = '目标项目集和项目';

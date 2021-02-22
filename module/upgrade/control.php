@@ -23,7 +23,7 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
-        if((version_compare($this->config->installedVersion, '20', '<') 
+        if((version_compare($this->config->installedVersion, '15', '<') 
             || strpos($this->config->installedVersion, 'biz') !== false 
             || strpos($this->config->installedVersion, 'pro') !== false) 
             && strpos($this->config->installedVersion, 'max') === false)
@@ -31,24 +31,9 @@ class upgrade extends control
             /* Judge upgrade step. */
             $upgradeStep = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=upgradeStep');
             if($upgradeStep == 'mergeProgram') $this->locate(inlink('mergeProgram'));
-
-            $this->locate(inlink('to20'));
         }
         if(version_compare($this->config->installedVersion, '6.4', '<=')) $this->locate(inlink('license'));
         $this->locate(inlink('backup'));
-    }
-
-    /**
-     * Upgrade to 20 version.
-     * 
-     * @access public
-     * @return void
-     */
-    public function to20()
-    {
-        $this->view->title = $this->lang->upgrade->to20Tips;
-        $this->view->video = $this->lang->upgrade->videoURL;
-        $this->display();
     }
 
     /**
@@ -152,16 +137,37 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
-            if((version_compare($fromVersion, '20', '<') 
-                || strpos($fromVersion, 'biz') !== false 
-                || strpos($fromVersion, 'pro') !== false) 
+            if((version_compare($fromVersion, '15', '<')
+                || strpos($fromVersion, 'biz') !== false
+                || strpos($fromVersion, 'pro') !== false)
                 && strpos($fromVersion, 'max') === false
-                && !isset($this->config->qcVersion)) $this->locate(inlink('mergeTips'));
+                && !isset($this->config->qcVersion)) $this->locate(inlink('guideTo15', "fromVersion=$fromVersion"));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 
         $this->view->result = 'fail';
         $this->view->errors = $this->upgrade->getError();
+        $this->display();
+    }
+
+    /**
+     * Guide to 15 version.
+     * 
+     * @param  string    $fromVersion 
+     * @access public
+     * @return void
+     */
+    public function guideTo15($fromVersion)
+    {
+        if($_POST)
+        {
+            $after15mode = fixer::input('post')->get('after15mode');
+            $this->loadModel('setting')->setItem('system.custom.after15mode', $after15mode);
+
+            if($after15mode == 'old') $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
+            if($after15mode == 'new') $this->locate(inlink('mergeTips'));
+        }
+
         $this->display();
     }
 
