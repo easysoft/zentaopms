@@ -1002,6 +1002,7 @@ class product extends control
      */
     public function manageLine()
     {
+        $this->app->loadLang('tree');
         if($_POST)
         {
             $this->product->manageLine();
@@ -1012,7 +1013,7 @@ class product extends control
         $this->view->position[] = $this->lang->product->line;
 
         $this->view->programs = array('') + $this->loadModel('program')->getTopPGMPairs();
-        $this->view->sons     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
+        $this->view->lines    = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
         $this->display();
     }
 
