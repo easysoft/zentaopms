@@ -995,6 +995,29 @@ class product extends control
     }
 
     /**
+     * Manage product line.
+     * 
+     * @access public
+     * @return void
+     */
+    public function manageLine()
+    {
+        $this->app->loadLang('tree');
+        if($_POST)
+        {
+            $this->product->manageLine();
+            die(js::reload('parent'));
+        }
+
+        $this->view->title      = $this->lang->product->line;
+        $this->view->position[] = $this->lang->product->line;
+
+        $this->view->programs = array('') + $this->loadModel('program')->getTopPGMPairs();
+        $this->view->lines    = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
+        $this->display();
+    }
+
+    /**
      * Get white list personnel.
      *
      * @param  int    $productID
