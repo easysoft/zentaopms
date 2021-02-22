@@ -3,7 +3,7 @@
   <tr>
     <th>
       <span class="pgm-exist hidden"><?php echo $lang->upgrade->existPGM;?></span>
-      <span class="pgm-no-exist"><?php echo $lang->program->PGMName;?></span></th>
+      <span class="pgm-no-exist"><?php echo $lang->program->PGMName;?></span>
     </th>
     <td class='required'>
       <div class='input-group'>
@@ -23,8 +23,8 @@
   <tr>
     <th>
       <span class="prj-exist hidden"><?php echo $lang->upgrade->existPRJ;?></span>
-      <span class="prj-no-exist"><?php echo $lang->program->PRJName;?></span></th>
-</th>
+      <span class="prj-no-exist"><?php echo $lang->program->PRJName;?></span>
+    </th>
     <td class='required'>
       <div class='input-group'>
         <?php echo html::select("projects", $projects, '', "class='form-control hidden prj-exist'");?>
