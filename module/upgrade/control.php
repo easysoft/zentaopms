@@ -302,6 +302,11 @@ class upgrade extends control
             $this->upgrade->initUserView();
             $this->upgrade->setDefaultPriv();
             $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
+
+            /* Set defult hourPoint. */
+            $hourPoint = $this->loadModel('setting')->getItem('owner=system&module=custom&key=hourPoint');
+            if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
+
             die(js::locate($this->createLink('upgrade', 'mergeRepo')));
         }
 
