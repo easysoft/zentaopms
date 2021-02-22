@@ -469,7 +469,7 @@ class programModel extends model
         if(empty($programID)) return $topPGM;
 
         $program = $this->getPGMByID($programID);
-        list($topPGM) = explode(',', trim($program->path, ','));
+        if(isset($program)) list($topPGM) = explode(',', trim($program->path, ','));
         return $topPGM;
     }
 
