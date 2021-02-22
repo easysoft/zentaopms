@@ -221,7 +221,7 @@ class upgrade extends control
                 /* Create Program. */
                 list($programID, $projectID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
-                
+
                 /* Process merged products and projects. */
                 $this->upgrade->processMergedData($programID, $projectID, $linkedProducts, $linkedSprints);
 

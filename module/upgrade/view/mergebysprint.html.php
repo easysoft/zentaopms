@@ -12,7 +12,7 @@
       </div>
       <div class='line-groups'>
         <?php foreach($noMergedSprints as $sprintID => $sprint):?>
-        <?php echo html::checkBox("sprints", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $sprint->id, "data-begin='{$sprint->begin}' data-end='{$sprint->end}'");?>
+        <?php echo html::checkBox("sprints", array($sprint->id => "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}"), $sprint->id, "data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-pm='{$sprint->PM}'");?>
         <?php endforeach;?>
       </div>
     </div>

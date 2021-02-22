@@ -8,6 +8,7 @@ $(function()
     PGMEnd   = $('.PGMParams #end').val();
     setPGMBegin(PGMBegin);
     setPGMEnd(PGMEnd);
+    setPRJPM();
 
     $('[name^=lines]').change(function()
     {
@@ -22,6 +23,7 @@ $(function()
         }
         setPGMBegin(PGMBegin);
         setPGMEnd(PGMEnd);
+        setPRJPM();
     })
 
     var PGMOriginEnd = $('#end').val();
@@ -71,6 +73,7 @@ $(function()
 
         setPGMBegin(PGMBegin);
         setPGMEnd(PGMEnd);
+        setPRJPM();
     })
 
     $('[name^=products]').change(function()
@@ -89,6 +92,7 @@ $(function()
         }
         setPGMBegin(PGMBegin);
         setPGMEnd(PGMEnd);
+        setPRJPM();
     })
 
     $('[name^=sprints]').change(function()
@@ -103,6 +107,7 @@ $(function()
         }
         setPGMBegin(PGMBegin);
         setPGMEnd(PGMEnd);
+        setPRJPM();
     })
 
     toggleProgram($('form #newProgram0'));
@@ -204,6 +209,21 @@ function setPGMEnd(PGMEnd)
             $('.PGMParams #end').val(PGMEnd);
         }
     });
+}
+
+function setPRJPM()
+{
+    var PM = [];
+    $(':checkbox:checked[data-pm]').each(function()
+    {
+        var PMName = $(this).attr('data-pm');
+        PM[PMName] = PM[PMName] == undefined ? 0 : PM[PMName];
+        PM[PMName] = PM[PMName] + 1;
+    });
+    PM.sort(function(el1, el2){return el2 - el1;});
+    PMNameList = Object.keys(PM);
+    PMNameList = PMNameList.filter(Boolean);
+    $('#PM').val(PMNameList[0]).trigger("chosen:updated");
 }
 
 function convertStringToDate(dateString)
