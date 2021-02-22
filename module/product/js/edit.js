@@ -12,11 +12,6 @@ $(function()
                 $('#program').trigger("chosen:updated");
             }
         }
-    })
-
-    $('#program').change(function()
-    {
-        var programID = $(this).val();
 
         $.get(createLink('product', 'ajaxGetLine', 'programID=' + programID), function(data)
         {

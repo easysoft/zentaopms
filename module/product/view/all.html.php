@@ -80,9 +80,9 @@
           <?php foreach($program as $lineID => $line):?>
           <?php if(isset($line['lineName'])):?>
           <?php
-              $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
-              $trClass .= ' is-nest-child  table-nest';
-              $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,$lineID'";
+          $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
+          $trClass .= ' is-nest-child  table-nest';
+          $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,$lineID'";
           ?>
           <tr <?php echo $trAttrs;?>>
             <td colspan="14">

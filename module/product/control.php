@@ -357,7 +357,6 @@ class product extends control
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
-
         /* Init vars. */
         $product              = $this->product->getById($productID);
         $notRemovePRJ         = array();
@@ -480,7 +479,7 @@ class product extends control
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs             = array('') + $this->loadModel('program')->getTopPGMPairs();
-        $this->view->lines                = array('') + $this->product->getLinePairs($product->program);
+        $this->view->lines                = $product->program ? array('') + $this->product->getLinePairs($product->program) : array();
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
         $this->view->canChangePGM         = $canChangePGM;
         $this->view->singleLinkProjects   = $singleLinkProjects;
@@ -984,7 +983,7 @@ class product extends control
         $this->loadModel('program');
         $this->session->set('productList', $this->app->getURI(true));
 
-        /* Init vars. */
+        /* Process product structure. */
         $productStructure = array();
         $productStats     = $this->product->getStats($orderBy, '', $browseType, '', 'story');
 
