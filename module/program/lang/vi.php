@@ -5,8 +5,9 @@ $lang->program->PRJIndex             = 'Dashboard';
 $lang->program->PRJHome              = 'Home';
 $lang->program->PRJCreate            = 'Create Project';
 $lang->program->PRJEdit              = 'Edit';
+$lang->program->PRJBatchEdit         = 'Batch Edit Projects';
 $lang->program->PRJView              = 'Project View';
-$lang->program->PRJBatchEdit         = 'Batch Edit';
+$lang->program->batchEdit            = 'Batch Edit';
 $lang->program->PRJBrowse            = 'Projects';
 $lang->program->PRJAll               = 'All';
 $lang->program->PRJStart             = 'Start';
@@ -90,8 +91,12 @@ $lang->program->PRJLongTime        = 'Long-Term Project';
 $lang->program->future             = 'TBD';
 $lang->program->morePRJ            = 'More Projects';
 
-$lang->program->productNotEmpty  = 'Please link products or create products.';
-$lang->program->existProductName = 'Product name already exists.';
+$lang->program->productNotEmpty        = 'Please link products or create products.';
+$lang->program->existProductName       = 'Product name already exists.';
+$lang->program->changeProgram          = 'Change program';
+$lang->program->changeProgramTip       = 'After modifying the program set, the products linked with the project will also modify the program set to which it belongs. Please confirm whether to modify it.';
+$lang->program->linkedProjectsTip      = 'Linked projects are as follows';
+$lang->program->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
 
 $lang->program->unitList['CNY'] = 'RMB';
 $lang->program->unitList['USD'] = 'USD';
@@ -266,7 +271,6 @@ $lang->program->PGMLongTime  = 'Long-Term';
 $lang->program->noPGM         = 'No program.';
 $lang->program->PGMShowClosed = 'Closed programs.';
 $lang->program->PGMTips       = 'If a parent item set is selected, products under that parent item set can be associated. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';
-$lang->program->PGMChangeTips = 'After modifying the parent program set, the products associated with the project will be cleared, and the requirements, bugs and other data under the project will also be affected, is it modified?';
 
 $lang->program->PGMAclList['private'] = "Private (accessible to project portfolio holders and stakeholders, stakeholders can follow up maintenance)";
 $lang->program->PGMAclList['open']    = "Default(user who can visit the program can access it)";

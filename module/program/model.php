@@ -457,6 +457,46 @@ class programModel extends model
     }
 
     /**
+     * Get top program by id.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return int
+     */
+    public function getTopPGMByID($programID)
+    {
+        $topPGM  = 0;
+        if(empty($programID)) return $topPGM;
+
+        $program = $this->getPGMByID($programID);
+        if(isset($program)) list($topPGM) = explode(',', trim($program->path, ','));
+        return $topPGM;
+    }
+
+    /**
+     * Get Multiple linked products for project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getMultiLinkedProducts($projectID)
+    {
+        $linkedProducts      = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        $multiLinkedProducts = $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->where('t1.product')->in($linkedProducts)
+            ->andWhere('t1.project')->ne($projectID)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->fetchPairs('id', 'name');
+
+        return $multiLinkedProducts;
+    }
+
+    /**
      * Get children by program id.
      *
      * @param  int     $programID
@@ -1151,15 +1191,15 @@ class programModel extends model
     }
 
     /**
-     * Get project workhour info. 
-     * 
-     * @param  int    $projectID 
+     * Get project workhour info.
+     *
+     * @param  int    $projectID
      * @access public
-     * @return object 
+     * @return object
      */
     public function getPRJWorkhour($projectID)
     {
-        $executions = $this->loadModel('project')->getExecutionPairs($projectID); 
+        $executions = $this->loadModel('project')->getExecutionPairs($projectID);
 
         $total = $this->dao->select('
             ROUND(SUM(estimate), 2) AS totalEstimate,
@@ -1188,14 +1228,14 @@ class programModel extends model
 
     /**
      * Get project stat data .
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
-     * @return object 
+     * @return object
      */
     public function getPRJStatData($projectID)
     {
-        $executions = $this->loadModel('project')->getExecutionPairs($projectID); 
+        $executions = $this->loadModel('project')->getExecutionPairs($projectID);
         $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
             ->where('t2.project')->eq($projectID)
@@ -1617,7 +1657,9 @@ class programModel extends model
      */
     public function PRJUpdate($projectID = 0)
     {
-        $oldProject = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        $oldProject     = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        $_POST['products'] = isset($_POST['products']) ? $_POST['products'] : $linkedProducts;
 
         $project = fixer::input('post')
             ->setDefault('team', substr($this->post->name, 0, 30))
@@ -1657,6 +1699,17 @@ class programModel extends model
             }
         }
 
+        /* Product belonging program set processing. */
+        $oldTopPGM = $this->getTopPGMByID($oldProject->parent);
+        $newTopPGM = $this->getTopPGMByID($project->parent);
+        if($oldTopPGM != $newTopPGM)
+        {
+            foreach($_POST['products'] as $productID => $product)
+            {
+                $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopPGM)->where('id')->eq($productID)->exec();
+            }
+        }
+
         /* Judge products not empty. */
         $linkedProductsCount = 0;
         foreach($_POST['products'] as $product)
@@ -1693,7 +1746,7 @@ class programModel extends model
 
         if(!dao::isError())
         {
-            $this->loadModel('project')->updateProducts($projectID);
+            $this->loadModel('project')->updateProducts($projectID, $_POST['products']);
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
             $whitelist = explode(',', $project->whitelist);
@@ -1704,6 +1757,54 @@ class programModel extends model
 
             return common::createChanges($oldProject, $project);
         }
+    }
+
+    /**
+     * Batch update products.
+     *
+     * @access public
+     * @return array
+     */
+    public function PRJBatchUpdate()
+    {
+        $projects    = array();
+        $allChanges  = array();
+        $data        = fixer::input('post')->get();
+        $oldProjects = $this->getPRJByIdList($this->post->projectIdList);
+        $nameList    = array();
+
+        foreach($data->projectIdList as $projectID)
+        {
+            $projectName   = $data->names[$projectID];
+            $parentProgram = $data->parents[$projectID];
+
+            $projectID = (int)$projectID;
+            $projects[$projectID] = new stdClass();
+            $projects[$projectID]->name   = $projectName;
+            $projects[$projectID]->parent = $parentProgram;
+            $projects[$projectID]->PM     = $data->PMs[$projectID];
+
+            /* Check unique name for edited projects. */
+            if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID .  sprintf($this->lang->error->unique, $this->lang->program->PRJName, $projectName);
+            $nameList[$projectName] = $projectName;
+        }
+
+        foreach($projects as $projectID => $project)
+        {
+            $oldProject = $oldProjects[$projectID];
+            $this->dao->update(TABLE_PROJECT)
+                ->data($project)
+                ->autoCheck()
+                ->batchCheck($this->config->program->PRJEdit->requiredFields , 'notempty')
+                ->check('name', 'unique', "id NOT " . helper::dbIN($data->projectIdList) . " and deleted='0'")
+                ->where('id')->eq($projectID)
+                ->exec();
+
+            if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
+
+            $allChanges[$projectID] = common::createChanges($oldProject, $project);
+        }
+        return $allChanges;
     }
 
     /**
@@ -1718,16 +1819,19 @@ class programModel extends model
      */
     public function printCell($col, $project, $users, $programID = 0)
     {
-        $canOrder = common::hasPriv('program', 'PRJOrderUpdate');
-        $account  = $this->app->user->account;
-        $id       = $col->id;
+        $canOrder     = common::hasPriv('program', 'PRJOrderUpdate');
+        $canBatchEdit = common::hasPriv('program', 'PRJBatchEdit');
+        $projectLink  = helper::createLink('program', 'index', "projectID=$project->id", '', '', $project->id);
+        $account      = $this->app->user->account;
+        $id           = $col->id;
 
         if($col->show)
         {
             $title = '';
             $class = "c-$id" . (in_array($id, ['PRJBudget', 'teamCount']) ? ' c-number' : ' c-name');
 
-            if($id == 'idAB') $class .= ' cell-id';
+            if($id == 'id') $class .= ' cell-id';
+
             if($id == 'PRJName')
             {
                 $class .= ' text-left';
@@ -1762,11 +1866,17 @@ class programModel extends model
             echo "<td class='$class' $title>";
             switch($id)
             {
-                case 'idAB':
-                    printf('%03d', $project->id);
+                case 'id':
+                    if($canBatchEdit)
+                    {
+                        echo html::checkbox('projectIdList', array($project->id => '')) . html::a($projectLink, sprintf('%03d', $project->id));
+                    }
+                    else
+                    {
+                        printf('%03d', $project->id);
+                    }
                     break;
                 case 'PRJName':
-                    $projectLink = helper::createLink('program', 'index', "projectID=$project->id", '', '', $project->id);
                     echo html::a($projectLink, $project->name);
                     if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->program->waterfall}</span>";
                     if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->program->scrum}</span>";
@@ -1826,7 +1936,7 @@ class programModel extends model
 
                     $from       = $project->from == 'PRJ' ? 'PRJ' : 'pgmproject';
                     $openModule = $project->from == 'PRJ' ? 'project' : 'program';
-                    common::printIcon('program', 'PRJEdit', "projectID=$project->id&programID=$project->parent&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$openModule", '', $project->id);
+                    common::printIcon('program', 'PRJEdit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$openModule", '', $project->id);
                     common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', '', '', $project->id);
                     common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', '', '', $project->id);
 

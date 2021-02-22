@@ -5,8 +5,9 @@ $lang->program->PRJIndex             = '项目仪表盘';
 $lang->program->PRJHome              = '项目主页';
 $lang->program->PRJCreate            = '创建项目';
 $lang->program->PRJEdit              = '编辑项目';
+$lang->program->PRJBatchEdit         = '批量编辑项目';
 $lang->program->PRJView              = '项目概况';
-$lang->program->PRJBatchEdit         = '批量编辑';
+$lang->program->batchEdit            = '批量编辑';
 $lang->program->PRJBrowse            = '项目列表';
 $lang->program->PRJAll               = '所有项目';
 $lang->program->PRJStart             = '启动项目';
@@ -90,8 +91,12 @@ $lang->program->PRJLongTime        = '长期';
 $lang->program->future             = '待定';
 $lang->program->morePRJ            = '更多项目';
 
-$lang->program->productNotEmpty  = '请关联产品或创建产品。';
-$lang->program->existProductName = '产品名称已存在。';
+$lang->program->productNotEmpty        = '请关联产品或创建产品。';
+$lang->program->existProductName       = '产品名称已存在。';
+$lang->program->changeProgram          = '修改项目集';
+$lang->program->changeProgramTip       = '修改项目集后，该项目关联的产品也会同时修改所属项目集，请确认是否修改。';
+$lang->program->linkedProjectsTip      = '关联的项目如下';
+$lang->program->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';
 
 $lang->program->tenThousand = '万';
 
@@ -268,7 +273,6 @@ $lang->program->PGMLongTime  = '长期项目';
 $lang->program->noPGM         = '暂时没有项目集';
 $lang->program->PGMShowClosed = '显示已关闭';
 $lang->program->PGMTips       = '选择了父项目集，则可关联该父项目集下的产品。如果项目未选择任何项目集，则系统会默认创建一个和该项目同名的产品并关联该项目。';
-$lang->program->PGMChangeTips = '修改父项目集后，项目已关联的产品会被清空，并且项目下的需求、bug等数据也会受影响，是否修改？';
 
 $lang->program->PGMAclList['private'] = "私有（项目集负责人和干系人可访问，干系人可后续维护）";
 $lang->program->PGMAclList['open']    = "公开（有项目集视图权限，即可访问）";

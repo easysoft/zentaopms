@@ -1,9 +1,53 @@
 $(function()
 {
-    $('#parent').click(function()
+    $('#parent').change(function()
     {
-        if(!confirm(PGMChangeTips)) return false;
-    })
+        var programID = $(this).val();
+
+        link = createLink('program', 'ajaxCheckProduct', 'programID=' + programID + '&projectID=' + projectID);
+        $.getJSON(link, function(data)
+        {
+            var changed = true;
+
+            if(data && data.result)
+            {
+                changed = confirm(data.message);
+                if(changed)
+                {
+                    $('#productsBox select').prop('disabled', true).trigger("chosen:updated");
+                }
+            }
+
+            if(data && !data.result)
+            {
+                $('#promptTable tbody tr').remove();
+                for(var i in data.message)
+                {
+                    var product = data.message[i];
+                    $('#promptTable').append("<tr><td><i class='icon icon-product'></i><strong>" + product +"</strong> " + linkedProjectsTip +"</td></tr>");
+                    for(var j in data.multiLinkedProjects)
+                    {
+                        if(i == j)
+                        {
+                            html = ''
+                            for(k in data.multiLinkedProjects[j])
+                            {
+                                var project = data.multiLinkedProjects[j][k];
+                                html += "<p><i class='icon icon-project'></i>" + project +"</p>";
+                            }
+                            $('#promptTable').append("<tr><td style='padding-left:40px'>" + html + "</td></tr>");
+                        }
+                    }
+                }
+
+                changed = false;
+                $('#promptBox').modal({show: true});
+            }
+
+            if(!changed) $("#parent").val(oldParent).trigger("chosen:updated");
+            oldParent = $('#parent').val();
+        });
+    });
 
     adjustProductBoxMargin();
     adjustPlanBoxMargin();
@@ -37,26 +81,5 @@ function setAclList(programID)
     else
     {
         $('.aclBox').html($('#PRJAcl').html());
-    }
-}
-
-/**
- * Set parent program.
- *
- * @access public
- * @return void
- */
-function setParentProgram()
-{
-    var parentProgram = $("#parent").val();
-
-    if(confirm(PGMChangeTips))
-    {
-        location.href = createLink('program', 'PRJEdit', 'projectID=' + projectID + '&programID=' + parentProgram + '&from=' + from);
-    }
-    else
-    {
-        $('#parent').val(oldParent);
-        $("#parent").trigger("chosen:updated");
     }
 }

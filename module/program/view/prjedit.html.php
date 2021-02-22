@@ -17,11 +17,11 @@
 <?php js::set('errorSameProducts', $lang->program->errorSameProducts);?>
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>
-<?php js::set('PGMChangeTips', $lang->program->PGMChangeTips);?>
 <?php js::set('longTime', $lang->program->PRJLongTime);?>
 <?php js::set('from', $from);?>
 <?php js::set('notRemoveProducts', $notRemoveProducts)?>
 <?php js::set('tip', $lang->program->notAllowRemoveProducts);?>
+<?php js::set('linkedProjectsTip', $lang->program->linkedProjectsTip);?>
 <?php $aclList = $project->parent ? $lang->program->PGMPRJAclList : $lang->program->PRJAclList;?>
 <?php $requiredFields = $config->program->PRJEdit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -33,7 +33,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->PGMParent;?></th>
-          <td><?php echo html::select('parent', $programList, $programID != $project->parent ? $programID : $project->parent, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
+          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen'");?></td>
           <td></td>
           <td></td>
         </tr>
@@ -173,5 +173,25 @@
 </div>
 <div id='PGMAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
+</div>
+<div class="modal fade" id="promptBox">
+  <div class="modal-dialog mw-600px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $project->name . ' > ' . $lang->program->changeProgram;?></h4>
+      </div>
+      <div class="modal-body">
+        <table class='table table-form' id='promptTable'>
+          <thead>
+            <tr>
+              <th class='text-left'><?php echo $lang->program->multiLinkedProductsTip;?></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

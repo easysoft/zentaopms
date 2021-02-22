@@ -55,7 +55,7 @@ js::set('browseType', $browseType);
       </p>
     </div>
     <?php else:?>
-    <form class='main-table' id='PRJForm' method='post'>
+    <form class='main-table' id='PRJForm' method='post' data-ride="table">
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
@@ -64,13 +64,14 @@ js::set('browseType', $browseType);
         $setting = $this->datatable->getSetting('program');
       ?>
       <table class='table has-sort-head'>
+      <?php $canBatchEdit = common::hasPriv('program', 'PRJBatchEdit');?>
         <thead>
           <tr>
             <?php
               foreach($setting as $value)
               {
                 if($value->id == 'PRJStatus' and $browseType !== 'all') $value->show = false;
-                if($value->show) $this->datatable->printHead($value, $orderBy, $vars);
+                if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
               }
             ?>
           </tr>
@@ -85,6 +86,19 @@ js::set('browseType', $browseType);
         </tbody>
       </table>
       <div class='table-footer'>
+        <?php if($canBatchEdit):?>
+        <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <?php endif;?>
+        <div class="table-actions btn-toolbar">
+        <?php
+        if($canBatchEdit)
+        {
+            $actionLink = $this->createLink('program', 'PRJBatchEdit', 'from=prjbrowse');
+            $misc       = "data-form-action='$actionLink'";
+            echo html::commonButton($lang->edit, $misc);
+        }
+        ?>
+        </div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>

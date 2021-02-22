@@ -4024,6 +4024,8 @@ class upgradeModel extends model
                 ->set('`order`')->eq($programID * 5)
                 ->where('id')->eq($programID)
                 ->exec();
+
+             $this->loadModel('action')->create('program', $programID, 'openedbysystem');
         }
         else
         {
@@ -4065,6 +4067,8 @@ class upgradeModel extends model
                 ->set('`order`')->eq($projectID * 5)
                 ->where('id')->eq($projectID)
                 ->exec();
+
+             $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
         }
         else
         {
@@ -4113,6 +4117,26 @@ class upgradeModel extends model
             $projectStory->project = $projectID;
             $this->dao->insert(TABLE_PROJECTSTORY)->data($projectStory)->exec();
         }
+
+        /* Compute project date. */
+        $linkedSprintIdList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->fetchPairs();
+        $linkedSprintIdList += $sprintIdList;
+        $undoneSprints       = $this->dao->select("count('*') as count")->from(TABLE_PROJECT)->where('id')->in($linkedSprintIdList)->andWhere('status')->ne('closed')->fetch('count');
+        $minRealBegan        = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('started')->orderBy('date_asc')->fetch('date');
+        $maxRealEnd          = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('closed')->orderBy('date_desc')->fetch('date');
+
+        $data = new stdClass();
+        $data->realBegan = $minRealBegan ? substr($minRealBegan, 0, 10) : '0000-00-00';
+        if($maxRealEnd and !$undoneSprints)
+        {
+            $data->realEnd    = substr($maxRealEnd, 0, 10);
+            $data->closedDate = $maxRealEnd;
+            $data->status     = 'closed';
+        }
+
+        $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
+
+        if($maxRealEnd and !$undoneSprints) $this->loadModel('action')->create('project', $projectID, 'closedbysystem');
 
         /* Compute product acl. */
         $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();

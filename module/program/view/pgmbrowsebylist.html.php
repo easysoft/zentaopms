@@ -95,7 +95,7 @@
             </ul>
           </div>
           <?php endif;?>
-          <?php common::printIcon('program', 'PRJEdit', "projectID=$program->id&programID=$program->parent&from=pgmbrowse", $program, 'list', 'edit', '', '', '', "data-group='program'", '', $program->id);?>
+          <?php common::printIcon('program', 'PRJEdit', "projectID=$program->id&from=pgmbrowse", $program, 'list', 'edit', '', '', '', "data-group='program'", '', $program->id);?>
           <?php common::printIcon('program', 'PRJManageMembers', "projectID=$program->id", $program, 'list', 'group', '', '', '', 'data-group="program"', '', $program->id);?>
           <?php common::printIcon('program', 'PRJGroup',         "projectID=$program->id", $program, 'list', 'lock', '', '', '', 'data-group="program"', '', $program->id);?>
           <?php if(common::hasPriv('program', 'PRJManageProducts') || common::hasPriv('program', 'PRJWhitelist') || common::hasPriv('program', 'PRJDelete')):?>

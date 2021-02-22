@@ -6,7 +6,7 @@ $lang->program->PRJHome              = '項目主頁';
 $lang->program->PRJCreate            = '創建項目';
 $lang->program->PRJEdit              = '編輯項目';
 $lang->program->PRJView              = '項目概況';
-$lang->program->PRJBatchEdit         = '批量編輯';
+$lang->program->batchEdit            = '批量編輯';
 $lang->program->PRJBrowse            = '項目列表';
 $lang->program->PRJAll               = '所有項目';
 $lang->program->PRJStart             = '啟動項目';
@@ -268,7 +268,6 @@ $lang->program->PGMLongTime  = '長期項目';
 $lang->program->noPGM         = '暫時沒有項目集';
 $lang->program->PGMShowClosed = '顯示已關閉';
 $lang->program->PGMTips       = '選擇了父項目集，則可關聯該父項目集下的產品。如果項目未選擇任何項目集，則系統會預設創建一個和該項目同名的產品並關聯該項目。';
-$lang->program->PGMChangeTips = '修改父項目集後，項目已關聯的產品會被清空，並且項目下的需求、bug等數據也會受影響，是否修改？';
 
 $lang->program->PGMAclList['private'] = "私有（項目集負責人和干係人可訪問，干係人可後續維護）";
 $lang->program->PGMAclList['open']    = "公開（有項目集視圖權限，即可訪問）";
