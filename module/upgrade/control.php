@@ -439,11 +439,12 @@ class upgrade extends control
         }
 
         $programs = $this->upgrade->getProgramPairs();
+        $currentProgramID = $programID ? $programID : key($programs);
 
         $this->view->title     = $this->lang->upgrade->mergeProgram;
         $this->view->programs  = $programs;
         $this->view->programID = $programID;
-        $this->view->projects  = array('' => '') + $this->upgrade->getProjectPairsByProgram(key($programs));
+        $this->view->projects  = array('' => '') + $this->upgrade->getProjectPairsByProgram($currentProgramID);
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups    = $this->loadModel('group')->getPairs();
         $this->display();

@@ -20,6 +20,10 @@
       </div>
     </td>
   </tr>
+  <tr class='PGMParams'>
+    <th><?php echo $lang->program->PGMCommon . $lang->program->PGMStatus;?></th>
+    <td><?php echo html::select('PGMStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
+  </tr>
   <tr>
     <th>
       <span class="prj-exist hidden"><?php echo $lang->upgrade->existPRJ;?></span>
@@ -39,6 +43,10 @@
         <?php endif;?>
       </div>
     </td>
+  </tr>
+  <tr class='PGMParams'>
+    <th><?php echo $lang->program->PRJCommon . $lang->program->PRJStatus;?></th>
+    <td><?php echo html::select('PRJStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
   </tr>
   <tr class='PGMParams'>
     <th><?php echo $lang->program->PRJPM;?></th>
