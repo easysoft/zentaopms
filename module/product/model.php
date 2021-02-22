@@ -388,7 +388,7 @@ class productModel extends model
 
         if(empty($products)) return $products;
 
-        $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
+        $lines = $this->getLinePairs();
         $productList = array();
         foreach($lines as $id => $name)
         {
@@ -1356,6 +1356,22 @@ class productModel extends model
         }
 
         return $stats;
+    }
+
+    /**
+     * Get product line pairs.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function getLinePairs($programID = 0)
+    {
+        return $this->dao->select('id,name')->from(TABLE_MODULE)
+            ->where('type')->eq('line')
+            ->beginIF($programID)->andWhere('root')->eq($programID)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
     }
 
     /**

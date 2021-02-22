@@ -333,7 +333,6 @@ class product extends control
         $this->view->rdUsers    = $rdUsers;
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
-        $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);
@@ -481,7 +480,7 @@ class product extends control
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs             = array('') + $this->loadModel('program')->getTopPGMPairs();
-        $this->view->lines                = array('') + $this->loadModel('tree')->getLinePairs();
+        $this->view->lines                = array('') + $this->product->getLinePairs($product->program);
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
         $this->view->canChangePGM         = $canChangePGM;
         $this->view->singleLinkProjects   = $singleLinkProjects;
@@ -556,7 +555,7 @@ class product extends control
 
         $this->view->title         = $this->lang->product->batchEdit;
         $this->view->position[]    = $this->lang->product->batchEdit;
-        $this->view->lines         = array('') + $this->tree->getLinePairs();
+        $this->view->lines         = array('') + $this->product->getLinePairs();
         $this->view->productIDList = $productIDList;
         $this->view->products      = $products;
         $this->view->poUsers       = $poUsers;
@@ -804,7 +803,7 @@ class product extends control
         $this->view->product    = $product;
         $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
+        $this->view->lines      = array('') + $this->product->getLinePairs();
         $this->view->dynamics   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, $productID);
         $this->view->roadmaps   = $this->product->getRoadmap($productID, 0, 6);
 
@@ -870,6 +869,19 @@ class product extends control
             $output .= '</div>';
         }
         die($output);
+    }
+
+    /**
+     * Ajax get product lines.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetLine($programID)
+    {
+        $lines = $this->product->getLinePairs($programID);
+        die(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
     }
 
     /**
@@ -1100,7 +1112,7 @@ class product extends control
                 unset($fields[$key]);
             }
 
-            $lines = $this->loadModel('tree')->getLinePairs();
+            $lines = $this->product->getLinePairs();
             $productStats = $this->product->getStats($orderBy, null, $status);
             foreach($productStats as $i => $product)
             {

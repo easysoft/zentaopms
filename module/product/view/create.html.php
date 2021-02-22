@@ -26,6 +26,10 @@
             <td><?php echo html::select('program', $programs, '', "class='form-control chosen' required");?></td><td></td>
           </tr>  
           <tr>
+            <th class='w-140px'><?php echo $lang->product->line;?></th>
+            <td><?php echo html::select('line', '', '', "class='form-control chosen'");?></td><td></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->product->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control input-product-title' required");?></td><td></td>
           </tr>

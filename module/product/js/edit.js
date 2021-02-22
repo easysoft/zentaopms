@@ -13,6 +13,18 @@ $(function()
             }
         }
     })
+
+    $('#program').change(function()
+    {
+        var programID = $(this).val();
+
+        $.get(createLink('product', 'ajaxGetLine', 'programID=' + programID), function(data)
+        {
+            $('#line_chosen').remove();
+            $('#line').replaceWith(data);
+            $('#line').chosen();
+        })
+    })
 });
 
 /**

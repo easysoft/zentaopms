@@ -205,23 +205,6 @@ class treeModel extends model
     }
 
     /**
-     * Get line pairs.
-     *
-     * @param  bool    $useShort 
-     * @access public
-     * @return array
-     */
-    public function getLinePairs($useShort = false)
-    {
-        $lines = $this->dao->select('id,name,short')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->fetchAll('id');
-
-        $linePairs = array();
-        foreach($lines as $lineID => $line) $linePairs[$lineID] = ($useShort and !empty($line->short)) ? $line->short : $line->name;
-
-        return $linePairs;
-    }
-
-    /**
      * Create an option menu of task in html.
      *
      * @param  int    $rootID
