@@ -55,6 +55,6 @@ $(document).on('click', 'td.content .more', function(e)
  */
 function getPlanID(obj)
 {
-    var planID = $(obj).attr("data-id")
+    var planID = $(obj).attr("data-id");
     $('#planID').val(planID);
 }

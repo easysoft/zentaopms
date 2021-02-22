@@ -11,10 +11,12 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('linkedProjectsTip', $lang->program->linkedProjectsTip);?>
+<?php js::set('changeProgram', $lang->program->changeProgram);?>
 <?php $requiredFields = $config->program->PRJEdit->requiredFields;?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $lang->product->batchEdit;?></h2>
+    <h2><?php echo $lang->program->PRJBatchEdit;?></h2>
   </div>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchEditForm">
     <table class="table table-form">
@@ -29,10 +31,10 @@
       <tbody>
         <?php foreach($projectIdList as $projectID):?>
         <tr>
-          <td><?php echo sprintf('%03d', $projectID) . html::hidden("productIDList[$projectID]", $projectID);?></td>
-          <td><?php echo html::select('parents', $programList, $projects[$projectID]->parent, "class='form-control chosen'");?></td>
+          <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIdList[$projectID]", $projectID);?></td>
+          <td><?php echo html::select("parents[$projectID]", $programList, $projects[$projectID]->parent, "class='form-control chosen' data-id='$projectID' data-name='{$projects[$projectID]->name}' data-parent='{$projects[$projectID]->parent}'");?></td>
           <td title='<?php echo $projects[$projectID]->name;?>'><?php echo html::input("names[$projectID]", $projects[$projectID]->name, "class='form-control'");?></td>
-          <td><?php echo html::select('PMs[$projectID]', $PMUsers, $projects[$projectID]->PM, "class='form-control chosen'");?></td>
+          <td><?php echo html::select("PMs[$projectID]", $PMUsers, $projects[$projectID]->PM, "class='form-control chosen'");?></td>
         </tr>
         <?php endforeach;?>
       </tbody>
@@ -45,5 +47,25 @@
         </tr>
       </tfoot>
     </table>
+</div>
+<div class="modal fade" id="promptBox">
+  <div class="modal-dialog mw-600px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <table class='table table-form' id='promptTable'>
+          <thead>
+            <tr>
+              <th class='text-left'><?php echo $lang->program->multiLinkedProductsTip;?></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

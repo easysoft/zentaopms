@@ -179,7 +179,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $project->name . ' > ' . $lang->program->changeProgram;?></h4>
+        <h4 class="modal-title"><?php printf($lang->program->changeProgram, $project->name);?></h4>
       </div>
       <div class="modal-body">
         <table class='table table-form' id='promptTable'>

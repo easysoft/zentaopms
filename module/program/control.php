@@ -1059,16 +1059,33 @@ class program extends control
      */
     public function PRJBatchEdit($from = 'prjbrowse', $programID = 0)
     {
+        /* Navigation stay in program when enter from program list. */
         if($from == 'pgmproject')
         {
             $this->app->rawMethod = 'pgmproject';
             $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
             $this->program->setPGMViewMenu($programID);
         }
-
         if($from == 'prjbrowse')
         {
             $this->lang->program->menu = $this->lang->PRJ->menu;
+        }
+
+        if($this->post->names)
+        {
+            $allChanges = $this->program->PRJBatchUpdate();
+
+            if(!empty($allChanges))
+            {
+                foreach($allChanges as $projectID => $changes)
+                {
+                    if(empty($changes)) continue;
+
+                    $actionID = $this->loadModel('action')->create('project', $projectID, 'Edited');
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+            die(js::locate($this->session->projectList, 'parent'));
         }
 
         $projectIdList = $this->post->projectIdList ? $this->post->projectIdList : die(js::locate($this->session->projectList, 'parent'));
@@ -1831,6 +1848,7 @@ class program extends control
      */
     public function ajaxCheckProduct($programID, $projectID)
     {
+        /* Set vars. */
         $project   = $this->program->getPRJByID($projectID);
         $oldTopPGM = $this->program->getTopPGMByID($project->parent);
         $newTopPGM = $this->program->getTopPGMByID($programID);

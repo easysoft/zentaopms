@@ -102,7 +102,7 @@ class programModel extends model
      */
     public function getPGMByID($programID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('`type`')->eq('program')->fetch();
+        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq((int)$programID)->andWhere('`type`')->eq('program')->fetch();
     }
 
     /**
@@ -469,7 +469,7 @@ class programModel extends model
         if(empty($programID)) return $topPGM;
 
         $program = $this->getPGMByID($programID);
-        if(!empty($program))list($topPGM) = explode(',', trim($program->path, ','));
+        if(!empty($program)) list($topPGM) = explode(',', trim($program->path, ','));
         return $topPGM;
     }
 
@@ -1657,8 +1657,8 @@ class programModel extends model
      */
     public function PRJUpdate($projectID = 0)
     {
-        $oldProject     = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
-        $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        $oldProject        = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        $linkedProducts    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
         $_POST['products'] = isset($_POST['products']) ? $_POST['products'] : $linkedProducts;
 
         $project = fixer::input('post')
@@ -1699,16 +1699,6 @@ class programModel extends model
             }
         }
 
-        /* Product belonging program set processing. */
-        $oldTopPGM = $this->getTopPGMByID($oldProject->parent);
-        $newTopPGM = $this->getTopPGMByID($project->parent);
-        if($oldTopPGM != $newTopPGM)
-        {
-            foreach($_POST['products'] as $productID => $product)
-            {
-                $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopPGM)->where('id')->eq($productID)->exec();
-            }
-        }
 
         /* Judge products not empty. */
         $linkedProductsCount = 0;
@@ -1746,6 +1736,17 @@ class programModel extends model
 
         if(!dao::isError())
         {
+            /* Product belonging program set processing. */
+            $oldTopPGM = $this->getTopPGMByID($oldProject->parent);
+            $newTopPGM = $this->getTopPGMByID($project->parent);
+            if($oldTopPGM != $newTopPGM)
+            {
+                foreach($_POST['products'] as $productID => $product)
+                {
+                    $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopPGM)->where('id')->eq($productID)->exec();
+                }
+            }
+
             $this->loadModel('project')->updateProducts($projectID, $_POST['products']);
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
@@ -1760,7 +1761,7 @@ class programModel extends model
     }
 
     /**
-     * Batch update products.
+     * Batch update projects.
      *
      * @access public
      * @return array
@@ -1801,7 +1802,21 @@ class programModel extends model
                 ->exec();
 
             if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
-
+            if(!dao::isError())
+            {
+                /* Product belonging program set processing. */
+                $oldTopPGM      = $this->getTopPGMByID($oldProject->parent);
+                $newTopPGM      = $this->getTopPGMByID($project->parent);
+                $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+                if($oldTopPGM != $newTopPGM)
+                {
+                    foreach($linkedProducts as $productID => $product)
+                    {
+                        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopPGM)->where('id')->eq($productID)->exec();
+                    }
+                }
+                if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
+            }
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }
         return $allChanges;

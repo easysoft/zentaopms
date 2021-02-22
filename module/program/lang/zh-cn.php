@@ -93,7 +93,7 @@ $lang->program->morePRJ            = '更多项目';
 
 $lang->program->productNotEmpty        = '请关联产品或创建产品。';
 $lang->program->existProductName       = '产品名称已存在。';
-$lang->program->changeProgram          = '修改项目集';
+$lang->program->changeProgram          = '%s > 修改项目集';
 $lang->program->changeProgramTip       = '修改项目集后，该项目关联的产品也会同时修改所属项目集，请确认是否修改。';
 $lang->program->linkedProjectsTip      = '关联的项目如下';
 $lang->program->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';

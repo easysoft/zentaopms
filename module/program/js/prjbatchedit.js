@@ -1,8 +1,12 @@
 $(function()
 {
-    $('#parent').change(function()
+    $("select[name^='parents']").change(function()
     {
-        var programID = $(this).val();
+        var $this     = $(this);
+        var programID = $this.val();
+        var projectID = $this.attr("data-id");
+        var oldParent = $this.attr("data-parent");
+        var title     = changeProgram.replace('%s', $this.attr("data-name"));
 
         /* Determine whether the project can change the program set. */
         link = createLink('program', 'ajaxCheckProduct', 'programID=' + programID + '&projectID=' + projectID);
@@ -13,15 +17,12 @@ $(function()
             if(data && data.result)
             {
                 changed = confirm(data.message);
-                if(changed)
-                {
-                    $('#productsBox select').prop('disabled', true).trigger("chosen:updated");
-                }
             }
 
             if(data && !data.result)
             {
                 $('#promptTable tbody tr').remove();
+                $('.modal-title').text(title);
                 for(var i in data.message)
                 {
                     var product = data.message[i];
@@ -45,42 +46,8 @@ $(function()
                 $('#promptBox').modal({show: true});
             }
 
-            if(!changed) $("#parent").val(oldParent).trigger("chosen:updated");
-            oldParent = $('#parent').val();
+            if(!changed) $this.val(oldParent).trigger("chosen:updated");
+            $this.attr('data-parent', $this.val());
         });
     });
-
-    adjustProductBoxMargin();
-    adjustPlanBoxMargin();
-
-    /* If the story of the product which linked the execution under the project, you don't allow to remove the product. */
-    $("#productsBox select").each(function()
-    {
-        var isExisted = $.inArray($(this).attr('data-last'), notRemoveProducts);
-        if(isExisted != -1)
-        {
-            $(this).prop('disabled', true).trigger("chosen:updated");
-            $(this).siblings('div').find('span').attr('title', tip);
-        }
-    });
-
 });
-
-/**
- * Set aclList.
- *
- * @param  int   $programID
- * @access public
- * @return void
- */
-function setAclList(programID)
-{
-    if(programID != 0)
-    {
-        $('.aclBox').html($('#PGMAcl').html());
-    }
-    else
-    {
-        $('.aclBox').html($('#PRJAcl').html());
-    }
-}

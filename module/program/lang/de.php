@@ -93,7 +93,7 @@ $lang->program->morePRJ            = 'More Project';
 
 $lang->program->productNotEmpty        = 'Please link products or create products.';
 $lang->program->existProductName       = 'Product name already exists.';
-$lang->program->changeProgram          = 'Change program';
+$lang->program->changeProgram          = '%s > Change program';
 $lang->program->changeProgramTip       = 'After modifying the program set, the products linked with the project will also modify the program set to which it belongs. Please confirm whether to modify it.';
 $lang->program->linkedProjectsTip      = 'Linked projects are as follows';
 $lang->program->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
