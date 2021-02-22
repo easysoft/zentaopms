@@ -126,7 +126,7 @@ function getProjectByProgram(obj)
 
 function toggleProgram(obj)
 {
-    var $obj       = $(obj);
+    var $obj = $(obj);
     if($obj.length == 0) return false;
 
     var $programs = $obj.closest('table').find('#programs');
@@ -135,6 +135,7 @@ function toggleProgram(obj)
         $('form .pgm-no-exist').removeClass('hidden');
         $('form .pgm-exist').addClass('hidden');
         $programs.attr('disabled', 'disabled');
+        $('#PGMStatus').closest('.PGMParams').show();
 
         $('form #newProject0').prop('checked', true);
         toggleProject($('form #newProject0'));
@@ -143,6 +144,7 @@ function toggleProgram(obj)
     {
         $('form .pgm-exist').removeClass('hidden');
         $('form .pgm-no-exist').addClass('hidden');
+        $('#PGMStatus').closest('.PGMParams').hide();
         $programs.removeAttr('disabled');
     }
 }
@@ -176,6 +178,38 @@ function toggleProject(obj)
     }
 }
 
+function setPRJStatus()
+{
+    var PRJStatus = 'closed';
+    $(':checkbox:checked[data-status]').each(function()
+    {
+        var status = $(this).attr('data-status');
+        if(status == 'doing' || status == 'suspended') 
+        {
+            PRJStatus = 'doing';
+            return false;
+        }
+
+        if(status == 'wait') PRJStatus = 'wait';
+    });
+    if($(':checkbox:checked[data-status]').length == 0) PRJStatus = 'wait';
+
+    $('#PRJStatus').val(PRJStatus);
+    $('#PRJStatus').trigger('chosen:updated');
+
+    setPGMStatus(PRJStatus);
+}
+
+function setPGMStatus(PRJStatus)
+{
+    var PGMStatus = 'wait';
+    if(PRJStatus != 'wait') PGMStatus = 'doing';
+    if(PRJStatus == 'closed') PGMStatus = 'closed';
+
+    $('#PGMStatus').val(PGMStatus);
+    $('#PGMStatus').trigger('chosen:updated');
+}
+
 function setPGMBegin(PGMBegin)
 {
     $(':checkbox:checked[data-begin]').each(function()
@@ -189,6 +223,8 @@ function setPGMBegin(PGMBegin)
             $('.PGMParams #begin').val(PGMBegin);
         }
     });
+
+	setPRJStatus();
 }
 
 function setPGMEnd(PGMEnd)

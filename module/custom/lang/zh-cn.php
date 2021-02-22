@@ -38,6 +38,7 @@ $lang->custom->URStory              = "用户需求";
 $lang->custom->SRStory              = "软件需求";
 $lang->custom->epic                 = "史诗";
 $lang->custom->default              = "默认";
+$lang->custom->mode                 = "模式";
 $lang->custom->scrumStory           = "故事";
 $lang->custom->waterfallCommon      = "瀑布";
 $lang->custom->buildin              = "系统内置";

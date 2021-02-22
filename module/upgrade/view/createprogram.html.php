@@ -9,7 +9,7 @@
       <div class='input-group'>
         <?php echo html::select("programs", $programs, $programID, "class='form-control hidden pgm-exist' onchange='getProjectByProgram(this)'");?>
         <?php echo html::input("PGMName", isset($programName) ? $programName : '', "class='form-control pgm-no-exist'");?>
-        <?php if(count(programs)):?>
+        <?php if(count($programs)):?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />
@@ -19,6 +19,10 @@
         <?php endif;?>
       </div>
     </td>
+  </tr>
+  <tr class='PGMParams'>
+    <th><?php echo $lang->program->PGMCommon . $lang->program->PGMStatus;?></th>
+    <td><?php echo html::select('PGMStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
   </tr>
   <tr>
     <th>
@@ -39,6 +43,10 @@
         <?php endif;?>
       </div>
     </td>
+  </tr>
+  <tr class='PGMParams'>
+    <th><?php echo $lang->program->PRJCommon . $lang->program->PRJStatus;?></th>
+    <td><?php echo html::select('PRJStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
   </tr>
   <tr class='PGMParams'>
     <th><?php echo $lang->program->PRJPM;?></th>

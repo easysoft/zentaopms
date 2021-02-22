@@ -3998,7 +3998,7 @@ class upgradeModel extends model
             $program = new stdclass();
             $program->name          = $data->PGMName;
             $program->type          = 'program';
-            $program->status        = 'wait';
+            $program->status        = $data->PGMStatus;
             $program->begin         = $data->begin;
             $program->end           = isset($data->end) ? $data->end : '';
             $program->openedBy      = $account;
@@ -4042,7 +4042,7 @@ class upgradeModel extends model
             $project->type          = 'project';
             $project->model         = 'scrum';
             $project->parent        = $programID;
-            $project->status        = 'wait';
+            $project->status        = $data->PRJStatus;
             $project->begin         = $data->begin;
             $project->end           = isset($data->end) ? $data->end : '';
             $project->PM            = $data->PM;
@@ -4115,28 +4115,8 @@ class upgradeModel extends model
         {
             $projectStory = $sprintStory;
             $projectStory->project = $projectID;
-            $this->dao->insert(TABLE_PROJECTSTORY)->data($projectStory)->exec();
+            $this->dao->replace(TABLE_PROJECTSTORY)->data($projectStory)->exec();
         }
-
-        /* Compute project date. */
-        $linkedSprintIdList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->fetchPairs();
-        $linkedSprintIdList += $sprintIdList;
-        $undoneSprints       = $this->dao->select("count('*') as count")->from(TABLE_PROJECT)->where('id')->in($linkedSprintIdList)->andWhere('status')->ne('closed')->fetch('count');
-        $minRealBegan        = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('started')->orderBy('date_asc')->fetch('date');
-        $maxRealEnd          = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('closed')->orderBy('date_desc')->fetch('date');
-
-        $data = new stdClass();
-        $data->realBegan = $minRealBegan ? substr($minRealBegan, 0, 10) : '0000-00-00';
-        if($maxRealEnd and !$undoneSprints)
-        {
-            $data->realEnd    = substr($maxRealEnd, 0, 10);
-            $data->closedDate = $maxRealEnd;
-            $data->status     = 'closed';
-        }
-
-        $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
-
-        if($maxRealEnd and !$undoneSprints) $this->loadModel('action')->create('project', $projectID, 'closedbysystem');
 
         /* Compute product acl. */
         $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
@@ -4167,7 +4147,32 @@ class upgradeModel extends model
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
         }
 
-        /* Set product and project relation. */
+		/* Compute project date and status. */
+		$linkedSprintIdList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->fetchPairs();
+		$linkedSprintIdList += $sprintIdList;
+		$minRealBegan        = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('started')->orderBy('date_asc')->fetch('date');
+		$maxRealEnd          = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('closed')->orderBy('date_desc')->fetch('date');
+
+		$PRJStatus = $this->computeStatus($projectID);
+
+		$data = new stdClass();
+		$data->realBegan = $minRealBegan ? substr($minRealBegan, 0, 10) : '0000-00-00';
+		$data->status    = $PRJStatus;
+		if($PRJStatus == 'closed')
+		{
+			$data->realEnd    = substr($maxRealEnd, 0, 10);
+			$data->closedDate = $maxRealEnd;
+		}
+
+		$this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
+		if($PRJStatus == 'closed') $this->loadModel('action')->create('project', $projectID, 'closedbysystem');
+
+		/* Compute program status. */
+		$PGMStatus = $this->computeStatus($programID);
+		$this->dao->update(TABLE_PROJECT)->set('status')->eq($PGMStatus)->where('id')->eq($programID)->exec();
+		if($PGMStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'closedbysystem');
+
+		/* Set product and project relation. */
         foreach($productIdList as $productID)
         {
             $data = new stdclass(); 
@@ -4180,9 +4185,34 @@ class upgradeModel extends model
         $this->computeObjectMembers($programID, $projectID, $productIdList, $sprintIdList);
     }
 
-    /**
-     * Compute program and project members.
-     * 
+	/**
+	 * Compute project or program status.
+	 *
+	 * @param  int    $objectID
+	 * @access public
+	 * @return string
+	 */
+	public function computeStatus($objectID)
+	{
+		$objects      = $this->dao->select('id, status')->from(TABLE_PROJECT)->where('parent')->eq($objectID)->fetchPairs();
+		$objectStatus = empty($objects) ? 'wait' : 'closed';
+		foreach($objects as $status)
+		{
+			if($status == 'doing' || $status == 'suspended')
+			{
+				$objectStatus = 'doing'; 
+				break;
+			}
+
+			if($status == 'wait') $objectStatus = 'wait';
+		}
+
+		return $objectStatus;
+	}
+
+	/**
+	 * Compute program and project members.
+	 * 
      * @param  int    $programID 
      * @param  int    $projectID
      * @param  array  $productIdList 
