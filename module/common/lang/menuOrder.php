@@ -1,6 +1,5 @@
 <?php
 $lang->mainNav->menuOrder[5]  = 'my';
-$lang->mainNav->menuOrder[10] = 'program';
 $lang->mainNav->menuOrder[15] = 'product';
 $lang->mainNav->menuOrder[20] = 'project';
 $lang->mainNav->menuOrder[23] = 'qa';
@@ -9,6 +8,7 @@ $lang->mainNav->menuOrder[30] = 'doc';
 $lang->mainNav->menuOrder[35] = 'report';
 $lang->mainNav->menuOrder[60] = 'system';
 $lang->mainNav->menuOrder[70] = 'admin';
+if($config->global->mode == 'new') $lang->mainNav->menuOrder[10] = 'program';
 
 /* Sort of main menu. */
 $lang->waterfall->menuOrder[5]  = 'programindex';

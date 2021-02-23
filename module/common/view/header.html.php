@@ -18,16 +18,22 @@ $isReport  = $rawModule == 'report';
   <div id='mainHeader'>
     <div class='container'>
       <div id='heading'>
+        <?php if($isProduct) echo isset($lang->product->switcherMenu) ? $lang->product->switcherMenu : '';?>
+        <?php if($this->config->global->mode == 'new'):?>
         <?php if($isProgram) echo isset($lang->program->switcherMenu) ? $lang->program->switcherMenu : '';?>
         <?php if($isProject) echo $this->loadModel('program')->getPRJSwitcher($this->session->PRJ, $app->rawModule, $app->rawMethod);?>
-        <?php if($isProduct) echo isset($lang->product->switcherMenu) ? $lang->product->switcherMenu : '';?>
+        <?php elseif($this->config->global->mode == 'old'):?>
+        <?php if($isProject) echo isset($lang->project->switcherMenu) ? $lang->project->switcherMenu : '';;?>
+        <?php endif;?>
       </div>
       <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>
       <div id='toolbar'>
+        <?php if($this->config->global->mode == 'new'):?>
         <?php if($isProgram) echo isset($lang->program->mainMenuAction) ? $lang->program->mainMenuAction : '';?>
         <?php if($isProject) echo $this->loadModel('program')->getPRJMainAction($app->rawModule, $app->rawMethod);?>
         <?php if($isProduct) echo isset($lang->product->mainMenuAction) ? $lang->product->mainMenuAction : '';?>
         <?php if($isReport)  echo isset($lang->report->mainMenuAction) ? $lang->report->mainMenuAction : '';?>
+        <?php endif;?>
       </div>
     </div>
   </div>

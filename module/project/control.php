@@ -113,9 +113,12 @@ class project extends control
     public function task($executionID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         /* Save last PRJ. */
-        $projectID = $this->loadModel('program')->savePRJState($this->session->PRJ, $this->program->getPRJPairs());
-        if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
-        setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        if($this->config->global->mode == 'new')
+        {
+            $projectID = $this->loadModel('program')->savePRJState($this->session->PRJ, $this->program->getPRJPairs());
+            if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
+            setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        }
 
         $this->loadModel('tree');
         $this->loadModel('search');

@@ -141,7 +141,6 @@ list($projectModule, $projectMethod) = explode('-', $config->projectLink);
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program = "<i class='icon icon-folder-open-o'></i> 项目集|$programModule|$programMethod|";
 $lang->mainNav->product = "<i class='icon icon-product'></i> 产品|$productModule|$productMethod|";
 $lang->mainNav->project = "<i class='icon icon-project'></i> 项目|$projectModule|$projectMethod|";
 $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
@@ -150,6 +149,7 @@ $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
 $lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|subject|browse|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
+if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-folder-open-o'></i> 项目集|$programModule|$programMethod|";
 
 $lang->dividerMenu = ',qa,report,admin,';
 
@@ -1024,5 +1024,6 @@ $lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="q
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+if($config->systemMode == 'old') $lang->noMenuModule[] = 'project';
 
 include (dirname(__FILE__) . '/menuOrder.php');
