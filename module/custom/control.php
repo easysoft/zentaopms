@@ -604,13 +604,13 @@ class custom extends control
     {
         if($_POST)
         {
-            $after15mode = fixer::input('post')->get('after15mode');
-            $this->loadModel('setting')->setItem('system.custom.after15mode', $after15mode);
-            if($after15mode == 'new') $this->locate($this->createLink('upgrade', 'mergeTips'));
+            $mode = fixer::input('post')->get('mode');
+            $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
+            if($mode == 'new') $this->locate($this->createLink('upgrade', 'mergeTips'));
         }
 
-        $after15mode = zget($this->config->custom, 'after15mode', 'old');
-        if($after15mode == 'new')
+        $mode = zget($this->config->global, 'mode', 'old');
+        if($mode == 'new')
         {
             if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') $this->locate($this->createLink('upgrade', 'mergeProgram'));
 
