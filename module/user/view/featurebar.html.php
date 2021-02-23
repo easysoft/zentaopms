@@ -40,13 +40,16 @@
     $active = $methodName == 'execution' ? ' btn-active-text' : '';
     common::printLink('user', 'execution',  "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
-    $label  = "<span class='text'>{$lang->user->issue}</span>";
-    $active = ($methodName == 'issue' or $methodName == 'issue')? ' btn-active-text' : '';
-    common::printLink('user', 'issue', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
+    if($this->config->global->mode == 'new')
+    {
+        $label  = "<span class='text'>{$lang->user->issue}</span>";
+        $active = ($methodName == 'issue' or $methodName == 'issue')? ' btn-active-text' : '';
+        common::printLink('user', 'issue', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
-    $label  = "<span class='text'>{$lang->user->risk}</span>";
-    $active = ($methodName == 'risk' or $methodName == 'risk')? ' btn-active-text' : '';
-    common::printLink('user', 'risk', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
+        $label  = "<span class='text'>{$lang->user->risk}</span>";
+        $active = ($methodName == 'risk' or $methodName == 'risk')? ' btn-active-text' : '';
+        common::printLink('user', 'risk', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
+    }
 
     $label  = "<span class='text'>{$lang->user->dynamic}</span>";
     $active = $methodName == 'dynamic' ? ' btn-active-text' : '';

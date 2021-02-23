@@ -308,8 +308,11 @@ $lang->my->workMenu->story       = "$lang->SRCommon|my|work|mode=story";
 $lang->my->workMenu->bug         = 'Bug|my|work|mode=bug';
 $lang->my->workMenu->testcase    = '用例|my|work|mode=testcase&type=assigntome';
 $lang->my->workMenu->testtask    = '测试单|my|work|mode=testtask&type=wait';
-$lang->my->workMenu->issue       = '问题|my|work|mode=issue';
-$lang->my->workMenu->risk        = '风险|my|work|mode=risk';
+if($config->systemMode == 'new')
+{
+    $lang->my->workMenu->issue       = '问题|my|work|mode=issue';
+    $lang->my->workMenu->risk        = '风险|my|work|mode=risk';
+}
 
 $lang->my->contributeMenu = new stdclass();
 $lang->my->contributeMenu->task        = '任务|my|contribute|mode=task';
@@ -318,8 +321,11 @@ $lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=sto
 $lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
 $lang->my->contributeMenu->testcase    = '用例|my|contribute|mode=testcase&type=openedbyme';
 $lang->my->contributeMenu->testtask    = '测试单|my|contribute|mode=testtask&type=done';
-$lang->my->contributeMenu->issue       = '问题|my|contribute|mode=issue';
-$lang->my->contributeMenu->risk        = '风险|my|contribute|mode=risk';
+if($config->systemMode == 'new')
+{
+    $lang->my->contributeMenu->issue       = '问题|my|contribute|mode=issue';
+    $lang->my->contributeMenu->risk        = '风险|my|contribute|mode=risk';
+}
 
 $lang->my->dividerMenu = ',myProject,team,';
 

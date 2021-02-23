@@ -8,7 +8,7 @@ $lang->mainNav->menuOrder[30] = 'doc';
 $lang->mainNav->menuOrder[35] = 'report';
 $lang->mainNav->menuOrder[60] = 'system';
 $lang->mainNav->menuOrder[70] = 'admin';
-if($config->global->mode == 'new') $lang->mainNav->menuOrder[10] = 'program';
+if($config->systemMode == 'new') $lang->mainNav->menuOrder[10] = 'program';
 
 /* Sort of main menu. */
 $lang->waterfall->menuOrder[5]  = 'programindex';
