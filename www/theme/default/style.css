@@ -54,7 +54,7 @@ a.showMoreImage:hover {opacity: 1;}
 .table-actions .btn{border: 1px solid #1183fb; color: #1183fb}
 .table-actions .btn:hover{background: #b3d4fc}
 
-#header #toolbar a{color: #fff; font-size: 14px; line-height: 15px; border: #84a2e2 1px solid}
+#header #toolbar a{color: #fff; font-size: 13px; line-height: 15px; border: #84a2e2 1px solid}
 
 #navbar .nav>li.divider {margin: 15px 8px 15px 8px;}
 #navbar .nav>li>a { padding: 10px 10px;}
