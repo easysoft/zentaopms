@@ -442,15 +442,16 @@ class programModel extends model
      * Get top program pairs.
      *
      * @param  string $model
+     * @param  string $mode
      * @access public
      * @return array
      */
-    public function getTopPGMPairs($model = '')
+    public function getTopPGMPairs($model = '', $mode = '')
     {
         return $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('grade')->eq(1)
-            ->andWhere('status')->ne('closed')
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('id')->in($this->app->user->view->programs)
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()

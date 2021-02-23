@@ -332,7 +332,7 @@ class product extends control
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs();
+        $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs('', 'noclosed');
         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);
@@ -440,6 +440,7 @@ class product extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
+        $productID = $this->product->saveState($productID, $this->products);
         $this->product->setMenu($this->products, $productID);
 
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
