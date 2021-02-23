@@ -1144,7 +1144,7 @@ EOD;
         /* Remove iframe for operation button in modal. Prevent pop up in modal. */
         if(isonlybody() and strpos($extraClass, 'showinonlybody') !== false) $extraClass = str_replace('iframe', '', $extraClass);
 
-        global $app, $lang;
+        global $app, $lang, $config;
 
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
@@ -1162,6 +1162,7 @@ EOD;
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
+        if($config->global->mode == 'old' and strtolower($module) == 'program'  and strpos($method, 'PRJ') === 0) ($module = 'project') and ($method = substr(strtolower($method), 3));
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 
@@ -2347,7 +2348,7 @@ EOD;
         }
         if($group == 'project')
         {
-            $lang->menu = self::getProgramMainMenu($moduleName);
+            $lang->menu = $config->global->mode == 'new' ? self::getProgramMainMenu($moduleName) : $lang->project->menu;
         }
     }
 
@@ -2396,7 +2397,7 @@ EOD;
      */
     public static function getProgramMainMenu($moduleName)
     {
-        global $app, $lang, $dbh;
+        global $app, $lang, $dbh, $config;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROGRAM . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
         if(empty($program)) return;
 

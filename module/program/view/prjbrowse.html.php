@@ -17,12 +17,14 @@ js::set('programID', $programID);
 js::set('browseType', $browseType);
 ?>
 <div id="mainMenu" class="clearfix">
+  <?php if($this->config->global->mode == 'new'):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php echo empty($program) ? $lang->program->project : $program->name;?>
       <?php if($programID) echo html::a(inLink('PRJBrowse', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>
+  <?php endif;?>
   <div class="btn-toolBar pull-left">
     <?php foreach($lang->program->featureBar as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
@@ -33,10 +35,15 @@ js::set('browseType', $browseType);
     <?php echo html::checkbox('PRJMine', array('1' => $lang->program->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if($this->config->global->mode == 'new'):?>
     <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php else:?>
+    <?php common::printLink('project', 'create', '', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
+    <?php endif;?>
   </div>
 </div>
 <div id='mainContent' class="main-row fade">
+  <?php if($this->config->global->mode == 'new'):?>
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
@@ -46,12 +53,17 @@ js::set('browseType', $browseType);
       </div>
     </div>
   </div>
+  <?php endif;?>
   <div class="main-col">
     <?php if(empty($projectStats)):?>
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->program->noPRJ;?></span>
+        <?php if($this->config->global->mode == 'new'):?>
         <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
+        <?php else:?>
+        <?php common::printLink('project', 'create', '', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-info btn-wide"');?>
+        <?php endif;?>
       </p>
     </div>
     <?php else:?>
@@ -64,7 +76,7 @@ js::set('browseType', $browseType);
         $setting = $this->datatable->getSetting('program');
       ?>
       <table class='table has-sort-head'>
-      <?php $canBatchEdit = common::hasPriv('program', 'PRJBatchEdit');?>
+      <?php $canBatchEdit = $this->config->global->mode == 'new' ? common::hasPriv('program', 'PRJBatchEdit') : common::hasPriv('project', 'batchEdit');?>
         <thead>
           <tr>
             <?php
@@ -93,7 +105,7 @@ js::set('browseType', $browseType);
         <?php
         if($canBatchEdit)
         {
-            $actionLink = $this->createLink('program', 'PRJBatchEdit', 'from=prjbrowse');
+            $actionLink = $this->config->global->mode == 'new' ? $this->createLink('program', 'PRJBatchEdit', 'from=prjbrowse') : $this->createLink('project', 'batchEdit');
             $misc       = "data-form-action='$actionLink'";
             echo html::commonButton($lang->edit, $misc);
         }

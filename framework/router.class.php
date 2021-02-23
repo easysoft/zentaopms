@@ -171,7 +171,7 @@ class router extends baseRouter
             $commonSettings = array();
             try
             {
-                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('sprintConcept', 'hourPoint', 'URSR')")->fetchAll();
+                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -180,6 +180,7 @@ class router extends baseRouter
         }
 
         $hourKey = $planKey = $URSR = 0;
+        $mode    = 'new';
         $projectKey = empty($this->config->isINT) ? ITERATION_KEY : SPRINT_KEY;
 
         foreach($commonSettings as $setting)
@@ -187,7 +188,12 @@ class router extends baseRouter
             if($setting->key == 'sprintConcept') $projectKey = $setting->value;
             if($setting->key == 'hourPoint')     $hourKey    = $setting->value;
             if($setting->key == 'URSR')          $URSR       = $setting->value;
+            if($setting->key == 'mode' and $setting->section == 'global') $mode = $setting->value;
         }
+
+
+        /* Record system mode. */
+        $config->systemMode = $mode;
 
         /* Record hour unit. */
         $config->hourUnit = 'H';

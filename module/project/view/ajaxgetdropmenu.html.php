@@ -49,7 +49,7 @@ foreach($projects as $project)
     ?>
     </div>
     <div class="col-footer">
-      <?php echo html::a(helper::createLink('project', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
+      <?php echo html::a(helper::createLink('program', 'prjbrowse'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->project->doneProjects?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
