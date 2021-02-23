@@ -326,7 +326,7 @@ class projectModel extends model
 
         /* Determine whether to add a sprint or a stage according to the model of the project. */
         $project    = $this->getByID($this->session->PRJ);
-        $sprintType = zget($this->config->project->modelList, $project->model, '');
+        $sprintType = $this->config->global->mode == 'new' ? zget($this->config->project->modelList, $project->model, '') : 'sprint';
 
         /* If the project model is a stage, determine whether the product is linked. */
         if($sprintType == 'stage' and empty($this->post->products[0]))
@@ -337,13 +337,13 @@ class projectModel extends model
 
         /* Get the data from the post. */
         $sprint = fixer::input('post')
-            ->setDefault('project', $this->session->PRJ)
             ->setDefault('status', 'wait')
-            ->setDefault('parent', $this->session->PRJ)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('openedVersion', $this->config->version)
             ->setDefault('team', substr($this->post->name,0, 30))
+            ->setIF($this->config->global->mode == 'new', 'project', $this->session->PRJ)
+            ->setIF($this->config->global->mode == 'new', 'parent', $this->session->PRJ)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->add('type', $sprintType)

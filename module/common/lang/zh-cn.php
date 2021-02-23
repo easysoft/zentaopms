@@ -1037,7 +1037,7 @@ $lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="q
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
-if($config->systemMode == 'old') 
+if($config->systemMode == 'old')
 {
     $lang->noMenuModule[] = 'project';
     $lang->noMenuModule[] = 'task';
