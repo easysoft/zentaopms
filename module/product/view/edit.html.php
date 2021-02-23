@@ -32,10 +32,12 @@
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
+          <?php if($this->config->global->mode == 'new'):?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
             <td><?php echo html::select('program', $programs, $product->program, "class='form-control chosen'");?></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
             <td><?php echo html::select('line', $lines, $product->line, "class='form-control chosen'");?></td><td></td>

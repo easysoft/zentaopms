@@ -21,13 +21,15 @@
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
+          <?php if($this->config->global->mode == 'new'):?>
           <tr>
             <th class='w-140px'><?php echo $lang->program->PGMCommon;?></th>
             <td><?php echo html::select('program', $programs, '', "class='form-control chosen' required");?></td><td></td>
-          </tr>  
+          </tr>
+          <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
-            <td><?php echo html::select('line', '', '', "class='form-control chosen'");?></td><td></td>
+            <td><?php echo html::select('line', $lines, '', "class='form-control chosen'");?></td><td></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->name;?></th>
