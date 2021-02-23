@@ -104,7 +104,9 @@ class caselibModel extends model
             $replace = $libID;
             common::setMenuVars($this->lang->caselib->menu, $key, $replace);
         }
+
         if($this->config->global->flow != 'full' && $this->app->getMethodName() != 'view') $this->lang->caselib->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->testcase->bySearch}</a>";
+        if($this->lang->navGroup->caselib == 'qa') $this->lang->qa->menu = $this->lang->caselib->menu;
     }
 
     /**

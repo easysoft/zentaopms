@@ -13,6 +13,21 @@ class caselib extends control
 {
     public $products = array();
 
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+
+        /* Set testtask menu group. */
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        if(!$this->projectID)
+        {
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $this->lang->noMenuModule[] = $this->app->rawModule;
+        }
+    }
+
+
     /**
      * Index page, header to browse.
      *

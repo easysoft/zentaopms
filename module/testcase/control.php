@@ -11,7 +11,8 @@
  */
 class testcase extends control
 {
-    public $products = array();
+    public $products  = array();
+    public $projectID = 0;
 
     /**
      * Construct function, load product, tree, user auto.
@@ -25,7 +26,17 @@ class testcase extends control
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
-        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
+
+        /* Set test case menu group. */
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        if(!$this->projectID)
+        {
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $this->lang->noMenuModule[] = $this->app->rawModule;
+        }
+
+        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
     }
 

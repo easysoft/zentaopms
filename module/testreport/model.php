@@ -39,6 +39,8 @@ class testreportModel extends model
             $replace = $productID;
             common::setMenuVars($this->lang->testreport->menu, $key, $replace);
         }
+
+        if($this->lang->navGroup->testreport == 'qa') $this->lang->qa->menu = $this->lang->testreport->menu;
     }
 
     /**

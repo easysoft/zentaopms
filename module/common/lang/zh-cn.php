@@ -409,7 +409,7 @@ $lang->qa->menu->caselib   = array('link' => '用例库|caselib|browse', 'alias'
 $lang->qa->subMenu = new stdclass();
 $lang->qa->subMenu->testcase = new stdclass();
 $lang->qa->subMenu->testcase->feature = array('link' => '功能测试|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
-$lang->qa->subMenu->testcase->unit    = array('link' => '单元测试|testtask|browseUnits|productID=%s');
+$lang->qa->subMenu->testcase->unit    = array('link' => '单元测试|testtask|browseUnits|productID=%s', 'alias' => 'browseunits');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();

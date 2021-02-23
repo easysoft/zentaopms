@@ -66,6 +66,8 @@ class testtaskModel extends model
             $replace = ($key == 'product') ? $selectHtml : $productID;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
+
+        if($this->lang->navGroup->testtask == 'qa') $this->lang->qa->menu = $this->lang->testtask->menu;
     }
 
     /**
@@ -129,6 +131,9 @@ class testtaskModel extends model
             $replace = ($key == 'product') ? $selectHtml : $productID;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
+
+        $this->lang->testtask->menu->testcase['subModule'] = 'testtask';
+        if($this->lang->navGroup->testtask == 'qa') $this->lang->qa->menu = $this->lang->testtask->menu;
     }
 
     /**
