@@ -93,6 +93,8 @@ $(function()
         setPGMBegin(PGMBegin);
         setPGMEnd(PGMEnd);
         setPRJPM();
+
+        hiddenProject();
     })
 
     $('[name^=sprints]').change(function()
@@ -108,10 +110,14 @@ $(function()
         setPGMBegin(PGMBegin);
         setPGMEnd(PGMEnd);
         setPRJPM();
+
+        hiddenProject();
     })
 
     toggleProgram($('form #newProgram0'));
     toggleProject($('form #newProject0'));
+
+    hiddenProject();
 });
 
 function getProjectByProgram(obj)
@@ -140,7 +146,7 @@ function toggleProgram(obj)
         $('form .pgm-no-exist').removeClass('hidden');
         $('form .pgm-exist').addClass('hidden');
         $programs.attr('disabled', 'disabled');
-        $('#PGMStatus').closest('.PGMParams').show();
+        $('.PGMStatus').show();
 
         $('form #newProject0').prop('checked', true);
         toggleProject($('form #newProject0'));
@@ -149,7 +155,7 @@ function toggleProgram(obj)
     {
         $('form .pgm-exist').removeClass('hidden');
         $('form .pgm-no-exist').addClass('hidden');
-        $('#PGMStatus').closest('.PGMParams').hide();
+        $('.PGMStatus').hide();
         $programs.removeAttr('disabled');
     }
 }
@@ -180,6 +186,32 @@ function toggleProject(obj)
         toggleProgram($('form #newProgram0'));
 
         getProjectByProgram(programs);
+    }
+}
+
+function hiddenProject()
+{
+    if($('[name^=sprints]:checked').length == 0)
+    {
+        $(".PGMParams input").attr('disabled' ,'disabled');
+        $(".PGMParams select").attr('disabled' ,'disabled').trigger('chosen:updated');
+        $('.PGMParams').hide();
+
+        $(".PRJName input").attr('disabled' ,'disabled');
+        $(".PRJName select").attr('disabled' ,'disabled').trigger('chosen:updated');
+        $('.PRJName').hide();
+    }
+    else
+    {
+        $(".PRJName input").removeAttr('disabled');
+        $(".PRJName select").removeAttr('disabled').trigger('chosen:updated');
+        $('.PRJName').show();
+
+        $(".PGMParams input").removeAttr('disabled');
+        $(".PGMParams select").removeAttr('disabled').trigger('chosen:updated');
+        $('.PGMParams').show();
+
+        if($('#newProject0').is(':checked')) $('#projects').attr('disabled', 'disabled');
     }
 }
 

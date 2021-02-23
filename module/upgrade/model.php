@@ -3992,15 +3992,13 @@ class upgradeModel extends model
 
         if(!isset($data->programs))
         {
-            if(!$this->post->longTime and !$this->post->end) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->program->end)));
-
             /* Insert program. */
             $program = new stdclass();
             $program->name          = $data->PGMName;
             $program->type          = 'program';
             $program->status        = $data->PGMStatus;
-            $program->begin         = $data->begin;
-            $program->end           = isset($data->end) ? $data->end : '';
+            $program->begin         = isset($data->begin) ? $data->begin : helper::now();
+            $program->end           = isset($data->end) ? $data->end : LONG_TIME;
             $program->openedBy      = $account;
             $program->openedDate    = helper::now();
             $program->openedVersion = $this->config->version;
@@ -4032,6 +4030,8 @@ class upgradeModel extends model
             $programID = $data->programs;
         }
 
+        if(!isset($data->sprints)) return array($programID);
+
         if(!isset($data->projects))
         {
             if(!$this->post->longTime and !$this->post->end) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->program->end)));
@@ -4044,7 +4044,7 @@ class upgradeModel extends model
             $project->parent        = $programID;
             $project->status        = $data->PRJStatus;
             $project->begin         = $data->begin;
-            $project->end           = isset($data->end) ? $data->end : '';
+            $project->end           = isset($data->end) ? $data->end : LONG_TIME;
             $project->PM            = $data->PM;
             $project->auth          = 'extend';
             $project->openedBy      = $account;
@@ -4053,6 +4053,10 @@ class upgradeModel extends model
             $project->acl           = $data->acl;
 
             $this->lang->project->name  = $this->lang->program->PRJName;
+
+            $programDate = $this->dao->select('begin,end')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+            if($data->begin < $programDate->begin) $this->dao->update(TABLE_PROGRAM)->set('begin')->eq($data->begin)->where('id')->eq($programID)->exec();
+            if($data->end > $programDate->end)     $this->dao->update(TABLE_PROGRAM)->set('end')->eq($data->end)->where('id')->eq($programID)->exec();
 
             $this->dao->insert(TABLE_PROJECT)->data($project)
                 ->batchcheck('name', 'notempty')
@@ -4090,11 +4094,33 @@ class upgradeModel extends model
      */
     public function processMergedData($programID, $projectID, $productIdList = array(), $sprintIdList = array())
     {
-        if(!$projectID) die(js::alert($this->lang->upgrade->projectEmpty));
-
         /* Product linked objects. */
         $this->dao->update(TABLE_STORY)->set('PRJ')->eq($programID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_RELEASE)->set('PRJ')->eq($programID)->where('product')->in($productIdList)->exec();
+
+        /* Compute product acl. */
+        $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
+        foreach($products as $product)
+        {
+            if($product->program) continue;
+
+            $data = new stdclass();
+            $data->program = $programID;
+            $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
+
+            $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
+        }
+
+        /* Compute program status. */
+        $PGMStatus = $this->computeStatus($programID);
+        $this->dao->update(TABLE_PROJECT)->set('status')->eq($PGMStatus)->where('id')->eq($programID)->exec();
+        if($PGMStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'closedbysystem');
+
+        /* No project is created when there are no sprints. */
+        if(!$sprintIdList) return;
+
+        if(!$projectID) die(js::alert($this->lang->upgrade->projectEmpty));
+
         $this->dao->update(TABLE_BUG)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_CASE)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('PRJ')->eq($projectID)->where('product')->in($productIdList)->exec();
@@ -4116,19 +4142,6 @@ class upgradeModel extends model
             $projectStory = $sprintStory;
             $projectStory->project = $projectID;
             $this->dao->replace(TABLE_PROJECTSTORY)->data($projectStory)->exec();
-        }
-
-        /* Compute product acl. */
-        $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
-        foreach($products as $product)
-        {
-            if($product->program) continue;
-
-            $data = new stdclass();
-            $data->program = $programID;
-            $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
-
-            $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
         }
 
         /* Compute sprint path and grade. */
@@ -4166,11 +4179,6 @@ class upgradeModel extends model
 
 		$this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
 		if($PRJStatus == 'closed') $this->loadModel('action')->create('project', $projectID, 'closedbysystem');
-
-		/* Compute program status. */
-		$PGMStatus = $this->computeStatus($programID);
-		$this->dao->update(TABLE_PROJECT)->set('status')->eq($PGMStatus)->where('id')->eq($programID)->exec();
-		if($PGMStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'closedbysystem');
 
 		/* Set product and project relation. */
         foreach($productIdList as $productID)

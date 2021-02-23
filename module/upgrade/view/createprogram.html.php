@@ -20,11 +20,11 @@
       </div>
     </td>
   </tr>
-  <tr class='PGMParams'>
+  <tr class='PGMStatus'>
     <th><?php echo $lang->program->PGMCommon . $lang->program->PGMStatus;?></th>
     <td><?php echo html::select('PGMStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
   </tr>
-  <tr>
+  <tr class='PRJName'>
     <th>
       <span class="prj-exist hidden"><?php echo $lang->upgrade->existPRJ;?></span>
       <span class="prj-no-exist"><?php echo $lang->program->PRJName;?></span>
