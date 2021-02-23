@@ -141,7 +141,6 @@ list($projectModule, $projectMethod) = explode('-', $config->projectLink);
 /* Main menu. */
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
-$lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> Program|program|pgmbrowse|';
 $lang->mainNav->product = '<i class="icon icon-menu-project"></i> Product|product|index|';
 $lang->mainNav->project = '<i class="icon icon-file"></i> Project|program|prjbrowse|';
 $lang->mainNav->qa      = '<i class="icon icon-test"></i> Test|qa|index|';
@@ -150,6 +149,7 @@ $lang->mainNav->doc     = '<i class="icon icon-doc"></i> Doc|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> Statistic|report|productsummary|";
 $lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
+if($config->systemMode == 'new') $lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> Program|program|pgmbrowse|';
 
 $lang->reporting = new stdclass();
 $lang->dividerMenu = ',qa,report,admin,';
@@ -294,8 +294,15 @@ $lang->my->menu = new stdclass();
 $lang->my->menu->index       = 'Index|my|index';
 $lang->my->menu->calendar    = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->myWork      = array('link' => 'Work|my|work|mode=task');
-$lang->my->menu->myProject   = array('link' => 'Project|my|project|');
-$lang->my->menu->myExecution = 'Execution|my|execution|type=undone';
+if($config->systemMode == 'new')
+{
+    $lang->my->menu->myProject   = array('link' => 'Project|my|project|');
+    $lang->my->menu->myExecution = 'Execution|my|execution|type=undone';
+}
+else
+{
+    $lang->my->menu->myExecution = $lang->executionCommon . '|my|execution|type=undone';
+}
 $lang->my->menu->contribute  = array('link' => 'Contribute|my|contribute|mode=task');
 $lang->my->menu->dynamic     = 'Dynamic|my|dynamic|';
 $lang->my->menu->score       = 'Score|my|score|';
@@ -309,8 +316,11 @@ $lang->my->workMenu->story       = "$lang->SRCommon|my|work|mode=story";
 $lang->my->workMenu->bug         = 'Bug|my|work|mode=bug';
 $lang->my->workMenu->testcase    = 'Test Case|my|work|mode=testcase&type=assigntome';
 $lang->my->workMenu->testtask    = 'Test Task|my|work|mode=testtask&type=wait';
-$lang->my->workMenu->issue       = 'Issue|my|work|mode=issue';
-$lang->my->workMenu->risk        = 'Risk|my|work|mode=risk';
+if($config->systemMode == 'new')
+{
+    $lang->my->workMenu->issue       = 'Issue|my|work|mode=issue';
+    $lang->my->workMenu->risk        = 'Risk|my|work|mode=risk';
+}
 
 $lang->my->contributeMenu = new stdclass();
 $lang->my->contributeMenu->task        = 'Task|my|contribute|mode=task';
@@ -319,8 +329,11 @@ $lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=sto
 $lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
 $lang->my->contributeMenu->testcase    = 'Test Case|my|contribute|mode=testtask&type=openedbyme';
 $lang->my->contributeMenu->testtask    = 'Test Task|my|contribute|mode=testtask&type=done';
-$lang->my->contributeMenu->issue       = 'Issue|my|contribute|mode=issue';
-$lang->my->contributeMenu->risk        = 'Risk|my|contribute|mode=risk';
+if($config->systemMode == 'new')
+{
+    $lang->my->contributeMenu->issue       = 'Issue|my|contribute|mode=issue';
+    $lang->my->contributeMenu->risk        = 'Risk|my|contribute|mode=risk';
+}
 
 $lang->my->dividerMenu = ',myProject,team,';
 
@@ -1026,5 +1039,10 @@ $lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="q
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+if($config->systemMode == 'old')
+{
+    $lang->noMenuModule[] = 'project';
+    $lang->noMenuModule[] = 'task';
+}
 
 include (dirname(__FILE__) . '/menuOrder.php');

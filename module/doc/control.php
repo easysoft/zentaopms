@@ -125,6 +125,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
+            if($this->config->global->mode == 'old') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
         }
@@ -361,6 +362,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
+            if($this->config->global->mode == 'old') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
 
@@ -447,6 +449,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
+            if($this->config->global->mode == 'old') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
@@ -512,6 +515,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
+            if($this->config->global->mode == 'old') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
@@ -841,6 +845,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
+            if($this->config->global->mode == 'old') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
@@ -940,6 +945,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
+            if($this->config->global->mode == 'old') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
