@@ -45,7 +45,7 @@
     </td>
   </tr>
   <tr class='PGMParams'>
-    <th><?php echo $lang->program->PRJCommon . $lang->program->PRJStatus;?></th>
+    <th><?php echo $lang->program->PRJStatus;?></th>
     <td><?php echo html::select('PRJStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
   </tr>
   <tr class='PGMParams'>
