@@ -348,6 +348,7 @@ $lang->resource->product->dashboard      = 'dashboard';
 $lang->resource->product->close          = 'closeAction';
 $lang->resource->product->updateOrder    = 'orderAction';
 $lang->resource->product->all            = 'all';
+$lang->resource->product->manageLine     = 'manageLine';
 $lang->resource->product->build          = 'build';
 $lang->resource->product->export         = 'exportAction';
 $lang->resource->product->whitelist      = 'whitelist';
@@ -369,11 +370,12 @@ $lang->product->methodOrder[60]  = 'dashboard';
 $lang->product->methodOrder[65]  = 'close';
 $lang->product->methodOrder[70]  = 'updateOrder';
 $lang->product->methodOrder[75]  = 'all';
-$lang->product->methodOrder[80]  = 'build';
-$lang->product->methodOrder[85]  = 'export';
-$lang->product->methodOrder[90]  = 'whitelist';
-$lang->product->methodOrder[95]  = 'addWhitelist';
-$lang->product->methodOrder[100] = 'unbindWhielist';
+$lang->product->methodOrder[80]  = 'manageLine';
+$lang->product->methodOrder[85]  = 'build';
+$lang->product->methodOrder[90]  = 'export';
+$lang->product->methodOrder[95]  = 'whitelist';
+$lang->product->methodOrder[100] = 'addWhitelist';
+$lang->product->methodOrder[105] = 'unbindWhielist';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();

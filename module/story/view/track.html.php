@@ -6,6 +6,7 @@
 .requirement{background: #fff}
 .main-table tbody>tr:hover { background-color: #fff; }
 .main-table tbody>tr:nth-child(odd):hover { background-color: #f5f5f5; }
+.fix-table-copy-wrapper {overflow: unset !important;}
 </style>
 <div id="mainContent" class="main-row fade">
   <div class="main-col">
