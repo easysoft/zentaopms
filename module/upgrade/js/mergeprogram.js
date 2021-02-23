@@ -261,7 +261,7 @@ function setPGMBegin(PGMBegin)
         }
     });
 
-	setPRJStatus();
+    setPRJStatus();
 }
 
 function setPGMEnd(PGMEnd)
@@ -286,6 +286,12 @@ function setPGMEnd(PGMEnd)
     });
 }
 
+/**
+ * Set the project PM when merge the sprint.
+ *
+ * @access public
+ * @return void
+ */
 function setPRJPM()
 {
     var PM = [];
