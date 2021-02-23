@@ -219,7 +219,7 @@ class caselibModel extends model
         $lib = fixer::input('post')
             ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
             ->setForce('type', 'library')
-            ->add('PRJ', $this->session->PRJ)
+            ->setIF($this->config->global->mode == 'new', 'PRJ', $this->session->PRJ)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid')
@@ -612,7 +612,7 @@ class caselibModel extends model
                 $data[$i]->openedDate   = $now;
                 $data[$i]->status       = $forceNotReview ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
-                $data[$i]->PRJ          = $this->session->PRJ;
+                if($this->config->global->mode == 'new') $data[$i]->PRJ = $this->session->PRJ;
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()
