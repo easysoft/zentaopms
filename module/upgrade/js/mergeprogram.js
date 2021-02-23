@@ -234,6 +234,13 @@ function setPGMBegin(PGMBegin)
 
 function setPGMEnd(PGMEnd)
 {
+    var length = $(':checkbox:checked[data-end]').length;
+    if(length == 0)
+    {
+        $('.PGMParams #end').val('');
+        return false;
+    }
+
     $(':checkbox:checked[data-end]').each(function()
     {
         end = $(this).attr('data-end').substr(0, 10);
