@@ -32,7 +32,8 @@ class report extends control
             unset($this->lang->noMenuModule[$index]);
             $this->lang->report->menu = $this->lang->report->projectMenu;
         }
-        if(isset($this->config->proVersion) &&$this->lang->navGroup->report == 'report') $this->lang->report->mainMenuAction = html::a(helper::createLink('report', 'custom'), $this->lang->crystal->custom, '', "class='btn btn-link'");
+
+        if((isset($this->config->proVersion) || isset($this->config->bizVersion)) && $this->lang->navGroup->report == 'report') $this->lang->report->mainMenuAction = html::a(helper::createLink('report', 'custom'), $this->lang->crystal->custom, '', "class='btn btn-link'");
     }
 
     /**
