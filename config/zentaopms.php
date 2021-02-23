@@ -19,6 +19,30 @@ $config->productCommonList['fr'][0]    = 'Product';
 $config->productCommonList['vi'][0]    = 'Sản phẩm';
 
 /* Project common list. */
+$config->projectCommonList['zh-cn'][0] = '项目';
+$config->projectCommonList['zh-cn'][1] = '迭代';
+$config->projectCommonList['zh-cn'][2] = '冲刺';
+
+$config->projectCommonList['zh-tw'][0] = '項目';
+$config->projectCommonList['zh-tw'][1] = '迭代';
+$config->projectCommonList['zh-tw'][2] = '冲刺';
+
+$config->projectCommonList['en'][0] = 'Project';
+$config->projectCommonList['en'][1] = 'Iteration';
+$config->projectCommonList['en'][2] = 'Sprint';
+
+$config->projectCommonList['de'][0] = 'Project';
+$config->projectCommonList['de'][1] = 'Iteration';
+$config->projectCommonList['de'][2] = 'Sprint';
+
+$config->projectCommonList['fr'][0] = 'Project';
+$config->projectCommonList['fr'][1] = 'Iteration';
+$config->projectCommonList['fr'][2] = 'Sprint';
+
+$config->projectCommonList['vi'][0] = 'Project';
+$config->projectCommonList['vi'][1] = 'Iteration';
+$config->projectCommonList['vi'][2] = 'Sprint';
+
 $config->executionCommonList['zh-cn'][0] = '迭代';
 $config->executionCommonList['zh-cn'][1] = '冲刺';
 $config->executionCommonList['zh-cn'][2] = '阶段';

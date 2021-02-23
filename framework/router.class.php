@@ -191,9 +191,9 @@ class router extends baseRouter
             if($setting->key == 'mode' and $setting->section == 'global') $mode = $setting->value;
         }
 
-
         /* Record system mode. */
         $config->systemMode = $mode;
+        if($config->systemMode == 'old') $this->config->executionCommonList = $this->config->projectCommonList;
 
         /* Record hour unit. */
         $config->hourUnit = 'H';

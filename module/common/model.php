@@ -2294,8 +2294,7 @@ EOD;
      */
     public static function setMainMenuByGroup($group, $moduleName, $methodName)
     {
-        global $lang;
-        global $config;
+        global $lang, $config;
         if($group == 'my')
         {
             $lang->menu      = $lang->my->menu;

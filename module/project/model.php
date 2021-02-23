@@ -185,15 +185,18 @@ class projectModel extends model
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $currentProject = $this->getById($projectID);
 
-        if(isset($currentProject->type) and $currentProject->type == 'program') return;
-
-        if(isset($currentProject->project)) $project = $this->loadModel('program')->getPRJByID($currentProject->project);
-
-        if(isset($project) and $project->model == 'waterfall')
+        if($this->config->global->mode == 'new')
         {
-            $productID = $this->loadModel('product')->getProductIDByProject($currentProject->id);
-            $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
-            $currentProject->name = $productName . '/' . $currentProject->name;
+            if(isset($currentProject->type) and $currentProject->type == 'program') return;
+
+            if(isset($currentProject->project)) $project = $this->loadModel('program')->getPRJByID($currentProject->project);
+
+            if(isset($project) and $project->model == 'waterfall')
+            {
+                $productID = $this->loadModel('product')->getProductIDByProject($currentProject->id);
+                $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
+                $currentProject->name = $productName . '/' . $currentProject->name;
+            }
         }
 
         $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod&extra=$extra");

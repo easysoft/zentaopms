@@ -293,8 +293,15 @@ $lang->my->menu = new stdclass();
 $lang->my->menu->index       = '首页|my|index';
 $lang->my->menu->calendar    = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->myWork      = array('link' => '待处理|my|work|mode=task');
-$lang->my->menu->myProject   = array('link' => '项目|my|project|');
-$lang->my->menu->myExecution = '执行|my|execution|type=undone';
+if($config->systemMode == 'new')
+{
+    $lang->my->menu->myProject   = array('link' => '项目|my|project|');
+    $lang->my->menu->myExecution = '执行|my|execution|type=undone';
+}
+else
+{
+    $lang->my->menu->myExecution = $lang->executionCommon . '|my|execution|type=undone';
+}
 $lang->my->menu->contribute  = array('link' => '贡献|my|contribute|mode=task');
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
 $lang->my->menu->score       = array('link' => '积分|my|score|', 'subModule' => 'score');
@@ -1030,6 +1037,10 @@ $lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="q
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
-if($config->systemMode == 'old') $lang->noMenuModule[] = 'project';
+if($config->systemMode == 'old') 
+{
+    $lang->noMenuModule[] = 'project';
+    $lang->noMenuModule[] = 'task';
+}
 
 include (dirname(__FILE__) . '/menuOrder.php');
