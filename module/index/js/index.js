@@ -79,7 +79,10 @@
         {
             return 'system';
         }
-
+        if(['caselib', 'testreport', 'testsuite', 'testtask', 'testcase', 'bug', 'qa'].includes(moduleName))
+        {
+            return link.prj ? 'project' : 'qa';
+        }
         if(moduleName === 'report')
         {
             if(['usereport', 'editreport', 'deletereport', 'custom'].includes(methodLowerCase) && link.params.from)
