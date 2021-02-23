@@ -1844,7 +1844,7 @@ class program extends control
      * @param  int    $programID
      * @param  int    $projectID
      * @access public
-     * @return array
+     * @return void
      */
     public function ajaxCheckProduct($programID, $projectID)
     {
@@ -1856,7 +1856,8 @@ class program extends control
         if($oldTopPGM == $newTopPGM) die();
 
         $response  = array();
-        $response['result'] = true;
+        $response['result']  = true;
+        $response['message'] = $this->lang->program->changeProgramTip;
 
         $multiLinkedProducts = $this->program->getMultiLinkedProducts($projectID);
         if($multiLinkedProducts)
@@ -1869,10 +1870,6 @@ class program extends control
             $response['result']              = false;
             $response['message']             = $multiLinkedProducts;
             $response['multiLinkedProjects'] = $multiLinkedProjects;
-        }
-        else
-        {
-            $response['message']   = $this->lang->program->changeProgramTip;
         }
         die(json_encode($response));
     }

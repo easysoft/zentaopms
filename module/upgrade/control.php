@@ -161,11 +161,11 @@ class upgrade extends control
     {
         if($_POST)
         {
-            $after15mode = fixer::input('post')->get('after15mode');
-            $this->loadModel('setting')->setItem('system.custom.after15mode', $after15mode);
+            $mode = fixer::input('post')->get('mode');
+            $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
 
-            if($after15mode == 'old') $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
-            if($after15mode == 'new') $this->locate(inlink('mergeTips'));
+            if($mode == 'old') $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
+            if($mode == 'new') $this->locate(inlink('mergeTips'));
         }
 
         $this->view->title = $this->lang->upgrade->to15Guide;

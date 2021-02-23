@@ -22,7 +22,7 @@
       <tr>
         <th class='text-top'><?php echo $lang->custom->mode;?></th>
         <td>
-          <p><label class="radio-inline"><input type="radio" name="after15mode" value="new" checked='checked' id="after15modenew"><?php echo $lang->upgrade->to15Mode['new'];?></label></p>
+          <p><label class="radio-inline"><input type="radio" name="mode" value="new" checked='checked' id="modenew"><?php echo $lang->upgrade->to15Mode['new'];?></label></p>
           <p class='text-info'><?php echo $lang->upgrade->selectedModeTips['new'];?></p>
         </td>
       </tr>

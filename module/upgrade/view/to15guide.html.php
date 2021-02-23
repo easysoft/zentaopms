@@ -18,7 +18,7 @@
       <div class='panel-body'>
         <div style='width:600px; margin: auto;'>
           <?php echo $lang->upgrade->to15Desc;?>
-          <?php echo html::radio('after15mode', $lang->upgrade->to15Mode, 'old');?>
+          <?php echo html::radio('mode', $lang->upgrade->to15Mode, 'old');?>
           <div id='selectedModeTips' class='text-info'><?php echo $lang->upgrade->selectedModeTips['old'];?></div>
         </div>
       </div>
@@ -30,7 +30,7 @@
 <script>
 $(function()
 {
-    $('[name=after15mode]').change(function()
+    $('[name=mode]').change(function()
     {
         $('#selectedModeTips').html(selectedModeTips[$(this).val()]);
     })
