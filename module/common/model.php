@@ -2312,6 +2312,11 @@ EOD;
             $lang->menu      = $lang->report->menu;
             $lang->menuOrder = $lang->report->menuOrder;
         }
+        if($group == 'qa')
+        {
+            $lang->menu      = $lang->qa->menu;
+            $lang->menuOrder = $lang->qa->menuOrder;
+        }
         if($group == 'attend')
         {
             $lang->menu      = $lang->attend->menu;
