@@ -17,7 +17,7 @@
       </p>
     </div>
     <?php else:?>
-    <?php $style = $this->app->rawModule == 'projectstory' ? "style='overflow: unset;'" : '';?>
+    <?php $style = $this->app->rawModule == 'projectstory' ? "style='overflow: unset; text-align: left'" : '';?>
     <?php $openModel = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
     <?php $module    = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';?>
     <div class='main-table' data-ride="table">
@@ -52,10 +52,10 @@
           <?php $rowspan = count($track);?>
           <tr>
             <td <?php if($rowspan != 0) echo "rowspan=" . $rowspan;?> class='requirement'>
-              <?php echo $key == 'noRequirement' ? $lang->story->noRequirement : html::a($this->createLink($module, 'view', "storyID=$requirement->id"), $requirement->title, '', "title=$requirement->title data-group='$openModel'");?>
               <?php if($key != 'noRequirement'):?>
               <span class="label label-primary label-outline"><?php echo zget($lang->story->statusList, $requirement->status);?></span>
               <?php endif;?>
+              <?php echo $key == 'noRequirement' ? $lang->story->noRequirement : html::a($this->createLink($module, 'view', "storyID=$requirement->id"), $requirement->title, '', "title=$requirement->title data-group='$openModel'");?>
             </td>
             <?php if(count($track) != 0):?>
             <?php $i = 1;?>
