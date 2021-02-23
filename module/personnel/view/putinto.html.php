@@ -11,7 +11,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <style>
-.main-table thead>tr>th:first-child{padding-left: 0px;}
+.main-table thead>tr>th:first-child {padding-left: 8px;}
+.table.has-sort-head thead>tr>th {padding-right: 8px;}
 </style>
 <div id="mainContent" class="main-row fade">
   <?php if(!empty($inputPersonnel)):?>
