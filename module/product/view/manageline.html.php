@@ -44,21 +44,27 @@
                   <div id='son'>
                     <div class="table-row row-module row-module-new">
                       <div class="table-col text-center"><strong><?php echo $lang->product->lineName;?></strong></div>
+                      <?php if($this->config->global->mode == 'new'):?>
                       <div class="table-col text-center"><strong><?php echo $lang->product->program;?></strong></div>
+                      <?php endif;?>
                       <div class="table-col col-actions"> </div>
                     </div>
                     <?php $maxOrder = 0;?>
                     <?php foreach($lines as $line):?>
                     <div class="table-row row-module">
                       <div class="table-col col-module"><?php echo html::input("modules[id$line->id]", $line->name, 'class="form-control"');?></div>
+                      <?php if($this->config->global->mode == 'new'):?>
                       <div class="table-col col-programs"><?php echo html::select("programs[id$line->id]", $programs, $line->root, "class='form-control chosen'");?></div>
+                      <?php endif;?>
                       <div class="table-col col-actions"> </div>
                     </div>
                     <?php endforeach;?>
                     <?php for($i = 0; $i <= 5 ; $i ++):?>
                     <div class="table-row row-module row-module-new">
                       <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control'");?></div>
+                      <?php if($this->config->global->mode == 'new'):?>
                       <div class="table-col col-programs"><?php echo html::select("programs[]", $programs, '', "class='form-control chosen'");?></div>
+                      <?php endif;?>
                       <div class="table-col col-actions">
                         <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
                         <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
