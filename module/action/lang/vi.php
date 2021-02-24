@@ -109,6 +109,7 @@ $lang->action->desc->changed        = '$date, changed by <strong>$actor</strong>
 $lang->action->desc->edited         = '$date, edited by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->assigned       = '$date, <strong>$actor</strong> assigned to <strong>$extra</strong>.' . "\n";
 $lang->action->desc->closed         = '$date, được đóng bởi <strong>$actor</strong> .' . "\n";
+$lang->action->desc->openedbysystem = '$date, opened by system' . "\n";
 $lang->action->desc->closedbysystem = '$date, closed by system.' . "\n";
 $lang->action->desc->deleted        = '$date, được xóa bởi <strong>$actor</strong> .' . "\n";
 $lang->action->desc->deletedfile    = '$date, <strong>$actor</strong> đã xóa <strong><i>$extra</i></strong>.' . "\n";
