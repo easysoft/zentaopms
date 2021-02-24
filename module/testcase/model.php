@@ -49,7 +49,11 @@ class testcaseModel extends model
             common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
 
-        if($this->lang->navGroup->testcase == 'qa') $this->lang->qa->menu = $this->lang->testcase->menu;
+        if($this->lang->navGroup->testcase == 'qa')
+        {
+            $this->lang->qa->menu         = $this->lang->testcase->menu;
+            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
+        }
     }
 
     /**

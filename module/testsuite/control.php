@@ -55,7 +55,8 @@ class testsuite extends control
         $this->session->set('testsuiteList', $this->app->getURI(true));
 
         /* Set menu. */
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $projectID            = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->PRJ;
+        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testsuite")));
         $productID = $this->product->saveState($productID, $this->products);
         $this->testsuite->setMenu($this->products, $productID);

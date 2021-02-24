@@ -49,7 +49,11 @@ class bugModel extends model
             common::setMenuVars($this->lang->bug->menu, $key, $replace);
         }
 
-        if($this->lang->navGroup->bug == 'qa') $this->lang->qa->menu = $this->lang->bug->menu;
+        if($this->lang->navGroup->bug == 'qa')
+        {
+            $this->lang->qa->menu         = $this->lang->bug->menu;
+            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
+        }
     }
 
     /**

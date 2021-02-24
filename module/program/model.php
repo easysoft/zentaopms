@@ -59,10 +59,7 @@ class programModel extends model
      */
     public function getPGMOption()
     {
-        return $this->dao->select('id,name')->from(TABLE_PROGRAM)
-            ->where('type')->eq('program')
-            ->andWhere('deleted')->eq(0)
-            ->fetchPairs();
+        return $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->fetchPairs();
     }
 
     /**

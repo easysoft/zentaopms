@@ -899,10 +899,17 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($productID, $module, $method, $extra)
+    public function ajaxGetDropMenu($productID, $module, $method, $extra = '', $from = '')
     {
-        $inProduct = zget($this->lang->navGroup, $module) == 'product';
-        $products  = $inProduct ? $this->product->getList() : $this->product->getProductsByProject($this->session->PRJ);
+        if($from == 'qa')
+        {
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
+        }
+
+        $moduleGroup = zget($this->lang->navGroup, $module);
+        $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
+        $products    = $moduleGroup == 'project' ? $this->product->getProductsByProject($this->session->PRJ) : $this->product->getList();
 
         $this->view->link       = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID  = $productID;
@@ -910,9 +917,9 @@ class product extends control
         $this->view->method     = $method;
         $this->view->extra      = $extra;
         $this->view->products   = $products;
-        $this->view->projectID  = $this->session->PRJ;
+        $this->view->projectID  = $moduleGroup == 'project' ? $this->session->PRJ : 0;
         $this->view->programs   = $this->loadModel('program')->getPGMOption();
-        $this->view->openModule = $inProduct ? 'product' : 'project';
+        $this->view->openModule = $moduleGroup;
         $this->display();
     }
 
