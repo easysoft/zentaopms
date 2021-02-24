@@ -150,10 +150,7 @@ $lang->system->menuOrder[10] = 'scrum';
 $lang->system->menuOrder[15] = 'waterfall';
 
 /* system menu order. */
-$lang->subject->menuOrder[5]  = 'subject';
-$lang->subject->menuOrder[10] = 'holiday';
 $lang->subject->menuOrder[15] = 'concept';
-$lang->subject->menuOrder[20] = 'estimate';
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';

@@ -540,19 +540,6 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_holiday`;
-CREATE TABLE IF NOT EXISTS `zt_holiday` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL DEFAULT '',
-  `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
-  `desc` text NOT NULL,
-  `year` char(4) NOT NULL,
-  `begin` date NOT NULL,
-  `end` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `year` (`year`),
-  KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_issue`;
 CREATE TABLE IF NOT EXISTS `zt_issue` (
   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,

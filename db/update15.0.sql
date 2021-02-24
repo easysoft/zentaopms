@@ -279,19 +279,6 @@ CREATE TABLE IF NOT EXISTS `zt_workestimation` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `zt_holiday` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL DEFAULT '',
-  `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
-  `desc` text NOT NULL,
-  `year` char(4) NOT NULL,
-  `begin` date NOT NULL,
-  `end` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `year` (`year`),
-  KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 ALTER TABLE `zt_task` ADD `design` mediumint(8) unsigned NOT NULL AFTER `module`;
 ALTER TABLE `zt_task` ADD `version` smallint(6) NOT NULL AFTER `desc`;
 ALTER TABLE `zt_task` ADD `activatedDate` date NOT NULL AFTER `lastEditedDate`;

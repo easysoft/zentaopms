@@ -71,10 +71,6 @@ $lang->moduleOrder[235] = 'budget';
 $lang->moduleOrder[240] = 'workestimation';
 $lang->moduleOrder[245] = 'durationestimation';
 
-$lang->moduleOrder[250] = 'subject';
-$lang->moduleOrder[255] = 'holiday';
-$lang->moduleOrder[260] = 'weekly';
-
 $lang->resource = new stdclass();
 
 /* Index module. */
@@ -1161,23 +1157,9 @@ $lang->resource->subject->browse = 'browse';
 
 $lang->subject->methodOrder[5]  = 'browse';
 
-/* Holiday. */
-$lang->resource->holiday = new stdclass();
-$lang->resource->holiday->browse = 'browse';
-$lang->resource->holiday->create = 'create';
-$lang->resource->holiday->edit   = 'edit';
-$lang->resource->holiday->delete = 'delete';
-
-$lang->holiday->methodOrder[5]  = 'browse';
-$lang->holiday->methodOrder[10] = 'create';
-$lang->holiday->methodOrder[15] = 'edit';
-$lang->holiday->methodOrder[20] = 'delete';
-
 /* Weekly. */
 $lang->resource->weekly = new stdclass();
 $lang->resource->weekly->index = 'index';
-
-$lang->holiday->methodOrder[5] = 'index';
 
 /* Custom. */
 $lang->resource->custom = new stdclass();

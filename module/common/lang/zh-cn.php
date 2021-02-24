@@ -154,7 +154,7 @@ $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
-$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|subject|browse|';
+$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|custom|browsestoryconcept|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
 if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-folder-open-o'></i> 项目集|$programModule|$programMethod|";
 
@@ -224,13 +224,7 @@ $lang->system->menu->waterfall = array('link' => '瀑布模型|stage|settype|', 
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
-$lang->subject->menu->subject  = array('link' => '支出科目|subject|browse|');
-$lang->subject->menu->holiday  = array('link' => '节假日|holiday|browse|');
 $lang->subject->menu->concept  = array('link' => '需求概念|custom|browsestoryconcept|');
-$lang->subject->menu->estimate = array('link' => '估算|custom|estimate');
-
-$lang->holiday = new stdclass();
-$lang->holiday->menu = $lang->subject->menu;
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -718,7 +712,6 @@ $lang->navGroup->subject       = 'system';
 $lang->navGroup->baseline      = 'system';
 $lang->navGroup->reviewcl      = 'system';
 $lang->navGroup->reviewsetting = 'system';
-$lang->navGroup->holiday       = 'system';
 
 $lang->navGroup->attend   = 'attend';
 $lang->navGroup->leave    = 'attend';

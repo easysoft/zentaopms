@@ -225,13 +225,7 @@ $lang->system->menu->waterfall = array('link' => 'Waterfall Model|stage|settype|
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
-$lang->subject->menu->subject  = array('link' => 'Subject|subject|browse|');
-$lang->subject->menu->holiday  = array('link' => 'Holiday|holiday|browse|');
 $lang->subject->menu->concept  = array('link' => 'Story Concept|custom|browsestoryconcept|');
-$lang->subject->menu->estimate = array('link' => 'Estimate|custom|estimate');
-
-$lang->holiday = new stdclass();
-$lang->holiday->menu = $lang->subject->menu;
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -720,7 +714,6 @@ $lang->navGroup->subject       = 'system';
 $lang->navGroup->baseline      = 'system';
 $lang->navGroup->reviewcl      = 'system';
 $lang->navGroup->reviewsetting = 'system';
-$lang->navGroup->holiday       = 'system';
 
 $lang->navGroup->attend   = 'attend';
 $lang->navGroup->leave    = 'attend';

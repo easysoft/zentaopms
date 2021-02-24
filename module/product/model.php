@@ -442,6 +442,15 @@ class productModel extends model
         $currentMethod = $this->app->methodName;
         $this->session->set('moreProductLink', $this->app->getURI(true));
 
+        /* init currentModule and currentMethod for report and story. */
+        if($currentModule == 'story')
+        {    
+            $storyMethods = ",track,create,batchcreate,batchclose,";
+            if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
+            if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
+        }    
+        if($currentMethod == 'report') $currentMethod = 'browse';
+
         $this->app->loadLang('project');
         $currentProductName = $this->lang->product->common;
         if($productID)
