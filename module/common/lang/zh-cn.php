@@ -218,13 +218,12 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => '全局设置|subject|browse|', 'subModule' => 'holiday');
-$lang->system->menu->scrum     = array('link' => '敏捷模型|custom|configurescrum|');
-$lang->system->menu->waterfall = array('link' => '瀑布模型|stage|settype|', 'alias' => 'browse');
+$lang->system->menu->company   = array('link' => '全局设置|custom|browsestoryconcept|', 'subModule' => 'holiday');
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
-$lang->subject->menu->concept  = array('link' => '需求概念|custom|browsestoryconcept|');
+$lang->subject->menu->storyConcept  = array('link' => '需求概念|custom|browsestoryconcept|');
+$lang->subject->menu->sprintConcept = array('link' => '项目概念|custom|configurescrum|');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -700,7 +699,6 @@ $lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->durationestimation = 'project';
 
-$lang->navGroup->stage         = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';

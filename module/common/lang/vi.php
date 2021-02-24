@@ -219,15 +219,12 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => 'Global Settings|subject|browse|', 'subModule' => 'holiday');
-$lang->system->menu->scrum     = array('link' => 'Scrum Model|custom|configurescrum|');
-$lang->system->menu->waterfall = array('link' => 'Waterfall Model|stage|settype|', 'alias' => 'browse');
+$lang->system->menu->company   = array('link' => 'Global Settings|custom|browsestoryconcept|', 'subModule' => 'holiday');
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
-$lang->subject->menu->subject  = array('link' => 'Subject|subject|browse|');
-$lang->subject->menu->concept  = array('link' => 'Story Concept|custom|browsestoryconcept|');
-$lang->subject->menu->estimate = array('link' => 'Estimate|custom|estimate');
+$lang->subject->menu->storyConcept  = array('link' => 'Story Concept|custom|browsestoryconcept|');
+$lang->subject->menu->sprintConcept = array('link' => 'Project Concept|custom|configurescrum|');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -704,7 +701,6 @@ $lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->durationestimation = 'project';
 
-$lang->navGroup->stage         = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';

@@ -21,13 +21,6 @@ $lang->custom->scoreReset           = 'Thiết lập lại điểm';
 $lang->custom->scoreTitle           = 'Tính năng điểm';
 $lang->custom->project              = $lang->sprintCommon;
 $lang->custom->product              = $lang->productCommon;
-$lang->custom->estimate             = 'Estimated configuration';
-$lang->custom->estimateConfig       = 'Estimated configuration';
-$lang->custom->estimateUnit         = 'Estimating Unit';
-$lang->custom->estimateEfficiency   = 'Productivity';
-$lang->custom->estimateCost         = 'Unit Labour Cost';
-$lang->custom->estimateHours        = 'Daily Working Hours';
-$lang->custom->estimateDays         = 'Working Days Per Week';
 $lang->custom->convertFactor        = 'Convert factor';
 $lang->custom->region               = 'Interval';
 $lang->custom->tips                 = 'Tips';
@@ -233,11 +226,6 @@ $lang->custom->conceptOptions->hourPoint      = array();
 $lang->custom->conceptOptions->hourPoint['0'] = 'giờ';
 $lang->custom->conceptOptions->hourPoint['1'] = 'Điểm';
 $lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';
-
-$lang->custom->conceptOptions->estimateUnit      = array();
-$lang->custom->conceptOptions->estimateUnit['0'] = 'Stunde(H)';
-$lang->custom->conceptOptions->estimateUnit['1'] = 'Story Point(SP)';
-$lang->custom->conceptOptions->estimateUnit['2'] = 'Function Point(FP)';
 
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = 'Set concept';

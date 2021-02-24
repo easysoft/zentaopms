@@ -56,20 +56,6 @@ REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES (
 
 ALTER TABLE `zt_config` MODIFY COLUMN `value` longtext NOT NULL AFTER `key`;
 
--- DROP TABLE IF EXISTS `zt_stage`;
-CREATE TABLE IF NOT EXISTS `zt_stage` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `percent` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- DROP TABLE IF EXISTS `zt_stakeholder`;
 CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
  `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -97,14 +83,6 @@ CREATE TABLE IF NOT EXISTS `zt_expect` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES 
-('需求','10','request','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('设计','10','design','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('开发','50','dev','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('测试','15','qa','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('发布','10','release','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
 -- DROP TABLE IF EXISTS `zt_design`;
 CREATE TABLE IF NOT EXISTS `zt_design` (
