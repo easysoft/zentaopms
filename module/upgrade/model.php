@@ -4030,7 +4030,37 @@ class upgradeModel extends model
             $programID = $data->programID ? $data->programID : $data->programs;
         }
 
-        if(!isset($data->sprints)) return array($programID);
+        if(!isset($data->lines))
+        {
+            if(!empty($data->lineName))
+            {
+                /* Insert product line. */
+                $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
+                $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
+
+                $line = new stdClass();
+                $line->type   = 'line';
+                $line->parent = 0;
+                $line->grade  = 1;
+                $line->name   = $data->lineName;
+                $line->root   = $programID;
+                $line->order = $maxOrder;
+                $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+                $lineID = $this->dao->lastInsertID();
+                $path   = ",$lineID,";
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+
+                if(dao::isError()) return false;
+            }
+
+            if(empty($data->lineName)) $lineID = 0;
+        }
+        else
+        {
+            $lineID = $data->lines;
+        }
+
+        if(!isset($data->sprints)) return array($programID, 0, $lineID);
 
         if(!isset($data->projects))
         {
@@ -4077,36 +4107,6 @@ class upgradeModel extends model
         else
         {
             $projectID = $data->projects;
-        }
-
-        if(!isset($data->lines))
-        {
-            if(!empty($data->lineName))
-            {
-                /* Insert product line. */
-                $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
-                $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
-
-                $line = new stdClass();
-                $line->type   = 'line';
-                $line->parent = 0;
-                $line->grade  = 1;
-                $line->name   = $data->lineName; 
-                $line->root   = $programID; 
-                $line->order = $maxOrder;
-                $this->dao->insert(TABLE_MODULE)->data($line)->exec();
-                $lineID = $this->dao->lastInsertID();
-                $path   = ",$lineID,";
-                $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
-
-                if(dao::isError()) return false;
-            }
-
-            if(empty($data->lineName)) $lineID = 0;
-        }
-        else
-        {
-            $lineID = $data->lines;
         }
 
         return array($programID, $projectID, $lineID);
