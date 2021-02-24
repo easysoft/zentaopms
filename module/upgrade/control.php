@@ -236,7 +236,7 @@ class upgrade extends control
                 /* Process unlinked sprint and product. */
                 foreach($linkedProducts as $productID => $product)
                 {
-                    if((isset($unlinkSprints[$productID]) and empty($unlinkSprints[$productID])) || !isset($unlinkSprints[$productID])) $this->dao->update(TABLE_PRODUCT)->set('line')->eq(0)->where('id')->eq($productID)->exec();
+                    if((isset($unlinkSprints[$productID]) and empty($unlinkSprints[$productID])) || !isset($unlinkSprints[$productID])) $this->dao->update(TABLE_PRODUCT)->set('line')->eq($lineID)->where('id')->eq($productID)->exec();
                 }
             }
             elseif($type == 'product')
