@@ -141,15 +141,22 @@ list($projectModule, $projectMethod) = explode('-', $config->projectLink);
 /* Main menu. */
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
-$lang->mainNav->product = '<i class="icon icon-menu-project"></i> Product|product|index|';
-$lang->mainNav->project = '<i class="icon icon-file"></i> Project|program|prjbrowse|';
+$lang->mainNav->product = "<i class='icon icon-menu-project'></i> Product|$productModule|$productMethod|";
+if($config->systemMode == 'new')
+{
+    $lang->mainNav->project = "<i class='icon icon-file'></i> Project|$projectModule|$projectMethod|";
+}
+else
+{
+    $lang->mainNav->project = "<i class='icon icon-file'></i> $lang->executionCommon|$projectModule|$projectMethod|";
+}
 $lang->mainNav->qa      = '<i class="icon icon-test"></i> Test|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> Code|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> Doc|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> Statistic|report|productsummary|";
 $lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
-if($config->systemMode == 'new') $lang->mainNav->program = '<i class="icon icon-folder-open-o"></i> Program|program|pgmbrowse|';
+if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-folder-open-o'></i> Program|$programModule|$programMethod|";
 
 $lang->reporting = new stdclass();
 $lang->dividerMenu = ',qa,report,admin,';

@@ -40,7 +40,7 @@
     $active = $methodName == 'execution' ? ' btn-active-text' : '';
     common::printLink('user', 'execution',  "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
-    if($this->config->global->mode == 'new')
+    if($this->config->systemMode == 'new')
     {
         $label  = "<span class='text'>{$lang->user->issue}</span>";
         $active = ($methodName == 'issue' or $methodName == 'issue')? ' btn-active-text' : '';

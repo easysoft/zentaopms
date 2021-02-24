@@ -142,7 +142,14 @@ list($projectModule, $projectMethod) = explode('-', $config->projectLink);
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
 $lang->mainNav->product = "<i class='icon icon-product'></i> 产品|$productModule|$productMethod|";
-$lang->mainNav->project = "<i class='icon icon-project'></i> 项目|$projectModule|$projectMethod|";
+if($config->systemMode == 'new')
+{
+    $lang->mainNav->project = "<i class='icon icon-project'></i> 项目|$projectModule|$projectMethod|";
+}
+else
+{
+    $lang->mainNav->project = "<i class='icon icon-project'></i> $lang->executionCommon|$projectModule|$projectMethod|";
+}
 $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';

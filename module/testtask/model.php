@@ -155,7 +155,7 @@ class testtaskModel extends model
     {
         $task = fixer::input('post')
             ->setDefault('build', '')
-            ->setIF($this->config->global->mode == 'new' and $this->lang->navGroup->testtask != 'qa', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa', 'PRJ', $this->session->PRJ)
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('uid,contactListMenu')

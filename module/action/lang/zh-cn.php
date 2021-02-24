@@ -168,6 +168,8 @@ $lang->action->desc->unlinkrelatedcase = '$date, 由 <strong>$actor</strong> 移
 $lang->action->label = new stdclass();
 $lang->action->label->created             = '创建';
 $lang->action->label->opened              = '创建';
+$lang->action->label->openedbysystem      = '系统创建';
+$lang->action->label->closedbysystem      = '系统关闭';
 $lang->action->label->added               = '添加';
 $lang->action->label->changed             = '变更了';
 $lang->action->label->edited              = '编辑了';
@@ -411,6 +413,7 @@ $lang->action->dynamicAction->user['loginxuanxuan']        = '登录客户端';
 $lang->action->dynamicAction->entry['created']             = '添加应用';
 $lang->action->dynamicAction->entry['edited']              = '编辑应用';
 
+global $config;
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = "计划|productplan|view|productID=%s";
@@ -418,7 +421,14 @@ $lang->action->label->release     = '发布|release|view|productID=%s';
 $lang->action->label->story       = "{$lang->SRCommon}|story|view|storyID=%s";
 $lang->action->label->program     = "项目集|program|pgmproduct|programID=%s";
 $lang->action->label->project     = "项目|program|index|projectID=%s";
-$lang->action->label->execution   = "执行|project|task|projectID=%s";
+if($config->systemMode == 'new')
+{
+    $lang->action->label->execution = "执行|project|task|projectID=%s";
+}
+else
+{
+    $lang->action->label->execution = "$lang->executionCommon|project|task|projectID=%s";
+}
 $lang->action->label->task        = '任务|task|view|taskID=%s';
 $lang->action->label->build       = '版本|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';

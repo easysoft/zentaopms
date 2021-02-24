@@ -32,7 +32,7 @@
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
-          <?php if($this->config->global->mode == 'new'):?>
+          <?php if($this->config->systemMode == 'new'):?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
             <td><?php echo html::select('program', $programs, $product->program, "class='form-control chosen'");?></td>

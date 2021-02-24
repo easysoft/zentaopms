@@ -39,7 +39,7 @@ html,body {height: 100%;}
         <th class='w-120px'><?php echo $lang->my->storyConcept;?></th>
         <td><?php echo html::select('URSR', $URSRList, $URSR, "class='form-control chosen'");?></td>
       </tr>  
-      <?php if($this->config->global->mode == 'new'):?>
+      <?php if($this->config->systemMode == 'new'):?>
       <tr>
         <th><?php echo $lang->my->programLink;?></th>
         <td><?php echo html::select('programLink', $lang->my->programLinkList, $programLink, "class='form-control chosen'");?></td>

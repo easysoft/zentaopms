@@ -27,7 +27,7 @@ class project extends control
             $this->projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode');
             if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
         }
-        $this->objectType = $this->config->global->mode == 'old' ? 'project' : 'exection';
+        $this->objectType = $this->config->systemMode == 'old' ? 'project' : 'exection';
     }
 
     /**
@@ -115,7 +115,7 @@ class project extends control
     public function task($executionID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         /* Save last PRJ. */
-        if($this->config->global->mode == 'new')
+        if($this->config->systemMode == 'new')
         {
             $projectID = $this->loadModel('program')->savePRJState($this->session->PRJ, $this->program->getPRJPairs());
             if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
@@ -1196,7 +1196,7 @@ class project extends control
         $this->view->isSprint = false;
         $project = $this->project->getById($this->session->PRJ);
 
-        if($this->config->global->mode == 'new')
+        if($this->config->systemMode == 'new')
         {
             if($project->model == 'scrum' && isset($this->config->custom->sprintConcept) and $this->config->custom->sprintConcept == 1)
             {
@@ -1333,7 +1333,7 @@ class project extends control
         }
 
         $this->view->isSprint = false;
-        if($this->config->global->mode == 'new')
+        if($this->config->systemMode == 'new')
         {
             $PRJData = $this->project->getById($this->session->PRJ);
             if($PRJData->model == 'scrum' && isset($this->config->custom->sprintConcept) && $this->config->custom->sprintConcept == 1)

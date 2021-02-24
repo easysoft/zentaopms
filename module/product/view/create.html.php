@@ -21,7 +21,7 @@
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
-          <?php if($this->config->global->mode == 'new'):?>
+          <?php if($this->config->systemMode == 'new'):?>
           <tr>
             <th class='w-140px'><?php echo $lang->program->PGMCommon;?></th>
             <td><?php echo html::select('program', $programs, '', "class='form-control chosen' required");?></td><td></td>

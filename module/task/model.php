@@ -47,7 +47,7 @@ class taskModel extends model
             ->setDefault('project', $projectID)
             ->setDefault('estimate,left,story', 0)
             ->setDefault('status', 'wait')
-            ->setIF($this->config->global->mode == 'new', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new', 'PRJ', $this->session->PRJ)
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('estStarted', '0000-00-00')
@@ -303,7 +303,7 @@ class taskModel extends model
             $data[$i]->pri        = $tasks->pri[$i];
             $data[$i]->estimate   = $tasks->estimate[$i];
             $data[$i]->left       = $tasks->estimate[$i];
-            $data[$i]->PRJ        = $this->config->global->mode == 'new' ? $this->session->PRJ : 0;
+            $data[$i]->PRJ        = $this->config->systemMode == 'new' ? $this->session->PRJ : 0;
             $data[$i]->project    = $projectID;
             $data[$i]->estStarted = empty($tasks->estStarted[$i]) ? '0000-00-00' : $tasks->estStarted[$i];
             $data[$i]->deadline   = empty($tasks->deadline[$i]) ? '0000-00-00' : $tasks->deadline[$i];

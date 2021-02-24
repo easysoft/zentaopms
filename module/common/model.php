@@ -1162,7 +1162,7 @@ EOD;
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if($config->global->mode == 'old' and strtolower($module) == 'program'  and strpos($method, 'PRJ') === 0) ($module = 'project') and ($method = substr(strtolower($method), 3));
+        if($config->systemMode == 'old' and strtolower($module) == 'program'  and strpos($method, 'PRJ') === 0) ($module = 'project') and ($method = substr(strtolower($method), 3));
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 
@@ -2353,7 +2353,7 @@ EOD;
         }
         if($group == 'project')
         {
-            $lang->menu = $config->global->mode == 'new' ? self::getProgramMainMenu($moduleName) : $lang->project->menu;
+            $lang->menu = $config->systemMode == 'new' ? self::getProgramMainMenu($moduleName) : $lang->project->menu;
         }
     }
 
