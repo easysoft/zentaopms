@@ -35,6 +35,7 @@ $isQa      = $rawModule == 'qa';
         <?php if($isProject) echo $this->loadModel('program')->getPRJMainAction($app->rawModule, $app->rawMethod);?>
         <?php if($isProduct) echo isset($lang->product->mainMenuAction) ? $lang->product->mainMenuAction : '';?>
         <?php if($isReport)  echo isset($lang->report->mainMenuAction) ? $lang->report->mainMenuAction : '';?>
+        <?php if($isQa)      echo isset($lang->qa->mainMenuAction) ? $lang->qa->mainMenuAction : '';?>
         <?php endif;?>
       </div>
     </div>
