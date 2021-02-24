@@ -520,7 +520,7 @@ class upgrade extends control
     public function ajaxGetLinesPairsByProgram($programID = 0)
     {
         $lines = array('' => '');
-        if($programID) $lines += $this->loadModel('product')->getLinePairs($programID);
+        if((int)$programID) $lines += $this->loadModel('product')->getLinePairs($programID);
         die(html::select('lines', $lines, '', 'class="form-control line-exist"'));
     }
 

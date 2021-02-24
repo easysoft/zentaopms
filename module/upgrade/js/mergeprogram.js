@@ -352,6 +352,8 @@ function setProgramByProduct(product)
         $('#programs').val(programID).trigger("chosen:updated");
         $('#programs').attr('disabled', 'disabled');
         $('#programID').val(programID);
+
+        getProjectByProgram($('#programs'));
     }
     else
     {
