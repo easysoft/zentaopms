@@ -109,7 +109,6 @@ $lang->action->desc->changed        = '$date, 由 <strong>$actor</strong> 变更
 $lang->action->desc->edited         = '$date, 由 <strong>$actor</strong> 编辑。' . "\n";
 $lang->action->desc->assigned       = '$date, 由 <strong>$actor</strong> 指派给 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->closed         = '$date, 由 <strong>$actor</strong> 关闭。' . "\n";
-$lang->action->desc->openedbysystem = '$date, 由系统创建。' . "\n";
 $lang->action->desc->closedbysystem = '$date, 由系统关闭。' . "\n";
 $lang->action->desc->deleted        = '$date, 由 <strong>$actor</strong> 删除。' . "\n";
 $lang->action->desc->deletedfile    = '$date, 由 <strong>$actor</strong> 删除了附件：<strong><i>$extra</i></strong>。' . "\n";

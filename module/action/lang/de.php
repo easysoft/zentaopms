@@ -109,7 +109,6 @@ $lang->action->desc->changed        = '$date, bearbeitet von <strong>$actor</str
 $lang->action->desc->edited         = '$date, bearbeitet von <strong>$actor</strong> .' . "\n";
 $lang->action->desc->assigned       = '$date, <strong>$actor</strong> zugewisen an <strong>$extra</strong>.' . "\n";
 $lang->action->desc->closed         = '$date, geschlossen von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->openedbysystem = '$date, opened by system' . "\n";
 $lang->action->desc->closedbysystem = '$date, closed by system.' . "\n";
 $lang->action->desc->deleted        = '$date, gelöscht von <strong>$actor</strong> .' . "\n";
 $lang->action->desc->deletedfile    = '$date, <strong>$actor</strong> löschte <strong><i>$extra</i></strong>.' . "\n";
