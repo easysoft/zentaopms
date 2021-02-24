@@ -153,6 +153,7 @@ class releaseModel extends model
                 $build->project = 0;
 
                 $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
+                $this->app->loadLang('build');
                 $this->dao->insert(TABLE_BUILD)->data($build)
                     ->autoCheck()
                     ->check('name', 'unique', "product = {$productID} AND branch = {$branch} AND deleted = '0'")
