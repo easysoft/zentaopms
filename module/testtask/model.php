@@ -54,7 +54,7 @@ class testtaskModel extends model
         if($isMobile)
         {
             $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
+            $pageNav = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
         }
         $pageNav .= $selectHtml;
 
@@ -67,7 +67,11 @@ class testtaskModel extends model
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
 
-        if($this->lang->navGroup->testtask == 'qa') $this->lang->qa->menu = $this->lang->testtask->menu;
+        if($this->lang->navGroup->testtask == 'qa')
+        {
+            $this->lang->qa->menu         = $this->lang->testtask->menu;
+            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
+        }
     }
 
     /**
@@ -133,7 +137,11 @@ class testtaskModel extends model
         }
 
         $this->lang->testtask->menu->testcase['subModule'] = 'testtask';
-        if($this->lang->navGroup->testtask == 'qa') $this->lang->qa->menu = $this->lang->testtask->menu;
+        if($this->lang->navGroup->testtask == 'qa')
+        {
+            $this->lang->qa->menu         = $this->lang->testtask->menu;
+            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
+        }
     }
 
     /**

@@ -46,7 +46,11 @@ class testsuiteModel extends model
             common::setMenuVars($this->lang->testsuite->menu, $key, $replace);
         }
 
-        if($this->lang->navGroup->testsuite == 'qa') $this->lang->qa->menu = $this->lang->testsuite->menu;
+        if($this->lang->navGroup->testsuite == 'qa')
+        {
+            $this->lang->qa->menu         = $this->lang->testsuite->menu;
+            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', 0);
+        }
     }
 
     /**

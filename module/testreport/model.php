@@ -40,7 +40,11 @@ class testreportModel extends model
             common::setMenuVars($this->lang->testreport->menu, $key, $replace);
         }
 
-        if($this->lang->navGroup->testreport == 'qa') $this->lang->qa->menu = $this->lang->testreport->menu;
+        if($this->lang->navGroup->testreport == 'qa')
+        {
+            $this->lang->qa->menu         = $this->lang->testreport->menu;
+            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
+        }
     }
 
     /**

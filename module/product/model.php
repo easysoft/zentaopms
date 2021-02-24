@@ -303,7 +303,7 @@ class productModel extends model
      */
     public function getProductPairsByProject($projectID, $status = 'all')
     {
-        $products = $this->getProductsByProject($projectID, $status);
+        $products = empty($projectID) ? $this->getList() : $this->getProductsByProject($projectID, $status);
         $pairs    = array();
         if(!empty($products))
         {
@@ -442,7 +442,7 @@ class productModel extends model
         $currentMethod = $this->app->methodName;
         $this->session->set('moreProductLink', $this->app->getURI(true));
 
-        $this->loadModel('project');
+        $this->app->loadLang('project');
         $currentProductName = $this->lang->product->common;
         if($productID)
         {
@@ -450,7 +450,8 @@ class productModel extends model
             $currentProductName = $currentProduct->name;
         }
 
-        $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+        $fromModule = $this->lang->navGroup->qa == 'qa' ? 'qa' : '';
+        $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra&from=$fromModule");
         $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'><i class='icon icon-product'></i> {$currentProductName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
@@ -1468,7 +1469,7 @@ class productModel extends model
     public function getProductLink($module, $method, $extra, $branch = false)
     {
         $link = '';
-        if(strpos('programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory', $module) !== false)
+        if(strpos('programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory,caselib', $module) !== false)
         {
             if($module == 'product' && $method == 'project')
             {

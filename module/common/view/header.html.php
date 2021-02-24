@@ -13,12 +13,14 @@ $isProgram = $rawModule == 'program';
 $isProduct = $rawModule == 'product';
 $isProject = $rawModule == 'project';
 $isReport  = $rawModule == 'report';
+$isQa      = $rawModule == 'qa';
 ?>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
       <div id='heading'>
         <?php if($isProduct) echo isset($lang->product->switcherMenu) ? $lang->product->switcherMenu : '';?>
+        <?php if($isQa)      echo isset($lang->qa->switcherMenu) ? $lang->qa->switcherMenu : '';?>
         <?php if($this->config->global->mode == 'new'):?>
         <?php if($isProgram) echo isset($lang->program->switcherMenu) ? $lang->program->switcherMenu : '';?>
         <?php if($isProject) echo $this->loadModel('program')->getPRJSwitcher($this->session->PRJ, $app->rawModule, $app->rawMethod);?>
