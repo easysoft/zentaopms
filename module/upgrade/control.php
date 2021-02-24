@@ -236,7 +236,7 @@ class upgrade extends control
                 /* Process unlinked sprint and product. */
                 foreach($linkedProducts as $productID => $product)
                 {
-                    if((isset($unlinkSprints[$productID]) and empty($unlinkSprints[$productID])) || !isset($unlinkSprints[$productID])) $this->dao->update(TABLE_PRODUCT)->set('line')->eq(0)->where('id')->eq($productID)->exec();
+                    if((isset($unlinkSprints[$productID]) and empty($unlinkSprints[$productID])) || !isset($unlinkSprints[$productID])) $this->dao->update(TABLE_PRODUCT)->set('line')->eq($lineID)->where('id')->eq($productID)->exec();
                 }
             }
             elseif($type == 'product')
@@ -308,6 +308,7 @@ class upgrade extends control
             $hourPoint = $this->loadModel('setting')->getItem('owner=system&module=custom&key=hourPoint');
             if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
 
+            $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectType')->eq('project')->exec();
             die(js::locate($this->createLink('upgrade', 'mergeRepo')));
         }
 

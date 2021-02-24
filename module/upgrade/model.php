@@ -4138,7 +4138,6 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->program = $programID;
             $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
-            $data->line    = $product->line ? $product->line : $lineID;
 
             $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
         }

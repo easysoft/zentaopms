@@ -271,6 +271,14 @@ class userModel extends model
             $user->company = $this->dao->lastInsertID();
         }
 
+        if($user->type == 'outside')
+        {
+            $requiredFieldList = explode(',', $this->config->user->create->requiredFields);
+            if(in_array('dept', $requiredFieldList))     unset($requiredFieldList[array_search('dept', $requiredFieldList)]);
+            if(in_array('commiter', $requiredFieldList)) unset($requiredFieldList[array_search('commiter', $requiredFieldList)]);
+            $this->config->user->create->requiredFields = implode(',', $requiredFieldList);
+        }
+
         $this->dao->insert(TABLE_USER)->data($user)
             ->autoCheck()
             ->batchCheck($this->config->user->create->requiredFields, 'notempty')
