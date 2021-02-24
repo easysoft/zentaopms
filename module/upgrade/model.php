@@ -4030,7 +4030,7 @@ class upgradeModel extends model
             $programID = $data->programID ? $data->programID : $data->programs;
         }
 
-        if(!isset($data->lines))
+        if(isset($data->newLine))
         {
             if(!empty($data->lineName))
             {
