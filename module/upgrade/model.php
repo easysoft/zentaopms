@@ -3990,7 +3990,7 @@ class upgradeModel extends model
         $data = fixer::input('post')->get();
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
 
-        if(!isset($data->programs))
+        if(!isset($data->programs) && $data->programID == '')
         {
             /* Insert program. */
             $program = new stdclass();
@@ -4027,7 +4027,7 @@ class upgradeModel extends model
         }
         else
         {
-            $programID = $data->programs;
+            $programID = $data->programID ? $data->programID : $data->programs;
         }
 
         if(!isset($data->sprints)) return array($programID);
