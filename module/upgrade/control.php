@@ -461,7 +461,7 @@ class upgrade extends control
         $this->view->programs  = $programs;
         $this->view->programID = $programID;
         $this->view->projects  = array('' => '') + $this->upgrade->getProjectPairsByProgram($currentProgramID);
-        $this->view->lines     = $currentProgramID ? array('' => '') + $this->loadModel('product')->getLinePairs($currentProgramID) : array();
+        $this->view->lines     = $currentProgramID ? array('' => '') + $this->loadModel('product')->getLinePairs($currentProgramID) : array('' => '');
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups    = $this->loadModel('group')->getPairs();
         $this->display();
