@@ -99,9 +99,9 @@
             if(methodLowerCase.indexOf('pgm') === 0) return 'program';
             if(methodLowerCase === 'index' || methodLowerCase.indexOf('prj') === 0) return 'project';
         }
-        if(moduleName === 'story' && (methodLowerCase === 'zerocase' || (methodLowerCase === 'batchedit' && (link.params.projectID || link.params.$2))))
+        if(moduleName === 'story' && methodLowerCase === 'zerocase')
         {
-            return 'project';
+            return link.params.from == 'project' ? 'project' : 'qa';
         }
         if(['repo', 'jenkins', 'job', 'compile'].includes(moduleName))
         {
@@ -122,8 +122,8 @@
         {
             if(methodLowerCase === 'browse')
             {
-                var viewType = link.params.viewType || link.params.$2;
-                if(['bug', 'case', 'caselib'].includes(viewType)) return 'project';
+                var viewType = link.params.view || link.params.$2;
+                if(['bug', 'case', 'caselib'].includes(viewType)) return link.params.from === 'project' ? 'project' : 'qa';
 
                 if(viewType === 'doc' && (link.params.from === 'product' || link.params.$5 == 'product')) return 'product';
                 if(viewType === 'doc' && (link.params.from === 'project' || link.params.$5 == 'project')) return 'project';

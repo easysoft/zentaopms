@@ -169,7 +169,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class="text-center">
-        <?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
+        <?php common::printLink('tree', 'browse', "productID=$productID&view=bug&currentModuleID=0&branch=0&from={$this->lang->navGroup->bug}", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>

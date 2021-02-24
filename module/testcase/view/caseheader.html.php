@@ -76,7 +76,7 @@
     }
     elseif($hasZeroPriv and $menuType == 'zerocase')
     {
-        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab'");
+        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID&orderBy=id_desc&from={$this->lang->navGroup->testcase}"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab'");
     }
     ?>
     <?php endforeach;?>

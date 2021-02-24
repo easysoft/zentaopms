@@ -871,7 +871,7 @@ class projectModel extends model
         }
 
         /* Order by status's content whether or not done */
-        $executions = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
+        $executions = $this->dao->select('*, IF(INSTR("done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->beginIF(!$projectID && $type == 'all' && $this->config->systemMode == 'new')->andWhere('type')->in('stage,sprint')->fi()
             ->beginIF($projectID && $this->config->systemMode == 'new')->andWhere('project')->eq($projectID)->fi()

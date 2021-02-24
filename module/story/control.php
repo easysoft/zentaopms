@@ -1475,19 +1475,29 @@ class story extends control
      *
      * @param  int    $productID
      * @param  string $orderBy
+     * @param  string $from      qa|project
      * @access public
      * @return void
      */
-    public function zeroCase($productID, $orderBy = 'id_desc')
+    public function zeroCase($productID, $orderBy = 'id_desc', $from = 'project')
     {
         $this->session->set('productList', $this->app->getURI(true));
         $products = $this->product->getPairs();
 
         $this->lang->set('menugroup.story', 'qa');
 
-        $moduleIndex = array_search('story', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        $this->lang->navGroup->story  = 'project';
+        $this->lang->navGroup->story = $from;
+        if($from == 'project')
+        {
+            $moduleIndex = array_search('story', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        }
+        else
+        {
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+        }
+
         $this->lang->story->menu      = $this->lang->testcase->menu;
         $this->lang->story->menuOrder = $this->lang->testcase->menuOrder;
         $this->loadModel('testcase')->setMenu($products, $productID);
