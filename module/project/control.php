@@ -113,9 +113,12 @@ class project extends control
     public function task($executionID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         /* Save last PRJ. */
-        $projectID = $this->loadModel('program')->savePRJState($this->session->PRJ, $this->program->getPRJPairs());
-        if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
-        setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        if($this->config->global->mode == 'new')
+        {
+            $projectID = $this->loadModel('program')->savePRJState($this->session->PRJ, $this->program->getPRJPairs());
+            if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
+            setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        }
 
         $this->loadModel('tree');
         $this->loadModel('search');
@@ -1191,14 +1194,24 @@ class project extends control
         $this->view->isSprint = false;
         $project = $this->project->getById($this->session->PRJ);
 
-        if($project->model == 'scrum' && isset($this->config->custom->sprintConcept) and $this->config->custom->sprintConcept == 1)
+        if($this->config->global->mode == 'new')
         {
-            $this->view->isSprint = true;
+            if($project->model == 'scrum' && isset($this->config->custom->sprintConcept) and $this->config->custom->sprintConcept == 1)
+            {
+                $this->view->isSprint = true;
 
-            unset($this->lang->project->endList[62]);
-            unset($this->lang->project->endList[93]);
-            unset($this->lang->project->endList[186]);
-            unset($this->lang->project->endList[365]);
+                unset($this->lang->project->endList[62]);
+                unset($this->lang->project->endList[93]);
+                unset($this->lang->project->endList[186]);
+                unset($this->lang->project->endList[365]);
+            }
+
+            $this->view->isStage    = $project->model == 'waterfall' ? true : false;
+            $this->view->iconObject = $project->model == 'waterfall' ? 'stage' : 'sprint';
+        }
+        else
+        {
+            $this->view->isStage = false;
         }
 
         $projectID = key($this->projects);
@@ -1223,8 +1236,6 @@ class project extends control
         $this->view->copyProjectID = $copyProjectID;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->isStage       = $project->model == 'waterfall' ? true    : false;
-        $this->view->iconObject    = $project->model == 'waterfall' ? 'stage' : 'sprint';
         $this->display();
     }
 
@@ -1320,15 +1331,24 @@ class project extends control
         }
 
         $this->view->isSprint = false;
-        $PRJData = $this->project->getById($this->session->PRJ);
-        if($PRJData->model == 'scrum' && isset($this->config->custom->sprintConcept) && $this->config->custom->sprintConcept == 1)
+        if($this->config->global->mode == 'new')
         {
-            $this->view->isSprint = true;
+            $PRJData = $this->project->getById($this->session->PRJ);
+            if($PRJData->model == 'scrum' && isset($this->config->custom->sprintConcept) && $this->config->custom->sprintConcept == 1)
+            {
+                $this->view->isSprint = true;
 
-            unset($this->lang->project->endList[62]);
-            unset($this->lang->project->endList[93]);
-            unset($this->lang->project->endList[186]);
-            unset($this->lang->project->endList[365]);
+                unset($this->lang->project->endList[62]);
+                unset($this->lang->project->endList[93]);
+                unset($this->lang->project->endList[186]);
+                unset($this->lang->project->endList[365]);
+            }
+
+            $this->view->isStage = $PRJData->model == 'waterfall' ? true : false;
+        }
+        else
+        {
+            $this->view->isStage = false;
         }
 
         $this->loadModel('user');
@@ -1359,7 +1379,6 @@ class project extends control
         $this->view->notRemoveProducts = $notRemoveProducts;
         $this->view->productPlans      = $productPlans;
         $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
-        $this->view->isStage           = $PRJData->model == 'waterfall' ? true : false;
         $this->display();
     }
 

@@ -141,7 +141,6 @@ list($projectModule, $projectMethod) = explode('-', $config->projectLink);
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program = "<i class='icon icon-folder-open-o'></i> 项目集|$programModule|$programMethod|";
 $lang->mainNav->product = "<i class='icon icon-product'></i> 产品|$productModule|$productMethod|";
 $lang->mainNav->project = "<i class='icon icon-project'></i> 项目|$projectModule|$projectMethod|";
 $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
@@ -150,6 +149,7 @@ $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
 $lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|subject|browse|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
+if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-folder-open-o'></i> 项目集|$programModule|$programMethod|";
 
 $lang->dividerMenu = ',qa,report,admin,';
 
@@ -293,8 +293,15 @@ $lang->my->menu = new stdclass();
 $lang->my->menu->index       = '首页|my|index';
 $lang->my->menu->calendar    = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->myWork      = array('link' => '待处理|my|work|mode=task');
-$lang->my->menu->myProject   = array('link' => '项目|my|project|');
-$lang->my->menu->myExecution = '执行|my|execution|type=undone';
+if($config->systemMode == 'new')
+{
+    $lang->my->menu->myProject   = array('link' => '项目|my|project|');
+    $lang->my->menu->myExecution = '执行|my|execution|type=undone';
+}
+else
+{
+    $lang->my->menu->myExecution = $lang->executionCommon . '|my|execution|type=undone';
+}
 $lang->my->menu->contribute  = array('link' => '贡献|my|contribute|mode=task');
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
 $lang->my->menu->score       = array('link' => '积分|my|score|', 'subModule' => 'score');
@@ -308,8 +315,11 @@ $lang->my->workMenu->story       = "$lang->SRCommon|my|work|mode=story";
 $lang->my->workMenu->bug         = 'Bug|my|work|mode=bug';
 $lang->my->workMenu->testcase    = '用例|my|work|mode=testcase&type=assigntome';
 $lang->my->workMenu->testtask    = '测试单|my|work|mode=testtask&type=wait';
-$lang->my->workMenu->issue       = '问题|my|work|mode=issue';
-$lang->my->workMenu->risk        = '风险|my|work|mode=risk';
+if($config->systemMode == 'new')
+{
+    $lang->my->workMenu->issue       = '问题|my|work|mode=issue';
+    $lang->my->workMenu->risk        = '风险|my|work|mode=risk';
+}
 
 $lang->my->contributeMenu = new stdclass();
 $lang->my->contributeMenu->task        = '任务|my|contribute|mode=task';
@@ -318,8 +328,11 @@ $lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=sto
 $lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
 $lang->my->contributeMenu->testcase    = '用例|my|contribute|mode=testcase&type=openedbyme';
 $lang->my->contributeMenu->testtask    = '测试单|my|contribute|mode=testtask&type=done';
-$lang->my->contributeMenu->issue       = '问题|my|contribute|mode=issue';
-$lang->my->contributeMenu->risk        = '风险|my|contribute|mode=risk';
+if($config->systemMode == 'new')
+{
+    $lang->my->contributeMenu->issue       = '问题|my|contribute|mode=issue';
+    $lang->my->contributeMenu->risk        = '风险|my|contribute|mode=risk';
+}
 
 $lang->my->dividerMenu = ',myProject,team,';
 
@@ -403,7 +416,7 @@ $lang->qa->menu->caselib   = array('link' => '用例库|caselib|browse', 'alias'
 $lang->qa->subMenu = new stdclass();
 $lang->qa->subMenu->testcase = new stdclass();
 $lang->qa->subMenu->testcase->feature = array('link' => '功能测试|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
-$lang->qa->subMenu->testcase->unit    = array('link' => '单元测试|testtask|browseUnits|productID=%s');
+$lang->qa->subMenu->testcase->unit    = array('link' => '单元测试|testtask|browseUnits|productID=%s', 'alias' => 'browseunits');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
@@ -1024,5 +1037,10 @@ $lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="q
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+if($config->systemMode == 'old')
+{
+    $lang->noMenuModule[] = 'project';
+    $lang->noMenuModule[] = 'task';
+}
 
 include (dirname(__FILE__) . '/menuOrder.php');

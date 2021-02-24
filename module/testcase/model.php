@@ -48,6 +48,8 @@ class testcaseModel extends model
             $replace = $productID;
             common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
+
+        if($this->lang->navGroup->testcase == 'qa') $this->lang->qa->menu = $this->lang->testcase->menu;
     }
 
     /**
@@ -65,9 +67,9 @@ class testcaseModel extends model
             ->add('status', $status)
             ->add('version', 1)
             ->add('fromBug', $bugID)
-            ->add('PRJ', $this->session->PRJ)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
+            ->setIF($this->config->global->mode == 'new', 'PRJ', $this->session->PRJ)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
@@ -159,7 +161,7 @@ class testcaseModel extends model
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
-            $data[$i]->PRJ          = $this->session->PRJ;
+            if($this->config->global->mode == 'new') $data[$i]->PRJ = $this->session->PRJ;
             $data[$i]->branch       = $cases->branch[$i];
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
@@ -1118,7 +1120,7 @@ class testcaseModel extends model
             }
             else
             {
-                $caseData->PRJ        = $this->session->PRJ;
+                if($this->config->global->mode == 'new') $caseData->PRJ = $this->session->PRJ;
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;

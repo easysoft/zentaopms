@@ -609,7 +609,8 @@ class block extends control
         $this->session->set('bugList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
-        $projectID = $this->view->block->module == 'my' ? 0 : (int)$this->session->PRJ;
+        $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->PRJ : 0;
+        $projectID = $this->view->block->module == 'my' ? 0 : $projectID;
         $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $projectID);
     }
 
@@ -625,6 +626,9 @@ class block extends control
         $this->app->loadLang('testcase');
         $this->app->loadLang('testtask');
 
+        $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->PRJ : 0;
+        $projectID = $this->view->block->module == 'my' ? 0 : $projectID;
+
         $cases = array();
         if($this->params->type == 'assigntome')
         {
@@ -636,7 +640,7 @@ class block extends control
                 ->andWhere('t3.status')->ne('done')
                 ->andWhere('t3.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
-                ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t2.PRJ')->eq((int)$this->session->PRJ)->fi()
+                ->beginIF($projectID)->andWhere('t2.PRJ')->eq($projectID)->fi()
                 ->orderBy($this->params->orderBy)
                 ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
                 ->fetchAll();
@@ -645,12 +649,12 @@ class block extends control
         {
             $cases = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_CASE)
                 ->andWhere('deleted')->eq(0)
-                ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('PRJ')->eq((int)$this->session->PRJ)->fi()
+                ->beginIF($projectID)->andWhere('PRJ')->eq($projectID)->fi()
                 ->orderBy($this->params->orderBy)
                 ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
                 ->fetchAll();
         }
-        $this->view->cases    = $cases;
+        $this->view->cases = $cases;
     }
 
     /**
@@ -661,16 +665,21 @@ class block extends control
      */
     public function printTesttaskBlock()
     {
+        $this->app->loadLang('testtask');
+
         $this->session->set('testtaskList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
-        $this->app->loadLang('testtask');
+
+        $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->PRJ : 0;
+        $projectID = $this->view->block->module == 'my' ? 0 : $projectID;
+
         $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->beginIF($this->view->block->module != 'my' and $this->session->PRJ)->andWhere('t1.PRJ')->eq((int)$this->session->PRJ)->fi()
+            ->beginIF($projectID)->andWhere('t1.PRJ')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
@@ -1474,19 +1483,19 @@ class block extends control
         $status = isset($this->params->type)  ? $this->params->type : '';
         $count  = isset($this->params->count) ? (int)$this->params->count : 0;
 
-        $products      = $this->loadModel('product')->getOrderedProducts($status, $count, $this->session->PRJ);
-        $productIdList = array_keys($products);
-
+        $projectID = $this->lang->navGroup->qa == 'project' ? $this->session->PRJ : 0;
+        $products  = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID);
         if(empty($products))
         {
             $this->view->products = $products;
             return false;
         }
 
-        $today     = date(DT_DATE1);
-        $yesterday = date(DT_DATE1, strtotime('yesterday'));
-        $testtasks = $this->dao->select('*')->from(TABLE_TESTTASK)->where('product')->in($productIdList)->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->orderBy('id')->fetchAll('product');
-        $bugs      = $this->dao->select("product, count(id) as total,
+        $productIdList = array_keys($products);
+        $today         = date(DT_DATE1);
+        $yesterday     = date(DT_DATE1, strtotime('yesterday'));
+        $testtasks     = $this->dao->select('*')->from(TABLE_TESTTASK)->where('product')->in($productIdList)->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->orderBy('id')->fetchAll('product');
+        $bugs          = $this->dao->select("product, count(id) as total,
             count(assignedTo = '{$this->app->user->account}' or null) as assignedToMe,
             count(status != 'closed' or null) as unclosed,
             count((status != 'closed' and status != 'resolved') or null) as unresolved,

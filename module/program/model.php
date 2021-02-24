@@ -924,7 +924,8 @@ class programModel extends model
         }
 
         $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
+            ->where('deleted')->eq('0')
+            ->beginIF($this->config->global->mode == 'new')->andWhere('type')->eq('project')->fi()
             ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
             ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
@@ -933,13 +934,12 @@ class programModel extends model
             ->orWhere('PM')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->andWhere('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
-        if($programTitle)
+        if($programTitle and $this->config->global->mode == 'new')
         {
             $programList = $this->getPGMPairs();
             foreach($projectList as $id => $project)
@@ -1841,7 +1841,7 @@ class programModel extends model
     {
         $canOrder     = common::hasPriv('program', 'PRJOrderUpdate');
         $canBatchEdit = common::hasPriv('program', 'PRJBatchEdit');
-        $projectLink  = helper::createLink('program', 'index', "projectID=$project->id", '', '', $project->id);
+        $projectLink  = $this->config->global->mode == 'new' ? helper::createLink('program', 'index', "projectID=$project->id", '', '', $project->id) : helper::createLink('project', 'task', "projectID=$project->id");
         $account      = $this->app->user->account;
         $id           = $col->id;
 
@@ -1957,16 +1957,16 @@ class programModel extends model
                     $from       = $project->from == 'PRJ' ? 'PRJ' : 'pgmproject';
                     $openModule = $project->from == 'PRJ' ? 'project' : 'program';
                     common::printIcon('program', 'PRJEdit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$openModule", '', $project->id);
-                    common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', '', '', $project->id);
-                    common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', '', '', $project->id);
+                    common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', '', $this->lang->project->team, $project->id);
+                    if($this->config->global->mode == 'new') common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', '', '', $project->id);
 
                     if(common::hasPriv('program','PRJManageProducts') || common::hasPriv('program','PRJWhitelist') || common::hasPriv('program','PRJDelete'))
                     {
                         echo "<div class='btn-group'>";
                         echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                         echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                        common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$programID&from=$from", $project, 'list', 'link', '', 'btn-action', '', "data-group=$openModule", '', $project->id);
-                        common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$programID&module=program&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-group=$openModule", '', $project->id);
+                        common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$programID&from=$from", $project, 'list', 'link', '', 'btn-action', '', "data-group=$openModule", $this->lang->project->manageProducts, $project->id);
+                        if($this->config->global->mode == 'new') common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$programID&module=program&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-group=$openModule", '', $project->id);
                         if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
                         echo "</ul>";
                         echo "</div>";

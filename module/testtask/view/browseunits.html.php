@@ -89,12 +89,6 @@
 $(function()
 {
     $('#<?php echo $browseType?>Tab').addClass('btn-active-text').append(" <span class='label label-light label-badge'><?php echo ($browseType == 'newest' and $pager->recTotal >= $pager->recPerPage) ? $pager->recPerPage : $pager->recTotal;?></span>");
-    <?php if($this->config->global->flow == 'full'):?>
-    $('#subNavbar [data-id=testcase]').addClass('active');
-    <?php else:?>
-    $('#navbar li.active').removeClass('active');
-    $('#navbar li[data-id=unit]').addClass('active');
-    <?php endif;?>
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

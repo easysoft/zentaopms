@@ -206,7 +206,7 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->project          = $project;
-        $this->view->projects         = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
+        $this->view->projects         = $this->config->global->mode == 'old' ? $projects : $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;
@@ -237,8 +237,11 @@ class task extends control
             die(js::locate($this->createLink('project', 'task', "projectID=$projectID")));
         }
 
-        $program = $this->loadModel('project')->getByID($this->session->PRJ);
-        if($program->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
+        if($this->config->global->mode == 'new')
+        {
+            $program = $this->loadModel('project')->getByID($this->session->PRJ);
+            if($program->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
+        }
 
         $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
@@ -389,7 +392,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->project, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->projects      = $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
+        $this->view->projects      = $this->config->global->mode == 'old' ? $this->project->getExecutionPairs() : $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->display();
     }
 

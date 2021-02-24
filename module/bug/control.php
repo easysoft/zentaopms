@@ -11,7 +11,8 @@
  */
 class bug extends control
 {
-    public $products = array();
+    public $products  = array();
+    public $projectID = 0;
 
     /**
      * Construct function, load some modules auto.
@@ -32,7 +33,16 @@ class bug extends control
         $this->loadModel('story');
         $this->loadModel('task');
 
-        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
+        /* Set bug menu group. */
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        if(!$this->projectID)
+        {
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $this->lang->noMenuModule[] = $this->app->rawModule;
+        }
+
+        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
         if($this->session->PRJ and empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
     }
 

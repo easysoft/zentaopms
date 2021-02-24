@@ -48,6 +48,8 @@ class bugModel extends model
             $replace = $productID;
             common::setMenuVars($this->lang->bug->menu, $key, $replace);
         }
+
+        if($this->lang->navGroup->bug == 'qa') $this->lang->qa->menu = $this->lang->bug->menu;
     }
 
     /**
@@ -61,12 +63,12 @@ class bugModel extends model
     {
         $now = helper::now();
         $bug = fixer::input('post')
-            ->setDefault('PRJ', $this->session->PRJ)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setDefault('project,story,task', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('deadline', '0000-00-00')
+            ->setIF($this->config->global->mode == 'new', 'PRJ', $this->session->PRJ)
             ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
@@ -228,7 +230,7 @@ class bugModel extends model
                 }
             }
 
-            $bug->PRJ = $this->session->PRJ;
+            if($this->config->global->mode == 'new') $bug->PRJ = $this->session->PRJ;
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')

@@ -129,7 +129,7 @@ class projectModel extends model
         if($methodName == 'create' and $moduleName == 'project') $label = $this->lang->project->create;
 
         $projectIndex = $this->select($projects, $projectID, null, $moduleName, $methodName, $extra);
-        $this->lang->modulePageNav = $projectIndex;
+        if($this->config->global->mode == 'new') $this->lang->modulePageNav = $projectIndex;
 
         foreach($this->lang->project->menu as $key => $menu)
         {
@@ -185,21 +185,33 @@ class projectModel extends model
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $currentProject = $this->getById($projectID);
 
-        if(isset($currentProject->type) and $currentProject->type == 'program') return;
-
-        if(isset($currentProject->project)) $project = $this->loadModel('program')->getPRJByID($currentProject->project);
-
-        if(isset($project) and $project->model == 'waterfall')
+        if($this->config->global->mode == 'new')
         {
-            $productID = $this->loadModel('product')->getProductIDByProject($currentProject->id);
-            $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
-            $currentProject->name = $productName . '/' . $currentProject->name;
+            if(isset($currentProject->type) and $currentProject->type == 'program') return;
+
+            if(isset($currentProject->project)) $project = $this->loadModel('program')->getPRJByID($currentProject->project);
+
+            if(isset($project) and $project->model == 'waterfall')
+            {
+                $productID = $this->loadModel('product')->getProductIDByProject($currentProject->id);
+                $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
+                $currentProject->name = $productName . '/' . $currentProject->name;
+            }
         }
 
         $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod&extra=$extra");
-
         $currentProjectName = '';
         if(isset($currentProject->name)) $currentProjectName = $currentProject->name;
+
+        if($this->config->global->mode == 'old')
+        {
+            $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'><span class='text'><i class='icon icon-sprint'></i> {$currentProjectName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "</div></div>"; 
+
+            $this->lang->project->switcherMenu = $output;
+        }
+
         $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProjectName}'><span class='text'><i class='icon icon-{$this->lang->icons[$currentProject->type]}'></i> {$currentProjectName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div></div>";
@@ -314,7 +326,7 @@ class projectModel extends model
 
         /* Determine whether to add a sprint or a stage according to the model of the project. */
         $project    = $this->getByID($this->session->PRJ);
-        $sprintType = zget($this->config->project->modelList, $project->model, '');
+        $sprintType = $this->config->global->mode == 'new' ? zget($this->config->project->modelList, $project->model, '') : 'sprint';
 
         /* If the project model is a stage, determine whether the product is linked. */
         if($sprintType == 'stage' and empty($this->post->products[0]))
@@ -325,13 +337,13 @@ class projectModel extends model
 
         /* Get the data from the post. */
         $sprint = fixer::input('post')
-            ->setDefault('project', $this->session->PRJ)
             ->setDefault('status', 'wait')
-            ->setDefault('parent', $this->session->PRJ)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('openedVersion', $this->config->version)
             ->setDefault('team', substr($this->post->name,0, 30))
+            ->setIF($this->config->global->mode == 'new', 'project', $this->session->PRJ)
+            ->setIF($this->config->global->mode == 'new', 'parent', $this->session->PRJ)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->add('type', $sprintType)
@@ -861,9 +873,9 @@ class projectModel extends model
         /* Order by status's content whether or not done */
         $executions = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->beginIF(!$projectID && $type == 'all')->andWhere('type')->in('stage,sprint')->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
+            ->beginIF(!$projectID && $type == 'all' && $this->config->global->mode == 'new')->andWhere('type')->in('stage,sprint')->fi()
+            ->beginIF($projectID && $this->config->global->mode == 'new')->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($type != 'all' && $this->config->global->mode == 'new')->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)

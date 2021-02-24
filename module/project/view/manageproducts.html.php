@@ -43,7 +43,7 @@
           <?php endforeach;?>
         </div>
       </div>
-      <?php if($project->grade == 1):?>
+      <?php if($this->config->global->mode == 'old' or $project->grade == 1):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->project->unlinkedProducts;?></div>
         <div class='detail-content row'>

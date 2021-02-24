@@ -333,6 +333,7 @@ class product extends control
         $this->view->rdUsers    = $rdUsers;
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs('', 'noclosed');
+        $this->view->lines      = $this->config->global->mode == 'new' ? array() : array('' => '') + $this->product->getLinePairs();
         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);
@@ -467,6 +468,10 @@ class product extends control
         $rdUsers = $this->user->getPairs('nodeleted|devfirst', $product->RD, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
+        $lines = array();
+        if($product->program) $lines = array('') + $this->product->getLinePairs($product->program);
+        if($this->config->global->mode == 'old') $lines = array('') + $this->product->getLinePairs();
+
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->edit;
@@ -480,7 +485,7 @@ class product extends control
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs             = array('') + $this->loadModel('program')->getTopPGMPairs();
-        $this->view->lines                = $product->program ? array('') + $this->product->getLinePairs($product->program) : array();
+        $this->view->lines                = $lines;
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
         $this->view->canChangePGM         = $canChangePGM;
         $this->view->singleLinkProjects   = $singleLinkProjects;

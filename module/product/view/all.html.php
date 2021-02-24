@@ -80,9 +80,18 @@
           <?php foreach($program as $lineID => $line):?>
           <?php if(isset($line['lineName'])):?>
           <?php
-          $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
-          $trClass .= ' is-nest-child  table-nest';
-          $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,$lineID'";
+          if($this->config->global->mode == 'new')
+          {
+              $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
+              $trClass .= ' is-nest-child  table-nest';
+              $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,$lineID'";
+          }
+          else
+          {
+              $trAttrs  = "data-id='line.$lineID' data-parent='0' data-nested='true'";
+              $trClass  = 'is-top-level table-nest-child';
+              $trAttrs .= " class='$trClass'";
+          }
           ?>
           <tr <?php echo $trAttrs;?>>
             <td colspan="14">

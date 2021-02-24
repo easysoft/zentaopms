@@ -11,6 +11,8 @@
  */
 class testreport extends control
 {
+    public $projectID = 0;
+
     /**
      * Construct
      *
@@ -32,6 +34,15 @@ class testreport extends control
         $this->loadModel('testtask');
         $this->loadModel('user');
         $this->app->loadLang('report');
+
+        /* Set testreport menu group. */
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        if(!$this->projectID)
+        {
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $this->lang->noMenuModule[] = $this->app->rawModule;
+        }
     }
 
     /**

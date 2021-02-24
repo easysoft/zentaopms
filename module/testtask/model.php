@@ -66,6 +66,8 @@ class testtaskModel extends model
             $replace = ($key == 'product') ? $selectHtml : $productID;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
+
+        if($this->lang->navGroup->testtask == 'qa') $this->lang->qa->menu = $this->lang->testtask->menu;
     }
 
     /**
@@ -129,6 +131,9 @@ class testtaskModel extends model
             $replace = ($key == 'product') ? $selectHtml : $productID;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
+
+        $this->lang->testtask->menu->testcase['subModule'] = 'testtask';
+        if($this->lang->navGroup->testtask == 'qa') $this->lang->qa->menu = $this->lang->testtask->menu;
     }
 
     /**
@@ -142,7 +147,7 @@ class testtaskModel extends model
     {
         $task = fixer::input('post')
             ->setDefault('build', '')
-            ->setDefault('PRJ', $this->session->PRJ)
+            ->setIF($this->config->global->mode == 'new', 'PRJ', $this->session->PRJ)
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('uid,contactListMenu')
