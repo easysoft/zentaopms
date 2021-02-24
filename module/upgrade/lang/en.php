@@ -9,13 +9,14 @@
  * @version     $Id: en.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->upgrade->common  = 'Update';
-$lang->upgrade->result  = 'Result';
-$lang->upgrade->fail    = 'Failed';
-$lang->upgrade->success = "<p><i class='icon icon-check-circle'></i></p><p>Congratulations!</p><p>Your ZenTao is updated.</p>";
-$lang->upgrade->tohome  = 'Visit ZenTao';
-$lang->upgrade->license = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2.';
-$lang->upgrade->warnning= 'Warning!';
+$lang->upgrade->common     = 'Update';
+$lang->upgrade->result     = 'Result';
+$lang->upgrade->fail       = 'Failed';
+$lang->upgrade->successTip = 'Successed';
+$lang->upgrade->success    = "<p><i class='icon icon-check-circle'></i></p><p>Congratulations!</p><p>Your ZenTao is updated.</p>";
+$lang->upgrade->tohome     = 'Visit ZenTao';
+$lang->upgrade->license    = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2.';
+$lang->upgrade->warnning   = 'Warning!';
 $lang->upgrade->checkExtension  = 'Check Extensions';
 $lang->upgrade->consistency     = 'Check Consistency';
 $lang->upgrade->warnningContent = <<<EOT

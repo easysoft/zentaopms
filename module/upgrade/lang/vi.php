@@ -12,6 +12,7 @@
 $lang->upgrade->common          = 'Cập nhật';
 $lang->upgrade->result          = 'Kết quả';
 $lang->upgrade->fail            = 'Thất bại';
+$lang->upgrade->successTip      = 'Erfolgreich';
 $lang->upgrade->success         = "<p><i class='icon icon-check-circle'></i></p><p>Chúc mừng!</p><p> ZenTao của bạn đã được cập nhật.</p>";
 $lang->upgrade->tohome          = 'Visit ZenTao';
 $lang->upgrade->license         = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2.';

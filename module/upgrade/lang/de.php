@@ -9,13 +9,14 @@
  * @version     $Id: en.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->upgrade->common  = 'Upgrade';
-$lang->upgrade->result  = 'Ergebnis';
-$lang->upgrade->fail    = 'Fehlgeschlagen';
-$lang->upgrade->success = 'Erfolgreich';
-$lang->upgrade->tohome  = 'Home';
-$lang->upgrade->license = 'Zentao PMS nutzt jetzt Z PUBLIC LICENSE(ZPL) 1.2.';
-$lang->upgrade->warnning= 'Warnung!';
+$lang->upgrade->common     = 'Upgrade';
+$lang->upgrade->result     = 'Ergebnis';
+$lang->upgrade->fail       = 'Fehlgeschlagen';
+$lang->upgrade->successTip = 'Successed';
+$lang->upgrade->success    = 'Erfolgreich';
+$lang->upgrade->tohome     = 'Home';
+$lang->upgrade->license    = 'Zentao PMS nutzt jetzt Z PUBLIC LICENSE(ZPL) 1.2.';
+$lang->upgrade->warnning   = 'Warnung!';
 $lang->upgrade->checkExtension  = 'Erweiterung prüfen';
 $lang->upgrade->consistency     = 'Check Consistency';
 $lang->upgrade->warnningContent = <<<EOT

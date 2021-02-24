@@ -619,6 +619,11 @@ class custom extends control
         }
 
         $this->app->loadLang('upgrade');
+
+        $this->view->title      = $this->lang->custom->mode;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+
         $this->display();
     }
 
