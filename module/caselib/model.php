@@ -110,7 +110,7 @@ class caselibModel extends model
         if($this->lang->navGroup->caselib == 'qa')
         {
             $this->lang->qa->menu           = $this->lang->caselib->menu;
-            $this->lang->qa->mainMenuAction = html::a(helper::createLink('caselib', 'create'), $this->lang->caselib->create, '', "class='btn btn-link'");
+            $this->lang->qa->mainMenuAction = html::a(helper::createLink('caselib', 'create'), "<i class='icon-plus'></i>" . $this->lang->caselib->create, '', "class='btn btn-link'");
 
             if(!empty($libraries))
             {
