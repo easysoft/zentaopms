@@ -47,7 +47,7 @@ class qaModel extends model
             common::setMenuVars($this->lang->qa->menu, $key, $replace);
         }
 
-        if($this->lang->navGroup->qa = 'qa') $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
+        if($this->lang->navGroup->qa == 'qa') $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
     }
 
     /**
