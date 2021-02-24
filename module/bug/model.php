@@ -72,7 +72,7 @@ class bugModel extends model
             ->setDefault('project,story,task', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('deadline', '0000-00-00')
-            ->setIF($this->config->global->mode == 'new', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new', 'PRJ', $this->session->PRJ)
             ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
@@ -234,7 +234,7 @@ class bugModel extends model
                 }
             }
 
-            if($this->config->global->mode == 'new') $bug->PRJ = $this->session->PRJ;
+            if($this->config->systemMode == 'new') $bug->PRJ = $this->session->PRJ;
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')

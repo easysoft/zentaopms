@@ -265,9 +265,6 @@ class upgrade extends control
 
                 /* Process merged products and projects. */
                 $this->upgrade->processMergedData($programID, $projectID, $lineID, $linkedProducts, $linkedSprints);
-
-                /* Process unlinked product. */
-                if($unlinkSprints) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($unlinkSprints)->exec();
             }
             elseif($type == 'sprint')
             {
@@ -329,6 +326,7 @@ class upgrade extends control
             $noMergedSprints = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
                 ->where('t1.project')->eq(0)
+                ->andWhere('t1.type')->eq('sprint')
                 ->andWhere('t2.product')->in(array_keys($noMergedProducts))
                 ->orderBy('t1.id_desc')
                 ->fetchAll('id');
@@ -367,14 +365,24 @@ class upgrade extends control
         /* Get projects group by product. */
         if($type == 'product')
         {
-            $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetchAll('id');
-            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=sprint'));
-
-            $noMergedSprints = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
-                ->where('t1.model')->eq('')
-                ->andWhere('t2.product')->in(array_keys($noMergedProducts))
+            $noMergedSprints = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t2.model')->eq('')
+                ->andWhere('t2.project')->eq(0)
+                ->andWhere('t2.type')->eq('sprint')
                 ->fetchAll('id');
+
+            /* Get products that are not merged by sprints. */
+            $noMergedProducts = $this->dao->select('t1.*,t3.name as programName')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
+                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.program=t3.id')
+                ->where('t2.project')->in(array_keys($noMergedSprints))
+                ->fetchAll('id');
+
+            /* Add products without sprints. */
+            $noMergedProducts += $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetchAll('id');
+
+            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=sprint'));
 
             /* Remove project than linked more than two products */
             $sprintProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');

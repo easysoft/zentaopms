@@ -108,7 +108,7 @@ $status = $this->session->testTaskVersionStatus;
         common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
         echo '</div>';
         common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true);
-        common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true);
+        common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
         if(common::hasPriv('testtask', 'delete', $task))
         {
             $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");

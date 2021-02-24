@@ -80,7 +80,7 @@
           <?php foreach($program as $lineID => $line):?>
           <?php if(isset($line['lineName'])):?>
           <?php
-          if($this->config->global->mode == 'new')
+          if($this->config->systemMode == 'new')
           {
               $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
               $trClass .= ' is-nest-child  table-nest';

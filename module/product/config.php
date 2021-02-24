@@ -85,7 +85,7 @@ $config->product->create = new stdclass();
 $config->product->edit   = new stdclass();
 $config->product->create->requiredFields = 'name';
 $config->product->edit->requiredFields   = 'name';
-if($config->global->mode == 'new')
+if($config->systemMode == 'new')
 {
     $config->product->create->requiredFields .= ',program';
     $config->product->edit->requiredFields   .= ',program';

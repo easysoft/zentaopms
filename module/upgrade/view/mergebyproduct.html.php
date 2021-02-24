@@ -20,7 +20,7 @@
         <?php foreach($noMergedProducts as $productID => $product):?>
         <div class='lineGroup'>
           <div class='productList'>
-            <?php echo html::checkBox("products", array($product->id => "{$product->name}"), $isChecked ? $product->id : '', "data-productid='{$product->id}' data-begin='{$product->createdDate}'");?>
+            <?php echo html::checkBox("products", array($product->id => "{$product->name}"), $isChecked ? $product->id : '', "data-productid='{$product->id}' data-begin='{$product->createdDate}' data-programid='{$product->program}'");?>
           </div>
           <div class='projectList'>
             <div class='scroll-handle'>

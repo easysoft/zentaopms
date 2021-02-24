@@ -189,7 +189,6 @@ class storyModel extends model
         $now   = helper::now();
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
-            ->cleanFloat('estimate')
             ->callFunc('title', 'trim')
             ->add('assignedDate', 0)
             ->add('version', 1)
@@ -200,6 +199,7 @@ class storyModel extends model
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview or $projectID > 0, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
+            ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
             ->setIF($projectID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')

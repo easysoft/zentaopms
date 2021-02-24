@@ -333,7 +333,7 @@ class product extends control
         $this->view->rdUsers    = $rdUsers;
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs('', 'noclosed');
-        $this->view->lines      = $this->config->global->mode == 'new' ? array() : array('' => '') + $this->product->getLinePairs();
+        $this->view->lines      = $this->config->systemMode == 'new' ? array() : array('' => '') + $this->product->getLinePairs();
         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);
@@ -470,7 +470,7 @@ class product extends control
 
         $lines = array();
         if($product->program) $lines = array('') + $this->product->getLinePairs($product->program);
-        if($this->config->global->mode == 'old') $lines = array('') + $this->product->getLinePairs();
+        if($this->config->systemMode == 'old') $lines = array('') + $this->product->getLinePairs();
 
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);

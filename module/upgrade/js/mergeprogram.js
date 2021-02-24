@@ -10,6 +10,8 @@ $(function()
     setPGMEnd(PGMEnd);
     setPRJPM();
 
+    setProgramByProduct($(':checkbox:checked[data-productid]'));
+
     $('[name^=lines]').change(function()
     {
         value = $(this).val();
@@ -78,6 +80,8 @@ $(function()
 
     $('[name^=products]').change(function()
     {
+        setProgramByProduct($(this));
+
         value = $(this).val();
         if($(this).prop('checked'))
         {
@@ -121,6 +125,13 @@ $(function()
     hiddenProject();
 });
 
+/**
+ * Get project by program id.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function getProjectByProgram(obj)
 {
     var programID = $(obj).val();
@@ -157,6 +168,13 @@ function getLineByProgram()
     if(programID)  $('lineBox').removeClass('hidden');
 }
 
+/**
+ * Toggle program name.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function toggleProgram(obj)
 {
     var $obj = $(obj);
@@ -180,10 +198,21 @@ function toggleProgram(obj)
         $('form .pgm-exist').removeClass('hidden');
         $('form .pgm-no-exist').addClass('hidden');
         $('.PGMStatus').hide();
-        $programs.removeAttr('disabled');
+
+        if(!$('#newProgram0').prop('disabled'))
+        {
+            $programs.removeAttr('disabled');
+        }
     }
 }
 
+/**
+ * Toggle line.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function toggleLine(obj)
 {
     var $obj       = $(obj);
@@ -212,6 +241,13 @@ function toggleLine(obj)
     }
 }
 
+/**
+ * Toggle project.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function toggleProject(obj)
 {
     var $obj       = $(obj);
@@ -234,13 +270,22 @@ function toggleProject(obj)
         $PGMParams.addClass('hidden');
         $projects.removeAttr('disabled');
 
-        $('form #newProgram0').prop('checked', false);
-        toggleProgram($('form #newProgram0'));
+        if($('#newProgram0').prop('checked'))
+        {
+            $('form #newProgram0').prop('checked', false);
+            toggleProgram($('form #newProgram0'));
+        }
 
         getProjectByProgram(programs);
     }
 }
 
+/**
+ * When there are no sprints for the selected product, hidden the project.
+ *
+ * @access public
+ * @return void
+ */
 function hiddenProject()
 {
     if($('[name^=sprints]:checked').length == 0)
@@ -267,6 +312,61 @@ function hiddenProject()
     }
 }
 
+/**
+ * When the selected product already set program, the program name is fixed.
+ *
+ * @param  object $product
+ * @access public
+ * @return void
+ */
+function setProgramByProduct(product)
+{
+    var programID = product.attr('data-programid');
+    $(':checkbox[data-productid]').each(function()
+    {
+        var currentProgramID = $(this).attr('data-programid');
+        if(currentProgramID != programID)
+        {
+            var currentProductID = $(this).val();
+            if(product.prop('checked'))
+            {
+                $(this).prop('checked', false);
+                $(this).attr('disabled', 'disabled');
+                $('[data-product=' + currentProductID + ']').prop('checked', false);
+                $('[data-product=' + currentProductID + ']').attr('disabled', 'disabled');
+            }
+            else if($(':checkbox:checked[data-programid=' + programID + ']').length == 0)
+            {
+                $(this).removeAttr('disabled');
+                $('[data-product=' + currentProductID + ']').removeAttr('disabled');
+            }
+        }
+    });
+
+    if(product.prop('checked') && programID != 0)
+    {
+        $('form #newProgram0').prop('checked', false);
+        toggleProgram($('form #newProgram0'));
+        $('form #newProgram0').attr('disabled', 'disabled');
+
+        $('#programs').val(programID).trigger("chosen:updated");
+        $('#programs').attr('disabled', 'disabled');
+        $('#programID').val(programID);
+    }
+    else
+    {
+        $('form #newProgram0').removeAttr('disabled');
+        $('#programs').removeAttr('disabled');
+        $('#programID').val('');
+    }
+}
+
+/**
+ * Set project status.
+ *
+ * @access public
+ * @return void
+ */
 function setPRJStatus()
 {
     var PRJStatus = 'closed';
@@ -289,6 +389,13 @@ function setPRJStatus()
     setPGMStatus(PRJStatus);
 }
 
+/**
+ * Set program status.
+ *
+ * @param  string $PRJStatus
+ * @access public
+ * @return void
+ */
 function setPGMStatus(PRJStatus)
 {
     var PGMStatus = 'wait';
@@ -299,6 +406,13 @@ function setPGMStatus(PRJStatus)
     $('#PGMStatus').trigger('chosen:updated');
 }
 
+/**
+ * Set program begin time.
+ *
+ * @param  string $PGMBegin
+ * @access public
+ * @return void
+ */
 function setPGMBegin(PGMBegin)
 {
     $(':checkbox:checked[data-begin]').each(function()
@@ -316,6 +430,13 @@ function setPGMBegin(PGMBegin)
     setPRJStatus();
 }
 
+/*
+ * Set program end time.
+ *
+ * @param  string $PGMEnd
+ * @access public
+ * @return void
+ */
 function setPGMEnd(PGMEnd)
 {
     var length = $(':checkbox:checked[data-end]').length;
@@ -359,6 +480,13 @@ function setPRJPM()
     $('#PM').val(PMNameList[0]).trigger("chosen:updated");
 }
 
+/*
+ * Convert string to date.
+ *
+ * @param  string $dateString
+ * @access public
+ * @return void
+ */
 function convertStringToDate(dateString)
 {
     dateString = dateString.split('-');

@@ -18,6 +18,7 @@
         </span>
         <?php endif;?>
       </div>
+      <?php echo html::hidden('programID', '');?>
     </td>
   </tr>
   <tr class='PGMStatus'>
