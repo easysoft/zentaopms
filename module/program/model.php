@@ -1748,7 +1748,7 @@ class programModel extends model
             {
                 foreach($_POST['products'] as $productID => $product)
                 {
-                    $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopPGM)->where('id')->eq($productID)->exec();
+                    $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopPGM)->where('id')->eq((int)$productID)->exec();
                 }
             }
 
@@ -1817,7 +1817,7 @@ class programModel extends model
                 {
                     foreach($linkedProducts as $productID => $product)
                     {
-                        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopPGM)->where('id')->eq($productID)->exec();
+                        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopPGM)->where('id')->eq((int)$productID)->exec();
                     }
                 }
                 if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
