@@ -307,6 +307,7 @@ class upgrade extends control
             $hourPoint = $this->loadModel('setting')->getItem('owner=system&module=custom&key=hourPoint');
             if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
 
+            $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectType')->eq('project')->exec();
             die(js::locate($this->createLink('upgrade', 'mergeRepo')));
         }
 

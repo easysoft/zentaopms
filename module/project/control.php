@@ -11,6 +11,7 @@
 class project extends control
 {
     public $projects;
+    public $objectType;
 
     /**
      * Construct function, Set projects.
@@ -26,6 +27,7 @@ class project extends control
             $this->projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode');
             if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
         }
+        $this->objectType = $this->config->global->mode == 'old' ? 'project' : 'exection';
     }
 
     /**
@@ -1169,7 +1171,7 @@ class project extends control
             $this->project->updateProducts($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('execution', $projectID, 'opened', '', join(',', $_POST['products']));
+            $this->loadModel('action')->create($this->objectType, $projectID, 'opened', '', join(',', $_POST['products']));
 
             $this->executeHooks($projectID);
 
@@ -1270,7 +1272,7 @@ class project extends control
                 $this->loadModel('action');
                 $this->dao->update(TABLE_PROJECT)->set('deleted')->eq(0)->where('id')->eq($projectID)->exec();
                 $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($extra)->exec();
-                $this->action->create('execution', $projectID, 'undeleted');
+                $this->action->create($this->objectType, $projectID, 'undeleted');
             }
 
             $oldProducts  = array_keys($oldProducts);
@@ -1281,7 +1283,7 @@ class project extends control
 
             if($changes or $diffProducts)
             {
-                $actionID = $this->loadModel('action')->create('execution', $projectID, 'edited', '', $products);
+                $actionID = $this->loadModel('action')->create($this->objectType, $projectID, 'edited', '', $products);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1402,7 +1404,7 @@ class project extends control
                 {
                     if(empty($changes)) continue;
 
-                    $actionID = $this->loadModel('action')->create('execution', $projectID, 'Edited');
+                    $actionID = $this->loadModel('action')->create($this->objectType, $projectID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
             }
@@ -1475,7 +1477,7 @@ class project extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('execution', $projectID, 'Started', $this->post->comment);
+                $actionID = $this->action->create($this->objectType, $projectID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1510,7 +1512,7 @@ class project extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('execution', $projectID, 'Delayed', $this->post->comment);
+                $actionID = $this->action->create($this->objectType, $projectID, 'Delayed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1545,7 +1547,7 @@ class project extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('execution', $projectID, 'Suspended', $this->post->comment);
+                $actionID = $this->action->create($this->objectType, $projectID, 'Suspended', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1580,7 +1582,7 @@ class project extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('execution', $projectID, 'Activated', $this->post->comment);
+                $actionID = $this->action->create($this->objectType, $projectID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1622,7 +1624,7 @@ class project extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('execution', $projectID, 'Closed', $this->post->comment);
+                $actionID = $this->action->create($this->objectType, $projectID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($projectID);
@@ -1969,7 +1971,7 @@ class project extends control
         {
             /* Delete project. */
             $this->dao->update(TABLE_PROJECT)->set('deleted')->eq(1)->where('id')->eq($projectID)->exec();
-            $this->loadModel('action')->create('execution', $projectID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+            $this->loadModel('action')->create($this->objectType, $projectID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
             $this->project->updateUserView($projectID);
             $this->session->set('project', '');
@@ -2015,7 +2017,7 @@ class project extends control
             $newProducts  = $this->project->getProducts($projectID);
             $newProducts  = array_keys($newProducts);
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
-            if($diffProducts) $this->loadModel('action')->create('execution', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
+            if($diffProducts) $this->loadModel('action')->create($this->objectType, $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
             die(js::locate($browseProjectLink));
         }
