@@ -50,7 +50,6 @@ ALTER TABLE `zt_user` ADD `analysis` text NOT NULL AFTER `nature`;
 ALTER TABLE `zt_user` ADD `strategy` text NOT NULL AFTER `analysis`;
 ALTER TABLE `zt_user` CHANGE `avatar` `avatar` text NOT NULL AFTER `commiter`;
 
-REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system','custom','','hourPoint','1');
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'URSR', '3');
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'unitList', 'CNY,USD');
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'defaultCurrency', 'CNY');
