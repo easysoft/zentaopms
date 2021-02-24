@@ -155,7 +155,7 @@ class testtaskModel extends model
     {
         $task = fixer::input('post')
             ->setDefault('build', '')
-            ->setIF($this->config->global->mode == 'new', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->global->mode == 'new' and $this->lang->navGroup->testtask != 'qa', 'PRJ', $this->session->PRJ)
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('uid,contactListMenu')
@@ -203,7 +203,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project and t1.product = t5.product')
 
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.PRJ')->eq($this->session->PRJ)
+            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
             ->andWhere('t1.auto')->ne('unit')
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
