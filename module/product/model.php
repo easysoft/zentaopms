@@ -503,6 +503,7 @@ class productModel extends model
     {
         $product = fixer::input('post')
             ->setDefault('status', 'normal')
+            ->setDefault('line', 0)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
@@ -556,6 +557,7 @@ class productModel extends model
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         $product = fixer::input('post')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
+            ->setDefault('line', 0)
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid,changeProjects')
