@@ -82,6 +82,7 @@ $lang->upgrade->line      = '产品线';
 $lang->upgrade->program   = '目标项目集和项目';
 $lang->upgrade->existPGM  = '已有项目集';
 $lang->upgrade->existPRJ  = '已有项目';
+$lang->upgrade->existLine = '已有' . $lang->productCommon . '线';
 $lang->upgrade->product   = $lang->productCommon;
 $lang->upgrade->project   = '迭代';
 $lang->upgrade->repo      = '版本库';

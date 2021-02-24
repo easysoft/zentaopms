@@ -4079,7 +4079,37 @@ class upgradeModel extends model
             $projectID = $data->projects;
         }
 
-        return array($programID, $projectID);
+        if(!isset($data->lines))
+        {
+            if(!empty($data->lineName))
+            {
+                /* Insert product line. */
+                $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
+                $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
+
+                $line = new stdClass();
+                $line->type   = 'line';
+                $line->parent = 0;
+                $line->grade  = 1;
+                $line->name   = $data->lineName; 
+                $line->root   = $programID; 
+                $line->order = $maxOrder;
+                $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+                $lineID = $this->dao->lastInsertID();
+                $path   = ",$lineID,";
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+
+                if(dao::isError()) return false;
+            }
+
+            if(empty($data->lineName)) $lineID = 0;
+        }
+        else
+        {
+            $lineID = $data->lines;
+        }
+
+        return array($programID, $projectID, $lineID);
     }
 
     /**
@@ -4087,12 +4117,13 @@ class upgradeModel extends model
      * 
      * @param  int    $programID 
      * @param  int    $projectID
+     * @param  int    $lineID
      * @param  array  $productIdList 
      * @param  array  $projectIdList
      * @access public
      * @return void
      */
-    public function processMergedData($programID, $projectID, $productIdList = array(), $sprintIdList = array())
+    public function processMergedData($programID, $projectID, $lineID, $productIdList = array(), $sprintIdList = array())
     {
         /* Product linked objects. */
         $this->dao->update(TABLE_STORY)->set('PRJ')->eq($programID)->where('product')->in($productIdList)->exec();
@@ -4107,6 +4138,7 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->program = $programID;
             $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
+            $data->line    = $product->line ? $product->line : $lineID;
 
             $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
         }

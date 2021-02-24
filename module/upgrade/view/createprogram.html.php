@@ -48,6 +48,26 @@
     <th><?php echo $lang->program->PRJStatus;?></th>
     <td><?php echo html::select('PRJStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
   </tr>
+  <tr class='LineName'>
+    <th>
+      <span class="line-exist hidden"><?php echo $lang->upgrade->existLine;?></span>
+      <span class="line-no-exist"><?php echo $lang->product->lineName;?></span>
+    </th>
+    <td>
+      <div class='input-group'>
+        <?php echo html::select("lines", $lines, '', "class='form-control hidden line-exist'");?>
+        <?php echo html::input("lineName", isset($lineName) ? $lineName : '', "class='form-control line-no-exist'");?>
+        <?php if(count($lines)):?>
+        <span class='input-group-addon'>
+          <div class="checkbox-primary">
+            <input type="checkbox" name="newLine" value="0" checked onchange="toggleLine(this)" id="newLine0" />
+            <label for="newLine0"><?php echo $lang->upgrade->newProgram;?></label>
+          </div>
+        </span>
+        <?php endif;?>
+      </div>
+    </td>
+  </tr>
   <tr class='PGMParams'>
     <th><?php echo $lang->program->PRJPM;?></th>
     <td><?php echo html::select('PM', array('' => '') + $users, '', "class='form-control chosen'");?></td>

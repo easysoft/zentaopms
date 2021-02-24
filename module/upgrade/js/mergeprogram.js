@@ -116,6 +116,7 @@ $(function()
 
     toggleProgram($('form #newProgram0'));
     toggleProject($('form #newProject0'));
+    toggleProject($('form #newLine0'));
 
     hiddenProject();
 });
@@ -133,6 +134,27 @@ function getProjectByProgram(obj)
             $('#projects').addClass('hidden');
         }
     })
+
+    getLineByProgram();
+}
+
+function getLineByProgram()
+{
+    var programID = $('#programs').val();
+    var link      = createLink('upgrade', 'ajaxGetLinesPairsByProgram', 'programID=' + programID);
+
+    $.post(link, function(data)
+    {
+        $('#lines').replaceWith(data);
+        if($('#newLine0').is(':checked'))
+        {
+            $('#lines').attr('disabled', 'disabled');
+            $('#lines').addClass('hidden');
+        }
+    })
+
+    if(!programID) $('lineBox').addClass('hidden');
+    if(programID)  $('lineBox').removeClass('hidden');
 }
 
 function toggleProgram(obj)
@@ -149,7 +171,9 @@ function toggleProgram(obj)
         $('.PGMStatus').show();
 
         $('form #newProject0').prop('checked', true);
+        $('form #newLine0').prop('checked', true);
         toggleProject($('form #newProject0'));
+        toggleLine($('form #newProject0'));
     }
     else
     {
@@ -157,6 +181,34 @@ function toggleProgram(obj)
         $('form .pgm-no-exist').addClass('hidden');
         $('.PGMStatus').hide();
         $programs.removeAttr('disabled');
+    }
+}
+
+function toggleLine(obj)
+{
+    var $obj       = $(obj);
+    if($obj.length == 0) return false;
+
+    var $lines     = $obj.closest('table').find('#lines');
+    var $programs  = $obj.closest('table').find('#programs');
+
+    if($obj.prop('checked'))
+    {
+        $('form .line-no-exist').removeClass('hidden');
+        $('form .line-exist').addClass('hidden');
+        $lines.attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('form .line-exist').removeClass('hidden');
+        $('form .line-no-exist').addClass('hidden');
+        $('.PGMStatus').hide();
+        $lines.removeAttr('disabled');
+
+        $('form #newProgram0').prop('checked', false);
+        toggleProgram($('form #newProgram0'));
+
+        getLineByProgram();
     }
 }
 

@@ -196,6 +196,7 @@ class upgrade extends control
     {
         $this->session->set('upgrading', true);
         $this->app->loadLang('program');
+        $this->app->loadLang('product');
 
         if($_POST)
         {
@@ -226,11 +227,11 @@ class upgrade extends control
                 }
 
                 /* Create Program. */
-                list($programID, $projectID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
+                list($programID, $projectID, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
 
                 /* Process merged products and projects. */
-                $this->upgrade->processMergedData($programID, $projectID, $linkedProducts, $linkedSprints);
+                $this->upgrade->processMergedData($programID, $projectID, $lineID, $linkedProducts, $linkedSprints);
 
                 /* Process unlinked sprint and product. */
                 foreach($linkedProducts as $productID => $product)
@@ -259,11 +260,11 @@ class upgrade extends control
                 }
 
                 /* Create Program. */
-                list($programID, $projectID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
+                list($programID, $projectID, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
 
                 /* Process merged products and projects. */
-                $this->upgrade->processMergedData($programID, $projectID, $linkedProducts, $linkedSprints);
+                $this->upgrade->processMergedData($programID, $projectID, $lineID, $linkedProducts, $linkedSprints);
 
                 /* Process unlinked product. */
                 if($unlinkSprints) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($unlinkSprints)->exec();
@@ -273,10 +274,10 @@ class upgrade extends control
                 $linkedSprints = $this->post->sprints;
 
                 /* Create Program. */
-                list($programID, $projectID) = $this->upgrade->createProgram(array(), $linkedSprints);
+                list($programID, $projectID, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
 
-                $this->upgrade->processMergedData($programID, $projectID, array(), $linkedSprints);
+                $this->upgrade->processMergedData($programID, $projectID, $lineID, array(), $linkedSprints);
             }
             elseif($type == 'moreLink')
             {
@@ -285,7 +286,7 @@ class upgrade extends control
                     $sprintID = $this->post->sprints[$i];
 
                     /* Change program field for product and project. */
-                    $this->upgrade->processMergedData(0, $projectID, array(), array($sprintID));
+                    $this->upgrade->processMergedData(0, $projectID, 0, array(), array($sprintID));
                 }
             }
 
@@ -319,7 +320,7 @@ class upgrade extends control
         /* Get products and projects group by product line. */
         if($type == 'productline')
         {
-            $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->orderBy('id_desc')->fetchAll('id');
+            $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq(0)->orderBy('id_desc')->fetchAll('id');
 
             $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->in(array_keys($productlines))->orderBy('id_desc')->fetchAll('id');
             if(empty($productlines) || empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=product'));
@@ -451,6 +452,7 @@ class upgrade extends control
         $this->view->programs  = $programs;
         $this->view->programID = $programID;
         $this->view->projects  = array('' => '') + $this->upgrade->getProjectPairsByProgram($currentProgramID);
+        $this->view->lines     = $currentProgramID ? array('' => '') + $this->loadModel('product')->getLinePairs($currentProgramID) : array();
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups    = $this->loadModel('group')->getPairs();
         $this->display();
@@ -497,6 +499,20 @@ class upgrade extends control
     {
         $projects = array('' => '') + $this->upgrade->getProjectPairsByProgram($programID);
         die(html::select('projects', $projects, '', 'class="form-control prj-exist"'));
+    }
+
+    /**
+     * Get the lines of the program it belongs to.
+     *
+     * @param  int   $programID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetLinesPairsByProgram($programID = 0)
+    {
+        $lines = array('' => '');
+        if($programID) $lines += $this->loadModel('product')->getLinePairs($programID);
+        die(html::select('lines', $lines, '', 'class="form-control line-exist"'));
     }
 
     /**
