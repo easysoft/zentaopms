@@ -2443,10 +2443,13 @@ class userModel extends model
         $personalData['createdBugs']         = $this->dao->select($count)->from(TABLE_BUG)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['resolvedBugs']        = $this->dao->select($count)->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['createdCases']        = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('product')->ne(0)->fetch('count');
-        $personalData['createdRisks']        = $this->dao->select($count)->from(TABLE_RISK)->where('createdBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['resolvedRisks']       = $this->dao->select($count)->from(TABLE_RISK)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['createdIssues']       = $this->dao->select($count)->from(TABLE_ISSUE)->where('createdBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['resolvedIssues']      = $this->dao->select($count)->from(TABLE_ISSUE)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        if(isset($this->config->maxVersion))
+        {
+            $personalData['createdRisks']        = $this->dao->select($count)->from(TABLE_RISK)->where('createdBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+            $personalData['resolvedRisks']       = $this->dao->select($count)->from(TABLE_RISK)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+            $personalData['createdIssues']       = $this->dao->select($count)->from(TABLE_ISSUE)->where('createdBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+            $personalData['resolvedIssues']      = $this->dao->select($count)->from(TABLE_ISSUE)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        }
         $personalData['createdDocs']         = $this->dao->select($count)->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['finishedTasks']       = $this->dao->select($count)->from(TABLE_TASK)->where('deleted')->eq('0')
             ->andWhere('finishedBy', true)->eq($account)
