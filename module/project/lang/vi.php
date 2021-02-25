@@ -119,8 +119,17 @@ $lang->project->statusList['doing']     = 'Đang làm';
 $lang->project->statusList['suspended'] = 'Đã đình chỉ';
 $lang->project->statusList['closed']    = 'Đã đóng';
 
-$lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
-$lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
+global $config;
+if($config->systemMode == 'new')
+{
+    $lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
+    $lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
+}
+else
+{
+    $lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
+    $lang->project->aclList['open']    = "Public (Users who can visit {$lang->executionCommon} can access it.)";
+}
 
 $lang->project->storyPoint = 'Story Point';
 
@@ -169,6 +178,7 @@ $lang->project->create            = "Tạo {$lang->executionCommon}";
 $lang->project->copy              = "Sao chép {$lang->executionCommon}";
 $lang->project->delete            = "Xóa {$lang->executionCommon}";
 $lang->project->browse            = "{$lang->executionCommon} List";
+$lang->project->list              = "{$lang->executionCommon} List";
 $lang->project->edit              = "Sửa {$lang->executionCommon}";
 $lang->project->batchEdit         = "Sửa hàng loạt";
 $lang->project->manageMembers     = 'Quản lý đội nhóm';

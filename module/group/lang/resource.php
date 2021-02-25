@@ -571,8 +571,10 @@ $lang->resource->project->storySort         = 'storySort';
 $lang->resource->project->whitelist         = 'whitelist';
 $lang->resource->project->addWhitelist      = 'addWhitelist';
 $lang->resource->project->unbindWhielist    = 'unbindWhielist';
+if($config->systemMode == 'old') $lang->resource->project->list = 'list';
 
 $lang->project->methodOrder[0]   = 'index';
+if($config->systemMode == 'old') $lang->project->methodOrder[1] = 'list';
 $lang->project->methodOrder[5]   = 'view';
 $lang->project->methodOrder[10]  = 'browse';
 $lang->project->methodOrder[15]  = 'create';

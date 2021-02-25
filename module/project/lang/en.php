@@ -119,8 +119,17 @@ $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspended';
 $lang->project->statusList['closed']    = 'Closed';
 
-$lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
-$lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
+global $config;
+if($config->systemMode == 'new')
+{
+    $lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
+    $lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
+}
+else
+{
+    $lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
+    $lang->project->aclList['open']    = "Public (Users who can visit {$lang->executionCommon} can access it.)";
+}
 
 $lang->project->storyPoint = 'Story Point';
 
@@ -169,6 +178,7 @@ $lang->project->create            = "Create {$lang->executionCommon}";
 $lang->project->copy              = "Copy {$lang->executionCommon}";
 $lang->project->delete            = "Delete {$lang->executionCommon}";
 $lang->project->browse            = "{$lang->executionCommon} List";
+$lang->project->list              = "{$lang->executionCommon} List";
 $lang->project->edit              = "Edit {$lang->executionCommon}";
 $lang->project->batchEdit         = "Batch Edit";
 $lang->project->manageMembers     = 'Manage Team';

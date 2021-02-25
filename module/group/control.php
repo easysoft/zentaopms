@@ -183,6 +183,14 @@ class group extends control
             $group      = $this->group->getById($groupID);
             $groupPrivs = $this->group->getPrivs($groupID);
 
+            if($this->config->systemMode == 'old')
+            {
+                if(isset($groupPrivs['program']['prjbrowse']))
+                {
+                    $groupPrivs['project']['list'] = 'list';
+                }
+            }
+
             $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
             $this->view->position[] = $group->name;
             $this->view->position[] = $this->lang->group->managePriv;
