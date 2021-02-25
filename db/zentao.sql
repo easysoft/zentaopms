@@ -1363,22 +1363,6 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_weeklyreport`;
-CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `PRJ` mediumint(8) unsigned NOT NULL,
-  `weekStart` date NOT NULL,
-  `pv` float(9,2) NOT NULL,
-  `ev` float(9,2) NOT NULL,
-  `ac` float(9,2) NOT NULL,
-  `sv` float(9,2) NOT NULL,
-  `cv` float(9,2) NOT NULL,
-  `staff` smallint(5) unsigned NOT NULL,
-  `progress` varchar(255) NOT NULL,
-  `workload` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `week` (`PRJ`,`weekStart`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_workestimation`;
 CREATE TABLE `zt_workestimation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

@@ -30,6 +30,7 @@
         <div class="tile-title"><?php echo $lang->block->createdCases;?></div>
         <div class="tile-amount"><?php echo empty($data['createdCases']) ? 0 : (int)$data['createdCases'];?></div>
       </div>
+      <?php if(isset($config->maxVersion)):?>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdRisks;?></div>
         <div class="tile-amount"><?php echo empty($data['createdRisks']) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=risk'), (int)$data['createdRisks']);?></div>
@@ -46,6 +47,7 @@
         <div class="tile-title"><?php echo $lang->block->resolvedIssues;?></div>
         <div class="tile-amount"><?php echo $data['resolvedIssues'];?></div>
       </div>
+      <?php endif;?>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdDocs;?></div>
         <div class="tile-amount"><?php echo $data['createdDocs'];?></div>

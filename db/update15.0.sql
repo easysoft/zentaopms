@@ -277,22 +277,6 @@ CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   UNIQUE KEY `task` (`task`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `PRJ` mediumint(8) unsigned NOT NULL,
-  `weekStart` date NOT NULL,
-  `pv` float(9,2) NOT NULL,
-  `ev` float(9,2) NOT NULL,
-  `ac` float(9,2) NOT NULL,
-  `sv` float(9,2) NOT NULL,
-  `cv` float(9,2) NOT NULL,
-  `staff` smallint(5) unsigned NOT NULL,
-  `progress` varchar(255) NOT NULL,
-  `workload` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `week` (`PRJ`,`weekStart`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 ALTER TABLE `zt_block` ADD `type` char(30) NOT NULL AFTER `module`;
 ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `module`, `type`, `order`), DROP INDEX `accountModuleOrder`;
 

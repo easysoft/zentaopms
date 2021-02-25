@@ -1156,10 +1156,6 @@ $lang->resource->subject->browse = 'browse';
 
 $lang->subject->methodOrder[5]  = 'browse';
 
-/* Weekly. */
-$lang->resource->weekly = new stdclass();
-$lang->resource->weekly->index = 'index';
-
 /* Custom. */
 $lang->resource->custom = new stdclass();
 $lang->resource->custom->index              = 'index';
