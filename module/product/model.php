@@ -957,29 +957,30 @@ class productModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $orderBy
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc')
+    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc', $projectID = 0)
     {
-        if(!$this->session->PRJ || !$productID) return array();
+        if($productID) return array();
+        if(empty($projectID)) return $this->getAllExecutionPairsByProduct($productID, $branch);
 
-        $project = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+        $project = $this->loadModel('program')->getPRJByID($projectID);
         $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
         $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
-            ->andWhere('t2.project')->eq($this->session->PRJ)
+            ->andWhere('t2.project')->eq($projectID)
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');
 
-        $executionList = array('0' => '');
-
         /* The waterfall project needs to show the hierarchy and remove the parent stage. */
+        $executionList = array('0' => '');
         if($project->model == 'waterfall')
         {
             foreach($executions as $id => $execution)
@@ -1008,6 +1009,54 @@ class productModel extends model
         }
 
         return $executionList;
+    }
+
+    /**
+     * Get execution pairs by product.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return array
+     */
+    public function getAllExecutionPairsByProduct($productID, $branch = 0)
+    {
+        if(empty($productID)) return array();
+        $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->in('stage,sprint')
+            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchAll('id');
+
+        $projectIdList = array();
+        foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
+
+        $executionPairs = array();
+        $projectPairs   = $this->loadModel('program')->getPRJPairsByIdList($projectIdList);
+        foreach($executions as $id => $execution)
+        {
+            if($execution->grade == 2 && isset($executions[$execution->parent]))
+            {
+                $execution->name = $projectPairs[$execution->project] . '/' . $executions[$execution->parent]->name . '/' . $execution->name;
+                $executions[$execution->parent]->children[$id] = $execution->name;
+                unset($executions[$id]);
+            }
+        }
+
+        foreach($executions as $execution)
+        {
+            if(isset($execution->children))
+            {
+                $executionPairs = $executionPairs + $execution->children;
+                continue;
+            }
+            $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
+        }
+
+        return $executionPairs;
     }
 
     /**
