@@ -663,7 +663,6 @@ $lang->navGroup->deploy      = 'project';
 $lang->navGroup->stakeholder = 'project';
 
 $lang->navGroup->projectstory   = 'project';
-$lang->navGroup->programplan    = 'project';
 $lang->navGroup->workestimation = 'project';
 $lang->navGroup->review         = 'project';
 $lang->navGroup->reviewissue    = 'project';
@@ -933,7 +932,6 @@ $lang->scrum->setMenu->whitelist = array('link' => 'White List|program|PRJWhitel
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
-$lang->programplan        = new stdclass();
 $lang->review             = new stdclass();
 $lang->milestone          = new stdclass();
 $lang->design             = new stdclass();
@@ -945,7 +943,6 @@ $lang->stakeholder        = new stdclass();
 $lang->projectstory       = new stdclass();
 
 $lang->workestimation->menu     = new stdclass();
-$lang->programplan->menu        = new stdclass();
 $lang->review->menu             = new stdclass();
 $lang->milestone->menu          = new stdclass();
 $lang->design->menu             = new stdclass();
@@ -960,9 +957,6 @@ $lang->workestimation->menu->workestimation = 'Work Estimation|workestimation|in
 
 $lang->stakeholder->menu->list  = array('link' => 'Stakeholder List|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
 $lang->stakeholder->menu->issue = array('link' => 'Issue|stakeholder|issue|');
-
-$lang->programplan->menu->gantt = array('link' => 'Gantt|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=gantt');
-$lang->programplan->menu->lists = array('link' => 'Stage|programplan|browse|programID={PROJECT}&productID={PRODUCT}&type=lists', 'alias' => 'create');
 
 $lang->design->menu->all      = array('link' => 'All|design|browse|productID={PRODUCT}&browseType=all');
 $lang->design->menu->hlds     = array('link' => 'HLDS|design|browse|productID={PRODUCT}&browseType=HLDS');

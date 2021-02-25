@@ -61,7 +61,6 @@ $lang->moduleOrder[195] = 'cron';
 $lang->moduleOrder[200] = 'dev';
 $lang->moduleOrder[205] = 'message';
 $lang->moduleOrder[210] = 'design';
-$lang->moduleOrder[215] = 'programplan';
 
 $lang->resource = new stdclass();
 
@@ -672,16 +671,6 @@ $lang->design->methodOrder[40]    = 'linkCommit';
 $lang->design->methodOrder[45]    = 'viewCommit';
 $lang->design->methodOrder[50]    = 'unlinkCommit';
 $lang->design->methodOrder[55]    = 'revision';
-
-/* Program plan. */
-$lang->resource->programplan = new stdclass();
-$lang->resource->programplan->browse = 'browse';
-$lang->resource->programplan->create = 'create';
-$lang->resource->programplan->edit   = 'edit';
-
-$lang->programplan->methodOrder[5]  = 'browse';
-$lang->programplan->methodOrder[10] = 'create';
-$lang->programplan->methodOrder[15] = 'edit';
 
 /* Task. */
 $lang->resource->task = new stdclass();
