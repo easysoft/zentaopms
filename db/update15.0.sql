@@ -146,26 +146,6 @@ CREATE TABLE IF NOT EXISTS `zt_budget` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_workestimation`;
-CREATE TABLE IF NOT EXISTS `zt_workestimation` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `PRJ` mediumint(8) unsigned NOT NULL,
-  `scale` decimal(10, 2) unsigned NOT NULL,
-  `productivity` decimal(10, 2) unsigned NOT NULL,
-  `duration` decimal(10, 2) unsigned NOT NULL,
-  `unitLaborCost` decimal(10, 2) unsigned NOT NULL,
-  `totalLaborCost` decimal(10, 2) unsigned NOT NULL,
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
-  `assignedTo` varchar(30) NOT NULL,
-  `assignedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  `dayHour` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 ALTER TABLE `zt_task` ADD `design` mediumint(8) unsigned NOT NULL AFTER `module`;
 ALTER TABLE `zt_task` ADD `version` smallint(6) NOT NULL AFTER `desc`;
 ALTER TABLE `zt_task` ADD `activatedDate` date NOT NULL AFTER `lastEditedDate`;
