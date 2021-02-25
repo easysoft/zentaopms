@@ -550,7 +550,7 @@ class custom extends control
         {
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
-            if($mode == 'new') $this->locate($this->createLink('upgrade', 'mergeTips'));
+            if($mode == 'new') die(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
         }
 
         $mode = zget($this->config->global, 'mode', 'old');
