@@ -250,8 +250,6 @@ $lang->searchObjects['program']     = 'Program';
 $lang->searchObjects['project']     = 'Project';
 $lang->searchObjects['execution']   = $lang->execution->common;
 $lang->searchObjects['user']        = 'User';
-$lang->searchObjects['issue']       = 'Issue';
-$lang->searchObjects['risk']        = 'Risk';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* Code formats for import. */
@@ -316,11 +314,6 @@ $lang->my->workMenu->story       = "$lang->SRCommon|my|work|mode=story";
 $lang->my->workMenu->bug         = 'Bug|my|work|mode=bug';
 $lang->my->workMenu->testcase    = 'Test Case|my|work|mode=testcase&type=assigntome';
 $lang->my->workMenu->testtask    = 'Test Task|my|work|mode=testtask&type=wait';
-if($config->systemMode == 'new')
-{
-    $lang->my->workMenu->issue       = 'Issue|my|work|mode=issue';
-    $lang->my->workMenu->risk        = 'Risk|my|work|mode=risk';
-}
 
 $lang->my->contributeMenu = new stdclass();
 $lang->my->contributeMenu->task        = 'Task|my|contribute|mode=task';
@@ -329,11 +322,6 @@ $lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=sto
 $lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
 $lang->my->contributeMenu->testcase    = 'Test Case|my|contribute|mode=testtask&type=openedbyme';
 $lang->my->contributeMenu->testtask    = 'Test Task|my|contribute|mode=testtask&type=done';
-if($config->systemMode == 'new')
-{
-    $lang->my->contributeMenu->issue       = 'Issue|my|contribute|mode=issue';
-    $lang->my->contributeMenu->risk        = 'Risk|my|contribute|mode=risk';
-}
 
 $lang->my->dividerMenu = ',myProject,team,';
 
@@ -683,8 +671,6 @@ $lang->navGroup->reviewissue    = 'project';
 $lang->navGroup->milestone      = 'project';
 $lang->navGroup->pssp           = 'project';
 $lang->navGroup->design         = 'project';
-$lang->navGroup->issue          = 'project';
-$lang->navGroup->risk           = 'project';
 $lang->navGroup->auditplan      = 'project';
 $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
@@ -934,9 +920,14 @@ $lang->menu->scrum->qa             = 'QA|qa|index';
 $lang->menu->scrum->ci             = 'Code|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
+$lang->menu->scrum->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
 $lang->menu->scrum->projectsetting = array('link' => 'Setting|program|prjview|project={PROJECT}', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
 
 $lang->scrum = new stdclass();
+$lang->scrum->subMenu = new stdclass();
+$lang->scrum->subMenu->other = new stdclass();
+$lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
+
 $lang->scrum->setMenu = new stdclass();
 $lang->scrum->setMenu->view      = array('link' => 'View|program|prjview|project={PROJECT}');
 $lang->scrum->setMenu->products  = array('link' => 'Product|program|PRJManageProducts|project={PROJECT}', 'alias' => 'prjmanageproducts');
@@ -955,8 +946,6 @@ $lang->auditplan          = new stdclass();
 $lang->cm                 = new stdclass();
 $lang->nc                 = new stdclass();
 $lang->pssp               = new stdclass();
-$lang->issue              = new stdclass();
-$lang->risk               = new stdclass();
 $lang->stakeholder        = new stdclass();
 $lang->durationestimation = new stdclass();
 $lang->projectstory       = new stdclass();
@@ -970,8 +959,6 @@ $lang->design->menu             = new stdclass();
 $lang->auditplan->menu          = new stdclass();
 $lang->cm->menu                 = new stdclass();
 $lang->pssp->menu               = new stdclass();
-$lang->issue->menu              = new stdclass();
-$lang->risk->menu               = new stdclass();
 $lang->stakeholder->menu        = new stdclass();
 $lang->waterfallproduct->menu   = new stdclass();
 $lang->durationestimation->menu = new stdclass();
@@ -998,7 +985,7 @@ $lang->design->menu->ads      = array('link' => 'ADS|design|browse|productID={PR
 $lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 if($config->systemMode == 'old')
 {
     $lang->noMenuModule[] = 'project';

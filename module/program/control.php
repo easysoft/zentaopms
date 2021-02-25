@@ -968,7 +968,7 @@ class program extends control
         /* Navigation stay in program when enter from program list. */
         if($from == 'PRJ')
         {
-            $this->lang->program->menu = $this->lang->waterfall->setMenu;
+            $this->lang->program->menu = $this->lang->scrum->setMenu;
             $moduleIndex = array_search('program', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
             $this->lang->navGroup->program = 'project';
@@ -1115,7 +1115,7 @@ class program extends control
     {
         $this->app->loadLang('bug');
         $this->lang->navGroup->program = 'project';
-        $this->lang->program->menu = $this->lang->waterfall->setMenu;
+        $this->lang->program->menu = $this->lang->scrum->setMenu;
         $moduleIndex = array_search('program', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -1160,7 +1160,7 @@ class program extends control
     public function PRJGroup($projectID = 0, $programID = 0)
     {
         $this->lang->navGroup->program = 'project';
-        $this->lang->program->menu = $this->lang->waterfall->setMenu;
+        $this->lang->program->menu = $this->lang->scrum->setMenu;
         $moduleIndex = array_search('program', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -1217,7 +1217,7 @@ class program extends control
     public function PRJManageView($groupID, $projectID, $programID)
     {
         $this->lang->navGroup->program = 'project';
-        $this->lang->program->menu = $this->lang->waterfall->setMenu;
+        $this->lang->program->menu = $this->lang->scrum->setMenu;
         $moduleIndex = array_search('program', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -1255,7 +1255,7 @@ class program extends control
     public function PRJManagePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
         $this->lang->navGroup->program = 'project';
-        $this->lang->program->menu = $this->lang->waterfall->setMenu;
+        $this->lang->program->menu = $this->lang->scrum->setMenu;
         $moduleIndex = array_search('program', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -1325,7 +1325,7 @@ class program extends control
     public function PRJManageMembers($projectID, $dept = '')
     {
         $this->lang->navGroup->program = 'project';
-        $this->lang->program->menu = $this->lang->waterfall->setMenu;
+        $this->lang->program->menu = $this->lang->scrum->setMenu;
         $moduleIndex = array_search('program', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -1678,7 +1678,7 @@ class program extends control
         if($from == 'PRJ') 
         {
             $this->lang->navGroup->program = 'project';
-            $this->lang->program->menu = $this->lang->waterfall->setMenu;
+            $this->lang->program->menu = $this->lang->scrum->setMenu;
             $moduleIndex = array_search('program', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         }
@@ -1709,7 +1709,7 @@ class program extends control
         if($from == 'PRJ') 
         {
             $this->lang->navGroup->program = 'project';
-            $this->lang->program->menu = $this->lang->waterfall->setMenu;
+            $this->lang->program->menu = $this->lang->scrum->setMenu;
             $moduleIndex = array_search('program', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         }
@@ -1751,7 +1751,7 @@ class program extends control
         if($from == 'PRJ') 
         {
             $this->lang->navGroup->program = 'project';
-            $this->lang->program->menu = $this->lang->waterfall->setMenu;
+            $this->lang->program->menu = $this->lang->scrum->setMenu;
             $moduleIndex = array_search('program', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         }

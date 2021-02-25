@@ -89,8 +89,6 @@ $lang->search->modules['program']     = '项目集';
 $lang->search->modules['project']     = '项目';
 $lang->search->modules['execution']   = $lang->execution->common;
 $lang->search->modules['story']       = '需求';
-$lang->search->modules['issue']       = '问题';
-$lang->search->modules['risk']        = '风险';
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;

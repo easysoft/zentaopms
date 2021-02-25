@@ -191,8 +191,11 @@ class todo extends control
             $bugs      = $this->bug->getUserBugPairs($account);
             $tasks     = $this->task->getUserTaskPairs($account, $status);
             $storys    = $this->loadModel('story')->getUserStoryPairs($account);
-            $issues    = $this->loadModel('issue')->getUserIssuePairs($account);
-            $risks     = $this->loadModel('risk')->getUserRiskPairs($account);
+            if(isset($this->config->maxVersion))
+            {
+                $issues = $this->loadModel('issue')->getUserIssuePairs($account);
+                $risks  = $this->loadModel('risk')->getUserRiskPairs($account);
+            }
             $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
 
             $reviews = array();
@@ -213,8 +216,11 @@ class todo extends control
                 if($todo->type == 'story')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
                 if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
                 if($todo->type == 'bug')      $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-                if($todo->type == 'issue')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
-                if($todo->type == 'risk')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
+                if(isset($this->config->maxVersion))
+                {
+                    if($todo->type == 'issue') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
+                    if($todo->type == 'risk')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
+                }
                 if($todo->type == 'review')   $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
                 if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TESTTASK)->fetch('name');
                 $todo->begin = $todo->begin ? str_replace(':', '', $todo->begin) : '2400';
@@ -242,8 +248,11 @@ class todo extends control
             $this->view->bugs        = $bugs;
             $this->view->tasks       = $tasks;
             $this->view->storys      = $storys;
-            $this->view->issues      = $issues;
-            $this->view->risks       = $risks;
+            if(isset($this->config->maxVersion))
+            {
+                $this->view->issues = $issues;
+                $this->view->risks  = $risks;
+            }
             $this->view->reviews     = $reviews;
             $this->view->testtasks   = $testtasks;
             $this->view->editedTodos = $editedTodos;
@@ -565,8 +574,11 @@ class todo extends control
             $bugs      = $this->loadModel('bug')->getUserBugPairs($account);
             $stories   = $this->loadModel('story')->getUserStoryPairs($account, 100, 'story');
             $tasks     = $this->loadModel('task')->getUserTaskPairs($account);
-            $issues    = $this->loadModel('issue')->getUserIssuePairs($account);
-            $risks     = $this->loadModel('risk')->getUserRiskPairs($account);
+            if(isset($this->config->maxVersion))
+            {
+                $issues = $this->loadModel('issue')->getUserIssuePairs($account);
+                $risks  = $this->loadModel('risk')->getUserRiskPairs($account);
+            }
             $testTasks = $this->loadModel('testtask')->getUserTesttaskPairs($account);
             if(isset($this->config->qcVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account, 0, 'wait');
             $times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
@@ -582,8 +594,12 @@ class todo extends control
                 if($type == 'bug')                $todo->name    = isset($bugs[$todo->idvalue])    ? $bugs[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if($type == 'story')              $todo->name    = isset($stories[$todo->idvalue]) ? $stories[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if($type == 'task')               $todo->name    = isset($tasks[$todo->idvalue])   ? $tasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
-                if($type == 'issue')              $todo->name    = isset($issues[$todo->idvalue])  ? $issues[$todo->idvalue] . "(#$todo->idvalue)" : '';
-                if($type == 'risk')               $todo->name    = isset($risks[$todo->idvalue])     ? $risks[$todo->idvalue] . "(#$todo->idvalue)" : '';
+
+                if(isset($this->config->maxVersion))
+                {
+                    if($type == 'issue') $todo->name = isset($issues[$todo->idvalue]) ? $issues[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                    if($type == 'risk')  $todo->name = isset($risks[$todo->idvalue])  ? $risks[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                }
                 if($type == 'testtask')           $todo->name    = isset($testTasks[$todo->idvalue]) ? $testTasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if($type == 'review' && isset($this->config->qcVersion)) $todo->name = isset($reviews[$todo->idvalue]) ? $reviews[$todo->idvalue] . "(#$todo->idvalue)" : '';
 
