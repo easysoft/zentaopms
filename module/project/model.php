@@ -358,7 +358,7 @@ class projectModel extends model
         if(!empty($sprint->percent)) $this->checkWorkload('create', $sprint->percent);
 
         /* Set planDuration and realDuration. */
-        if($this->config->maxVersion)
+        if(isset($this->config->maxVersion))
         {
             $sprint->planDuration = $this->loadModel('programplan')->getDuration($sprint->begin, $sprint->end);
             if(!empty($sprint->realBegan) and !empty($sprint->realEnd)) $sprint->realDuration = $this->loadModel('programplan')->getDuration($sprint->realBegan, $sprint->realEnd);
@@ -386,7 +386,7 @@ class projectModel extends model
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
             /* Update the path. */
-            if($this->config->maxVersion) $this->loadModel('programplan')->setTreePath($projectID);
+            if(isset($this->config->maxVersion)) $this->loadModel('programplan')->setTreePath($projectID);
 
             /* Copy team of project. */
             if($copyProjectID != '')
@@ -493,7 +493,7 @@ class projectModel extends model
         if(!empty($project->percent)) $this->checkWorkload('update', $project->percent, $oldProject);
 
         /* Set planDuration and realDuration. */
-        if($this->config->maxVersion)
+        if(isset($this->config->maxVersion))
         {
             $project->planDuration = $this->loadModel('programplan')->getDuration($project->begin, $project->end);
             if(!empty($project->realBegan) and !empty($project->realEnd)) $project->realDuration = $this->loadModel('programplan')->getDuration($project->realBegan, $project->realEnd);
