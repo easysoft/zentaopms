@@ -133,7 +133,7 @@ class testsuiteModel extends model
     {
         return $this->dao->select("*")->from(TABLE_TESTSUITE)
             ->where('product')->eq((int)$productID)
-            ->andWhere('PRJ')->eq($this->session->PRJ)
+            ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")
             ->orderBy($orderBy)
