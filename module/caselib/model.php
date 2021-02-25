@@ -240,6 +240,9 @@ class caselibModel extends model
             ->remove('uid')
             ->get();
         $lib = $this->loadModel('file')->processImgURL($lib, $this->config->caselib->editor->create['id'], $this->post->uid);
+
+        $this->lang->testsuite->name = $this->lang->caselib->name;
+        $this->lang->testsuite->desc = $this->lang->caselib->desc;
         $this->dao->insert(TABLE_TESTSUITE)->data($lib)
             ->batchcheck($this->config->caselib->create->requiredFields, 'notempty')
             ->check('name', 'unique', "deleted = '0'")

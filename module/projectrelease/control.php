@@ -85,6 +85,9 @@ class projectrelease extends control
      */
     public function create()
     {
+        $this->app->loadConfig('release');
+        $this->config->projectrelease->create = $this->config->release->create;
+
         if(!empty($_POST))
         {
             $releaseID = $this->projectrelease->create();
@@ -118,6 +121,9 @@ class projectrelease extends control
      */
     public function edit($releaseID)
     {
+        $this->app->loadConfig('release');
+        $this->config->projectrelease->create = $this->config->release->create;
+
         if(!empty($_POST))
         {
             $changes = $this->projectrelease->update($releaseID);

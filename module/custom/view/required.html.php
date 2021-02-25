@@ -40,14 +40,7 @@
           <?php
           $fields = $this->custom->getFormFields($moduleName, $method);
 
-          if($moduleName == 'doc'     and $method == 'createlib')  $method = 'createLib';
-          if($moduleName == 'doc'     and $method == 'editlib')    $method = 'editLib';
-          if($moduleName == 'caselib' and $method == 'createcase')
-          {
-              $this->app->loadLang('testcase');
-              $fields = $this->custom->getFormFields('testcase', $method);
-              $method = 'createCase';
-          }
+          if($moduleName == 'caselib' and $method == 'createcase') continue;
           $actionKey = $method . 'Action';
           if(isset($lang->$moduleName->$actionKey))
           {

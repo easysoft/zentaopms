@@ -175,7 +175,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             <table class='table table-form'>
               <tbody>
                 <tr>
-                  <th class='w-80px'><?php echo $lang->bug->project;?></th>
+                  <th class='w-85px'><?php echo $lang->bug->project;?></th>
                   <td><span id='projectIdBox'><?php echo html::select('project', $projects, $bug->project, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
                 </tr>
                 <tr>

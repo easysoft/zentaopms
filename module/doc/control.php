@@ -50,7 +50,7 @@ class doc extends control
         $pager = new pager(0, 5, 1);
 
         $this->lang->TRActions  = $this->doc->setFastMenu($this->lang->doc->fast);
-        $this->lang->TRActions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
+        $this->lang->TRActions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc() : '';
 
         $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
@@ -218,7 +218,7 @@ class doc extends control
     {
         if(!empty($_POST))
         {
-            $libID = $this->doc->createLib();
+            $libID = $this->doc->createlib();
             if(!dao::isError())
             {
                 $this->action->create('docLib', $libID, 'Created');
@@ -355,7 +355,7 @@ class doc extends control
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
 
-            $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
+            $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         }
         elseif($this->from == 'project')
         {
@@ -366,7 +366,7 @@ class doc extends control
             $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
 
-            $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
+            $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         }
         else
         {

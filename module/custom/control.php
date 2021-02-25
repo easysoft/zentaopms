@@ -272,7 +272,7 @@ class custom extends control
         if($this->server->request_method == 'POST')
         {
             $this->custom->saveRequiredFields($moduleName);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('required', "moduleName=$moduleName")));
         }
 
         foreach($this->config->custom->requiredModules as $requiredModule) $this->app->loadLang($requiredModule);

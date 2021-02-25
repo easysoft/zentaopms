@@ -17,7 +17,7 @@
     <div id='mainContent' class='main-content'>
       <div class='center-block'>
         <div class='main-header'>
-          <h2><?php echo $lang->doc->createLib;?></h2>
+          <h2><?php echo $lang->doc->createlib;?></h2>
         </div>
         <form method='post' target='hiddenwin' >
           <table class='table table-form'>

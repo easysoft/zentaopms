@@ -21,7 +21,7 @@
             <button class="btn" type="button" data-toggle="dropdown"><i class='icon-cog'></i> <span class="caret"></span></button>
             <ul class='dropdown-menu'>
               <li><?php common::printLink('tree', 'browse', "libID=$libID&viewType=doc&currentModuleID=0&branch=0&from=$from", "<i class='icon icon-cog'></i>" . $lang->doc->manageType);?></li>
-              <li><?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>" . $lang->doc->editLib, '', "class='iframe'");?></li>
+              <li><?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>" . $lang->doc->editlib, '', "class='iframe'");?></li>
               <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>" . $lang->doc->deleteLib, 'hiddenwin');?></li>
             </ul>
           </div>

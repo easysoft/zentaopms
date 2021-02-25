@@ -49,7 +49,7 @@
           <tr>
             <th class='w-50px'><?php echo $lang->idAB;?></th>
             <th class='w-110px<?php echo zget($visibleFields, 'type', ' hidden') . zget($requiredFields, 'type', '', ' required');?>'><?php echo $lang->bug->type;?></th>
-            <th class='w-70px<?php echo zget($visibleFields, 'severity', ' hidden') . zget($requiredFields, 'severity', '', ' required');?>'><?php echo $lang->bug->severityAB;?></th>
+            <th class='w-80px<?php echo zget($visibleFields, 'severity', ' hidden') . zget($requiredFields, 'severity', '', ' required');?>'><?php echo $lang->bug->severityAB;?></th>
             <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->bug->pri;?></th>
             <th class="required <?php if(count($visibleFields) >= 10) echo ' w-150px';?>"><?php echo $lang->bug->title;?></th>
             <?php if($branchProduct):?>

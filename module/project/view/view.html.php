@@ -131,7 +131,7 @@
                 <?php $i++;?>
                 <?php endforeach;?>
                 <div class="col-xs-6">
-                  <?php if($canBeChanged) common::printLink('doc', 'createLib', "type=project&objectID=$execution->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted iframe' data-width='1000px'");?>
+                  <?php if($canBeChanged) common::printLink('doc', 'createLib', "type=project&objectID=$execution->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createlib, '', "class='text-muted iframe' data-width='1000px'");?>
                 </div>
                 <?php endif;?>
               </div>

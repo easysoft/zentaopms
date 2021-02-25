@@ -116,7 +116,7 @@ $lang->workingHour = 'giờ';
 
 $lang->generalUR    = 'UR/Epic';
 $lang->generalSR    = 'SR/Story';
-$lang->sprintCommon = 'Iteration/Phase';
+$lang->sprintCommon = $lang->iterationCommon . '/Phase';
 
 $lang->execution = new stdclass();
 $lang->execution->common = 'Execution';

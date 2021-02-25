@@ -116,7 +116,7 @@ $lang->workingHour = '工时';
 
 $lang->generalUR    = '用需/史诗';
 $lang->generalSR    = '软需/故事';
-$lang->sprintCommon = '迭代/阶段';
+$lang->sprintCommon = $lang->iterationCommon . '/阶段';
 
 $lang->execution = new stdclass();
 $lang->execution->common = '执行';
