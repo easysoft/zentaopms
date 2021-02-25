@@ -51,9 +51,9 @@
               </div>
             </div>
           </div>
+          <?php $i ++;?>
           <?php endforeach;?>
         </div>
-        <?php $i ++;?>
         <?php endforeach;?>
       </div>
     </div>

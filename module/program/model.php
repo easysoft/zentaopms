@@ -1745,7 +1745,7 @@ class programModel extends model
             {
                 foreach($_POST['products'] as $productID => $product)
                 {
-                    $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopPGM)->where('id')->eq((int)$productID)->exec();
+                    $this->dao->update(TABLE_PRODUCT)->set('program')->eq((int)$newTopPGM)->where('id')->eq((int)$productID)->exec();
                 }
             }
 

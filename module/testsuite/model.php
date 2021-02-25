@@ -101,7 +101,7 @@ class testsuiteModel extends model
     {
         $suite = fixer::input('post')
             ->stripTags($this->config->testsuite->editor->create['id'], $this->config->allowedTags)
-            ->add('PRJ', $this->session->PRJ)
+            ->setIF($this->lang->navGroup->testsuite != 'qa', 'PRJ', $this->session->PRJ)
             ->add('product', (int)$productID)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
@@ -133,7 +133,7 @@ class testsuiteModel extends model
     {
         return $this->dao->select("*")->from(TABLE_TESTSUITE)
             ->where('product')->eq((int)$productID)
-            ->andWhere('PRJ')->eq($this->session->PRJ)
+            ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")
             ->orderBy($orderBy)
