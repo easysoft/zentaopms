@@ -826,15 +826,7 @@ class product extends control
      */
     public function ajaxGetProjects($productID, $projectID = 0, $branch = 0, $number = '')
     {
-        if($productID == 0)
-        {
-            $projects = array(0 => '') + $this->loadModel('project')->getExecutionPairs();
-        }
-        else
-        {
-            $projects = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch);
-        }
-
+        $projects = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch, 'id_desc', $projectID);
         if($this->app->getViewType() == 'json') die(json_encode($projects));
 
         if($number === '')

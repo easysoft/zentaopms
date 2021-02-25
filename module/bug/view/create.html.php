@@ -91,7 +91,7 @@ js::set('isStepsTemplate', $isStepsTemplate);
             </td>
             <?php endif;?>
             <?php if($showProject):?>
-            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
+            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $executionID, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
             <?php endif;?>
             <td>
               <div class='input-group' id='buildBox'>

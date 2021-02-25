@@ -175,8 +175,8 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID = $productID ? $productID : key($this->products);
-        $projectID = $this->lang->navGroup->testtask == 'project' ? $this->session->PRJ : 0;
-        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_asc', $projectID);
+        $projectID = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->PRJ;
+        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
         /* Set menu. */
@@ -609,7 +609,8 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID = $productID ? $productID : key($this->products);
-        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID);
+        $projectID = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->PRJ;
+        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
         $this->view->task         = $task;
@@ -1179,7 +1180,8 @@ class testtask extends control
         $this->app->loadLang('job');
 
         $productID = $productID ? $productID : key($this->products);
-        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID);
+        $projectID = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->PRJ;
+        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;

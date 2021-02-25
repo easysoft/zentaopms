@@ -18,7 +18,7 @@
       <?php if($this->session->currentProductType !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
     </h2>
     <div class="pull-right btn-toolbar">
-      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=bug&params=' . helper::safe64Encode("productID=$productID&projectID=$projectID&moduleID=$moduleID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
+      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=bug&params=' . helper::safe64Encode("productID=$productID&executionID=$executionID&moduleID=$moduleID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
       <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-primary"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
@@ -79,18 +79,18 @@
           <?php if(!empty($titles)):?>
           <?php foreach($titles as $bugTitle => $fileName):?>
           <?php
-          $moduleID  = $i == 0 ? $moduleID  : 'ditto';
-          $projectID = $i == 0 ? $projectID  : 'ditto';
-          $type      = $i == 0 ? '' : 'ditto';
-          $pri       = $i == 0 ? 0  : 'ditto';
-          $os        = $i == 0 ? '' : 'ditto';
-          $browser   = $i == 0 ? '' : 'ditto';
+          $moduleID    = $i == 0 ? $moduleID : 'ditto';
+          $executionID = $i == 0 ? $executionID : 'ditto';
+          $type        = $i == 0 ? '' : 'ditto';
+          $pri         = $i == 0 ? 0  : 'ditto';
+          $os          = $i == 0 ? '' : 'ditto';
+          $browser     = $i == 0 ? '' : 'ditto';
           ?>
           <tr>
             <td class='text-center'><?php echo $i+1;?></td>
             <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, $i)'");?></td>
             <td><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
+            <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $executionID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
             <td id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, 'trunk', "class='form-control chosen' multiple");?></td>
             <td>
               <div class='input-group'>
@@ -122,18 +122,18 @@
           <?php $nextStart = $i;?>
           <?php for($i = $nextStart; $i < $config->bug->batchCreate; $i++):?>
           <?php
-          $moduleID  = $i - $nextStart == 0 ? $moduleID  : 'ditto';
-          $projectID = $i - $nextStart == 0 ? $projectID  : 'ditto';
-          $type      = $i - $nextStart == 0 ? '' : 'ditto';
-          $pri       = $i - $nextStart == 0 ? 0  : 'ditto';
-          $os        = $i - $nextStart == 0 ? '' : 'ditto';
-          $browser   = $i - $nextStart == 0 ? '' : 'ditto';
+          $moduleID    = $i - $nextStart == 0 ? $moduleID : 'ditto';
+          $executionID = $i - $nextStart == 0 ? $executionID : 'ditto';
+          $type        = $i - $nextStart == 0 ? '' : 'ditto';
+          $pri         = $i - $nextStart == 0 ? 0  : 'ditto';
+          $os          = $i - $nextStart == 0 ? '' : 'ditto';
+          $browser     = $i - $nextStart == 0 ? '' : 'ditto';
           ?>
           <tr>
             <td><?php echo $i+1;?></td>
             <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, $i)'");?></td>
             <td><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
+            <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $executionID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
             <td id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
             <td>
               <div class='input-group'>
@@ -179,7 +179,7 @@
       <td>%s</td>
       <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[%s]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, \"%s\")'");?></td>
       <td><?php echo html::select("modules[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[%s]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, \"%s\")'");?></td>
+      <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[%s]", $projects, $executionID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, \"%s\")'");?></td>
       <td id='buildBox%s'><?php echo html::select("openedBuilds[%s][]", $builds, '', "class='form-control chosen' multiple");?></td>
       <td>
         <div class='input-group'>

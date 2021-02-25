@@ -113,7 +113,7 @@ class build extends control
             $execution->name = '';
         }
 
-        $executions = $this->loadModel('product')->getExecutionPairsByProduct($build->product, $build->branch);
+        $executions = $this->loadModel('product')->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->PRJ);
         if(!isset($executions[$build->project])) $executions[$build->project] = $execution->name;
 
         $productGroups = $this->project->getProducts($build->project);
@@ -527,7 +527,7 @@ class build extends control
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, $viewType = 'bug', $startModuleID = 0);
-        $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getExecutionPairsByProduct($build->product);
+        $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getExecutionPairsByProduct($build->product, 0, 'id_desc', $this->session->PRJ);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 

@@ -99,7 +99,9 @@ class projectrelease extends control
         }
 
         /* Get the builds that can select. */
-        $builds        = $this->loadModel('build')->getProductBuildPairs($this->session->PRJ, 0, 0, 'notrunk');
+        $productPairs  = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $productIdList = array_keys($productPairs);
+        $builds        = $this->loadModel('build')->getProductBuildPairs($productIdList, 0, 0, 'notrunk');
         $releaseBuilds = $this->projectrelease->getReleaseBuilds($this->session->PRJ);
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
@@ -545,7 +547,7 @@ class projectrelease extends control
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($release->product, $viewType = 'bug', $startModuleID = 0);
-        $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getExecutionPairsByProduct($release->product);
+        $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getExecutionPairsByProduct($release->product, 0, 'id_desc', $this->session->PRJ);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($release->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         if($this->session->currentProductType == 'normal')
