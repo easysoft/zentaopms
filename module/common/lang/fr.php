@@ -936,6 +936,7 @@ $lang->menu->scrum->projectbuild   = array('link' => 'Build|projectbuild|browse|
 $lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->scrum->projectsetting = array('link' => 'Setting|program|prjview|project={PROJECT}', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
 
+$lang->scrum = new stdclass();
 $lang->scrum->setMenu = new stdclass();
 $lang->scrum->setMenu->view      = array('link' => 'View|program|prjview|project={PROJECT}');
 $lang->scrum->setMenu->products  = array('link' => 'Product|program|PRJManageProducts|project={PROJECT}', 'alias' => 'prjmanageproducts');
