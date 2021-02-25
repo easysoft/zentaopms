@@ -681,8 +681,6 @@ $lang->navGroup->compile        = 'project';
 $lang->navGroup->report         = 'project';
 $lang->navGroup->measrecord     = 'project';
 
-$lang->navGroup->durationestimation = 'project';
-
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';
@@ -917,9 +915,14 @@ $lang->menu->scrum->qa             = '测试|qa|index';
 $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
+$lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
 $lang->menu->scrum->projectsetting = array('link' => '设置|program|prjview|project={PROJECT}', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
 
 $lang->scrum = new stdclass();
+$lang->scrum->subMenu = new stdclass();
+$lang->scrum->subMenu->other = new stdclass();
+$lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
+
 $lang->scrum->setMenu = new stdclass();
 $lang->scrum->setMenu->view           = array('link' => '概况|program|prjview|project={PROJECT}', 'alias' => 'prjedit');
 $lang->scrum->setMenu->products       = array('link' => '产品|program|PRJManageProducts|project={PROJECT}', 'alias' => 'prjmanageproducts');
@@ -938,7 +941,6 @@ $lang->cm                 = new stdclass();
 $lang->nc                 = new stdclass();
 $lang->pssp               = new stdclass();
 $lang->stakeholder        = new stdclass();
-$lang->durationestimation = new stdclass();
 $lang->projectstory       = new stdclass();
 
 $lang->workestimation->menu     = new stdclass();
@@ -951,13 +953,9 @@ $lang->cm->menu                 = new stdclass();
 $lang->pssp->menu               = new stdclass();
 $lang->stakeholder->menu        = new stdclass();
 $lang->waterfallproduct->menu   = new stdclass();
-$lang->durationestimation->menu = new stdclass();
 $lang->projectstory->menu       = new stdclass();
 
 $lang->workestimation->menu->workestimation = '工作量估算|workestimation|index|project={PROJECT}';
-$lang->workestimation->menu->duration       = array('link' => '工期估算|durationestimation|index|project={PROJECT}', 'subModule' => 'durationestimation');
-
-$lang->durationestimation->menu = $lang->workestimation->menu;
 
 $lang->stakeholder->menu->list  = array('link' => '干系人列表|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
 $lang->stakeholder->menu->issue = array('link' => '问题管理|stakeholder|issue|');

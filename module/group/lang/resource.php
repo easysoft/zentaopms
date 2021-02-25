@@ -65,7 +65,6 @@ $lang->moduleOrder[210] = 'design';
 $lang->moduleOrder[215] = 'programplan';
 
 $lang->moduleOrder[240] = 'workestimation';
-$lang->moduleOrder[245] = 'durationestimation';
 
 $lang->resource = new stdclass();
 
@@ -1196,14 +1195,6 @@ $lang->resource->workestimation = new stdclass();
 $lang->resource->workestimation->index  = 'index';
 
 $lang->workestimation->methodOrder[0] = 'index';
-
-/* Duration estimation. */
-$lang->resource->durationestimation = new stdclass();
-$lang->resource->durationestimation->index  = 'index';
-$lang->resource->durationestimation->create = 'create';
-
-$lang->durationestimation->methodOrder[0] = 'index';
-$lang->durationestimation->methodOrder[5] = 'create';
 
 /* Department. */
 $lang->resource->dept = new stdclass();
