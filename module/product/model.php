@@ -963,7 +963,7 @@ class productModel extends model
      */
     public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc', $projectID = 0)
     {
-        if($productID) return array();
+        if(empty($productID)) return array();
         if(empty($projectID)) return $this->getAllExecutionPairsByProduct($productID, $branch);
 
         $project = $this->loadModel('program')->getPRJByID($projectID);
