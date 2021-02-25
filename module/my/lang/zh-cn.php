@@ -105,5 +105,5 @@ global $config;
 $lang->my->projectLinkList = array();
 //$lang->my->projectLinkList['program-home']    = '默认进入项目主页，可以了解公司整体的项目状况';
 $lang->my->projectLinkList['program-prjbrowse'] = '默认进入项目列表，可以查看所有的项目';
-if($config->systemModel == 'new') $lang->my->projectLinkList['program-index'] = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
+if($config->systemMode == 'new') $lang->my->projectLinkList['program-index'] = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
 $lang->my->projectLinkList['project-task']      = '默认进入最近一个项目迭代的任务列表，可以查看当前迭代下的任务信息';
