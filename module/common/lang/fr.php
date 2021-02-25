@@ -663,7 +663,6 @@ $lang->navGroup->deploy      = 'project';
 $lang->navGroup->stakeholder = 'project';
 
 $lang->navGroup->projectstory   = 'project';
-$lang->navGroup->workestimation = 'project';
 $lang->navGroup->review         = 'project';
 $lang->navGroup->reviewissue    = 'project';
 $lang->navGroup->milestone      = 'project';
@@ -932,7 +931,6 @@ $lang->scrum->setMenu->members   = array('link' => 'Member|program|PRJManageMemb
 $lang->scrum->setMenu->whitelist = array('link' => 'White List|program|PRJWhitelist|project={PROJECT}', 'subModule' => 'personnel');
 
 $lang->waterfallproduct   = new stdclass();
-$lang->workestimation     = new stdclass();
 $lang->review             = new stdclass();
 $lang->milestone          = new stdclass();
 $lang->design             = new stdclass();
@@ -943,7 +941,6 @@ $lang->pssp               = new stdclass();
 $lang->stakeholder        = new stdclass();
 $lang->projectstory       = new stdclass();
 
-$lang->workestimation->menu     = new stdclass();
 $lang->review->menu             = new stdclass();
 $lang->milestone->menu          = new stdclass();
 $lang->design->menu             = new stdclass();
@@ -953,8 +950,6 @@ $lang->pssp->menu               = new stdclass();
 $lang->stakeholder->menu        = new stdclass();
 $lang->waterfallproduct->menu   = new stdclass();
 $lang->projectstory->menu       = new stdclass();
-
-$lang->workestimation->menu->workestimation = 'Work Estimation|workestimation|index|project={PROJECT}';
 
 $lang->stakeholder->menu->list  = array('link' => 'Stakeholder List|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
 $lang->stakeholder->menu->issue = array('link' => 'Issue|stakeholder|issue|');
