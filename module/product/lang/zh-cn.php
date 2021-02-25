@@ -141,7 +141,15 @@ $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '结束';
 
-$lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、所属项目集的干系人、相关联项目的团队成员和干系人可访问)";
+global $config;
+if($config->systemMode == 'new')
+{
+    $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、所属项目集的干系人、相关联项目的团队成员和干系人可访问)";
+}
+else
+{
+    $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、相关联{$lang->executionCommon}的团队成员可访问)";
+}
 $lang->product->aclList['open']    = "公开(有{$lang->productCommon}视图权限，即可访问)";
 //$lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
 
