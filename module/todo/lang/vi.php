@@ -97,8 +97,6 @@ $lang->todo->typeList['cycle']    = 'Lặp lại';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = 'Nhiệm vụ';
 $lang->todo->typeList['story']    = 'Câu chuyện';
-$lang->todo->typeList['issue']    = 'Issue';
-$lang->todo->typeList['risk']     = 'Risk';
 $lang->todo->typeList['review']   = 'Review';
 $lang->todo->typeList['testtask'] = 'Testtask';
 

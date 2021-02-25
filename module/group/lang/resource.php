@@ -63,8 +63,6 @@ $lang->moduleOrder[205] = 'message';
 
 $lang->moduleOrder[210] = 'design';
 $lang->moduleOrder[215] = 'programplan';
-$lang->moduleOrder[220] = 'issue';
-$lang->moduleOrder[225] = 'risk';
 
 $lang->moduleOrder[235] = 'budget';
 $lang->moduleOrder[240] = 'workestimation';
@@ -103,8 +101,6 @@ $lang->resource->my->bug             = 'bug';
 $lang->resource->my->testtask        = 'testtask';
 $lang->resource->my->testcase        = 'testcase';
 $lang->resource->my->execution       = 'execution';
-$lang->resource->my->issue           = 'issue';
-$lang->resource->my->risk            = 'risk';
 
 $lang->my->methodOrder[1]   = 'index';
 $lang->my->methodOrder[5]   = 'todo';
@@ -128,8 +124,6 @@ $lang->my->methodOrder[90]  = 'bug';
 $lang->my->methodOrder[95]  = 'testtask';
 $lang->my->methodOrder[100] = 'testcase';
 $lang->my->methodOrder[105] = 'execution';
-$lang->my->methodOrder[110] = 'issue';
-$lang->my->methodOrder[115] = 'risk';
 
 /* Todo. */
 $lang->resource->todo = new stdclass();
@@ -297,34 +291,6 @@ $lang->issue->methodOrder[45] = 'cancel';
 $lang->issue->methodOrder[50] = 'activate';
 $lang->issue->methodOrder[55] = 'resolve';
 $lang->issue->methodOrder[60] = 'view';
-
-/* Risk . */
-$lang->resource->risk = new stdclass();
-$lang->resource->risk->browse      = 'browse';
-$lang->resource->risk->create      = 'create';
-$lang->resource->risk->edit        = 'edit';
-$lang->resource->risk->delete      = 'delete';
-$lang->resource->risk->activate    = 'activate';
-$lang->resource->risk->close       = 'close';
-$lang->resource->risk->hangup      = 'hangup';
-$lang->resource->risk->batchCreate = 'batchCreate';
-$lang->resource->risk->cancel      = 'cancel';
-$lang->resource->risk->track       = 'track';
-$lang->resource->risk->view        = 'view';
-$lang->resource->risk->assignTo    = 'assignTo';
-
-$lang->risk->methodOrder[5]  = 'browse';
-$lang->risk->methodOrder[10] = 'create';
-$lang->risk->methodOrder[15] = 'edit';
-$lang->risk->methodOrder[20] = 'delete';
-$lang->risk->methodOrder[25] = 'activate';
-$lang->risk->methodOrder[30] = 'close';
-$lang->risk->methodOrder[35] = 'hangup';
-$lang->risk->methodOrder[40] = 'batchCreate';
-$lang->risk->methodOrder[45] = 'cancel';
-$lang->risk->methodOrder[50] = 'track';
-$lang->risk->methodOrder[55] = 'view';
-$lang->risk->methodOrder[60] = 'assignTo';
 
 /* Product. */
 $lang->resource->product = new stdclass();
@@ -1308,8 +1274,6 @@ $lang->resource->user->bug            = 'bug';
 $lang->resource->user->testTask       = 'testTask';
 $lang->resource->user->testCase       = 'testCase';
 $lang->resource->user->execution      = 'execution';
-$lang->resource->user->issue          = 'issue';
-$lang->resource->user->risk           = 'risk';
 $lang->resource->user->dynamic        = 'dynamic';
 $lang->resource->user->cropAvatar     = 'cropAvatar';
 $lang->resource->user->profile        = 'profile';

@@ -97,8 +97,6 @@ $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = '任务';
 $lang->todo->typeList['story']    = $lang->SRCommon;
-$lang->todo->typeList['issue']    = '问题';
-$lang->todo->typeList['risk']     = '风险';
 $lang->todo->typeList['review']   = '评审';
 $lang->todo->typeList['testtask'] = '测试单';
 
