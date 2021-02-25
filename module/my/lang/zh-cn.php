@@ -101,8 +101,9 @@ $lang->my->productLinkList['product-all']       = '默认进入产品列表，�
 $lang->my->productLinkList['product-dashboard'] = '默认进入最近一个产品仪表盘，可以查看当前产品概况';
 $lang->my->productLinkList['product-browse']    = '默认进入最近一个产品的需求列表，可以查看当前产品下的需求信息';
 
+global $config;
 $lang->my->projectLinkList = array();
 //$lang->my->projectLinkList['program-home']    = '默认进入项目主页，可以了解公司整体的项目状况';
 $lang->my->projectLinkList['program-prjbrowse'] = '默认进入项目列表，可以查看所有的项目';
-$lang->my->projectLinkList['program-index']     = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
+if($config->systemModel == 'new') $lang->my->projectLinkList['program-index'] = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
 $lang->my->projectLinkList['project-task']      = '默认进入最近一个项目迭代的任务列表，可以查看当前迭代下的任务信息';

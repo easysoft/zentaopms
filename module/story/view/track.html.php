@@ -40,7 +40,9 @@
             </th>
             <th><?php echo $lang->story->story;?></th>
             <th><?php echo $lang->story->tasks;?></th>
+            <?php if(isset($config->maxVersion)):?>
             <th><?php echo $lang->story->design;?></th>
+            <?php endif;?>
             <th><?php echo $lang->story->case;?></th>
             <th><?php echo $lang->story->repoCommit;?></th>
             <th><?php echo $lang->story->bug;?></th>
@@ -67,11 +69,13 @@
                 <?php echo html::a($this->createLink('task', 'view', "taskID=$taskID"), $task->name, '', "title='$task->name'") . '<br/>';?>
                 <?php endforeach;?>
               </td>
+              <?php if(isset($config->maxVersion)):?>
               <td>
                 <?php foreach($story->designs as $designID => $design):?>
                 <?php echo html::a($this->createLink('design', 'view', "designID=$designID"), $design->name, '', "title='$design->name'") . '<br/>';?> 
                 <?php endforeach;?>
               </td>
+              <?php endif;?>
               <td>
                 <?php foreach($story->cases as $caseID => $case):?>
                 <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', false, $case->PRJ), $case->title, '', "title='$case->title'") . '<br/>';?> 
@@ -98,7 +102,9 @@
             <td></td>
             <td></td>
             <td></td>
+            <?php if(isset($config->maxVersion)):?>
             <td></td>
+            <?php endif;?>
             <?php endif;?>
           </tr>
           <?php endforeach;?>

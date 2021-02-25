@@ -101,8 +101,9 @@ $lang->my->productLinkList['product-all']       = 'By default, you go to the pro
 $lang->my->productLinkList['product-dashboard'] = 'By default, go to the latest product dashboard to see the current product overview';
 $lang->my->productLinkList['product-browse']    = 'By default, go to the list of requirements for the most recent product and see the requirements under the current product';
 
+global $config;
 $lang->my->projectLinkList = array();
 //$lang->my->projectLinkList['program-home']    = 'The default access to the project home page, you can understand the overall project status of the company';
 $lang->my->projectLinkList['program-prjbrowse'] = 'By default, you go to the project list, where you can view all the projects';
-$lang->my->projectLinkList['program-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
+if($config->systemMode == 'new') $lang->my->projectLinkList['program-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
 $lang->my->projectLinkList['project-task']      = 'By default, you go to the task list for the most recent project iteration to see the task information for the current iteration';
