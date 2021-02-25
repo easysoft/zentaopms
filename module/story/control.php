@@ -458,6 +458,11 @@ class story extends control
             $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
             $showFields = trim($showFields, ',');
         }
+        if($type == 'requirement')
+        {
+            unset($customFields['plan']);
+            $showFields = str_replace('plan', '', $showFields);
+        }
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
@@ -705,8 +710,14 @@ class story extends control
 
         /* Set Custom*/
         foreach(explode(',', $this->config->story->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->story->$field;
+        $showFields = $this->config->story->custom->batchEditFields;
+        if($storyType == 'requirement')
+        {
+            unset($customFields['plan']);
+            $showFields = str_replace('plan', '', $showFields);
+        }
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->story->custom->batchEditFields;
+        $this->view->showFields   = $showFields;
 
         /* Judge whether the editedStories is too large and set session. */
         $countInputVars  = count($stories) * (count(explode(',', $this->config->story->custom->batchEditFields)) + 3);
