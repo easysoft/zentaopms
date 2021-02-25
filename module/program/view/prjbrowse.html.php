@@ -35,8 +35,10 @@ js::set('browseType', $browseType);
     <?php echo html::checkbox('PRJMine', array('1' => $lang->program->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if($this->config->systemMode == 'new'):?>
+    <?php if(isset($this->config->maxVersion)):?>
     <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php elseif($this->config->systemMode == 'new'):?>
+    <?php common::printLink('program', 'prjcreate', 'mode=scrum', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
     <?php else:?>
     <?php common::printLink('project', 'create', '', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
     <?php endif;?>

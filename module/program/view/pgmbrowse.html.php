@@ -27,7 +27,13 @@
   </div>
   <div class='pull-right'>
     <?php if(isset($lang->pageActions)) echo $lang->pageActions;?>
-    <?php if(common::hasPriv('program', 'createguide')) echo html::a($this->createLink('program', 'createguide', 'program=0&from=PGM'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PRJCreate, '', "class='btn btn-primary' data-toggle='modal'");?>
+    <?php if(isset($this->config->maxVersion)):?>
+    <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php elseif($this->config->systemMode == 'new'):?>
+    <?php common::printLink('program', 'prjcreate', 'mode=scrum', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
+    <?php else:?>
+    <?php common::printLink('project', 'create', '', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
+    <?php endif;?>
   </div>
 </div>
 <div id='mainContent' class='main-row'>
