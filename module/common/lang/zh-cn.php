@@ -682,8 +682,6 @@ $lang->navGroup->compile        = 'project';
 $lang->navGroup->report         = 'project';
 $lang->navGroup->measrecord     = 'project';
 
-$lang->navGroup->durationestimation = 'project';
-
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';
@@ -945,7 +943,6 @@ $lang->cm                 = new stdclass();
 $lang->nc                 = new stdclass();
 $lang->pssp               = new stdclass();
 $lang->stakeholder        = new stdclass();
-$lang->durationestimation = new stdclass();
 $lang->projectstory       = new stdclass();
 
 $lang->workestimation->menu     = new stdclass();
@@ -959,14 +956,11 @@ $lang->cm->menu                 = new stdclass();
 $lang->pssp->menu               = new stdclass();
 $lang->stakeholder->menu        = new stdclass();
 $lang->waterfallproduct->menu   = new stdclass();
-$lang->durationestimation->menu = new stdclass();
 $lang->projectstory->menu       = new stdclass();
 
 $lang->workestimation->menu->workestimation = '工作量估算|workestimation|index|project={PROJECT}';
-$lang->workestimation->menu->duration       = array('link' => '工期估算|durationestimation|index|project={PROJECT}', 'subModule' => 'durationestimation');
 $lang->workestimation->menu->budget         = array('link' => '费用估算|budget|summary|', 'subModule' => 'budget');
 
-$lang->durationestimation->menu = $lang->workestimation->menu;
 $lang->budget->menu             = $lang->workestimation->menu;
 
 $lang->stakeholder->menu->list  = array('link' => '干系人列表|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');

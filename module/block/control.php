@@ -1245,7 +1245,7 @@ class block extends control
      */
     public function printWaterfallEstimateBlock()
     {
-        $this->app->loadLang('durationestimation');
+        if(isset($this->config->maxVersion)) $this->app->loadLang('durationestimation');
         $programID = $this->session->PRJ;
         $members   = $this->loadModel('project')->getTeamMemberPairs($programID);
         $budget    = $this->loadModel('workestimation')->getBudget($programID);
