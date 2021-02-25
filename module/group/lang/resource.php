@@ -155,136 +155,160 @@ $lang->todo->methodOrder[70] = 'activate';
 $lang->todo->methodOrder[75] = 'close';
 $lang->todo->methodOrder[80] = 'batchClose';
 
-/* Program. */
-$lang->resource->program = new stdclass();
-$lang->resource->program->createGuide             = 'createGuide';
-//$lang->resource->program->PGMIndex             = 'PGMIndex';
-$lang->resource->program->PGMBrowse               = 'PGMBrowse';
-$lang->resource->program->PGMProduct              = 'PGMProduct';
-$lang->resource->program->PGMCreate               = 'PGMCreate';
-$lang->resource->program->PGMEdit                 = 'PGMEdit';
-$lang->resource->program->PGMStart                = 'PGMStart';
-$lang->resource->program->PGMSuspend              = 'PGMSuspend';
-$lang->resource->program->PGMActivate             = 'PGMActivate';
-$lang->resource->program->PGMClose                = 'PGMClose';
-$lang->resource->program->PGMDelete               = 'PGMDelete';
-$lang->resource->program->PGMProject              = 'PGMProject';
-$lang->resource->program->PGMStakeholder          = 'PGMStakeholder';
-$lang->resource->program->createStakeholder       = 'createStakeholder';
-$lang->resource->program->unlinkStakeholder       = 'unlinkStakeholder';
-$lang->resource->program->batchUnlinkStakeholders = 'batchUnlinkStakeholders';
-$lang->resource->program->export                  = 'export';
-$lang->resource->program->index                   = 'PRJIndex';
-$lang->resource->program->PRJBrowse               = 'PRJBrowse';
-$lang->resource->program->PRJProgramTitle         = 'PRJModuleOpen';
-$lang->resource->program->PRJCreate               = 'PRJCreate';
-$lang->resource->program->PRJEdit                 = 'PRJEdit';
-$lang->resource->program->PRJBatchEdit            = 'PRJBatchEdit';
-$lang->resource->program->PRJGroup                = 'PRJGroup';
-$lang->resource->program->PRJCreateGroup          = 'PRJCreateGroup';
-$lang->resource->program->PRJManageView           = 'PRJManageView';
-$lang->resource->program->PRJManagePriv           = 'PRJManagePriv';
-$lang->resource->program->PRJManageMembers        = 'PRJManageMembers';
-$lang->resource->program->PRJManageGroupMember    = 'PRJManageGroupMember';
-$lang->resource->program->PRJCopyGroup            = 'PRJCopyGroup';
-$lang->resource->program->PRJEditGroup            = 'PRJEditGroup';
-$lang->resource->program->PRJStart                = 'PRJStart';
-$lang->resource->program->PRJSuspend              = 'PRJSuspend';
-$lang->resource->program->PRJClose                = 'PRJClose';
-$lang->resource->program->PRJActivate             = 'PRJActivate';
-$lang->resource->program->PRJDelete               = 'PRJDelete';
-$lang->resource->program->PRJView                 = 'PRJView';
-$lang->resource->program->PRJWhitelist            = 'PRJWhitelist';
-$lang->resource->program->PRJAddWhitelist         = 'PRJAddWhitelist';
-$lang->resource->program->unbindWhielist          = 'unbindWhielist';
-$lang->resource->program->PRJManageProducts       = 'PRJManageProducts';
-$lang->resource->program->view                    = 'view';
+global $config;
+if($config->systemMode == 'new')
+{
+    /* Program. */
+    $lang->resource->program = new stdclass();
+    $lang->resource->program->createGuide             = 'createGuide';
+    //$lang->resource->program->PGMIndex             = 'PGMIndex';
+    $lang->resource->program->PGMBrowse               = 'PGMBrowse';
+    $lang->resource->program->PGMProduct              = 'PGMProduct';
+    $lang->resource->program->PGMCreate               = 'PGMCreate';
+    $lang->resource->program->PGMEdit                 = 'PGMEdit';
+    $lang->resource->program->PGMStart                = 'PGMStart';
+    $lang->resource->program->PGMSuspend              = 'PGMSuspend';
+    $lang->resource->program->PGMActivate             = 'PGMActivate';
+    $lang->resource->program->PGMClose                = 'PGMClose';
+    $lang->resource->program->PGMDelete               = 'PGMDelete';
+    $lang->resource->program->PGMProject              = 'PGMProject';
+    $lang->resource->program->PGMStakeholder          = 'PGMStakeholder';
+    $lang->resource->program->createStakeholder       = 'createStakeholder';
+    $lang->resource->program->unlinkStakeholder       = 'unlinkStakeholder';
+    $lang->resource->program->batchUnlinkStakeholders = 'batchUnlinkStakeholders';
+    $lang->resource->program->export                  = 'export';
+    $lang->resource->program->index                   = 'PRJIndex';
+    $lang->resource->program->PRJBrowse               = 'PRJBrowse';
+    $lang->resource->program->PRJProgramTitle         = 'PRJModuleOpen';
+    $lang->resource->program->PRJCreate               = 'PRJCreate';
+    $lang->resource->program->PRJEdit                 = 'PRJEdit';
+    $lang->resource->program->PRJBatchEdit            = 'PRJBatchEdit';
+    $lang->resource->program->PRJGroup                = 'PRJGroup';
+    $lang->resource->program->PRJCreateGroup          = 'PRJCreateGroup';
+    $lang->resource->program->PRJManageView           = 'PRJManageView';
+    $lang->resource->program->PRJManagePriv           = 'PRJManagePriv';
+    $lang->resource->program->PRJManageMembers        = 'PRJManageMembers';
+    $lang->resource->program->PRJManageGroupMember    = 'PRJManageGroupMember';
+    $lang->resource->program->PRJCopyGroup            = 'PRJCopyGroup';
+    $lang->resource->program->PRJEditGroup            = 'PRJEditGroup';
+    $lang->resource->program->PRJStart                = 'PRJStart';
+    $lang->resource->program->PRJSuspend              = 'PRJSuspend';
+    $lang->resource->program->PRJClose                = 'PRJClose';
+    $lang->resource->program->PRJActivate             = 'PRJActivate';
+    $lang->resource->program->PRJDelete               = 'PRJDelete';
+    $lang->resource->program->PRJView                 = 'PRJView';
+    $lang->resource->program->PRJWhitelist            = 'PRJWhitelist';
+    $lang->resource->program->PRJAddWhitelist         = 'PRJAddWhitelist';
+    $lang->resource->program->unbindWhielist          = 'unbindWhielist';
+    $lang->resource->program->PRJManageProducts       = 'PRJManageProducts';
+    $lang->resource->program->view                    = 'view';
 
-$lang->program->methodOrder[0]   = 'createGuide';
-//$lang->program->methodOrder[5]   = 'PGMIndex';
-$lang->program->methodOrder[10]  = 'PGMBrowse';
-$lang->program->methodOrder[15]  = 'PGMProduct';
-$lang->program->methodOrder[20]  = 'PGMCreate';
-$lang->program->methodOrder[25]  = 'PGMEdit';
-$lang->program->methodOrder[30]  = 'PGMStart';
-$lang->program->methodOrder[35]  = 'PGMSuspend';
-$lang->program->methodOrder[40]  = 'PGMClose';
-$lang->program->methodOrder[45]  = 'PGMActivate';
-$lang->program->methodOrder[55]  = 'PGMDelete';
-$lang->program->methodOrder[60]  = 'PGMProject';
-$lang->program->methodOrder[65]  = 'PGMStakeholder';
-$lang->program->methodOrder[67]  = 'createStakeholder';
-$lang->program->methodOrder[70]  = 'unlinkStakeholder';
-$lang->program->methodOrder[75]  = 'batchUnlinkStakeholders';
-$lang->program->methodOrder[80]  = 'export';
-$lang->program->methodOrder[85]  = 'PRJIndex';
-$lang->program->methodOrder[90]  = 'PRJBrowse';
-$lang->program->methodOrder[95]  = 'PRJProgramTitle';
-$lang->program->methodOrder[100] = 'PRJCreate';
-$lang->program->methodOrder[105] = 'PRJEdit';
-$lang->program->methodOrder[106] = 'PRJBatchEdit';
-$lang->program->methodOrder[110] = 'PRJGroup';
-$lang->program->methodOrder[115] = 'PRJCreateGroup';
-$lang->program->methodOrder[120] = 'PRJManageView';
-$lang->program->methodOrder[125] = 'PRJManagePriv';
-$lang->program->methodOrder[130] = 'PRJManageMembers';
-$lang->program->methodOrder[135] = 'PRJManageGroupMember';
-$lang->program->methodOrder[140] = 'PRJCopyGroup';
-$lang->program->methodOrder[145] = 'PRJEditGroup';
-$lang->program->methodOrder[150] = 'PRJStart';
-$lang->program->methodOrder[155] = 'PRJSuspend';
-$lang->program->methodOrder[160] = 'PRJClose';
-$lang->program->methodOrder[165] = 'PRJActivate';
-$lang->program->methodOrder[170] = 'PRJUpdateOrder';
-$lang->program->methodOrder[175] = 'PRJDelete';
-$lang->program->methodOrder[180] = 'PRJView';
-$lang->program->methodOrder[185] = 'PRJWhitelist';
-$lang->program->methodOrder[190] = 'PRJAddWhitelist';
-$lang->program->methodOrder[195] = 'unbindWhielist';
-$lang->program->methodOrder[200] = 'PRJManageProducts';
-$lang->program->methodOrder[205] = 'view';
+    $lang->program->methodOrder[0]   = 'createGuide';
+    //$lang->program->methodOrder[5]   = 'PGMIndex';
+    $lang->program->methodOrder[10]  = 'PGMBrowse';
+    $lang->program->methodOrder[15]  = 'PGMProduct';
+    $lang->program->methodOrder[20]  = 'PGMCreate';
+    $lang->program->methodOrder[25]  = 'PGMEdit';
+    $lang->program->methodOrder[30]  = 'PGMStart';
+    $lang->program->methodOrder[35]  = 'PGMSuspend';
+    $lang->program->methodOrder[40]  = 'PGMClose';
+    $lang->program->methodOrder[45]  = 'PGMActivate';
+    $lang->program->methodOrder[55]  = 'PGMDelete';
+    $lang->program->methodOrder[60]  = 'PGMProject';
+    $lang->program->methodOrder[65]  = 'PGMStakeholder';
+    $lang->program->methodOrder[67]  = 'createStakeholder';
+    $lang->program->methodOrder[70]  = 'unlinkStakeholder';
+    $lang->program->methodOrder[75]  = 'batchUnlinkStakeholders';
+    $lang->program->methodOrder[80]  = 'export';
+    $lang->program->methodOrder[85]  = 'PRJIndex';
+    $lang->program->methodOrder[90]  = 'PRJBrowse';
+    $lang->program->methodOrder[95]  = 'PRJProgramTitle';
+    $lang->program->methodOrder[100] = 'PRJCreate';
+    $lang->program->methodOrder[105] = 'PRJEdit';
+    $lang->program->methodOrder[106] = 'PRJBatchEdit';
+    $lang->program->methodOrder[110] = 'PRJGroup';
+    $lang->program->methodOrder[115] = 'PRJCreateGroup';
+    $lang->program->methodOrder[120] = 'PRJManageView';
+    $lang->program->methodOrder[125] = 'PRJManagePriv';
+    $lang->program->methodOrder[130] = 'PRJManageMembers';
+    $lang->program->methodOrder[135] = 'PRJManageGroupMember';
+    $lang->program->methodOrder[140] = 'PRJCopyGroup';
+    $lang->program->methodOrder[145] = 'PRJEditGroup';
+    $lang->program->methodOrder[150] = 'PRJStart';
+    $lang->program->methodOrder[155] = 'PRJSuspend';
+    $lang->program->methodOrder[160] = 'PRJClose';
+    $lang->program->methodOrder[165] = 'PRJActivate';
+    $lang->program->methodOrder[170] = 'PRJUpdateOrder';
+    $lang->program->methodOrder[175] = 'PRJDelete';
+    $lang->program->methodOrder[180] = 'PRJView';
+    $lang->program->methodOrder[185] = 'PRJWhitelist';
+    $lang->program->methodOrder[190] = 'PRJAddWhitelist';
+    $lang->program->methodOrder[195] = 'unbindWhielist';
+    $lang->program->methodOrder[200] = 'PRJManageProducts';
+    $lang->program->methodOrder[205] = 'view';
 
-/* Personnel . */
-$lang->resource->personnel = new stdclass();
-$lang->resource->personnel->accessible     = 'accessible';
-$lang->resource->personnel->putInto        = 'putInto';
-$lang->resource->personnel->whitelist      = 'whitelist';
-$lang->resource->personnel->addWhitelist   = 'addWhitelist';
-$lang->resource->personnel->unbindWhielist = 'unbindWhielist';
+    /* Personnel . */
+    $lang->resource->personnel = new stdclass();
+    $lang->resource->personnel->accessible     = 'accessible';
+    $lang->resource->personnel->putInto        = 'putInto';
+    $lang->resource->personnel->whitelist      = 'whitelist';
+    $lang->resource->personnel->addWhitelist   = 'addWhitelist';
+    $lang->resource->personnel->unbindWhielist = 'unbindWhielist';
 
-$lang->personnel->methodOrder[5]  = 'accessible';
-$lang->personnel->methodOrder[10] = 'putInto';
-$lang->personnel->methodOrder[15] = 'whitelist';
-$lang->personnel->methodOrder[20] = 'addWhitelist';
-$lang->personnel->methodOrder[25] = 'unbindWhielist';
+    $lang->personnel->methodOrder[5]  = 'accessible';
+    $lang->personnel->methodOrder[10] = 'putInto';
+    $lang->personnel->methodOrder[15] = 'whitelist';
+    $lang->personnel->methodOrder[20] = 'addWhitelist';
+    $lang->personnel->methodOrder[25] = 'unbindWhielist';
 
-/* Issue . */
-$lang->resource->issue = new stdclass();
-$lang->resource->issue->browse        = 'browse';
-$lang->resource->issue->create        = 'create';
-$lang->resource->issue->batchCreate   = 'batchCreate';
-$lang->resource->issue->delete        = 'delete';
-$lang->resource->issue->edit          = 'edit';
-$lang->resource->issue->confirm       = 'confirm';
-$lang->resource->issue->assignTo      = 'assignTo';
-$lang->resource->issue->close         = 'close';
-$lang->resource->issue->cancel        = 'cancel';
-$lang->resource->issue->activate      = 'activate';
-$lang->resource->issue->resolve       = 'resolve';
-$lang->resource->issue->view          = 'view';
+    /* Project Story. */
+    $lang->resource->projectstory = new stdclass();
+    $lang->resource->projectstory->story       = 'story';
+    $lang->resource->projectstory->track       = 'track';
+    $lang->resource->projectstory->view        = 'view';
+    $lang->resource->projectstory->linkStory   = 'linkStory';
+    $lang->resource->projectstory->unlinkStory = 'unlinkStory';
 
-$lang->issue->methodOrder[5]  = 'browse';
-$lang->issue->methodOrder[10] = 'create';
-$lang->issue->methodOrder[15] = 'batchCreate';
-$lang->issue->methodOrder[20] = 'delete';
-$lang->issue->methodOrder[25] = 'edit';
-$lang->issue->methodOrder[30] = 'confirm';
-$lang->issue->methodOrder[35] = 'assignTo';
-$lang->issue->methodOrder[40] = 'close';
-$lang->issue->methodOrder[45] = 'cancel';
-$lang->issue->methodOrder[50] = 'activate';
-$lang->issue->methodOrder[55] = 'resolve';
-$lang->issue->methodOrder[60] = 'view';
+    $lang->projectstory->methodOrder[5]  = 'story';
+    $lang->projectstory->methodOrder[10] = 'track';
+    $lang->projectstory->methodOrder[15] = 'view';
+    $lang->projectstory->methodOrder[20] = 'linkStory';
+    $lang->projectstory->methodOrder[25] = 'unlinkStory';
+
+    /* Release. */
+    $lang->resource->projectbuild = new stdclass();
+    $lang->resource->projectbuild->browse = 'browse';
+
+    /* Release. */
+    $lang->resource->projectrelease = new stdclass();
+    $lang->resource->projectrelease->browse           = 'browse';
+    $lang->resource->projectrelease->create           = 'create';
+    $lang->resource->projectrelease->edit             = 'edit';
+    $lang->resource->projectrelease->delete           = 'delete';
+    $lang->resource->projectrelease->view             = 'view';
+    $lang->resource->projectrelease->export           = 'export';
+    $lang->resource->projectrelease->linkStory        = 'linkStory';
+    $lang->resource->projectrelease->unlinkStory      = 'unlinkStory';
+    $lang->resource->projectrelease->batchUnlinkStory = 'batchUnlinkStory';
+    $lang->resource->projectrelease->linkBug          = 'linkBug';
+    $lang->resource->projectrelease->unlinkBug        = 'unlinkBug';
+    $lang->resource->projectrelease->batchUnlinkBug   = 'batchUnlinkBug';
+    $lang->resource->projectrelease->changeStatus     = 'changeStatus';
+
+    $lang->projectrelease->methodOrder[5]  = 'browse';
+    $lang->projectrelease->methodOrder[10] = 'create';
+    $lang->projectrelease->methodOrder[15] = 'edit';
+    $lang->projectrelease->methodOrder[20] = 'delete';
+    $lang->projectrelease->methodOrder[25] = 'view';
+    $lang->projectrelease->methodOrder[35] = 'export';
+    $lang->projectrelease->methodOrder[40] = 'linkStory';
+    $lang->projectrelease->methodOrder[45] = 'unlinkStory';
+    $lang->projectrelease->methodOrder[50] = 'batchUnlinkStory';
+    $lang->projectrelease->methodOrder[55] = 'linkBug';
+    $lang->projectrelease->methodOrder[60] = 'unlinkBug';
+    $lang->projectrelease->methodOrder[65] = 'batchUnlinkBug';
+    $lang->projectrelease->methodOrder[70] = 'changeStatus';
+}
 
 /* Product. */
 $lang->resource->product = new stdclass();
@@ -465,20 +489,6 @@ $lang->productplan->methodOrder[50] = 'unlinkBug';
 $lang->productplan->methodOrder[55] = 'batchUnlinkBug';
 $lang->productplan->methodOrder[60] = 'batchEdit';
 
-/* Project Story. */
-$lang->resource->projectstory = new stdclass();
-$lang->resource->projectstory->story       = 'story';
-$lang->resource->projectstory->track       = 'track';
-$lang->resource->projectstory->view        = 'view';
-$lang->resource->projectstory->linkStory   = 'linkStory';
-$lang->resource->projectstory->unlinkStory = 'unlinkStory';
-
-$lang->projectstory->methodOrder[5]  = 'story';
-$lang->projectstory->methodOrder[10] = 'track';
-$lang->projectstory->methodOrder[15] = 'view';
-$lang->projectstory->methodOrder[20] = 'linkStory';
-$lang->projectstory->methodOrder[25] = 'unlinkStory';
-
 /* Release. */
 $lang->resource->release = new stdclass();
 $lang->resource->release->browse           = 'browse';
@@ -508,40 +518,6 @@ $lang->release->methodOrder[55] = 'linkBug';
 $lang->release->methodOrder[60] = 'unlinkBug';
 $lang->release->methodOrder[65] = 'batchUnlinkBug';
 $lang->release->methodOrder[70] = 'changeStatus';
-
-/* Release. */
-$lang->resource->projectbuild = new stdclass();
-$lang->resource->projectbuild->browse = 'browse';
-
-/* Release. */
-$lang->resource->projectrelease = new stdclass();
-$lang->resource->projectrelease->browse           = 'browse';
-$lang->resource->projectrelease->create           = 'create';
-$lang->resource->projectrelease->edit             = 'edit';
-$lang->resource->projectrelease->delete           = 'delete';
-$lang->resource->projectrelease->view             = 'view';
-$lang->resource->projectrelease->export           = 'export';
-$lang->resource->projectrelease->linkStory        = 'linkStory';
-$lang->resource->projectrelease->unlinkStory      = 'unlinkStory';
-$lang->resource->projectrelease->batchUnlinkStory = 'batchUnlinkStory';
-$lang->resource->projectrelease->linkBug          = 'linkBug';
-$lang->resource->projectrelease->unlinkBug        = 'unlinkBug';
-$lang->resource->projectrelease->batchUnlinkBug   = 'batchUnlinkBug';
-$lang->resource->projectrelease->changeStatus     = 'changeStatus';
-
-$lang->projectrelease->methodOrder[5]  = 'browse';
-$lang->projectrelease->methodOrder[10] = 'create';
-$lang->projectrelease->methodOrder[15] = 'edit';
-$lang->projectrelease->methodOrder[20] = 'delete';
-$lang->projectrelease->methodOrder[25] = 'view';
-$lang->projectrelease->methodOrder[35] = 'export';
-$lang->projectrelease->methodOrder[40] = 'linkStory';
-$lang->projectrelease->methodOrder[45] = 'unlinkStory';
-$lang->projectrelease->methodOrder[50] = 'batchUnlinkStory';
-$lang->projectrelease->methodOrder[55] = 'linkBug';
-$lang->projectrelease->methodOrder[60] = 'unlinkBug';
-$lang->projectrelease->methodOrder[65] = 'batchUnlinkBug';
-$lang->projectrelease->methodOrder[70] = 'changeStatus';
 
 /* Project. */
 $lang->resource->project = new stdclass();
