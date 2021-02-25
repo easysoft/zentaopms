@@ -64,7 +64,6 @@ $lang->moduleOrder[205] = 'message';
 $lang->moduleOrder[210] = 'design';
 $lang->moduleOrder[215] = 'programplan';
 
-$lang->moduleOrder[235] = 'budget';
 $lang->moduleOrder[240] = 'workestimation';
 $lang->moduleOrder[245] = 'durationestimation';
 
@@ -1205,24 +1204,6 @@ $lang->resource->durationestimation->create = 'create';
 
 $lang->durationestimation->methodOrder[0] = 'index';
 $lang->durationestimation->methodOrder[5] = 'create';
-
-/* Budget. */
-$lang->resource->budget = new stdclass();
-$lang->resource->budget->browse       = 'browse';
-$lang->resource->budget->summary      = 'summary';
-$lang->resource->budget->create       = 'create';
-$lang->resource->budget->batchCreate  = 'batchCreate';
-$lang->resource->budget->edit         = 'edit';
-$lang->resource->budget->view         = 'view';
-$lang->resource->budget->delete       = 'delete';
-
-$lang->budget->methodOrder[5]  = 'browse';
-$lang->budget->methodOrder[10] = 'summary';
-$lang->budget->methodOrder[15] = 'create';
-$lang->budget->methodOrder[20] = 'batchCreate';
-$lang->budget->methodOrder[25] = 'edit';
-$lang->budget->methodOrder[30] = 'view';
-$lang->budget->methodOrder[35] = 'delete';
 
 /* Department. */
 $lang->resource->dept = new stdclass();

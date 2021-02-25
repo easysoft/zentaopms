@@ -193,7 +193,6 @@ if(!defined('TABLE_RISK'))               define('TABLE_RISK', '`' . $config->db-
 if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
 if(!defined('TABLE_WORKESTIMATION'))     define('TABLE_WORKESTIMATION', '`' . $config->db->prefix . 'workestimation`');
 if(!defined('TABLE_DURATIONESTIMATION')) define('TABLE_DURATIONESTIMATION', '`' . $config->db->prefix . 'durationestimation`');
-if(!defined('TABLE_BUDGET'))             define('TABLE_BUDGET', '`' . $config->db->prefix . 'budget`');
 
 if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
@@ -227,7 +226,6 @@ $config->objectTables['risk']        = TABLE_RISK;
 $config->objectTables['issue']       = TABLE_ISSUE;
 $config->objectTables['design']      = TABLE_DESIGN;
 $config->objectTables['stakeholder'] = TABLE_STAKEHOLDER;
-$config->objectTables['budget']      = TABLE_BUDGET;
 $config->objectTables['job']         = TABLE_JOB;
 
 /* Program privs.*/

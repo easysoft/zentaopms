@@ -663,7 +663,6 @@ $lang->navGroup->stakeholder = 'project';
 $lang->navGroup->projectstory   = 'project';
 $lang->navGroup->programplan    = 'project';
 $lang->navGroup->workestimation = 'project';
-$lang->navGroup->budget         = 'project';
 $lang->navGroup->review         = 'project';
 $lang->navGroup->reviewissue    = 'project';
 $lang->navGroup->milestone      = 'project';
@@ -930,7 +929,6 @@ $lang->scrum->setMenu->whitelist      = array('link' => '白名单|program|PRJWh
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
-$lang->budget             = new stdclass();
 $lang->programplan        = new stdclass();
 $lang->review             = new stdclass();
 $lang->milestone          = new stdclass();
@@ -944,7 +942,6 @@ $lang->durationestimation = new stdclass();
 $lang->projectstory       = new stdclass();
 
 $lang->workestimation->menu     = new stdclass();
-$lang->budget->menu             = new stdclass();
 $lang->programplan->menu        = new stdclass();
 $lang->review->menu             = new stdclass();
 $lang->milestone->menu          = new stdclass();
@@ -959,10 +956,8 @@ $lang->projectstory->menu       = new stdclass();
 
 $lang->workestimation->menu->workestimation = '工作量估算|workestimation|index|project={PROJECT}';
 $lang->workestimation->menu->duration       = array('link' => '工期估算|durationestimation|index|project={PROJECT}', 'subModule' => 'durationestimation');
-$lang->workestimation->menu->budget         = array('link' => '费用估算|budget|summary|', 'subModule' => 'budget');
 
 $lang->durationestimation->menu = $lang->workestimation->menu;
-$lang->budget->menu             = $lang->workestimation->menu;
 
 $lang->stakeholder->menu->list  = array('link' => '干系人列表|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
 $lang->stakeholder->menu->issue = array('link' => '问题管理|stakeholder|issue|');
