@@ -1194,7 +1194,7 @@ class testcase extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs('nocode', $this->session->PRJ);
+            $products = $this->loadModel('product')->getPairs();
             $branches = $this->loadModel('branch')->getPairs($productID);
 
             /* Get related objects id lists. */

@@ -131,6 +131,10 @@ class treeModel extends model
                     $branches = $newBranches;
                 }
             }
+            elseif($product and $product->type == 'normal')
+            {    
+                $branches = array(0 => ''); 
+            }
         }
 
         $treeMenu = array();

@@ -35,7 +35,7 @@ js::set('suiteID',        $suiteID);
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class='text-center'>
-        <?php common::printLink('tree', 'browse', "productID=$productID&view=case", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
+        <?php common::printLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$this->lang->navGroup->testcase}", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>

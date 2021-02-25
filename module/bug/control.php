@@ -43,7 +43,7 @@ class bug extends control
         }
 
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
-        if($this->session->PRJ and empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
+        if($this->projectID and empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
     }
 
     /**
@@ -134,7 +134,7 @@ class bug extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get projects. */
-        $projects = $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'empty|withdelete');
+        $projects = $this->loadModel('project')->getExecutionPairs($this->projectID, 'all', 'empty|withdelete');
 
         /* Get bugs. */
         $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
@@ -447,7 +447,7 @@ class bug extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
-        $productList = $this->product->getOrderedProducts('all', 40, $this->session->PRJ); 
+        $productList = $this->product->getOrderedProducts('all', 40, $this->projectID);
         foreach($productList as $product) $products[$product->id] = $product->name;
 
         /* Set custom. */
@@ -609,7 +609,7 @@ class bug extends control
             $this->lang->set('menugroup.bug', 'repo');
             $repos = $this->loadModel('repo')->getRepoPairs($this->session->PRJ);
             $this->repo->setMenu($repos);
-            $this->lang->bug->menu      = $this->lang->repo->menu;
+            $this->lang->bug->menu = $this->lang->repo->menu;
         }
 
         /* Get product info. */
@@ -1537,8 +1537,8 @@ class bug extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs('nocode', $this->session->PRJ);
-            $projects = $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'all|nocode');
+            $products = $this->loadModel('product')->getPairs();
+            $projects = $this->loadModel('project')->getExecutionPairs($this->projectID, 'all', 'all');
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();

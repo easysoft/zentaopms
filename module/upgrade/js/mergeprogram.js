@@ -60,7 +60,10 @@ $(function()
         $('.lineBox').addClass('hidden');
         $(target).removeClass('hidden');
         $('#source').find('.lineBox :checkBox').prop('checked', false);
-        $(target).find(":checkbox").prop('checked', true);
+
+        /* The first group of products is selected by default. */
+        var firstProduct = $(target).find(":checkbox:first").prop('checked', true);
+        $('[data-product=' + firstProduct.val() + ']').prop('checked', true);
 
         /* Replace program name. */
         $('#PGMName').val($(this).text());
@@ -352,6 +355,8 @@ function setProgramByProduct(product)
         $('#programs').val(programID).trigger("chosen:updated");
         $('#programs').attr('disabled', 'disabled');
         $('#programID').val(programID);
+
+        getProjectByProgram($('#programs'));
     }
     else
     {

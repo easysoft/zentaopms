@@ -74,7 +74,7 @@ class qaModel extends model
             {
                 $itemMenu = zget($moduleSubMenu, $menuKey, '');
                 $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
-                $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
+                $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos(',' . $itemMenu['alias'] . ',', ",$methodName,") !== false));
                 $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
                 if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
                 {

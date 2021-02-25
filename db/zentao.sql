@@ -540,19 +540,6 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_holiday`;
-CREATE TABLE IF NOT EXISTS `zt_holiday` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL DEFAULT '',
-  `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
-  `desc` text NOT NULL,
-  `year` char(4) NOT NULL,
-  `begin` date NOT NULL,
-  `end` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `year` (`year`),
-  KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_issue`;
 CREATE TABLE IF NOT EXISTS `zt_issue` (
   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -1007,19 +994,6 @@ CREATE TABLE IF NOT EXISTS `zt_storystage` (
   UNIQUE KEY `story_branch` (`story`,`branch`),
   KEY `story` (`story`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_stage`;
-CREATE TABLE IF NOT EXISTS `zt_stage` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `percent` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_suitecase`;
 CREATE TABLE IF NOT EXISTS `zt_suitecase` (
   `suite` mediumint(8) unsigned NOT NULL,
@@ -1388,22 +1362,6 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_weeklyreport`;
-CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `PRJ` mediumint(8) unsigned NOT NULL,
-  `weekStart` date NOT NULL,
-  `pv` float(9,2) NOT NULL,
-  `ev` float(9,2) NOT NULL,
-  `ac` float(9,2) NOT NULL,
-  `sv` float(9,2) NOT NULL,
-  `cv` float(9,2) NOT NULL,
-  `staff` smallint(5) unsigned NOT NULL,
-  `progress` varchar(255) NOT NULL,
-  `workload` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `week` (`PRJ`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_workestimation`;
 CREATE TABLE `zt_workestimation` (
@@ -4320,14 +4278,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (11,'user','todo'),
 (11,'user','view'),
 (12,'my','limited');
-
-INSERT INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES 
-('需求','10','request','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('设计','10','design','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'), 
-('开发','50','dev','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('测试','15','qa','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'), 
-('发布','10','release','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
-('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
 INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('zh-cn', 'custom', 'URSRList', '1', '{\"SRName\":\"\\u7814\\u53d1\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),

@@ -856,7 +856,7 @@ class block extends control
         }
 
         $today  = helper::today();
-        $monday = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        if(isset($this->config->maxVersion)) $monday = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
         $tasks  = $this->dao->select("PRJ, 
             sum(consumed) as totalConsumed, 
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
@@ -874,7 +874,7 @@ class block extends control
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
                 $project->executions = $this->project->getExecutionStats($projectID, 'all', 0, 0, 30, 'id_asc');
             }
-            elseif($project->model == 'waterfall')
+            elseif($project->model == 'waterfall' and isset($this->config->maxVersion))
             {
                 $begin   = $project->begin;
                 $weeks   = $this->weekly->getWeekPairs($begin);
@@ -1672,8 +1672,8 @@ class block extends control
         if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
         if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
         if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
-        if(common::hasPriv('risk',  'view')) $hasViewPriv['risk']  = true;
-        if(common::hasPriv('issue', 'view')) $hasViewPriv['issue'] = true;
+        if(common::hasPriv('risk',  'view') and isset($this->config->maxVersion)) $hasViewPriv['risk']  = true;
+        if(common::hasPriv('issue', 'view') and isset($this->config->maxVersion)) $hasViewPriv['issue'] = true;
         if(common::hasPriv('story', 'view')) $hasViewPriv['story'] = true;
 
         $params = $this->get->param;

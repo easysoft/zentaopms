@@ -65,15 +65,10 @@ $lang->moduleOrder[210] = 'design';
 $lang->moduleOrder[215] = 'programplan';
 $lang->moduleOrder[220] = 'issue';
 $lang->moduleOrder[225] = 'risk';
-$lang->moduleOrder[230] = 'stage';
 
 $lang->moduleOrder[235] = 'budget';
 $lang->moduleOrder[240] = 'workestimation';
 $lang->moduleOrder[245] = 'durationestimation';
-
-$lang->moduleOrder[250] = 'subject';
-$lang->moduleOrder[255] = 'holiday';
-$lang->moduleOrder[260] = 'weekly';
 
 $lang->resource = new stdclass();
 
@@ -1161,24 +1156,6 @@ $lang->resource->subject->browse = 'browse';
 
 $lang->subject->methodOrder[5]  = 'browse';
 
-/* Holiday. */
-$lang->resource->holiday = new stdclass();
-$lang->resource->holiday->browse = 'browse';
-$lang->resource->holiday->create = 'create';
-$lang->resource->holiday->edit   = 'edit';
-$lang->resource->holiday->delete = 'delete';
-
-$lang->holiday->methodOrder[5]  = 'browse';
-$lang->holiday->methodOrder[10] = 'create';
-$lang->holiday->methodOrder[15] = 'edit';
-$lang->holiday->methodOrder[20] = 'delete';
-
-/* Weekly. */
-$lang->resource->weekly = new stdclass();
-$lang->resource->weekly->index = 'index';
-
-$lang->holiday->methodOrder[5] = 'index';
-
 /* Custom. */
 $lang->resource->custom = new stdclass();
 $lang->resource->custom->index              = 'index';
@@ -1190,7 +1167,6 @@ $lang->resource->custom->flow               = 'flow';
 $lang->resource->custom->working            = 'working';
 $lang->resource->custom->setPublic          = 'setPublic';
 $lang->resource->custom->timezone           = 'timezone';
-$lang->resource->custom->estimate           = 'estimate';
 $lang->resource->custom->setStoryConcept    = 'setStoryConcept';
 $lang->resource->custom->editStoryConcept   = 'editStoryConcept';
 $lang->resource->custom->browseStoryConcept = 'browseStoryConcept';
@@ -1206,7 +1182,6 @@ $lang->custom->methodOrder[30] = 'flow';
 $lang->custom->methodOrder[35] = 'working';
 $lang->custom->methodOrder[40] = 'setPublic';
 $lang->custom->methodOrder[45] = 'timezone';
-$lang->custom->methodOrder[50] = 'estimate';
 $lang->custom->methodOrder[55] = 'setStoryContcept';
 $lang->custom->methodOrder[60] = 'editStoryContcept';
 $lang->custom->methodOrder[65] = 'browseStoryContcept';
@@ -1237,22 +1212,6 @@ $lang->resource->git->apiSync = 'apiSync';
 $lang->git->methodOrder[5]  = 'diff';
 $lang->git->methodOrder[10] = 'cat';
 $lang->git->methodOrder[15] = 'apiSync';
-
-/* Stage. */
-$lang->resource->stage = new stdclass();
-$lang->resource->stage->browse      = 'browse';
-$lang->resource->stage->create      = 'create';
-$lang->resource->stage->batchCreate = 'batchCreate';
-$lang->resource->stage->edit        = 'edit';
-$lang->resource->stage->setType     = 'setType';
-$lang->resource->stage->delete      = 'delete';
-
-$lang->stage->methodOrder[5]  = 'browse';
-$lang->stage->methodOrder[10] = 'create';
-$lang->stage->methodOrder[15] = 'batchCreate';
-$lang->stage->methodOrder[20] = 'edit';
-$lang->stage->methodOrder[25] = 'setType';
-$lang->stage->methodOrder[30] = 'delete';
 
 /* Company. */
 $lang->resource->company = new stdclass();

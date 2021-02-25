@@ -22,7 +22,6 @@ $lang->waterfall->menuOrder[40] = 'qa';
 $lang->waterfall->menuOrder[45] = 'doc';
 $lang->waterfall->menuOrder[50] = 'projectbuild';
 $lang->waterfall->menuOrder[55] = 'projectrelease';
-$lang->waterfall->menuOrder[60] = 'weekly';
 $lang->waterfall->menuOrder[65] = 'other';
 $lang->waterfall->menuOrder[70] = 'projectsetting';
 
@@ -150,10 +149,7 @@ $lang->system->menuOrder[10] = 'scrum';
 $lang->system->menuOrder[15] = 'waterfall';
 
 /* system menu order. */
-$lang->subject->menuOrder[5]  = 'subject';
-$lang->subject->menuOrder[10] = 'holiday';
 $lang->subject->menuOrder[15] = 'concept';
-$lang->subject->menuOrder[20] = 'estimate';
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';

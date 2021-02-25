@@ -442,6 +442,15 @@ class productModel extends model
         $currentMethod = $this->app->methodName;
         $this->session->set('moreProductLink', $this->app->getURI(true));
 
+        /* init currentModule and currentMethod for report and story. */
+        if($currentModule == 'story')
+        {    
+            $storyMethods = ",track,create,batchcreate,batchclose,";
+            if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
+            if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
+        }    
+        if($currentMethod == 'report') $currentMethod = 'browse';
+
         $this->app->loadLang('project');
         $currentProductName = $this->lang->product->common;
         if($productID)
@@ -494,6 +503,7 @@ class productModel extends model
     {
         $product = fixer::input('post')
             ->setDefault('status', 'normal')
+            ->setDefault('line', 0)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
@@ -547,6 +557,7 @@ class productModel extends model
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         $product = fixer::input('post')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
+            ->setDefault('line', 0)
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid,changeProjects')

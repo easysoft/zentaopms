@@ -37,7 +37,7 @@
           <?php foreach($lineGroups[$line->id] as $productID => $product):?>
           <div class='lineGroup'>
             <div class='productList'>
-            <?php echo html::checkBox("products[$line->id]", array($productID => $product->name), $i == 0 ? $product->id : 0, "title='{$product->name}' data-productid='{$product->id}' data-line='{$line->id}' data-begin='{$product->createdDate}'");?>
+            <?php echo html::checkBox("products[$line->id]", array($productID => $product->name), $i == 0 ? $product->id : 0, "title='{$product->name}' data-productid='{$product->id}' data-line='{$line->id}' data-begin='{$product->createdDate}' data-programid='{$product->program}'");?>
             <?php echo html::hidden("productIdList[$line->id][$productID]", $productID);?>
             </div>
             <div class='projectList'>
@@ -51,9 +51,9 @@
               </div>
             </div>
           </div>
+          <?php $i ++;?>
           <?php endforeach;?>
         </div>
-        <?php $i ++;?>
         <?php endforeach;?>
       </div>
     </div>

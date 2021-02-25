@@ -154,7 +154,7 @@ $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
-$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|subject|browse|';
+$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|custom|browsestoryconcept|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
 if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-folder-open-o'></i> 项目集|$programModule|$programMethod|";
 
@@ -218,19 +218,12 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => '全局设置|subject|browse|', 'subModule' => 'holiday');
-$lang->system->menu->scrum     = array('link' => '敏捷模型|custom|configurescrum|');
-$lang->system->menu->waterfall = array('link' => '瀑布模型|stage|settype|', 'alias' => 'browse');
+$lang->system->menu->company   = array('link' => '全局设置|custom|browsestoryconcept|', 'subModule' => 'holiday');
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
-$lang->subject->menu->subject  = array('link' => '支出科目|subject|browse|');
-$lang->subject->menu->holiday  = array('link' => '节假日|holiday|browse|');
-$lang->subject->menu->concept  = array('link' => '需求概念|custom|browsestoryconcept|');
-$lang->subject->menu->estimate = array('link' => '估算|custom|estimate');
-
-$lang->holiday = new stdclass();
-$lang->holiday->menu = $lang->subject->menu;
+$lang->subject->menu->storyConcept  = array('link' => '需求概念|custom|browsestoryconcept|');
+$lang->subject->menu->sprintConcept = array('link' => '项目概念|custom|configurescrum|');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -685,7 +678,6 @@ $lang->navGroup->workestimation = 'project';
 $lang->navGroup->budget         = 'project';
 $lang->navGroup->review         = 'project';
 $lang->navGroup->reviewissue    = 'project';
-$lang->navGroup->weekly         = 'project';
 $lang->navGroup->milestone      = 'project';
 $lang->navGroup->pssp           = 'project';
 $lang->navGroup->design         = 'project';
@@ -706,7 +698,6 @@ $lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->durationestimation = 'project';
 
-$lang->navGroup->stage         = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';
@@ -718,7 +709,6 @@ $lang->navGroup->subject       = 'system';
 $lang->navGroup->baseline      = 'system';
 $lang->navGroup->reviewcl      = 'system';
 $lang->navGroup->reviewsetting = 'system';
-$lang->navGroup->holiday       = 'system';
 
 $lang->navGroup->attend   = 'attend';
 $lang->navGroup->leave    = 'attend';
@@ -942,16 +932,9 @@ $lang->menu->scrum->qa             = '测试|qa|index';
 $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
-$lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
 $lang->menu->scrum->projectsetting = array('link' => '设置|program|prjview|project={PROJECT}', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
 
 $lang->scrum = new stdclass();
-$lang->scrum->subMenu = new stdclass();
-$lang->scrum->subMenu->other = new stdclass();
-$lang->scrum->subMenu->other->issue       = array('link' => '问题|issue|browse|', 'subModule' => 'issue');
-$lang->scrum->subMenu->other->risk        = array('link' => '风险|risk|browse|', 'subModule' => 'risk');
-$lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
-
 $lang->scrum->setMenu = new stdclass();
 $lang->scrum->setMenu->view           = array('link' => '概况|program|prjview|project={PROJECT}', 'alias' => 'prjedit');
 $lang->scrum->setMenu->products       = array('link' => '产品|program|PRJManageProducts|project={PROJECT}', 'alias' => 'prjmanageproducts');
@@ -959,40 +942,11 @@ $lang->scrum->setMenu->group          = array('link' => '权限|program|PRJGroup
 $lang->scrum->setMenu->members        = array('link' => '团队|program|PRJManageMembers|project={PROJECT}', 'alias' => 'prjmanagemembers');
 $lang->scrum->setMenu->whitelist      = array('link' => '白名单|program|PRJWhitelist|project={PROJECT}', 'subModule' => 'personnel');
 
-/* Waterfall menu. */
-$lang->menu->waterfall = new stdclass();
-$lang->menu->waterfall->programindex   = array('link' => '仪表盘|program|index|project={PROJECT}');
-$lang->menu->waterfall->programplan    = array('link' => '计划|programplan|browse|project={PROJECT}', 'subModule' => 'programplan');
-$lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
-$lang->menu->waterfall->doc            = array('link' => '文档|doc|index|project={PROJECT}');
-$lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story');
-$lang->menu->waterfall->design         = '设计|design|browse|product={PRODUCT}';
-$lang->menu->waterfall->ci             = '代码|repo|browse|';
-$lang->menu->waterfall->track          = array('link' => '矩阵|projectstory|track', 'alias' => 'track');
-$lang->menu->waterfall->qa             = '测试|qa|index';
-$lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
-$lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
-$lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc,workestimation,durationestimation,budget,pssp,measrecord,report');
-$lang->menu->waterfall->projectsetting = array('link' => '设置|program|prjview|project={PROJECT}', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
-
-$lang->waterfall = new stdclass();
-$lang->waterfall->subMenu = new stdclass();
-$lang->waterfall->subMenu->other = new stdclass();
-$lang->waterfall->subMenu->other->estimation  = array('link' => '估算|workestimation|index|program=%s', 'subModule' => 'workestimation,durationestimation,budget');
-$lang->waterfall->subMenu->other->issue       = array('link' => '问题|issue|browse|', 'subModule' => 'issue');
-$lang->waterfall->subMenu->other->risk        = array('link' => '风险|risk|browse|', 'subModule' => 'risk');
-$lang->waterfall->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
-
-$lang->waterfall->setMenu = new stdclass();
-$lang->waterfall->setMenu = $lang->scrum->setMenu; 
-
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
 $lang->budget             = new stdclass();
 $lang->programplan        = new stdclass();
 $lang->review             = new stdclass();
-$lang->weekly             = new stdclass();
 $lang->milestone          = new stdclass();
 $lang->design             = new stdclass();
 $lang->auditplan          = new stdclass();
@@ -1009,7 +963,6 @@ $lang->workestimation->menu     = new stdclass();
 $lang->budget->menu             = new stdclass();
 $lang->programplan->menu        = new stdclass();
 $lang->review->menu             = new stdclass();
-$lang->weekly->menu             = new stdclass();
 $lang->milestone->menu          = new stdclass();
 $lang->design->menu             = new stdclass();
 $lang->auditplan->menu          = new stdclass();
