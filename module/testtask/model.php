@@ -455,7 +455,7 @@ class testtaskModel extends model
     {
         return $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('id')->notIN($linkedCases)
-                ->andWhere('PRJ')->eq($this->session->PRJ)
+                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
                 ->andWhere('status')->ne('wait')
                 ->andWhere('type')->ne('unit')
                 ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
@@ -484,7 +484,7 @@ class testtaskModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where($query)
-                ->andWhere('PRJ')->eq($this->session->PRJ)
+                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
                 ->andWhere('product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
@@ -517,7 +517,7 @@ class testtaskModel extends model
         if($bugs)
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
-                ->andWhere('PRJ')->eq($this->session->PRJ)
+                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
                 ->andWhere('product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
@@ -550,7 +550,7 @@ class testtaskModel extends model
         return $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
                 ->where($query)
-                ->andWhere('t1.PRJ')->eq($this->session->PRJ)
+                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
                 ->andWhere('t2.suite')->eq((int)$suite)
                 ->andWhere('t1.product')->eq($productID)
                 ->andWhere('status')->ne('wait')
@@ -585,7 +585,7 @@ class testtaskModel extends model
             ->where($query)
             ->andWhere('t1.id')->notin($linkedCases)
             ->andWhere('t2.task')->eq($testTask)
-            ->andWhere('t1.PRJ')->eq($this->session->PRJ)
+            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
             ->andWhere('t1.status')->ne('wait')
             ->page($pager)
             ->fetchAll();

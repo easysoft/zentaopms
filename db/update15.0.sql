@@ -129,23 +129,6 @@ CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   UNIQUE KEY `project` (`project`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_budget`;
-CREATE TABLE IF NOT EXISTS `zt_budget` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
-  `PRJ` mediumint(8) NOT NULL,
-  `stage` char(30) NOT NULL,
-  `subject` mediumint(8) NOT NULL,
-  `amount` char(30) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `desc` text NOT NULL,
-  `createdBy` char(30) NOT NULL,
-  `createdDate` date NOT NULL,
-  `lastEditedBy` char(30) NOT NULL,
-  `lastEditedDate` date NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 ALTER TABLE `zt_task` ADD `design` mediumint(8) unsigned NOT NULL AFTER `module`;
 ALTER TABLE `zt_task` ADD `version` smallint(6) NOT NULL AFTER `desc`;
 ALTER TABLE `zt_task` ADD `activatedDate` date NOT NULL AFTER `lastEditedDate`;
