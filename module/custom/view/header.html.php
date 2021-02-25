@@ -12,7 +12,7 @@
   {
       common::printLink('custom', $sysObject, "", "<span class='text'>{$lang->custom->$sysObject}</span>", '', "class='btn btn-link' id='{$sysObject}Tab'");
   }
-  if(isset($config->systemMode) and $config->systemMode == 'old')
+  if((isset($config->systemMode) and $config->systemMode == 'old') || (isset($config->global->upgradeStep) and $config->global->upgradeStep == 'mergeProgram'))
   {
       common::printLink('custom', 'mode', "", "<span class='text'>{$lang->custom->mode}</span>", '', "class='btn btn-link' id='modeTab'");
   }
