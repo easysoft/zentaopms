@@ -286,7 +286,7 @@ class testsuiteModel extends model
         $linkedCases = $this->getLinkedCases($suite->id, 'id_desc', null, $append = false);
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
             ->andWhere('id')->notIN(array_keys($linkedCases))
-            ->andWhere('PRJ')->eq($this->session->PRJ)
+            ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)
