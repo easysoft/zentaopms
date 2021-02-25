@@ -374,18 +374,6 @@ class upgrade extends control
                 ->andWhere('t2.type')->eq('sprint')
                 ->fetchAll('id');
 
-            /* Get products that are not merged by sprints. */
-            $noMergedProducts = $this->dao->select('t1.*,t3.name as programName')->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.program=t3.id')
-                ->where('t2.project')->in(array_keys($noMergedSprints))
-                ->fetchAll('id');
-
-            /* Add products without sprints. */
-            $noMergedProducts += $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetchAll('id');
-
-            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=sprint'));
-
             /* Remove project than linked more than two products */
             $sprintProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
             $productGroup   = array();
@@ -397,6 +385,18 @@ class upgrade extends control
                     $productGroup[] = array_keys($products);
                 }
             }
+
+            /* Get products that are not merged by sprints. */
+            $noMergedProducts = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
+                ->where('t2.project')->in(array_keys($noMergedSprints))
+                ->fetchAll('id');
+
+            /* Add products without sprints. */
+            $noMergedProducts += $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetchAll('id');
+
+            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=sprint'));
+
 
             /* Group project by product. */
             $productGroups = array();
