@@ -113,6 +113,8 @@ $(function()
 
             var productID = $(this).attr('data-product');
             if(productID && $('[data-productid=' + productID + ']').length > 0 && !$('[data-productid=' + productID + ']').prop('checked')) $('[data-productid=' + productID + ']').prop('checked', true);
+
+            setProgramByProduct($(':checkbox[data-productid=' + productID + ']'));
         }
         setPGMBegin(PGMBegin);
         setPGMEnd(PGMEnd);

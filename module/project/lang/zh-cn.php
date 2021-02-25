@@ -119,8 +119,17 @@ $lang->project->statusList['doing']     = '进行中';
 $lang->project->statusList['suspended'] = '已挂起';
 $lang->project->statusList['closed']    = '已关闭';
 
-$lang->project->aclList['private'] = "私有（团队成员和项目负责人、干系人可访问）";
-$lang->project->aclList['open']    = "继承项目访问权限（能访问当前项目，即可访问）";
+global $config;
+if($config->systemMode == 'new')
+{
+    $lang->project->aclList['private'] = "私有（团队成员和项目负责人、干系人可访问）";
+    $lang->project->aclList['open']    = "继承项目访问权限（能访问当前项目，即可访问）";
+}
+else
+{
+    $lang->project->aclList['private'] = "私有（团队成员和{$lang->executionCommon}负责人可访问）";
+    $lang->project->aclList['open']    = "公开（有{$lang->executionCommon}视图权限即可访问）";
+}
 
 $lang->project->storyPoint = '故事点';
 
@@ -169,6 +178,7 @@ $lang->project->create            = "添加{$lang->executionCommon}";
 $lang->project->copy              = "复制{$lang->executionCommon}";
 $lang->project->delete            = "删除{$lang->executionCommon}";
 $lang->project->browse            = "浏览{$lang->executionCommon}";
+$lang->project->list              = "{$lang->executionCommon}列表";
 $lang->project->edit              = "编辑{$lang->executionCommon}";
 $lang->project->batchEdit         = "批量编辑";
 $lang->project->manageMembers     = '团队管理';

@@ -331,6 +331,18 @@ class groupModel extends model
                 }
             }
         }
+
+        if($this->config->systemMode)
+        {
+            $this->dao->update(TABLE_GROUPPRIV)
+                ->set('module')->eq('program')
+                ->set('method')->eq('prjbrowse')
+                ->where('module')->eq('project')
+                ->andWhere('method')->eq('list')
+                ->andWhere('`group`')->eq($groupID)
+                ->exec();
+        }
+
         return true;
     }
 
