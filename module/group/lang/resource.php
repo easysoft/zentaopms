@@ -60,11 +60,8 @@ $lang->moduleOrder[190] = 'backup';
 $lang->moduleOrder[195] = 'cron';
 $lang->moduleOrder[200] = 'dev';
 $lang->moduleOrder[205] = 'message';
-
 $lang->moduleOrder[210] = 'design';
 $lang->moduleOrder[215] = 'programplan';
-
-$lang->moduleOrder[240] = 'workestimation';
 
 $lang->resource = new stdclass();
 
@@ -1189,12 +1186,6 @@ $lang->company->methodOrder[0]  = 'index';
 $lang->company->methodOrder[5]  = 'browse';
 $lang->company->methodOrder[15] = 'edit';
 $lang->company->methodOrder[25] = 'dynamic';
-
-/* Work estimation. */
-$lang->resource->workestimation = new stdclass();
-$lang->resource->workestimation->index  = 'index';
-
-$lang->workestimation->methodOrder[0] = 'index';
 
 /* Department. */
 $lang->resource->dept = new stdclass();
