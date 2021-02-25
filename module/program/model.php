@@ -1480,6 +1480,8 @@ class programModel extends model
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', substr($this->post->name, 0, 30))
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
@@ -1665,6 +1667,8 @@ class programModel extends model
 
         $project = fixer::input('post')
             ->setDefault('team', substr($this->post->name, 0, 30))
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
@@ -1783,9 +1787,11 @@ class programModel extends model
 
             $projectID = (int)$projectID;
             $projects[$projectID] = new stdClass();
-            $projects[$projectID]->name   = $projectName;
-            $projects[$projectID]->parent = $parentProgram;
-            $projects[$projectID]->PM     = $data->PMs[$projectID];
+            $projects[$projectID]->name           = $projectName;
+            $projects[$projectID]->parent         = $parentProgram;
+            $projects[$projectID]->PM             = $data->PMs[$projectID];
+            $projects[$projectID]->lastEditedBy   = $this->app->user->account;
+            $projects[$projectID]->lastEditedDate = helper::now();
 
             /* Check unique name for edited projects. */
             if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID .  sprintf($this->lang->error->unique, $this->lang->program->PRJName, $projectName);

@@ -20,6 +20,8 @@ ALTER TABLE `zt_project` ADD `parentVersion` smallint(6) NOT NULL AFTER `version
 ALTER TABLE `zt_project` ADD `planDuration` int(11) NOT NULL AFTER `parentVersion`;
 ALTER TABLE `zt_project` ADD `realDuration` int(11) NOT NULL AFTER `planDuration`;
 ALTER TABLE `zt_project` ADD `output` text NOT NULL AFTER `milestone`;
+ALTER TABLE `zt_project` ADD `lastEditedBy` varchar(30) NOT NULL DEFAULT '' AFTER `openedVersion`;
+ALTER TABLE `zt_project` ADD `lastEditedDate` datetime NOT NULL AFTER `lastEditedBy`;
 
 ALTER TABLE `zt_product` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_product` ADD `bind` enum('0','1') NOT NULL DEFAULT '0' AFTER `code`;

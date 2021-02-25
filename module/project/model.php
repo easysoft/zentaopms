@@ -342,6 +342,8 @@ class projectModel extends model
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('openedVersion', $this->config->version)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
             ->setDefault('team', substr($this->post->name,0, 30))
             ->setIF($this->config->systemMode == 'new', 'project', $this->session->PRJ)
             ->setIF($this->config->systemMode == 'new', 'parent', $this->session->PRJ)
@@ -470,6 +472,8 @@ class projectModel extends model
 
         /* Get the data from the post. */
         $project = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
@@ -565,21 +569,23 @@ class projectModel extends model
 
             $projectID = (int)$projectID;
             $projects[$projectID] = new stdClass();
-            $projects[$projectID]->name      = $projectName;
-            $projects[$projectID]->code      = $projectCode;
-            $projects[$projectID]->PM        = $data->PMs[$projectID];
-            $projects[$projectID]->PO        = $data->POs[$projectID];
-            $projects[$projectID]->QD        = $data->QDs[$projectID];
-            $projects[$projectID]->RD        = $data->RDs[$projectID];
-            $projects[$projectID]->lifetime  = $data->lifetimes[$projectID];
-            $projects[$projectID]->attribute = $data->attributes[$projectID];
-            $projects[$projectID]->status    = $data->statuses[$projectID];
-            $projects[$projectID]->begin     = $data->begins[$projectID];
-            $projects[$projectID]->end       = $data->ends[$projectID];
-            $projects[$projectID]->team      = $data->teams[$projectID];
-            $projects[$projectID]->desc      = htmlspecialchars_decode($data->descs[$projectID]);
-            $projects[$projectID]->days      = $data->dayses[$projectID];
-            $projects[$projectID]->order     = $data->orders[$projectID];
+            $projects[$projectID]->name           = $projectName;
+            $projects[$projectID]->code           = $projectCode;
+            $projects[$projectID]->PM             = $data->PMs[$projectID];
+            $projects[$projectID]->PO             = $data->POs[$projectID];
+            $projects[$projectID]->QD             = $data->QDs[$projectID];
+            $projects[$projectID]->RD             = $data->RDs[$projectID];
+            $projects[$projectID]->lifetime       = $data->lifetimes[$projectID];
+            $projects[$projectID]->attribute      = $data->attributes[$projectID];
+            $projects[$projectID]->status         = $data->statuses[$projectID];
+            $projects[$projectID]->begin          = $data->begins[$projectID];
+            $projects[$projectID]->end            = $data->ends[$projectID];
+            $projects[$projectID]->team           = $data->teams[$projectID];
+            $projects[$projectID]->desc           = htmlspecialchars_decode($data->descs[$projectID]);
+            $projects[$projectID]->days           = $data->dayses[$projectID];
+            $projects[$projectID]->order          = $data->orders[$projectID];
+            $projects[$projectID]->lastEditedBy   = $this->app->user->account;
+            $projects[$projectID]->lastEditedDate = helper::now();
 
             /* Check unique name for edited projects. */
             if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID .  sprintf($this->lang->error->unique, $this->lang->project->name, $projectName);
@@ -652,6 +658,8 @@ class projectModel extends model
         $project = fixer::input('post')
             ->add('realBegan', $now)
             ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_PROJECT)->data($project)->autoCheck()->where('id')->eq((int)$projectID)->exec();
@@ -670,7 +678,11 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
-        $project = fixer::input('post')->remove('comment')->get();
+        $project = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
 
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
@@ -693,6 +705,8 @@ class projectModel extends model
         $now        = helper::now();
         $project = fixer::input('post')
             ->setDefault('status', 'suspended')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_PROJECT)->data($project)
@@ -716,6 +730,8 @@ class projectModel extends model
         $now        = helper::now();
         $project = fixer::input('post')
             ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
             ->remove('comment,readjustTime,readjustTask')
             ->get();
 
@@ -783,6 +799,8 @@ class projectModel extends model
             ->setDefault('status', 'closed')
             ->setDefault('closedBy', $this->app->user->account)
             ->setDefault('closedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
             ->remove('comment')
             ->get();
 

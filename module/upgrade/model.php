@@ -1060,6 +1060,7 @@ class upgradeModel extends model
         $releases = $this->dao->select('id, `desc`')->from(TABLE_RELEASE)->fetchAll();
         $projects = $this->dao->select('id, `desc`, goal')->from(TABLE_PROJECT)->fetchAll();
         $builds   = $this->dao->select('id, `desc`')->from(TABLE_BUILD)->fetchAll();
+        $account  = isset($this->app->user->account) ? $this->app->user->account : '';
 
         foreach($products as $product)
         {
@@ -1084,8 +1085,10 @@ class upgradeModel extends model
 
         foreach($projects as $project)
         {
-            $project->desc = nl2br($project->desc);
-            $project->goal = nl2br($project->goal);
+            $project->desc           = nl2br($project->desc);
+            $project->goal           = nl2br($project->goal);
+            $project->lastEditedBy   = $account;
+            $project->lastEditedDate = helper::now();
             $this->dao->update(TABLE_PROJECT)->data($project)->where('id')->eq($project->id)->exec();
             $this->saveLogs($this->dao->get());
         }
@@ -4068,19 +4071,21 @@ class upgradeModel extends model
 
             /* Insert project. */
             $project = new stdclass();
-            $project->name          = $data->PRJName;
-            $project->type          = 'project';
-            $project->model         = 'scrum';
-            $project->parent        = $programID;
-            $project->status        = $data->PRJStatus;
-            $project->begin         = $data->begin;
-            $project->end           = isset($data->end) ? $data->end : LONG_TIME;
-            $project->PM            = $data->PM;
-            $project->auth          = 'extend';
-            $project->openedBy      = $account;
-            $project->openedDate    = helper::now();
-            $project->openedVersion = $this->config->version;
-            $project->acl           = $data->acl;
+            $project->name           = $data->PRJName;
+            $project->type           = 'project';
+            $project->model          = 'scrum';
+            $project->parent         = $programID;
+            $project->status         = $data->PRJStatus;
+            $project->begin          = $data->begin;
+            $project->end            = isset($data->end) ? $data->end : LONG_TIME;
+            $project->PM             = $data->PM;
+            $project->auth           = 'extend';
+            $project->openedBy       = $account;
+            $project->openedDate     = helper::now();
+            $project->openedVersion  = $this->config->version;
+            $project->lastEditedBy   = $account;
+            $project->lastEditedDate = helper::now();
+            $project->acl            = $data->acl;
 
             $this->lang->project->name  = $this->lang->program->PRJName;
 

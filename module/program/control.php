@@ -1654,7 +1654,12 @@ class program extends control
         {
             $newID = array_shift($idList);
             if($id == $newID) continue;
-            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
+            $this->dao->update(TABLE_PROJECT)
+                ->set('`order`')->eq($order)
+                ->set('lastEditedBy')->eq($this->app->user->account)
+                ->set('lastEditedDate')->eq(helper::now())
+                ->where('id')->eq($newID)
+                ->exec();
         }
     }
 

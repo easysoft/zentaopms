@@ -683,6 +683,8 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime NOT NULL,
   `openedVersion` varchar(20) NOT NULL,
+  `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
+  `lastEditedDate` datetime NOT NULL,
   `closedBy` varchar(30) NOT NULL DEFAULT '',
   `closedDate` datetime NOT NULL,
   `canceledBy` varchar(30) NOT NULL DEFAULT '',
