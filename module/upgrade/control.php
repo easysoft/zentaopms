@@ -306,8 +306,8 @@ class upgrade extends control
             if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
 
             /* Update sprints history. */
-            $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll();
-            $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->exec();
+            $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
+            $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
             die(js::locate($this->createLink('upgrade', 'mergeRepo')));
         }
 
