@@ -175,7 +175,8 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID = $productID ? $productID : key($this->products);
-        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID);
+        $projectID = $this->lang->navGroup->testtask == 'project' ? $this->session->PRJ : 0;
+        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_asc', $projectID);
         $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
         /* Set menu. */

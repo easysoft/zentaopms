@@ -275,7 +275,7 @@ class caselibModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where('lib')->eq((int)$libID)
-                ->andWhere('PRJ')->eq($this->session->PRJ)
+                ->beginIF($this->lang->navGroup->caselib != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
                 ->andWhere('product')->eq(0)
                 ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
                 ->beginIF($browseType == 'wait')->andWhere('status')->eq($browseType)->fi()
@@ -312,7 +312,7 @@ class caselibModel extends model
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq((int)$libID)->fi()
-                ->andWhere('PRJ')->eq($this->session->PRJ)
+                ->beginIF($this->lang->navGroup->caselib != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
                 ->andWhere('product')->eq(0)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($sort)->page($pager)->fetchAll();
@@ -627,7 +627,7 @@ class caselibModel extends model
                 $data[$i]->openedDate   = $now;
                 $data[$i]->status       = $forceNotReview ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
-                if($this->config->systemMode == 'new') $data[$i]->PRJ = $this->session->PRJ;
+                if($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa') $data[$i]->PRJ = $this->session->PRJ;
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()

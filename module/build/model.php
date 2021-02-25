@@ -293,7 +293,7 @@ class buildModel extends model
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.product')->in($products)
-            ->andWhere('t1.PRJ')->eq($this->session->PRJ)
+            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
