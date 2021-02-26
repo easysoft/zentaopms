@@ -230,6 +230,8 @@ class router extends baseRouter
              if($setting->key == 'projectLink') $config->projectLink = $setting->value;
         }
 
+        $lang->URCommon = '';
+        $lang->SRCommon = '';
         if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
         {
             /* Get story concept in project and product. */

@@ -4026,7 +4026,8 @@ class upgradeModel extends model
                 ->where('id')->eq($programID)
                 ->exec();
 
-             $this->loadModel('action')->create('program', $programID, 'openedbysystem');
+            $this->loadModel('action')->create('program', $programID, 'openedbysystem');
+            if($data->PGMStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'closedbysystem');
         }
         else
         {
@@ -4107,7 +4108,8 @@ class upgradeModel extends model
                 ->where('id')->eq($projectID)
                 ->exec();
 
-             $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
+            $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
+            if($data->PRJStatus == 'closed') $this->loadModel('action')->create('project', $projectID, 'closedbysystem');
         }
         else
         {
@@ -4146,11 +4148,6 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
         }
-
-        /* Compute program status. */
-        $PGMStatus = $this->computeStatus($programID, 'program');
-        $this->dao->update(TABLE_PROJECT)->set('status')->eq($PGMStatus)->where('id')->eq($programID)->exec();
-        if($PGMStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'closedbysystem');
 
         /* No project is created when there are no sprints. */
         if(!$sprintIdList) return;
@@ -4202,11 +4199,11 @@ class upgradeModel extends model
 		$minRealBegan        = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('started')->orderBy('date_asc')->fetch('date');
 		$maxRealEnd          = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('closed')->orderBy('date_desc')->fetch('date');
 
-		$PRJStatus = $this->computeStatus($projectID, 'project');
-
 		$data = new stdClass();
 		$data->realBegan = $minRealBegan ? substr($minRealBegan, 0, 10) : '0000-00-00';
 		$data->status    = $PRJStatus;
+
+        $PRJStatus = $this->dao->select('status')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('status');
 		if($PRJStatus == 'closed')
 		{
 			$data->realEnd    = substr($maxRealEnd, 0, 10);
@@ -4214,7 +4211,6 @@ class upgradeModel extends model
 		}
 
 		$this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
-		if($PRJStatus == 'closed') $this->loadModel('action')->create('project', $projectID, 'closedbysystem');
 
 		/* Set product and project relation. */
         foreach($productIdList as $productID)
@@ -4228,37 +4224,6 @@ class upgradeModel extends model
 
         $this->computeObjectMembers($programID, $projectID, $productIdList, $sprintIdList);
     }
-
-	/**
-	 * Compute project or program status.
-	 *
-	 * @param  int    $objectID
-	 * @param  string $objectType
-	 * @access public
-	 * @return string
-	 */
-	public function computeStatus($objectID, $objectType)
-	{
-        $objects = $this->dao->select('id, status')->from(TABLE_PROJECT)
-            ->where('parent')->eq($objectID)
-            ->beginif($objectType == 'program')->andWhere('type')->eq('project')->fi()
-            ->beginif($objectType == 'project')->andWhere('type')->eq('sprint')->fi()
-            ->fetchPairs();
-
-		$objectStatus = empty($objects) ? 'wait' : 'closed';
-		foreach($objects as $status)
-		{
-			if($status == 'doing' || $status == 'suspended')
-			{
-				$objectStatus = 'doing'; 
-				break;
-			}
-
-			if($status == 'wait') $objectStatus = 'wait';
-		}
-
-		return $objectStatus;
-	}
 
 	/**
 	 * Compute program and project members.
