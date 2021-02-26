@@ -26,10 +26,10 @@ html[lang='en'] #deadlineTd .input-group-addon{padding: 5px 18px}
 
 .colorpicker.input-group-btn > .btn {border-right: none}
 
-.input-group-addon.w-90px{min-width:90px;}
-.input-group .input-group-btn .btn{padding: 6px 12px;}
-.input-group .chosen-container{min-width: 80px;}
-#all{border-left:none}
+.input-group-addon.w-90px {min-width:90px;}
+.input-group .input-group-btn .btn {padding: 6px 12px;}
+.input-group .chosen-container {min-width: 80px;}
+#all {border-left:none}
 
 .pri-selector > .btn {padding: 5px 8px!important; width: 100%;}
 .pri-selector > .dropdown-menu {padding: 10px;}
@@ -39,7 +39,7 @@ html[lang='en'] #deadlineTd .input-group-addon{padding: 5px 18px}
 .title-group .chosen-container {width: 1%!important; min-width: 70px;}
 .title-group #severity + .chosen-container > .chosen-single {border-radius: 0!important;}
 .title-group #pri + .chosen-container > .chosen-single {border-top-left-radius: 0!important; border-bottom-left-radius: 0!important;}
-#mainContent .center-block{padding-bottom:40px;}
+#mainContent .center-block {padding-bottom:40px;}
 
 #typeBox {width:180px;}
 #typeBox .required:after {right: 1px;}

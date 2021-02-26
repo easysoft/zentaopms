@@ -716,7 +716,7 @@ class commonModel extends model
                 /* Avoid highlighting the same navigation method at the same time. */
                 if($currentModule == 'feedback' and $currentMethod == 'admin') $active = '';
                 if($currentModule == 'product' and $currentMethod == 'browse') $active = '';
-                if($currentModule == 'story' and $currentMethod == 'track')    $active = '';
+                if($currentModule == 'story') $active = '';
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
 

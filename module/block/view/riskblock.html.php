@@ -29,18 +29,13 @@
     <tbody>
       <?php foreach($risks as $risk):?>
       <?php
-      $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+      $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
       ?>
       <tr>
         <td class='c-id-xs'><?php echo sprintf('%03d', $risk->id);?></td>
         <td class='c-name' title='<?php echo $risk->name?>'><?php echo html::a($this->createLink('risk', 'view', "riskID=$risk->id", '', '', $risk->PRJ), $risk->name)?></td>
         <?php if($longBlock):?>
-        <?php
-        $priColor = 'pri-low';
-        if($risk->pri == 'middle') $priColor = 'pri-middle';
-        if($risk->pri == 'high')   $priColor = 'pri-high';
-        ?>
-        <td class='c-pri'><?php echo "<span class='$priColor'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
+        <td class='c-pri'><?php echo "<span class='pri-{$risk->pri}'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
         <td class='c-category'><?php echo zget($lang->risk->categoryList, $risk->category)?></td>
         <td class='c-identifiedDate'><?php echo $risk->identifiedDate == '0000-00-00' ? '' : $risk->identifiedDate;?></td>
         <?php endif;?>

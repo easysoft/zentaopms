@@ -327,23 +327,6 @@ $lang->my->dividerMenu = ',myProject,team,';
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
-/* 产品视图设置。*/
-$lang->scrumproduct = new stdclass();
-$lang->scrumproduct->menu = new stdclass();
-
-$lang->scrumproduct->menu->story   = array('link' => "{$lang->SRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->scrumproduct->menu->plan    = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
-//$lang->scrumproduct->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
-$lang->scrumproduct->menu->roadmap = '路线图|product|roadmap|productID=%s';
-$lang->scrumproduct->menu->project = "{$lang->executionCommon}|product|project|status=all&productID=%s";
-$lang->scrumproduct->menu->dynamic = '动态|product|dynamic|productID=%s';
-$lang->scrumproduct->menu->doc     = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->scrumproduct->menu->branch  = '@branch@|branch|manage|productID=%s';
-$lang->scrumproduct->menu->module  = '模块|tree|browse|productID=%s&view=story';
-$lang->scrumproduct->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
-$lang->scrumproduct->menu->requirement = array('link' => "{$lang->URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->scrumproduct->menu->story       = array('link' => "{$lang->SRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-
 $lang->product->dividerMenu = ',plan,project,dashboard,';
 
 $lang->story = new stdclass();
@@ -922,11 +905,11 @@ $lang->scrum->subMenu->other = new stdclass();
 $lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->scrum->setMenu = new stdclass();
-$lang->scrum->setMenu->view           = array('link' => '概况|program|prjview|project={PROJECT}', 'alias' => 'prjedit');
-$lang->scrum->setMenu->products       = array('link' => '产品|program|PRJManageProducts|project={PROJECT}', 'alias' => 'prjmanageproducts');
-$lang->scrum->setMenu->group          = array('link' => '权限|program|PRJGroup|project={PROJECT}', 'alias' => 'prjgroup,prjmanageview,prjmanagepriv');
-$lang->scrum->setMenu->members        = array('link' => '团队|program|PRJManageMembers|project={PROJECT}', 'alias' => 'prjmanagemembers');
-$lang->scrum->setMenu->whitelist      = array('link' => '白名单|program|PRJWhitelist|project={PROJECT}', 'subModule' => 'personnel');
+$lang->scrum->setMenu->view      = array('link' => '概况|program|prjview|project={PROJECT}', 'alias' => 'prjedit');
+$lang->scrum->setMenu->products  = array('link' => '产品|program|PRJManageProducts|project={PROJECT}', 'alias' => 'prjmanageproducts');
+$lang->scrum->setMenu->group     = array('link' => '权限|program|PRJGroup|project={PROJECT}', 'alias' => 'prjgroup,prjmanageview,prjmanagepriv');
+$lang->scrum->setMenu->members   = array('link' => '团队|program|PRJManageMembers|project={PROJECT}', 'alias' => 'prjmanagemembers');
+$lang->scrum->setMenu->whitelist = array('link' => '白名单|program|PRJWhitelist|project={PROJECT}', 'subModule' => 'personnel');
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();

@@ -332,15 +332,24 @@ class groupModel extends model
             }
         }
 
-        if($this->config->systemMode)
+        if($this->config->systemMode == 'old')
         {
-            $this->dao->replace(TABLE_GROUPPRIV)
-                ->set('module')->eq('program')
-                ->set('method')->eq('prjbrowse')
-                ->where('module')->eq('project')
-                ->andWhere('method')->eq('list')
+            $prjBrowse = $this->dao->select('module')->from(TABLE_GROUPPRIV)
+                ->where('module')->eq('program')
+                ->andWhere('method')->eq('prjbrowse')
                 ->andWhere('`group`')->eq($groupID)
-                ->exec();
+                ->fetch('module');
+
+            if(!$prjBrowse)
+            {
+                $this->dao->update(TABLE_GROUPPRIV)
+                    ->set('module')->eq('program')
+                    ->set('method')->eq('prjbrowse')
+                    ->where('module')->eq('project')
+                    ->andWhere('method')->eq('list')
+                    ->andWhere('`group`')->eq($groupID)
+                    ->exec();
+            }
         }
 
         return true;

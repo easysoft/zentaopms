@@ -12,6 +12,7 @@
 class bug extends control
 {
     public $products  = array();
+
     public $projectID = 0;
 
     /**

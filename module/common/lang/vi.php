@@ -328,23 +328,6 @@ $lang->my->dividerMenu = ',myProject,team,';
 $lang->todo    = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
-/* Product menu settings. */
-$lang->scrumproduct = new stdclass();
-$lang->scrumproduct->menu = new stdclass();
-
-$lang->scrumproduct->menu->story    = array('link' => 'Story|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->scrumproduct->menu->plan     = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
-$lang->scrumproduct->menu->release  = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
-$lang->scrumproduct->menu->roadmap  = 'Roadmap|product|roadmap|productID=%s';
-$lang->scrumproduct->menu->project  = "{$lang->executionCommon}|product|project|status=all&productID=%s";
-$lang->scrumproduct->menu->dynamic  = 'Dynamics|product|dynamic|productID=%s';
-$lang->scrumproduct->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->scrumproduct->menu->branch   = '@branch@|branch|manage|productID=%s';
-$lang->scrumproduct->menu->module   = 'Module|tree|browse|productID=%s&view=story';
-$lang->scrumproduct->menu->view     = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
-$lang->scrumproduct->menu->requirement = array('link' => "Requirement|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->scrumproduct->menu->story       = array('link' => "Story|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-
 $lang->product->dividerMenu = ',plan,project,dashboard,';
 
 $lang->story = new stdclass();

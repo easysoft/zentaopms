@@ -2,6 +2,6 @@
 .col-side .chosen-container {width: 218px!important}
 .col-side .chosen-container[id^="openedBuild"] {width: 172px!important}
 .col-side .chosen-container[id^="resolvedBuild"] {width: 172px!important}
-.chosen-choices li.search-choice{word-break: break-all;}
+.chosen-choices li.search-choice {word-break: break-all;}
 #linkBugBox > li {margin-left:-56px}
-#branch{width: 95px;}
+#branch {width: 95px;}

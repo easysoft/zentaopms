@@ -1078,12 +1078,6 @@ $lang->mail->methodOrder[55] = 'sendCloud';
 $lang->mail->methodOrder[60] = 'sendcloudUser';
 $lang->mail->methodOrder[65] = 'ztCloud';
 
-/* Subject. */
-$lang->resource->subject = new stdclass();
-$lang->resource->subject->browse = 'browse';
-
-$lang->subject->methodOrder[5]  = 'browse';
-
 /* Custom. */
 $lang->resource->custom = new stdclass();
 $lang->resource->custom->index              = 'index';

@@ -78,7 +78,6 @@ $filter->product->index              = new stdclass();
 $filter->product->export             = new stdclass();
 $filter->product->project            = new stdclass();
 $filter->program->default            = new stdclass();
-$filter->program->prjbrowse          = new stdclass();
 $filter->program->pgmproject         = new stdclass();
 $filter->program->prjbrowse          = new stdclass();
 $filter->program->pgmbrowse          = new stdclass();
