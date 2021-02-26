@@ -4148,7 +4148,7 @@ class upgradeModel extends model
         }
 
         /* Compute program status. */
-        $PGMStatus = $this->computeStatus($programID);
+        $PGMStatus = $this->computeStatus($programID, 'program');
         $this->dao->update(TABLE_PROJECT)->set('status')->eq($PGMStatus)->where('id')->eq($programID)->exec();
         if($PGMStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'closedbysystem');
 
@@ -4202,7 +4202,7 @@ class upgradeModel extends model
 		$minRealBegan        = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('started')->orderBy('date_asc')->fetch('date');
 		$maxRealEnd          = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('closed')->orderBy('date_desc')->fetch('date');
 
-		$PRJStatus = $this->computeStatus($projectID);
+		$PRJStatus = $this->computeStatus($projectID, 'project');
 
 		$data = new stdClass();
 		$data->realBegan = $minRealBegan ? substr($minRealBegan, 0, 10) : '0000-00-00';
@@ -4233,12 +4233,18 @@ class upgradeModel extends model
 	 * Compute project or program status.
 	 *
 	 * @param  int    $objectID
+	 * @param  string $objectType
 	 * @access public
 	 * @return string
 	 */
-	public function computeStatus($objectID)
+	public function computeStatus($objectID, $objectType)
 	{
-		$objects      = $this->dao->select('id, status')->from(TABLE_PROJECT)->where('parent')->eq($objectID)->fetchPairs();
+        $objects = $this->dao->select('id, status')->from(TABLE_PROJECT)
+            ->where('parent')->eq($objectID)
+            ->beginif($objectType == 'program')->andWhere('type')->eq('project')->fi()
+            ->beginif($objectType == 'project')->andWhere('type')->eq('sprint')->fi()
+            ->fetchPairs();
+
 		$objectStatus = empty($objects) ? 'wait' : 'closed';
 		foreach($objects as $status)
 		{
