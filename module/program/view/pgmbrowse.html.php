@@ -28,9 +28,9 @@
   <div class='pull-right'>
     <?php if(isset($lang->pageActions)) echo $lang->pageActions;?>
     <?php if(isset($this->config->maxVersion)):?>
-    <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php common::printLink('program', 'createGuide', "programID=0&from=PGM", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php elseif($this->config->systemMode == 'new'):?>
-    <?php common::printLink('program', 'prjcreate', 'mode=scrum', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('program', 'prjcreate', "mode=scrum&programID=0&from=PGM", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
     <?php else:?>
     <?php common::printLink('project', 'create', '', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
     <?php endif;?>
