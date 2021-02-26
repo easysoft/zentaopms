@@ -1,4 +1,5 @@
 <style> #source .lineGroup .productList{width: 170px;} </style>
+<?php reset($productlines);?>
 <?php $selected = key($productlines);?>
 <div class='alert alert-info'>
   <?php
