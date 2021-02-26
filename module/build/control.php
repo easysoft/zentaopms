@@ -45,7 +45,7 @@ class build extends control
         $execution = $this->loadModel('project')->getExecutionById($executionID);
 
         /* Set menu. */
-        $executions = $this->project->getExecutionPairs($this->session->PRJ);
+        $executions = $this->project->getExecutionPairs($execution->project);
         $this->project->setMenu($executions, $executionID);
 
         $productGroups = $this->project->getProducts($executionID);
@@ -95,9 +95,9 @@ class build extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "buildID=$buildID")));
         }
 
-        $build = $this->build->getById((int)$buildID);
-
         $this->loadModel('project');
+        $this->loadModel('product');
+        $build = $this->build->getById((int)$buildID);
 
         /* Set menu. */
         $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ), $build->project);
@@ -106,19 +106,18 @@ class build extends control
         $orderBy = 'status_asc, stage_asc, id_desc';
 
         /* Assign. */
-        $execution = $this->loadModel('project')->getExecutionById($build->project);
+        $execution = $this->project->getExecutionById($build->project);
         if(empty($execution))
         {
             $execution = new stdclass();
             $execution->name = '';
         }
 
-        $executions = $this->loadModel('product')->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->PRJ);
+        $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->PRJ);
         if(!isset($executions[$build->project])) $executions[$build->project] = $execution->name;
 
         $productGroups = $this->project->getProducts($build->project);
 
-        $this->loadModel('product');
         if(!isset($productGroups[$build->product]))
         {
             $product = $this->product->getById($build->product);
