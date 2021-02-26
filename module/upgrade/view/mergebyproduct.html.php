@@ -20,13 +20,13 @@
         <?php foreach($noMergedProducts as $productID => $product):?>
         <div class='lineGroup'>
           <div class='productList'>
-            <?php echo html::checkBox("products", array($product->id => "{$product->name}"), $isChecked ? $product->id : '', "data-productid='{$product->id}' data-begin='{$product->createdDate}' data-programid='{$product->program}'");?>
+            <?php echo html::checkBox("products", array($product->id => $product->name), $isChecked ? $product->id : '', "data-productid='{$product->id}' data-begin='{$product->createdDate}' data-programid='{$product->program}'");?>
           </div>
           <div class='projectList'>
             <div class='scroll-handle'>
             <?php if(isset($productGroups[$productID])):?>
             <?php foreach($productGroups[$productID] as $sprint):?>
-            <?php echo html::checkBox("sprints[$productID]", array($sprint->id => "{$sprint->name}"), $isChecked ? $sprint->id : '', "data-product='{$productID}' data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
+            <?php echo html::checkBox("sprints[$productID]", array($sprint->id => $sprint->name), $isChecked ? $sprint->id : '', "data-product='{$productID}' data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
             <?php echo html::hidden("sprintIdList[$productID][$sprint->id]", $sprint->id);?>
             <?php endforeach;?>
             <?php endif;?>
