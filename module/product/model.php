@@ -488,8 +488,8 @@ class productModel extends model
      */
     public function getProductMainAction()
     {
-        $link = html::a(helper::createLink('product', 'all'), $this->lang->product->product, '', "style='border: none;'");
-        $html = "<p style='padding-top:5px;'><i class='icon icon-list' style='padding-right:5px;'></i>" . $link . "</p>";
+        $link = html::a(helper::createLink('product', 'all'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
+        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
         return common::hasPriv('product', 'all') ? $html : '';
     }
 

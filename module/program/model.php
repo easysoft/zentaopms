@@ -31,8 +31,8 @@ class programModel extends model
      */
     public function getPGMMainAction()
     {
-        $link = html::a(helper::createLink('program', 'pgmbrowse'), $this->lang->program->PGMBrowse, '', "style='border: none;'");
-        $html = "<p style='padding-top:5px;'><i class='icon icon-list' style='padding-right:5px;'></i>" . $link . "</p>";
+        $link = html::a(helper::createLink('program', 'pgmbrowse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
+        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
         return common::hasPriv('program', 'pgmbrowse') ? $html : '';
     }
 
@@ -893,8 +893,8 @@ class programModel extends model
      */
     public function getPRJMainAction($module, $method)
     {
-        $link = html::a(helper::createLink('program', 'prjbrowse'), $this->lang->program->PRJBrowse, '', "style='border: none;'");
-        $html = "<p style='padding-top:5px;'><i class='icon icon-list' style='padding-right:5px;'></i>" . $link . "</p>";
+        $link = html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
+        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
         return common::hasPriv('program', 'prjbrowse') ? $html : '';
     }
 
