@@ -24,8 +24,8 @@
         <div class='detail-content row'>
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
-          <?php $isDisabled = in_array($productID, $notRemoveProducts) ? "disabled='disabled'" : '';?>
-          <?php $title      = in_array($productID, $notRemoveProducts) ? $lang->program->notAllowRemoveProducts : $productName;?>
+          <?php $isDisabled = in_array($productID, $unmodifiableProducts) ? "disabled='disabled'" : '';?>
+          <?php $title      = in_array($productID, $unmodifiableProducts) ? $lang->program->notAllowRemoveProducts : $productName;?>
           <?php $checked    = 'checked';?>
           <div class='col-sm-4'>
             <div class='product <?php echo $checked . (isset($branchGroups[$productID]) ? ' has-branch' : '')?>'>

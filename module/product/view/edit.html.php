@@ -18,7 +18,7 @@
 <?php js::set('singleLinkProjects', $singleLinkProjects);?>
 <?php js::set('multipleLinkProjects', $multipleLinkProjects);?>
 <style>
-#changeProgram i.icon.icon-project{padding-right: 5px;}
+#changeProgram .icon-project {padding-right: 5px;}
 </style>
 <div id="mainContent" class="main-content">
   <div class="center-block">
