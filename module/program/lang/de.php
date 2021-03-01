@@ -98,6 +98,8 @@ $lang->program->changeProgramTip       = 'After modifying the program set, the p
 $lang->program->linkedProjectsTip      = 'Linked projects are as follows';
 $lang->program->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
 
+$lang->program->tenThousand = '';
+
 $lang->program->unitList['CNY'] = 'RMB';
 $lang->program->unitList['USD'] = 'USD';
 $lang->program->unitList['HKD'] = 'HKD';
