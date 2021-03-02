@@ -2,7 +2,6 @@
 $lang->projectstory->common      = '项目需求';
 $lang->projectstory->index       = '需求主页';
 $lang->projectstory->view        = '需求详情';
-$lang->projectstory->story       = $lang->generalSR;
 $lang->projectstory->track       = '矩阵';
 $lang->projectstory->linkStory   = '关联' . $lang->SRCommon;
 $lang->projectstory->unlinkStory = '移除' . $lang->SRCommon;

@@ -2,7 +2,6 @@
 $lang->projectstory->common      = 'Yêu cầu dự án';
 $lang->projectstory->index       = 'Yêu cầu trang nhà';
 $lang->projectstory->view        = 'Story Detail';
-$lang->projectstory->story       = $lang->generalSR;
 $lang->projectstory->track       = 'Theo dõi ma trận';
 $lang->projectstory->linkStory   = 'Linked' . $lang->SRCommon;
 $lang->projectstory->unlinkStory = 'Unlinked' . $lang->SRCommon;

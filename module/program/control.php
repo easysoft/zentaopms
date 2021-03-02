@@ -763,11 +763,11 @@ class program extends control
      */
     public function index($projectID = 0)
     {
-        $project = $this->program->getPRJByID($projectID);
-        if(empty($project) || $project->type != 'project') die(js::error($this->lang->notFound) . js::locate('back'));
-
         $this->lang->navGroup->program = 'project';
         $projectID = $this->program->savePRJState($projectID, $this->program->getPRJPairs());
+
+        $project = $this->program->getPRJByID($projectID);
+        if(empty($project) || $project->type != 'project') die(js::error($this->lang->notFound) . js::locate('back'));
 
         if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
         setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
