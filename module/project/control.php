@@ -42,7 +42,7 @@ class project extends control
             $this->projects = $this->project->getExecutionPairs($this->session->PRJ, 'all', 'nocode');
             if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
         }
-        $this->objectType = $this->config->systemMode == 'old' ? 'project' : 'exection';
+        $this->objectType = $this->config->systemMode == 'classic' ? 'project' : 'exection';
     }
 
     /**

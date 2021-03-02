@@ -104,7 +104,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
               <td>
                 <div id='sonModule'>
                   <?php if($viewType == 'story' and $allProduct):?>
-                  <div class='table-row row-module copy'>
+                  <div class='table-row row-module copy' style='display: none;'>
                     <div class='table-col col-module'><?php echo html::select('allProduct', $allProduct, '', "class='form-control chosen' onchange=\"syncProductOrProject(this,'product')\"");?></div>
                     <div class='table-col col-shorts'><?php echo html::select('productModule', $productModules, '', "class='form-control chosen'");?></div>
                     <div class='table-col col-actions'>

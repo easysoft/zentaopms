@@ -332,7 +332,7 @@ class groupModel extends model
             }
         }
 
-        if($this->config->systemMode == 'old')
+        if($this->config->systemMode == 'classic')
         {
             $prjBrowse = $this->dao->select('module')->from(TABLE_GROUPPRIV)
                 ->where('module')->eq('program')

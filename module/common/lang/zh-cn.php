@@ -964,7 +964,7 @@ $lang->stakeholder->menu->issue = array('link' => '问题管理|stakeholder|issu
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
-if($config->systemMode == 'old')
+if($config->systemMode == 'classic')
 {
     $lang->noMenuModule[] = 'project';
     $lang->noMenuModule[] = 'task';
