@@ -57,7 +57,7 @@ class testreportModel extends model
     {
         $data = fixer::input('post')
             ->stripTags($this->config->testreport->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->lang->navGroup->testreport != 'qa', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testreport != 'qa', 'PRJ', $this->session->PRJ)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('stories', ',')
