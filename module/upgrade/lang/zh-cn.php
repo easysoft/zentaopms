@@ -73,11 +73,11 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>可以选择这些迭代归属于某个新项目下。</p>
 EOD;
 
-$lang->upgrade->to15Mode['old'] = '保持老版本的习惯';
-$lang->upgrade->to15Mode['new'] = '全新项目集管理模式';
+$lang->upgrade->to15Mode['classic'] = '保持老版本的习惯';
+$lang->upgrade->to15Mode['new']     = '全新项目集管理模式';
 
-$lang->upgrade->selectedModeTips['old'] = '后续您还可以在后台-自定义里面切换为全新项目集管理的模式。';
-$lang->upgrade->selectedModeTips['new'] = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';
+$lang->upgrade->selectedModeTips['classic'] = '后续您还可以在后台-自定义里面切换为全新项目集管理的模式。';
+$lang->upgrade->selectedModeTips['new']     = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';
 
 $lang->upgrade->line      = '产品线';
 $lang->upgrade->program   = '目标项目集和项目';

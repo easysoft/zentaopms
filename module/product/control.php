@@ -360,21 +360,21 @@ class product extends control
 
         /* Init vars. */
         $product              = $this->product->getById($productID);
-        $notRemovePRJ         = array();
+        $unmodifiableProjects = array();
         $canChangePGM         = true;
         $singleLinkProjects   = array();
         $multipleLinkProjects = array();
         $linkStoriesProjects  = array();
 
         /* Link the projects stories under this product. */
-        $notRemovePRJ = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $unmodifiableProjects = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t2.deleted')->eq('0')
             ->fetchPairs('project', 'product');
 
-        if(!empty($notRemovePRJ)) $canChangePGM = false;
+        if(!empty($unmodifiableProjects)) $canChangePGM = false;
 
         /* Get the projects linked with this product. */
         $projectPairs = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -403,7 +403,7 @@ class product extends control
                 }
                 else
                 {
-                    if(isset($notRemovePRJ[$projectID])) $linkStoriesProjects[$projectID] = $projectName;
+                    if(isset($unmodifiableProjects[$projectID])) $linkStoriesProjects[$projectID] = $projectName;
                 }
             }
         }
@@ -470,7 +470,7 @@ class product extends control
 
         $lines = array();
         if($product->program) $lines = array('') + $this->product->getLinePairs($product->program);
-        if($this->config->systemMode == 'old') $lines = array('') + $this->product->getLinePairs();
+        if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
 
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
@@ -901,15 +901,15 @@ class product extends control
         $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
         $products    = $moduleGroup == 'project' ? $this->product->getProductsByProject($this->session->PRJ) : $this->product->getList();
 
-        $this->view->link       = $this->product->getProductLink($module, $method, $extra);
-        $this->view->productID  = $productID;
-        $this->view->module     = $module;
-        $this->view->method     = $method;
-        $this->view->extra      = $extra;
-        $this->view->products   = $products;
-        $this->view->projectID  = $moduleGroup == 'project' ? $this->session->PRJ : 0;
-        $this->view->programs   = $this->loadModel('program')->getPGMOption();
-        $this->view->openModule = $moduleGroup;
+        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
+        $this->view->productID = $productID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+        $this->view->products  = $products;
+        $this->view->projectID = $moduleGroup == 'project' ? $this->session->PRJ : 0;
+        $this->view->programs  = $this->loadModel('program')->getPGMOption();
+        $this->view->openGroup = $moduleGroup;
         $this->display();
     }
 

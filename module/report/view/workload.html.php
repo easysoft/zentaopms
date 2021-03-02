@@ -2,13 +2,8 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('weekend', $config->project->weekend);?>
 <div id='mainContent' class='main-row'>
-  <div class='side-col col-lg'>
+  <div class='side-col col-lg' id='sidebar'>
     <?php include 'blockreportlist.html.php';?>
-    <div class='panel panel-body' style='padding: 10px 6px'>
-      <div class='text proversion'>
-        <strong class='text-danger small text-latin'>PRO</strong> &nbsp;<span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->report->proVersionEn : $lang->report->proVersion; ?></span>
-      </div>
-    </div>
   </div>
   <div class='main-col'>
     <div class='cell'>

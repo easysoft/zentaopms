@@ -327,33 +327,36 @@ class story extends control
      * @param  int    $branch
      * @param  int    $moduleID
      * @param  int    $storyID
-     * @param  int    $project
+     * @param  int    $projectID
      * @param  int    $plan
      * @param  string $type requirement|story
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0, $type = 'story')
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $plan = 0, $type = 'story')
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
-        if($project)
+        if($projectID)
         {
-            $prj = $this->dao->findById((int)$project)->from(TABLE_PROJECT)->fetch();
-            if($prj->type == 'project')
+            $projects = $this->loadModel('project')->getExecutionPairs();
+            $this->project->setMenu($projects, $projectID);
+
+            $project  = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
+            if($project->type == 'project')
             {
                 $this->app->rawModule = 'projectstory';
                 $this->lang->navGroup->story = 'project';
-                $this->lang->product->menu = $this->lang->menu->{$prj->model};
+                $this->lang->product->menu = $this->lang->menu->{$project->model};
             }
             else
             {
                 $this->app->rawModule = 'project';
                 $this->lang->navGroup->story = 'project';
             }
-            $this->view->project = $prj;
+            $this->view->project = $project;
         }
 
         /* Clear title when switching products and set the session for the current product. */
@@ -378,12 +381,12 @@ class story extends control
             foreach($mails as $mail) $stories[] = $mail->storyID;
 
             /* Project or execution linked stories. */
-            if($project)
+            if($projectID)
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
-                $this->loadModel('project')->linkStory($project, $stories, $products);
-                if($project != $this->session->PRJ) $this->loadModel('project')->linkStory($this->session->PRJ, $stories, $products);
+                $this->loadModel('project')->linkStory($projectID, $stories, $products);
+                if($projectID != $this->session->PRJ) $this->loadModel('project')->linkStory($this->session->PRJ, $stories, $products);
             }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
@@ -399,11 +402,11 @@ class story extends control
             {
                 die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
             }
-            elseif($project)
+            elseif($projectID)
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, false);
-                $moduleName = $prj->type == 'project' ? 'projectstory' : 'project';
-                $param      = $prj->type == 'project' ? "productID=$productID" : "projectID=$project&orderBy=id_desc&browseType=unclosed";
+                $moduleName = $project->type == 'project' ? 'projectstory' : 'project';
+                $param      = $project->type == 'project' ? "productID=$productID" : "projectID=$projectID&orderBy=id_desc&browseType=unclosed";
                 $link       = $this->createLink($moduleName, 'story', $param);
                 die(js::locate($link, 'parent'));
             }
@@ -494,7 +497,7 @@ class story extends control
         $this->view->branch           = $branch;
         $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $project > 0 || $this->config->story->needReview == 0) ? 0 : 1;
+        $this->view->needReview       = ($this->app->user->account == $product->PO || $projectID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
 
         $this->display();
     }

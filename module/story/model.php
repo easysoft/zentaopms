@@ -3279,12 +3279,12 @@ class storyModel extends model
 
         $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlinkStory);
 
-        $module     = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';
-        $canView    = common::hasPriv($module, 'view');
-        $openModule = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
-        $storyLink  = helper::createLink($module, 'view', "storyID=$story->id");
-        $account    = $this->app->user->account;
-        $id         = $col->id;
+        $module    = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';
+        $canView   = common::hasPriv($module, 'view');
+        $openGroup = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
+        $storyLink = helper::createLink($module, 'view', "storyID=$story->id");
+        $account   = $this->app->user->account;
+        $id        = $col->id;
         if($col->show)
         {
             $class = "c-{$id}";
@@ -3347,7 +3347,7 @@ class storyModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a($storyLink, sprintf('%03d', $story->id), '', "data-group='$openModule'");
+                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a($storyLink, sprintf('%03d', $story->id), '', "data-group='$openGroup'");
                 }
                 else
                 {
@@ -3365,7 +3365,7 @@ class storyModel extends model
                 if($story->branch and isset($branches[$story->branch])) echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                 if($story->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
-                echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color' data-group='$openModule'") : "<span style='color: $story->color'>{$story->title}</span>";
+                echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color' data-group='$openGroup'") : "<span style='color: $story->color'>{$story->title}</span>";
                 if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';
                 break;
             case 'plan':
@@ -3649,12 +3649,15 @@ class storyModel extends model
                 $stories[$id]->cases     = $this->loadModel('testcase')->getStoryCases($id);
                 $stories[$id]->bugs      = $this->loadModel('bug')->getStoryBugs($id);
                 $stories[$id]->tasks     = $this->loadModel('task')->getStoryTasks($id);
-                $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
-                $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
-                    ->where('AType')->eq('design')
-                    ->andWhere('BType')->eq('commit')
-                    ->andWhere('AID')->in(array_keys($stories[$id]->designs))
-                    ->fetchPairs();
+                if(isset($this->config->maxVersion))
+                {
+                    $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                    $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
+                        ->where('AType')->eq('design')
+                        ->andWhere('BType')->eq('commit')
+                        ->andWhere('AID')->in(array_keys($stories[$id]->designs))
+                        ->fetchPairs();
+                }
             }
 
             $requirement->track = $stories;
@@ -3680,12 +3683,15 @@ class storyModel extends model
                 $stories[$id]->cases     = $this->loadModel('testcase')->getStoryCases($id);
                 $stories[$id]->bugs      = $this->loadModel('bug')->getStoryBugs($id);
                 $stories[$id]->tasks     = $this->loadModel('task')->getStoryTasks($id);
-                $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
-                $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
-                    ->where('AType')->eq('design')
-                    ->andWhere('BType')->eq('commit')
-                    ->andWhere('AID')->in(array_keys($stories[$id]->designs))
-                    ->fetchPairs();
+                if(isset($this->config->maxVersion))
+                {
+                    $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                    $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
+                        ->where('AType')->eq('design')
+                        ->andWhere('BType')->eq('commit')
+                        ->andWhere('AID')->in(array_keys($stories[$id]->designs))
+                        ->fetchPairs();
+                }
             }
 
             $requirements['noRequirement'] = $stories;
@@ -3711,12 +3717,16 @@ class storyModel extends model
         foreach($stories as $id => $title)
         {
             $track[$id] = new stdclass();
-            $track[$id]->title    = $title;
-            $track[$id]->case     = $this->loadModel('testcase')->getStoryCases($id);
-            $track[$id]->bug      = $this->loadModel('bug')->getStoryBugs($id);
-            $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
-            $track[$id]->story    = $this->getByID($id);
-            $track[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($track[$id]->design))->fetchPairs();
+            $track[$id]->title = $title;
+            $track[$id]->case  = $this->loadModel('testcase')->getStoryCases($id);
+            $track[$id]->bug   = $this->loadModel('bug')->getStoryBugs($id);
+            $track[$id]->story = $this->getByID($id);
+            $track[$id]->task  = $this->loadModel('task')->getStoryTasks($id);
+            if(isset($this->config->maxVersion))
+            {
+                $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                $track[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($track[$id]->design))->fetchPairs();
+            }
         }
 
         return $track;

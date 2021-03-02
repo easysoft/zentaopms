@@ -208,7 +208,7 @@ class actionModel extends model
      */
     public function getList($objectType, $objectID)
     {
-        if($this->config->systemMode == 'old' and $objectType == 'execution') $objectType = 'project';
+        if($this->config->systemMode == 'classic' and $objectType == 'execution') $objectType = 'project';
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')

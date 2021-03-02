@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class="main-row" <?php if(isonlybody()) echo 'style="padding-top: 0px;"';?>>
-  <div class="col-12 main-col">
+  <div class="col-8 main-col">
     <div class="row">
       <div class="col-sm-12">
         <div class="cell">
@@ -141,11 +141,6 @@
           <?php $this->printExtendFields($product, 'div', "position=right&inForm=0&inCell=1");?>
         </div>
       </div>
-      <div class="col-sm-12">
-        <?php $blockHistory = true;?>
-        <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=product&objectID=$product->id");?>
-        <?php include '../../common/view/action.html.php';?>
-      </div>
     </div>
     <div class='main-actions'>
       <div class="btn-toolbar">
@@ -169,6 +164,15 @@
             common::printIcon('product', 'delete', $params, $product, 'button', 'trash', 'hiddenwin');
         }
         ?>
+      </div>
+    </div>
+  </div>
+  <div class="col-4 side-col">
+    <div class="row">
+      <div class="col-sm-12">
+        <?php $blockHistory = true;?>
+        <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=product&objectID=$product->id");?>
+        <?php include '../../common/view/action.html.php';?>
       </div>
     </div>
   </div>

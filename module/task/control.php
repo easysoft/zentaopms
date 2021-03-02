@@ -206,7 +206,7 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->project          = $project;
-        $this->view->projects         = $this->config->systemMode == 'old' ? $projects : $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
+        $this->view->projects         = $this->config->systemMode == 'classic' ? $projects : $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;
@@ -392,7 +392,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->project, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->projects      = $this->config->systemMode == 'old' ? $this->project->getExecutionPairs() : $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
+        $this->view->projects      = $this->config->systemMode == 'classic' ? $this->project->getExecutionPairs() : $this->loadModel('project')->getExecutionsByProject($this->session->PRJ, 'all', 0, true);
         $this->display();
     }
 

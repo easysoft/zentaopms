@@ -10,6 +10,24 @@ $lang->mainNav->menuOrder[60] = 'system';
 $lang->mainNav->menuOrder[70] = 'admin';
 if($config->systemMode == 'new') $lang->mainNav->menuOrder[10] = 'program';
 
+/* Waterfall menu order. */
+$lang->waterfall->menuOrder[5]  = 'programindex';
+$lang->waterfall->menuOrder[10] = 'programplan';
+$lang->waterfall->menuOrder[15] = 'project';
+$lang->waterfall->menuOrder[20] = 'projectstory';
+$lang->waterfall->menuOrder[25] = 'design';
+$lang->waterfall->menuOrder[30] = 'ci';
+$lang->waterfall->menuOrder[35] = 'track';
+$lang->waterfall->menuOrder[38] = 'review';
+$lang->waterfall->menuOrder[39] = 'cm';
+$lang->waterfall->menuOrder[40] = 'qa';
+$lang->waterfall->menuOrder[45] = 'doc';
+$lang->waterfall->menuOrder[50] = 'projectbuild';
+$lang->waterfall->menuOrder[55] = 'projectrelease';
+$lang->waterfall->menuOrder[60] = 'weekly';
+$lang->waterfall->menuOrder[65] = 'other';
+$lang->waterfall->menuOrder[70] = 'projectsetting';
+
 /* Sort of main menu. */
 $lang->scrum->menuOrder[5]  = 'programindex';
 $lang->scrum->menuOrder[10] = 'project';

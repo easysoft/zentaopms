@@ -203,7 +203,7 @@ class projectModel extends model
         $currentProjectName = '';
         if(isset($currentProject->name)) $currentProjectName = $currentProject->name;
 
-        if($this->config->systemMode == 'old')
+        if($this->config->systemMode == 'classic')
         {
             $this->session->set('moreProjectLink', $this->app->getURI(true));
             $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'><span class='text'><i class='icon icon-sprint'></i> {$currentProjectName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
@@ -880,7 +880,7 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
-        $mode    .= $this->cookie->projectMode;
+        $mode   .= $this->cookie->projectMode;
         $orderBy = $this->config->project->orderBy;
         if($projectID)
         {

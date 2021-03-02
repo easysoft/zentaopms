@@ -114,8 +114,6 @@ $lang->future      = '未来';
 $lang->year        = '年';
 $lang->workingHour = '工时';
 
-$lang->generalUR    = '用需/史诗';
-$lang->generalSR    = '软需/故事';
 $lang->sprintCommon = $lang->iterationCommon . '/阶段';
 
 $lang->execution = new stdclass();
@@ -648,7 +646,6 @@ $lang->navGroup->review         = 'project';
 $lang->navGroup->reviewissue    = 'project';
 $lang->navGroup->milestone      = 'project';
 $lang->navGroup->pssp           = 'project';
-$lang->navGroup->design         = 'project';
 $lang->navGroup->auditplan      = 'project';
 $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
@@ -944,7 +941,6 @@ $lang->waterfall->setMenu = $lang->scrum->setMenu;
 $lang->waterfallproduct   = new stdclass();
 $lang->review             = new stdclass();
 $lang->milestone          = new stdclass();
-$lang->design             = new stdclass();
 $lang->auditplan          = new stdclass();
 $lang->cm                 = new stdclass();
 $lang->nc                 = new stdclass();
@@ -954,7 +950,6 @@ $lang->projectstory       = new stdclass();
 
 $lang->review->menu             = new stdclass();
 $lang->milestone->menu          = new stdclass();
-$lang->design->menu             = new stdclass();
 $lang->auditplan->menu          = new stdclass();
 $lang->cm->menu                 = new stdclass();
 $lang->pssp->menu               = new stdclass();
@@ -965,16 +960,9 @@ $lang->projectstory->menu       = new stdclass();
 $lang->stakeholder->menu->list  = array('link' => '干系人列表|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
 $lang->stakeholder->menu->issue = array('link' => '问题管理|stakeholder|issue|');
 
-$lang->design->menu->all      = array('link' => '所有|design|browse|productID={PRODUCT}&browseType=all');
-$lang->design->menu->hlds     = array('link' => '概要设计|design|browse|productID={PRODUCT}&browseType=HLDS');
-$lang->design->menu->dds      = array('link' => '详细设计|design|browse|productID={PRODUCT}&browseType=DDS');
-$lang->design->menu->dbds     = array('link' => '数据库设计|design|browse|productID={PRODUCT}&browseType=DBDS');
-$lang->design->menu->ads      = array('link' => '接口设计|design|browse|productID={PRODUCT}&browseType=ADS');
-$lang->design->menu->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
-
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
-if($config->systemMode == 'old')
+if($config->systemMode == 'classic')
 {
     $lang->noMenuModule[] = 'project';
     $lang->noMenuModule[] = 'task';

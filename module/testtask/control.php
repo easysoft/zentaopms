@@ -1217,10 +1217,10 @@ class testtask extends control
     }
 
     /**
-     * Ajax get test tasks 
-     * 
-     * @param  int    $productID 
-     * @param  int    $projectID 
+     * Ajax get test tasks.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return void
      */

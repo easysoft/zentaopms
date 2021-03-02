@@ -60,12 +60,12 @@
                 <?php endif;?>
                 <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></nobr>
               </th>
-              <th class='c-pri w-50px'>   <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
-              <th class='w-100px'> <?php common::printOrderLink('module',        $orderBy, $vars, $lang->testcase->module);?></th>
-              <th class='c-name'>  <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
-              <th class='w-90px'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
-              <th class='c-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-              <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testcase->lastRunResult);?></th>
+              <th class='c-pri w-50px'><?php common::printOrderLink('pri',     $orderBy, $vars, $lang->priAB);?></th>
+              <th class='w-100px'><?php common::printOrderLink('module',       $orderBy, $vars, $lang->testcase->module);?></th>
+              <th class='c-name'><?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
+              <th class='w-90px'><?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
+              <th class='c-status'><?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
+              <th class='w-80px'><?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testcase->lastRunResult);?></th>
               <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'><?php echo $lang->testcase->bugsAB;?></th>
               <th class='w-30px' title='<?php echo $lang->testcase->results?>'><?php echo $lang->testcase->resultsAB;?></th>
               <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'><?php echo $lang->testcase->stepNumberAB;?></th>
