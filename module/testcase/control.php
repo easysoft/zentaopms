@@ -11,8 +11,20 @@
  */
 class testcase extends control
 {
+    /**
+     * All products.
+     *
+     * @var    array
+     * @access public
+     */
     public $products = array();
 
+    /**
+     * Project id.
+     *
+     * @var    int
+     * @access public
+     */
     public $projectID = 0;
 
     /**

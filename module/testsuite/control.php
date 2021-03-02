@@ -11,6 +11,12 @@
  */
 class testsuite extends control
 {
+    /**
+     * All products.
+     *
+     * @var    array
+     * @access public
+     */
     public $products = array();
 
     /**
