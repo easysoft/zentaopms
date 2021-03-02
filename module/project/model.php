@@ -880,7 +880,7 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
-        $mode    .= $this->cookie->projectMode;
+        $mode   .= $this->cookie->projectMode;
         $orderBy = $this->config->project->orderBy;
         if($projectID)
         {
