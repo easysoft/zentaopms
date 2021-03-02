@@ -110,6 +110,9 @@ class program extends control
      */
     public function PGMProduct($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $programID = $this->program->savePGMState($programID, $this->program->getPGMPairs());
+        setCookie("lastPGM", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         $program = $this->program->getPGMByID($programID);
         if(empty($program) || $program->type != 'program') die(js::error($this->lang->notFound) . js::locate('back'));
 
