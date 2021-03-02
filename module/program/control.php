@@ -1027,21 +1027,21 @@ class program extends control
         $this->view->title      = $this->lang->program->PRJEdit;
         $this->view->position[] = $this->lang->program->PRJEdit;
 
-        $this->view->PMUsers           = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->users             = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->project           = $project;
-        $this->view->programList       = $this->program->getParentPairs();
-        $this->view->programID         = $programID;
-        $this->view->allProducts       = array('0' => '') + $allProducts;
-        $this->view->productPlans      = $productPlans;
-        $this->view->linkedProducts    = $linkedProducts;
+        $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->users                = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->project              = $project;
+        $this->view->programList          = $this->program->getParentPairs();
+        $this->view->programID            = $programID;
+        $this->view->allProducts          = array('0' => '') + $allProducts;
+        $this->view->productPlans         = $productPlans;
+        $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
-        $this->view->URSRPairs         = $this->loadModel('custom')->getURSRPairs();
-        $this->view->from              = $from;
-        $this->view->parentProgram     = $parentProgram;
-        $this->view->remainBudget      = $this->program->getParentRemainBudget($parentProgram) + (float)$project->budget;
-        $this->view->budgetUnitList    = $this->program->getBudgetUnitList();
+        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
+        $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
+        $this->view->from                 = $from;
+        $this->view->parentProgram        = $parentProgram;
+        $this->view->remainBudget         = $this->program->getParentRemainBudget($parentProgram) + (float)$project->budget;
+        $this->view->budgetUnitList       = $this->program->getBudgetUnitList();
 
         $this->display();
     }
@@ -1815,12 +1815,12 @@ class program extends control
         }
 
         /* Assign. */
-        $this->view->title             = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
-        $this->view->position[]        = $this->lang->project->manageProducts;
-        $this->view->allProducts       = $allProducts;
-        $this->view->linkedProducts    = $linkedProducts;
+        $this->view->title                = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
+        $this->view->position[]           = $this->lang->project->manageProducts;
+        $this->view->allProducts          = $allProducts;
+        $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
+        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 
         $this->display();
     }

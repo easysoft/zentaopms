@@ -1366,21 +1366,21 @@ class project extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $project->RD, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
-        $this->view->title             = $title;
-        $this->view->position          = $position;
-        $this->view->projects          = $projects;
-        $this->view->project           = $project;
-        $this->view->poUsers           = $poUsers;
-        $this->view->pmUsers           = $pmUsers;
-        $this->view->qdUsers           = $qdUsers;
-        $this->view->rdUsers           = $rdUsers;
-        $this->view->users             = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->groups            = $this->loadModel('group')->getPairs();
-        $this->view->allProducts       = $allProducts;
-        $this->view->linkedProducts    = $linkedProducts;
+        $this->view->title                = $title;
+        $this->view->position             = $position;
+        $this->view->projects             = $projects;
+        $this->view->project              = $project;
+        $this->view->poUsers              = $poUsers;
+        $this->view->pmUsers              = $pmUsers;
+        $this->view->qdUsers              = $qdUsers;
+        $this->view->rdUsers              = $rdUsers;
+        $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
+        $this->view->groups               = $this->loadModel('group')->getPairs();
+        $this->view->allProducts          = $allProducts;
+        $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->productPlans      = $productPlans;
-        $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
+        $this->view->productPlans         = $productPlans;
+        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
         $this->display();
     }
 
@@ -2053,13 +2053,13 @@ class project extends control
         }
 
         /* Assign. */
-        $this->view->title             = $title;
-        $this->view->position          = $position;
-        $this->view->allProducts       = $allProducts;
-        $this->view->project           = $project;
-        $this->view->linkedProducts    = $linkedProducts;
+        $this->view->title                = $title;
+        $this->view->position             = $position;
+        $this->view->allProducts          = $allProducts;
+        $this->view->project              = $project;
+        $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
+        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 
         $this->display();
     }
