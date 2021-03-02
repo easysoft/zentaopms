@@ -39,7 +39,7 @@
           </td>
           <td class='pv-10px' colspan='2'>
             <div class='input-group'>
-              <span class='input-group-addon'> <?php echo $lang->group->PRJ;?></span>
+              <span class='input-group-addon'> <?php echo $lang->group->manageProject;?></span>
               <?php echo html::select("program[$account][]", $programs, $program, "class='form-control chosen' multiple");?>
             </div>
           </td>
@@ -58,7 +58,7 @@
           </td>
           <td class='pv-10px' colspan='2'>
             <div class='input-group'>
-              <span class='input-group-addon'> <?php echo $lang->group->PRJ;?></span>
+              <span class='input-group-addon'> <?php echo $lang->group->manageProject;?></span>
               <?php echo html::select('program[0][]', $programs, '', "class='form-control chosen' multiple");?>
             </div>
           </td>
