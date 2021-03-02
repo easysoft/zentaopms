@@ -1542,18 +1542,19 @@ class productModel extends model
     }
 
     /**
-     * Create the link from module,method,extra
+     * Create the link from module,method,extra,branch.
      *
      * @param  string  $module
      * @param  string  $method
-     * @param  mix     $extra
+     * @param  string  $extra
+     * @param  bool    $branch
      * @access public
      * @return void
      */
     public function getProductLink($module, $method, $extra, $branch = false)
     {
         $link = '';
-        if(strpos('programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory,caselib', $module) !== false)
+        if(strpos('programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory', $module) !== false)
         {
             if($module == 'product' && $method == 'project')
             {
