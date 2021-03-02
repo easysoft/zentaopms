@@ -901,15 +901,15 @@ class product extends control
         $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
         $products    = $moduleGroup == 'project' ? $this->product->getProductsByProject($this->session->PRJ) : $this->product->getList();
 
-        $this->view->link       = $this->product->getProductLink($module, $method, $extra);
-        $this->view->productID  = $productID;
-        $this->view->module     = $module;
-        $this->view->method     = $method;
-        $this->view->extra      = $extra;
-        $this->view->products   = $products;
-        $this->view->projectID  = $moduleGroup == 'project' ? $this->session->PRJ : 0;
-        $this->view->programs   = $this->loadModel('program')->getPGMOption();
-        $this->view->openModule = $moduleGroup;
+        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
+        $this->view->productID = $productID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+        $this->view->products  = $products;
+        $this->view->projectID = $moduleGroup == 'project' ? $this->session->PRJ : 0;
+        $this->view->programs  = $this->loadModel('program')->getPGMOption();
+        $this->view->openGroup = $moduleGroup;
         $this->display();
     }
 

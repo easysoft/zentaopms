@@ -50,14 +50,14 @@
     <?php if(common::canModify('product', $product)): ?>
     <?php
     $otherParam = '';
-    $openModule = 'product';
+    $openGroup  = 'product';
     if($this->app->rawModule == 'projectstory')
     {
         $otherParam = "storyID=&projectID={$this->session->PRJ}";
-        $openModule = 'project';
+        $openGroup  = 'project';
     }
     ?>
-    <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam", "<i class='icon icon-plus'></i>" . $lang->story->create, '', "class='btn btn-primary' data-group='$openModule'"); ?>
+    <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam", "<i class='icon icon-plus'></i>" . $lang->story->create, '', "class='btn btn-primary' data-group='$openGroup'"); ?>
     <?php endif;?>
   </div>
   <?php endif;?>

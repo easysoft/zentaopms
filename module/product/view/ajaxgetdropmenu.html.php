@@ -27,19 +27,19 @@ foreach($products as $product)
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
-        $myProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $productName, '', "class='text-important' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-group='$openModule'");
+        $myProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $productName, '', "class='text-important' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-group='$openGroup'");
     }
     else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
-        $normalProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $productName, '', "title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-group='$openModule'");
+        $normalProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $productName, '', "title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-group='$openGroup'");
     }
     else if($product->status == 'closed')
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $objectID);
-        $closedProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $productName, '', "title='{$productName}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-group='$openModule'");
+        $closedProductsHtml .= html::a($linkHtml, html::icon($lang->icons['product']) . ' ' . $productName, '', "title='{$productName}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-group='$openGroup'");
     }
 }
 ?>
