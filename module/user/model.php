@@ -1548,7 +1548,7 @@ class userModel extends model
             if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
             if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
             if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
-            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage')->fetchAll('id');
+            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage')->fi()->fetchAll('id');
 
             /* Get teams. */
             if($teams === null)
@@ -1777,9 +1777,8 @@ class userModel extends model
         /* Set opened sprints and stages into userview. */
         $openedSprints = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('acl')->eq('open')
-            ->andWhere('type')
-            ->in('sprint,stage')
-            ->andWhere('project')->in($userView->projects)
+            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage')->fi()
+            ->beginIF($this->config->systemMode == 'new')->andWhere('project')->in($userView->projects)->fi()
             ->fetchAll('id');
 
         $openedSprints     = join(',', array_keys($openedSprints));

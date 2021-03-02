@@ -553,7 +553,7 @@ class custom extends control
             if($mode == 'new') die(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
         }
 
-        $mode = zget($this->config->global, 'mode', 'old');
+        $mode = zget($this->config->global, 'mode', 'classic');
         if($mode == 'new')
         {
             if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') $this->locate($this->createLink('upgrade', 'mergeProgram'));

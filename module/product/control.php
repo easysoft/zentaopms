@@ -470,7 +470,7 @@ class product extends control
 
         $lines = array();
         if($product->program) $lines = array('') + $this->product->getLinePairs($product->program);
-        if($this->config->systemMode == 'old') $lines = array('') + $this->product->getLinePairs();
+        if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
 
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);

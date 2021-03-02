@@ -183,7 +183,7 @@ class group extends control
             $group      = $this->group->getById($groupID);
             $groupPrivs = $this->group->getPrivs($groupID);
 
-            if($this->config->systemMode == 'old')
+            if($this->config->systemMode == 'classic')
             {
                 if(isset($groupPrivs['program']['prjbrowse']))
                 {

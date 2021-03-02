@@ -193,7 +193,7 @@ class router extends baseRouter
 
         /* Record system mode. */
         $config->systemMode = $mode;
-        if($config->systemMode == 'old') $this->config->executionCommonList = $this->config->projectCommonList;
+        if($config->systemMode == 'classic') $this->config->executionCommonList = $this->config->projectCommonList;
 
         /* Record hour unit. */
         $config->hourUnit = 'H';
