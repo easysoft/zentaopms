@@ -914,7 +914,6 @@ class program extends control
             }
         }
 
-        $allProducts   = $this->program->getPGMProductPairs($programID);
         $parentProgram = $this->program->getPGMByID($programID);
 
         $this->view->title      = $this->lang->program->PRJCreate;
@@ -924,7 +923,7 @@ class program extends control
         $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
         $this->view->copyProjects   = $this->program->getPRJPairsByModel();
         $this->view->products       = $products;
-        $this->view->allProducts    = array('0' => '') + $allProducts;
+        $this->view->allProducts    = array('0' => '') + $this->program->getPGMProductPairs($programID);
         $this->view->productPlans   = array('0' => '') + $productPlans;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->programID      = $programID;
