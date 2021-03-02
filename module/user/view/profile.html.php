@@ -20,16 +20,7 @@
   <div class='cell'>
     <div class='main-header text-center'>
       <span class="avatar avatar bg-secondary avatar-circle">
-      <?php
-      if($user->avatar)
-      {
-          echo html::image($user->avatar);
-      }
-      else
-      {
-          echo strtoupper($user->account[0]);
-      }
-      ?>
+      <?php echo $user->avatar ? html::image($user->avatar) : strtoupper($user->account[0]);?>
       </span>
       <span class='user-name'><?php echo $user->realname;?></span>
       <span class='user-role'><?php echo zget($lang->user->roleList, $user->role);?></span>
