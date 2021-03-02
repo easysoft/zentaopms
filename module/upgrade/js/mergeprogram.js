@@ -154,6 +154,12 @@ function getProjectByProgram(obj)
     getLineByProgram();
 }
 
+/**
+ * Get lines by program id.
+ *
+ * @access public
+ * @return void
+ */
 function getLineByProgram()
 {
     var programID = $('#programs').val();
