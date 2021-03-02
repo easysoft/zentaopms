@@ -360,21 +360,21 @@ class product extends control
 
         /* Init vars. */
         $product              = $this->product->getById($productID);
-        $notRemovePRJ         = array();
+        $unmodifiableProjects = array();
         $canChangePGM         = true;
         $singleLinkProjects   = array();
         $multipleLinkProjects = array();
         $linkStoriesProjects  = array();
 
         /* Link the projects stories under this product. */
-        $notRemovePRJ = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $unmodifiableProjects = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t2.deleted')->eq('0')
             ->fetchPairs('project', 'product');
 
-        if(!empty($notRemovePRJ)) $canChangePGM = false;
+        if(!empty($unmodifiableProjects)) $canChangePGM = false;
 
         /* Get the projects linked with this product. */
         $projectPairs = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -403,7 +403,7 @@ class product extends control
                 }
                 else
                 {
-                    if(isset($notRemovePRJ[$projectID])) $linkStoriesProjects[$projectID] = $projectName;
+                    if(isset($unmodifiableProjects[$projectID])) $linkStoriesProjects[$projectID] = $projectName;
                 }
             }
         }
