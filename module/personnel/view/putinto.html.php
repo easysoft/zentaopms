@@ -29,8 +29,10 @@
             <th colspan="3">                <?php echo $lang->personnel->task;?></th>
             <th colspan="3">                <?php echo $lang->personnel->bug;?></th>
             <th colspan="2" class="w-150px"><?php echo $lang->personnel->createStories;?></th>
+            <?php if(isset($this->config->maxVersion)): ?>
             <th colspan="3">                <?php echo $lang->personnel->issue;?></th>
             <th colspan="3">                <?php echo $lang->personnel->risk;?></th>
+            <?php endif;?>
           </tr>
           <tr>
             <th><?php echo $lang->personnel->putInto;?></th>
@@ -43,12 +45,14 @@
             <th><?php echo $lang->personnel->wait;?></th>
             <th><?php echo $lang->personnel->UR;?></th>
             <th><?php echo $lang->personnel->SR;?></th>
+            <?php if(isset($this->config->maxVersion)): ?>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
             <th><?php echo $lang->personnel->wait;?></th>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
             <th><?php echo $lang->personnel->wait;?></th>
+            <?php endif;?>
           </tr>
         </thead>
         <tbody class="sortable">
@@ -68,12 +72,14 @@
             <td><?php echo $personnel['pendingBug'];?></td>
             <td><?php echo $personnel['UR'];?></td>
             <td><?php echo $personnel['SR'];?></td>
+            <?php if(isset($this->config->maxVersion)): ?>
             <td><?php echo $personnel['createdIssue'];?></td>
             <td><?php echo $personnel['resolvedIssue'];?></td>
             <td><?php echo $personnel['pendingIssue'];?></td>
             <td><?php echo $personnel['createdRisk'];?></td>
             <td><?php echo $personnel['resolvedRisk'];?></td>
             <td><?php echo $personnel['pendingRisk'];?></td>
+            <?php endif;?>
           </tr>
         <?php endforeach;?>
         </tbody>

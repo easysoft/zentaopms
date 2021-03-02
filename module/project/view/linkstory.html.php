@@ -18,7 +18,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->linkStory;?></span></span>
-    <?php if($projectStories and ($this->app->rawModule == 'project')):?>
+    <?php if($executionStories and ($this->app->rawModule == 'project')):?>
     <span class='btn btn-link'><span class='text'><?php echo $lang->project->linkPRJStoryTip;?></span></span>
     <?php elseif($this->app->rawModule == 'project'):?>
     <span class='btn btn-link'><span class='text'><?php echo $lang->project->linkAllStoryTip;?></span></span>

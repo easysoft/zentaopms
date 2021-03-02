@@ -1312,11 +1312,11 @@ class project extends control
         $linkedBranches = array();
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
-        $notRemoveProducts = array();
+        $unmodifiableProducts = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             $projectStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('story');
-            if(!empty($projectStories)) array_push($notRemoveProducts, $productID);
+            if(!empty($projectStories)) array_push($unmodifiableProducts, $productID);
         }
 
         foreach($linkedProducts as $product)
@@ -1378,7 +1378,7 @@ class project extends control
         $this->view->groups            = $this->loadModel('group')->getPairs();
         $this->view->allProducts       = $allProducts;
         $this->view->linkedProducts    = $linkedProducts;
-        $this->view->notRemoveProducts = $notRemoveProducts;
+        $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->productPlans      = $productPlans;
         $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
         $this->display();
@@ -2038,11 +2038,11 @@ class project extends control
         $linkedBranches  = array();
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
-        $notRemoveProducts = array();
+        $unmodifiableProducts = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             $projectStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('story');
-            if(!empty($projectStories)) array_push($notRemoveProducts, $productID);
+            if(!empty($projectStories)) array_push($unmodifiableProducts, $productID);
         }
 
         // Merge allProducts and linkedProducts for closed product.
@@ -2058,7 +2058,7 @@ class project extends control
         $this->view->allProducts       = $allProducts;
         $this->view->project           = $project;
         $this->view->linkedProducts    = $linkedProducts;
-        $this->view->notRemoveProducts = $notRemoveProducts;
+        $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 
         $this->display();
@@ -2239,15 +2239,15 @@ class project extends control
             $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
 
-        if($project->project != 0) $projectStories = $this->story->getProjectStoryPairs($project->project);
+        if($project->project != 0) $executionStories = $this->story->getProjectStoryPairs($project->project);
 
-        $prjStories = $this->story->getProjectStoryPairs($projectID);
+        $projectStories = $this->story->getProjectStoryPairs($projectID);
         foreach($allStories as $id => $story)
         {
-            if(isset($prjStories[$story->id])) unset($allStories[$id]);
+            if(isset($projectStories[$story->id])) unset($allStories[$id]);
 
             if($story->parent < 0) unset($allStories[$id]);
-            if(!empty($projectStories) and !isset($projectStories[$story->id])) unset($allStories[$id]);
+            if(!empty($executionStories) and !isset($executionStories[$story->id])) unset($allStories[$id]);
         }
 
         /* Pager. */
@@ -2257,22 +2257,21 @@ class project extends control
         $allStories = array_chunk($allStories, $pager->recPerPage);
 
         /* Assign. */
-        $title      = $project->name . $this->lang->colon . $this->lang->project->linkStory;
-        $position[] = html::a($browseLink, $project->name);
-        $position[] = $this->lang->project->linkStory;
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->linkStory;
+        $this->view->position[] = html::a($browseLink, $project->name);
+        $this->view->position[] = $this->lang->project->linkStory;
 
-        $this->view->title          = $title;
-        $this->view->position       = $position;
-        $this->view->project        = $project;
-        $this->view->products       = $products;
-        $this->view->projectStories = empty($projectStories) ? '' : $projectStories;
-        $this->view->allStories     = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
-        $this->view->pager          = $pager;
-        $this->view->browseType     = $browseType;
-        $this->view->productType    = $productType;
-        $this->view->modules        = $modules;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->branchGroups   = $branchGroups;
+        $this->view->project          = $project;
+        $this->view->products         = $products;
+        $this->view->executionStories = empty($executionStories) ? '' : $executionStories;
+        $this->view->allStories       = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
+        $this->view->pager            = $pager;
+        $this->view->browseType       = $browseType;
+        $this->view->productType      = $productType;
+        $this->view->modules          = $modules;
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
+        $this->view->branchGroups     = $branchGroups;
+
         $this->display();
     }
 
@@ -2806,6 +2805,7 @@ class project extends control
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
         $project     = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+
         $count = 0;
         if(!empty($planStory))
         {
