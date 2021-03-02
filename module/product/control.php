@@ -908,7 +908,7 @@ class product extends control
         $this->view->extra     = $extra;
         $this->view->products  = $products;
         $this->view->projectID = $moduleGroup == 'project' ? $this->session->PRJ : 0;
-        $this->view->programs  = $this->loadModel('program')->getPGMOption();
+        $this->view->programs  = $this->loadModel('program')->getPGMPairs(true);
         $this->view->openGroup = $moduleGroup;
         $this->display();
     }

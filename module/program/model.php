@@ -39,27 +39,17 @@ class programModel extends model
     /**
      * Get program pairs.
      *
+     * @param  bool   $isQueryAll
      * @access public
      * @return array
      */
-    public function getPGMPairs()
+    public function getPGMPairs($isQueryAll = false)
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->fetchPairs();
-    }
-
-    /**
-     * Get program option.
-     *
-     * @access public
-     * @return array
-     */
-    public function getPGMOption()
-    {
-        return $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->fetchPairs();
     }
 
     /**
@@ -1874,19 +1864,6 @@ class programModel extends model
                 $title  = "title='{$project->name}'";
             }
 
-            $PRJProgram = '';
-            if($id == 'PRJProgram' and $project->parent != 0)
-            {
-                $programList  = $this->getPGMOption();
-                $programIndex = $programID ? strpos($project->path, (string)$programID) : 0;
-                $projectIndex = strpos($project->path, $project->id);
-                $programPath  = explode(',' , substr($project->path, $programIndex, $projectIndex - $programIndex));
-                foreach($programPath as $program)
-                {
-                    if($program) $PRJProgram .= '/' . zget($programList, $program);
-                }
-                $title = "title='{$PRJProgram}'";
-            }
             if($id == 'PRJBudget')
             {
                 $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format((float)$project->budget, 1);
@@ -1916,9 +1893,6 @@ class programModel extends model
                     echo html::a($projectLink, $project->name);
                     if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->program->waterfall}</span>";
                     if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->program->scrum}</span>";
-                    break;
-                case 'PRJProgram':
-                    echo $PRJProgram;
                     break;
                 case 'PM':
                     $user   = $this->loadModel('user')->getByID($project->PM, 'account');
