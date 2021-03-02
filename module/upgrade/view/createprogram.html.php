@@ -9,14 +9,12 @@
       <div class='input-group'>
         <?php echo html::select("programs", $programs, $programID, "class='form-control hidden pgm-exist' onchange='getProjectByProgram(this)'");?>
         <?php echo html::input("PGMName", isset($programName) ? $programName : '', "class='form-control pgm-no-exist'");?>
-        <?php if(count($programs)):?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />
             <label for="newProgram0"><?php echo $lang->upgrade->newProgram;?></label>
           </div>
         </span>
-        <?php endif;?>
       </div>
       <?php echo html::hidden('programID', '');?>
     </td>
