@@ -110,6 +110,9 @@ class program extends control
      */
     public function PGMProduct($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $programID = $this->program->savePGMState($programID, $this->program->getPGMPairs());
+        setCookie("lastPGM", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         $program = $this->program->getPGMByID($programID);
         if(empty($program) || $program->type != 'program') die(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -958,6 +961,7 @@ class program extends control
         $this->app->loadLang('custom');
         $this->app->loadLang('project');
         $this->loadModel('productplan');
+        $this->loadModel('action');
 
         $project   = $this->program->getPRJByID($projectID);
         $programID = $project->parent;
@@ -988,7 +992,7 @@ class program extends control
 
             if($changes)
             {
-                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
+                $actionID = $this->action->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -1056,6 +1060,8 @@ class program extends control
      */
     public function PRJBatchEdit($from = 'prjbrowse', $programID = 0)
     {
+        $this->loadModel('action');
+
         /* Navigation stay in program when enter from program list. */
         if($from == 'pgmproject')
         {
@@ -1078,7 +1084,7 @@ class program extends control
                 {
                     if(empty($changes)) continue;
 
-                    $actionID = $this->loadModel('action')->create('project', $projectID, 'Edited');
+                    $actionID = $this->action->create('project', $projectID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
             }

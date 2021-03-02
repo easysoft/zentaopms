@@ -544,7 +544,7 @@ class customModel extends model
         $this->app->loadLang('custom');
         $lang = $this->app->getClientLang();
 
-        $langData = $this->dao->select('`key`, `value`, system')->from(TABLE_LANG)
+        $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
             ->andWhere('section')->eq('URSRList')

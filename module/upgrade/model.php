@@ -3993,7 +3993,7 @@ class upgradeModel extends model
         $data = fixer::input('post')->get();
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
 
-        if(!isset($data->programs) && $data->programID == '')
+        if(isset($data->newProgram))
         {
             /* Insert program. */
             $program = new stdclass();
@@ -4009,7 +4009,7 @@ class upgradeModel extends model
 
             $this->app->loadLang('program');
             $this->app->loadLang('project');
-            $this->lang->project->name  = $this->lang->program->PGMName;
+            $this->lang->project->name = $this->lang->program->PGMName;
 
             $this->dao->insert(TABLE_PROJECT)->data($program)
                 ->batchcheck('name,begin', 'notempty')
@@ -4066,7 +4066,7 @@ class upgradeModel extends model
 
         if(!isset($data->sprints)) return array($programID, 0, $lineID);
 
-        if(!isset($data->projects))
+        if(isset($data->newProject))
         {
             if(!$this->post->longTime and !$this->post->end) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->program->end)));
 
@@ -4201,7 +4201,6 @@ class upgradeModel extends model
 
 		$data = new stdClass();
 		$data->realBegan = $minRealBegan ? substr($minRealBegan, 0, 10) : '0000-00-00';
-		$data->status    = $PRJStatus;
 
         $PRJStatus = $this->dao->select('status')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('status');
 		if($PRJStatus == 'closed')

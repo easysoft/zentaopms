@@ -178,23 +178,23 @@
                     <th><?php echo $lang->project->begin;?></th>
                     <td><?php echo $project->begin;?></td>
                     <th><?php echo $lang->project->totalEstimate;?></th>
-                    <td><em><?php echo (float)$workhour->totalEstimate;?></em></td>
+                    <td><em><?php echo (float)$workhour->totalEstimate . $lang->project->workHour;?></em></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->project->end;?></th>
                     <td><?php echo $project->end;?></td>
                     <th><?php echo $lang->project->totalConsumed;?></th>
-                    <td><em><?php echo (float)$workhour->totalConsumed;?></em></td>
+                    <td><em><?php echo (float)$workhour->totalConsumed . $lang->project->workHour;?></em></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->project->totalDays;?></th>
                     <td><?php echo $project->days;?></td>
                     <th><?php echo $lang->project->totalLeft;?></th>
-                    <td><em><?php echo (float)$workhour->totalLeft;?></em></td>
+                    <td><em><?php echo (float)$workhour->totalLeft . $lang->project->workHour;?></em></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->project->totalHours;?></th>
-                    <td><em><?php echo (float)$workhour->totalHours;?></em></td>
+                    <td><em><?php echo (float)$workhour->totalHours . $lang->project->workHour;?></em></td>
                   </tr>
                 </tbody>
               </table>

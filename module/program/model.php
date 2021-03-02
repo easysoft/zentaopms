@@ -1744,17 +1744,7 @@ class programModel extends model
 
         if(!dao::isError())
         {
-            /* Product belonging program set processing. */
-            $oldTopPGM = $this->getTopPGMByID($oldProject->parent);
-            $newTopPGM = $this->getTopPGMByID($project->parent);
-            if($oldTopPGM != $newTopPGM)
-            {
-                foreach($_POST['products'] as $productID => $product)
-                {
-                    $this->dao->update(TABLE_PRODUCT)->set('program')->eq((int)$newTopPGM)->where('id')->eq((int)$productID)->exec();
-                }
-            }
-
+            $this->updateProductPGM($oldProject->parent, $project->parent, $_POST['products']);
             $this->loadModel('project')->updateProducts($projectID, $_POST['products']);
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
@@ -1814,22 +1804,43 @@ class programModel extends model
             if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
             if(!dao::isError())
             {
-                /* Product belonging program set processing. */
-                $oldTopPGM      = $this->getTopPGMByID($oldProject->parent);
-                $newTopPGM      = $this->getTopPGMByID($project->parent);
                 $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-                if($oldTopPGM != $newTopPGM)
-                {
-                    foreach($linkedProducts as $productID => $product)
-                    {
-                        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopPGM)->where('id')->eq((int)$productID)->exec();
-                    }
-                }
+                $this->updateProductPGM($oldProject->parent, $project->parent, $linkedProducts);
+
                 if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
             }
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }
         return $allChanges;
+    }
+
+    /**
+     * Update the program set of the product.
+     *
+     * @param  int    $oldProgram
+     * @param  int    $newProgram
+     * @param  array  $products
+     * @access public
+     * @return void
+     */
+    public function updateProductPGM($oldProgram, $newProgram, $products)
+    {
+        $this->loadModel('action');
+        /* Product belonging program set processing. */
+        $oldTopPGM = $this->getTopPGMByID($oldProgram);
+        $newTopPGM = $this->getTopPGMByID($newProgram);
+        if($oldTopPGM != $newTopPGM)
+        {
+            foreach($products as $productID => $product)
+            {
+                $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+                $this->dao->update(TABLE_PRODUCT)->set('program')->eq((int)$newTopPGM)->where('id')->eq((int)$productID)->exec();
+                $newProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+                $changes    = common::createChanges($oldProduct, $newProduct);
+                $actionID   = $this->action->create('product', $productID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
     }
 
     /**
