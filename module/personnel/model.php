@@ -81,8 +81,11 @@ class personnelModel extends model
         $executionPairs   = $this->getInvolvedExecutions($projects);
         $taskInput        = $this->getProjectTaskInput($projects, $accountPairs);
         $bugAndStoryInput = $this->getBugAndStoryInput($accountPairs, $programID);
-        $issueInput       = $this->getIssueInput($accountPairs, $projects);
-        $riskInput        = $this->getRiskInput($accountPairs, $projects);
+        if(isset($this->config->maxVersion))
+        {
+            $issueInput       = $this->getIssueInput($accountPairs, $projects);
+            $riskInput        = $this->getRiskInput($accountPairs, $projects);
+        }
         $userPairs        = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
         foreach($userPairs as $user) $user->role = zget($this->lang->user->roleList, $user->role, $user->role);
 
@@ -96,8 +99,11 @@ class personnelModel extends model
 
             $personnelList[$account] += $taskInput[$account];
             $personnelList[$account] += $bugAndStoryInput[$account];
-            $personnelList[$account] += $issueInput[$account];
-            $personnelList[$account] += $riskInput[$account];
+            if(isset($this->config->maxVersion))
+            {
+                $personnelList[$account] += $issueInput[$account];
+                $personnelList[$account] += $riskInput[$account];
+            }
         }
 
         return $personnelList;
