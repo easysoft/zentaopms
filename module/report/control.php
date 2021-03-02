@@ -76,8 +76,6 @@ class report extends control
      */
     public function productSummary($conditions = '')
     {
-        $this->app->loadLang('product');
-        $this->app->loadLang('productplan');
         $this->app->loadLang('story');
         $this->view->title      = $this->lang->report->productSummary;
         $this->view->position[] = $this->lang->report->productSummary;
