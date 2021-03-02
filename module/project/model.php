@@ -1779,6 +1779,7 @@ class projectModel extends model
      * Update products of a project.
      *
      * @param  int    $projectID
+     * @param  array  $products
      * @access public
      * @return void
      */
