@@ -10,12 +10,27 @@
  */
 class project extends control
 {
+    /**
+     * The global $projects.
+     *
+     * @var array
+     * @access public
+     */
     public $projects;
+
+    /**
+     * The global $objectType.
+     *
+     * @var string
+     * @access public
+     */
     public $objectType;
 
     /**
      * Construct function, Set projects.
      *
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
