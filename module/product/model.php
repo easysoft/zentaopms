@@ -660,6 +660,12 @@ class productModel extends model
         if(!dao::isError()) return common::createChanges($oldProduct, $product);
     }
 
+    /**
+     * Manage line.
+     *
+     * @access public
+     * @return void
+     */
     public function manageLine()
     {
         $data = fixer::input('post')->get();
