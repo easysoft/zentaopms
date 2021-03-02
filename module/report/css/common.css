@@ -4,6 +4,8 @@
 .date{width:80px;}
 ul li{list-style:none;}
 
+.side-col {padding-right: 20px; width: 15%;}
+#sidebar>.cell {width: 100%;}
 #productList p{margin:2px 0;}
 .table-bordered, .outer.with-side .main, .outer.with-side > form > .table, .outer.with-side > .table{border: none}
 

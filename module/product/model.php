@@ -556,6 +556,20 @@ class productModel extends model
     {
         $productID  = (int)$productID;
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+
+        /* Link the projects stories under this product. */
+        $unmodifiableProjects = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchPairs('project', 'product');
+        if(!empty($unmodifiableProjects))
+        {
+            dao::$errors[] = $this->lang->product->changePGMError;
+            return false;
+        }
+
         $product = fixer::input('post')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setDefault('line', 0)
