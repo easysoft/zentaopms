@@ -13,6 +13,14 @@ class caselib extends control
 {
     public $products = array();
 
+    /**
+     * Construct function.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
