@@ -16,9 +16,11 @@ class tree extends control
     /**
      * Module browse.
      * 
-     * @param  int    $rootID 
+     * @param  int    $rootID
      * @param  string $viewType         story|bug|case|doc
-     * @param  int    $currentModuleID 
+     * @param  int    $currentModuleID
+     * @param  int    $branch
+     * @param  string $from
      * @access public
      * @return void
      */
