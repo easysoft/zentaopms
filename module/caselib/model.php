@@ -234,7 +234,7 @@ class caselibModel extends model
         $lib = fixer::input('post')
             ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
             ->setForce('type', 'library')
-            ->setIF($this->config->systemMode == 'new', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa', 'PRJ', $this->session->PRJ)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid')
@@ -278,7 +278,7 @@ class caselibModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where('lib')->eq((int)$libID)
-                ->beginIF($this->lang->navGroup->caselib != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
+                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
                 ->andWhere('product')->eq(0)
                 ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
                 ->beginIF($browseType == 'wait')->andWhere('status')->eq($browseType)->fi()
@@ -315,7 +315,7 @@ class caselibModel extends model
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq((int)$libID)->fi()
-                ->beginIF($this->lang->navGroup->caselib != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
+                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
                 ->andWhere('product')->eq(0)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($sort)->page($pager)->fetchAll();
