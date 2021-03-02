@@ -25,6 +25,8 @@ class story extends control
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->loadModel('action');
+
+        if($this->app->openGroup == 'project') $this->app->rawModule = 'projectstory';
     }
 
     /**
@@ -56,7 +58,7 @@ class story extends control
             if($project->type == 'project')
             {
                 $this->app->rawModule = 'projectstory';
-                $this->lang->navGroup->story = 'project';
+                $this->lang->navGroup->projectstory = 'project';
                 $this->lang->product->menu = $this->lang->menu->{$project->model};
             }
             else
@@ -535,11 +537,10 @@ class story extends control
      * Edit a story.
      *
      * @param  int    $storyID
-     * @param  string $from product|project
      * @access public
      * @return void
      */
-    public function edit($storyID, $from = 'product')
+    public function edit($storyID)
     {
         if(!empty($_POST))
         {
@@ -560,15 +561,8 @@ class story extends control
             }
             else
             {
-                $module = $from == 'project' ? 'projectstory' : 'story';
-                die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+                die(js::locate($this->createLink($this->app->rawModule, 'view', "storyID=$storyID"), 'parent'));
             }
-        }
-
-        if($from == 'project')
-        {
-            $this->app->rawModule = 'projectstory';
-            $this->lang->navGroup->story = 'project';
         }
 
         $this->commonAction($storyID);
@@ -576,7 +570,7 @@ class story extends control
         /* Assign. */
         $story   = $this->story->getById($storyID, 0, true);
         $product = $this->product->getById($story->product);
-        $stories = $this->story->getParentStoryPairs($story->product, $story->parent); 
+        $stories = $this->story->getParentStoryPairs($story->product, $story->parent);
         if(isset($stories[$storyID])) unset($stories[$storyID]);
 
         $this->story->replaceURLang($story->type);
@@ -775,12 +769,6 @@ class story extends control
             die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
         }
 
-        if($from == 'project')
-        {
-            $this->app->rawModule = 'projectstory';
-            $this->lang->navGroup->story = 'project';
-        }
-
         $this->commonAction($storyID);
         $this->story->getAffectedScope($this->view->story);
         $this->app->loadLang('task');
@@ -836,10 +824,11 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  int    $version
+     * @param  int    $param
      * @access public
      * @return void
      */
-    public function view($storyID, $version = 0, $from = 'product', $param = 0)
+    public function view($storyID, $version = 0, $param = 0)
     {
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
@@ -858,12 +847,11 @@ class story extends control
         $users        = $this->user->getPairs('noletter');
 
         /* Set the menu. */
+        $from = $this->app->openGroup;
         if($from == 'project')
         {
             $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
-            $this->app->rawModule = 'project';
-            $this->lang->navGroup->story = 'project';
-            $this->lang->product->menu   = $this->lang->menu->{$project->model};
+            $this->lang->product->menu = $this->lang->menu->{$project->model};
             $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $project->id);
 
             /* If status is done, can not create task from story. */
@@ -1321,11 +1309,11 @@ class story extends control
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->storyList, 'parent'));
     }
-    
+
     /**
      * Assign to.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -1592,15 +1580,15 @@ class story extends control
      * @return void
      */
     public function processStoryChange($storyID, $result = 'yes')
-    {   
+    {
         $this->commonAction($storyID);
         $story = $this->story->getByID($storyID);
 
         if($result == 'no')
-        {   
+        {
             $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($storyID)->exec();
             die(js::closeModal('parent.parent', 'this'));
-        }   
+        }
 
         $this->view->changedStories = $this->story->getChangedStories($story);
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
@@ -1795,7 +1783,7 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
         $this->products = $this->product->getPairs();
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, $storyType, $branchID); 
+        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, $storyType, $branchID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
         $this->product->setMenu($this->products, $productID, $branchID);
 
@@ -2110,8 +2098,8 @@ class story extends control
     /**
      * Ajax get story status.
      * 
-     * @param  string $method 
-     * @param  string $params 
+     * @param  string $method
+     * @param  string $params
      * @access public
      * @return void
      */

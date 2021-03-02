@@ -1055,6 +1055,10 @@ class commonModel extends model
      */
     public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
     {
+        /* Add data-group attribute. */
+        global $app;
+        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openGroup . '"';
+
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
@@ -1145,6 +1149,9 @@ EOD;
         if(isonlybody() and strpos($extraClass, 'showinonlybody') !== false) $extraClass = str_replace('iframe', '', $extraClass);
 
         global $app, $lang, $config;
+
+        /* Add data-group attribute. */
+        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openGroup . '"';
 
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
