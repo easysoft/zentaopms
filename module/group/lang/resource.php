@@ -60,7 +60,6 @@ $lang->moduleOrder[190] = 'backup';
 $lang->moduleOrder[195] = 'cron';
 $lang->moduleOrder[200] = 'dev';
 $lang->moduleOrder[205] = 'message';
-$lang->moduleOrder[210] = 'design';
 
 $lang->resource = new stdclass();
 
@@ -623,32 +622,6 @@ $lang->project->methodOrder[225] = 'storySort';
 $lang->project->methodOrder[230] = 'whitelist';
 $lang->project->methodOrder[235] = 'addWhitelist';
 $lang->project->methodOrder[240] = 'unbindWhielist';
-
-/* Design. */
-$lang->resource->design = new stdclass();
-$lang->resource->design->browse       = 'browse';
-$lang->resource->design->view         = 'view';
-$lang->resource->design->create       = 'create';
-$lang->resource->design->batchCreate  = 'batchCreate';
-$lang->resource->design->edit         = 'edit';
-$lang->resource->design->assignTo     = 'assignTo';
-$lang->resource->design->delete       = 'delete';
-$lang->resource->design->linkCommit   = 'linkCommit';
-$lang->resource->design->viewCommit   = 'viewCommit';
-$lang->resource->design->unlinkCommit = 'unlinkCommit';
-$lang->resource->design->revision     = 'revision';
-
-$lang->design->methodOrder[5]     = 'browse';
-$lang->design->methodOrder[10]    = 'view';
-$lang->design->methodOrder[15]    = 'create';
-$lang->design->methodOrder[20]    = 'batchCreate';
-$lang->design->methodOrder[25]    = 'edit';
-$lang->design->methodOrder[30]    = 'assignTo';
-$lang->design->methodOrder[35]    = 'delete';
-$lang->design->methodOrder[40]    = 'linkCommit';
-$lang->design->methodOrder[45]    = 'viewCommit';
-$lang->design->methodOrder[50]    = 'unlinkCommit';
-$lang->design->methodOrder[55]    = 'revision';
 
 /* Task. */
 $lang->resource->task = new stdclass();

@@ -44,7 +44,9 @@
             <th><?php echo $lang->story->design;?></th>
             <?php endif;?>
             <th><?php echo $lang->story->case;?></th>
+            <?php if(isset($config->maxVersion)):?>
             <th><?php echo $lang->story->repoCommit;?></th>
+            <?php endif;?>
             <th><?php echo $lang->story->bug;?></th>
           </tr>
         </thead>
@@ -81,6 +83,7 @@
                 <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', false, $case->PRJ), $case->title, '', "title='$case->title'") . '<br/>';?> 
                 <?php endforeach;?>
               </td>
+              <?php if(isset($config->maxVersion)):?>
               <td>
                 <?php foreach($story->revisions as $revision => $repoID):?>
                 <?php 
@@ -88,6 +91,7 @@
                 ?> 
                 <?php endforeach;?>
               </td>
+              <?php endif;?>
               <td>
                 <?php foreach($story->bugs as $bugID => $bug):?>
                 <?php echo html::a($this->createLink('bug', 'view', "bugID=$bugID"), $bug->title, '', "title='$bug->title'") . '<br/>';?>
@@ -101,8 +105,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
             <?php if(isset($config->maxVersion)):?>
+            <td></td>
             <td></td>
             <?php endif;?>
             <?php endif;?>

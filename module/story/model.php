@@ -3649,12 +3649,15 @@ class storyModel extends model
                 $stories[$id]->cases     = $this->loadModel('testcase')->getStoryCases($id);
                 $stories[$id]->bugs      = $this->loadModel('bug')->getStoryBugs($id);
                 $stories[$id]->tasks     = $this->loadModel('task')->getStoryTasks($id);
-                $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
-                $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
-                    ->where('AType')->eq('design')
-                    ->andWhere('BType')->eq('commit')
-                    ->andWhere('AID')->in(array_keys($stories[$id]->designs))
-                    ->fetchPairs();
+                if(isset($this->config->maxVersion))
+                {
+                    $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                    $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
+                        ->where('AType')->eq('design')
+                        ->andWhere('BType')->eq('commit')
+                        ->andWhere('AID')->in(array_keys($stories[$id]->designs))
+                        ->fetchPairs();
+                }
             }
 
             $requirement->track = $stories;
@@ -3680,12 +3683,15 @@ class storyModel extends model
                 $stories[$id]->cases     = $this->loadModel('testcase')->getStoryCases($id);
                 $stories[$id]->bugs      = $this->loadModel('bug')->getStoryBugs($id);
                 $stories[$id]->tasks     = $this->loadModel('task')->getStoryTasks($id);
-                $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
-                $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
-                    ->where('AType')->eq('design')
-                    ->andWhere('BType')->eq('commit')
-                    ->andWhere('AID')->in(array_keys($stories[$id]->designs))
-                    ->fetchPairs();
+                if(isset($this->config->maxVersion))
+                {
+                    $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                    $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
+                        ->where('AType')->eq('design')
+                        ->andWhere('BType')->eq('commit')
+                        ->andWhere('AID')->in(array_keys($stories[$id]->designs))
+                        ->fetchPairs();
+                }
             }
 
             $requirements['noRequirement'] = $stories;
@@ -3711,12 +3717,16 @@ class storyModel extends model
         foreach($stories as $id => $title)
         {
             $track[$id] = new stdclass();
-            $track[$id]->title    = $title;
-            $track[$id]->case     = $this->loadModel('testcase')->getStoryCases($id);
-            $track[$id]->bug      = $this->loadModel('bug')->getStoryBugs($id);
-            $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
-            $track[$id]->story    = $this->getByID($id);
-            $track[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($track[$id]->design))->fetchPairs();
+            $track[$id]->title = $title;
+            $track[$id]->case  = $this->loadModel('testcase')->getStoryCases($id);
+            $track[$id]->bug   = $this->loadModel('bug')->getStoryBugs($id);
+            $track[$id]->story = $this->getByID($id);
+            $track[$id]->task  = $this->loadModel('task')->getStoryTasks($id);
+            if(isset($this->config->maxVersion))
+            {
+                $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                $track[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($track[$id]->design))->fetchPairs();
+            }
         }
 
         return $track;
