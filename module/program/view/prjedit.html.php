@@ -19,7 +19,7 @@
 <?php js::set('projectID', $project->id);?>
 <?php js::set('longTime', $lang->program->PRJLongTime);?>
 <?php js::set('from', $from);?>
-<?php js::set('notRemoveProducts', $notRemoveProducts)?>
+<?php js::set('unmodifiableProducts', $unmodifiableProducts)?>
 <?php js::set('tip', $lang->program->notAllowRemoveProducts);?>
 <?php js::set('linkedProjectsTip', $lang->program->linkedProjectsTip);?>
 <?php $aclList = $project->parent ? $lang->program->PGMPRJAclList : $lang->program->PRJAclList;?>
@@ -109,7 +109,7 @@
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
-              <?php if(in_array($product->id, $notRemoveProducts)) echo html::hidden("products[$i]", $product->id);?>
+              <?php if(in_array($product->id, $unmodifiableProducts)) echo html::hidden("products[$i]", $product->id);?>
               <?php $i++;?>
               <?php endforeach;?>
               <div class='col-sm-4 <?php if($programID) echo 'required';?>' style="padding-right: 6px;">

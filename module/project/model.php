@@ -2154,10 +2154,9 @@ class projectModel extends model
             if($statusPairs[$storyID] == 'draft' || $statusPairs[$storyID] == 'closed') continue;
             if(isset($linkedStories[$storyID])) continue;
 
-            $productID = (empty($products) and $this->app->rawMethod == 'batchcreate') ? $this->cookie->preProductID : (int)$products[$storyID];
             $data = new stdclass();
             $data->project = $projectID;
-            $data->product = $productID;
+            $data->product = (int)$products[$storyID];
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
             $data->order   = ++$lastOrder;
@@ -2263,7 +2262,7 @@ class projectModel extends model
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembers();
 
         $project = $this->getByID($projectID);
-        $type    = $this->config->global->mode == 'new' ? $project->type : 'project';
+        $type    = $this->config->systemMode == 'new' ? $project->type : 'project';
         if(empty($project)) return array();
 
         return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')

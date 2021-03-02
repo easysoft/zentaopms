@@ -42,7 +42,8 @@
               <?php echo html::select('product', $products, '', "onchange='loadBranches(this.value)' class='form-control chosen'");?>
               <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "class='form-control chosen control-branch'");?>
               </div>
-            </td><td></td>
+            </td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>

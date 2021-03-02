@@ -22,9 +22,9 @@
     <table class="table table-form">
       <thead>
         <tr>
-          <th class='w-10px'>  <?php echo $lang->idAB;?></th>
-          <th class='w-150px'> <?php echo $lang->program->PGMParent;?></th>
-          <th class='w-200px required'><?php echo $lang->program->PRJName;?></th>
+          <th class='w-40px'>  <?php echo $lang->idAB;?></th>
+          <th class='w-200px'> <?php echo $lang->program->PGMParent;?></th>
+          <th class='c-name required'><?php echo $lang->program->PRJName;?></th>
           <th class="w-150px <?php echo strpos($requiredFields, 'PM') !== false ?  'required' : '';?>"> <?php echo $lang->program->PRJPM;?></th>
         </tr>
       </thead>

@@ -25,7 +25,7 @@ $(function()
                 for(var i in data.message)
                 {
                     var product = data.message[i];
-                    $('#promptTable').append("<tr><td><i class='icon icon-product'></i><strong>" + product +"</strong> " + linkedProjectsTip +"</td></tr>");
+                    $('#promptTable').append("<tr><td><i class='icon icon-product'></i> <strong>" + product +"</strong> " + linkedProjectsTip +"</td></tr>");
                     for(var j in data.multiLinkedProjects)
                     {
                         if(i == j)
@@ -34,7 +34,7 @@ $(function()
                             for(k in data.multiLinkedProjects[j])
                             {
                                 var project = data.multiLinkedProjects[j][k];
-                                html += "<p><i class='icon icon-project'></i>" + project +"</p>";
+                                html += "<p><i class='icon icon-project'></i> " + project +"</p>";
                             }
                             $('#promptTable').append("<tr><td style='padding-left:40px'>" + html + "</td></tr>");
                         }
@@ -56,7 +56,7 @@ $(function()
     /* If the story of the product which linked the execution under the project, you don't allow to remove the product. */
     $("#productsBox select").each(function()
     {
-        var isExisted = $.inArray($(this).attr('data-last'), notRemoveProducts);
+        var isExisted = $.inArray($(this).attr('data-last'), unmodifiableProducts);
         if(isExisted != -1)
         {
             $(this).prop('disabled', true).trigger("chosen:updated");

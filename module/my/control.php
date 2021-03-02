@@ -842,14 +842,16 @@ class my extends control
             die(js::locate($this->createLink('my', 'index'), 'parent'));
         }
 
-        $this->view->title            = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;
-        $this->view->position[]       = $this->lang->my->preference;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;
+        $this->view->position[] = $this->lang->my->preference;
+
         $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
         $this->view->URSR             = isset($this->config->URSR) ? $this->config->URSR : $this->setting->getItem('owner=system&module=custom&key=URSR');
         $this->view->programLink      = isset($this->config->programLink) ? $this->config->programLink : 'program-pgmbrowse';
         $this->view->productLink      = isset($this->config->productLink) ? $this->config->productLink : 'product-all';
         $this->view->projectLink      = isset($this->config->projectLink) ? $this->config->projectLink : 'program-prjbrowse';
         $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
+
         $this->display();
     }
 

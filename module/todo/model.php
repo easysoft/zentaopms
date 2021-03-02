@@ -32,7 +32,7 @@ class todoModel extends model
             ->setIF($hasObject && $objectType,  'idvalue', $idvalue)
             ->setIF($this->post->date == false,  'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
-            ->setIF($this->post->begin == false or $this->post->end   == false, 'end',   '2400')
+            ->setIF($this->post->begin == false or $this->post->end == false, 'end', '2400')
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove('bug, task, story, issue, risk, review, testtask, uid, feedback')
             ->get();
