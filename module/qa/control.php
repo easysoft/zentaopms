@@ -11,6 +11,12 @@
  */
 class qa extends control
 {
+    /**
+     * Project id.
+     *
+     * @var    int
+     * @access public
+     */
     public $projectID;
 
     /**
