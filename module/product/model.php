@@ -887,7 +887,7 @@ class productModel extends model
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
-        $programList = $this->loadModel('program')->getParentPairs();
+        $programList = $this->loadModel('program')->getParentPairs('', 'noclosed');
         foreach($projectList as $id => $project) $projectList[$id]->programName = $programList[$project->parent];
 
         return $projectList;
