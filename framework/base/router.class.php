@@ -141,6 +141,15 @@ class baseRouter
     public $clientLang;
 
     /**
+     * 当前页面所在的group，用于左侧菜单栏判断。
+     * The current group(url: '#open=?'), highlight left menu.
+     *
+     * @var string
+     * @access public
+     */
+    public $openGroup;
+
+    /**
      * 用户使用的主题。
      * The theme of the client user.
      * 
@@ -373,6 +382,7 @@ class baseRouter
         $this->setTimezone();
         $this->startSession();
         $this->setPRJ();
+        $this->setOpenGroup();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
@@ -835,7 +845,9 @@ class baseRouter
             if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
             session_start();
 
-            $this->sessionID = session_id();
+            /* If request header has token, use it as session for authentication. */
+            $this->sessionID = $_SERVER['HTTP_TOKEN'] ? session_id($_SERVER['HTTP_TOKEN']) : session_id();
+
             if(isset($_GET[$this->config->sessionVar])) helper::restartSession($_GET[$this->config->sessionVar]);
 
             define('SESSION_STARTED', true);
@@ -852,6 +864,18 @@ class baseRouter
     public function setPRJ()
     {
         if(isset($_GET['PRJ'])) $this->session->set('PRJ', $_GET['PRJ']); //Set PRJ id into session.
+    }
+
+    /**
+     * 从cookie中获取当前的group, 即URL锚链接'#open=?'。
+     * Get current group from cookie, original source is url '#open=?'.
+     *
+     * @access public
+     * @return void
+     */
+    public function setOpenGroup()
+    {
+        if(isset($_COOKIE['openGroup'])) $this->openGroup = $_COOKIE['openGroup'];
     }
 
     /**
