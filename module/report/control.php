@@ -71,12 +71,16 @@ class report extends control
     /**
      * Product information report.
      *
+     * @params string $conditions
      * @access public
      * @return void
      */
     public function productSummary($conditions = '')
     {
         $this->app->loadLang('story');
+        $this->app->loadLang('product');
+        $this->app->loadLang('productplan');
+
         $this->view->title      = $this->lang->report->productSummary;
         $this->view->position[] = $this->lang->report->productSummary;
         $this->view->products   = $this->report->getProducts($conditions);
