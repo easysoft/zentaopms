@@ -1312,11 +1312,11 @@ class project extends control
         $linkedBranches = array();
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
-        $notRemoveProducts = array();
+        $unmodifiableProducts = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             $projectStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('story');
-            if(!empty($projectStories)) array_push($notRemoveProducts, $productID);
+            if(!empty($projectStories)) array_push($unmodifiableProducts, $productID);
         }
 
         foreach($linkedProducts as $product)
@@ -1378,7 +1378,7 @@ class project extends control
         $this->view->groups            = $this->loadModel('group')->getPairs();
         $this->view->allProducts       = $allProducts;
         $this->view->linkedProducts    = $linkedProducts;
-        $this->view->notRemoveProducts = $notRemoveProducts;
+        $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->productPlans      = $productPlans;
         $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
         $this->display();
@@ -2038,11 +2038,11 @@ class project extends control
         $linkedBranches  = array();
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
-        $notRemoveProducts = array();
+        $unmodifiableProducts = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             $projectStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('story');
-            if(!empty($projectStories)) array_push($notRemoveProducts, $productID);
+            if(!empty($projectStories)) array_push($unmodifiableProducts, $productID);
         }
 
         // Merge allProducts and linkedProducts for closed product.
@@ -2058,7 +2058,7 @@ class project extends control
         $this->view->allProducts       = $allProducts;
         $this->view->project           = $project;
         $this->view->linkedProducts    = $linkedProducts;
-        $this->view->notRemoveProducts = $notRemoveProducts;
+        $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 
         $this->display();
@@ -2805,6 +2805,7 @@ class project extends control
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
         $project     = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+
         $count = 0;
         if(!empty($planStory))
         {

@@ -140,7 +140,7 @@
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' $class onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
-              <?php if(in_array($product->id, $notRemoveProducts)) echo html::hidden("products[$i]", $product->id);?>
+              <?php if(in_array($product->id, $unmodifiableProducts)) echo html::hidden("products[$i]", $product->id);?>
               <?php $i++;?>
               <?php endforeach;?>
               <?php if(!$isStage):?>
@@ -189,6 +189,6 @@
 </div>
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
-<?php js::set('notRemoveProducts',$notRemoveProducts);?>
+<?php js::set('unmodifiableProducts',$unmodifiableProducts);?>
 <?php js::set('tip', $lang->project->notAllowRemoveProducts);?>
 <?php include '../../common/view/footer.html.php';?>

@@ -60,9 +60,9 @@
         <?php endif;?>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
         <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
-        <th class='w-70px'> <?php echo $lang->productplan->stories;?></th>
-        <th class='w-60px'> <?php echo $lang->productplan->bugs;?></th>
-        <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
+        <th class='w-70px'><?php echo $lang->productplan->stories;?></th>
+        <th class='w-60px'><?php echo $lang->productplan->bugs;?></th>
+        <th class='w-60px'><?php echo $lang->productplan->hour;?></th>
         <th class='w-70px'><?php echo $lang->productplan->execution;?></th>
         <th><?php echo $lang->productplan->desc;?></th>
         <?php

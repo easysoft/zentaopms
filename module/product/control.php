@@ -799,18 +799,16 @@ class product extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
 
-        $this->executeHooks($productID);
-
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->view;
 
-        $this->view->product    = $product;
-        $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->lines      = array('') + $this->product->getLinePairs();
-        $this->view->dynamics   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, $productID);
-        $this->view->roadmaps   = $this->product->getRoadmap($productID, 0, 6);
+        $this->view->product  = $product;
+        $this->view->actions  = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users    = $this->user->getPairs('noletter');
+        $this->view->lines    = array('') + $this->product->getLinePairs();
+        $this->view->dynamics = $this->action->getDynamic('all', 'all', 'date_desc', $pager, $productID);
+        $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
 
         $this->display();
     }

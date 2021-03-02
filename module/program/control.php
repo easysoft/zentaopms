@@ -460,8 +460,6 @@ class program extends control
      */
     public function PGMStakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->loadModel('user');
-        $this->app->loadLang('user');
         $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
@@ -1009,11 +1007,11 @@ class program extends control
         $parentProgram  = $this->program->getPGMByID($programID);
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
-        $notRemoveProducts  = array();
+        $unmodifiableProducts = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             $projectStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('story');
-            if(!empty($projectStories)) array_push($notRemoveProducts, $productID);
+            if(!empty($projectStories)) array_push($unmodifiableProducts, $productID);
         }
 
         foreach($linkedProducts as $product)
@@ -1038,7 +1036,7 @@ class program extends control
         $this->view->allProducts       = array('0' => '') + $allProducts;
         $this->view->productPlans      = $productPlans;
         $this->view->linkedProducts    = $linkedProducts;
-        $this->view->notRemoveProducts = $notRemoveProducts;
+        $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
         $this->view->URSRPairs         = $this->loadModel('custom')->getURSRPairs();
         $this->view->from              = $from;
@@ -1093,8 +1091,8 @@ class program extends control
 
         foreach($projects as $project) $appendPMUsers[$project->PM] = $project->PM;
 
-        $this->view->title         = $this->lang->program->batchEdit;
-        $this->view->position[]    = $this->lang->program->batchEdit;
+        $this->view->title      = $this->lang->program->batchEdit;
+        $this->view->position[] = $this->lang->program->batchEdit;
 
         $this->view->projectIdList = $projectIdList;
         $this->view->projects      = $projects;
@@ -1803,11 +1801,11 @@ class program extends control
         $linkedBranches     = array();
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
-        $notRemoveProducts = array();
+        $unmodifiableProducts = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             $projectStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('story');
-            if(!empty($projectStories)) array_push($notRemoveProducts, $productID);
+            if(!empty($projectStories)) array_push($unmodifiableProducts, $productID);
         }
 
         /* Merge allProducts and linkedProducts for closed product. */
@@ -1822,7 +1820,7 @@ class program extends control
         $this->view->position[]        = $this->lang->project->manageProducts;
         $this->view->allProducts       = $allProducts;
         $this->view->linkedProducts    = $linkedProducts;
-        $this->view->notRemoveProducts = $notRemoveProducts;
+        $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->branchGroups      = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 
         $this->display();

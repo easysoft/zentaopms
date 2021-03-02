@@ -465,12 +465,13 @@ class programModel extends model
      */
     public function getTopPGMByID($programID)
     {
-        $topPGM  = 0;
-        if(empty($programID)) return $topPGM;
+        if(empty($programID)) return 0;
 
         $program = $this->getPGMByID($programID);
-        if(!empty($program)) list($topPGM) = explode(',', trim($program->path, ','));
-        return $topPGM;
+        if(empty($program)) return 0;
+
+        $path = explode(',', trim($program->path, ','));
+        return $path[0];
     }
 
     /**

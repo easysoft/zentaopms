@@ -378,8 +378,10 @@ class story extends control
             /* Project or execution linked stories. */
             if($project)
             {
-                $this->loadModel('project')->linkStory($project, $stories);
-                if($project != $this->session->PRJ) $this->loadModel('project')->linkStory($this->session->PRJ, $stories);
+                $products = array();
+                foreach($mails as $story) $products[$story->storyID] = $productID;
+                $this->loadModel('project')->linkStory($project, $stories, $products);
+                if($project != $this->session->PRJ) $this->loadModel('project')->linkStory($this->session->PRJ, $stories, $products);
             }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
