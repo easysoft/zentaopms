@@ -114,8 +114,6 @@ $lang->future      = '未來';
 $lang->year        = '年';
 $lang->workingHour = '工時';
 
-$lang->generalUR    = '用需/史詩';
-$lang->generalSR    = '軟需/故事';
 $lang->sprintCommon = '迭代/階段';
 
 $lang->execution = new stdclass();

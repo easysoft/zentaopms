@@ -114,8 +114,6 @@ $lang->future       = 'En Attente';
 $lang->year         = 'Année';
 $lang->workingHour  = 'Heures';
 
-$lang->generalUR    = 'UR/Epic';
-$lang->generalSR    = 'SR/Story';
 $lang->sprintCommon = $lang->iterationCommon . '/Phase';
 
 $lang->execution = new stdclass();
