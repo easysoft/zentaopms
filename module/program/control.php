@@ -156,6 +156,8 @@ class program extends control
     {
         $this->lang->navGroup->program = 'program';
 
+        $parentProgram = $this->program->getPGMByID($parentProgramID);
+
         if($_POST)
         {
             $projectID = $this->program->PGMCreate();
@@ -171,7 +173,7 @@ class program extends control
         $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->parentProgram  = $this->program->getPGMByID($parentProgramID);
+        $this->view->parentProgram  = $parentProgram;
         $this->view->parents        = $this->program->getParentPairs();
         $this->view->PGMList        = $this->program->getPGMList();
         $this->view->budgetUnitList = $this->program->getBudgetUnitList();
@@ -204,8 +206,9 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('PGMBrowse')));
         }
 
-        $program = $this->program->getPGMByID($programID);
-        $parents = $this->program->getParentPairs();
+        $program       = $this->program->getPGMByID($programID);
+        $parentProgram = $program->parent ? $this->program->getPGMByID($program->parent) : '';
+        $parents       = $this->program->getParentPairs();
         unset($parents[$programID]);
 
         $this->view->title       = $this->lang->program->PGMEdit;
@@ -218,7 +221,7 @@ class program extends control
         $this->view->parents        = $parents;
         $this->view->PGMList        = $this->program->getPGMList();
         $this->view->budgetUnitList = $this->program->getBudgetUnitList();
-        $this->view->parentProgram  = $program->parent ? $this->program->getPGMByID($program->parent) : '';
+        $this->view->parentProgram  = $parentProgram;
         $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram) + (float)$program->budget;
 
         $this->display();
@@ -892,8 +895,9 @@ class program extends control
         $acl       = 'private';
         $auth      = 'extend';
 
-        $products     = array();
-        $productPlans = array();
+        $products      = array();
+        $productPlans  = array();
+        $parentProgram = $this->program->getPGMByID($programID);
 
         if($copyProjectID)
         {
@@ -935,7 +939,7 @@ class program extends control
         $this->view->copyProjectID  = $copyProjectID;
         $this->view->from           = $from;
         $this->view->programList    = $this->program->getParentPairs();
-        $this->view->parentProgram  = $this->program->getPGMByID($programID);
+        $this->view->parentProgram  = $parentProgram;
         $this->view->URSRPairs      = $this->loadModel('custom')->getURSRPairs();
         $this->view->remainBudget   = $this->program->getParentRemainBudget($parentProgram);
         $this->view->budgetUnitList = $this->program->getBudgetUnitList();
@@ -1002,6 +1006,7 @@ class program extends control
         $productPlans   = array(0 => '');
         $allProducts    = $this->program->getPGMProductPairs($project->parent, 'assign', 'noclosed');
         $linkedProducts = $this->project->getProducts($projectID);
+        $parentProgram  = $this->program->getPGMByID($programID);
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
         $unmodifiableProducts = array();
@@ -1037,7 +1042,7 @@ class program extends control
         $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
         $this->view->from                 = $from;
-        $this->view->parentProgram        = $this->program->getPGMByID($programID);
+        $this->view->parentProgram        = $parentProgram;
         $this->view->remainBudget         = $this->program->getParentRemainBudget($parentProgram) + (float)$project->budget;
         $this->view->budgetUnitList       = $this->program->getBudgetUnitList();
 
