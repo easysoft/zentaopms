@@ -63,15 +63,13 @@ function syncProductOrProject(obj, type)
     $('#copyModule').bind('click', function(){syncModule(obj.value, viewType)});
 }
 
-function toggleCopy()
+function toggleCopy(toggle)
 {
-   var $copy = $('.table-row.copy');
-   if($copy.size() == 0) return false;
-   $copy.toggle();
+   $('.table-row.copy').toggle(toggle);
 }
 
 $(document).ready(function()
 {
-    toggleCopy();
+    toggleCopy(false);
     $('[data-id="edit"] a').modalTrigger({type: 'iframe', width: 500});
 });
