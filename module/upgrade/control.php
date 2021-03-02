@@ -189,6 +189,7 @@ class upgrade extends control
      * Merge program.
      *
      * @param  string $type
+     * @param  int    $programID
      * @access public
      * @return void
      */
@@ -200,7 +201,6 @@ class upgrade extends control
 
         if($_POST)
         {
-            $programID = 0;
             if($type == 'productline')
             {
                 $linkedProducts = array();
