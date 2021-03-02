@@ -25,13 +25,13 @@ js::set('unfoldAll',     $lang->project->treeLevel['all']);
 js::set('foldAll',       $lang->project->treeLevel['root']);
 js::set('storyType',     $storyType);
 $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
-$isProjectStroy = $this->app->rawModule == 'projectstory';
+$isProjectStory = $this->app->rawModule == 'projectstory';
 ?>
 <style>
 .btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
 </style>
 <div id="mainMenu" class="clearfix">
-  <?php if(!$isProjectStroy):?>
+  <?php if(!$isProjectStory):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php
@@ -118,7 +118,7 @@ $isProjectStroy = $this->app->rawModule == 'projectstory';
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu" id='exportActionMenu'>
         <?php
-        $openGroup = $isProjectStroy ? 'project' : 'product';
+        $openGroup = $isProjectStory ? 'project' : 'product';
         $class = common::hasPriv('story', 'export') ? '' : "class=disabled";
         $misc  = common::hasPriv('story', 'export') ? "class='export' data-group='$openGroup'" : "class=disabled";
         $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&projectID=0&browseType=$browseType&type=$storyType") : '#';
@@ -132,18 +132,18 @@ $isProjectStroy = $this->app->rawModule == 'projectstory';
       <ul class='dropdown-menu'>
         <li>
         <?php
-        $openGroup = $isProjectStroy ? 'project' : 'product';
+        $openGroup = $isProjectStory ? 'project' : 'product';
         if(commonModel::isTutorialMode())
         {
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
-            if($isProjectStroy) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID={$this->session->PRJ}");
+            if($isProjectStory) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID={$this->session->PRJ}");
             $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
             echo html::a($link, $lang->story->createCommon, '', "data-group='$openGroup'");
         }
         else
         {
             $link     = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
-            if($isProjectStroy) $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID={$this->session->PRJ}");
+            if($isProjectStory) $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID={$this->session->PRJ}");
             $disabled = '';
             if(!common::hasPriv('story', 'create'))
             {
@@ -158,13 +158,13 @@ $isProjectStroy = $this->app->rawModule == 'projectstory';
         <li <?php echo $batchDisabled;?>>
         <?php
           $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=0&plan=0&type=$storyType");
-          if($isProjectStroy) $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project={$this->session->PRJ}");
+          if($isProjectStory) $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project={$this->session->PRJ}");
           echo html::a($batchLink, $lang->story->batchCreate, '', "data-group='$openGroup'");
         ?>
         </li>
       </ul>
     </div>
-    <?php $isShow = $isProjectStroy ? '' : "style='display: none;'";?>
+    <?php $isShow = $isProjectStory ? '' : "style='display: none;'";?>
     <div class='btn-group dropdown-hover' <?php echo $isShow;?>>
     <?php
     if(commonModel::isTutorialMode())
@@ -212,8 +212,8 @@ $isProjectStroy = $this->app->rawModule == 'projectstory';
       <p>
         <span class="text-muted"><?php echo $storyType == 'story' ? $lang->story->noStory : $lang->story->noRequirement;?></span>
         <?php if(common::canModify('product', $product) and common::hasPriv('story', 'create')):?>
-        <?php $projectID  = $isProjectStroy ? $this->session->PRJ : 0;?>
-        <?php $openGroup  = $isProjectStroy ? 'project' : 'product';?>
+        <?php $projectID  = $isProjectStory ? $this->session->PRJ : 0;?>
+        <?php $openGroup  = $isProjectStory ? 'project' : 'product';?>
         <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->createCommon, '', "class='btn btn-info' data-group='$openGroup'");?>
         <?php endif;?>
       </p>
