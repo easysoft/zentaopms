@@ -165,6 +165,9 @@
             }
         }
 
+        /* Set openGroup cookie */
+        $.cookie('openGroup', group, {expires: config.cookieLife, path: config.webRoot});
+
         /* Highlight at main menu */
         var $menuMainNav = $('#menuMainNav');
         var $lastActiveNav = $menuMainNav.find('li.active');
