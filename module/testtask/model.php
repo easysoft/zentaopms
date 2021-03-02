@@ -293,11 +293,11 @@ class testtaskModel extends model
     }
 
     /**
-     * Get testtask pairs 
-     * 
-     * @param  int    $productID 
-     * @param  int    $projectID 
-     * @param  string $appendIdList 
+     * Get testtask pairs.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  string $appendIdList
      * @param  string $params         noempty
      * @access public
      * @return array
