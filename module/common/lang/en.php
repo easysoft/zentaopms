@@ -599,7 +599,7 @@ $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
-$lang->menugroup->report      = 'reporting';
+$lang->menugroup->report      = 'report';
 $lang->menugroup->people      = 'admin';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
@@ -627,6 +627,7 @@ $lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
 $lang->navGroup->score  = 'my';
 
+$lang->navGroup->program   = 'program';
 $lang->navGroup->personnel = 'program';
 
 $lang->navGroup->product     = 'product';

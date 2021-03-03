@@ -15,6 +15,7 @@ class program extends control
         parent::__construct($moduleName, $methodName);
         $this->loadModel('project');
         $this->loadModel('group');
+        $this->loadModel('execution');
     }
 
     /**
@@ -42,10 +43,9 @@ class program extends control
      */
     public function browse($status = 'all', $orderBy = 'order_asc')
     {
-        $this->lang->navGroup->program       = 'program';
         $this->lang->program->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
 
-        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->PGMCreate, '', "class='btn btn-secondary'");
+        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-secondary'");
 
         $this->app->session->set('programList', $this->app->getURI(true));
 
@@ -68,8 +68,8 @@ class program extends control
         }
         $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 
-        $this->view->title       = $this->lang->program->PGMBrowse;
-        $this->view->position[]  = $this->lang->program->PGMBrowse;
+        $this->view->title       = $this->lang->program->browse;
+        $this->view->position[]  = $this->lang->program->browse;
 
         $this->view->programs    = $programs;
         $this->view->status      = $status;
@@ -101,7 +101,6 @@ class program extends control
         $program = $this->program->getPGMByID($programID);
         if(empty($program) || $program->type != 'program') die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $this->lang->navGroup->program       = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         $this->program->setPGMViewMenu($programID);
@@ -118,8 +117,8 @@ class program extends control
             $programID = current($path);
         }
 
-        $this->view->title       = $this->lang->program->PGMProduct;
-        $this->view->position[]  = $this->lang->program->PGMProduct;
+        $this->view->title       = $this->lang->program->product;
+        $this->view->position[]  = $this->lang->program->product;
         $this->view->program     = $program;
         $this->view->browseType  = $browseType;
         $this->view->orderBy     = $orderBy;
@@ -139,29 +138,27 @@ class program extends control
      */
     public function create($parentProgramID = 0)
     {
-        $this->lang->navGroup->program = 'program';
-
         $parentProgram = $this->program->getPGMByID($parentProgramID);
 
         if($_POST)
         {
-            $projectID = $this->program->PGMCreate();
+            $projectID = $this->program->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('program', $projectID, 'opened');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title      = $this->lang->program->PGMCreate;
-        $this->view->position[] = $this->lang->program->PGMCreate;
+        $this->view->title      = $this->lang->program->create;
+        $this->view->position[] = $this->lang->program->create;
 
         $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->poUsers         = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
         $this->view->parentProgram   = $parentProgram;
         $this->view->parents         = $this->program->getParentPairs();
-        $this->view->PGMList         = $this->program->getPGMList();
-        $this->view->budgetUnitList  = $this->program->getBudgetUnitList();
+        $this->view->programList     = $this->program->getPGMList();
+        $this->view->budgetUnitList  = $this->project->getBudgetUnitList();
         $this->view->availableBudget = $this->program->getAvailableBudget($parentProgram);
 
         $this->display();
@@ -176,11 +173,9 @@ class program extends control
      */
     public function edit($programID = 0)
     {
-        $this->lang->navGroup->program = 'program';
-
         if($_POST)
         {
-            $changes = $this->program->PGMUpdate($programID);
+            $changes = $this->program->update($programID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
@@ -188,7 +183,7 @@ class program extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('PGMBrowse')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse')));
         }
 
         $program       = $this->program->getPGMByID($programID);
@@ -196,15 +191,15 @@ class program extends control
         $parents       = $this->program->getParentPairs();
         unset($parents[$programID]);
 
-        $this->view->title       = $this->lang->program->PGMEdit;
-        $this->view->position[]  = $this->lang->program->PGMEdit;
+        $this->view->title      = $this->lang->program->edit;
+        $this->view->position[] = $this->lang->program->edit;
 
         $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
         $this->view->poUsers         = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
         $this->view->program         = $program;
         $this->view->parents         = $parents;
-        $this->view->PGMList         = $this->program->getPGMList();
+        $this->view->programList     = $this->program->getPGMList();
         $this->view->budgetUnitList  = $this->program->getBudgetUnitList();
         $this->view->parentProgram   = $parentProgram;
         $this->view->availableBudget = $this->program->getAvailableBudget($parentProgram) + (float)$program->budget;
@@ -221,7 +216,6 @@ class program extends control
      */
     public function close($programID)
     {
-        $this->lang->navGroup->program = 'program';
         $this->loadModel('action');
         $program = $this->program->getPGMByID($programID);
 
@@ -262,7 +256,6 @@ class program extends control
      */
     public function start($programID)
     {
-        $this->lang->navGroup->program = 'program';
         $this->loadModel('action');
 
         if(!empty($_POST))
@@ -296,7 +289,6 @@ class program extends control
      */
     public function activate($programID = 0)
     {
-        $this->lang->navGroup->program = 'program';
         $this->loadModel('action');
         $program = $this->program->getPGMByID($programID);
 
@@ -336,7 +328,6 @@ class program extends control
      */
     public function suspend($programID)
     {
-        $this->lang->navGroup->program = 'program';
         $this->loadModel('action');
 
         if(!empty($_POST))
@@ -399,13 +390,12 @@ class program extends control
     public function project($programID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $programID = $this->program->savePGMState($programID, $this->program->getPGMPairs());
-        if(!$programID) $this->locate($this->createLink('program', 'PGMbrowse')); 
+        if(!$programID) $this->locate($this->createLink('program', 'browse'));
         setCookie("lastPGM", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $this->app->session->set('PGMProject', $this->app->getURI(true));
         $this->app->session->set('projectList', $this->app->getURI(true));
 
-        $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         $this->program->setPGMViewMenu($programID);
@@ -421,8 +411,8 @@ class program extends control
         $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
         $projectStats = $this->program->getPRJStats($programID, $browseType, 0, $sortField, $pager, $programTitle);
 
-        $this->view->title      = $this->lang->program->PGMProject;
-        $this->view->position[] = $this->lang->program->PGMProject;
+        $this->view->title      = $this->lang->program->project;
+        $this->view->position[] = $this->lang->program->project;
 
         $this->view->projectStats = $projectStats;
         $this->view->pager        = $pager;
@@ -448,7 +438,6 @@ class program extends control
      */
     public function stakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         $this->program->setPGMViewMenu($programID);
@@ -457,8 +446,8 @@ class program extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->program->PGMStakeholder;
-        $this->view->position[] = $this->lang->program->PGMStakeholder;
+        $this->view->title      = $this->lang->program->stakeholder;
+        $this->view->position[] = $this->lang->program->stakeholder;
 
         $this->view->stakeholders = $this->program->getStakeholders($programID, $orderBy, $pager);
         $this->view->pager        = $pager;
@@ -482,11 +471,10 @@ class program extends control
         if($_POST)
         {
             $this->program->createStakeholder($programID);
-            die(js::locate($this->createLink('program', 'PGMStakeholder', "programID=$programID"), 'parent'));
+            die(js::locate($this->createLink('program', 'stakeholder', "programID=$programID"), 'parent'));
         }
 
         $this->loadModel('user');
-        $this->lang->navGroup->program = 'program';
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
         $this->program->setPGMViewMenu($programID);
@@ -655,35 +643,6 @@ class program extends control
     }
 
     /**
-     * Ajax get project drop menu.
-     *
-     * @param  int     $projectID
-     * @param  string  $module
-     * @param  string  $method
-     * @access public
-     * @return void
-     */
-    public function ajaxGetPRJDropMenu($projectID = 0, $module, $method)
-    {
-        $closedProjects = $this->program->getPRJList(0, 'closed', 0, 'id_desc');
-
-        $closedProjectNames = array();
-        foreach($closedProjects as $project) $closedProjectNames = common::convert2Pinyin($closedProjectNames);
-
-        $closedProjectsHtml = '';
-        foreach($closedProjects as $project) $closedProjectsHtml .= html::a($this->createLink('program', 'index', '', '', '', $project->id), '<i class="icon icon-menu-doc"></i>' . $project->name);
-
-        $this->view->projectID = $projectID;
-        $this->view->module    = $module;
-        $this->view->method    = $method;
-
-        $this->view->normalProjectsHtml = $this->program->getPRJTreeMenu(0, array('programmodel', 'createPRJManageLink'), 0, 'dropmenu');
-        $this->view->closedProjectsHtml = $closedProjectsHtml;
-
-        $this->display();
-    }
-
-    /**
      * Ajax get projects.
      *
      * @access public
@@ -742,31 +701,6 @@ class program extends control
         $this->send(array('result' => 'success'));
     }
 
-    /**
-     * Project index view.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function index($projectID = 0)
-    {
-        $this->lang->navGroup->program = 'project';
-        $projectID = $this->program->savePRJState($projectID, $this->program->getPRJPairs());
-
-        $project = $this->program->getPRJByID($projectID);
-        if(empty($project) || $project->type != 'project') die(js::error($this->lang->notFound) . js::locate('back'));
-
-        if(!$projectID) $this->locate($this->createLink('program', 'PRJbrowse')); 
-        setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
-        $this->view->title      = $this->lang->program->common . $this->lang->colon . $this->lang->program->PRJIndex;
-        $this->view->position[] = $this->lang->program->PRJIndex;
-        $this->view->project    = $project;
-
-        $this->display();
-    }
-
     /*
      * Removing users from the white list.
      *
@@ -775,9 +709,9 @@ class program extends control
      * @access public
      * @return void
      */
-    public function unbindWhielist($id = 0, $confirm = 'no')
+    public function unbindWhitelist($id = 0, $confirm = 'no')
     {
-        echo $this->fetch('personnel', 'unbindWhielist', "id=$id&confirm=$confirm");
+        echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
     }
 
     /**
@@ -793,69 +727,5 @@ class program extends control
         if(!$program) die(js::error($this->lang->notFound) . js::locate('back'));
 
         echo $this->fetch('program', 'PGMProduct', "programID=$programID");
-    }
-
-    /**
-     * AJAX: Check products.
-     *
-     * @param  int    $programID
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function ajaxCheckProduct($programID, $projectID)
-    {
-        /* Set vars. */
-        $project   = $this->program->getPRJByID($projectID);
-        $oldTopPGM = $this->program->getTopPGMByID($project->parent);
-        $newTopPGM = $this->program->getTopPGMByID($programID);
-
-        if($oldTopPGM == $newTopPGM) die();
-
-        $response  = array();
-        $response['result']  = true;
-        $response['message'] = $this->lang->program->changeProgramTip;
-
-        $multiLinkedProducts = $this->program->getMultiLinkedProducts($projectID);
-        if($multiLinkedProducts)
-        {
-            $multiLinkedProjects = array();
-            foreach($multiLinkedProducts as $productID => $product)
-            {
-                $multiLinkedProjects[$productID] = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            }
-            $response['result']              = false;
-            $response['message']             = $multiLinkedProducts;
-            $response['multiLinkedProjects'] = $multiLinkedProjects;
-        }
-        die(json_encode($response));
-    }
-
-    /**
-     * Adjust the navigation.
-     *
-     * @param  string $from
-     * @param  int    $programID
-     * @access public
-     * @return void
-     */
-    public function adjustNavigation($from = '', $programID = 0)
-    {
-        if($from == 'browse') $this->lang->navGroup->program = 'program';
-
-        if($from == 'PRJ')
-        {
-            $this->lang->navGroup->program = 'project';
-            $this->lang->program->menu = $this->lang->scrum->setMenu;
-            $moduleIndex = array_search('program', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        }
-
-        if($from == 'project')
-        {
-            $this->app->rawMethod = 'project';
-            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
-            $this->program->setPGMViewMenu($programID);
-        }
     }
 }

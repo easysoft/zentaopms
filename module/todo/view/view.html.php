@@ -198,7 +198,7 @@
         <?php if(empty($projects)):?>
         <div class="table-empty-tip">
           <p>
-            <span class="text-muted"><?php echo $lang->project->noProject;?></span>
+            <span class="text-muted"><?php echo $lang->project->empty;?></span>
             <?php echo html::a("javascript:createProject()", "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
           </p>
         </div>
@@ -258,7 +258,7 @@
         <?php if(empty($projects)):?>
         <div class="table-empty-tip">
           <p>
-            <span class="text-muted"><?php echo $lang->project->noProject;?></span>
+            <span class="text-muted"><?php echo $lang->project->empty;?></span>
             <?php echo html::a("javascript:createProject()", "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
           </p>
         </div>

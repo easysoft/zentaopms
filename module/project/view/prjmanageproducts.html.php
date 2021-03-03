@@ -1,11 +1,11 @@
 <?php
 /**
- * The manage prjmanageproducts view of program module of ZenTaoPMS.
+ * The manage prjmanageproducts view of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     program
+ * @package     project
  * @version     $Id
  * @link        http://www.zentao.net
  */
@@ -25,7 +25,7 @@
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
           <?php $isDisabled = in_array($productID, $unmodifiableProducts) ? "disabled='disabled'" : '';?>
-          <?php $title      = in_array($productID, $unmodifiableProducts) ? $lang->program->notAllowRemoveProducts : $productName;?>
+          <?php $title      = in_array($productID, $unmodifiableProducts) ? $lang->project->notAllowRemoveProducts : $productName;?>
           <?php $checked    = 'checked';?>
           <div class='col-sm-4'>
             <div class='product <?php echo $checked . (isset($branchGroups[$productID]) ? ' has-branch' : '')?>'>

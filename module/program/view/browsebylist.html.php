@@ -6,13 +6,13 @@
       <tr>
         <th class='table-nest-title'>
           <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
-          <?php echo $lang->program->PGMName;?>
+          <?php echo $lang->program->name;?>
         </th>
-        <th class='w-100px'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PGMPM);?></th>
-        <th class='text-right w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->PGMBudget);?></th>
-        <th class='w-90px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->PGMStatus);?></th>
-        <th class='w-100px'><?php common::printOrderLink('begin',  $orderBy, $vars, $lang->program->begin);?></th>
-        <th class='w-100px'><?php common::printOrderLink('end',    $orderBy, $vars, $lang->program->end);?></th>
+        <th class='w-100px'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
+        <th class='text-right w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
+        <th class='w-90px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
+        <th class='w-100px'><?php common::printOrderLink('begin',  $orderBy, $vars, $lang->project->begin);?></th>
+        <th class='w-100px'><?php common::printOrderLink('end',    $orderBy, $vars, $lang->project->end);?></th>
         <th class='text-center w-180px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -56,30 +56,30 @@
           <?php $userID = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : ''?>
           <?php if(!empty($program->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $program->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
         </td>
-        <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $program->budget >= 10000 ? number_format($program->budget / 10000, 1) . $lang->program->tenThousand : number_format((float)$program->budget, 1);?>
-        <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->program->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->program->future;?></td>
+        <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $program->budget >= 10000 ? number_format($program->budget / 10000, 1) . $lang->project->tenThousand : number_format((float)$program->budget, 1);?>
+        <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->PRJLongTime : $program->end;?></td>
         <td class='c-actions'>
           <?php if($program->type == 'program'):?>
-          <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'PGMStart', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->PGMStart);?>
-          <?php if($program->status == 'doing')  common::printIcon('program', 'PGMClose',    "programID=$program->id", $program, 'list', 'off',   '', 'iframe', true);?>
-          <?php if($program->status == 'closed') common::printIcon('program', 'PGMActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
+          <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'start', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->start);?>
+          <?php if($program->status == 'doing')  common::printIcon('program', 'close',    "programID=$program->id", $program, 'list', 'off',   '', 'iframe', true);?>
+          <?php if($program->status == 'closed') common::printIcon('program', 'activate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
 
-          <?php if(common::hasPriv('program', 'PGMSuspend') || (common::hasPriv('program', 'PGMClose') && $program->status != 'doing') || (common::hasPriv('program', 'PGMActivate') && $program->status != 'closed')):?>
+          <?php if(common::hasPriv('program', 'suspend') || (common::hasPriv('program', 'close') && $program->status != 'doing') || (common::hasPriv('program', 'activate') && $program->status != 'closed')):?>
           <div class='btn-group'>
             <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
             <ul class='dropdown-menu pull-right text-center' role='menu' style="min-width:auto; padding: 5px 10px;">
-              <?php common::printIcon('program', 'PGMSuspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true, '', $this->lang->program->PGMSuspend);?>
-              <?php if($program->status != 'doing')  common::printIcon('program', 'PGMClose',    "programID=$program->id", $program, 'list', 'off', '',   'iframe', true);?>
-              <?php if($program->status != 'closed') common::printIcon('program', 'PGMActivate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
+              <?php common::printIcon('program', 'suspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true, '', $this->lang->program->suspend);?>
+              <?php if($program->status != 'doing')  common::printIcon('program', 'close',    "programID=$program->id", $program, 'list', 'off', '',   'iframe', true);?>
+              <?php if($program->status != 'closed') common::printIcon('program', 'activate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
             </ul>
           </div>
           <?php endif;?>
-          <?php common::printIcon('program', 'PGMEdit',   "programID=$program->id", '', 'list', 'edit');?>
-          <?php common::printIcon('program', 'PGMCreate', "programID=$program->id", '', 'list', 'split', '', '', '', '', $this->lang->program->PGMChildren);?>
-          <?php if(common::hasPriv('program', 'PGMDelete')) echo html::a($this->createLink("program", "PGMDelete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PGMDelete}'");?>
+          <?php common::printIcon('program', 'edit',   "programID=$program->id", '', 'list', 'edit');?>
+          <?php common::printIcon('program', 'create', "programID=$program->id", '', 'list', 'split', '', '', '', '', $this->lang->program->children);?>
+          <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->delete}'");?>
 
           <?php else:?>
           <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('project', 'start', "projectID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
@@ -104,7 +104,7 @@
             <ul class='dropdown-menu pull-right text-center' role='menu'>
               <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&programID=0&from=browse", $program, 'list', 'link', '', '', '', "data-group='program'", '', $program->id);?>
               <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&programID=0&module=program&from=browse", $program, 'list', 'shield-check', '', '', '', "data-group='program'", '', $program->id);?>
-              <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}' data-group='program'");?>
+              <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->delete}' data-group='program'");?>
             </ul>
           </div>
           <?php endif;?>

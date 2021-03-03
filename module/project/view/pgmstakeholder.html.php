@@ -1,6 +1,6 @@
 <?php
 /**
- * The stakeholder view of program module of ZenTaoPMS.
+ * The stakeholder view of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -11,13 +11,13 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('confirmDelete', $lang->program->confirmDelete);?>
+<?php js::set('confirmDelete', $lang->project->confirmDelete);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('program', 'pgmstakeholder', "programID=$programID"), '<span class="text">' . $lang->program->PGMStakeholder . '</span>', '', 'class="btn btn-link btn-active-text"');?>
+    <?php echo html::a($this->createLink('project', 'pgmstakeholder', "projectID=$projectID"), '<span class="text">' . $lang->project->PGMStakeholder . '</span>', '', 'class="btn btn-link btn-active-text"');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('stakeholder', 'create', "programID=$programID", "<i class='icon icon-plus'></i>" . $lang->program->createStakeholder, '', "class='btn btn-primary'");?>
+    <?php common::printLink('stakeholder', 'create', "projectID=$projectID", "<i class='icon icon-plus'></i>" . $lang->project->createStakeholder, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
@@ -32,7 +32,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th><?php echo $lang->user->realname;?></th>
-          <th class="w-100px"><?php echo $lang->program->stakeholderType;?></th>
+          <th class="w-100px"><?php echo $lang->project->stakeholderType;?></th>
           <th class="w-120px"><?php echo $lang->user->role;?></th>
           <th class="w-120px"><?php echo $lang->user->phone;?></th>
           <th class="w-120px"><?php echo $lang->user->qq;?></th>
@@ -49,9 +49,9 @@
             <?php printf('%03d', $stakeholder->id);?>
           </td>
           <?php $isKey = $stakeholder->key ? " <i class='icon icon-star-empty'></i>" : '';?>
-          <?php $title = $stakeholder->key ? $lang->program->isStakeholderKey : '';?>
+          <?php $title = $stakeholder->key ? $lang->project->isStakeholderKey : '';?>
           <td title="<?php echo $title;?>"><?php echo $stakeholder->realname . $isKey;?></td>
-          <td title='<?php echo zget($lang->program->stakeholderTypeList, $stakeholder->type, '');?>'><?php echo zget($lang->program->stakeholderTypeList, $stakeholder->type, '');?></td>
+          <td title='<?php echo zget($lang->project->stakeholderTypeList, $stakeholder->type, '');?>'><?php echo zget($lang->project->stakeholderTypeList, $stakeholder->type, '');?></td>
           <td><?php echo zget($lang->user->roleList, $stakeholder->role, '');?></td>
           <td title="<?php echo $stakeholder->phone;?>"><?php echo $stakeholder->phone;?></td>
           <td title="<?php echo $stakeholder->qq;?>"><?php echo $stakeholder->qq;?></td>
@@ -59,8 +59,8 @@
           <td title="<?php echo $stakeholder->email;?>"><?php echo $stakeholder->email;?></td>
           <td class='c-actions'>
             <?php
-            $deleteClass = common::hasPriv('program', 'unlinkStakeholder') ? 'btn' : 'btn disabled';
-            echo html::a($this->createLink('program', 'unlinkStakeholder', "id=$stakeholder->id&programID=$programID&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->program->unlinkStakeholder}' class='{$deleteClass}'");
+            $deleteClass = common::hasPriv('project', 'unlinkStakeholder') ? 'btn' : 'btn disabled';
+            echo html::a($this->createLink('project', 'unlinkStakeholder', "id=$stakeholder->id&projectID=$projectID&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->project->unlinkStakeholder}' class='{$deleteClass}'");
             ?>
           </td>
         </tr>
@@ -71,8 +71,8 @@
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions">
-          <?php $actionLink = $this->createLink('program', 'batchUnlinkStakeholders', "programID=$programID");?>
-          <?php echo html::commonButton($lang->program->unlink, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");?>
+          <?php $actionLink = $this->createLink('project', 'batchUnlinkStakeholders', "projectID=$projectID");?>
+          <?php echo html::commonButton($lang->project->unlink, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");?>
         </div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>

@@ -34,65 +34,65 @@
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('holders', $lang->project->placeholder);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
-<?php js::set('longTime', $lang->program->PRJLongTime);?>
-<?php js::set('currencySymbol', $lang->program->currencySymbol);?>
-<?php js::set('PGMParentBudget', $lang->program->PGMParentBudget);?>
-<?php js::set('future', $lang->program->future);?>
+<?php js::set('longTime', $lang->project->PRJLongTime);?>
+<?php js::set('currencySymbol', $lang->project->currencySymbol);?>
+<?php js::set('PGMParentBudget', $lang->project->PGMParentBudget);?>
+<?php js::set('future', $lang->project->future);?>
 <?php js::set('PGMList', $PGMList);?>
-<?php $aclList = $parentProgram ? $lang->program->subPGMAclList : $lang->program->PGMAclList;?>
-<?php $requiredFields = $config->program->PGMCreate->requiredFields;?>
+<?php $aclList = $parentProgram ? $lang->project->subPGMAclList : $lang->project->PGMAclList;?>
+<?php $requiredFields = $config->project->PGMCreate->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->program->PGMCreate;?></h2>
+      <h2><?php echo $lang->project->PGMCreate;?></h2>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->program->PGMParent;?></th>
+          <th><?php echo $lang->project->PGMParent;?></th>
           <td><?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : 0, "class='form-control chosen' onchange=setBudgetTipsAndAclList(this.value)");?>
           <td></td>
         </tr>
         <tr>
-          <th class='w-120px'><?php echo $lang->program->PGMName;?></th>
+          <th class='w-120px'><?php echo $lang->project->PGMName;?></th>
           <td class="col-main"><?php echo html::input('name', '', "class='form-control' required");?></td>
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->PGMPM;?></th>
+          <th><?php echo $lang->project->PGMPM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->PGMBudget;?></th>
+          <th><?php echo $lang->project->PGMBudget;?></th>
           <td>
             <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->PGMParentBudget . zget($lang->program->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->project->PGMParentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
               <?php echo html::input('budget', '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon fix-border'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
               <?php else:?>
               <span class='input-group-addon fix-border'></span>
-              <?php echo html::select('budgetUnit', $budgetUnitList, $config->program->defaultCurrency, "class='form-control'");?>
+              <?php echo html::select('budgetUnit', $budgetUnitList, $config->project->defaultCurrency, "class='form-control'");?>
               <?php endif;?>
             </div>
           </td>
           <td>
             <div class='checkbox-primary future w-70px'>
               <input type='checkbox' id='future' name='future' value='1' />
-              <label for='future'><?php echo $lang->program->future;?></label>
+              <label for='future'><?php echo $lang->project->future;?></label>
             </div>
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->program->dateRange;?></th>
+          <th><?php echo $lang->project->dateRange;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' placeholder='" . $lang->program->begin . "' required");?>
-              <span class='input-group-addon'><?php echo $lang->program->to;?></span>
-              <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->program->end . "' required");?>
+              <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' placeholder='" . $lang->project->begin . "' required");?>
+              <span class='input-group-addon'><?php echo $lang->project->to;?></span>
+              <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->project->end . "' required");?>
             </div>
           </td>
-          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+          <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr class='hide'>
           <th><?php echo $lang->project->status;?></th>
@@ -103,7 +103,7 @@
         </tr>
         <?php $this->printExtendFields('', 'table');?>
         <tr>
-          <th><?php echo $lang->program->PGMDesc;?></th>
+          <th><?php echo $lang->project->PGMDesc;?></th>
           <td colspan='3'>
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
@@ -135,14 +135,14 @@
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->copyTitle;?></h4>
     </div>
     <div class='modal-body'>
-      <?php if(count($programs) == 1):?>
+      <?php if(count($projects) == 1):?>
       <div class='alert with-icon'>
         <i class='icon-exclamation-sign'></i>
         <div class='content'><?php echo $lang->project->copyNoProject;?></div>
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
-      <?php foreach ($programs as $id => $name):?>
+      <?php foreach ($projects as $id => $name):?>
       <?php if(empty($id)):?>
       <?php if($copyProgramID != 0):?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a></div>
@@ -157,10 +157,10 @@
   </div>
 </div>
 <div id='PGMAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->project->PGMAclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div id='subPGMAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->subPGMAclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->project->subPGMAclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <?php js::set('parentProgramID', isset($parentProgram->id) ? $parentProgram->id : 0);?>
 <?php include '../../common/view/footer.html.php';?>

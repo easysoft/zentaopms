@@ -42,7 +42,7 @@
           <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->project->relatedMember;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php common::printLink('program', 'PRJManageMembers', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+              <li><?php common::printLink('project', 'PRJManageMembers', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
             </nav>
           </div>
           <div class="panel-body">
@@ -51,7 +51,7 @@
               <?php if($project->PM):?>
               <?php $i--;?>
               <?php unset($teamMembers[$project->PM]);?>
-              <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->PM);?> <span class="text-muted">（<?php echo $lang->program->PRJPM;?>）</span></div>
+              <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->PM);?> <span class="text-muted">（<?php echo $lang->project->PRJPM;?>）</span></div>
               <?php endif;?>
               <?php if($project->PO):?>
               <?php $i--;?>
@@ -75,7 +75,7 @@
               <?php $j++;?>
               <?php endforeach;?>
               <div class="col-xs-6">
-                <?php common::printLink('program', 'PRJManageMembers', "projectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->project->manageMembers, '', "class='text-muted'");?>
+                <?php common::printLink('project', 'PRJManageMembers', "projectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->project->manageMembers, '', "class='text-muted'");?>
               </div>
             </div>
           </div>
@@ -95,16 +95,16 @@
         if(!$project->deleted)
         {
             echo "<div class='divider'></div>";
-            common::printIcon('program', 'PRJStart',    "projectID=$project->id", $project, 'button', 'play', '', 'iframe', true, '', $lang->project->start);
-            common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'button', 'magic', '', 'iframe', true, '', $lang->project->activate);
-            common::printIcon('program', 'PRJSuspend',  "projectID=$project->id", $project, 'button', 'pause', '', 'iframe', true, '', $lang->project->suspend);
-            common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'button', 'off', '', 'iframe', true, '', $lang->close);
+            common::printIcon('project', 'PRJStart',    "projectID=$project->id", $project, 'button', 'play', '', 'iframe', true, '', $lang->project->start);
+            common::printIcon('project', 'PRJActivate', "projectID=$project->id", $project, 'button', 'magic', '', 'iframe', true, '', $lang->project->activate);
+            common::printIcon('project', 'PRJSuspend',  "projectID=$project->id", $project, 'button', 'pause', '', 'iframe', true, '', $lang->project->suspend);
+            common::printIcon('project', 'PRJClose',    "projectID=$project->id", $project, 'button', 'off', '', 'iframe', true, '', $lang->close);
 
             echo $this->buildOperateMenu($project, 'view');
 
             echo "<div class='divider'></div>";
-            common::printIcon('program', 'PRJEdit', $params, $project, 'button', 'edit', '', '', '', '', $lang->edit);
-            common::printIcon('program', 'PRJDelete', $params, $project, 'button', 'trash', 'hiddenwin', '', '', '', $lang->delete);
+            common::printIcon('project', 'PRJEdit', $params, $project, 'button', 'edit', '', '', '', '', $lang->edit);
+            common::printIcon('project', 'PRJDelete', $params, $project, 'button', 'trash', 'hiddenwin', '', '', '', $lang->delete);
         }
         ?>
       </div>
@@ -122,7 +122,7 @@
                 <?php if($project->deleted):?>
                 <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
                 <?php endif; ?>
-                <span class="label label-primary label-outline"><?php echo zget($lang->program->PRJLifeTimeList, $project->lifetime);?></span>
+                <span class="label label-primary label-outline"><?php echo zget($lang->project->PRJLifeTimeList, $project->lifetime);?></span>
                 <?php if(isset($project->delay)):?>
                 <span class="label label-danger label-outline"><?php echo $lang->project->delayed;?></span>
                 <?php else:?>
@@ -220,7 +220,7 @@
           <div class="detail">
             <div class="detail-title"><strong><?php echo $lang->project->acl;?></strong></div>
             <div class="detail-content">
-              <p><?php echo $lang->program->PGMPRJAclList[$project->acl];?></p>
+              <p><?php echo $lang->project->PGMPRJAclList[$project->acl];?></p>
             </div>
           </div>
           <?php $this->printExtendFields($project, 'div', "position=right&inForm=0&inCell=1");?>

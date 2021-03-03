@@ -1,53 +1,53 @@
 <div class='row cell' id='cards'>
-  <?php foreach ($programs as $programID => $program):?>
-  <div class='col' data-id='<?php echo $programID?>'>
-    <div class='panel' data-url='<?php echo $this->createLink('program', 'index', "programID=$program->id", '', '', $program->id);?>'>
+  <?php foreach ($projects as $projectID => $project):?>
+  <div class='col' data-id='<?php echo $projectID?>'>
+    <div class='panel' data-url='<?php echo $this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id);?>'>
       <div class='panel-heading'>
-        <strong class='program-name' title='<?php echo $program->name;?>'><?php echo $program->name;?></strong>
-        <?php if($program->model === 'waterfall'): ?>
-        <span class='program-type-label label label-warning label-outline'><?php echo $lang->program->waterfall; ?></span>
+        <strong class='project-name' title='<?php echo $project->name;?>'><?php echo $project->name;?></strong>
+        <?php if($project->model === 'waterfall'): ?>
+        <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
         <?php else: ?>
-        <span class='program-type-label label label-info label-outline'><?php echo $lang->program->scrum; ?></span>
+        <span class='project-type-label label label-info label-outline'><?php echo $lang->project->scrum; ?></span>
         <?php endif; ?>
         <nav class='panel-actions nav nav-default'>
           <li class='dropdown'>
             <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
             <ul class='dropdown-menu pull-right'>
-              <li><?php common::printIcon('program', 'group', "programID=$program->id", $program, 'button', 'group');?></li>
-              <li><?php common::printIcon('program', 'manageMembers', "programID=$program->id", $program, 'button', 'persons');?></li>
-              <li><?php common::printicon('program', 'activate', "programid=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
-              <li><?php if(common::hasPriv('program', 'edit')) echo html::a($this->createLink("program", "edit", "programID=$program->id"), "<i class='icon-edit'></i> " . $lang->edit, '', "");?></li>
-              <li><?php common::printIcon('program', 'start',   "programID=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
-              <li><?php common::printIcon('program', 'suspend', "programID=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
-              <li><?php common::printIcon('program', 'close',   "programID=$program->id", $program, 'button', '', '', 'iframe', true);?></li>
-              <li><?php if(common::hasPriv('program', 'delete'))  echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i> " . $lang->delete, 'hiddenwin', "");?></li>
+              <li><?php common::printIcon('project', 'group', "projectID=$project->id", $project, 'button', 'group');?></li>
+              <li><?php common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'button', 'persons');?></li>
+              <li><?php common::printicon('project', 'activate', "projectid=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
+              <li><?php if(common::hasPriv('project', 'edit')) echo html::a($this->createLink("project", "edit", "projectID=$project->id"), "<i class='icon-edit'></i> " . $lang->edit, '', "");?></li>
+              <li><?php common::printIcon('project', 'start',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
+              <li><?php common::printIcon('project', 'suspend', "projectID=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
+              <li><?php common::printIcon('project', 'close',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
+              <li><?php if(common::hasPriv('project', 'delete'))  echo html::a($this->createLink("project", "delete", "projectID=$project->id"), "<i class='icon-trash'></i> " . $lang->delete, 'hiddenwin', "");?></li>
             </ul>
           </li>
         </nav>
       </div>
       <div class='panel-body'>
-        <div class='program-infos'>
-          <span><i class='icon icon-group'></i> <?php printf($lang->program->membersUnit, $program->teamCount); ?></span>
-          <span><i class='icon icon-clock'></i> <?php printf($lang->program->hoursUnit, $program->estimate); ?></span>
-          <span><i class='icon icon-cost'></i> <?php echo $program->budget . '' . zget($lang->program->unitList, $program->budgetUnit);?></span>
+        <div class='project-infos'>
+          <span><i class='icon icon-group'></i> <?php printf($lang->project->membersUnit, $project->teamCount); ?></span>
+          <span><i class='icon icon-clock'></i> <?php printf($lang->project->hoursUnit, $project->estimate); ?></span>
+          <span><i class='icon icon-cost'></i> <?php echo $project->budget . '' . zget($lang->project->unitList, $project->budgetUnit);?></span>
         </div>
-        <?php if($program->model === 'waterfall'): ?>
-        <div class='program-detail program-stages'>
-          <p class='text-muted'><?php echo $lang->program->ongoingStage; ?></p>
+        <?php if($project->model === 'waterfall'): ?>
+        <div class='project-detail project-stages'>
+          <p class='text-muted'><?php echo $lang->project->ongoingStage; ?></p>
           <?php
-          $programProjects = array();
-          foreach($program->projects as $project)
+          $projectProjects = array();
+          foreach($project->projects as $project)
           {
-              if(!$project->parent) $programProjects[] = $project;
+              if(!$project->parent) $projectProjects[] = $project;
           }
           ?>
-          <?php if(empty($programProjects)): ?>
-          <div class='label label-outline'><?php echo zget($lang->project->statusList, $program->status);?></div>
+          <?php if(empty($projectProjects)): ?>
+          <div class='label label-outline'><?php echo zget($lang->project->statusList, $project->status);?></div>
           <?php else: ?>
-          <div class='program-stages-container scrollbar-hover'>
-            <div class='program-stages-row'>
-              <?php foreach ($programProjects as $project): ?>
-              <div class='program-stage-item is-<?php echo $project->status;?><?php if($project->status !== 'wait') echo ' is-going'; ?>'>
+          <div class='project-stages-container scrollbar-hover'>
+            <div class='project-stages-row'>
+              <?php foreach ($projectProjects as $project): ?>
+              <div class='project-stage-item is-<?php echo $project->status;?><?php if($project->status !== 'wait') echo ' is-going'; ?>'>
                 <div><?php echo $project->name; ?></div>
               </div>
               <?php endforeach; ?>
@@ -56,9 +56,9 @@
           <?php endif; ?>
         </div>
         <?php else: ?>
-        <?php $project = $program->projects ? current($program->projects) : '';?>
-        <div class='program-detail program-iteration'>
-          <p class='text-muted'><?php echo $lang->program->lastIteration; ?></p>
+        <?php $project = $project->projects ? current($project->projects) : '';?>
+        <div class='project-detail project-iteration'>
+          <p class='text-muted'><?php echo $lang->project->lastIteration; ?></p>
           <?php if($project):?>
           <div class='row'>
             <div class='col-xs-5'><?php echo $project->name; ?></div>
@@ -95,27 +95,27 @@
 #cards .panel-actions .dropdown-menu > li > a {padding-left: 5px; text-align: left;}
 #cards .panel-actions .dropdown-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
 #cards .panel-actions .dropdown-menu > li > a:hover > i {opacity: 1;}
-#cards .program-type-label {padding: 1px 2px;}
-#cards .program-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
-#cards .program-infos {font-size: 12px;}
-#cards .program-infos > span {display: inline-block; line-height: 12px;}
-#cards .program-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
-#cards .program-infos > span + span {margin-left: 15px;}
-#cards .program-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px;}
-#cards .program-detail > p {margin-bottom: 8px;}
-#cards .program-detail .progress {height: 4px;}
-#cards .program-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
+#cards .project-type-label {padding: 1px 2px;}
+#cards .project-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
+#cards .project-infos {font-size: 12px;}
+#cards .project-infos > span {display: inline-block; line-height: 12px;}
+#cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
+#cards .project-infos > span + span {margin-left: 15px;}
+#cards .project-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px;}
+#cards .project-detail > p {margin-bottom: 8px;}
+#cards .project-detail .progress {height: 4px;}
+#cards .project-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
 #cards .pager {margin: 0; float: right;}
 #cards .pager .btn {border: none}
-#cards .program-stages-container {margin: 0 -16px -16px -16px; padding: 0 4px; height: 46px; overflow-x: auto; position: relative;}
-#cards .program-stages:after {content: ' '; width: 30px; display: block; right: -16px; top: 16px; bottom: -6px; z-index: 1; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); position: absolute;}
-#cards .program-stages-row {position: relative; height: 30px; z-index: 0;}
-#cards .program-stage-item {white-space: nowrap; position: absolute; top: 0; min-width: 48px; padding-top: 13px; color: #838A9D;}
-#cards .program-stage-item > div {white-space: nowrap; overflow: visible; text-align: center; text-overflow: ellipsis;}
-#cards .program-stage-item:before {content: ' '; display: block; width: 8px; height: 8px; border-radius: 50%; background: #D1D1D1; position: absolute; left: 50%; margin-left: -4px; top: 0; z-index: 1;}
-#cards .program-stage-item + .program-stage-item:after {content: ' '; display: block; left: -50%; right: 50%; height: 2px; background-color: #D1D1D1; top: 3px; position: absolute; z-index: 0;}
-#cards .program-stage-item.is-going {color: #333;}
-#cards .program-stage-item.is-going::before {background-color: #0C64EB;}
+#cards .project-stages-container {margin: 0 -16px -16px -16px; padding: 0 4px; height: 46px; overflow-x: auto; position: relative;}
+#cards .project-stages:after {content: ' '; width: 30px; display: block; right: -16px; top: 16px; bottom: -6px; z-index: 1; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); position: absolute;}
+#cards .project-stages-row {position: relative; height: 30px; z-index: 0;}
+#cards .project-stage-item {white-space: nowrap; position: absolute; top: 0; min-width: 48px; padding-top: 13px; color: #838A9D;}
+#cards .project-stage-item > div {white-space: nowrap; overflow: visible; text-align: center; text-overflow: ellipsis;}
+#cards .project-stage-item:before {content: ' '; display: block; width: 8px; height: 8px; border-radius: 50%; background: #D1D1D1; position: absolute; left: 50%; margin-left: -4px; top: 0; z-index: 1;}
+#cards .project-stage-item + .project-stage-item:after {content: ' '; display: block; left: -50%; right: 50%; height: 2px; background-color: #D1D1D1; top: 3px; position: absolute; z-index: 0;}
+#cards .project-stage-item.is-going {color: #333;}
+#cards .project-stage-item.is-going::before {background-color: #0C64EB;}
 </style>
 <script>
 $(function()
@@ -137,7 +137,7 @@ $(function()
     $(window).on('resize', resizeCards);
 
     /* Auto resize stages */
-    $cards.find('.program-stages-container').each(function()
+    $cards.find('.project-stages-container').each(function()
     {
         var $container = $(this);
         var $row = $container.children();

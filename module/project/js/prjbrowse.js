@@ -8,5 +8,5 @@ $(function()
     });
 });
 
-$('#project' + programID).addClass('active');
+$('#project' + projectID).addClass('active');
 $(".tree .active").parent('li').addClass('active');

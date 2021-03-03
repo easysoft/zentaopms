@@ -18,21 +18,19 @@
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolBar pull-left">
-    <?php foreach($lang->program->PGMFeatureBar as $key => $label):?>
+    <?php foreach($lang->program->featureBar as $key => $label):?>
     <?php $active = $status == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php echo html::a(inlink('browse', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('showClosed', array('1' => $lang->program->PGMShowClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
+    <?php echo html::checkbox('showClosed', array('1' => $lang->program->showClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
   </div>
   <div class='pull-right'>
     <?php if(isset($lang->pageActions)) echo $lang->pageActions;?>
     <?php if(isset($this->config->maxVersion)):?>
-    <?php common::printLink('program', 'createGuide', "programID=0&from=PGM", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php common::printLink('project', 'createGuide', "programID=0&from=PGM", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php elseif($this->config->systemMode == 'new'):?>
-    <?php common::printLink('program', 'prjcreate', "mode=scrum&programID=0&from=PGM", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
-    <?php else:?>
-    <?php common::printLink('project', 'create', '', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('project', 'create', "mode=scrum&programID=0&from=PGM", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
     <?php endif;?>
   </div>
 </div>
@@ -40,8 +38,8 @@
   <?php if(empty($programs)):?>
   <div class="table-empty-tip">
     <p>
-      <span class="text-muted"><?php echo $lang->program->noPGM;?></span>
-      <?php common::printLink('program', 'create', '', "<i class='icon icon-plus'></i> " . $lang->program->PGMCreate, '', "class='btn btn-info'");?>
+      <span class="text-muted"><?php echo $lang->program->noProgram;?></span>
+      <?php common::printLink('program', 'create', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info'");?>
     </p>
   </div>
   <?php else:?>

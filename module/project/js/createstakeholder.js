@@ -7,7 +7,7 @@
 function setDeptUsers(obj)
 {
     dept = $(obj).val();//Get dept ID.
-    link = createLink('program', 'createstakeholder', 'programID=' + programID + '&dept=' + dept);
+    link = createLink('project', 'createstakeholder', 'projectID=' + projectID + '&dept=' + dept);
     location.href=link;
 }
 

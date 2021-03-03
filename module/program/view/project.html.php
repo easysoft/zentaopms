@@ -21,17 +21,15 @@ js::set('browseType', $browseType);
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('PGMProject', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('project', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('PRJMine', array('1' => $lang->program->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
+    <?php echo html::checkbox('involved ', array('1' => $lang->project->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(isset($this->config->maxVersion)):?>
     <?php common::printLink('project', 'createGuide', "programID=$programID&from=program", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php elseif($this->config->systemMode == 'new'):?>
-    <?php common::printLink('project', 'create', "mode=scrum&programID=$programID&from=program", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
-    <?php else:?>
-    <?php common::printLink('project', 'create', '', '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('project', 'create', "mode=scrum&programID=$programID&from=program", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
     <?php endif;?>
   </div>
 </div>
@@ -40,8 +38,12 @@ js::set('browseType', $browseType);
     <?php if(empty($projectStats)):?>
     <div class="table-empty-tip">
       <p>
-        <span class="text-muted"><?php echo $lang->program->noPRJ;?></span>
-        <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
+        <span class="text-muted"><?php echo $lang->project->empty;?></span>
+        <?php if(isset($this->config->maxVersion)):?>
+        <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
+        <?php elseif($this->config->systemMode == 'new'):?>
+        <?php common::printLink('project', 'create', "mode=scrum&programID=$programID&from=program", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide"');?>
+        <?php endif;?>
       </p>
     </div>
     <?php else:?>

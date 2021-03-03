@@ -1,6 +1,6 @@
 <?php
 /**
- * The create stakeholder view of program module of ZenTaoPMS.
+ * The create stakeholder view of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -11,19 +11,19 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('programID', $programID);?>
-<?php $path = str_replace(",{$programID},", ',', "{$program->path}");?>
+<?php js::set('projectID', $projectID);?>
+<?php $path = str_replace(",{$projectID},", ',', "{$project->path}");?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
-      <?php echo html::a($this->createLink('program', 'craetestakeholder', "programID={$programID}"), "<span class='text'> {$lang->program->createStakeholder}</span>");?>
+      <?php echo html::a($this->createLink('project', 'craetestakeholder', "projectID={$projectID}"), "<span class='text'> {$lang->project->createStakeholder}</span>");?>
     </span>
     <div class='input-group space w-200px'>
       <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
       <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
     </div>
-    <?php if($program->parent):?>
-    <?php echo html::a($this->createLink('program', 'createStakeholder', "programID=$programID&dept=&parent=$path"), $lang->program->importStakeholder, '', 'class="btn btn-primary"');?>
+    <?php if($project->parent):?>
+    <?php echo html::a($this->createLink('project', 'createStakeholder', "projectID=$projectID&dept=&parent=$path"), $lang->project->importStakeholder, '', 'class="btn btn-primary"');?>
     <?php endif;?>
   </div>
 </div>

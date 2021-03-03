@@ -293,13 +293,13 @@ function setBudgetTipsAndAclList(parentProgramID)
 {
     if(parentProgramID != 0)
     {
-        $.get(createLink('program', 'ajaxGetAvailableBudget', "parentProgramID=" + parentProgramID), function(availableBudget)
+        $.get(createLink('project', 'ajaxGetAvailableBudget', "parentProgramID=" + parentProgramID), function(availableBudget)
         {
             parentProgram = PGMList[parentProgramID];
-            programBudget = parentProgram.budget;
+            projectBudget = parentProgram.budget;
             PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
-            budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + availableBudget) : '';
+            budgetNotes = projectBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + availableBudget) : '';
             $('#budget').attr('placeholder', budgetNotes);
         });
         $('.aclBox').html($('#subPGMAcl').html());

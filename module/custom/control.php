@@ -19,7 +19,7 @@ class custom extends control
      */
     public function index()
     {
-        if(common::hasPriv('custom', 'set')) die(js::locate(inlink('set', "module=program&field=" . key($this->lang->custom->program->fields))));
+        if(common::hasPriv('custom', 'set')) die(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
         if(common::hasPriv('custom', 'product')) die(js::locate(inlink('product')));
         if(common::hasPriv('custom', 'project')) die(js::locate(inlink('project')));
 
@@ -48,7 +48,7 @@ class custom extends control
         $this->app->loadLang($module);
         $fieldList = zget($this->lang->$module, $field, '');
 
-        if($module == 'program' and $field == 'unitList')
+        if($module == 'project' and $field == 'unitList')
         {
             $this->app->loadConfig($module);
             $unitList = zget($this->config->$module, 'unitList', '');
@@ -65,9 +65,9 @@ class custom extends control
         }
         if($module == 'task' and $field == 'hours')
         {
-            $this->app->loadConfig('project');
-            $this->view->weekend   = $this->config->project->weekend;
-            $this->view->workhours = $this->config->project->defaultWorkhours;
+            $this->app->loadConfig('execution');
+            $this->view->weekend   = $this->config->execution->weekend;
+            $this->view->workhours = $this->config->execution->defaultWorkhours;
         }
         if($module == 'bug' and $field == 'longlife')
         {
@@ -90,7 +90,7 @@ class custom extends control
 
         if(strtolower($this->server->request_method) == "post")
         {
-            if($module == 'program' and $field == 'unitList')
+            if($module == 'project' and $field == 'unitList')
             {
                 $data = fixer::input('post')->join('unitList', ',')->get();
                 if(empty($data->unitList)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->currencyNotEmpty));
@@ -111,7 +111,7 @@ class custom extends control
             }
             elseif($module == 'task' and $field == 'hours')
             {
-                $this->loadModel('setting')->setItems('system.project', fixer::input('post')->get());
+                $this->loadModel('setting')->setItems('system.execution', fixer::input('post')->get());
             }
             elseif($module == 'bug' and $field == 'longlife')
             {
@@ -466,7 +466,7 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function project()
+    public function execution()
     {
         if($_POST)
         {

@@ -1,11 +1,11 @@
 <?php
 /**
- * The prigroup view file of program module of ZenTaoPMS.
+ * The prigroup view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     program
+ * @package     project
  * @version     $Id: prigroup.html.php 4769 2013-05-05 07:24:21Z wwccss $
  * @link        http://www.zentao.net
  */
@@ -19,7 +19,7 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->group->browse;?></span></span>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php if(common::hasPriv('program', 'PRJCreateGroup')) echo html::a($this->createLink('program', 'PRJCreateGroup', "projectID=$projectID&programID=$programID", '', true), '<i class="icon-plus"></i> ' . $lang->group->create, '', 'class="btn btn-primary iframe" data-width="550"');?>
+    <?php if(common::hasPriv('project', 'PRJCreateGroup')) echo html::a($this->createLink('project', 'PRJCreateGroup', "projectID=$projectID&projectID=$projectID", '', true), '<i class="icon-plus"></i> ' . $lang->group->create, '', 'class="btn btn-primary iframe" data-width="550"');?>
   </div>
 </div>
 <div id='mainContent' class='main-table'>
@@ -44,12 +44,12 @@
         <td class='c-actions'>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php $disabled = $group->role == 'limited' ? 'disabled' : '';?>
-          <?php common::printIcon('program', 'PRJManageView', "groupID=$group->id&projectID=$projectID&programID=$programID", $group, 'list', 'eye', '', $disabled);?>
-          <?php common::printIcon('program', 'PRJManagePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
+          <?php common::printIcon('project', 'PRJManageView', "groupID=$group->id&projectID=$projectID&projectID=$projectID", $group, 'list', 'eye', '', $disabled);?>
+          <?php common::printIcon('project', 'PRJManagePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php common::printIcon('program', 'PRJManageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
-          <?php common::printIcon('program', 'PRJEditGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
-          <?php common::printIcon('program', 'PRJCopyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
+          <?php common::printIcon('project', 'PRJManageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
+          <?php common::printIcon('project', 'PRJEditGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php common::printIcon('project', 'PRJCopyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
           <?php
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {

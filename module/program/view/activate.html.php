@@ -1,12 +1,12 @@
 <?php
 /**
- * The suspend file of program module of ZenTaoPMS.
+ * The activate file of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang<wwccss@gmail.com>
- * @package     program 
- * @version     $Id: suspend.html.php 935 2013-01-16 07:49:24Z wwccss@gmail.com $
+ * @package     program
+ * @version     $Id: activate.html.php 935 2013-01-16 07:49:24Z wwccss@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>

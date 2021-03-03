@@ -11,10 +11,10 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('confirmDelete', $lang->program->confirmDelete);?>
+<?php js::set('confirmDelete', $lang->project->confirmDelete);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('program', 'pgmstakeholder', "programID=$programID"), '<span class="text">' . $lang->program->PGMStakeholder . '</span>', '', 'class="btn btn-link btn-active-text"');?>
+    <?php echo html::a($this->createLink('program', 'stakeholder', "programID=$programID"), '<span class="text">' . $lang->program->stakeholder . '</span>', '', 'class="btn btn-link btn-active-text"');?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('stakeholder', 'create', "programID=$programID", "<i class='icon icon-plus'></i>" . $lang->program->createStakeholder, '', "class='btn btn-primary'");?>

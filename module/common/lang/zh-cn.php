@@ -625,6 +625,7 @@ $lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
 $lang->navGroup->score  = 'my';
 
+$lang->navGroup->program   = 'program';
 $lang->navGroup->personnel = 'program';
 
 $lang->navGroup->product     = 'product';

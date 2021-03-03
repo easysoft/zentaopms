@@ -1,6 +1,6 @@
 <?php
 /**
- * The html product list file of pgmproduct method of program module of ZenTaoPMS.
+ * The html product list file of pgmproduct method of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -17,11 +17,11 @@
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
     <?php if($key == $browseType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink("pgmproduct", "programID=$program->id&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink("pgmproduct", "projectID=$project->id&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('product', 'create', "programID=$program->id", '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('product', 'create', "projectID=$project->id", '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>
   <?php endif;?>
 </div>
@@ -32,11 +32,11 @@
   </div>
   <?php else:?>
   <div class="main-col">
-    <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo $this->createLink('product', 'batchEdit', "programID=$program->id");?>'>
+    <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo $this->createLink('product', 'batchEdit', "projectID=$project->id");?>'>
       <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
       <table id="productList" class="table has-sort-head table-bordered table-fixed">
-        <?php $vars = "programID=$program->id&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+        <?php $vars = "projectID=$project->id&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr class="text-center">
             <th class='c-id text-left' rowspan='2'>
@@ -96,7 +96,7 @@
             <td><?php echo $product->releases;?></td>
             <td><?php echo $product->plans;?></td>
             <td class='c-actions'>
-              <?php common::printIcon('product', 'edit', "product=$product->id&action=edit&extra=&programID=$program->id", $product, 'list', 'edit');?>
+              <?php common::printIcon('product', 'edit', "product=$product->id&action=edit&extra=&projectID=$project->id", $product, 'list', 'edit');?>
               <?php if($canOrder):?>
               <span class='c-actions sort-handler'><i class="icon icon-move"></i></span>
               <?php endif;?>
@@ -121,7 +121,7 @@
   <?php endif;?>
 </div>
 <?php js::set('orderBy', $orderBy)?>
-<?php js::set('programID', $program->id)?>
+<?php js::set('projectID', $project->id)?>
 <script>
 $(function()
 {

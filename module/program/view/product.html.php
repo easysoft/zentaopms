@@ -17,7 +17,7 @@
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
     <?php if($key == $browseType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink("pgmproduct", "programID=$program->id&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink("product", "programID=$program->id&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">

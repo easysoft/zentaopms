@@ -35,7 +35,7 @@
 <script>
 $(function()
 {
-    $('#mainMenu #projectTab').addClass('btn-active-text');
+    $('#mainMenu #executionTab').addClass('btn-active-text');
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,11 +1,11 @@
 <?php
 /**
- * The prjstart view file of program module of ZenTaoPMS.
+ * The prjstart view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     program
+ * @package     project
  * @version     $Id: prjstart.html.php 4769 2013-05-05 07:24:21Z wwccss $
  * @link        http://www.zentao.net
  */
@@ -15,8 +15,8 @@
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
-      <span class='prefix label-id'><strong><?php echo $program->id;?></strong></span>
-      <?php echo isonlybody() ? ("<span title='$program->name'>" . $program->name . '</span>') : html::a($this->createLink('project', 'view', 'project=' . $program->id), $program->name, '_blank');?>
+      <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
+      <?php echo isonlybody() ? ("<span title='$project->name'>" . $project->name . '</span>') : html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
       <?php if(!isonlybody()):?>
       <small><?php echo $lang->arrow . $lang->project->start;?></small>
       <?php endif;?>
@@ -26,7 +26,7 @@
     <table class='table table-form'>
       <tbody>
         <tr>
-          <th class='w-100px'><?php echo $lang->program->realBegan;?></th>
+          <th class='w-100px'><?php echo $lang->project->realBegan;?></th>
           <td><?php echo html::input('realBegan', helper::today(), "class='form-control form-date'");?></td>
           <td></td>
         </tr>

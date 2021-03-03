@@ -13,7 +13,7 @@ class project extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->loadModel('project');
+        $this->loadModel('execution');
         $this->loadModel('group');
     }
 
@@ -30,554 +30,6 @@ class project extends control
         $this->view->from      = $from;
         $this->view->projectID = $projectID;
         $this->display();
-    }
-
-    /**
-     * Project home page.
-     *
-     * @access public
-     * @return void
-     */
-    public function PGMIndex()
-    {
-        $this->lang->navGroup->project = 'project';
-
-        $this->view->title      = $this->lang->project->PGMIndex;
-        $this->view->position[] = $this->lang->project->PGMIndex;
-        $this->display();
-    }
-
-    /**
-     * Project list.
-     *
-     * @param  varchar $status
-     * @param  varchar $orderBy
-     * @access public
-     * @return void
-     */
-    public function PGMBrowse($status = 'all', $orderBy = 'order_asc')
-    {
-        $this->lang->navGroup->project       = 'project';
-        $this->lang->project->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
-
-        if(common::hasPriv('project', 'pgmcreate')) $this->lang->pageActions = html::a($this->createLink('project', 'pgmcreate'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->PGMCreate, '', "class='btn btn-secondary'");
-
-        $this->app->session->set('projectList', $this->app->getURI(true));
-
-        $projectType = $this->cookie->projectType ? $this->cookie->projectType : 'bylist';
-
-        if($projectType === 'bygrid')
-        {
-            $projects = $this->project->getProjectStats($status, 20, $orderBy);
-        }
-        else
-        {
-            $projects = $this->project->getPGMList($status, $orderBy, null, true);
-        }
-
-        /* Get PM id list. */
-        $accounts = array();
-        foreach($projects as $project)
-        {
-            if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
-        }
-        $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
-
-        $this->view->title       = $this->lang->project->PGMBrowse;
-        $this->view->position[]  = $this->lang->project->PGMBrowse;
-
-        $this->view->projects    = $projects;
-        $this->view->status      = $status;
-        $this->view->orderBy     = $orderBy;
-        $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->projectType = $projectType;
-        $this->view->PMList      = $PMList;
-
-        $this->display();
-    }
-
-    /**
-     * Project products list.
-     *
-     * @param  int     $projectID
-     * @param  string  $browseType
-     * @param  string  $orderBy
-     * @param  int     $recTotal
-     * @param  int     $recPerPage
-     * @param  int     $pageID
-     * @access public
-     * @return void
-     */
-    public function PGMProduct($projectID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
-    {
-        $projectID = $this->project->savePGMState($projectID, $this->project->getPGMPairs());
-        setCookie("lastPGM", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
-        $project = $this->project->getPGMByID($projectID);
-        if(empty($project) || $project->type != 'project') die(js::error($this->lang->notFound) . js::locate('back'));
-
-        $this->lang->navGroup->project       = 'project';
-        $this->lang->project->switcherMenu   = $this->project->getPGMSwitcher($projectID, true);
-        $this->lang->project->mainMenuAction = $this->project->getPGMMainAction();
-        $this->project->setPGMViewMenu($projectID);
-
-        /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Get the top projectID. */
-        if($projectID)
-        {
-            $path      = explode(',', $project->path);
-            $path      = array_filter($path);
-            $projectID = current($path);
-        }
-
-        $this->view->title       = $this->lang->project->PGMProduct;
-        $this->view->position[]  = $this->lang->project->PGMProduct;
-        $this->view->project     = $project;
-        $this->view->browseType  = $browseType;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->products    = $this->loadModel('product')->getStats($orderBy, $pager, $browseType, '', 'story', $projectID);
-
-        $this->display();
-    }
-
-    /**
-     * Create a project.
-     *
-     * @param  int  $parentProjectID
-     * @access public
-     * @return void
-     */
-    public function PGMCreate($parentProjectID = 0)
-    {
-        $this->lang->navGroup->project = 'project';
-
-        $parentProject = $this->project->getPGMByID($parentProjectID);
-
-        if($_POST)
-        {
-            $projectID = $this->project->PGMCreate();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->loadModel('action')->create('project', $projectID, 'opened');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('pgmbrowse')));
-        }
-
-        $this->view->title      = $this->lang->project->PGMCreate;
-        $this->view->position[] = $this->lang->project->PGMCreate;
-
-        $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
-        $this->view->poUsers         = $this->user->getPairs('noclosed|nodeleted|pofirst');
-        $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->parentProject   = $parentProject;
-        $this->view->parents         = $this->project->getParentPairs();
-        $this->view->PGMList         = $this->project->getPGMList();
-        $this->view->budgetUnitList  = $this->project->getBudgetUnitList();
-        $this->view->availableBudget = $this->project->getAvailableBudget($parentProject);
-
-        $this->display();
-    }
-
-    /**
-     * Edit a project.
-     *
-     * @param  int $projectID
-     * @access public
-     * @return void
-     */
-    public function PGMEdit($projectID = 0)
-    {
-        $this->lang->navGroup->project = 'project';
-
-        if($_POST)
-        {
-            $changes = $this->project->PGMUpdate($projectID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
-                $this->action->logHistory($actionID, $changes);
-            }
-
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('PGMBrowse')));
-        }
-
-        $project       = $this->project->getPGMByID($projectID);
-        $parentProject = $project->parent ? $this->project->getPGMByID($project->parent) : '';
-        $parents       = $this->project->getParentPairs();
-        unset($parents[$projectID]);
-
-        $this->view->title       = $this->lang->project->PGMEdit;
-        $this->view->position[]  = $this->lang->project->PGMEdit;
-
-        $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->poUsers         = $this->user->getPairs('noclosed|nodeleted|pofirst');
-        $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->project         = $project;
-        $this->view->parents         = $parents;
-        $this->view->PGMList         = $this->project->getPGMList();
-        $this->view->budgetUnitList  = $this->project->getBudgetUnitList();
-        $this->view->parentProject   = $parentProject;
-        $this->view->availableBudget = $this->project->getAvailableBudget($parentProject) + (float)$project->budget;
-
-        $this->display();
-    }
-
-    /**
-     * Close a project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function PGMClose($projectID)
-    {
-        $this->lang->navGroup->project = 'project';
-        $this->loadModel('action');
-        $project = $this->project->getPGMByID($projectID);
-
-        if(!empty($_POST))
-        {
-            /* Only when all subprojects and subprojects are closed can the project be closed. */
-            $hasUnfinished = $this->project->hasUnfinished($project);
-            if($hasUnfinished) die(js::error($this->lang->project->PGMCloseErrorMessage));
-
-            $changes = $this->project->close($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('project', $projectID, 'Closed', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-
-            $this->executeHooks($projectID);
-            die(js::reload('parent.parent'));
-        }
-
-        $this->view->title      = $this->lang->project->PGMClose;
-        $this->view->position[] = $this->lang->project->PGMClose;
-        $this->view->project    = $project;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('project', $projectID);
-
-        $this->display('project', 'close');
-    }
-
-    /**
-     * Start project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function PGMStart($projectID)
-    {
-        $this->lang->navGroup->project = 'project';
-        $this->loadModel('action');
-
-        if(!empty($_POST))
-        {
-            $changes = $this->project->start($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('project', $projectID, 'Started', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->executeHooks($projectID);
-            die(js::reload('parent.parent'));
-        }
-
-        $this->view->title      = $this->lang->project->start;
-        $this->view->position[] = $this->lang->project->start;
-        $this->view->project    = $this->project->getPGMByID($projectID);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('project', $projectID);
-        $this->display();
-    }
-
-    /**
-     * Activate a project.
-     *
-     * @param  int     $projectID
-     * @access public
-     * @return void
-     */
-    public function PGMActivate($projectID = 0)
-    {
-        $this->lang->navGroup->project = 'project';
-        $this->loadModel('action');
-        $project = $this->project->getPGMByID($projectID);
-
-        if(!empty($_POST))
-        {
-            $changes = $this->project->activate($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            die(js::reload('parent.parent'));
-        }
-
-        $newBegin = date('Y-m-d');
-        $dateDiff = helper::diffDate($newBegin, $project->begin);
-        $newEnd   = date('Y-m-d', strtotime($project->end) + $dateDiff * 24 * 3600);
-
-        $this->view->title      = $this->lang->project->PGMActivate;
-        $this->view->position[] = $this->lang->project->PGMActivate;
-        $this->view->project    = $project;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('project', $projectID);
-        $this->view->newBegin   = $newBegin;
-        $this->view->newEnd     = $newEnd;
-        $this->display();
-    }
-
-    /**
-     * Suspend a project.
-     *
-     * @param  int     $projectID
-     * @access public
-     * @return void
-     */
-    public function PGMSuspend($projectID)
-    {
-        $this->lang->navGroup->project = 'project';
-        $this->loadModel('action');
-
-        if(!empty($_POST))
-        {
-            $changes = $this->project->suspend($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('project', $projectID, 'Suspended', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            $this->executeHooks($projectID);
-            die(js::reload('parent.parent'));
-        }
-
-        $this->view->title      = $this->lang->project->suspend;
-        $this->view->position[] = $this->lang->project->suspend;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->action->getList('project', $projectID);
-        $this->view->project    = $this->project->getPGMByID($projectID);
-
-        $this->display('project', 'suspend');
-    }
-
-    /**
-     * Delete a project.
-     *
-     * @param  int    $projectID
-     * @param  string $confirm  yes|no
-     * @access public
-     * @return void
-     */
-    public function PGMDelete($projectID, $confirm = 'no')
-    {
-        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('count');
-        if($childrenCount) die(js::alert($this->lang->project->hasChildren));
-
-        $project = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($projectID)->fetch();
-        if($confirm == 'no') die(js::confirm($this->lang->project->confirmDelete, $this->createLink('project', 'PGMDelete', "projectID=$projectID&confirm=yes")));
-
-        $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($projectID)->exec();
-        $this->loadModel('action')->create('project', $projectID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
-
-        die(js::reload('parent'));
-    }
-
-    /**
-     * Project project list.
-     *
-     * @param  int    $projectID
-     * @param  string $browseType
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function PGMProject($projectID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
-    {
-        $projectID = $this->project->savePGMState($projectID, $this->project->getPGMPairs());
-        if(!$projectID) $this->locate($this->createLink('project', 'PGMbrowse')); 
-        setCookie("lastPGM", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
-        $this->app->session->set('PGMProject', $this->app->getURI(true));
-        $this->app->session->set('projectList', $this->app->getURI(true));
-
-        $this->lang->navGroup->project = 'project';
-        $this->lang->project->switcherMenu   = $this->project->getPGMSwitcher($projectID, true);
-        $this->lang->project->mainMenuAction = $this->project->getPGMMainAction();
-        $this->project->setPGMViewMenu($projectID);
-
-        $this->loadModel('datatable');
-
-        /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $projectTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=PRJProjectTitle');
-        $order        = explode('_', $orderBy);
-        $sortField    = zget($this->config->project->sortFields, $order[0], 'id') . '_' . $order[1];
-        $projectStats = $this->project->getPRJStats($projectID, $browseType, 0, $sortField, $pager, $projectTitle);
-
-        $this->view->title      = $this->lang->project->PGMProject;
-        $this->view->position[] = $this->lang->project->PGMProject;
-
-        $this->view->projectStats = $projectStats;
-        $this->view->pager        = $pager;
-        $this->view->projectID    = $projectID;
-        $this->view->project      = $this->project->getPRJByID($projectID);
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $this->view->browseType   = $browseType;
-        $this->view->orderBy      = $orderBy;
-
-        $this->display();
-    }
-
-    /**
-     * Project stakeholder list.
-     *
-     * @param  int    $projectID
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function PGMStakeholder($projectID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
-    {
-        $this->lang->navGroup->project = 'project';
-        $this->lang->project->switcherMenu   = $this->project->getPGMSwitcher($projectID, true);
-        $this->lang->project->mainMenuAction = $this->project->getPGMMainAction();
-        $this->project->setPGMViewMenu($projectID);
-
-        /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, $recPerPage, $pageID);
-
-        $this->view->title      = $this->lang->project->PGMStakeholder;
-        $this->view->position[] = $this->lang->project->PGMStakeholder;
-
-        $this->view->stakeholders = $this->project->getStakeholders($projectID, $orderBy, $pager);
-        $this->view->pager        = $pager;
-        $this->view->projectID    = $projectID;
-        $this->view->project      = $this->project->getPRJByID($projectID);
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $this->view->orderBy      = $orderBy;
-
-        $this->display();
-    }
-
-    /**
-     * Create project stakeholder.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function createStakeholder($projectID = 0, $dept = '', $parentIdList = '')
-    {
-        if($_POST)
-        {
-            $this->project->createStakeholder($projectID);
-            die(js::locate($this->createLink('project', 'PGMStakeholder', "projectID=$projectID"), 'parent'));
-        }
-
-        $this->loadModel('user');
-        $this->lang->navGroup->project = 'project';
-        $this->lang->project->switcherMenu   = $this->project->getPGMSwitcher($projectID, true);
-        $this->lang->project->mainMenuAction = $this->project->getPGMMainAction();
-        $this->project->setPGMViewMenu($projectID);
-
-        $this->loadModel('dept');
-        $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
-
-        $this->view->title      = $this->lang->project->createStakeholder;
-        $this->view->position[] = $this->lang->project->createStakeholder;
-
-        $this->view->projectID          = $projectID;
-        $this->view->project            = $this->project->getPGMByID($projectID);
-        $this->view->users              = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->deptUsers          = $deptUsers;
-        $this->view->dept               = $dept;
-        $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->stakeholders       = $this->project->getStakeholders($projectID, 't1.id_desc');
-        $this->view->parentStakeholders = $this->project->getStakeholdersByPGMList($parentIdList);
-
-        $this->display();
-    }
-
-    /**
-     * Unlink project stakeholder.
-     *
-     * @param  int    $stakeholderID
-     * @param  int    $projectID
-     * @param  string $confirm
-     * @access public
-     * @return void
-     */
-    public function unlinkStakeholder($stakeholderID, $projectID, $confirm = 'no')
-    {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->project->confirmDelete, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&projectID=$projectID&confirm=yes")));
-        }
-        else
-        {
-            $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch('user');
-            $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
-
-            $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
-            $this->updateChildUserView($projectID, $account);
-
-            die(js::reload('parent'));
-         }
-    }
-
-    /**
-     * Batch unlink project stakeholders.
-     *
-     * @param  int    $projectID
-     * @param  string $stakeholderIDList
-     * @param  string $confirm
-     * @access public
-     * @return void
-     */
-    public function batchUnlinkStakeholders($projectID = 0, $stakeholderIDList = '', $confirm = 'no')
-    {
-        $stakeholderIDList = $stakeholderIDList ? $stakeholderIDList : implode(',', $this->post->stakeholderIDList);
-
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->project->confirmBatchUnlink, $this->inlink('batchUnlinkStakeholders', "projectID=$projectID&stakeholderIDList=$stakeholderIDList&confirm=yes")));
-        }
-        else
-        {
-            $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
-            $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->exec();
-
-            $this->loadModel('user')->updateUserView($projectID, 'project', $account);
-            $this->updateChildUserView($projectID, $account);
-
-            die(js::reload('parent'));
-        }
     }
 
     /**
@@ -648,24 +100,6 @@ class project extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->display();
-    }
-
-    /**
-     * Ajax get project drop menu.
-     *
-     * @param  int     $projectID
-     * @param  string  $module
-     * @param  string  $method
-     * @access public
-     * @return void
-     */
-    public function ajaxGetPGMDropMenu($projectID = 0, $module, $method)
-    {
-        $this->view->projectID = $projectID;
-        $this->view->module    = $module;
-        $this->view->method    = $method;
-        $this->view->projects  = $this->project->getPGMList('all');
         $this->display();
     }
 
@@ -795,7 +229,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJBrowse($projectID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function browse($projectID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->lang->project->menu = $this->lang->PRJ->menu;
         if($this->session->moreProjectLink) $this->lang->project->mainMenuAction = html::a($this->session->moreProjectLink, '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
@@ -835,7 +269,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJProjectTitle()
+    public function projectTitle()
     {
         $this->loadModel('setting');
         if($_POST)
@@ -860,7 +294,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJCreate($model = 'waterfall', $projectID = 0, $from = 'PRJ', $copyProjectID = '')
+    public function create($model = 'waterfall', $projectID = 0, $from = 'PRJ', $copyProjectID = '')
     {
         if($from == 'PRJ') $this->lang->project->menu = $this->lang->PRJ->menu;
 
@@ -955,7 +389,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJEdit($projectID = 0, $from = 'PRJ')
+    public function edit($projectID = 0, $from = 'PRJ')
     {
         $this->app->loadLang('custom');
         $this->app->loadLang('project');
@@ -1041,7 +475,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJBatchEdit($from = 'prjbrowse', $projectID = 0)
+    public function batchEdit($from = 'prjbrowse', $projectID = 0)
     {
         $this->loadModel('action');
 
@@ -1087,7 +521,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJView($projectID = 0)
+    public function view($projectID = 0)
     {
         $this->app->loadLang('bug');
         $this->lang->navGroup->project = 'project';
@@ -1133,7 +567,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJGroup($projectID = 0, $projectID = 0)
+    public function group($projectID = 0, $projectID = 0)
     {
         $this->lang->navGroup->project = 'project';
         $this->lang->project->menu = $this->lang->scrum->setMenu;
@@ -1165,7 +599,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJCreateGroup($projectID = 0, $projectID = 0)
+    public function createGroup($projectID = 0, $projectID = 0)
     {
         if(!empty($_POST))
         {
@@ -1190,7 +624,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJManageView($groupID, $projectID, $projectID)
+    public function manageView($groupID, $projectID, $projectID)
     {
         $this->lang->navGroup->project = 'project';
         $this->lang->project->menu = $this->lang->scrum->setMenu;
@@ -1228,7 +662,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJManagePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
+    public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
         $this->lang->navGroup->project = 'project';
         $this->lang->project->menu = $this->lang->scrum->setMenu;
@@ -1298,7 +732,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJManageMembers($projectID, $dept = '')
+    public function manageMembers($projectID, $dept = '')
     {
         $this->lang->navGroup->project = 'project';
         $this->lang->project->menu = $this->lang->scrum->setMenu;
@@ -1342,7 +776,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJManageGroupMember($groupID, $deptID = 0)
+    public function manageGroupMember($groupID, $deptID = 0)
     {
         if(!empty($_POST))
         {
@@ -1377,7 +811,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJCopyGroup($groupID)
+    public function copyGroup($groupID)
     {
         if(!empty($_POST))
          {
@@ -1402,7 +836,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJEditGroup($groupID)
+    public function editGroup($groupID)
     {
        if(!empty($_POST))
         {
@@ -1424,7 +858,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJStart($projectID)
+    public function start($projectID)
     {
         $this->loadModel('action');
         $project = $this->project->getPRJByID($projectID);
@@ -1482,7 +916,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJSuspend($projectID)
+    public function suspend($projectID)
     {
         $this->loadModel('action');
 
@@ -1516,7 +950,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJClose($projectID)
+    public function close($projectID)
     {
         $this->loadModel('action');
 
@@ -1550,7 +984,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJActivate($projectID)
+    public function activate($projectID)
     {
         $this->loadModel('action');
         $project = $this->project->getPRJByID($projectID);
@@ -1592,7 +1026,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJDelete($projectID, $confirm = 'no')
+    public function delete($projectID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -1619,7 +1053,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJUpdateOrder()
+    public function updateOrder()
     {
         $idList  = explode(',', trim($this->post->projects, ','));
         $orderBy = $this->post->orderBy;
@@ -1654,7 +1088,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJWhitelist($projectID = 0, $projectID = 0, $module = 'project', $from = 'PRJ', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist($projectID = 0, $projectID = 0, $module = 'project', $from = 'PRJ', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($from == 'PRJ') 
         {
@@ -1684,7 +1118,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJAddWhitelist($projectID = 0, $deptID = 0, $projectID = 0, $from = 'PRJ')
+    public function addWhitelist($projectID = 0, $deptID = 0, $projectID = 0, $from = 'PRJ')
     {
         /* Navigation stay in project when enter from project list. */
         $this->adjustNavigation($from, $projectID);
@@ -1714,7 +1148,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function PRJManageProducts($projectID, $projectID = 0, $from = 'PRJ')
+    public function manageProducts($projectID, $projectID = 0, $from = 'PRJ')
     {
         /* Navigation stay in project when enter from project list. */
         $this->adjustNavigation($from, $projectID);

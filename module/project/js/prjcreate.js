@@ -25,7 +25,7 @@ $(function()
 });
 
 /**
- * Set parent program.
+ * Set parent project.
  *
  * @access public
  * @return void
@@ -33,7 +33,7 @@ $(function()
 function setParentProgram()
 {
     var parentProgram = $("#parent").val();
-    location.href = createLink('program', 'PRJCreate', 'model=' + model + '&programID=' + parentProgram + '&from=' + from);
+    location.href = createLink('project', 'PRJCreate', 'model=' + model + '&projectID=' + parentProgram + '&from=' + from);
 }
 
 /**
@@ -45,7 +45,7 @@ function setParentProgram()
  */
 function setCopyProject(copyProjectID)
 {
-    location.href = createLink('program', 'PRJCreate', 'model=' + model + '&programID=' + programID + '&from=' + from + '&copyProjectID=' + copyProjectID);
+    location.href = createLink('project', 'PRJCreate', 'model=' + model + '&projectID=' + projectID + '&from=' + from + '&copyProjectID=' + copyProjectID);
 }
 
 /**
@@ -78,13 +78,13 @@ function addNewProduct(obj)
 /**
  * Set access control box.
  *
- * @param  int $programID
+ * @param  int $projectID
  * @access public
  * @return void
  */
-function setAclList(programID)
+function setAclList(projectID)
 {
-    if(programID != 0)
+    if(projectID != 0)
     {
         $('.aclBox').html($('#PGMAcl').html());
     }
@@ -225,7 +225,7 @@ $('#projectName').on('keyup', function()
 {
     var name = $(this).val();
     name = name.replace(/\s+/g, '');
-    link = createLink('program', 'ajaxGetCopyProjects');
+    link = createLink('project', 'ajaxGetCopyProjects');
     $.post(link, {name: name, cpoyProjectID : copyProjectID}, function(data)
     {
         $('#copyProjects').html(data);

@@ -3,13 +3,13 @@ $(function()
     $("select[name^='parents']").change(function()
     {
         var $this     = $(this);
-        var programID = $this.val();
+        var projectID = $this.val();
         var projectID = $this.attr("data-id");
         var oldParent = $this.attr("data-parent");
         var title     = changeProgram.replace('%s', $this.attr("data-name"));
 
-        /* Determine whether the project can change the program set. */
-        link = createLink('program', 'ajaxCheckProduct', 'programID=' + programID + '&projectID=' + projectID);
+        /* Determine whether the project can change the project set. */
+        link = createLink('project', 'ajaxCheckProduct', 'projectID=' + projectID + '&projectID=' + projectID);
         $.getJSON(link, function(data)
         {
             var changed = true;

@@ -2,10 +2,10 @@ $(function()
 {
     $('#parent').change(function()
     {
-        var programID = $(this).val();
+        var projectID = $(this).val();
 
-        /* Determine whether the project can change the program set. */
-        link = createLink('program', 'ajaxCheckProduct', 'programID=' + programID + '&projectID=' + projectID);
+        /* Determine whether the project can change the project set. */
+        link = createLink('project', 'ajaxCheckProduct', 'projectID=' + projectID + '&projectID=' + projectID);
         $.getJSON(link, function(data)
         {
             var changed = true;
@@ -69,13 +69,13 @@ $(function()
 /**
  * Set aclList.
  *
- * @param  int   $programID
+ * @param  int   $projectID
  * @access public
  * @return void
  */
-function setAclList(programID)
+function setAclList(projectID)
 {
-    if(programID != 0)
+    if(projectID != 0)
     {
         $('.aclBox').html($('#PGMAcl').html());
     }
