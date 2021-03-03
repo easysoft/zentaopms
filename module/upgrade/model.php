@@ -4032,6 +4032,8 @@ class upgradeModel extends model
         else
         {
             $programID = $data->programID ? $data->programID : $data->programs;
+            $this->dao->update(TABLE_PROGRAM)->set('status')->eq($data->PGMStatus)->where('id')->eq($programID)->exec();
+            if($data->PGMStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'openedbysystem');
         }
 
         if(isset($data->newLine))
@@ -4114,6 +4116,8 @@ class upgradeModel extends model
         else
         {
             $projectID = $data->projects;
+            $this->dao->update(TABLE_PROJECT)->set('status')->eq($data->PRJStatus)->where('id')->eq($projectID)->exec();
+            if($data->PRJStatus == 'closed') $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
         }
 
         return array($programID, $projectID, $lineID);
