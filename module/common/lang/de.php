@@ -188,7 +188,7 @@ $lang->product->menu->home = 'Home|product|index|';
 $lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
 $lang->product->viewMenu = new stdclass();
-$lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->plan        = array('link' => "Plan|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s",     'subModule' => 'release');
@@ -307,7 +307,7 @@ $lang->my->menu->contacts    = 'Contacts|my|managecontacts|';
 
 $lang->my->workMenu = new stdclass();
 $lang->my->workMenu->task        = 'Task|my|work|mode=task';
-$lang->my->workMenu->requirement = "$lang->URCommon|my|work|mode=requirement";
+if($config->URAndSR) $lang->my->workMenu->requirement = "$lang->URCommon|my|work|mode=requirement";
 $lang->my->workMenu->story       = "$lang->SRCommon|my|work|mode=story";
 $lang->my->workMenu->bug         = 'Bug|my|work|mode=bug';
 $lang->my->workMenu->testcase    = 'Test Case|my|work|mode=testcase&type=assigntome';
@@ -315,7 +315,7 @@ $lang->my->workMenu->testtask    = 'Test Task|my|work|mode=testtask&type=wait';
 
 $lang->my->contributeMenu = new stdclass();
 $lang->my->contributeMenu->task        = 'Task|my|contribute|mode=task';
-$lang->my->contributeMenu->requirement = "$lang->URCommon|my|contribute|mode=requirement";
+f($config->URAndSR) $lang->my->contributeMenu->requirement = "$lang->URCommon|my|contribute|mode=requirement";
 $lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=story";
 $lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
 $lang->my->contributeMenu->testcase    = 'Test Case|my|contribute|mode=testtask&type=openedbyme';
