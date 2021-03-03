@@ -1,59 +1,33 @@
-function setCopyProject(projectID)
-{
-    location.href = createLink('project', 'create', 'productID=&projectID=0&copyProjectID=' + projectID);
-}
-
 $(function()
 {
     $('#copyProjects a').click(function(){setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide')});
-    $('#begin').on('change', function()
+    $('#isCat').change(function()
     {
-       $("#end").val('');
-       $("#days").val('');
-       $("input:radio[name='delta']").attr("checked",false);
-    });
-    $('#end').on('change', function()
-    {
-        $("input:radio[name='delta']").attr("checked", false);
-    })
-
-    if(typeof(currentPlanID) == 'undefined')
-    {
-        $('#productsBox select[id^="products"]').each(function()
+        if($(this).prop('checked'))
         {
-            var branchID = 0;
-            if($(this).closest('.input-group').find('select[id^="branch"]').size() > 0)
-            {
-                var branchID = $(this).closest('.input-group').find('select[id^="branch"]').val();
-            }
-            loadPlans($(this), branchID);
-        });
-    }
+            $('#longTimeBox').removeClass('hidden');
+        }
+        else
+        {
+            $('#longTimeBox').addClass('hidden');
+            $('#longTimeBox').find('#longTime').prop('checked', false).change();
+        }
+    });
 
-    /* Assign value to the manage products by the different request type.*/
-    var product = $('#products0');
-    $(product).val(productID);
-    $(product).trigger("chosen:updated");
-    loadBranches($(product));
-
-    var adjustMainCol = function()
+    $('#longTime').change(function()
     {
-        if(!isStage) $('.main-form .col-main').css('width', Math.max(250, Math.floor(($('#productsBox').outerWidth() - 50)/3) + 10));
-    };
-    adjustMainCol();
-    $(window).on('resize', adjustMainCol);
+        if($(this).prop('checked'))
+        {
+            $('#end').val('').attr('disabled', 'disabled');
+        }
+        else
+        {
+            $('#end').removeAttr('disabled');
+        }
+    });
 });
 
-function showLifeTimeTips()
+function setCopyProject(copiedProgramID)
 {
-    var lifetime = $('#lifetime option:selected').val();
-    if(lifetime == 'ops')
-    {
-        $('#lifeTimeTips').show();
-    }
-    else
-    {
-        $('#lifeTimeTips').hide();
-    }
+    location.href = createLink('program', 'create', 'template=' + template + '&programID=' + parentProgramID + '&copyProgramID=' + copiedProgramID);
 }
-

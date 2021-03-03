@@ -142,7 +142,8 @@ $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
 $lang->mainNav->product = "<i class='icon icon-menu-project'></i> Product|$productModule|$productMethod|";
 if($config->systemMode == 'new')
 {
-    $lang->mainNav->project = "<i class='icon icon-file'></i> Project|$projectModule|$projectMethod|";
+    $lang->mainNav->project   = "<i class='icon icon-file'></i> Project|$projectModule|$projectMethod|";
+    $lang->mainNav->execution = "<i class='icon icon-sprint'></i> Execution|execution|task|";
 }
 else
 {
@@ -162,18 +163,25 @@ $lang->dividerMenu = ',qa,report,admin,';
 /* Program set menu. */
 $lang->program = new stdclass();
 $lang->program->menu = new stdclass();
-//$lang->program->menu->index  = 'Home|program|pgmindex|';
-$lang->program->menu->browse = array('link' => 'Program|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers');
+//$lang->program->menu->index  = 'Home|program|index|';
+$lang->program->menu->browse = array('link' => 'Program|program|browse|');
 
 $lang->PRJ = new stdclass();
 $lang->PRJ->menu = new stdclass();
-$lang->PRJ->menu->browse = array('link' => 'Project|program|prjbrowse|', 'alias' => 'prjcreate,prjedit,prjgroup,prjmanagepriv,prjmanageview,prjmanagemembers,prjbatchedit');
+if($config->systemMode == 'new')
+{
+    $lang->PRJ->menu->browse = array('link' => 'Project|project|browse|');
+}
+else
+{
+    $lang->PRJ->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
+}
 
 $lang->program->viewMenu = new stdclass();
-$lang->program->viewMenu->product     = array('link' => 'Product|program|pgmproduct|program=%s', 'alias' => 'view');
-$lang->program->viewMenu->project     = array('link' => "Project|program|pgmproject|program=%s");
+$lang->program->viewMenu->product     = array('link' => 'Product|program|product|program=%s', 'alias' => 'view');
+$lang->program->viewMenu->project     = array('link' => "Project|program|project|program=%s");
 $lang->program->viewMenu->personnel   = array('link' => "Member|personnel|accessible|program=%s");
-$lang->program->viewMenu->stakeholder = array('link' => "Stakeholder|program|pgmstakeholder|program=%s", 'alias' => 'createstakeholder');
+$lang->program->viewMenu->stakeholder = array('link' => "Stakeholder|program|stakeholder|program=%s", 'alias' => 'createstakeholder');
 
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();

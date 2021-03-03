@@ -2,6 +2,7 @@
 $lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[15] = 'product';
 $lang->mainNav->menuOrder[20] = 'project';
+$lang->mainNav->menuOrder[21] = 'execution';
 $lang->mainNav->menuOrder[23] = 'qa';
 $lang->mainNav->menuOrder[25] = 'repo';
 $lang->mainNav->menuOrder[30] = 'doc';

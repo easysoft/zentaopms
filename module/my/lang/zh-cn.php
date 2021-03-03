@@ -90,10 +90,10 @@ $lang->my->productLink = '产品默认着陆页';
 $lang->my->projectLink = '项目默认着陆页';
 
 $lang->my->programLinkList = array();
-//$lang->my->programLinkList['program-home']     = '默认进入项目集主页，可以了解公司整体的战略规划状况';
-$lang->my->programLinkList['program-pgmbrowse']  = '默认进入项目集列表，可以查看所有的项目集';
-//$lang->my->programLinkList['program-pgmindex'] = '默认进入最近一个项目集仪表盘，可以查看当前项目集概况';
-$lang->my->programLinkList['program-pgmproject'] = '默认进入最近一个项目集的项目列表，可以查看当前项目集下所有项目';
+//$lang->my->programLinkList['program-home']  = '默认进入项目集主页，可以了解公司整体的战略规划状况';
+$lang->my->programLinkList['program-browse']  = '默认进入项目集列表，可以查看所有的项目集';
+//$lang->my->programLinkList['program-index'] = '默认进入最近一个项目集仪表盘，可以查看当前项目集概况';
+$lang->my->programLinkList['program-project'] = '默认进入最近一个项目集的项目列表，可以查看当前项目集下所有项目';
 
 $lang->my->productLinkList = array();
 $lang->my->productLinkList['product-index']     = '默认进入产品主页，可以了解公司整体的产品状况';
@@ -103,7 +103,7 @@ $lang->my->productLinkList['product-browse']    = '默认进入最近一个产�
 
 global $config;
 $lang->my->projectLinkList = array();
-//$lang->my->projectLinkList['program-home']    = '默认进入项目主页，可以了解公司整体的项目状况';
-$lang->my->projectLinkList['program-prjbrowse'] = '默认进入项目列表，可以查看所有的项目';
+//$lang->my->projectLinkList['project-home'] = '默认进入项目主页，可以了解公司整体的项目状况';
+$lang->my->projectLinkList['project-browse'] = '默认进入项目列表，可以查看所有的项目';
+$lang->my->projectLinkList['project-task']   = '默认进入最近一个项目迭代的任务列表，可以查看当前迭代下的任务信息';
 if($config->systemMode == 'new') $lang->my->projectLinkList['program-index'] = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
-$lang->my->projectLinkList['project-task']      = '默认进入最近一个项目迭代的任务列表，可以查看当前迭代下的任务信息';

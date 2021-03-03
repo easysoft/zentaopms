@@ -1,0 +1,4 @@
+#mainMenu .pull-left .checkbox-primary {display: inline-block; margin-left: 10px;}
+#mainMenu .pull-right > .btn-group + .btn {margin-left: 10px;}
+#mainMenu .pull-right > .btn-group > .btn-icon {background: transparent;}
+#mainMenu .pull-right > .btn-group > .btn-icon:hover {background: #fff;}

@@ -59,7 +59,7 @@ class stakeholder extends control
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
 
             $moduleName = $programID ? 'program'              : $this->moduleName;
-            $methodName = $programID ? 'pgmstakeholder'       : 'browse';
+            $methodName = $programID ? 'stakeholder'          : 'browse';
             $param      = $programID ? "programID=$programID" : '';
             $locate     = $this->createLink($moduleName, $methodName, $param);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
@@ -69,7 +69,7 @@ class stakeholder extends control
         {
             $this->loadModel('program');
             $this->app->rawModule = 'program';
-            $this->app->rawMethod = 'pgmstakeholder';
+            $this->app->rawMethod = 'stakeholder';
             $this->lang->navGroup->program = 'program';
             $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
             $this->program->setPGMViewMenu($programID);

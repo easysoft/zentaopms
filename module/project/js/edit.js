@@ -1,22 +1,31 @@
-$().ready(function()
-{
-    $('#submit').click(function()
-    {
-        $('#products0').removeAttr("disabled");
-        $('#branch0').removeAttr("disabled");
-    });
-});
-
 $(function()
 {
-    /* If the story of the product which linked the execution under the project, you don't allow to remove the product. */
-    $("#productsBox select").each(function()
+    var endDate = $('#end').val();
+    $('#isCat').change(function()
     {
-        var isExisted = $.inArray($(this).attr('data-last'), unmodifiableProducts);
-        if(isExisted != -1)
+        if($(this).prop('checked'))
         {
-            $(this).prop('disabled', true).trigger("chosen:updated");
-            $(this).siblings('div').find('span').attr('title', tip);
+            $('#longTimeBox').removeClass('hidden');
+            $('#longTime').change();
+        }
+        else
+        {
+            $('#longTimeBox').addClass('hidden');
+            $('#longTimeBox').find('#longTime').prop('checked', false).change();
         }
     });
-})
+
+    $('#longTime').change(function()
+    {
+        if($(this).prop('checked'))
+        {
+            $('#end').val('').attr('disabled', 'disabled');
+        }
+        else
+        {
+            $('#end').val(endDate).removeAttr('disabled');
+        }
+    });
+
+    $('#isCat').change();
+});

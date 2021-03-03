@@ -142,7 +142,8 @@ $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
 $lang->mainNav->product = "<i class='icon icon-product'></i> 产品|$productModule|$productMethod|";
 if($config->systemMode == 'new')
 {
-    $lang->mainNav->project = "<i class='icon icon-project'></i> 项目|$projectModule|$projectMethod|";
+    $lang->mainNav->project   = "<i class='icon icon-project'></i> 项目|$projectModule|$projectMethod|";
+    $lang->mainNav->execution = "<i class='icon icon-sprint'></i> 执行|execution|task|";
 }
 else
 {
@@ -161,25 +162,25 @@ $lang->dividerMenu = ',qa,report,admin,';
 /* Program set menu. */
 $lang->program = new stdclass();
 $lang->program->menu = new stdclass();
-//$lang->program->menu->index   = '主页|program|pgmindex|';
-$lang->program->menu->browse  = array('link' => '项目集|program|pgmbrowse|', 'alias' => 'pgmcreate,pgmedit,pgmgroup,pgmmanagepriv,pgmmanageview,pgmmanagemembers,prjcreate,prjedit,prjmanageproducts,prjwhitelist,prjaddwhitelist');
+//$lang->program->menu->index   = '主页|program|index|';
+$lang->program->menu->browse  = array('link' => '项目集|program|browse|');
 
 $lang->PRJ = new stdclass();
 $lang->PRJ->menu = new stdclass();
 if($config->systemMode == 'new')
 {
-    $lang->PRJ->menu->browse = array('link' => '项目|program|prjbrowse|', 'alias' => 'prjcreate,prjedit,prjgroup,prjmanagepriv,prjmanageview,prjmanagemembers,prjmanageproducts,prjwhitelist,prjaddwhitelist,prjbatchedit');
+    $lang->PRJ->menu->browse = array('link' => '项目|project|browse|');
 }
 else
 {
-    $lang->PRJ->menu->browse = array('link' => "$lang->executionCommon|program|prjbrowse|");
+    $lang->PRJ->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
 }
 
 $lang->program->viewMenu = new stdclass();
-$lang->program->viewMenu->product     = array('link' => '产品|program|pgmproduct|program=%s', 'alias' => 'view');
-$lang->program->viewMenu->project     = array('link' => "项目|program|pgmproject|program=%s");
+$lang->program->viewMenu->product     = array('link' => '产品|program|product|program=%s', 'alias' => 'view');
+$lang->program->viewMenu->project     = array('link' => "项目|program|project|program=%s");
 $lang->program->viewMenu->personnel   = array('link' => "人员|personnel|accessible|program=%s");
-$lang->program->viewMenu->stakeholder = array('link' => "干系人|program|pgmstakeholder|program=%s", 'alias' => 'createstakeholder');
+$lang->program->viewMenu->stakeholder = array('link' => "干系人|program|stakeholder|program=%s", 'alias' => 'createstakeholder');
 
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();

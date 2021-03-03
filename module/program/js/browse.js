@@ -1,9 +1,9 @@
 $(function()
 {
-    $('input[name^="mine"]').click(function()
+    $('input[name^="showClosed"]').click(function()
     {
-        var mine = $(this).is(':checked') ? 1 : 0;
-        $.cookie('mine', mine, {expires:config.cookieLife, path:config.webRoot});
+        var showClosed = $(this).is(':checked') ? 1 : 0;
+        $.cookie('showClosed', showClosed, {expires:config.cookieLife, path:config.webRoot});
         window.location.reload();
     });
 });
