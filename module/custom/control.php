@@ -570,7 +570,7 @@ class custom extends control
      */
     public function mode()
     {
-        if($_POST)
+        if($this->post->mode == 'new')
         {
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);

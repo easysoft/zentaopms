@@ -42,6 +42,7 @@ $lang->custom->deleteStoryConcept   = "Delete story Concept";
 $lang->custom->configureScrum       = "Scrum Model Custom";
 $lang->custom->URConcept            = "UR Concept";
 $lang->custom->SRConcept            = "SR Concept";
+$lang->custom->switch               = "Switch";
 $lang->custom->oneUnit              = "One {$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "Please set the conversion factor of {$lang->hourCommon} to %s first";
 

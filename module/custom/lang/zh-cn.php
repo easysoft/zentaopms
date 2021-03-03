@@ -43,6 +43,7 @@ $lang->custom->deleteStoryConcept   = "删除需求概念";
 $lang->custom->configureScrum       = "项目概念";
 $lang->custom->URConcept            = "用需概念";
 $lang->custom->SRConcept            = "软需概念";
+$lang->custom->switch               = "切换";
 $lang->custom->oneUnit              = "一个{$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "请先设置{$lang->hourCommon}转换为%s的换算系数";
 
