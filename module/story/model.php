@@ -2405,7 +2405,7 @@ class storyModel extends model
         }
 
         $this->dao->sqlobj->sql = $query;
-        return $stories;
+        return $this->mergePlanTitle($productID, $stories, $branch, $type);
     }
 
     /**
