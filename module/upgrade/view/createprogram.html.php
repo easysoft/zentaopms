@@ -19,7 +19,7 @@
       <?php echo html::hidden('programID', '');?>
     </td>
   </tr>
-  <tr class='PGMStatus'>
+  <tr>
     <th><?php echo $lang->program->PGMCommon . $lang->program->PGMStatus;?></th>
     <td><?php echo html::select('PGMStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
   </tr>
