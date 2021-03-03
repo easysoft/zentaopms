@@ -22,7 +22,7 @@ class todoModel extends model
     public function create($date, $account)
     {
         $objectType = $this->post->type;
-        $hasObject  = in_array($objectType, array('bug', 'task', 'story', 'issue', 'risk', 'review', 'testtask', 'feedback'));
+        $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
         if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
         $todo = fixer::input('post')
@@ -34,7 +34,7 @@ class todoModel extends model
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->begin == false or $this->post->end == false, 'end', '2400')
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
-            ->remove('bug, task, story, issue, risk, review, testtask, uid, feedback')
+            ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
         if($todo->end < $todo->begin)
@@ -171,10 +171,10 @@ class todoModel extends model
     public function update($todoID)
     {
         $oldTodo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
-        if(in_array($oldTodo->type, array('bug', 'task', 'story', 'issue', 'risk', 'review', 'testtask', 'feedback'))) $oldTodo->name = '';
+        if(in_array($oldTodo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
 
         $objectType = $this->post->type;
-        $hasObject  = in_array($objectType, array('bug', 'task', 'story', 'issue', 'risk', 'review', 'testtask', 'feedback'));
+        $hasObject  = in_array($objectType, $this->config->todo->moduleList);
         if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
         $todo = fixer::input('post')
             ->cleanInt('pri, begin, end, private')
@@ -186,7 +186,7 @@ class todoModel extends model
             ->setIF($this->post->end   == false, 'end', '2400')
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
-            ->remove('bug, task, story, feedback, issue, risk, review, testtask, feedback, uid')
+            ->remove(implode(',', $this->config->todo->moduleList) . 'uid')
             ->get();
 
         if($todo->end < $todo->begin)

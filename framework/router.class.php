@@ -171,7 +171,7 @@ class router extends baseRouter
             $commonSettings = array();
             try
             {
-                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode')")->fetchAll();
+                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -179,7 +179,7 @@ class router extends baseRouter
             }
         }
 
-        $hourKey = $planKey = $URSR = 0;
+        $hourKey = $planKey = $URSR = $URAndSR = 0;
         $mode    = 'new';
         $projectKey = empty($this->config->isINT) ? ITERATION_KEY : SPRINT_KEY;
 
@@ -188,6 +188,7 @@ class router extends baseRouter
             if($setting->key == 'sprintConcept') $projectKey = $setting->value;
             if($setting->key == 'hourPoint')     $hourKey    = $setting->value;
             if($setting->key == 'URSR')          $URSR       = $setting->value;
+            if($setting->key == 'URAndSR')       $URAndSR    = $setting->value;
             if($setting->key == 'mode' and $setting->section == 'global') $mode = $setting->value;
         }
 
@@ -215,6 +216,7 @@ class router extends baseRouter
 
         /* User preference init. */
         $config->URSR        = $URSR;
+        $config->URAndSR     = $URAndSR;
         $config->programLink = 'program-pgmbrowse';
         $config->productLink = 'product-all';
         $config->projectLink = 'program-prjbrowse';

@@ -39,27 +39,17 @@ class programModel extends model
     /**
      * Get program pairs.
      *
+     * @param  bool   $isQueryAll
      * @access public
      * @return array
      */
-    public function getPGMPairs()
+    public function getPGMPairs($isQueryAll = false)
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->fetchPairs();
-    }
-
-    /**
-     * Get program option.
-     *
-     * @access public
-     * @return array
-     */
-    public function getPGMOption()
-    {
-        return $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->fetchPairs();
     }
 
     /**
@@ -192,8 +182,8 @@ class programModel extends model
                 $program->budgetUnit = $parentProgram->budgetUnit;
                 if(isset($program->budget) and $parentProgram->budget != 0)
                 {
-                    $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
-                    if($program->budget > $parentRemainBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                    $availableBudget = $this->getAvailableBudget($parentProgram);
+                    if($program->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
                 }
 
                 if(dao::isError()) return false;
@@ -307,8 +297,8 @@ class programModel extends model
             $program->budgetUnit = $parentProgram->budgetUnit;
             if($program->budget != 0 and $parentProgram->budget != 0)
             {
-                $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
-                if($program->budget > $parentRemainBudget + $oldProgram->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                $availableBudget = $this->getAvailableBudget($parentProgram);
+                if($program->budget > $availableBudget + $oldProgram->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
         if(dao::isError()) return false;
@@ -725,13 +715,13 @@ class programModel extends model
     }
 
     /**
-     * Get parent remain budget.
+     * Get available budget.
      *
      * @param  object  $parentProgram
      * @access public
      * @return int
      */
-    public function getParentRemainBudget($parentProgram)
+    public function getAvailableBudget($parentProgram)
     {
         if(empty($parentProgram)) return;
 
@@ -751,11 +741,11 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getParentPairs($model = '')
+    public function getParentPairs($model = '', $mode = '')
     {
         $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
-            ->andWhere('status')->ne('closed')
+            ->beginIF(strpos($mode, 'noclosed') === false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->orderBy('grade desc, `order`')
@@ -1518,8 +1508,8 @@ class programModel extends model
             $project->budgetUnit = $parentProgram->budgetUnit;
             if(isset($project->budget) and $parentProgram->budget != 0)
             {
-                $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
-                if($project->budget > $parentRemainBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                $availableBudget = $this->getAvailableBudget($parentProgram);
+                if($project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
 
             /* Judge products not empty. */
@@ -1702,8 +1692,8 @@ class programModel extends model
             $project->budgetUnit = $parentProgram->budgetUnit;
             if($project->budget != 0 and $parentProgram->budget != 0)
             {
-                $parentRemainBudget = $this->getParentRemainBudget($parentProgram);
-                if($project->budget > $parentRemainBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                $availableBudget = $this->availableBudget($parentProgram);
+                if($project->budget > $availableBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
 
@@ -1896,19 +1886,6 @@ class programModel extends model
                 $title  = "title='{$project->name}'";
             }
 
-            $PRJProgram = '';
-            if($id == 'PRJProgram' and $project->parent != 0)
-            {
-                $programList  = $this->getPGMOption();
-                $programIndex = $programID ? strpos($project->path, (string)$programID) : 0;
-                $projectIndex = strpos($project->path, $project->id);
-                $programPath  = explode(',' , substr($project->path, $programIndex, $projectIndex - $programIndex));
-                foreach($programPath as $program)
-                {
-                    if($program) $PRJProgram .= '/' . zget($programList, $program);
-                }
-                $title = "title='{$PRJProgram}'";
-            }
             if($id == 'PRJBudget')
             {
                 $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format((float)$project->budget, 1);
@@ -1938,9 +1915,6 @@ class programModel extends model
                     echo html::a($projectLink, $project->name);
                     if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->program->waterfall}</span>";
                     if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->program->scrum}</span>";
-                    break;
-                case 'PRJProgram':
-                    echo $PRJProgram;
                     break;
                 case 'PM':
                     $user   = $this->loadModel('user')->getByID($project->PM, 'account');

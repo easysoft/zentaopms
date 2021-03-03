@@ -140,7 +140,7 @@ $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';
 $lang->custom->user->fields['deleted']      = '列出已删除用户';
 
-$lang->custom->system = array('required', 'score');
+$lang->custom->system = array('required', 'flow', 'score');
 
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = '关闭的区块';
@@ -191,8 +191,18 @@ $lang->custom->weekend        = '休息日';
 $lang->custom->weekendList[2] = '双休';
 $lang->custom->weekendList[1] = '单休';
 
-$lang->custom->sprintConceptList[0] = '项目 - 产品 - 迭代';
-$lang->custom->sprintConceptList[1] = '项目 - 产品 - 冲刺';
+global $config;
+if($config->systemMode == 'classic')
+{
+    $lang->custom->sprintConceptList[0] = '产品 - 项目';
+    $lang->custom->sprintConceptList[1] = '产品 - 迭代';
+    $lang->custom->sprintConceptList[2] = '产品 - 冲刺';
+}
+else
+{
+    $lang->custom->sprintConceptList[0] = '项目 - 产品 - 迭代';
+    $lang->custom->sprintConceptList[1] = '项目 - 产品 - 冲刺';
+}
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 
@@ -213,15 +223,17 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
 $lang->custom->moduleName['project']     = $lang->sprintCommon;
 
-$lang->custom->conceptQuestions['overview']         = "1. 下述哪种组合方式更适合您公司的管理现状？";
-$lang->custom->conceptQuestions['story']            = "2. 您公司是在使用需求概念还是用户故事概念？";
-$lang->custom->conceptQuestions['requirementpoint'] = "3. 您公司是在使用工时还是功能点来做规模估算？";
-$lang->custom->conceptQuestions['storypoint']       = "3. 您公司是在使用工时还是故事点来做规模估算？";
+$lang->custom->conceptQuestions['overview'] = "1. 下述哪种组合方式更适合您公司的管理现状？";
+$lang->custom->conceptQuestions['URAndSR']  = "2. 是否启用{$lang->URCommon}和{$lang->SRCommon}概念？";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();
 $lang->custom->conceptOptions->story['0'] = '需求';
 $lang->custom->conceptOptions->story['1'] = '故事';
+
+$lang->custom->conceptOptions->URAndSR = array();
+$lang->custom->conceptOptions->URAndSR['1'] = '是';
+$lang->custom->conceptOptions->URAndSR['0'] = '否';
 
 $lang->custom->conceptOptions->hourPoint      = array();
 $lang->custom->conceptOptions->hourPoint['0'] = '工时';

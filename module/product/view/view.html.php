@@ -12,7 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div id='mainContent' class="main-row" <?php if(isonlybody()) echo 'style="padding-top: 0px;"';?>>
+<?php $style = isonlybody() ? 'style="padding-top: 0px;"' : '';?>
+<div id='mainContent' class="main-row" <?php echo $style;?>>
   <div class="col-8 main-col">
     <div class="row">
       <div class="col-sm-12">

@@ -11,8 +11,20 @@
  */
 class bug extends control
 {
-    public $products  = array();
+    /**
+     * All products.
+     *
+     * @var    array
+     * @access public
+     */
+    public $products = array();
 
+    /**
+     * Project id.
+     *
+     * @var    int
+     * @access public
+     */
     public $projectID = 0;
 
     /**

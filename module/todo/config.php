@@ -26,3 +26,5 @@ $config->todo->list->customBatchEditFields   = 'pri,desc,beginAndEnd,status';
 $config->todo->custom = new stdclass();
 $config->todo->custom->batchCreateFields = 'type,pri,desc,beginAndEnd';
 $config->todo->custom->batchEditFields   = 'pri,beginAndEnd,status';
+
+$config->todo->moduleList = array('bug', 'task', 'story', 'issue', 'risk', 'review', 'testtask', 'feedback');

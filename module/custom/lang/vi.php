@@ -139,7 +139,7 @@ $lang->custom->user->fields['statusList']   = 'Tình trạng';
 $lang->custom->user->fields['contactField'] = 'Liên hệ có sẵn';
 $lang->custom->user->fields['deleted']      = 'Người dùng đã xóa';
 
-$lang->custom->system = array('required', 'score');
+$lang->custom->system = array('required', 'flow', 'score');
 
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = 'Đã đóng Block';
@@ -190,8 +190,18 @@ $lang->custom->weekend        = 'Cuối tuần';
 $lang->custom->weekendList[2] = '2 ngày nghỉ';
 $lang->custom->weekendList[1] = '1 ngày nghỉ';
 
-$lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
-$lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
+global $config;
+if($config->systemMode == 'classic')
+{
+    $lang->custom->sprintConceptList[0] = 'Product - Project';
+    $lang->custom->sprintConceptList[1] = 'Product - Iteration';
+    $lang->custom->sprintConceptList[2] = 'Product - Sprint';
+}
+else
+{
+    $lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
+    $lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
+}
 
 $lang->custom->workingList['full']      = 'Quản lý vòng đời ứng dụng';
 
@@ -212,10 +222,8 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Kế hoạch';
 $lang->custom->moduleName['project']     = $lang->sprintCommon;
 
-$lang->custom->conceptQuestions['overview']         = "1. Sự kết hợp quản lý nào phù hợp với công ty của bạn?";
-$lang->custom->conceptQuestions['story']            = "2. Bạn có sử dụng mô hình điều kiện hay câu chuyện người dùng trong doanh nghiệp của bạn?";
-$lang->custom->conceptQuestions['requirementpoint'] = "3. Do you use hours or function points to make estimations in your company?";
-$lang->custom->conceptQuestions['storypoint']       = "3. Bạn có dùng giờ hoặc điểm để tạo dự kiến trong doanh nghiệp của bạn ?";
+$lang->custom->conceptQuestions['overview'] = "1. Sự kết hợp quản lý nào phù hợp với công ty của bạn?";
+$lang->custom->conceptQuestions['URAndSR']  = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();

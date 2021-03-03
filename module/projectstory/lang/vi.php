@@ -1,8 +1,9 @@
 <?php
-$lang->projectstory->common      = 'Yêu cầu dự án';
-$lang->projectstory->index       = 'Yêu cầu trang nhà';
-$lang->projectstory->view        = 'Story Detail';
-$lang->projectstory->track       = 'Theo dõi ma trận';
+$lang->projectstory->common      = "Project {$lang->SRCommon}";
+$lang->projectstory->index       = "{$lang->SRCommon} Home";
+$lang->projectstory->view        = "{$lang->SRCommon} Detail";
+$lang->projectstory->story       = "{$lang->SRCommon} List";
+$lang->projectstory->track       = 'Tracking Matrix';
 $lang->projectstory->linkStory   = 'Linked' . $lang->SRCommon;
 $lang->projectstory->unlinkStory = 'Unlinked' . $lang->SRCommon;
 

@@ -139,7 +139,7 @@ $lang->custom->user->fields['statusList']   = 'Status';
 $lang->custom->user->fields['contactField'] = 'Available Contact';
 $lang->custom->user->fields['deleted']      = 'Show deleted user';
 
-$lang->custom->system = array('required', 'score');
+$lang->custom->system = array('required', 'flow', 'score');
 
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = 'Closed Block';
@@ -190,8 +190,18 @@ $lang->custom->weekend        = 'Weekend';
 $lang->custom->weekendList[2] = '2-Day Off';
 $lang->custom->weekendList[1] = '1-Day Off';
 
-$lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
-$lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
+global $config;
+if($config->systemMode == 'classic')
+{
+    $lang->custom->sprintConceptList[0] = 'Product - Project';
+    $lang->custom->sprintConceptList[1] = 'Product - Iteration';
+    $lang->custom->sprintConceptList[2] = 'Product - Sprint';
+}
+else
+{
+    $lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
+    $lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
+}
 
 $lang->custom->workingList['full'] = 'Full Management of Dev';
 
@@ -212,10 +222,8 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
 $lang->custom->moduleName['project']     = $lang->sprintCommon;
 
-$lang->custom->conceptQuestions['overview']         = "1. Which combination of management fits your company?";
-$lang->custom->conceptQuestions['story']            = "2. Do you use the concept of requirement or user story in your company?";
-$lang->custom->conceptQuestions['requirementpoint'] = "3. Do you use hours or function points to make estimations in your company?";
-$lang->custom->conceptQuestions['storypoint']       = "3. Do you use hours or story points to make estimations in your company?";
+$lang->custom->conceptQuestions['overview'] = "1. Which combination of management fits your company?";
+$lang->custom->conceptQuestions['URAndSR']  = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();

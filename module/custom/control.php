@@ -539,6 +539,30 @@ class custom extends control
     }
 
     /**
+     * Set flow.
+     *
+     * @access public
+     * @return void
+     */
+    public function flow()
+    {
+        if($_POST)
+        {
+            $this->custom->setConcept();
+            $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->post->URAndSR);
+
+            $this->app->loadLang('common');
+            $locate = inlink('flow');
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+        }
+
+        $this->view->title      = $this->lang->custom->flow;
+        $this->view->position[] = $this->lang->custom->flow;
+        $this->display();
+    }
+
+    /**
      * Set Mode.
      * 
      * @access public
