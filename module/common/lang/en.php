@@ -221,8 +221,7 @@ $lang->system->menu->company   = array('link' => 'Global Settings|custom|browses
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
-$lang->subject->menu->storyConcept  = array('link' => 'Story Concept|custom|browsestoryconcept|');
-$lang->subject->menu->sprintConcept = array('link' => 'Project Concept|custom|configurescrum|');
+$lang->subject->menu->storyConcept = array('link' => 'Story Concept|custom|browsestoryconcept|');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();

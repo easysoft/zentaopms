@@ -461,42 +461,6 @@ class custom extends control
     }
 
     /**
-     * Configure scrum.
-     * 
-     * @access public
-     * @return void
-     */
-    public function configureScrum()
-    {
-        $this->app->loadLang('custom');
-        $this->lang->custom->menu = $this->lang->subject->menu;
-        $this->lang->navGroup->custom = 'system';
-        $this->lang->system->menu->company['subModule'] .= ',custom';
-        $key = array_search('custom', $this->lang->noMenuModule);
-        if($key !== false) unset($this->lang->noMenuModule[$key]);
-
-        if($_POST)
-        {
-            $this->custom->setConcept();
-
-            $locate = inlink('configureScrum');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
-        }
-
-        $URSRName = $this->dao->select("`value`")->from(TABLE_CONFIG)
-            ->where('module')->eq('custom')
-            ->andWhere('section')->eq('common')
-            ->andWhere('`key`')->eq('URSRName')
-            ->fetch('value');
-
-        $this->view->title      = $this->lang->custom->configureScrum;
-        $this->view->position[] = $this->lang->custom->configureScrum;
-        $this->view->URSRName   = json_decode($URSRName);
-
-        $this->display();
-    }
-
-    /**
      * Set whether the project is read-only.
      *
      * @access public

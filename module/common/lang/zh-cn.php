@@ -220,8 +220,7 @@ $lang->system->menu->company   = array('link' => '全局设置|custom|browsestor
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
-$lang->subject->menu->storyConcept  = array('link' => '需求概念|custom|browsestoryconcept|');
-$lang->subject->menu->sprintConcept = array('link' => '项目概念|custom|configurescrum|');
+$lang->subject->menu->storyConcept = array('link' => '需求概念|custom|browsestoryconcept|');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();

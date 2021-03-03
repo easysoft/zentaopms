@@ -39,7 +39,6 @@ $lang->custom->setStoryConcept      = "Set Story Concept";
 $lang->custom->setDefaultConcept    = "Set Default Concept";
 $lang->custom->browseStoryConcept   = "List of story concepts";
 $lang->custom->deleteStoryConcept   = "Delete story Concept";
-$lang->custom->configureScrum       = "Scrum Model Custom";
 $lang->custom->URConcept            = "UR Concept";
 $lang->custom->SRConcept            = "SR Concept";
 $lang->custom->switch               = "Switch";
