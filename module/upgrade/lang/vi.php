@@ -10,6 +10,7 @@
  * @link  http://www.zentao.net
  */
 $lang->upgrade->common          = 'Cập nhật';
+$lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Kết quả';
 $lang->upgrade->fail            = 'Thất bại';
 $lang->upgrade->successTip      = 'Erfolgreich';
@@ -37,6 +38,7 @@ $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions<
            <li>Or xóa "<strong style="color:#ed980f">%s</strong>" and create <strong style="color:#ed980f">ok.txt</strong> and leave it blank.</li>
            </ul>
            <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue upgrading.</a></strong></p>';
+
 $lang->upgrade->selectVersion = 'Phiên bản';
 $lang->upgrade->continue      = 'Tiếp tục';
 $lang->upgrade->noteVersion   = "Chọn the compatible version, or it might cause data loss.";
@@ -50,7 +52,26 @@ $lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard
 $lang->upgrade->afterDeleted  = 'File không là deleted. Vui lòng refresh after you xóa it.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->to20Demo      = 'View version 20 of the demo';
+$lang->upgrade->to15Guide     = 'ZenTao open source version 15.0.beta1 upgrade';
+$lang->upgrade->to15Desc      = <<<EOD
+<p>Dear users, ZenTao has made adjustments to navigation and concepts since version 15. The main changes are as follows:</p>
+<ol>
+<p><li>Added the concept of program. A program set can include multiple products and multiple projects.</li></p>
+<p><li>Subdivided the concept of project and iteration, a project can contain multiple iterations.</li></p>
+<p><li>The navigation adds a left menu and supports multi-page operations.</li></p>
+</ol>
+<br/>
+<p>You can experience the latest version of the function online to decide whether to enable the mode: <a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>Demo</a></p>
+</br>
+<p><strong>How do you plan to use the new version of ZenTao?</strong></p>
+EOD;
+
+$lang->upgrade->to15Mode['classic'] = 'Keep the old version';
+$lang->upgrade->to15Mode['new']     = 'New program management mode';
+
+$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program set management mode in the background-Customize in the future.';
+$lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
+
 $lang->upgrade->demoURL       = 'http://zentao20.demo.zentao.net';
 $lang->upgrade->videoURL      = 'https://qc.zentao.net/zentao20.mp4';
 $lang->upgrade->to20Tips      = 'Zentao 20 upgrade tips';
