@@ -12,7 +12,7 @@
 $lang->product->common        = $lang->productCommon . '視圖';
 $lang->product->index         = $lang->productCommon . '主頁';
 $lang->product->browse        = "{$lang->SRCommon}列表";
-$lang->product->dynamic       = '產品動態';
+$lang->product->dynamic       = $lang->productCommon . '動態';
 $lang->product->view          = "{$lang->productCommon}概況";
 $lang->product->edit          = "編輯{$lang->productCommon}";
 $lang->product->batchEdit     = '批量編輯';
