@@ -9,11 +9,7 @@
  * @version     $Id: deny.html.php 4129 2013-01-18 01:58:14Z wwccss $
  */
 ?>
-<?php if(isset($this->config->conceptSetted)):?>
 <?php include 'header.html.php';?>
-<?php else:?>
-<?php include '../../common/view/header.lite.html.php';?>
-<?php endif;?>
 <?php if(isset($this->config->conceptSetted)):?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
