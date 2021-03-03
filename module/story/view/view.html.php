@@ -398,13 +398,16 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
+          <?php if($this->config->URAndSR):?>
           <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
+          <?php endif;?>
           <?php if($story->type == 'story'):?>
-          <li><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
+          <li class="<?php if(!$this->config->URAndSR) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <?php endif;?>
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
         <div class='tab-content'>
+          <?php if($this->config->URAndSR):?>
           <div class='tab-pane active' id='legendStories'>
             <ul class="list-unstyled">
               <?php
@@ -421,9 +424,10 @@
               <?php if(!empty($relations)) echo html::a('javascript:void(0)', $lang->story->unlink . $linkLang, '', "class='btn btn-info' id='unlinkStory'");?></li>
             </ul>
           </div>
+          <?php endif;?>
 
           <?php if($story->type == 'story'):?>
-          <div class='tab-pane' id='legendProjectAndTask'>
+          <div class="tab-pane <?php if(!$this->config->URAndSR) echo 'active';?>" id='legendProjectAndTask'>
             <ul class="list-unstyled">
               <?php
               foreach($story->tasks as $projectTasks)

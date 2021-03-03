@@ -3630,59 +3630,70 @@ class storyModel extends model
      */
     public function getTracks($productID = 0, $branch = 0, $pager = null)
     {
-        $sourcePageID = $pager->pageID;
-        $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
-        if($pager->pageID != $sourcePageID)
-        {
-            $requirements  = array();
-            $pager->pageID = $sourcePageID;
-        }
+        $tracks         = array();
+        $sourcePageID   = $pager->pageID;
+        $excludeStories = false;
 
-        foreach($requirements as $requirement)
+        if($this->config->URAndSR)
         {
-            $stories = $this->getRelation($requirement->id, 'requirement');
-            $stories = empty($stories) ? array() : $stories;
-            foreach($stories as $id => $title)
+            $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
+            if($pager->pageID != $sourcePageID)
             {
-                $stories[$id] = new stdclass();
-                $stories[$id]->title     = $title;
-                $stories[$id]->cases     = $this->loadModel('testcase')->getStoryCases($id);
-                $stories[$id]->bugs      = $this->loadModel('bug')->getStoryBugs($id);
-                $stories[$id]->tasks     = $this->loadModel('task')->getStoryTasks($id);
-                if(isset($this->config->maxVersion))
-                {
-                    $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
-                    $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
-                        ->where('AType')->eq('design')
-                        ->andWhere('BType')->eq('commit')
-                        ->andWhere('AID')->in(array_keys($stories[$id]->designs))
-                        ->fetchPairs();
-                }
+                $requirements  = array();
+                $pager->pageID = $sourcePageID;
             }
 
-            $requirement->track = $stories;
+            foreach($requirements as $requirement)
+            {
+                $stories = $this->getRelation($requirement->id, 'requirement');
+                $stories = empty($stories) ? array() : $stories;
+                foreach($stories as $id => $title)
+                {
+                    $stories[$id] = new stdclass();
+                    $stories[$id]->title = $title;
+                    $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
+                    $stories[$id]->bugs  = $this->loadModel('bug')->getStoryBugs($id);
+                    $stories[$id]->tasks = $this->loadModel('task')->getStoryTasks($id);
+                    if(isset($this->config->maxVersion))
+                    {
+                        $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                        $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
+                            ->where('AType')->eq('design')
+                            ->andWhere('BType')->eq('commit')
+                            ->andWhere('AID')->in(array_keys($stories[$id]->designs))
+                            ->fetchPairs();
+                    }
+                }
+
+                $requirement->track = $stories;
+            }
+
+            $tracks = $requirements;
+
+            /* Get no requirements story. */
+            $excludeStories = $this->dao->select('BID')->from(TABLE_RELATION)
+                ->where('AType')->eq('requirement')
+                ->andWhere('BType')->eq('story')
+                ->andWhere('relation')->eq('subdivideinto')
+                ->andWhere('product')->eq($productID)
+                ->fetchPairs('BID', 'BID');
+            $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories);
+            if($stories) $pager->recTotal += 1;
+        }
+        else
+        {
+            $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
         }
 
-        /* Get no requirements story. */
-        $subdividedStories = $this->dao->select('BID')->from(TABLE_RELATION)
-            ->where('AType')->eq('requirement')
-            ->andWhere('BType')->eq('story')
-            ->andWhere('relation')->eq('subdivideinto')
-            ->andWhere('product')->eq($productID)
-            ->fetchPairs('BID', 'BID');
-
-        $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $subdividedStories);
-        if($stories) $pager->recTotal += 1;
-
-        if(count($requirements) < $pager->recPerPage)
+        if(count($tracks) < $pager->recPerPage)
         {
             foreach($stories as $id => $story)
             {
                 $stories[$id] = new stdclass();
-                $stories[$id]->title     = $story->title;
-                $stories[$id]->cases     = $this->loadModel('testcase')->getStoryCases($id);
-                $stories[$id]->bugs      = $this->loadModel('bug')->getStoryBugs($id);
-                $stories[$id]->tasks     = $this->loadModel('task')->getStoryTasks($id);
+                $stories[$id]->title = $story->title;
+                $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
+                $stories[$id]->bugs  = $this->loadModel('bug')->getStoryBugs($id);
+                $stories[$id]->tasks = $this->loadModel('task')->getStoryTasks($id);
                 if(isset($this->config->maxVersion))
                 {
                     $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
@@ -3694,10 +3705,10 @@ class storyModel extends model
                 }
             }
 
-            $requirements['noRequirement'] = $stories;
+            $tracks['noRequirement'] = $stories;
         }
 
-        return $requirements;
+        return $tracks;
     }
 
     /**

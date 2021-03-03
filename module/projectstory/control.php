@@ -88,7 +88,8 @@ class projectStory extends control
      */
     public function view($storyID)
     {
-        echo $this->fetch('story', 'view', "storyID=$storyID");
+        $story = $this->loadModel('story')->getByID($storyID);
+        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->PRJ);
     }
 
     /**

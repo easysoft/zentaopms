@@ -139,7 +139,7 @@ $lang->custom->user->fields['statusList']   = 'Statut';
 $lang->custom->user->fields['contactField'] = 'Contact';
 $lang->custom->user->fields['deleted']      = 'Parti';
 
-$lang->custom->system = array('required', 'score');
+$lang->custom->system = array('required', 'flow', 'score');
 
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = 'Bloc Fermé';
@@ -190,8 +190,18 @@ $lang->custom->weekend        = 'Weekend';
 $lang->custom->weekendList[2] = '2-Jour';
 $lang->custom->weekendList[1] = '1-Jour';
 
-$lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
-$lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
+global $config;
+if($config->systemMode == 'classic')
+{
+    $lang->custom->sprintConceptList[0] = 'Product - Project';
+    $lang->custom->sprintConceptList[1] = 'Product - Iteration';
+    $lang->custom->sprintConceptList[2] = 'Product - Sprint';
+}
+else
+{
+    $lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
+    $lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
+}
 
 $lang->custom->workingList['full'] = 'Application Lifecycle Management';
 
@@ -212,10 +222,8 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
 $lang->custom->moduleName['project']     = $lang->sprintCommon;
 
-$lang->custom->conceptQuestions['overview']         = "1. Quelle combinaison de gestion convient le mieux à votre entreprise ?";
-$lang->custom->conceptQuestions['story']            = "2. Utilisez-vous le concept d'exigence ou de user story dans votre entreprise ?";
-$lang->custom->conceptQuestions['requirementpoint'] = "3. Utilisez-vous des heures ou des points de fonction pour faire des estimations dans votre entreprise ?";
-$lang->custom->conceptQuestions['storypoint']       = "3. Utilisez-vous des heures ou des points de Story pour faire des estimations dans votre entreprise ?";
+$lang->custom->conceptQuestions['overview'] = "1. Quelle combinaison de gestion convient le mieux à votre entreprise ?";
+$lang->custom->conceptQuestions['URAndSR']  = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();

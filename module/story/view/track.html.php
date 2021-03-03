@@ -24,6 +24,7 @@
       <table class='table table-bordered' id="trackList">
         <thead>
           <tr class='text-center'>
+            <?php if($config->URAndSR):?>
             <th <?php echo $style;?>>
               <?php if($this->app->rawModule == 'projectstory'): ?>
               <div class="dropdown">
@@ -38,6 +39,7 @@
               <?php echo $lang->story->requirement;?>
               <?php endif;?>
             </th>
+            <?php endif;?>
             <th><?php echo $lang->story->story;?></th>
             <th><?php echo $lang->story->tasks;?></th>
             <?php if(isset($config->maxVersion)):?>
@@ -55,12 +57,14 @@
           <?php $track = ($key == 'noRequirement') ? $requirement : $requirement->track;?>
           <?php $rowspan = count($track);?>
           <tr>
+            <?php if($config->URAndSR):?>
             <td <?php if($rowspan != 0) echo "rowspan=" . $rowspan;?> class='requirement'>
               <?php if($key != 'noRequirement'):?>
               <span class="label label-primary label-outline"><?php echo zget($lang->story->statusList, $requirement->status);?></span>
               <?php endif;?>
               <?php echo $key == 'noRequirement' ? $lang->story->noRequirement : html::a($this->createLink($module, 'view', "storyID=$requirement->id"), $requirement->title, '', "title=$requirement->title data-group='$openGroup'");?>
             </td>
+            <?php endif;?>
             <?php if(count($track) != 0):?>
             <?php $i = 1;?>
             <?php foreach($track as $storyID => $story):?>
