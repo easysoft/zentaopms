@@ -1707,7 +1707,6 @@ class programModel extends model
             }
         }
 
-
         /* Judge products not empty. */
         $linkedProductsCount = 0;
         foreach($_POST['products'] as $product)
@@ -1775,28 +1774,48 @@ class programModel extends model
         foreach($data->projectIdList as $projectID)
         {
             $projectName   = $data->names[$projectID];
-            $parentProgram = $data->parents[$projectID];
 
             $projectID = (int)$projectID;
             $projects[$projectID] = new stdClass();
             $projects[$projectID]->name           = $projectName;
-            $projects[$projectID]->parent         = $parentProgram;
+            $projects[$projectID]->parent         = $data->parents[$projectID];
             $projects[$projectID]->PM             = $data->PMs[$projectID];
+            $projects[$projectID]->begin          = $data->begins[$projectID];
+            $projects[$projectID]->end            = isset($data->ends[$projectID]) ? $data->ends[$projectID] : LONG_TIME;
+            $projects[$projectID]->days           = $data->dayses[$projectID];
+            $projects[$projectID]->acl            = $data->acls[$projectID];
             $projects[$projectID]->lastEditedBy   = $this->app->user->account;
             $projects[$projectID]->lastEditedDate = helper::now();
 
             /* Check unique name for edited projects. */
-            if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID .  sprintf($this->lang->error->unique, $this->lang->program->PRJName, $projectName);
+            if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID . sprintf($this->lang->error->unique, $this->lang->program->PRJName, $projectName);
             $nameList[$projectName] = $projectName;
+
+            if($projects[$projectID]->parent)
+            {
+                $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($projects[$projectID]->parent)->fetch();
+
+                if($parentProgram)
+                {
+                    /* Child project begin cannot less than parent. */
+                    if($projects[$projectID]->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PRJBeginGreateChild, $parentProgram->begin);
+
+                    /* When parent set end then child project end cannot greater than parent. */
+                    if($parentProgram->end != '0000-00-00' and $projects[$projectID]->end > $parentProgram->end) dao::$errors['end'] =  sprintf($this->lang->program->PRJEndLetterChild, $parentProgram->end);
+
+                }
+            }
         }
 
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];
-            $this->dao->update(TABLE_PROJECT)
-                ->data($project)
-                ->autoCheck()
+            $this->dao->update(TABLE_PROJECT)->data($project)
+                ->autoCheck($skipFields = 'begin,end')
                 ->batchCheck($this->config->program->PRJEdit->requiredFields , 'notempty')
+                ->checkIF($project->begin != '', 'begin', 'date')
+                ->checkIF($project->end != '', 'end', 'date')
+                ->checkIF($project->end != '', 'end', 'gt', $project->begin)
                 ->check('name', 'unique', "id NOT " . helper::dbIN($data->projectIdList) . " and deleted='0'")
                 ->where('id')->eq($projectID)
                 ->exec();
@@ -1808,6 +1827,9 @@ class programModel extends model
                 $this->updateProductPGM($oldProject->parent, $project->parent, $linkedProducts);
 
                 if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
+                /* When acl is open, white list set empty. When acl is private,update user view. */
+                if($project->acl == 'open') $this->loadModel('personnel')->updateWhitelist('', 'project', $projectID);
+                if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
             }
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }

@@ -1096,7 +1096,6 @@ class program extends control
         $this->view->title      = $this->lang->program->batchEdit;
         $this->view->position[] = $this->lang->program->batchEdit;
 
-        $this->view->projectIdList = $projectIdList;
         $this->view->projects      = $projects;
         $this->view->programList   = $this->program->getParentPairs();
         $this->view->PMUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $appendPMUsers);

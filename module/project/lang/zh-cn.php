@@ -244,7 +244,6 @@ $lang->project->linkStoryByPlanTips = "此操作会将所选计划下面的{$lan
 $lang->project->selectProject       = "请选择{$lang->executionCommon}";
 $lang->project->selectExecution     = "请选择阶段/迭代/冲刺";
 $lang->project->beginAndEnd         = '起止时间';
-$lang->project->begin               = '开始日期';
 $lang->project->end                 = '截止日期';
 $lang->project->lblStats            = '工时统计';
 $lang->project->stats               = '可用工时 <strong>%s</strong> 工时，总共预计 <strong>%s</strong> 工时，已经消耗 <strong>%s</strong> 工时，预计剩余 <strong>%s</strong> 工时';
