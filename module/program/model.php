@@ -1692,7 +1692,7 @@ class programModel extends model
             $project->budgetUnit = $parentProgram->budgetUnit;
             if($project->budget != 0 and $parentProgram->budget != 0)
             {
-                $availableBudget = $this->availableBudget($parentProgram);
+                $availableBudget = $this->getAvailableBudget($parentProgram);
                 if($project->budget > $availableBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
