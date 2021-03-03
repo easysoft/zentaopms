@@ -152,6 +152,7 @@ function getProjectByProgram(obj)
     })
 
     getLineByProgram();
+    getPGMStatus('program', programID);
 }
 
 /**
@@ -598,12 +599,20 @@ function computeEndDate(delta)
     computeWorkDays();
 }
 
-function getPGMStatus(objectType, programID)
+/**
+ * Get program status.
+ *
+ * @param  string $objectType
+ * @param  int    $objectID
+ * @access public
+ * @return void
+ */
+function getPGMStatus(objectType, objectID)
 {
-    var link = createLink('upgrade', 'ajaxGetPGMStatus', 'programID=' + programID);
+    var link = createLink('upgrade', 'ajaxGetPGMStatus', 'objectID=' + objectID);
     $.post(link, function(data)
     {
-        if(objectType == 'program') $('#PGMStatus').val(data);
-        if(objectType == 'project') $('#PRJStatus').val(data);
+        if(objectType == 'program') $('#PGMStatus').val(data).trigger("chosen:updated");
+        if(objectType == 'project') $('#PRJStatus').val(data).trigger("chosen:updated");
     })
 }

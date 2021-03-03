@@ -509,7 +509,7 @@ class upgrade extends control
     public function ajaxGetProjectPairsByProgram($programID = 0)
     {
         $projects = array('' => '') + $this->upgrade->getProjectPairsByProgram($programID);
-        die(html::select('projects', $projects, '', 'class="form-control prj-exist"'));
+        die(html::select('projects', $projects, '', 'class="form-control prj-exist" onchange="getPGMStatus(\'project\', this.value)"'));
     }
 
     /**
@@ -674,5 +674,17 @@ class upgrade extends control
     public function ajaxGetProductName($productID)
     {
         die($this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name'));
+    }
+
+    /**
+     * Ajax get program status.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetPGMStatus($programID)
+    {
+        die($this->dao->select('status')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch('status'));
     }
 }

@@ -30,7 +30,7 @@
     </th>
     <td class='required'>
       <div class='input-group'>
-        <?php echo html::select("projects", $projects, '', "class='form-control hidden prj-exist'");?>
+        <?php echo html::select("projects", $projects, '', "class='form-control hidden prj-exist' onchange='getPGMStatus(project, this.value)'");?>
         <?php echo html::input("PRJName", isset($sprintName) ? $sprintName : '', "class='form-control prj-no-exist'");?>
         <?php if(count($projects)):?>
         <span class='input-group-addon'>
