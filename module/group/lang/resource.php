@@ -1064,7 +1064,6 @@ $lang->resource->custom->setStoryConcept    = 'setStoryConcept';
 $lang->resource->custom->editStoryConcept   = 'editStoryConcept';
 $lang->resource->custom->browseStoryConcept = 'browseStoryConcept';
 $lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
-$lang->resource->custom->configureScrum     = 'configureScrum';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -1079,7 +1078,6 @@ $lang->custom->methodOrder[55] = 'setStoryContcept';
 $lang->custom->methodOrder[60] = 'editStoryContcept';
 $lang->custom->methodOrder[65] = 'browseStoryContcept';
 $lang->custom->methodOrder[70] = 'deleteStoryContcept';
-$lang->custom->methodOrder[75] = 'configureScrum';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';

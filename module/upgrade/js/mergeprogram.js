@@ -214,6 +214,9 @@ function toggleProgram(obj)
         {
             $programs.removeAttr('disabled');
         }
+
+        var programID = $('#programs').val();
+        getPGMStatus('program', programID);
     }
 }
 
@@ -279,6 +282,7 @@ function toggleProject(obj)
         $('form .prj-exist').removeClass('hidden');
         $('form .prj-no-exist').addClass('hidden');
         $PGMParams.addClass('hidden');
+        $('#PRJStatus').closest('tr').removeClass('hidden');
         $projects.removeAttr('disabled');
 
         if($('#newProgram0').prop('checked'))
@@ -592,4 +596,14 @@ function computeEndDate(delta)
     endDate = $.zui.formatDate(beginDate.addDays(delta - 1), 'yyyy-MM-dd');
     $('#end').val(endDate).datetimepicker('update');
     computeWorkDays();
+}
+
+function getPGMStatus(objectType, programID)
+{
+    var link = createLink('upgrade', 'ajaxGetPGMStatus', 'programID=' + programID);
+    $.post(link, function(data)
+    {
+        if(objectType == 'program') $('#PGMStatus').val(data);
+        if(objectType == 'project') $('#PRJStatus').val(data);
+    })
 }

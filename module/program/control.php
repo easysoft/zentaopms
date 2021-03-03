@@ -966,23 +966,7 @@ class program extends control
         $programID = $project->parent;
 
         /* Navigation stay in program when enter from program list. */
-        if($from == 'PRJ')
-        {
-            $this->lang->program->menu = $this->lang->scrum->setMenu;
-            $moduleIndex = array_search('program', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-            $this->lang->navGroup->program = 'project';
-        }
-        if($from == 'pgmbrowse')
-        {
-            $this->lang->navGroup->program = 'program';
-        }
-        if($from == 'pgmproject')
-        {
-            $this->app->rawMethod = 'pgmproject';
-            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
-            $this->program->setPGMViewMenu($programID);
-        }
+        $this->adjustNavigation($from, $programID);
 
         if($_POST)
         {
@@ -1062,16 +1046,7 @@ class program extends control
         $this->loadModel('action');
 
         /* Navigation stay in program when enter from program list. */
-        if($from == 'pgmproject')
-        {
-            $this->app->rawMethod = 'pgmproject';
-            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
-            $this->program->setPGMViewMenu($programID);
-        }
-        if($from == 'prjbrowse')
-        {
-            $this->lang->program->menu = $this->lang->PRJ->menu;
-        }
+        $this->adjustNavigation($from, $programID);
 
         if($this->post->names)
         {
@@ -1712,19 +1687,7 @@ class program extends control
     public function PRJAddWhitelist($projectID = 0, $deptID = 0, $programID = 0, $from = 'PRJ')
     {
         /* Navigation stay in program when enter from program list. */
-        if($from == 'PRJ') 
-        {
-            $this->lang->navGroup->program = 'project';
-            $this->lang->program->menu = $this->lang->scrum->setMenu;
-            $moduleIndex = array_search('program', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        }
-        if($from == 'pgmproject')
-        {
-            $this->app->rawMethod = 'pgmproject';
-            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
-            $this->program->setPGMViewMenu($programID);
-        }
+        $this->adjustNavigation($from, $programID);
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=program&programID=$programID&from=$from");
     }
@@ -1754,23 +1717,7 @@ class program extends control
     public function PRJManageProducts($projectID, $programID = 0, $from = 'PRJ')
     {
         /* Navigation stay in program when enter from program list. */
-        if($from == 'PRJ') 
-        {
-            $this->lang->navGroup->program = 'project';
-            $this->lang->program->menu = $this->lang->scrum->setMenu;
-            $moduleIndex = array_search('program', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        }
-        if($from == 'pgmbrowse')
-        {
-            $this->lang->navGroup->program = 'program';
-        }
-        if($from == 'pgmproject')
-        {
-            $this->app->rawMethod = 'pgmproject';
-            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
-            $this->program->setPGMViewMenu($programID);
-        }
+        $this->adjustNavigation($from, $programID);
 
         if(!empty($_POST))
         {
@@ -1878,5 +1825,34 @@ class program extends control
             $response['multiLinkedProjects'] = $multiLinkedProjects;
         }
         die(json_encode($response));
+    }
+
+    /**
+     * Adjust the navigation.
+     *
+     * @param  string $from
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function adjustNavigation($from = '', $programID = 0)
+    {
+        if($from == 'prjbrowse') $this->lang->program->menu = $this->lang->PRJ->menu;
+        if($from == 'pgmbrowse') $this->lang->navGroup->program = 'program';
+
+        if($from == 'PRJ')
+        {
+            $this->lang->navGroup->program = 'project';
+            $this->lang->program->menu = $this->lang->scrum->setMenu;
+            $moduleIndex = array_search('program', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        }
+
+        if($from == 'pgmproject')
+        {
+            $this->app->rawMethod = 'pgmproject';
+            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
+            $this->program->setPGMViewMenu($programID);
+        }
     }
 }
