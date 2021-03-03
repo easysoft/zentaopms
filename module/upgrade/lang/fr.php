@@ -9,14 +9,15 @@
  * @version     $Id: en.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
  * @link        https://www.zentao.pm
  */
-$lang->upgrade->common     = 'Mise à jour';
-$lang->upgrade->result     = 'Résultat';
-$lang->upgrade->fail       = 'Echec';
-$lang->upgrade->successTip = 'Mise à jour effectuée';
-$lang->upgrade->success    = 'Mise à jour effectuée';
-$lang->upgrade->tohome     = 'Visitez ZenTao';
-$lang->upgrade->license    = 'ZenTao est sous Z PUBLIC LICENSE(ZPL) 1.2.';
-$lang->upgrade->warnning   = 'Attention!';
+$lang->upgrade->common          = 'Mise à jour';
+$lang->upgrade->start           = 'Start';
+$lang->upgrade->result          = 'Résultat';
+$lang->upgrade->fail            = 'Echec';
+$lang->upgrade->successTip      = 'Mise à jour effectuée';
+$lang->upgrade->success         = 'Mise à jour effectuée';
+$lang->upgrade->tohome          = 'Visitez ZenTao';
+$lang->upgrade->license         = 'ZenTao est sous Z PUBLIC LICENSE(ZPL) 1.2.';
+$lang->upgrade->warnning        = 'Attention!';
 $lang->upgrade->checkExtension  = 'Vérifiez Extensions';
 $lang->upgrade->consistency     = 'Vérifiez Consistence';
 $lang->upgrade->warnningContent = <<<EOT
@@ -37,6 +38,7 @@ $lang->upgrade->setStatusFile      = '<h4>Accomplissez les actions suivantes</h4
                                       <li>Ou supprimez "<strong style="color:#ed980f">%s</strong>" et créez <strong style="color:#ed980f">ok.txt</strong> et laissez ce fichier vide.</li>
                                       </ul>
                                       <p><strong style="color:red">Vous avez lu et accompli toutes les actions précédentes. <a href="upgrade.php">Continuez la mise à jour.</a></strong></p>';
+
 $lang->upgrade->selectVersion = 'Version';
 $lang->upgrade->continue      = 'Continuer';
 $lang->upgrade->noteVersion   = "Sélectionnez une version compatible où vous pourriez perdre des données.";
@@ -50,7 +52,26 @@ $lang->upgrade->noticeSQL     = 'Votre base de donnée est inconsistente avec le
 $lang->upgrade->afterDeleted  = "Le fichier n'est pas supprimé. Recommencez après l'avoir supprimé.";
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->to20Demo      = 'View version 20 of the demo';
+$lang->upgrade->to15Guide     = 'ZenTao open source version 15.0.beta1 upgrade';
+$lang->upgrade->to15Desc      = <<<EOD
+<p>Dear users, ZenTao has made adjustments to navigation and concepts since version 15. The main changes are as follows:</p>
+<ol>
+<p><li>Added the concept of program. A program set can include multiple products and multiple projects.</li></p>
+<p><li>Subdivided the concept of project and iteration, a project can contain multiple iterations.</li></p>
+<p><li>The navigation adds a left menu and supports multi-page operations.</li></p>
+</ol>
+<br/>
+<p>You can experience the latest version of the function online to decide whether to enable the mode: <a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>Demo</a></p>
+</br>
+<p><strong>How do you plan to use the new version of ZenTao?</strong></p>
+EOD;
+
+$lang->upgrade->to15Mode['classic'] = 'Keep the old version';
+$lang->upgrade->to15Mode['new']     = 'New program management mode';
+
+$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program set management mode in the background-Customize in the future.';
+$lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
+
 $lang->upgrade->demoURL       = 'http://zentao20.demo.zentao.net';
 $lang->upgrade->videoURL      = 'https://qc.zentao.net/zentao20.mp4';
 $lang->upgrade->to20Tips      = 'Zentao 20 upgrade tips';
