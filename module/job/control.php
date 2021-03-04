@@ -12,10 +12,10 @@
 class job extends control
 {
     /**
-     * Construct 
-     * 
-     * @param  string $moduleName 
-     * @param  string $methodName 
+     * Construct
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
@@ -23,7 +23,7 @@ class job extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('ci')->setMenu();
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
     }
 
     /**
@@ -151,9 +151,9 @@ class job extends control
 
     /**
      * View job and compile.
-     * 
-     * @param  int    $jobID 
-     * @param  int    $compileID 
+     *
+     * @param  int    $jobID
+     * @param  int    $compileID
      * @access public
      * @return void
      */
@@ -171,7 +171,7 @@ class job extends control
             $compile = $this->compile->getLastResult($jobID);
         }
 
-        if($compile and $compile->testtask) 
+        if($compile and $compile->testtask)
         {
             $this->app->loadLang('project');
             $taskID = $compile->testtask;
