@@ -392,7 +392,7 @@ class commonModel extends model
             {
                 if($group == 'program')
                 {
-                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->PRJ);
+                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->project);
                 }
                 elseif($group == 'product' && $menuItem->name == 'doc')
                 {
@@ -472,7 +472,7 @@ class commonModel extends model
                 if(isset($lang->$model->subMenu->$key))
                 {
                     $programSubMenu = $lang->$model->subMenu->$key;
-                    $subMenu        = common::createSubMenu($programSubMenu, $app->session->PRJ);
+                    $subMenu        = common::createSubMenu($programSubMenu, $app->session->project);
 
                     if(!empty($subMenu))
                     {
@@ -592,6 +592,7 @@ class commonModel extends model
 
             $item = new stdClass();
             $item->group      = $group;
+            $item->code       = $group;
             $item->active     = zget($lang->navGroup, $moduleName, '') == $group || $moduleName != 'program' && $moduleName == $group;
             $item->title      = $title;
             $item->moduleName = $currentModule;
@@ -747,9 +748,8 @@ class commonModel extends model
         foreach ($lang->searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
-            if($key == 'program')    $key = 'program-pgmproduct';
-            if($key == 'project')    $key = 'program-index';
-            if($key == 'execution')  $key = 'project-view';
+            if($key == 'program')    $key = 'program-product';
+            if($key == 'project')    $key = 'project-index';
             if($key == 'deploystep') $key = 'deploy-viewstep';
 
             echo "<li $class><a href='javascript:$.setSearchType(\"$key\");' data-value='{$key}'>{$value}</a></li>";
@@ -1057,7 +1057,7 @@ class commonModel extends model
     {
         /* Add data-group attribute. */
         global $app;
-        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openGroup . '"';
+        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openApp . '"';
 
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
@@ -1151,7 +1151,7 @@ EOD;
         global $app, $lang, $config;
 
         /* Add data-group attribute. */
-        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openGroup . '"';
+        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openApp . '"';
 
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
@@ -1169,7 +1169,7 @@ EOD;
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if($config->systemMode == 'classic' and strtolower($module) == 'program'  and strpos($method, 'PRJ') === 0) ($module = 'project') and ($method = substr(strtolower($method), 3));
+        if($config->systemMode == 'classic' and strtolower($module) == 'project') $method = substr(strtolower($method), 3);
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 
@@ -1727,7 +1727,7 @@ EOD;
             if(!defined('IN_UPGRADE') and $inProject)
             {
                 /* Check program priv. */
-                if($this->session->PRJ and strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
+                if($this->session->project and strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }
@@ -1768,7 +1768,7 @@ EOD;
         /* If is the program admin, have all program privs. */
         $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
         if($module == 'program' && strpos($method, 'prj') !== false) $inProject = true;
-        if($inProject && $app->session->PRJ && strpos(",{$app->user->rights['projects']},", ",{$app->session->PRJ},") !== false) return true;
+        if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
@@ -1808,8 +1808,8 @@ EOD;
     public function resetProgramPriv($module, $method)
     {
         /* Get user program priv. */
-        if(!$this->app->session->PRJ) return;
-        $program       = $this->dao->findByID($this->app->session->PRJ)->from(TABLE_PROJECT)->fetch();
+        if(!$this->app->session->project) return;
+        $program       = $this->dao->findByID($this->app->session->project)->from(TABLE_PROJECT)->fetch();
         $programRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
             ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
             ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group=t3.group')
@@ -1855,20 +1855,20 @@ EOD;
         if($module == 'todo' and ($method == 'create' or $method == 'batchcreate')) return true;
         if($module == 'effort' and ($method == 'batchcreate' or $method == 'createforobject')) return true;
 
-        /* Limited project. */
-        $limitedProject = false;
-        if(!empty($module) && $module == 'task' && !empty($object->project) or
-            !empty($module) && $module == 'project' && !empty($object->id)
+        /* Limited execution. */
+        $limitedExecution = false;
+        if(!empty($module) && $module == 'task' && !empty($object->execution) or
+            !empty($module) && $module == 'execution' && !empty($object->id)
         )
         {
             $objectID = '';
-            if($module == 'project' and !empty($object->id))  $objectID = $object->id;
-            if($module == 'task' and !empty($object->project))$objectID = $object->project;
+            if($module == 'execution' and !empty($object->id))  $objectID = $object->id;
+            if($module == 'task' and !empty($object->execution))$objectID = $object->execution;
 
-            $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
-            if($objectID and strpos(",{$limitedProjects},", ",$objectID,") !== false) $limitedProject = true;
+            $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
+            if($objectID and strpos(",{$limitedExecutions},", ",$objectID,") !== false) $limitedExecution = true;
         }
-        if(empty($app->user->rights['rights']['my']['limited']) && !$limitedProject) return true;
+        if(empty($app->user->rights['rights']['my']['limited']) && !$limitedExecution) return true;
 
         if(!empty($method) && strpos($method, 'batch')  === 0) return false;
         if(!empty($method) && strpos($method, 'link')   === 0) return false;
@@ -2176,12 +2176,12 @@ EOD;
             if($product->status == 'closed') return false;
         }
 
-        /* Check the project is closed. */
+        /* Check the execution is closed. */
         $productModuleList = array('story', 'bug', 'testtask');
-        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and empty($config->CRProject))
+        if(!in_array($module, $productModuleList) and !empty($object->execution) and is_numeric($object->execution) and empty($config->CRExecution))
         {
-            $project = $app->control->loadModel('project')->getByID($object->project);
-            if($project->status == 'closed') return false;
+            $execution = $app->control->loadModel('execution')->getByID($object->execution);
+            if($execution->status == 'closed') return false;
         }
 
         return true;
@@ -2190,7 +2190,7 @@ EOD;
     /**
      * Check object can modify.
      *
-     * @param  string $type    product|project
+     * @param  string $type    product|Execution
      * @param  object $object
      * @static
      * @access public
@@ -2200,8 +2200,8 @@ EOD;
     {
         global $config;
 
-        if($type == 'product' and empty($config->CRProduct) and $object->status == 'closed') return false;
-        if($type == 'project' and empty($config->CRProject) and $object->status == 'closed') return false;
+        if($type == 'product'   and empty($config->CRProduct)   and $object->status == 'closed') return false;
+        if($type == 'execution' and empty($config->CRExecution) and $object->status == 'closed') return false;
 
         return true;
     }
@@ -2381,8 +2381,8 @@ EOD;
             $link = is_array($setting) ? $setting['link'] : $setting;
 
             if(strpos($link, "{PRODUCT}") !== false)   $link = str_replace('{PRODUCT}', $app->session->product, $link);
-            if(strpos($link, "{EXECUTION}") !== false) $link = str_replace('{EXECUTION}', $app->session->project, $link);
-            if(strpos($link, "{PROJECT}") !== false)   $link = str_replace('{PROJECT}', $app->session->PRJ, $link);
+            if(strpos($link, "{EXECUTION}") !== false) $link = str_replace('{EXECUTION}', $app->session->execution, $link);
+            if(strpos($link, "{PROJECT}") !== false)   $link = str_replace('{PROJECT}', $app->session->project, $link);
 
             if(is_array($setting))
             {
@@ -2410,7 +2410,7 @@ EOD;
     public static function getProgramMainMenu($moduleName)
     {
         global $app, $lang, $dbh, $config;
-        $program = $dbh->query("SELECT * FROM " . TABLE_PROGRAM . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
+        $program = $dbh->query("SELECT * FROM " . TABLE_PROGRAM . " WHERE `id` = '{$app->session->project}'")->fetch();
         if(empty($program)) return;
 
         self::initProgramSubmenu();
@@ -2445,7 +2445,7 @@ EOD;
     public static function getProgramModuleMenu($moduleName, $methodName)
     {
         global $app, $lang, $dbh;
-        $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
+        $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->project}'")->fetch();
         if(empty($program)) return;
         if($program->model == 'waterfall')
         {

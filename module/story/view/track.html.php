@@ -18,7 +18,7 @@
     </div>
     <?php else:?>
     <?php $style     = $this->app->rawModule == 'projectstory' ? "style='overflow: unset; text-align: left'" : '';?>
-    <?php $openGroup = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
+    <?php $openApp   = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
     <?php $module    = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';?>
     <div class='main-table' data-ride="table">
       <table class='table table-bordered' id="trackList">
@@ -62,14 +62,14 @@
               <?php if($key != 'noRequirement'):?>
               <span class="label label-primary label-outline"><?php echo zget($lang->story->statusList, $requirement->status);?></span>
               <?php endif;?>
-              <?php echo $key == 'noRequirement' ? $lang->story->noRequirement : html::a($this->createLink($module, 'view', "storyID=$requirement->id"), $requirement->title, '', "title=$requirement->title data-group='$openGroup'");?>
+              <?php echo $key == 'noRequirement' ? $lang->story->noRequirement : html::a($this->createLink($module, 'view', "storyID=$requirement->id"), $requirement->title, '', "title=$requirement->title data-app='$openApp'");?>
             </td>
             <?php endif;?>
             <?php if(count($track) != 0):?>
             <?php $i = 1;?>
             <?php foreach($track as $storyID => $story):?>
             <?php if($i != 1) echo '<tr>';?>
-              <td style='padding-left: 10px;'><?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '',"title='$story->title' data-group='$openGroup'");?></td>
+              <td style='padding-left: 10px;'><?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '',"title='$story->title' data-app='$openApp'");?></td>
               <td>
                 <?php foreach($story->tasks as $taskID => $task):?>
                 <?php echo html::a($this->createLink('task', 'view', "taskID=$taskID"), $task->name, '', "title='$task->name'") . '<br/>';?>
@@ -78,21 +78,21 @@
               <?php if(isset($config->maxVersion)):?>
               <td>
                 <?php foreach($story->designs as $designID => $design):?>
-                <?php echo html::a($this->createLink('design', 'view', "designID=$designID"), $design->name, '', "title='$design->name'") . '<br/>';?> 
+                <?php echo html::a($this->createLink('design', 'view', "designID=$designID"), $design->name, '', "title='$design->name'") . '<br/>';?>
                 <?php endforeach;?>
               </td>
               <?php endif;?>
               <td>
                 <?php foreach($story->cases as $caseID => $case):?>
-                <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', false, $case->PRJ), $case->title, '', "title='$case->title'") . '<br/>';?> 
+                <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', false, $case->PRJ), $case->title, '', "title='$case->title'") . '<br/>';?>
                 <?php endforeach;?>
               </td>
               <?php if(isset($config->maxVersion)):?>
               <td>
                 <?php foreach($story->revisions as $revision => $repoID):?>
-                <?php 
+                <?php
                 echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision) . '<br/>';
-                ?> 
+                ?>
                 <?php endforeach;?>
               </td>
               <?php endif;?>

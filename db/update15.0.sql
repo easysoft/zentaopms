@@ -23,24 +23,38 @@ ALTER TABLE `zt_project` ADD `output` text NOT NULL AFTER `milestone`;
 ALTER TABLE `zt_project` ADD `lastEditedBy` varchar(30) NOT NULL DEFAULT '' AFTER `openedVersion`;
 ALTER TABLE `zt_project` ADD `lastEditedDate` datetime NOT NULL AFTER `lastEditedBy`;
 
-ALTER TABLE `zt_product` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_action` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_bug` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_build` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_burn` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_doc` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_relation` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_relation` CHANGE `program` `project` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_doclib` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_task` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_testreport` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_testtask` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+
+ALTER TABLE `zt_task` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_doc` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_story` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_bug` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_case` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_testtask` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_testreport` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_testsuite` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_build` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_release` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_expect` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+
 ALTER TABLE `zt_product` ADD `bind` enum('0','1') NOT NULL DEFAULT '0' AFTER `code`;
-ALTER TABLE `zt_task` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_doc` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_story` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_product` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_repo` ADD `product` varchar(255) NOT NULL AFTER `id`;
-ALTER TABLE `zt_bug` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_case` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_testtask` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_testreport` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_testsuite` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_build` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_release` ADD `PRJ` mediumint(8) unsigned NOT NULL AFTER `id`;
 
-ALTER TABLE `zt_group` ADD `PRJ` mediumint NOT NULL AFTER `id`;
-INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'PRJAdmin', '项目管理员可以维护项目的权限');
+ALTER TABLE `zt_group` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'projectAdmin', '项目管理员可以维护项目的权限');
 
-ALTER TABLE `zt_usergroup` ADD `PRJ` text NOT NULL;
+ALTER TABLE `zt_usergroup` ADD `project` text NOT NULL;
 
 ALTER TABLE `zt_userview` ADD `programs` mediumtext NOT NULL AFTER `account`;
 ALTER TABLE `zt_userview` ADD `sprints` mediumtext NOT NULL AFTER `programs`;
@@ -57,6 +71,8 @@ REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES (
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'defaultCurrency', 'CNY');
 
 ALTER TABLE `zt_config` MODIFY COLUMN `value` longtext NOT NULL AFTER `key`;
+
+UPDATE `zt_config` SET `key` = 'CRExecution' WHERE `module` = 'common' AND `key` = 'CRProject';
 
 -- DROP TABLE IF EXISTS `zt_stakeholder`;
 CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
@@ -78,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
 CREATE TABLE IF NOT EXISTS `zt_expect` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `userID` mediumint(8) NOT NULL,
-  `PRJ` mediumint(8) NOT NULL DEFAULT 0,
+  `project` mediumint(8) NOT NULL DEFAULT 0,
   `expect` text NOT NULL,
   `progress` text NOT NULL,
   `createdBy` char(30) NOT NULL,
@@ -178,8 +194,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,  'my',           'uploadAvatar'),
 (1,  'user',         'execution'),
 (1,  'user',         'cropAvatar'),
-(1,  'program',      'PRJBrowse'),
-(1,  'program',      'PRJView'),
+(1,  'program',      'browse'),
+(1,  'program',      'view'),
 (1,  'search',       'index'),
 (1,  'search',       'buildIndex'),
 (2,  'product',      'dashboard'),
@@ -192,7 +208,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (2,  'user',         'execution'),
 (2,  'user',         'cropAvatar'),
 (2,  'search',       'index'),
-(2,  'program',      'PRJBrowse'),
+(2,  'program',      'browse'),
 (3,  'product',      'dashboard'),
 (3,  'product',      'manageLine'),
 (3,  'projectstory', 'story'),
@@ -203,7 +219,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (3,  'user',         'execution'),
 (3,  'user',         'cropAvatar'),
 (3,  'search',       'index'),
-(3,  'program',      'PRJBrowse'),
+(3,  'program',      'browse'),
 (4,  'product',      'dashboard'),
 (4,  'product',      'manageLine'),
 (4,  'projectstory', 'story'),
@@ -213,8 +229,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (4,  'my',           'uploadAvatar'),
 (4,  'user',         'execution'),
 (4,  'user',         'cropAvatar'),
-(4,  'program',      'PRJView'),
-(4,  'program',      'PRJBrowse'),
+(4,  'program',      'view'),
+(4,  'program',      'browse'),
 (4,  'search',       'index'),
 (5,  'product',      'dashboard'),
 (5,  'product',      'manageLine'),
@@ -227,8 +243,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (5,  'my',           'uploadAvatar'),
 (5,  'user',         'execution'),
 (5,  'user',         'cropAvatar'),
-(5,  'program',      'PRJView'),
-(5,  'program',      'PRJBrowse'),
+(5,  'program',      'view'),
+(5,  'program',      'browse'),
 (5,  'search',       'index'),
 (6,  'product',      'dashboard'),
 (6,  'product',      'manageLine'),
@@ -239,8 +255,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (6,  'my',           'uploadAvatar'),
 (6,  'user',         'execution'),
 (6,  'user',         'cropAvatar'),
-(6,  'program',      'PRJView'),
-(6,  'program',      'PRJBrowse'),
+(6,  'program',      'view'),
+(6,  'program',      'browse'),
 (6,  'search',       'index'),
 (7,  'product',      'dashboard'),
 (7,  'product',      'manageLine'),
@@ -253,8 +269,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (7,  'my',           'uploadAvatar'),
 (7,  'user',         'execution'),
 (7,  'user',         'cropAvatar'),
-(7,  'program',      'PRJView'),
-(7,  'program',      'PRJBrowse'),
+(7,  'program',      'view'),
+(7,  'program',      'browse'),
 (7,  'search',       'index'),
 (8,  'product',      'dashboard'),
 (8,  'product',      'manageLine'),
@@ -265,8 +281,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (8,  'my',           'uploadAvatar'),
 (8,  'user',         'execution'),
 (8,  'user',         'cropAvatar'),
-(8,  'program',      'PRJView'),
-(8,  'program',      'PRJBrowse'),
+(8,  'program',      'view'),
+(8,  'program',      'browse'),
 (8,  'search',       'index'),
 (9,  'product',      'dashboard'),
 (9,  'product',      'manageLine'),
@@ -279,8 +295,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (9,  'my',           'uploadAvatar'),
 (9,  'user',         'execution'),
 (9,  'user',         'cropAvatar'),
-(9,  'program',      'PRJView'),
-(9,  'program',      'PRJBrowse'),
+(9,  'program',      'view'),
+(9,  'program',      'browse'),
 (9,  'search',       'index'),
 (10, 'product',      'dashboard'),
 (10, 'product',      'manageLine'),
@@ -292,7 +308,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (10, 'user',         'execution'),
 (10, 'user',         'cropAvatar'),
 (10, 'search',       'index'),
-(10, 'program',      'PRJBrowse'),
+(10, 'program',      'browse'),
 (11, 'product',      'dashboard'),
 (11, 'product',      'manageLine'),
 (11, 'projectstory', 'story'),
@@ -301,7 +317,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (11, 'my',           'preference'),
 (11, 'my',           'uploadAvatar'),
 (11, 'user',         'execution'),
-(11, 'program',      'PRJBrowse'),
+(11, 'program',      'browse'),
 (11, 'user',         'cropAvatar');
 
 INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES

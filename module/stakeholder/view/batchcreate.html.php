@@ -18,8 +18,8 @@
       <?php echo html::a($this->createLink('stakeholder', 'batchcreate', "projectID={$projectID}"), "<span class='text'> {$lang->program->createStakeholder}</span>");?>
     </span>
     <div class='input-group space w-200px'>
-      <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
-      <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
+      <span class='input-group-addon'><?php echo $lang->execution->selectDept?></span>
+      <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
     </div>
     <?php if($project->parent and $config->systemMode == 'new'):?>
     <?php echo html::a($this->createLink('stakeholder', 'batchcreate', "dept=&parent=$project->parent"), $lang->program->importStakeholder, '', 'class="btn btn-primary"');?>

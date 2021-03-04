@@ -21,7 +21,7 @@ $lang->group->managePrivByGroup  = 'Gérer Privilèges par Groupe';
 $lang->group->managePrivByModule = 'Gérer Privilèges par Module';
 $lang->group->byModuleTips       = '<span class="tips">(Shift/Ctrl pour sélection multiple)</span>';
 $lang->group->manageMember       = 'Gérer Membres';
-$lang->group->managePRJAdmin     = 'Manage Program Admins';
+$lang->group->manageProjectAdmin = 'Manage Program Admins';
 $lang->group->confirmDelete      = "Voulez-vous supprimer ce groupe d'utilisateurs ?";
 $lang->group->successSaved       = 'Sauvé.';
 $lang->group->errorNotSaved      = 'Echec. Veuillez sélectionner actions et groupes.';

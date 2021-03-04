@@ -71,14 +71,14 @@ class stakeholder extends control
             $this->app->rawModule = 'program';
             $this->app->rawMethod = 'stakeholder';
             $this->lang->navGroup->program = 'program';
-            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
-            $this->program->setPGMViewMenu($programID);
+            $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
+            $this->program->setViewMenu($programID);
 
-            $this->view->members = $this->program->getPRJTeamMemberPairs($programID);
+            $this->view->members = $this->loadModel('project')->getProjectTeamMemberPairs($programID);
         }
         else
         {
-            $this->view->members = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
+            $this->view->members = $this->loadModel('execution')->getTeamMemberPairs($this->session->project);
         }
 
         $this->view->title      = $this->lang->stakeholder->create;
@@ -110,11 +110,11 @@ class stakeholder extends control
         $this->view->title      = $this->lang->stakeholder->batchCreate;
         $this->view->position[] = $this->lang->stakeholder->batchCreate;
 
-        $this->view->project            = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+        $this->view->project            = $this->loadModel('project')->getByID($this->session->project);
         $this->view->users              = $this->user->getPairs('all|nodeleted|noclosed');
         $this->view->deptUsers          = $deptUsers;
         $this->view->dept               = $dept;
-        $this->view->projectID          = $this->session->PRJ;
+        $this->view->projectID          = $this->session->project;
         $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
         $this->view->stakeholders       = $this->stakeholder->getStakeholders('all', 'id_desc');
         $this->view->parentStakeholders = $this->program->getStakeholders($parentID, 't1.id_desc');
@@ -153,10 +153,10 @@ class stakeholder extends control
         }
 
         $users = array('' => '');
-        if($stakeholder->type == 'team') $users = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
+        if($stakeholder->type == 'team') $users = $this->loadModel('execution')->getTeamMemberPairs($this->session->project);
         elseif($stakeholder->type == 'company')
         {
-            $members = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
+            $members = $this->loadModel('execution')->getTeamMemberPairs($this->session->project);
             $users   = $this->loadModel('user')->getPairs('noclosed');
             $users   = array('' => '') + array_diff($users, $members);
         }
@@ -180,7 +180,7 @@ class stakeholder extends control
      */
     public function ajaxGetMembers($user = '', $programID = 0)
     {
-        $members = $programID == 0 ? $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ) : $this->loadModel('program')->getPRJTeamMemberPairs($programID);
+        $members = $programID == 0 ? $this->loadModel('execution')->getTeamMemberPairs($this->session->project) : $this->loadModel('project')->getProjectTeamMemberPairs($programID);
         die(html::select('user', $members, $user, "class='form-control chosen'"));
     }
 
@@ -194,7 +194,7 @@ class stakeholder extends control
      */
     public function ajaxGetCompanyUser($user = '', $programID = 0)
     {
-        $members = $programID == 0 ? $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ) : $this->loadModel('program')->getPRJTeamMemberPairs($programID);
+        $members = $programID == 0 ? $this->loadModel('execution')->getTeamMemberPairs($this->session->project) : $this->loadModel('project')->getProjectTeamMemberPairs($programID);
         $users   = $this->loadModel('user')->getPairs('noclosed');
         $companyUsers = array('' => '') + array_diff($users, $members);
 
@@ -274,7 +274,7 @@ class stakeholder extends control
         else
         {
             $this->stakeholder->delete(TABLE_STAKEHOLDER, $userID);
-            $this->loadModel('user')->updateUserView($this->session->PRJ, 'project');
+            $this->loadModel('user')->updateUserView($this->session->project, 'project');
             die(js::reload('parent'));
         }
     }
@@ -293,7 +293,7 @@ class stakeholder extends control
         $this->view->position[] = $this->lang->stakeholder->view;
 
         $this->view->user    = $this->stakeholder->getByID($userID);
-        $this->view->users   = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ ,'nodeleted');
+        $this->view->users   = $this->loadModel('execution')->getTeamMemberPairs($this->session->project,'nodeleted');
         $this->view->expects = $this->stakeholder->getExpectByUser($userID);
 
         $this->display();
@@ -356,7 +356,7 @@ class stakeholder extends control
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
         $this->view->position[] = $this->lang->stakeholder->view;
         $this->view->user       = $this->stakeholder->getByID($userID);
-        $this->view->users      = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ ,'nodeleted');
+        $this->view->users      = $this->loadModel('execution')->getTeamMemberPairs($this->session->project,'nodeleted');
         $this->display();
     }
 

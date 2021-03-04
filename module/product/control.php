@@ -909,7 +909,7 @@ class product extends control
         $this->view->products  = $products;
         $this->view->projectID = $moduleGroup == 'project' ? $this->session->PRJ : 0;
         $this->view->programs  = $this->loadModel('program')->getPGMPairs(true);
-        $this->view->openGroup = $moduleGroup;
+        $this->view->openApp   = $moduleGroup;
         $this->display();
     }
 
@@ -1011,7 +1011,7 @@ class product extends control
 
     /**
      * Manage product line.
-     * 
+     *
      * @access public
      * @return void
      */

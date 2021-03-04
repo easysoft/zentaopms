@@ -81,7 +81,7 @@ $(function()
               <td class='w-150px'><?php echo $lang->datatable->showModule;?></td>
               <td><?php echo html::radio('showModule', $lang->datatable->showModuleList, isset($config->datatable->$datatableId->showModule) ? $config->datatable->$datatableId->showModule : '');?></td>
             </tr>
-            <?php if($app->moduleName == 'project' && $app->methodName == 'task'):?>
+            <?php if($app->moduleName == 'execution' && $app->methodName == 'task'):?>
             <tr>
               <td><?php echo $lang->datatable->showAllModule;?></td>
               <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->project->task->allModule) ? $config->project->task->allModule : 0);?></td>

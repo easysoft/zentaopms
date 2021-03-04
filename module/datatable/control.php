@@ -37,7 +37,7 @@ class datatable extends control
 
             $name = 'datatable.' . $this->post->target . '.' . $this->post->name;
             $this->loadModel('setting')->setItem($account . '.' . $name, $this->post->value);
-            if($this->post->allModule !== false) $this->setting->setItem("$account.project.task.allModule", $this->post->allModule);
+            if($this->post->allModule !== false) $this->setting->setItem("$account.execution.task.allModule", $this->post->allModule);
             if($this->post->global) $this->setting->setItem('system.' . $name, $this->post->value);
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => 'dao error.'));
