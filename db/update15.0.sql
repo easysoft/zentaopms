@@ -45,6 +45,7 @@ ALTER TABLE `zt_testreport` ADD `project` mediumint(8) unsigned NOT NULL AFTER `
 ALTER TABLE `zt_testsuite` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_build` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_release` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_expect` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 
 ALTER TABLE `zt_product` ADD `bind` enum('0','1') NOT NULL DEFAULT '0' AFTER `code`;
 ALTER TABLE `zt_product` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
