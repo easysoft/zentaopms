@@ -235,7 +235,7 @@
         if(lastOpenedApp !== appCode)
         {
             lastOpenedApp = appCode;
-            updateAppUrl(appCode);
+            updateAppUrl(appCode, null, null, true);
         }
 
         return true;
@@ -350,12 +350,13 @@
      * @param {string} appCode         The app code of target app to update url
      * @param {string|boolean} [url]   The new url of the app
      * @param {string|boolean} [title] The new title of the app
+     * @param {boolean}        [push]  Use push instead of replace
      * @return {void}
      */
-    function updateAppUrl(appCode, url, title)
+    function updateAppUrl(appCode, url, title, push)
     {
         var app = openedApps[appCode];
-        if(!app) return;
+        if(!app || lastOpenedApp !== appCode) return;
 
         if(url) app.appUrl = url;
         else url = app.appUrl;
@@ -363,11 +364,11 @@
         else title = app.appTitle || app.text;
 
         if(url && url.indexOf('#') < 0 && getAppCodeFromUrl(url) !== appCode) url = url + '#app=' + appCode;
-        if(lastOpenedApp === appCode)
+        if(location.href !== url)
         {
-            if(location.url !== url) history.replaceState({app: appCode}, title, url);
-            document.title = title;
+            history[push ? 'pushState' : 'replaceState']({app: appCode}, title, url);
         }
+        document.title = title;
     }
 
     /* Bind helper methods to global object "$.apps" */
@@ -440,6 +441,11 @@
             }
             $.zui.ContextMenu.show(items, options);
             event.preventDefault();
+        });
+
+        window.addEventListener('popstate', function(event)
+        {
+            if(lastOpenedApp !== event.state.app) openApp(event.state.app);
         });
 
         /* Redirect or open default app after document load */
