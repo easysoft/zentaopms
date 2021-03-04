@@ -15,8 +15,8 @@ class releaseModel extends model
 {
     /**
      * Get release by id.
-     * 
-     * @param  int    $releaseID 
+     *
+     * @param  int    $releaseID
      * @param  bool   $setImgSize
      * @access public
      * @return object
@@ -42,20 +42,20 @@ class releaseModel extends model
 
     /**
      * Get list of releases.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  string $type 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type
      * @access public
      * @return array
      */
     public function getList($productID, $branch = 0, $type = 'all')
     {
-        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project, t4.name as PRJName')
+        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project, t4.name as projectName')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.PRJ = t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
@@ -66,11 +66,11 @@ class releaseModel extends model
 
     /**
      * Get last release.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
      * @access public
-     * @return bool | object 
+     * @return bool | object
      */
     public function getLast($productID, $branch = 0)
     {
@@ -84,9 +84,9 @@ class releaseModel extends model
 
     /**
      * Get release builds from product.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
      * @access public
      * @return void
      */
@@ -102,9 +102,9 @@ class releaseModel extends model
 
     /**
      * Create a release.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
      * @access public
      * @return int
      */
@@ -144,13 +144,13 @@ class releaseModel extends model
             else
             {
                 $build = new stdclass();
-                $build->product = (int)$productID;
-                $build->branch  = (int)$branch;
-                $build->name    = $release->name;
-                $build->date    = $release->date;
-                $build->builder = $this->app->user->account;
-                $build->desc    = $release->desc;
-                $build->project = 0;
+                $build->product   = (int)$productID;
+                $build->branch    = (int)$branch;
+                $build->name      = $release->name;
+                $build->date      = $release->date;
+                $build->builder   = $this->app->user->account;
+                $build->desc      = $release->desc;
+                $build->execution = 0;
 
                 $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
                 $this->app->loadLang('build');
@@ -201,8 +201,8 @@ class releaseModel extends model
 
     /**
      * Update a release.
-     * 
-     * @param  int    $releaseID 
+     *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
@@ -234,8 +234,8 @@ class releaseModel extends model
 
     /**
      * Link stories
-     * 
-     * @param  int    $releaseID 
+     *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
@@ -270,10 +270,10 @@ class releaseModel extends model
     }
 
     /**
-     * Unlink story 
-     * 
-     * @param  int    $releaseID 
-     * @param  int    $storyID 
+     * Unlink story
+     *
+     * @param  int    $releaseID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -287,8 +287,8 @@ class releaseModel extends model
 
     /**
      * Batch unlink story.
-     * 
-     * @param  int    $releaseID 
+     *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
@@ -309,9 +309,9 @@ class releaseModel extends model
 
     /**
      * Link bugs.
-     * 
-     * @param  int    $releaseID 
-     * @param  string $type 
+     *
+     * @param  int    $releaseID
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -334,11 +334,11 @@ class releaseModel extends model
     }
 
     /**
-     * Unlink bug. 
-     * 
-     * @param  int    $releaseID 
-     * @param  int    $bugID 
-     * @param  string $type 
+     * Unlink bug.
+     *
+     * @param  int    $releaseID
+     * @param  int    $bugID
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -353,9 +353,9 @@ class releaseModel extends model
 
     /**
      * Batch unlink bug.
-     * 
-     * @param  int    $releaseID 
-     * @param  string $type 
+     *
+     * @param  int    $releaseID
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -377,9 +377,9 @@ class releaseModel extends model
 
     /**
      * Change status.
-     * 
-     * @param  int    $releaseID 
-     * @param  string $status 
+     *
+     * @param  int    $releaseID
+     * @param  string $status
      * @access public
      * @return bool
      */

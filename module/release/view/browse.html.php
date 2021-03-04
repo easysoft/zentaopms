@@ -63,13 +63,13 @@
       <tr>
         <td><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td>
-          <?php 
+          <?php
           $flagIcon = $release->marker ? "<icon class='icon icon-flag red' title='{$lang->release->marker}'></icon> " : '';
           echo html::a(inlink('view', "release=$release->id"), $release->name, '', "title='$release->name'") . $flagIcon;
           ?>
         </td>
-        <td title='<?php echo $release->PRJName?>'><?php echo $release->PRJName;?></td>
-        <td title='<?php echo $release->buildName?>'><?php echo empty($release->project) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
+        <td title='<?php echo $release->projectName?>'><?php echo $release->projectName;?></td>
+        <td title='<?php echo $release->buildName?>'><?php echo empty($release->execution) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
         <?php if($product->type != 'normal'):?>
         <td class='text-center' title='<?php echo zget($branches, $release->branch, '');?>'><?php echo $branches[$release->branch];?></td>
         <?php endif;?>
