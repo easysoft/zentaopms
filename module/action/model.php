@@ -633,14 +633,14 @@ class actionModel extends model
      * @param  string $period
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string|int $productID   all|int(like 123)|notzero   all => include zeror, notzero, great than 0
-     * @param  string|int $projectID   same as productID
+     * @param  string|int $productID   all|int(like 123)|notzero   all => include zero, notzero, greater than 0
+     * @param  string|int $executionID same as productID
      * @param  string $date
      * @param  string $direction
      * @access public
      * @return array
      */
-    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $productID = 'all', $projectID = 'all', $date = '', $direction = 'next')
+    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $productID = 'all', $executionID = 'all', $date = '', $direction = 'next')
     {
         /* Computer the begin and end date of a period. */
         $beginAndEnd = $this->computeBeginAndEnd($period);
@@ -648,32 +648,20 @@ class actionModel extends model
 
         /* Build has priv condition. */
         $condition = 1;
-        if($productID == 'all') $products = $this->app->user->view->products;
-        if($projectID == 'all') $projects = $this->app->user->view->projects;
-        if($productID == 'all' or $projectID == 'all')
+        if($productID == 'all')   $products   = $this->app->user->view->products;
+        if($executionID == 'all') $executions = $this->app->user->view->sprints;
+
+        if($productID == 'all' or $executionID == 'all')
         {
-            $projectCondition = $projectID == 'all' ? "project " . helper::dbIN($projects) : '';
+            $executionCondition = $executionID == 'all' ? "execution " . helper::dbIN($executions) : '';
             $productCondition = $productID == 'all' ? "INSTR('," . $products . ",', product) > 0" : '';
-            if(is_numeric($productID)) $productCondition = "product like'%,$productID,%' or product='$productID'";
-            if(is_numeric($projectID)) $projectCondition = "project='$projectID'";
+            if(is_numeric($productID))   $productCondition = "product like'%,$productID,%' or product='$productID'";
+            if(is_numeric($executionID)) $executionCondition = "execution='$executionID'";
 
-            $condition = "(product =',0,' AND project = '0')";
-            if($projectCondition) $condition .= ' OR ' . $projectCondition;
-            if($productCondition) $condition .= ' OR ' . $productCondition;
+            $condition = "(product =',0,' AND execution = '0')";
+            if($executionCondition) $condition .= ' OR ' . $executionCondition;
+            if($productCondition)   $condition .= ' OR ' . $productCondition;
             if($this->app->user->admin) $condition = 1; 
-        }
-
-        /* If is project, select its related. */
-        $executions = array();
-        $products   = array();
-        if(is_numeric($projectID))
-        {
-            $project = $this->loadModel('program')->getPRJByID($projectID);
-            if(!empty($project) && $project->type == 'project')
-            {
-                $executions = $this->loadModel('project')->getExecutionPairs($projectID);
-                $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-            }
         }
 
         $this->loadModel('doc');
@@ -690,12 +678,12 @@ class actionModel extends model
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
-            ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
-            ->beginIF(!empty($executions))->markLeft()->orWhere('project')->in(array_keys($executions))->fi()->markRight()
+            ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
+            ->beginIF(!empty($executions))->markLeft()->orWhere('execution')->in(array_keys($executions))->fi()->markRight()
             ->beginIF(!empty($products))->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
-            ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
-            ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
+            ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
+            ->beginIF($executionID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
             ->beginIF($docs and !$this->app->user->admin)->andWhere("IF(objectType != 'doc', '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
             ->beginIF($libs and !$this->app->user->admin)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
