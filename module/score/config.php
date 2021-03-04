@@ -12,7 +12,7 @@ $config->score->rule->block       = new stdClass();
 $config->score->rule->build       = new stdClass();
 $config->score->rule->search      = new stdClass();
 $config->score->rule->release     = new stdClass();
-$config->score->rule->project     = new stdClass();
+$config->score->rule->execution   = new stdClass();
 $config->score->rule->tutorial    = new stdClass();
 $config->score->rule->testcase    = new stdClass();
 $config->score->rule->testtask    = new stdClass();
@@ -57,8 +57,8 @@ $config->score->rule->story->create = array('times' => 0, 'hour' => 0, 'score' =
 
 $config->score->rule->build->create = array('times' => 0, 'hour' => 0, 'score' => 10);
 
-$config->score->rule->project->close  = array('times' => 0, 'hour' => 0, 'score' => 0);
-$config->score->rule->project->create = array('times' => 0, 'hour' => 0, 'score' => 10);
+$config->score->rule->execution->close  = array('times' => 0, 'hour' => 0, 'score' => 0);
+$config->score->rule->execution->create = array('times' => 0, 'hour' => 0, 'score' => 10);
 
 $config->score->rule->release->create = array('times' => 0, 'hour' => 0, 'score' => 10);
 
@@ -79,5 +79,5 @@ $config->score->ruleExtended['user']['changePassword'] = array('strength' => arr
 $config->score->ruleExtended['bug']['confirmBug']      = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
 $config->score->ruleExtended['bug']['resolve']         = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
 $config->score->ruleExtended['task']['finish']         = array('pri'      => array(1 => 2, 2 => 1, 3 => 0));
-$config->score->ruleExtended['project']['close']       = array('manager'  => array('close' => 20, 'onTime' => 10),
+$config->score->ruleExtended['execution']['close']     = array('manager'  => array('close' => 20, 'onTime' => 10),
                                                                'member'   => array('close' => 5,  'onTime' => 5));

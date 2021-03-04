@@ -356,7 +356,7 @@ class commonModel extends model
         //if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->noviceTutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
 
         $manualUrl = (!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home'];
-        echo '<li>' . html::a($manualUrl, $lang->manual, '', "class='open-in-tab' id='helpLink' data-group='help'") . '</li>';
+        echo '<li>' . html::a($manualUrl, $lang->manual, '', "class='open-in-app' id='helpLink' data-app='help'") . '</li>';
 
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
@@ -1055,9 +1055,9 @@ class commonModel extends model
      */
     public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
     {
-        /* Add data-group attribute. */
+        /* Add data-app attribute. */
         global $app;
-        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openApp . '"';
+        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->openApp . '"';
 
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
@@ -1150,8 +1150,8 @@ EOD;
 
         global $app, $lang, $config;
 
-        /* Add data-group attribute. */
-        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openApp . '"';
+        /* Add data-app attribute. */
+        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->openApp . '"';
 
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
