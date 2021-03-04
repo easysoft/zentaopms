@@ -11,24 +11,24 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='main-content'> 
+<div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->group->create;?></h2>
   </div>
   <form method='post' target='hiddenwin' id='dataform'>
-    <table align='center' class='table table-form'> 
+    <table align='center' class='table table-form'>
       <tr>
         <th><?php echo $lang->group->name;?></th>
         <td class='required'><?php echo html::input('name', '', "class='form-control'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->group->desc;?></th>
         <td><?php echo html::textarea('desc', '', "rows=5 class=form-control");?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->group->limited;?></th>
         <td><?php echo html::checkbox('limited', '');?></td>
-      </tr>  
+      </tr>
       <tr>
         <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
       </tr>

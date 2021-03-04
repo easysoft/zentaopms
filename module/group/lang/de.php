@@ -21,7 +21,7 @@ $lang->group->managePrivByGroup  = 'Rechte';
 $lang->group->managePrivByModule = 'Modul Rechte';
 $lang->group->byModuleTips       = '<span class="tips">(SHIFT/STRG für Multi-Select)</span>';
 $lang->group->manageMember       = 'Mitglieder';
-$lang->group->managePRJAdmin     = 'Manage Program Admins';
+$lang->group->manageProjectAdmin = 'Manage Program Admins';
 $lang->group->confirmDelete      = 'Möchten Sie die Gruppe löschen?';
 $lang->group->successSaved       = 'Gespeichert!';
 $lang->group->errorNotSaved      = 'Fehlgeschlagen. Bitte aktion und Gruppe wählen.';
