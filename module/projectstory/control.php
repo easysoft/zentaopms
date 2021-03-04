@@ -23,7 +23,7 @@ class projectStory extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->project);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=projectstory")));
     }
 
@@ -47,7 +47,7 @@ class projectStory extends control
         $this->session->set('storyList',$this->app->getURI(true));
         if(empty($productID)) $productID = key($this->products);
 
-        $this->lang->menugroup->product = 'projectstory';
+        $this->lang->menugroup->product       = 'projectstory';
 
         $this->lang->story->title             = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
         $this->lang->story->createRequirement = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->createRequirement);
@@ -89,7 +89,7 @@ class projectStory extends control
     public function view($storyID)
     {
         $story = $this->loadModel('story')->getByID($storyID);
-        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->PRJ);
+        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->project);
     }
 
     /**
@@ -106,7 +106,7 @@ class projectStory extends control
      */
     public function linkStory($projectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
-        echo $this->fetch('project', 'linkStory', "projectID=$projectID&browseType=$browseType&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('execution', 'linkStory', "projectID=$projectID&browseType=$browseType&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -120,7 +120,7 @@ class projectStory extends control
      */
     public function unlinkStory($projectID, $storyID, $confirm = 'no')
     {
-        echo $this->fetch('project', 'unlinkStory', "projectID=$projectID&storyID=$storyID&confirm=$confirm");
+        echo $this->fetch('execution', 'unlinkStory', "projectID=$projectID&storyID=$storyID&confirm=$confirm");
     }
 }
 
