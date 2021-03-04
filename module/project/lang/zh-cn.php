@@ -140,13 +140,6 @@ $lang->project->currencySymbol['SGD'] = 'S$';
 $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "瀑布";
 
-$lang->project->categoryList['single']   = "单产品项目";
-$lang->project->categoryList['multiple'] = "多产品项目";
-
-$lang->project->lifeTimeList['short'] = "短期";
-$lang->project->lifeTimeList['long']  = "长期";
-$lang->project->lifeTimeList['ops']   = "运维";
-
 $lang->project->featureBar['all']       = '所有';
 $lang->project->featureBar['doing']     = '进行中';
 $lang->project->featureBar['wait']      = '未开始';

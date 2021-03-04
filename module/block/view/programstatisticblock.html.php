@@ -108,7 +108,7 @@ $(function()
         <?php foreach($projects as $project):?>
         <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
           <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>
-          <?php echo html::a(helper::createLink('program', 'index', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->program->PGMIndex}");?>
+          <?php echo html::a(helper::createLink('program', 'index', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->index}");?>
         </li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
@@ -123,39 +123,39 @@ $(function()
             <div class="progress-pie inline-block space" data-value="<?php echo $project->progress;?>" data-doughnut-size="84">
               <canvas width="120" height="120"></canvas>
               <div class="progress-info">
-                <small><?php echo $lang->story->common . $lang->program->doneStories;?></small>
+                <small><?php echo $lang->story->common . $lang->project->doneStories;?></small>
                 <strong><?php echo $project->doneStories;?></strong>
               </div>
             </div>
             <div class="table-row text-center small text-muted with-padding">
               <div class="col-4 text-bottom">
-                <div><?php echo $lang->program->allStories;?></div>
+                <div><?php echo $lang->project->allStories;?></div>
                 <div><?php echo $project->allStories;?></div>
               </div>
               <div class="col-4">
                 <span class="label label-dot label-primary"></span>
-                <div><?php echo $lang->program->doneStories;?></div>
+                <div><?php echo $lang->project->doneStories;?></div>
                 <div><?php echo $project->doneStories;?></div>
               </div>
               <div class="col-4">
                 <span class="label label-dot label-pale"></span>
-                <div><?php echo $lang->program->leftStories;?></div>
+                <div><?php echo $lang->project->leftStories;?></div>
                 <div><?php echo $project->leftStories;?></div>
               </div>
             </div>
           </div>
           <div class="col-7">
             <div class="project-info">
-              <h4><?php echo $lang->program->allInput;?></h4>
+              <h4><?php echo $lang->project->allInput;?></h4>
               <div class='info'>
-                <span><i class='icon icon-group'></i> <?php echo sprintf($lang->program->membersUnit, $project->teamCount);?></span>
-                <span><i class='icon icon-clock'></i> <?php echo sprintf($lang->program->hoursUnit, $project->estimate);?></span>
-                <span><i class='icon icon-cost'></i> <?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></span>
+                <span><i class='icon icon-group'></i> <?php echo sprintf($lang->project->membersUnit, $project->teamCount);?></span>
+                <span><i class='icon icon-clock'></i> <?php echo sprintf($lang->project->hoursUnit, $project->estimate);?></span>
+                <span><i class='icon icon-cost'></i> <?php echo $project->budget . ' ' . zget($lang->project->unitList, $project->budgetUnit);?></span>
               </div>
             </div>
             <div class="project-info">
               <?php $i = 0;?>
-              <h4><?php echo $lang->program->lastIteration;?></h4>
+              <h4><?php echo $lang->project->lastIteration;?></h4>
               <?php foreach($project->executions as $execution):?>
               <?php $i ++;?>
               <?php if($i > 3) break;?>
@@ -173,12 +173,12 @@ $(function()
         <?php else:?>
           <div class="col-6">
             <div class='table-row text-left weekly-row with-padding'>
-              <span class='weekly-title'><?php echo $lang->program->weekly;?></span>
+              <span class='weekly-title'><?php echo $lang->project->weekly;?></span>
               <span class='stage text-muted'><?php echo $project->current;?></span>
             </div>
             <div class='progress-group col-10 center-block'>
               <div class='progress-num text-center'>
-                <div class='weekly-title'><?php echo $lang->program->PRJProgress;?></div>
+                <div class='weekly-title'><?php echo $lang->project->PRJProgress;?></div>
                 <div class='weekly-progress'><?php echo $project->progress . '%';?></div>
               </div>
               <div class='progress'>
@@ -187,15 +187,15 @@ $(function()
             </div>
             <div class="table-row text-center small with-padding col-10 center-block">
               <div class="col-4 text-bottom">
-                <div class='weekly-name'><?php echo $lang->program->pv;?></div>
+                <div class='weekly-name'><?php echo $lang->project->pv;?></div>
                 <div class='weekly-value'><?php echo $project->pv;?></div>
               </div>
               <div class="col-4">
-                <div class='weekly-name'><?php echo $lang->program->ev;?></div>
+                <div class='weekly-name'><?php echo $lang->project->ev;?></div>
                 <div class='weekly-value'><?php echo $project->ev;?></div>
               </div>
               <div class="col-4">
-                <div class='weekly-name'><?php echo $lang->program->sv;?></div>
+                <div class='weekly-name'><?php echo $lang->project->sv;?></div>
                 <div class='weekly-value'><?php echo $project->sv;?></div>
               </div>
             </div>
@@ -203,33 +203,33 @@ $(function()
           <div class='col-6'>
             <div class='table-row weekly-row with-padding'>
               <div class='col-4 text-center'>
-                <span class='weekly-title'><?php echo $lang->program->allInput;?></span>
+                <span class='weekly-title'><?php echo $lang->project->allInput;?></span>
               </div>
               <div class='col-8'></div>
             </div>
             <div class='progress-group'>
               <div class="table-row text-center small with-padding">
                 <div class="col-4 text-bottom">
-                  <div class='weekly-name'><?php echo $lang->program->PRJPM;?></div>
-                  <div class='weekly-value'><?php echo $project->PM ? zget($users, $project->PM) : $lang->program->emptyPM;?></div>
+                  <div class='weekly-name'><?php echo $lang->project->PRJPM;?></div>
+                  <div class='weekly-value'><?php echo $project->PM ? zget($users, $project->PM) : $lang->project->emptyPM;?></div>
                 </div>
                 <div class="col-4">
-                  <div class='weekly-name'><?php echo $lang->program->teamCount;?></div>
+                  <div class='weekly-name'><?php echo $lang->project->teamCount;?></div>
                   <div class='weekly-value'><?php echo $project->teamCount;?></div>
                 </div>
                 <div class="col-4">
-                  <div class='weekly-name'><?php echo $lang->program->PRJBudget;?></div>
+                  <div class='weekly-name'><?php echo $lang->project->PRJBudget;?></div>
                   <div class='weekly-value'><?php echo $project->budget;?></div>
                 </div>
               </div>
             </div>
             <div class="table-row text-center small with-padding">
                 <div class="col-4 text-bottom">
-                  <div class='weekly-name'><?php echo $lang->program->ac;?></div>
+                  <div class='weekly-name'><?php echo $lang->project->ac;?></div>
                   <div class='weekly-value'><?php echo $project->ac;?></div>
                 </div>
                 <div class="col-4">
-                  <div class='weekly-name'><?php echo $lang->program->cv;?></div>
+                  <div class='weekly-name'><?php echo $lang->project->cv;?></div>
                   <div class='weekly-value'><?php echo $project->cv;?></div>
                 </div>
                 <div>

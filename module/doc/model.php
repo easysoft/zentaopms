@@ -157,7 +157,7 @@ class docModel extends model
             if($type == 'project')
             {
                 $status = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'undone' : 'all';
-                $idList = $this->loadModel('project')->getExecutionIdList($projectID, $status);
+                $idList = $this->loadModel('execution')->getIdList($projectID, $status);
             }
 
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
@@ -170,7 +170,7 @@ class docModel extends model
         {
             /* If extra have unclosedProject then ignore unclosed project libs. */
             $status          = (strpos($extra, 'unclosedProject') !== false) ? 'undone' : 'all';
-            $executionIdList = $this->loadModel('project')->getExecutionIdList($projectID, $status);
+            $executionIdList = $this->loadModel('execution')->getIdList($projectID, $status);
             $productIdList   = $this->loadModel('product')->getProductIDByProject($projectID, false);
 
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
@@ -195,7 +195,7 @@ class docModel extends model
         if(strpos($extra, 'withObject') !== false)
         {
             $products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-            $projects = $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'noclosed');
+            $projects = $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'noclosed');
         }
 
         $libPairs = array();
@@ -780,7 +780,7 @@ class docModel extends model
         $this->config->doc->search['actionURL'] = $actionURL;
         $this->config->doc->search['queryID']   = $queryID;
         $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->loadModel('product')->getPairs('nocode', $this->session->PRJ) + array('all'=>$this->lang->doc->allProduct);
-        $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getExecutionPairs($this->session->PRJ, 'all', 'noclosed') + array('all'=>$this->lang->doc->allProject);
+        $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'noclosed') + array('all'=>$this->lang->doc->allProject);
         $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
 
         /* Get the modules. */
@@ -1141,7 +1141,7 @@ class docModel extends model
                 $objectList = $this->loadModel('product')->getPairs();
             }
 
-            if($type == 'project') $objectList = $this->loadModel('project')->getExecutionsByProject($projectID, $executionStatus, 0, true);
+            if($type == 'project') $objectList = $this->loadModel('execution')->getByProject($projectID, $executionStatus, 0, true);
             if(empty($objectList)) return $libs;
 
             $docLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
@@ -1565,7 +1565,7 @@ class docModel extends model
     public function getLibIdListByProject($projectID = 0)
     {
         $products = $this->loadModel('product')->getProductIDByProject($projectID, false);
-        $projects = $this->loadModel('project')->getExecutionPairs($projectID, 'all', 'noclosed');
+        $projects = $this->loadModel('execution')->getPairs($projectID, 'all', 'noclosed');
 
         $projectLibs = array();
         $productLibs = array();
@@ -1592,7 +1592,7 @@ class docModel extends model
         $today  = date('Y-m-d');
         $lately = date('Y-m-d', strtotime('-3 day'));
         $statisticInfo = $this->dao->select("count(id) as totalDocs, count(editedDate like '{$today}%' or null) as todayEditedDocs,
-            count(editedDate > '{$lately}' or null) as lastEditedDocs, count(addedDate > '{$lately}' or null) as lastAddedDocs, 
+            count(editedDate > '{$lately}' or null) as lastEditedDocs, count(addedDate > '{$lately}' or null) as lastAddedDocs,
             count(collector like '%,{$this->app->user->account},%' or null) as myCollection, count(addedBy = '{$this->app->user->account}' or null) as myDocs")->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($docIdList)

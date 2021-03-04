@@ -9,16 +9,16 @@
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-programs <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr>
-        <th class='c-name w-100px'><?php echo $lang->program->PRJName;?></th>
-        <th class='w-100px'><?php echo $lang->program->PGMPM;?></th>
-        <th class='w-80px'><?php echo $lang->program->PGMStatus;?></th>
+        <th class='c-name w-100px'><?php echo $lang->project->name;?></th>
+        <th class='w-100px'><?php echo $lang->program->PM;?></th>
+        <th class='w-80px'><?php echo $lang->program->status;?></th>
         <?php if($longBlock):?>
         <th class='w-60px'><?php echo $lang->program->teamCount;?></th>
         <th class='w-90px text-right'><?php echo $lang->task->consumed;?></th>
-        <th class='w-80px text-right'><?php echo $lang->program->PGMBudget;?></th>
-        <th class='w-80px'><?php echo $lang->program->leftStories;?></th>
-        <th class='w-80px'><?php echo $lang->program->leftTasks;?></th>
-        <th class='w-80px'><?php echo $lang->program->leftBugs;?></th>
+        <th class='w-80px text-right'><?php echo $lang->program->budget;?></th>
+        <th class='w-80px'><?php echo $lang->project->leftStories;?></th>
+        <th class='w-80px'><?php echo $lang->project->leftTasks;?></th>
+        <th class='w-80px'><?php echo $lang->project->leftBugs;?></th>
         <?php endif;?>
       </tr>
     </thead>
@@ -35,9 +35,9 @@
         </td>
         <?php if($longBlock):?>
         <td class='text-center'><?php echo $project->teamCount;?></td>
-        <td class='text-right' title="<?php echo $project->consumed . ' ' . $lang->project->workHour;?>"><?php echo $project->consumed . ' ' . $lang->project->workHourUnit;?></td>
+        <td class='text-right' title="<?php echo $project->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->consumed . ' ' . $lang->execution->workHourUnit;?></td>
         <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format((float)$project->budget, 1);?>
-        <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $lang->program->future;?></td>
+        <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td class='text-center'><?php echo $project->leftStories;?></td>
         <td class='text-center'><?php echo $project->leftTasks;?></td>
         <td class='text-center'><?php echo $project->leftBugs;?></td>

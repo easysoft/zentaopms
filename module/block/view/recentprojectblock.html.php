@@ -41,9 +41,9 @@
         <div class='panel-heading not-move-handler'>
           <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?> </strong>
           <?php if($project->model === 'waterfall'): ?>
-          <span class='project-type-label label label-warning label-outline'><?php echo $lang->program->waterfall; ?></span>
+          <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
           <?php else: ?>
-          <span class='project-type-label label label-info label-outline'><?php echo $lang->program->scrum; ?></span>
+          <span class='project-type-label label label-info label-outline'><?php echo $lang->project->scrum; ?></span>
           <?php endif; ?>
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
@@ -63,12 +63,12 @@
         </div>
         <div class='panel-body'>
           <div class='project-infos'>
-            <span><i class='icon icon-group'></i> <?php printf($lang->program->membersUnit, $project->teamCount); ?></span>
-            <span><i class='icon icon-clock'></i> <?php printf($lang->program->hoursUnit, $project->estimate); ?></span>
+            <span><i class='icon icon-group'></i> <?php printf($lang->project->membersUnit, $project->teamCount); ?></span>
+            <span><i class='icon icon-clock'></i> <?php printf($lang->project->hoursUnit, $project->estimate); ?></span>
           </div>
           <?php if($project->model === 'waterfall'): ?>
           <div class='project-detail project-stages'>
-            <p class='text-muted'><?php echo $lang->program->ongoingStage;?></p>
+            <p class='text-muted'><?php echo $lang->project->ongoingStage;?></p>
             <?php
             $projectProjects = array();
             foreach($project->executions as $project)
@@ -93,7 +93,7 @@
           <?php else: ?>
           <?php $project = empty($project->executions ) ? '' : end($project->executions);?>
           <div class='project-detail project-iteration'>
-            <p class='text-muted'><?php echo $lang->program->lastIteration; ?></p>
+            <p class='text-muted'><?php echo $lang->project->lastIteration; ?></p>
             <?php if($project):?>
             <div class='row'>
               <div class='col-xs-5'><?php echo $project->name;?></div>
