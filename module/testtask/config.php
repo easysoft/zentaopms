@@ -2,11 +2,11 @@
 $config->testtask = new stdclass();
 $config->testtask->create = new stdclass();
 $config->testtask->edit   = new stdclass();
-$config->testtask->create->requiredFields = 'project,build,begin,end,name';
-$config->testtask->edit->requiredFields   = 'project,build,begin,end,name';
+$config->testtask->create->requiredFields = 'execution,build,begin,end,name';
+$config->testtask->edit->requiredFields   = 'execution,build,begin,end,name';
 
 $config->testtask->importunitresult = new stdclass();
-$config->testtask->importunitresult->requiredFields = 'project,build,begin,end,name,resultFile';
+$config->testtask->importunitresult->requiredFields = 'execution,build,begin,end,name,resultFile';
 
 $config->testtask->editor = new stdclass();
 $config->testtask->editor->create           = array('id' => 'desc', 'tools' => 'simpleTools');

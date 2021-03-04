@@ -15,15 +15,15 @@ $this->app->loadConfig('sso');
 if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);
 
 js::set('navGroup', $lang->navGroup);
-js::set('tabsLang', $lang->index->tab);
-js::set('menuItems', commonModel::getMainNavList($app->rawModule));
+js::set('appsLang', $lang->index->app);
+js::set('appsMenuItems', commonModel::getMainNavList($app->rawModule));
 js::set('defaultOpen', $open);
 ?>
 <?php if(isset($this->config->bizVersion)):?>
 <style>#searchbox .dropdown-menu.show-quick-go.with-active {top: -468px; max-height: 465px;}</style>
 <?php endif;?>
 <div id='menu'>
-  <nav id='menuNav' data-group='<?php echo $app->rawModule; ?>'>
+  <nav id='menuNav'>
     <ul class='nav nav-default' id='menuMainNav'>
     </ul>
     <ul class='nav nav-default'>
@@ -47,9 +47,9 @@ js::set('defaultOpen', $open);
     </ul>
   </div>
 </div>
-<div id='pages'>
+<div id='apps'>
 </div>
-<div id='pagesBar'>
+<div id='appsBar'>
   <ul id='bars' class='nav nav-default'></ul>
   <div id='poweredBy'>
     <div id="globalBarLogo">

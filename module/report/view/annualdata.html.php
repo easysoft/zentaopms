@@ -51,7 +51,7 @@
           <?php
           $contributions = 0;
           $maxCount      = 0;
-          $radarData     = array('product' => 0, 'project' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);
+          $radarData     = array('product' => 0, 'execution' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);
           foreach($data['contributions'] as $objectType => $objectContributions)
           {
               $sum = array_sum($objectContributions);
@@ -85,7 +85,7 @@
             <?php
             $objectContributions = isset($data['contributions'][$objectType]) ? $data['contributions'][$objectType] : array();
             $contributionActions = zget($annualDataConfig['contributions'], $objectType, array_keys($objectContributions));
-            
+
             $colors = $annualDataConfig['colors'];
             $detail = '';
             $items  = array();
@@ -117,7 +117,7 @@
                     $item['width'] = $width;
                     $item['count'] = $count;
                     $items[$color] = $item;
-            
+
                     $detail .= "<li><span class='color' style='background-color:{$color}'></span><span class='item-name'>" . $annualDataLang->actionList[$actionName] . "</span><span class='count'>{$count}</span></li>";
                 }
             }
@@ -138,22 +138,22 @@
       <header><h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2></header>
       <div id='radarCanvas'></div>
     </section>
-    <section id='projectData'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->projects . $soFar;?></h2></header>
+    <section id='executionData'>
+      <header><h2 class='text-holder'><?php echo $annualDataLang->executions . $soFar;?></h2></header>
       <div class='has-table'>
         <table class='table table-hover table-fixed table-borderless table-condensed'>
           <thead class='hidden'>
             <tr>
-              <?php foreach($annualDataLang->projectFields as $field => $name):?>
+              <?php foreach($annualDataLang->executionFields as $field => $name):?>
               <th class='<?php echo "c-$field";?>'><?php echo $name;?></th>
               <?php endforeach?>
             </tr>
           </thead>
           <tbody>
-            <?php foreach($data['projectStat'] as $project):?>
+            <?php foreach($data['executionStat'] as $execution):?>
             <tr>
-              <?php foreach($annualDataLang->projectFields as $field => $name):?>
-              <td class='<?php echo "c-$field";?>' title='<?php echo $project->$field;?>'><?php echo $project->$field;?></td>
+              <?php foreach($annualDataLang->executionFields as $field => $name):?>
+              <td class='<?php echo "c-$field";?>' title='<?php echo $execution->$field;?>'><?php echo $execution->$field;?></td>
               <?php endforeach?>
             </tr>
             <?php endforeach;?>
@@ -164,7 +164,7 @@
         <table class='table table-hover table-fixed table-borderless table-condensed'>
           <thead>
             <tr>
-              <?php foreach($annualDataLang->projectFields as $field => $name):?>
+              <?php foreach($annualDataLang->executionFields as $field => $name):?>
               <th class='<?php echo "c-$field";?>'><?php echo $name;?></th>
               <?php endforeach?>
             </tr>
@@ -223,7 +223,7 @@
     <?php endif;?>
     <?php
     $objectTypeList['story'] = $radarData['product'];
-    $objectTypeList['task']  = $radarData['project'] > $radarData['devel'] ? $radarData['project'] : $radarData['devel'];
+    $objectTypeList['task']  = $radarData['execution'] > $radarData['devel'] ? $radarData['execution'] : $radarData['devel'];
     $objectTypeList['bug']   = $radarData['qa'];
     $objectTypeList['case']  = $radarData['qa'];
     arsort($objectTypeList);
@@ -347,7 +347,7 @@ $(function()
     $commonTemplate['stack'] = 'all';
     $commonTemplate['label'] = array('show' => false);
     $commonTemplate['data']  = array();
-    
+
     $jsonedMonths = json_encode($months);
     foreach($annualDataConfig['month'] as $objectType => $actions):?>
     <?php

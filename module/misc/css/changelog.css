@@ -12,6 +12,6 @@
 #details .details-list {display: none; padding: 10px; background: #f1f1f1; border-radius: 4px;}
 #details.show-details .details-list {display: block;}
 #details > .btn > .icon-angle-right {transition: transform .2s; display: inline-block;}
-#details.show-details > .btn > .icon-angle-right {transform: rotate(90deg)}
+#details.show-details > .btn > .icon-angle-right {transform: rotate(90deg);}
 #details.show-details > .btn:focus {border-radius: 4px 4px 0 0;}
 #details.show-details > .btn:focus + .details-list {border-radius: 0 0 4px 4px;}

@@ -72,6 +72,8 @@ REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES (
 
 ALTER TABLE `zt_config` MODIFY COLUMN `value` longtext NOT NULL AFTER `key`;
 
+UPDATE `zt_config` SET `key` = 'CRExecution' WHERE `module` = 'common' AND `key` = 'CRProject';
+
 -- DROP TABLE IF EXISTS `zt_stakeholder`;
 CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
  `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -28,9 +28,9 @@ $lang->company->backyard = 'Intranet';
 $lang->company->guest    = 'Guest Login';
 $lang->company->admins   = 'Administrator';
 
-$lang->company->product = $lang->productCommon;
-$lang->company->project = $lang->executionCommon;
-$lang->company->user    = 'User';
+$lang->company->product   = $lang->productCommon;
+$lang->company->execution = $lang->executionCommon;
+$lang->company->user      = 'User';
 
 $lang->company->guestOptions[0] = 'Deny';
 $lang->company->guestOptions[1] = 'Allow';

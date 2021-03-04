@@ -1,65 +1,65 @@
 (function()
 {
     /* Init variables */
-    var openedTabs      = {}; // Key-value to save group-tab pairs
-    var groupsMap       = {}; // Key-value to save group-menu pairs
-    var openedTabZIndex = 10; // Last opened tab z-index
-    var defaultTabGroup;      // Default tab group
-    var lastOpenedGroup;      // Last opened tab group
+    var openedApps      = {}; // Key-value to save appCode-app pairs
+    var appsMap         = {}; // Key-value to save opened appCode-app pairs
+    var openedAppZIndex = 10; // Last opened app z-index
+    var defaultApp;           // Default app code
+    var lastOpenedApp;        // Last opened app code
 
     /**
-     * Init menu list
+     * Init apps menu list
      */
-    function initMenuList()
+    function initAppsMenu()
     {
         var $helpLink = $('#helpLink');
-        groupsMap.help =
+        appsMap.help =
         {
-            group:    'help',
+            code:     'help',
             icon:     'icon-help',
             url:      $helpLink.attr('href'),
             external: true,
             text:     $helpLink.text(),
-            pageUrl:  config.webRoot + '#open=help'
+            appUrl:  config.webRoot + '#app=help'
         };
         var $menuMainNav = $('#menuMainNav').empty();
-        window.menuItems.forEach(function(item)
+        window.appsMenuItems.forEach(function(item)
         {
             if(item === 'divider') return $menuMainNav.append('<li class="divider"></li>');
 
             var $link= $('<a data-pos="menu"></a>')
-                .attr('data-group', item.group)
-                .attr('class', 'show-in-tab')
+                .attr('data-app', item.code)
+                .attr('class', 'show-in-app')
                 .html(item.title);
 
             item.icon = ($link.find('.icon').attr('class') || '').replace('icon ', '');
             item.text = $link.text().trim();
             $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>');
-            groupsMap[item.group] = item;
+            appsMap[item.code] = item;
 
-            $('<li></li>').attr('data-group', item.group)
+            $('<li></li>').attr('data-app', item.code)
                 .attr('title', item.text)
                 .append($link)
                 .appendTo($menuMainNav);
 
-            if(!defaultTabGroup) defaultTabGroup = item.group;
+            if(!defaultApp) defaultApp = item.code;
         });
     }
 
     /**
-     * Get tab group from url
+     * Get app app code from url
      * @param {String} urlOrModuleName Url string
      * @return {String}
      */
-    function getGroupFromUrl(urlOrModuleName)
+    function getAppCodeFromUrl(urlOrModuleName)
     {
-        var group = window.navGroup[urlOrModuleName];
-        if(group) return group;
+        var code = window.navGroup[urlOrModuleName];
+        if(code) return code;
 
         var link = $.parseLink(urlOrModuleName);
         if(!link.moduleName || link.isOnlyBody) return '';
 
-        if(link.hash && link.hash.indexOf('open=') === 0) return link.hash.substr(5);
+        if(link.hash && link.hash.indexOf('app=') === 0) return link.hash.substr(5);
 
         /* Handling special situations */
         var moduleName      = link.moduleName;
@@ -138,201 +138,201 @@
         var myMethods = 'todocalendar|effortcalendar|todo|task|story|bug|testtask|testcase|execution|issue|risk|dynamic|profile';
         if(moduleName === 'user' && myMethods.indexOf(methodLowerCase) != -1) return 'my';
 
-        group = window.navGroup[moduleName] || moduleName || urlOrModuleName;
-        return groupsMap[group] ? group : '';
+        code = window.navGroup[moduleName] || moduleName || urlOrModuleName;
+        return appsMap[code] ? code : '';
     }
 
     /**
-     * Open tab
-     * @param {string} [url]   Url to open in tab
-     * @param {string} [group] The group of target tab to open
+     * Open app
+     * @param {string} [url]   Url to open
+     * @param {string} [appCode] The code of target app to open
      * @return {void}
      */
-    function openTab(url, group)
+    function openApp(url, appCode)
     {
         /* Check params */
-        if(!group)
+        if(!appCode)
         {
-            if(groupsMap[url])
+            if(appsMap[url])
             {
-                group = url;
+                appCode = url;
                 url = '';
             }
             else
             {
-                group = getGroupFromUrl(url);
-                if(!group) return false;
+                appCode = getAppCodeFromUrl(url);
+                if(!appCode) return false;
             }
         }
 
-        /* Set openGroup cookie */
-        $.cookie('openGroup', group, {expires: config.cookieLife, path: config.webRoot});
+        /* Set openApp cookie */
+        $.cookie('openApp', appCode, {expires: config.cookieLife, path: config.webRoot});
 
         /* Highlight at main menu */
         var $menuMainNav = $('#menuMainNav');
         var $lastActiveNav = $menuMainNav.find('li.active');
-        if($lastActiveNav.data('group') !== group)
+        if($lastActiveNav.data('app') !== appCode)
         {
             $lastActiveNav.removeClass('active');
-            $menuMainNav.find('li[data-group="' + group + '"]').addClass('active');
+            $menuMainNav.find('li[data-app="' + appCode + '"]').addClass('active');
         }
 
-        /* Create pate tab object and store it */
-        var tab = openedTabs[group];
-        if(!tab)
+        /* Create pate app object and store it */
+        var app = openedApps[appCode];
+        if(!app)
         {
             var $iframe = $(
             [
                 '<iframe',
-                    'id="tabIframe-' + group + '"',
-                    'name="tab-' + group + '"',
+                    'id="appIframe-' + appCode + '"',
+                    'name="app-' + appCode + '"',
                     'frameborder="no"',
                     'allowtransparency="true"',
                     'scrolling="auto"',
                     'style="width: 100%; height: 100%; left: 0px;"',
                 '/>'
             ].join(' '));
-            var $page = $('<div class="page-tab" id="tab-' + group + '"></div>')
+            var $app = $('<div class="app-container" id="app-' + appCode + '"></div>')
                 .append($iframe)
-                .appendTo('#pages');
+                .appendTo('#apps');
 
-            tab = $.extend({$iframe: $iframe, $page: $page, group: group}, groupsMap[group]);
-            openedTabs[group] = tab;
+            app = $.extend({$iframe: $iframe, $app: $app, code: appCode}, appsMap[appCode]);
+            openedApps[appCode] = app;
 
             /* If first show without url, then use the default url */
-            if(!url) url = groupsMap[group].url;
+            if(!url) url = appsMap[appCode].url;
         }
 
-        /* Show page tab and update iframe source */
-        if(url) reloadTab(group, url);
-        tab.zIndex = openedTabZIndex++;
-        tab.$page.show().css('z-index', tab.zIndex);
+        /* Show page app and update iframe source */
+        if(url) reloadApp(appCode, url);
+        app.zIndex = openedAppZIndex++;
+        app.$app.show().css('z-index', app.zIndex);
 
         /* Update task bar */
         var $bars = $('#bars');
-        var $bar = $('#tabBar-' + group);
+        var $bar = $('#appBar-' + appCode);
         if(!$bar.length)
         {
             var $link= $('<a data-pos="bar"></a>')
-                .attr('data-group', group)
-                .attr('class', 'show-in-tab')
-                .html(tab.text);
-            $bar = $('<li></li>').attr('data-group', group)
-                .attr('id', 'tabBar-' + group)
+                .attr('data-app', appCode)
+                .attr('class', 'show-in-app')
+                .html(app.text);
+            $bar = $('<li></li>').attr('data-app', appCode)
+                .attr('id', 'appBar-' + appCode)
                 .append($link)
                 .appendTo($bars);
         }
         var $lastActiveBar = $bars.find('li.active');
-        if($lastActiveBar.data('group') !== group)
+        if($lastActiveBar.data('app') !== appCode)
         {
             $lastActiveBar.removeClass('active');
-            $bars.find('li[data-group="' + group + '"]').addClass('active');
+            $bars.find('li[data-app="' + appCode + '"]').addClass('active');
         }
-        tab.$bar = $bar;
+        app.$bar = $bar;
 
-        /* Update tab state */
-        tab.show = true;
-        if(lastOpenedGroup !== group)
+        /* Update app state */
+        app.show = true;
+        if(lastOpenedApp !== appCode)
         {
-            lastOpenedGroup = group;
-            updateTabUrl(group);
+            lastOpenedApp = appCode;
+            updateAppUrl(appCode, null, null, true);
         }
 
         return true;
     }
 
     /**
-     * Get last opened tab
-     * @param {boolean} [onlyShowed] If set to true then only get last tab from tabs are showed
-     * @returns {object} The opened tab info object
+     * Get last opened app
+     * @param {boolean} [onlyShowed] If set to true then only get last app from apps are showed
+     * @returns {object} The opened app info object
      */
-    function getLastTab(onlyShowed)
+    function getLastApp(onlyShowed)
     {
         var lastShowIndex = 0;
-        var lastTab = null;
-        for(var group in openedTabs)
+        var lastApp = null;
+        for(var appCode in openedApps)
         {
-            var tab = openedTabs[group];
-            if((!onlyShowed || tab.show) && lastShowIndex < tab.zIndex && !tab.closed)
+            var app = openedApps[appCode];
+            if((!onlyShowed || app.show) && lastShowIndex < app.zIndex && !app.closed)
             {
-                lastShowIndex = tab.zIndex;
-                lastTab = tab;
+                lastShowIndex = app.zIndex;
+                lastApp = app;
             }
         }
-        return lastTab;
+        return lastApp;
     }
 
     /**
-     * Hide tab
-     * @param {string} group The group of target tab to hide
+     * Hide app
+     * @param {string} appCode The app code of target app to hide
      * @return {void}
      */
-    function hideTab(group)
+    function hideApp(appCode)
     {
-        var tab = openedTabs[group];
-        if(!tab || !tab.show) return;
+        var app = openedApps[appCode];
+        if(!app || !app.show) return;
 
-        tab.$page.hide();
-        tab.show = false;
-        lastOpenedGroup = null;
+        app.$app.hide();
+        app.show = false;
+        lastOpenedApp = null;
 
-        /* Active last tab */
-        var lastTab = getLastTab(true) || getLastTab();
-        showTab(lastTab ? lastTab.group : defaultTabGroup);
+        /* Active last app */
+        var lastApp = getLastApp(true) || getLastApp();
+        showApp(lastApp ? lastApp.code : defaultApp);
     }
 
     /**
-     * Show tab
-     * @param {string} group The group of target tab to show
+     * Show app
+     * @param {string} appCode The app code of target app to show
      * @return {void}
      */
-    function showTab(group)
+    function showApp(appCode)
     {
-        return openTab('', group);
+        return openApp('', appCode);
     }
 
     /**
-     * Toggle tab
-     * @param {string} group The group of target tab to toggle
+     * Toggle app
+     * @param {string} appCode The app code of target app to toggle
      * @return {void}
      */
-    function toggleTab(group)
+    function toggleApp(appCode)
     {
-        var tab = openedTabs[group];
-        if(!tab || tab.group !== lastOpenedGroup) showTab(group);
-        else hideTab(group);
+        var app = openedApps[appCode];
+        if(!app || app.code !== lastOpenedApp) showApp(appCode);
+        else hideApp(appCode);
     }
 
     /**
-     * Close tab
-     * @param {string} group The group of target tab to close
+     * Close app
+     * @param {string} appCode The app code of target app to close
      */
-    function closeTab(group)
+    function closeApp(appCode)
     {
-        group = group || lastOpenedGroup;
-        var tab = openedTabs[group];
-        if(!tab) return;
+        appCode = appCode || lastOpenedApp;
+        var app = openedApps[appCode];
+        if(!app) return;
 
-        tab.closed = true;
-        hideTab(group);
-        tab.$page.remove();
-        tab.$bar.remove();
-        delete openedTabs[group];
+        app.closed = true;
+        hideApp(appCode);
+        app.$app.remove();
+        app.$bar.remove();
+        delete openedApps[appCode];
     }
 
     /**
-     * Reload tab
-     * @param {string} group         The group of target tab to reload
+     * Reload app
+     * @param {string} appCode       The app code of target app to reload
      * @param {string|boolean} [url] The new url to load, it's optional
      * @return {void}
      */
-    function reloadTab(group, url)
+    function reloadApp(appCode, url)
     {
-        var tab = openedTabs[group];
-        if(!tab) return;
+        var app = openedApps[appCode];
+        if(!app) return;
 
-        if(url === true) url = tab.url;
-        var iframe = tab.$iframe[0];
+        if(url === true) url = app.url;
+        var iframe = app.$iframe[0];
 
         try
         {
@@ -341,64 +341,65 @@
         }
         catch(_)
         {
-            iframe.src = url || tab.url;
+            iframe.src = url || app.url;
         }
     }
 
     /**
-     * Update browser url and title for the given tab
-     * @param {string} group           The group of target tab to update url
-     * @param {string|boolean} [url]   The new url of the tab
-     * @param {string|boolean} [title] The new title of the tab
+     * Update browser url and title for the given app
+     * @param {string} appCode         The app code of target app to update url
+     * @param {string|boolean} [url]   The new url of the app
+     * @param {string|boolean} [title] The new title of the app
+     * @param {boolean}        [push]  Use push instead of replace
      * @return {void}
      */
-    function updateTabUrl(group, url, title)
+    function updateAppUrl(appCode, url, title, push)
     {
-        var tab = openedTabs[group];
-        if(!tab) return;
+        var app = openedApps[appCode];
+        if(!app || lastOpenedApp !== appCode) return;
 
-        if(url) tab.pageUrl = url;
-        else url = tab.pageUrl;
-        if(title) tab.pageTitle = title;
-        else title = tab.pageTitle || tab.text;
+        if(url) app.appUrl = url;
+        else url = app.appUrl || app.url;
+        if(title) app.appTitle = title;
+        else title = app.appTitle || app.text;
 
-        if(url && url.indexOf('#') < 0) url = url + '#open=' + group;
-        if(lastOpenedGroup === group)
+        if(url && url.indexOf('#') < 0 && getAppCodeFromUrl(url) !== appCode) url = url + '#app=' + appCode;
+        if(location.href !== url)
         {
-            if(location.url !== url) history.replaceState({}, title, url);
-            document.title = title;
+            history[push ? 'pushState' : 'replaceState']({app: appCode}, title, url);
         }
+        document.title = title;
     }
 
-    /* Bind helper methods to global object "$.tabs" */
-    $.tabs = window.tabs =
+    /* Bind helper methods to global object "$.apps" */
+    $.apps = window.apps =
     {
-        show:       showTab,
-        open:       openTab,
-        hide:       hideTab,
-        toggle:     toggleTab,
-        close:      closeTab,
-        reload:     reloadTab,
-        updateUrl:  updateTabUrl,
-        getGroup:   getGroupFromUrl,
-        getLastTab: getLastTab,
-        openedTabs: openedTabs,
-        groupsMap:  groupsMap
+        show:       showApp,
+        open:       openApp,
+        hide:       hideApp,
+        toggle:     toggleApp,
+        close:      closeApp,
+        reload:     reloadApp,
+        updateUrl:  updateAppUrl,
+        getAppCode: getAppCodeFromUrl,
+        getLastApp: getLastApp,
+        openedApps: openedApps,
+        appsMap:  appsMap
     };
 
     /* Init after current page load */
     $(function()
     {
-        initMenuList();
+        initAppsMenu();
 
         /* Bind events */
-        $(document).on('click', '.open-in-tab,.show-in-tab', function(e)
+        $(document).on('click', '.open-in-app,.show-in-app', function(e)
         {
             var $link = $(this);
-            if($link.is('[data-modal],[data-toggle],[data-tab],.iframe,.not-in-tab')) return;
-            var url = $link.hasClass('show-in-tab') ? '' : ($link.attr('href') || $link.data('url'));
+            if($link.is('[data-modal],[data-toggle],.iframe,.not-in-app')) return;
+            var url = $link.hasClass('show-in-app') ? '' : ($link.attr('href') || $link.data('url'));
             if(url && url.indexOf('onlybody=yes') > 0) return;
-            if(openTab(url, $link.data('group')))
+            if(openApp(url, $link.data('app')))
             {
                 e.preventDefault();
                 if($link.closest('#userNav').length)
@@ -407,19 +408,19 @@
                     setTimeout(function(){$menu.removeClass('hidden')}, 200);
                 }
             }
-        }).on('contextmenu', '.open-in-tab,.show-in-tab', function(event)
+        }).on('contextmenu', '.open-in-app,.show-in-app', function(event)
         {
             var $btn  = $(this);
-            var group = $btn.data('group');
-            if(!group) return;
+            var appCode = $btn.data('app');
+            if(!appCode) return;
 
-            var lang  = window.tabsLang;
-            var tab   = openedTabs[group];
-            var items = [{label: lang.open, disabled: tab && lastOpenedGroup === group, onClick: function(){showTab(group)}}];
-            if(tab)
+            var lang  = window.appsLang;
+            var app   = openedApps[appCode];
+            var items = [{label: lang.open, disabled: app && lastOpenedApp === appCode, onClick: function(){showApp(appCode)}}];
+            if(app)
             {
-                items.push({label: lang.reload, onClick: function(){reloadTab(group)}});
-                if(group !== 'my') items.push({label: lang.close, onClick: function(){closeTab(group)}});
+                items.push({label: lang.reload, onClick: function(){reloadApp(appCode)}});
+                if(appCode !== 'my') items.push({label: lang.close, onClick: function(){closeApp(appCode)}});
             }
 
             var options = {event: event, onClickItem: function(_item, _$item, e){e.preventDefault();}};
@@ -430,7 +431,7 @@
                 if(pos === 'bar')
                 {
                     options.x = bounding.left;
-                    options.y = bounding.top - (group === 'my' ? 65 : 92);
+                    options.y = bounding.top - (appCode === 'my' ? 65 : 92);
                 }
                 else
                 {
@@ -442,14 +443,19 @@
             event.preventDefault();
         });
 
-        /* Redirect or open default tab after document load */
-        var defaultOpenUrl = window.defaultOpen;
-        if(!defaultOpenUrl && location.hash.indexOf('#open=') === 0)
+        window.addEventListener('popstate', function(event)
         {
-            defaultOpenUrl = decodeURIComponent(location.hash.substr(6));
+            if(lastOpenedApp !== event.state.app) openApp(event.state.app);
+        });
+
+        /* Redirect or open default app after document load */
+        var defaultOpenUrl = window.defaultOpen;
+        if(!defaultOpenUrl && location.hash.indexOf('#app=') === 0)
+        {
+            defaultOpenUrl = decodeURIComponent(location.hash.substr(5));
         }
-        if(defaultOpenUrl) openTab(defaultOpenUrl);
-        else openTab(defaultTabGroup);
+        if(defaultOpenUrl) openApp(defaultOpenUrl);
+        else openApp(defaultApp);
     });
 }());
 
@@ -662,17 +668,17 @@ $(function()
 /* Change the search object according to the module and method. */
 function changeSearchObject()
 {
-    var tabInfo = $.tabs.getLastTab();
-    var tabPageModuleName = tabInfo.$iframe[0].contentWindow.config.currentModule;
-    var tabPageMethodName = tabInfo.$iframe[0].contentWindow.config.currentMethod;
+    var appInfo = $.apps.getLastApp();
+    var appPageModuleName = appInfo.$iframe[0].contentWindow.config.currentModule;
+    var appPageMethodName = appInfo.$iframe[0].contentWindow.config.currentMethod;
 
-    var searchType = tabPageModuleName;
-    if(tabPageModuleName == 'product' && tabPageMethodName == 'browse') var searchType = 'story';
+    var searchType = appPageModuleName;
+    if(appPageModuleName == 'product' && appPageMethodName == 'browse') var searchType = 'story';
 
     var projectMethod = 'task|story|bug|build';
-    if(tabPageModuleName == 'project' && projectMethod.indexOf(tabPageMethodName) != -1) var searchType = tabPageMethodName;
+    if(appPageModuleName == 'project' && projectMethod.indexOf(appPageMethodName) != -1) var searchType = appPageMethodName;
 
-    if(tabPageModuleName == 'my' || tabPageModuleName == 'user') var searchType = tabPageMethodName;
+    if(appPageModuleName == 'my' || appPageModuleName == 'user') var searchType = appPageMethodName;
 
     if(searchObjectList.indexOf(',' + searchType + ',') == -1) var searchType = 'bug';
 

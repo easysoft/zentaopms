@@ -27,7 +27,7 @@ class story extends control
         $this->loadModel('user');
         $this->loadModel('action');
 
-        if($this->app->openGroup == 'project') $this->app->rawModule = 'projectstory';
+        if($this->app->openApp == 'project') $this->app->rawModule = 'projectstory';
     }
 
     /**
@@ -851,7 +851,7 @@ class story extends control
         $users        = $this->user->getPairs('noletter');
 
         /* Set the menu. */
-        $from = $this->app->openGroup;
+        $from = $this->app->openApp;
         if($from == 'project')
         {
             $project = $this->dao->findById((int)$this->session->project)->from(TABLE_PROJECT)->fetch();

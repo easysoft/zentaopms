@@ -28,9 +28,9 @@ $lang->company->backyard = '内网';
 $lang->company->guest    = '匿名登录';
 $lang->company->admins   = '管理员';
 
-$lang->company->product = $lang->productCommon;
-$lang->company->project = $lang->executionCommon;
-$lang->company->user    = '用户';
+$lang->company->product   = $lang->productCommon;
+$lang->company->execution = $lang->executionCommon;
+$lang->company->user      = '用户';
 
 $lang->company->guestOptions[0] = '不允许';
 $lang->company->guestOptions[1] = '允许';

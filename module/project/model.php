@@ -390,19 +390,49 @@ class projectModel extends model
     }
 
     /**
-     * Get project pairs.
+     * Get project team member pairs.
      *
-     * @param  int    $projectID
+     * @param  int  $programID
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberPairs($programID = 0)
+    {
+      $projectList = $this->getPairsByProgram($programID);
+      if(!$projectList) return array('' => '');
+
+      $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+          ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+          ->where('t1.root')->in(array_keys($projectList))
+          ->andWhere('t1.type')->eq('project')
+          ->andWhere('t2.deleted')->eq(0)
+          ->fetchAll('account');
+      if(!$users) return array('' => '');
+
+      foreach($users as $account => $user)
+      {
+        $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
+        if(!empty($this->config->isINT)) $firstLetter = '';
+        $users[$account] = $firstLetter . ($user->realname ? $user->realname : $user->account);
+      }
+
+      return array('' => '') + $users;
+    }
+
+    /**
+     * Get project pairs by programID.
+     *
+     * @param  int    $programID
      * @param  status $status    all|wait|doing|suspended|closed|noclosed
      * @access public
      * @return object
      */
-    public function getPairs($projectID = 0, $status = 'all')
+    public function getPairsByProgram($programID = 0, $status = 'all')
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
-            ->beginIF($projectID)->andWhere('parent')->eq($projectID)->fi()
+            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($status != 'all' && $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
@@ -563,7 +593,7 @@ class projectModel extends model
     public function createManageLink($project)
     {
         $link = $project->type == 'project' ? helper::createLink('project', 'browse', "projectID={$project->id}&status=all") : helper::createLink('project', 'index', "projectID={$project->id}", '', '', $project->id);
-        $icon = $project->type == 'project' ? "<i class='icon icon-folder-open-o'></i> " : "<i class='icon icon-project'></i> ";
+        $icon = $project->type == 'project' ? "<i class='icon icon-program'></i> " : "<i class='icon icon-project'></i> ";
         return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
@@ -1077,8 +1107,8 @@ class projectModel extends model
                     }
 
                     $from      = $project->from == 'PRJ' ? 'PRJ' : 'pgmproject';
-                    $openGroup = $project->from == 'PRJ' ? 'project' : 'project';
-                    common::printIcon('project', 'edit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$openGroup", '', $project->id);
+                    $openApp   = $project->from == 'PRJ' ? 'project' : 'project';
+                    common::printIcon('project', 'edit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-app=$openApp", '', $project->id);
                     common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', '', $this->lang->execution->team, $project->id);
                     if($this->config->systemMode == 'new') common::printIcon('project', 'group', "projectID=$project->id&projectID=$projectID", $project, 'list', 'lock', '', '', '', '', '', $project->id);
 
@@ -1087,8 +1117,8 @@ class projectModel extends model
                         echo "<div class='btn-group'>";
                         echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                         echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                        common::printIcon('project', 'manageProducts', "projectID=$project->id&projectID=$projectID&from=$from", $project, 'list', 'link', '', 'btn-action', '', "data-group=$openGroup", $this->lang->project->manageProducts, $project->id);
-                        if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&projectID=$projectID&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-group=$openGroup", '', $project->id);
+                        common::printIcon('project', 'manageProducts', "projectID=$project->id&projectID=$projectID&from=$from", $project, 'list', 'link', '', 'btn-action', '', "data-app=$openApp", $this->lang->project->manageProducts, $project->id);
+                        if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&projectID=$projectID&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-app=$openApp", '', $project->id);
                         if(common::hasPriv('project','delete')) echo html::a(inLink("delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->delete}'");
                         echo "</ul>";
                         echo "</div>";

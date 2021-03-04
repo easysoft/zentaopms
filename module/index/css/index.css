@@ -1,7 +1,7 @@
 body {padding-left: 96px}
 
 #menu {position: fixed; left: 0; top: 0; bottom: 0; background-color: #3C495C; width: 96px; z-index: 1015;}
-#menuNav {position: absolute; top: 0; bottom: 80px; width: 100%;}
+#menuNav {position: absolute; top: 5px; bottom: 80px; width: 100%;}
 #menu .nav > li {float: none; padding: 2px 8px;}
 #menu .nav > li > a {color: #fff; line-height: 20px; padding: 8px 6px; border-radius: 2px; white-space: nowrap;}
 #menu .nav > li > a > .icon {display: inline-block; font-size: 16px;}
@@ -36,12 +36,12 @@ body.menu-hide {padding-left: 0;}
   #executionList {max-height: 270px; min-height: 270px;}
 }
 
-#pages {position: fixed; left: 96px; bottom: 0; right: 0; top: 0;}
-.page-tab {position: absolute; left: 0; bottom: 40px; right: 0; top: 0; background-color: #efefef;}
-.menu-hide #pages {left: 40px}
+#apps {position: fixed; left: 96px; bottom: 0; right: 0; top: 0;}
+.app-container {position: absolute; left: 0; bottom: 40px; right: 0; top: 0; background-color: #efefef;}
+.menu-hide #apps {left: 40px}
 
-#pagesBar {position: fixed; left: 96px; bottom: 0; right: 0; height: 40px; z-index: 1012; background: #fff; border-top: 1px solid #eff1f7;}
-.menu-hide #pagesBar {left: 40px}
+#appsBar {position: fixed; left: 96px; bottom: 0; right: 0; height: 40px; z-index: 1012; background: #fff; border-top: 1px solid #eff1f7;}
+.menu-hide #appsBar {left: 40px}
 #bars {position: absolute; left: 0; top: 0; bottom: 0; padding: 0 5px}
 #bars > li {padding: 8px 5px;}
 #bars > li > a {height: 24px; color: #fff; background: #3c4353; padding: 2px 8px; line-height: 20px; border-radius: 2px;}

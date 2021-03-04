@@ -29,7 +29,7 @@
     </div>
     <div class="main-col">
       <form class='main-table table-members' method='post' target='hiddenwin'>
-        <table class='table table-form'> 
+        <table class='table table-form'>
           <?php if($groupUsers):?>
           <tr>
             <th class='w-140px'>
@@ -60,7 +60,7 @@
           </tr>
           <tr>
             <td class='text-center form-actions' colspan='2'>
-              <?php 
+              <?php
               echo html::submitButton();
               echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
               echo html::hidden('foo'); // Just a var, to make sure $_POST is not empty.

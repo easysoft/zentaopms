@@ -34,7 +34,6 @@ $lang->project->whitelist         = 'Project Whitelist';
 $lang->project->addWhitelist      = 'Project Add Whitelist';
 $lang->project->unbindWhielist    = 'Project Remove Whitelist';
 $lang->project->manageProducts    = 'Manage Products';
-$lang->project->view              = 'Program Detail';
 $lang->project->copyTitle         = 'Please select an project to copy';
 $lang->project->errorSameProducts = 'Project cannot be associated with multiple identical products.';
 $lang->project->errorNoProducts   = 'At least one product is associated';
@@ -42,8 +41,7 @@ $lang->project->copyNoProject     = 'There are no items available to copy.';
 $lang->project->searchByName      = 'Enter the project name to retrieve';
 
 /* Fields. */
-$lang->project->common             = 'Program';
-$lang->project->project            = 'Project';
+$lang->project->common             = 'Project';
 $lang->project->stage              = 'Stage';
 $lang->project->PM                 = 'Manager';
 $lang->project->name               = 'Name';

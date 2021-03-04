@@ -15,14 +15,14 @@ class groupModel extends model
 {
     /**
      * Create a group.
-     * 
+     *
      * @access public
      * @return bool
      */
     public function create()
     {
         $group = fixer::input('post')->get();
-        if(isset($group->limited)) 
+        if(isset($group->limited))
         {
             unset($group->limited);
             $group->role = 'limited';
@@ -32,8 +32,8 @@ class groupModel extends model
 
     /**
      * Update a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
@@ -45,8 +45,8 @@ class groupModel extends model
 
     /**
      * Copy a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
@@ -66,9 +66,9 @@ class groupModel extends model
 
     /**
      * Copy privileges.
-     * 
-     * @param  string    $fromGroup 
-     * @param  string    $toGroup 
+     *
+     * @param  string    $fromGroup
+     * @param  string    $toGroup
      * @access public
      * @return void
      */
@@ -84,9 +84,9 @@ class groupModel extends model
 
     /**
      * Copy user.
-     * 
-     * @param  string    $fromGroup 
-     * @param  string    $toGroup 
+     *
+     * @param  string    $fromGroup
+     * @param  string    $toGroup
      * @access public
      * @return void
      */
@@ -102,32 +102,32 @@ class groupModel extends model
 
     /**
      * Get group lists.
-     * 
+     *
      * @param  int    $projectID
      * @access public
      * @return array
      */
     public function getList($projectID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_GROUP)->where('PRJ')->eq($projectID)->orderBy('id')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_GROUP)->where('project')->eq($projectID)->orderBy('id')->fetchAll();
     }
 
     /**
      * Get group pairs.
-     * 
+     *
      * @param  int    $projectID
      * @access public
      * @return array
      */
     public function getPairs($projectID = 0)
     {
-        return $this->dao->select('id, name')->from(TABLE_GROUP)->where('PRJ')->eq($projectID)->orderBy('id')->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_GROUP)->where('project')->eq($projectID)->orderBy('id')->fetchPairs();
     }
 
     /**
      * Get group by id.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return object
      */
@@ -141,8 +141,8 @@ class groupModel extends model
 
     /**
      * Get group by account.
-     * 
-     * @param  string    $account 
+     *
+     * @param  string    $account
      * @access public
      * @return array
      */
@@ -171,8 +171,8 @@ class groupModel extends model
 
     /**
      * Get privileges of a groups.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return array
      */
@@ -186,8 +186,8 @@ class groupModel extends model
 
     /**
      * Get user pairs of a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return array
      */
@@ -204,14 +204,14 @@ class groupModel extends model
 
     /**
      * Get user programs of a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return array
      */
     public function getUserPrograms($groupID)
     {
-        return $this->dao->select('t1.account, t1.PRJ')
+        return $this->dao->select('t1.account, t1.project')
             ->from(TABLE_USERGROUP)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('`group`')->eq((int)$groupID)
@@ -258,8 +258,8 @@ class groupModel extends model
 
     /**
      * Delete a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @param  null   $null      compatible with that of model::delete()
      * @access public
      * @return void
@@ -396,7 +396,7 @@ class groupModel extends model
 
     /**
      * Update privilege by module.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -420,8 +420,8 @@ class groupModel extends model
 
     /**
      * Update users.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
@@ -455,13 +455,13 @@ class groupModel extends model
     }
 
     /**
-     * Update program admins.
-     * 
-     * @param  int    $groupID 
+     * Update project admins.
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
-    public function updatePRJAdmin($groupID)
+    public function updateProjectAdmin($groupID)
     {
         $this->loadModel('user');
         $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->exec();
@@ -474,10 +474,10 @@ class groupModel extends model
             $data = new stdclass();
             $data->group   = $groupID;
             $data->account = $account;
-            $data->PRJ     = implode($programs[$account], ',');
+            $data->project = implode($programs[$account], ',');
 
             $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
-            foreach($programs[$account] as $programID) 
+            foreach($programs[$account] as $programID)
             {
                 if(!$programID) continue;
                 $this->user->updateUserView($programID, 'program');
@@ -487,10 +487,10 @@ class groupModel extends model
         if(!dao::isError()) return true;
         return false;
     }
-    
+
     /**
      * Sort resource.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -511,7 +511,7 @@ class groupModel extends model
         {
             $this->lang->resource->$key = $resource;
         }
-        
+
         /* sort methodOrder. */
         foreach($this->lang->resource as $moduleName => $resources)
         {
@@ -577,9 +577,9 @@ class groupModel extends model
 
     /**
      * Judge an action is clickable or not.
-     * 
-     * @param  object $group 
-     * @param  string $action 
+     *
+     * @param  object $group
+     * @param  string $action
      * @static
      * @access public
      * @return bool
@@ -588,8 +588,8 @@ class groupModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'manageview' and $group->role == 'limited') return false; 
-        if($action == 'copy' and $group->role == 'limited') return false; 
+        if($action == 'manageview' and $group->role == 'limited') return false;
+        if($action == 'copy' and $group->role == 'limited') return false;
 
         return true;
     }

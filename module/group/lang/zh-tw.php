@@ -21,7 +21,7 @@ $lang->group->managePrivByGroup  = '權限維護';
 $lang->group->managePrivByModule = '按模組分配權限';
 $lang->group->byModuleTips       = '<span class="tips">（可以按住Shift或者Ctrl鍵進行多選）</span>';
 $lang->group->manageMember       = '成員維護';
-$lang->group->managePRJAdmin     = '維護項目管理員';
+$lang->group->manageProjectAdmin = '維護項目管理員';
 $lang->group->confirmDelete      = '您確定刪除該用戶分組嗎？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '沒有保存，請確認選擇了權限數據。';

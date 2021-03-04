@@ -24,7 +24,7 @@
         <div class='col-sm-4'>
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->execution->common;?></span>
-            <?php echo html::select('project', $projects, $project, "class='form-control chosen' onchange='changeParams(this)'");?>
+            <?php echo html::select('execution', $executions, $execution, "class='form-control chosen' onchange='changeParams(this)'");?>
           </div>
         </div>
       </div>
@@ -71,7 +71,7 @@
               </tr>
             <?php endforeach;?>
             </tbody>
-          </table> 
+          </table>
         </div>
       </div>
     </div>

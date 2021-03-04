@@ -3,10 +3,10 @@ $lang->index->common = 'Accueil';
 $lang->index->index  = 'Accueil';
 $lang->index->search = 'Please input';
 
-$lang->index->tab = new stdClass();
-$lang->index->tab->open   = 'Open';
-$lang->index->tab->reload = 'Reload';
-$lang->index->tab->close  = 'Close';
+$lang->index->app = new stdClass();
+$lang->index->app->open   = 'Open';
+$lang->index->app->reload = 'Reload';
+$lang->index->app->close  = 'Close';
 
 $lang->index->upgradeVersion = 'New version of Zen Tao';
 $lang->index->currentVersion = 'Current Version';

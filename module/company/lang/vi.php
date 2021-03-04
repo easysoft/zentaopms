@@ -28,9 +28,9 @@ $lang->company->backyard = 'Intranet';
 $lang->company->guest    = 'Khách truy cập';
 $lang->company->admins   = 'Quản trị viên';
 
-$lang->company->product = $lang->productCommon;
-$lang->company->project = $lang->executionCommon;
-$lang->company->user    = 'Người dùng';
+$lang->company->product   = $lang->productCommon;
+$lang->company->execution = $lang->executionCommon;
+$lang->company->user      = 'Người dùng';
 
 $lang->company->guestOptions[0] = 'Từ chối';
 $lang->company->guestOptions[1] = 'Cho phép';

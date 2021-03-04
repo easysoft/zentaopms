@@ -89,15 +89,15 @@ class reportModel extends model
     }
 
     /**
-     * Get projects.
+     * Get executons.
      *
      * @access public
      * @return void
      */
-    public function getProjects($begin = 0, $end = 0)
+    public function getExecutons($begin = 0, $end = 0)
     {
-        $tasks = $this->dao->select('t1.*,t2.name as projectName')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+        $tasks = $this->dao->select('t1.*,t2.name as executonName')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.executon = t2.id')
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
@@ -109,23 +109,23 @@ class reportModel extends model
             ->orderBy('t2.end_desc')
             ->fetchAll();
 
-        $projects = array();
+        $executons = array();
         foreach($tasks as $task)
         {
-            $projectID = $task->project;
-            if(!isset($projects[$projectID]))
+            $executonID = $task->executon;
+            if(!isset($executons[$executonID]))
             {
-                $projects[$projectID] = new stdclass();
-                $projects[$projectID]->estimate = 0;
-                $projects[$projectID]->consumed = 0;
+                $executons[$executonID] = new stdclass();
+                $executons[$executonID]->estimate = 0;
+                $executons[$executonID]->consumed = 0;
             }
 
-            $projects[$projectID]->name      = $task->projectName;
-            $projects[$projectID]->estimate += $task->estimate;
-            $projects[$projectID]->consumed += $task->consumed;
+            $executons[$executonID]->name      = $task->executonName;
+            $executons[$executonID]->estimate += $task->estimate;
+            $executons[$executonID]->consumed += $task->consumed;
         }
 
-        return $projects;
+        return $executons;
     }
 
     /**
@@ -226,10 +226,12 @@ class reportModel extends model
      *
      * @param  int    $begin
      * @param  int    $end
+     * @param  int    $product
+     * @param  int    $execution
      * @access public
      * @return array
      */
-    public function getBugs($begin, $end, $product, $project)
+    public function getBugs($begin, $end, $product, $execution)
     {
         $end = date('Ymd', strtotime("$end +1 day"));
         $bugs = $this->dao->select('id, resolution, openedBy, status')->from(TABLE_BUG)
@@ -237,7 +239,7 @@ class reportModel extends model
             ->andWhere('openedDate')->ge($begin)
             ->andWhere('openedDate')->le($end)
             ->beginIF($product)->andWhere('product')->eq($product)->fi()
-            ->beginIF($project)->andWhere('project')->eq($project)->fi()
+            ->beginIF($execution)->andWhere('execution')->eq($execution)->fi()
             ->fetchAll();
 
         $bugCreate = array();
@@ -279,27 +281,27 @@ class reportModel extends model
         if($assign == 'noassign')
         {
             $members = $this->dao->select('t1.account,t2.name,t1.root')->from(TABLE_TEAM)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id = t1.root')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t2.id = t1.root')
                 ->where('t2.status')->notin('cancel, closed, done, suspended')
                 ->beginIF($dept)->andWhere('t1.account')->in(array_keys($deptUsers))->fi()
-                ->andWhere('t1.type')->eq('project')
-                ->andWhere("t1.account NOT IN(SELECT `assignedTo` FROM " . TABLE_TASK . " WHERE `project` = t1.`root` AND `status` NOT IN('cancel, closed, done, pause') AND assignedTo != '' GROUP BY assignedTo)")
+                ->andWhere('t1.type')->eq('execution')
+                ->andWhere("t1.account NOT IN(SELECT `assignedTo` FROM " . TABLE_TASK . " WHERE `execution` = t1.`root` AND `status` NOT IN('cancel, closed, done, pause') AND assignedTo != '' GROUP BY assignedTo)")
                 ->fetchGroup('account', 'name');
 
             $workload = array();
             if(!empty($members))
             {
-                foreach($members as $member => $projects)
+                foreach($members as $member => $executions)
                 {
-                    if(!empty($projects))
+                    if(!empty($executions))
                     {
-                        foreach($projects as $name => $project)
+                        foreach($executions as $name => $execution)
                         {
-                            $workload[$member]['task'][$name]['count']     = 0;
-                            $workload[$member]['task'][$name]['manhour']   = 0;
-                            $workload[$member]['task'][$name]['projectID'] = $project->root;
-                            $workload[$member]['total']['count']           = 0;
-                            $workload[$member]['total']['manhour']         = 0;
+                            $workload[$member]['task'][$name]['count']       = 0;
+                            $workload[$member]['task'][$name]['manhour']     = 0;
+                            $workload[$member]['task'][$name]['executionID'] = $execution->root;
+                            $workload[$member]['total']['count']             = 0;
+                            $workload[$member]['total']['manhour']           = 0;
                         }
                     }
                 }
@@ -307,8 +309,8 @@ class reportModel extends model
             return $workload;
         }
 
-        $stmt = $this->dao->select('t1.*, t2.name as projectName')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+        $stmt = $this->dao->select('t1.*, t2.name as executionName')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->in('wait,doing')
             ->andWhere('t2.deleted')->eq(0)
@@ -365,9 +367,9 @@ class reportModel extends model
                 foreach($userTasks as $task)
                 {
                     if(isset($parents[$task->id])) continue;
-                    $workload[$user]['task'][$task->projectName]['count']     = isset($workload[$user]['task'][$task->projectName]['count']) ? $workload[$user]['task'][$task->projectName]['count'] + 1 : 1;
-                    $workload[$user]['task'][$task->projectName]['manhour']   = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->left : $task->left;
-                    $workload[$user]['task'][$task->projectName]['projectID'] = $task->project;
+                    $workload[$user]['task'][$task->executionName]['count']       = isset($workload[$user]['task'][$task->executionName]['count']) ? $workload[$user]['task'][$task->executionName]['count'] + 1 : 1;
+                    $workload[$user]['task'][$task->executionName]['manhour']     = isset($workload[$user]['task'][$task->executionName]['manhour']) ? $workload[$user]['task'][$task->executionName]['manhour'] + $task->left : $task->left;
+                    $workload[$user]['task'][$task->executionName]['executionID'] = $task->execution;
                     $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count'] + 1 : 1;
                     $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
@@ -464,7 +466,7 @@ class reportModel extends model
     {
         return $this->dao->select('t1.id, t1.name, t2.account as user, t1.deadline')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.assignedTo = t2.account')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->where('t1.assignedTo')->ne('')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
@@ -520,9 +522,9 @@ class reportModel extends model
 
     /**
      * Get user login count in this year.
-     * 
+     *
      * @param  array  $accounts
-     * @param  int    $year 
+     * @param  int    $year
      * @access public
      * @return int
      */
@@ -533,9 +535,9 @@ class reportModel extends model
 
     /**
      * Get user action count in this year.
-     * 
-     * @param  array  $accounts 
-     * @param  int    $year 
+     *
+     * @param  array  $accounts
+     * @param  int    $year
      * @access public
      * @return int
      */
@@ -549,9 +551,9 @@ class reportModel extends model
 
     /**
      * Get user contributions in this year.
-     * 
-     * @param  array  $accounts 
-     * @param  int    $year 
+     *
+     * @param  array  $accounts
+     * @param  int    $year
      * @access public
      * @return array
      */
@@ -599,9 +601,9 @@ class reportModel extends model
 
     /**
      * Get user todo stat in this year.
-     * 
+     *
      * @param  array  $accounts
-     * @param  int    $year 
+     * @param  int    $year
      * @access public
      * @return object
      */
@@ -615,7 +617,7 @@ class reportModel extends model
 
     /**
      * Get user effort stat in this error.
-     * 
+     *
      * @param  array  $accounts
      * @param  int    $year
      * @access public
@@ -634,9 +636,9 @@ class reportModel extends model
 
     /**
      * Get count of created story,plan and finished story by accounts every product in this year.
-     * 
+     *
      * @param  array  $accounts
-     * @param  int    $year 
+     * @param  int    $year
      * @access public
      * @return array
      */
@@ -734,17 +736,17 @@ class reportModel extends model
     }
 
     /**
-     * Get count of finished task, story and resolved bug by accounts every projects in this year.
-     * 
+     * Get count of finished task, story and resolved bug by accounts every executions in this year.
+     *
      * @param  array  $accounts
-     * @param  int    $year 
+     * @param  int    $year
      * @access public
      * @return array
      */
-    public function getUserYearProjects($accounts, $year)
+    public function getUserYearExecutions($accounts, $year)
     {
-        /* Get changed projects in this year. */
-        $projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('deleted')->eq(0)
+        /* Get changed executions in this year. */
+        $executions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq(0)
             ->andWhere('LEFT(begin, 4)', true)->eq($year)
             ->orWhere('LEFT(end, 4)')->eq($year)
             ->markRight(1)
@@ -759,67 +761,67 @@ class reportModel extends model
             ->orderBy('`order` desc')
             ->fetchAll('id');
 
-        $teamProjects = $this->dao->select('*')->from(TABLE_TEAM)
-            ->where('type')->eq('project')
+        $teamExecutions = $this->dao->select('*')->from(TABLE_TEAM)
+            ->where('type')->eq('execution')
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->andWhere('LEFT(`join`, 4)')->eq($year)
             ->fetchPairs('root', 'root');
-        $taskProjects = $this->dao->select('project')->from(TABLE_TASK)
+        $taskExecutions = $this->dao->select('execution')->from(TABLE_TASK)
             ->where('LEFT(finishedDate, 4)')->eq($year)
             ->andWhere('deleted')->eq(0)
             ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
-            ->fetchPairs('project', 'project');
-        if($teamProjects or $taskProjects)
+            ->fetchPairs('execution', 'execution');
+        if($teamExecutions or $taskExecutions)
         {
-            $projects += $this->dao->select('id,name')->from(TABLE_PROJECT)
-                ->where('id')->in($teamProjects + $taskProjects)
+            $executions += $this->dao->select('id,name')->from(TABLE_EXECUTION)
+                ->where('id')->in($teamExecutions + $taskExecutions)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('`order` desc')
                 ->fetchAll('id');
         }
 
         /* Get count of finished task, story and resolved bug in this year. */
-        $taskStats = $this->dao->select('project, count(*) as finishedTask, sum(if((story != 0), 1, 0)) as finishedStory')->from(TABLE_TASK)
-            ->where('project')->in(array_keys($projects))
+        $taskStats = $this->dao->select('execution, count(*) as finishedTask, sum(if((story != 0), 1, 0)) as finishedStory')->from(TABLE_TASK)
+            ->where('execution')->in(array_keys($executions))
             ->andWhere('finishedBy')->ne('')
             ->andWhere('LEFT(finishedDate, 4)')->eq($year)
             ->andWhere('deleted')->eq(0)
             ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
-            ->groupBy('project')
-            ->fetchAll('project');
-        $resolvedBugs = $this->dao->select('t2.project, count(*) as count')->from(TABLE_BUG)->alias('t1')
+            ->groupBy('execution')
+            ->fetchAll('execution');
+        $resolvedBugs = $this->dao->select('t2.execution, count(*) as count')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.resolvedBuild=t2.id')
-            ->where('t2.project')->in(array_keys($projects))
+            ->where('t2.execution')->in(array_keys($executions))
             ->andWhere('t1.resolvedBy')->ne('')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('LEFT(t1.resolvedDate, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('t1.resolvedBy')->in($accounts)->fi()
-            ->groupBy('t2.project')
-            ->fetchAll('project');
+            ->groupBy('t2.execution')
+            ->fetchAll('execution');
 
-        foreach($projects as $projectID => $project)
+        foreach($executions as $executionID => $execution)
         {
-            $project->task  = 0;
-            $project->story = 0;
-            $project->bug   = 0;
+            $execution->task  = 0;
+            $execution->story = 0;
+            $execution->bug   = 0;
 
-            $taskStat = zget($taskStats, $projectID, '');
+            $taskStat = zget($taskStats, $executionID, '');
             if($taskStat)
             {
-                $project->task  = $taskStat->finishedTask;
-                $project->story = $taskStat->finishedStory;
+                $execution->task  = $taskStat->finishedTask;
+                $execution->story = $taskStat->finishedStory;
             }
 
-            $resolvedBug = zget($resolvedBugs, $projectID, '');
-            if($resolvedBug) $project->bug = $resolvedBug->count;
+            $resolvedBug = zget($resolvedBugs, $executionID, '');
+            if($resolvedBug) $execution->bug = $resolvedBug->count;
         }
 
-        return $projects;
+        return $executions;
     }
 
     /**
-     * Get status stat that is all time, include story, task and bug. 
-     * 
+     * Get status stat that is all time, include story, task and bug.
+     *
      * @access public
      * @return array
      */
@@ -835,9 +837,9 @@ class reportModel extends model
 
     /**
      * Get year object stat, include status and action stat
-     * 
-     * @param  array  $accounts 
-     * @param  string $year 
+     *
+     * @param  array  $accounts
+     * @param  string $year
      * @param  string $objectType   story|task|bug
      * @access public
      * @return array
@@ -890,9 +892,9 @@ class reportModel extends model
 
     /**
      * Get year case stat, include result and action stat.
-     * 
-     * @param  array  $accounts 
-     * @param  string $year 
+     *
+     * @param  array  $accounts
+     * @param  string $year
      * @access public
      * @return array
      */
@@ -961,8 +963,8 @@ class reportModel extends model
 
     /**
      * Get year months.
-     * 
-     * @param  string $year 
+     *
+     * @param  string $year
      * @access public
      * @return array
      */
@@ -976,9 +978,9 @@ class reportModel extends model
 
     /**
      * Get status vverview.
-     * 
-     * @param  string $objectType 
-     * @param  array  $statusStat 
+     *
+     * @param  string $objectType
+     * @param  array  $statusStat
      * @access public
      * @return string
      */
