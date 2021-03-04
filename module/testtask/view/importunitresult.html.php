@@ -22,18 +22,18 @@
     <form method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo $lang->testtask->project;?></th>
-          <td class='w-p35-f'><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></td><td></td>
+          <th class='w-80px'><?php echo $lang->testtask->execution;?></th>
+          <td class='w-p35-f'><?php echo html::select('execution', $executions, '', "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></td><td></td>
         </tr>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->build;?></th>
           <td class='w-p35-f'>
             <div class='input-group' id='buildBox'>
             <?php echo html::select('build', empty($builds) ? '' : $builds, '', "class='form-control chosen'");?>
-            <?php if(isset($projectID) and $projectID and empty($builds)):?>
-            <span class='input-group-addon'><?php echo html::a(helper::createLink('build', 'create', "projectID=$projectID", '', true), $lang->build->create, '', "data-toggle='modal' data-type='iframe' data-width='95%'")?> </span>
+            <?php if(isset($executionID) and $executionID and empty($builds)):?>
+            <span class='input-group-addon'><?php echo html::a(helper::createLink('build', 'create', "executionID=$executionID", '', true), $lang->build->create, '', "data-toggle='modal' data-type='iframe' data-width='95%'")?> </span>
             </div>
-            <div class='hidden'><?php echo '&nbsp; ' .  html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProjectBuilds($projectID)'");?></div>
+            <div class='hidden'><?php echo '&nbsp; ' .  html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadExecutionBuilds($executionID)'");?></div>
             <?php endif;?>
           </td>
           <td></td>

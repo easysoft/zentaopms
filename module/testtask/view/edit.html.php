@@ -25,10 +25,10 @@
     <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo $lang->testtask->project;?></th>
+          <th class='w-80px'><?php echo $lang->testtask->execution;?></th>
           <td class='w-p35-f'>
           <?php
-          echo html::select('project', $projects, $task->project, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");
+          echo html::select('execution', $executions, $task->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");
           echo html::hidden('product', $task->product);
           ?>
           </td>

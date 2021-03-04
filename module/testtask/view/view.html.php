@@ -79,8 +79,8 @@
           <table class="table table-data table-fixed">
             <?php $isOnlybody = helper::inOnlyBodyMode(); ?>
             <tr>
-              <th class='w-60px'><?php echo $lang->testtask->project;?></th>
-              <td><?php echo $isOnlybody ? $task->projectName : html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName, '', "title='{$task->projectName}'");?></td>
+              <th class='w-60px'><?php echo $lang->testtask->execution;?></th>
+              <td><?php echo $isOnlybody ? $task->executionName : html::a($this->createLink('execution', 'story', "executionID=$task->execution"), $task->executionName, '', "title='{$task->executionName}'");?></td>
             </tr>
             <tr>
               <th><?php echo $lang->testtask->build;?></th>

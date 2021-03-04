@@ -1,17 +1,17 @@
 /**
- * Load project related builds
- * 
+ * Load execution related builds
+ *
  * @access public
  * @return void
  */
 function loadProductRelated()
 {
-    loadProjectBuilds(parseInt($('#project').val()));
+    loadExecutionBuilds(parseInt($('#execution').val()));
 }
 
 /* If the mouse hover over the manage contacts button, give tip. */
 $(function()
 {
     adjustPriBoxWidth();
-    if($('#project').val()) loadProjectBuilds($('#project').val());
+    if($('#execution').val()) loadExecutionBuilds($('#execution').val());
 });

@@ -216,7 +216,7 @@ class testreport extends control
             if($projectID != $objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $project = $this->project->getById($projectID);
-            $tasks   = $this->testtask->getProjectTasks($projectID);
+            $tasks   = $this->testtask->getExecutionTasks($projectID);
             $owners  = array();
             $buildIdList   = array();
             $productIdList = array();
@@ -392,7 +392,7 @@ class testreport extends control
 
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
-        
+
         $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $cases, $begin, $end);
         $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $begin, $end);
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
@@ -408,12 +408,12 @@ class testreport extends control
     /**
      * View report.
      *
-     * @param  int    $reportID 
-     * @param  string $from 
-     * @param  string $tab 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * @param  int    $reportID
+     * @param  string $from
+     * @param  string $tab
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */

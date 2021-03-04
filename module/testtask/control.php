@@ -38,7 +38,7 @@ class testtask extends control
         parent::__construct($moduleName, $methodName);
 
         /* Set testtask menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if(!$this->projectID)
         {
             $this->app->loadConfig('qa');
@@ -122,13 +122,13 @@ class testtask extends control
 
     /**
      * Browse unit tasks.
-     * 
-     * @param  int    $productID 
-     * @param  string $browseType 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -171,10 +171,12 @@ class testtask extends control
      * Create a test task.
      *
      * @param  int    $productID
+     * @param  int    $executionID
+     * @param  int    $build
      * @access public
      * @return void
      */
-    public function create($productID, $projectID = 0, $build = 0)
+    public function create($productID, $executionID = 0, $build = 0)
     {
         if(!empty($_POST))
         {
@@ -187,10 +189,10 @@ class testtask extends control
         }
 
         /* Create testtask from testtask of test.*/
-        $productID = $productID ? $productID : key($this->products);
-        $projectID = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->PRJ;
-        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $productID  = $productID ? $productID : key($this->products);
+        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
+        $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
         /* Set menu. */
         $productID  = $this->product->saveState($productID, $this->products);
@@ -201,11 +203,11 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->create;
 
-        $this->view->projects  = $projects;
-        $this->view->productID = $productID;
-        $this->view->builds    = $builds;
-        $this->view->build     = $build;
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
+        $this->view->executions = $executions;
+        $this->view->productID  = $productID;
+        $this->view->builds     = $builds;
+        $this->view->build      = $build;
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
 
         $this->display();
     }
@@ -224,8 +226,8 @@ class testtask extends control
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* When the session changes, you need to query the related products again. */
-        if($this->session->PRJ != $task->PRJ) $this->view->products = $this->products = $this->product->getProductPairsByProject($task->PRJ);
-        $this->session->PRJ = $task->PRJ;
+        if($this->session->project != $task->project) $this->view->products = $this->products = $this->product->getProductPairsByProject($task->project);
+        $this->session->project = $task->project;
 
         $productID = $task->product;
         $buildID   = $task->build;
@@ -264,9 +266,9 @@ class testtask extends control
 
     /**
      * Browse unit cases.
-     * 
-     * @param  int    $taskID 
-     * @param  string $orderBy 
+     *
+     * @param  int    $taskID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -286,7 +288,7 @@ class testtask extends control
 
         /* Load lang. */
         $this->app->loadLang('testtask');
-        $this->app->loadLang('project');
+        $this->app->loadLang('execution');
 
         /* Get test cases. */
         $runs = $this->testtask->getRuns($taskID, 0, $orderBy);
@@ -363,7 +365,7 @@ class testtask extends control
         /* Load modules. */
         $this->loadModel('datatable');
         $this->loadModel('testcase');
-        $this->loadModel('project');
+        $this->loadModel('execution');
 
         /* Save the session. */
         $this->session->set('caseList', $this->app->getURI(true));
@@ -399,11 +401,11 @@ class testtask extends control
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
-        /* Get project type and set assignedToList. */
-        $project = $this->project->getById($task->project);
-        if($project->acl == 'private')
+        /* Get execution type and set assignedToList. */
+        $execution = $this->execution->getById($task->execution);
+        if($execution->acl == 'private')
         {
-            $assignedToList = $this->project->getTeamMemberPairs($project->id, 'nodeleted');
+            $assignedToList = $this->execution->getTeamMemberPairs($execution->id, 'nodeleted');
         }
         else
         {
@@ -523,7 +525,7 @@ class testtask extends control
     {
         /* Save the session. */
         $this->loadModel('testcase');
-        $this->app->loadLang('project');
+        $this->app->loadLang('execution');
         $this->app->loadLang('task');
         $this->session->set('caseList', $this->app->getURI(true));
 
@@ -621,13 +623,13 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->edit;
 
         /* Create testtask from testtask of test.*/
-        $productID = $productID ? $productID : key($this->products);
-        $projectID = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->PRJ;
-        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $productID  = $productID ? $productID : key($this->products);
+        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
+        $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
         $this->view->task         = $task;
-        $this->view->projects     = $projects;
+        $this->view->executions   = $executions;
         $this->view->builds       = $builds;
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
@@ -699,7 +701,7 @@ class testtask extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent')); 
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
 
@@ -1091,7 +1093,7 @@ class testtask extends control
 
         /* If case has changed and not confirmed, remove it. */
         if($from == 'testtask')
-        {    
+        {
             $runs = $this->dao->select('`case`, version')->from(TABLE_TESTRUN)
                 ->where('`case`')->in($caseIDList)
                 ->andWhere('task')->eq($taskID)
@@ -1134,7 +1136,7 @@ class testtask extends control
             $results = $this->testtask->getResults($runID);
 
             $testtaskID = $this->dao->select('task')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('task');
-            $testtask   = $this->dao->select('id, build, project, product')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
+            $testtask   = $this->dao->select('id, build, execution, product')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
 
             $this->view->testtask = $testtask;
         }
@@ -1172,8 +1174,8 @@ class testtask extends control
 
     /**
      * Import unit results.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -1192,19 +1194,19 @@ class testtask extends control
 
         $this->app->loadLang('job');
 
-        $productID = $productID ? $productID : key($this->products);
-        $projectID = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->PRJ;
-        $projects  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds    = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
+        $productID  = $productID ? $productID : key($this->products);
+        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
+        $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->testtask->importUnitResult;
 
-        $this->view->projects  = $projects;
-        $this->view->builds    = $builds;
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
-        $this->view->productID = $productID;
+        $this->view->executions = $executions;
+        $this->view->builds     = $builds;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
+        $this->view->productID  = $productID;
         $this->display();
     }
 
@@ -1233,13 +1235,13 @@ class testtask extends control
      * Ajax get test tasks.
      *
      * @param  int    $productID
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function ajaxGetTestTasks($productID, $projectID = 0)
+    public function ajaxGetTestTasks($productID, $executionID = 0)
     {
-        $pairs = $this->testtask->getPairs($productID, $projectID);
+        $pairs = $this->testtask->getPairs($productID, $executionID);
         die(html::select('testtask', $pairs, '', "class='form-control chosen'"));
     }
 }

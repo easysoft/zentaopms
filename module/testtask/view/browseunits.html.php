@@ -41,12 +41,12 @@
     <thead>
     <?php $vars = "productID=$productID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <tr>
-        <th class='c-id text-left'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
-        <th class='w-300px text-left'><?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
-        <th class='text-left'>        <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
-        <th class='text-left'>        <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
-        <th class='c-user text-left'> <?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
-        <th class='w-90px text-left'> <?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->execTime);?></th>
+        <th class='c-id text-left'>   <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
+        <th class='w-300px text-left'><?php common::printOrderLink('name',      $orderBy, $vars, $lang->testtask->name);?></th>
+        <th class='text-left'>        <?php common::printOrderLink('execution', $orderBy, $vars, $lang->testtask->execution);?></th>
+        <th class='text-left'>        <?php common::printOrderLink('build',     $orderBy, $vars, $lang->testtask->build);?></th>
+        <th class='c-user text-left'> <?php common::printOrderLink('owner',     $orderBy, $vars, $lang->testtask->owner);?></th>
+        <th class='w-90px text-left'> <?php common::printOrderLink('begin',     $orderBy, $vars, $lang->testtask->execTime);?></th>
         <th class='w-50px text-center'><?php echo $lang->testtask->caseCount;?></th>
         <th class='w-40px text-center'><?php echo $lang->testtask->passCount;?></th>
         <th class='w-40px text-center'><?php echo $lang->testtask->failCount;?></th>
@@ -58,7 +58,7 @@
     <tr class='text-left'>
       <td><?php printf('%03d', $task->id);?></td>
       <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('unitCases', "taskID=$task->id"), $task->name);?></td>
-      <td class='c-name' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
+      <td class='c-name' title="<?php echo $task->executionName?>"><?php echo $task->executionName?></td>
       <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName);?></td>
       <td><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>

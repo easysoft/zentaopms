@@ -28,7 +28,7 @@ class testtaskModel extends model
 
         if($testtask and $this->app->viewType != 'mhtml')
         {
-            $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'), 0, 0, $this->session->PRJ);
+            $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'), 0, 0, $this->session->project);
             if(!isset($testtasks[$testtask])) $testtasks[$testtask] = $this->getById($testtask);
 
             $selectHtml .= "<div class='btn-group angle-btn'>";
@@ -76,11 +76,11 @@ class testtaskModel extends model
 
     /**
      * Set unit menu.
-     * 
-     * @param  array  $products 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  int    $testtask 
+     *
+     * @param  array  $products
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $testtask
      * @access public
      * @return void
      */
@@ -155,7 +155,7 @@ class testtaskModel extends model
     {
         $task = fixer::input('post')
             ->setDefault('build', '')
-            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa', 'project', $this->session->project)
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('uid,contactListMenu')
@@ -195,15 +195,15 @@ class testtaskModel extends model
     {
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
 
-        return $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
+        return $this->dao->select("t1.*, t2.name AS productName, t3.name AS executionName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project and t1.product = t5.product')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.execution = t5.project and t1.product = t5.product')
 
             ->where('t1.deleted')->eq(0)
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.auto')->ne('unit')
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
@@ -220,11 +220,11 @@ class testtaskModel extends model
 
     /**
      * Get product unit tasks.
-     * 
-     * @param  int    $productID 
-     * @param  string $browseType 
-     * @param  string $orderBy 
-     * @param  int    $pager 
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $pager
      * @access public
      * @return void
      */
@@ -232,14 +232,14 @@ class testtaskModel extends model
     {
         $beginAndEnd = $this->loadModel('action')->computeBeginAndEnd($browseType);
         if($browseType == 'newest') $orderBy = 'end_desc,' . $orderBy;
-        $tasks = $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName")
+        $tasks = $this->dao->select("t1.*, t2.name AS productName, t3.name AS executionName, t4.name AS buildName")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.auto')->eq('unit')
             ->beginIF($browseType != 'all' and $browseType != 'newest' and $beginAndEnd)
             ->andWhere('t1.end')->ge($beginAndEnd['begin'])
@@ -271,20 +271,20 @@ class testtaskModel extends model
     }
 
     /**
-     * Get test tasks of a project.
+     * Get test tasks of a execution.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectTasks($projectID, $orderBy = 'id_desc', $pager = null)
+    public function getExecutionTasks($executionID, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name AS buildName')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
-            ->where('t1.project')->eq((int)$projectID)
+            ->where('t1.execution')->eq((int)$execution)
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
@@ -296,17 +296,17 @@ class testtaskModel extends model
      * Get testtask pairs.
      *
      * @param  int    $productID
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  string $appendIdList
      * @param  string $params         noempty
      * @access public
      * @return array
      */
-    public function getPairs($productID, $projectID = 0, $appendIdList = '', $params = '')
+    public function getPairs($productID, $executionID = 0, $appendIdList = '', $params = '')
     {
         $pairs = $this->dao->select('id,name')->from(TABLE_TESTTASK)
             ->where('product')->eq((int)$productID)
-            ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
+            ->beginIF($executionID)->andWhere('execution')->eq((int)$executionID)->fi()
             ->andWhere('auto')->ne('unit')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id_desc')
@@ -344,16 +344,16 @@ class testtaskModel extends model
         if($task)
         {
             $product = $this->dao->select('name,type')->from(TABLE_PRODUCT)->where('id')->eq($task->product)->fetch();
-            $task->productName = $product->name;
-            $task->productType = $product->type;
-            $task->branch      = 0;
-            $task->projectName = '';
-            $task->buildName   = '';
+            $task->productName   = $product->name;
+            $task->productType   = $product->type;
+            $task->branch        = 0;
+            $task->executionName = '';
+            $task->buildName     = '';
 
-            if($task->project)
+            if($task->execution)
             {
-                $task->projectName = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($task->project)->fetch('name');
-                $task->branch      = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($task->project)->andWhere('product')->eq($task->product)->fetch('branch');
+                $task->executionName = $this->dao->select('name')->from(TABLE_EXECUTION)->where('id')->eq($task->exection)->fetch('name');
+                $task->branch        = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($task->exection)->andWhere('product')->eq($task->product)->fetch('branch');
             }
 
             $build = $this->dao->select('branch,name')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
@@ -380,9 +380,9 @@ class testtaskModel extends model
      */
     public function getByUser($account, $pager = null, $orderBy = 'id_desc', $type = '')
     {
-        return $this->dao->select('t1.*, t2.name AS projectName, t3.name AS buildName')
+        return $this->dao->select('t1.*, t2.name AS executionName, t3.name AS buildName')
             ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
@@ -455,7 +455,7 @@ class testtaskModel extends model
     {
         return $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('id')->notIN($linkedCases)
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
+                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('status')->ne('wait')
                 ->andWhere('type')->ne('unit')
                 ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
@@ -484,7 +484,7 @@ class testtaskModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where($query)
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
+                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
@@ -517,7 +517,7 @@ class testtaskModel extends model
         if($bugs)
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
+                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
@@ -550,7 +550,7 @@ class testtaskModel extends model
         return $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
                 ->where($query)
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
+                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
                 ->andWhere('t2.suite')->eq((int)$suite)
                 ->andWhere('t1.product')->eq($productID)
                 ->andWhere('status')->ne('wait')
@@ -585,7 +585,7 @@ class testtaskModel extends model
             ->where($query)
             ->andWhere('t1.id')->notin($linkedCases)
             ->andWhere('t2.task')->eq($testTask)
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.status')->ne('wait')
             ->page($pager)
             ->fetchAll();
@@ -711,9 +711,9 @@ class testtaskModel extends model
 
     /**
      * Get bug info.
-     * 
-     * @param  int    $taskID 
-     * @param  int    $productID 
+     *
+     * @param  int    $taskID
+     * @param  int    $productID
      * @access public
      * @return array
      */
@@ -1108,27 +1108,27 @@ class testtaskModel extends model
      * @param  int    $limit
      * @param  string $status all|wait|doing|done|blocked
      * @param  array $skipProductIDList
-     * @param  array $skipProjectIDList
+     * @param  array $skipExecutionIDList
      * @access public
      * @return array
      */
-    public function getUserTestTaskPairs($account, $limit = 0, $status = 'all', $skipProductIDList = array(), $skipProjectIDList = array())
+    public function getUserTestTaskPairs($account, $limit = 0, $status = 'all', $skipProductIDList = array(), $skipExecutionIDList = array())
     {
-        $stmt = $this->dao->select('t1.id, t1.name, t2.name as project')
+        $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
             ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.PRJ = t2.id')
+            ->leftjoin(TABLE_EXTENSION)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.owner')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
-            ->beginIF(!empty($skipProjectIDList))->andWhere('t1.PRJ')->notin($skipProjectIDList)->fi()
+            ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.exection')->notin($skipExecutionIDList)->fi()
             ->beginIF($limit)->limit($limit)->fi()
             ->query();
 
         $testtaskPairs = array();
         while($testtask = $stmt->fetch())
         {
-            $testtaskPairs[$testtask->id] = $testtask->project . ' / ' . $testtask->name;
+            $testtaskPairs[$testtask->id] = $testtask->execution . ' / ' . $testtask->name;
         }
         return $testtaskPairs;
     }
@@ -1575,7 +1575,7 @@ class testtaskModel extends model
                     break;
                 }
 
-                common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
+                common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=executionID=$task->execution,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
 
                 common::printIcon('testtask', 'results', "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
                 common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', '', '', 'runCase iframe', false, "data-width='95%'");
@@ -1696,8 +1696,8 @@ class testtaskModel extends model
 
     /**
      * Import unit results.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return string
      */
@@ -1738,15 +1738,15 @@ class testtaskModel extends model
 
     /**
      * Process auto test result.
-     * 
-     * @param  int    $testtaskID 
-     * @param  int    $productID 
-     * @param  array  $suites 
-     * @param  array  $cases 
-     * @param  array  $results 
-     * @param  array  $suiteNames 
-     * @param  array  $caseTitles 
-     * @param  string $auto     unit|func 
+     *
+     * @param  int    $testtaskID
+     * @param  int    $productID
+     * @param  array  $suites
+     * @param  array  $cases
+     * @param  array  $results
+     * @param  array  $suiteNames
+     * @param  array  $caseTitles
+     * @param  string $auto     unit|func
      * @access public
      * @return int
      */
@@ -1848,10 +1848,10 @@ class testtaskModel extends model
 
     /**
      * Parse cppunit XML result.
-     * 
-     * @param  string $fileName 
-     * @param  int    $productID 
-     * @param  string $frame 
+     *
+     * @param  string $fileName
+     * @param  int    $productID
+     * @param  string $frame
      * @access public
      * @return array
      */
@@ -1920,10 +1920,10 @@ class testtaskModel extends model
 
     /**
      * Parse unit result from xml.
-     * 
-     * @param  string $fileName 
-     * @param  int    $productID 
-     * @param  string $frame 
+     *
+     * @param  string $fileName
+     * @param  int    $productID
+     * @param  string $frame
      * @access public
      * @return array
      */
@@ -2085,12 +2085,12 @@ class testtaskModel extends model
 
     /**
      * Parse unit result from ztf.
-     * 
-     * @param  array  $caseResults 
-     * @param  string $frame 
-     * @param  int    $productID 
-     * @param  int    $jobID 
-     * @param  int    $compileID 
+     *
+     * @param  array  $caseResults
+     * @param  string $frame
+     * @param  int    $productID
+     * @param  int    $jobID
+     * @param  int    $compileID
      * @access public
      * @return array
      */
@@ -2165,12 +2165,12 @@ class testtaskModel extends model
 
     /**
      * Parse function result from ztf.
-     * 
-     * @param  array  $caseResults 
-     * @param  string $frame 
-     * @param  int    $productID 
-     * @param  int    $jobID 
-     * @param  int    $compileID 
+     *
+     * @param  array  $caseResults
+     * @param  string $frame
+     * @param  int    $productID
+     * @param  int    $jobID
+     * @param  int    $compileID
      * @access public
      * @return array
      */
