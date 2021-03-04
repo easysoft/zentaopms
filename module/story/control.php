@@ -896,7 +896,7 @@ class story extends control
         $this->view->users       = $users;
         $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
         $this->view->executions  = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->execution   = $this->execution->getByID($story->execution);
+        $this->view->execution   = $this->execution->getByID($story->project);
         $this->view->actions     = $this->action->getList('story', $storyID);
         $this->view->storyModule = $storyModule;
         $this->view->modulePath  = $modulePath;
