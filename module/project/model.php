@@ -368,7 +368,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function getPRJWorkhour($projectID)
+    public function getWorkhour($projectID)
     {
         $executions = $this->loadModel('project')->getExecutionPairs($projectID);
 
@@ -404,7 +404,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function getPRJStatData($projectID)
+    public function getStatData($projectID)
     {
         $executions = $this->loadModel('project')->getExecutionPairs($projectID);
         $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
@@ -432,7 +432,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function getPRJPairs($projectID = 0, $status = 'all')
+    public function getPairs($projectID = 0, $status = 'all')
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
@@ -451,7 +451,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function getPRJByIdList($projectIdList = array())
+    public function getByIdList($projectIdList = array())
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
@@ -468,7 +468,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getPRJPairsByIdList($projectIdList = array())
+    public function getPairsByIdList($projectIdList = array())
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
@@ -504,7 +504,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function buildPRJMenuQuery($projectID = 0, $type = 'list')
+    public function buildMenuQuery($projectID = 0, $type = 'list')
     {
         $path    = '';
         $project = $this->getPRJByID($projectID);

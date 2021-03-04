@@ -112,9 +112,9 @@ class project extends control
      * @access public
      * @return void
      */
-    public function ajaxGetPRJDropMenu($projectID = 0, $module, $method)
+    public function ajaxGetDropMenu($projectID = 0, $module, $method)
     {
-        $closedProjects = $this->project->getPRJList(0, 'closed', 0, 'id_desc');
+        $closedProjects = $this->project->getList(0, 'closed', 0, 'id_desc');
 
         $closedProjectNames = array();
         foreach($closedProjects as $project) $closedProjectNames = common::convert2Pinyin($closedProjectNames);
@@ -126,7 +126,7 @@ class project extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
 
-        $this->view->normalProjectsHtml = $this->project->getPRJTreeMenu(0, array('projectmodel', 'createPRJManageLink'), 0, 'dropmenu');
+        $this->view->normalProjectsHtml = $this->project->getTreeMenu(0, array('projectmodel', 'createPRJManageLink'), 0, 'dropmenu');
         $this->view->closedProjectsHtml = $closedProjectsHtml;
 
         $this->display();
@@ -201,9 +201,9 @@ class project extends control
     public function index($projectID = 0)
     {
         $this->lang->navGroup->project = 'project';
-        $projectID = $this->project->savePRJState($projectID, $this->project->getPRJPairs());
+        $projectID = $this->project->savePRJState($projectID, $this->project->getPairs());
 
-        $project = $this->project->getPRJByID($projectID);
+        $project = $this->project->getByID($projectID);
         if(empty($project) || $project->type != 'project') die(js::error($this->lang->notFound) . js::locate('back'));
 
         if(!$projectID) $this->locate($this->createLink('project', 'PRJbrowse')); 
@@ -245,7 +245,7 @@ class project extends control
         $projectTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=PRJProjectTitle');
         $order        = explode('_', $orderBy);
         $sortField    = zget($this->config->project->sortFields, $order[0], 'id') . '_' . $order[1];
-        $projectStats = $this->project->getPRJStats($projectID, $browseType, $queryID, $sortField, $pager, $projectTitle);
+        $projectStats = $this->project->getStats($projectID, $browseType, $queryID, $sortField, $pager, $projectTitle);
 
         $this->view->title      = $this->lang->project->PRJBrowse;
         $this->view->position[] = $this->lang->project->PRJBrowse;
@@ -253,8 +253,8 @@ class project extends control
         $this->view->projectStats = $projectStats;
         $this->view->pager        = $pager;
         $this->view->projectID    = $projectID;
-        $this->view->project      = $this->project->getPRJByID($projectID);
-        $this->view->PRJTree      = $this->project->getPRJTreeMenu(0, array('projectmodel', 'createPRJManageLink'), 0, 'list');
+        $this->view->project      = $this->project->getByID($projectID);
+        $this->view->PRJTree      = $this->project->getTreeMenu(0, array('projectmodel', 'createPRJManageLink'), 0, 'list');
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;
@@ -357,7 +357,7 @@ class project extends control
 
         $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->copyProjects    = $this->project->getPRJPairsByModel();
+        $this->view->copyProjects    = $this->project->getPairsByModel();
         $this->view->products        = $products;
         $this->view->allProducts     = array('0' => '') + $this->project->getPGMProductPairs($projectID);
         $this->view->productPlans    = array('0' => '') + $productPlans;
@@ -396,7 +396,7 @@ class project extends control
         $this->loadModel('productplan');
         $this->loadModel('action');
 
-        $project   = $this->project->getPRJByID($projectID);
+        $project   = $this->project->getByID($projectID);
         $projectID = $project->parent;
 
         /* Navigation stay in project when enter from project list. */
@@ -545,13 +545,13 @@ class project extends control
         $this->view->title        = $this->lang->project->PRJView; 
         $this->view->position     = $this->lang->project->PRJView;
         $this->view->projectID    = $projectID;
-        $this->view->project      = $this->project->getPRJByID($projectID);
+        $this->view->project      = $this->project->getByID($projectID);
         $this->view->products     = $products;
         $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
-        $this->view->statData     = $this->project->getPRJStatData($projectID);
-        $this->view->workhour     = $this->project->getPRJWorkhour($projectID);
+        $this->view->statData     = $this->project->getStatData($projectID);
+        $this->view->workhour     = $this->project->getWorkhour($projectID);
         $this->view->planGroup    = $this->loadModel('project')->getPlans($products);;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
@@ -861,7 +861,7 @@ class project extends control
     public function start($projectID)
     {
         $this->loadModel('action');
-        $project = $this->project->getPRJByID($projectID);
+        $project = $this->project->getByID($projectID);
 
         if(!empty($_POST))
         {
@@ -970,7 +970,7 @@ class project extends control
 
         $this->view->title      = $this->lang->project->close;
         $this->view->position[] = $this->lang->project->close;
-        $this->view->project    = $this->project->getPRJByID($projectID);
+        $this->view->project    = $this->project->getByID($projectID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('project', $projectID);
 
@@ -987,7 +987,7 @@ class project extends control
     public function activate($projectID)
     {
         $this->loadModel('action');
-        $project = $this->project->getPRJByID($projectID);
+        $project = $this->project->getByID($projectID);
 
         if(!empty($_POST))
         {
@@ -1030,7 +1030,7 @@ class project extends control
     {
         if($confirm == 'no')
         {
-            $project = $this->project->getPRJByID($projectID);
+            $project = $this->project->getByID($projectID);
             echo js::confirm(sprintf($this->lang->project->PRJConfirmDelete, $project->name), $this->createLink('project', 'PRJDelete', "projectID=$projectID&confirm=yes"));
             die();
         }
@@ -1236,7 +1236,7 @@ class project extends control
     public function ajaxCheckProduct($projectID, $projectID)
     {
         /* Set vars. */
-        $project   = $this->project->getPRJByID($projectID);
+        $project   = $this->project->getByID($projectID);
         $oldTopPGM = $this->project->getTopPGMByID($project->parent);
         $newTopPGM = $this->project->getTopPGMByID($projectID);
 
