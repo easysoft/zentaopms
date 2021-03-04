@@ -21,12 +21,12 @@ class bugfree1ConvertModel extends bugfreeConvertModel
     {
         $this->clear();
         $this->convertGroup();
-        $result['users']    = $this->convertUser();
-        $result['projects'] = $this->convertProject();
-        $result['modules']  = $this->convertModule();
-        $result['bugs']     = $this->convertBug();
-        $result['actions']  = $this->convertAction();
-        $result['files']    = $this->convertFile();
+        $result['users']      = $this->convertUser();
+        $result['executions'] = $this->convertExecution();
+        $result['modules']    = $this->convertModule();
+        $result['bugs']       = $this->convertBug();
+        $result['actions']    = $this->convertAction();
+        $result['files']      = $this->convertFile();
         $this->dao->dbh($this->dbh);
         $this->loadModel('tree')->fixModulePath();
         return $result;
@@ -115,21 +115,21 @@ class bugfree1ConvertModel extends bugfreeConvertModel
     }
 
     /**
-     * Convert project in bugfree to product in zentao.
+     * Convert execution in bugfree to product in zentao.
      * 
      * @access public
-     * @return int      converted project count
+     * @return int      converted execution count
      */
-    public function convertProject()
+    public function convertExecution()
     {
-        $projects = $this->dao->dbh($this->sourceDBH)->select("projectID AS id, projectName AS name")->from('BugProject')->fetchAll('id');
-        foreach($projects as $projectID => $project)
+        $executions = $this->dao->dbh($this->sourceDBH)->select("executionID AS id, executionName AS name")->from('Bugexecution')->fetchAll('id');
+        foreach($executions as $executionID => $execution)
         {
-            unset($project->id);
-            $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCT)->data($project)->exec();
-            $this->map['product'][$projectID] = $this->dao->lastInsertID();
+            unset($execution->id);
+            $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCT)->data($execution)->exec();
+            $this->map['product'][$executionID] = $this->dao->lastInsertID();
         }
-        return count($projects);
+        return count($executions);
     }
 
     /**
@@ -145,7 +145,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ->dbh($this->sourceDBH)
             ->select(
                 'moduleID AS id, 
-                projectID AS root, 
+                executionID AS root, 
                 moduleName AS name, 
                 moduleGrade AS grade, 
                 parentID AS parent, 
@@ -183,7 +183,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ->dbh($this->sourceDBH)
             ->select('
             bugID AS id, 
-            projectID AS product, 
+            executionID AS product, 
             moduleID AS module,
             bugTitle AS title,
             bugSeverity AS severity,
