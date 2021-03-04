@@ -10,9 +10,9 @@ function changeUser(account)
     }
     location.href = link;
 }
-function changeProject(project)
+function changeExecution(execution)
 {
-    link = createLink('company', 'dynamic', 'type=project&param=' + project);
+    link = createLink('company', 'dynamic', 'type=execution&param=' + execution);
     location.href = link;
 }
 function changeProduct(product)
