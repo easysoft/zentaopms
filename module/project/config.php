@@ -21,37 +21,32 @@ $config->project->editor->prjview     = array('id' => 'comment', 'tools' => 'sim
 $config->project->list = new stdclass();
 $config->project->list->exportFields = 'id,name,code,template,product,status,begin,end,budget,PM,end,desc';
 
-$config->project->PGMCreate = new stdclass();
-$config->project->PGMEdit   = new stdclass();
-$config->project->PGMCreate->requiredFields = 'name,begin,end';
-$config->project->PGMEdit->requiredFields   = 'name,begin,end';
+$config->project->create = new stdclass();
+$config->project->edit   = new stdclass();
+$config->project->create->requiredFields = 'name,code,begin,end';
+$config->project->edit->requiredFields   = 'name,code,begin,end';
 
-$config->project->PRJCreate = new stdclass();
-$config->project->PRJEdit   = new stdclass();
-$config->project->PRJCreate->requiredFields = 'name,code,begin,end';
-$config->project->PRJEdit->requiredFields   = 'name,code,begin,end';
-
-$config->project->sortFields            = new stdclass();
-$config->project->sortFields->id        = 'id';
-$config->project->sortFields->begin     = 'begin';
-$config->project->sortFields->end       = 'end';
-$config->project->sortFields->PRJStatus = 'status';
-$config->project->sortFields->PRJBudget = 'budget';
+$config->project->sortFields         = new stdclass();
+$config->project->sortFields->id     = 'id';
+$config->project->sortFields->begin  = 'begin';
+$config->project->sortFields->end    = 'end';
+$config->project->sortFields->status = 'status';
+$config->project->sortFields->budget = 'budget';
 
 global $lang;
 $config->project->datatable = new stdclass();
-$config->project->datatable->defaultField = array('id', 'PRJName', 'PM', 'PRJStatus', 'begin', 'end', 'PRJBudget', 'teamCount','PRJEstimate','PRJConsume', 'PRJProgress', 'actions');
+$config->project->datatable->defaultField = array('id', 'name', 'PM', 'status', 'begin', 'end', 'budget', 'teamCount','estimate','consume', 'progress', 'actions');
 
 $config->project->datatable->fieldList['id']['title']    = 'ID';
 $config->project->datatable->fieldList['id']['fixed']    = 'left';
 $config->project->datatable->fieldList['id']['width']    = '60';
 $config->project->datatable->fieldList['id']['required'] = 'yes';
 
-$config->project->datatable->fieldList['PRJName']['title']    = 'PRJName';
-$config->project->datatable->fieldList['PRJName']['fixed']    = 'left';
-$config->project->datatable->fieldList['PRJName']['width']    = 'auto';
-$config->project->datatable->fieldList['PRJName']['required'] = 'yes';
-$config->project->datatable->fieldList['PRJName']['sort']     = 'no';
+$config->project->datatable->fieldList['name']['title']    = 'name';
+$config->project->datatable->fieldList['name']['fixed']    = 'left';
+$config->project->datatable->fieldList['name']['width']    = 'auto';
+$config->project->datatable->fieldList['name']['required'] = 'yes';
+$config->project->datatable->fieldList['name']['sort']     = 'no';
 
 $config->project->datatable->fieldList['PM']['title']    = 'PM';
 $config->project->datatable->fieldList['PM']['fixed']    = 'no';
@@ -59,11 +54,11 @@ $config->project->datatable->fieldList['PM']['width']    = '80';
 $config->project->datatable->fieldList['PM']['required'] = 'yes';
 $config->project->datatable->fieldList['PM']['sort']     = 'no';
 
-$config->project->datatable->fieldList['PRJStatus']['title']    = 'PRJStatus';
-$config->project->datatable->fieldList['PRJStatus']['fixed']    = 'left';
-$config->project->datatable->fieldList['PRJStatus']['width']    = '80';
-$config->project->datatable->fieldList['PRJStatus']['required'] = 'no';
-$config->project->datatable->fieldList['PRJStatus']['sort']     = 'yes';
+$config->project->datatable->fieldList['status']['title']    = 'status';
+$config->project->datatable->fieldList['status']['fixed']    = 'left';
+$config->project->datatable->fieldList['status']['width']    = '80';
+$config->project->datatable->fieldList['status']['required'] = 'no';
+$config->project->datatable->fieldList['status']['sort']     = 'yes';
 
 $config->project->datatable->fieldList['begin']['title']    = 'begin';
 $config->project->datatable->fieldList['begin']['fixed']    = 'no';
@@ -75,10 +70,10 @@ $config->project->datatable->fieldList['end']['fixed']    = 'no';
 $config->project->datatable->fieldList['end']['width']    = '100';
 $config->project->datatable->fieldList['end']['required'] = 'no';
 
-$config->project->datatable->fieldList['PRJBudget']['title']    = 'PRJBudget';
-$config->project->datatable->fieldList['PRJBudget']['fixed']    = 'no';
-$config->project->datatable->fieldList['PRJBudget']['width']    = '80';
-$config->project->datatable->fieldList['PRJBudget']['required'] = 'yes';
+$config->project->datatable->fieldList['budget']['title']    = 'budget';
+$config->project->datatable->fieldList['budget']['fixed']    = 'no';
+$config->project->datatable->fieldList['budget']['width']    = '80';
+$config->project->datatable->fieldList['budget']['required'] = 'yes';
 
 $config->project->datatable->fieldList['teamCount']['title']    = 'teamCount';
 $config->project->datatable->fieldList['teamCount']['fixed']    = 'no';
@@ -86,23 +81,23 @@ $config->project->datatable->fieldList['teamCount']['width']    = '40';
 $config->project->datatable->fieldList['teamCount']['required'] = 'no';
 $config->project->datatable->fieldList['teamCount']['sort']     = 'no';
 
-$config->project->datatable->fieldList['PRJEstimate']['title']    = 'PRJEstimate';
-$config->project->datatable->fieldList['PRJEstimate']['fixed']    = 'no';
-$config->project->datatable->fieldList['PRJEstimate']['width']    = '60';
-$config->project->datatable->fieldList['PRJEstimate']['required'] = 'no';
-$config->project->datatable->fieldList['PRJEstimate']['sort']     = 'no';
+$config->project->datatable->fieldList['estimate']['title']    = 'estimate';
+$config->project->datatable->fieldList['estimate']['fixed']    = 'no';
+$config->project->datatable->fieldList['estimate']['width']    = '60';
+$config->project->datatable->fieldList['estimate']['required'] = 'no';
+$config->project->datatable->fieldList['estimate']['sort']     = 'no';
 
-$config->project->datatable->fieldList['PRJConsume']['title']    = 'PRJConsume';
-$config->project->datatable->fieldList['PRJConsume']['fixed']    = 'no';
-$config->project->datatable->fieldList['PRJConsume']['width']    = '60';
-$config->project->datatable->fieldList['PRJConsume']['required'] = 'no';
-$config->project->datatable->fieldList['PRJConsume']['sort']     = 'no';
+$config->project->datatable->fieldList['consume']['title']    = 'consume';
+$config->project->datatable->fieldList['consume']['fixed']    = 'no';
+$config->project->datatable->fieldList['consume']['width']    = '60';
+$config->project->datatable->fieldList['consume']['required'] = 'no';
+$config->project->datatable->fieldList['consume']['sort']     = 'no';
 
-$config->project->datatable->fieldList['PRJProgress']['title']    = 'PRJProgress';
-$config->project->datatable->fieldList['PRJProgress']['fixed']    = 'right';
-$config->project->datatable->fieldList['PRJProgress']['width']    = '60';
-$config->project->datatable->fieldList['PRJProgress']['required'] = 'no';
-$config->project->datatable->fieldList['PRJProgress']['sort']     = 'no';
+$config->project->datatable->fieldList['progress']['title']    = 'progress';
+$config->project->datatable->fieldList['progress']['fixed']    = 'right';
+$config->project->datatable->fieldList['progress']['width']    = '60';
+$config->project->datatable->fieldList['progress']['required'] = 'no';
+$config->project->datatable->fieldList['progress']['sort']     = 'no';
 
 $config->project->datatable->fieldList['actions']['title']    = 'actions';
 $config->project->datatable->fieldList['actions']['fixed']    = 'right';

@@ -39,7 +39,7 @@ class personnelModel extends model
         }
 
         /* Determine who can be accessed based on access control. */
-        $program = $this->loadModel('program')->getPGMByID($programID);
+        $program = $this->loadModel('program')->getByID($programID);
         $personnelList = array();
         if($program->acl != 'open')
         {

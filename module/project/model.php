@@ -25,41 +25,6 @@ class projectModel extends model
     }
 
     /**
-     * Get stakeholders by project id.
-     *
-     * @param  int     $projectID
-     * @param  string  $orderBy
-     * @param  object  $paper
-     * @access public
-     * @return array
-     */
-    public function getStakeholders($projectID = 0, $orderBy, $pager = null)
-    {
-        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
-            ->where('t1.objectID')->eq($projectID)
-            ->andWhere('t1.objectType')->eq('project')
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll();
-    }
-
-    /**
-     * Get stakeholders by project id list.
-     *
-     * @param  string $projectIdList
-     * @access public
-     * @return array
-     */
-    public function getStakeholdersByProjects($projectIdList = 0)
-    {
-        return $this->dao->select('distinct user as account')->from(TABLE_STAKEHOLDER)
-            ->where('objectID')->in($projectIdList)
-            ->andWhere('objectType')->eq('project')
-            ->fetchAll();
-    }
-
-    /**
      * Show accessDenied response.
      *
      * @access private
@@ -507,7 +472,7 @@ class projectModel extends model
     public function buildMenuQuery($projectID = 0, $type = 'list')
     {
         $path    = '';
-        $project = $this->getPRJByID($projectID);
+        $project = $this->getByID($projectID);
         if($project) $path = $project->path;
 
         return $this->dao->select('*')->from(TABLE_PROJECT)
@@ -878,7 +843,7 @@ class projectModel extends model
 
         if(!dao::isError())
         {
-            $this->updateProductPGM($oldProject->parent, $project->parent, $_POST['products']);
+            $this->updateProductProgram($oldProject->parent, $project->parent, $_POST['products']);
             $this->loadModel('project')->updateProducts($projectID, $_POST['products']);
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
@@ -959,7 +924,7 @@ class projectModel extends model
             if(!dao::isError())
             {
                 $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-                $this->updateProductPGM($oldProject->parent, $project->parent, $linkedProducts);
+                $this->updateProductProgram($oldProject->parent, $project->parent, $linkedProducts);
 
                 if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
                 /* When acl is open, white list set empty. When acl is private,update user view. */
@@ -972,26 +937,26 @@ class projectModel extends model
     }
 
     /**
-     * Update the project set of the product.
+     * Update the program of the product.
      *
-     * @param  int    $oldProject
-     * @param  int    $newProject
+     * @param  int    $oldProgram
+     * @param  int    $newProgram
      * @param  array  $products
      * @access public
      * @return void
      */
-    public function updateProductPGM($oldProject, $newProject, $products)
+    public function updateProductProgram($oldProgram, $newProgram, $products)
     {
         $this->loadModel('action');
         /* Product belonging project set processing. */
-        $oldTopPGM = $this->getTopPGMByID($oldProject);
-        $newTopPGM = $this->getTopPGMByID($newProject);
-        if($oldTopPGM != $newTopPGM)
+        $oldTopProgram = $this->program->getTopByID($oldProgram);
+        $newTopProgram = $this->program->getTopByID($newProgram);
+        if($oldTopProgram != $newTopProgram)
         {
             foreach($products as $productID => $product)
             {
                 $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-                $this->dao->update(TABLE_PRODUCT)->set('project')->eq((int)$newTopPGM)->where('id')->eq((int)$productID)->exec();
+                $this->dao->update(TABLE_PRODUCT)->set('project')->eq((int)$newTopProgram)->where('id')->eq((int)$productID)->exec();
                 $newProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
                 $changes    = common::createChanges($oldProduct, $newProduct);
                 $actionID   = $this->action->create('product', $productID, 'edited');
@@ -1039,9 +1004,9 @@ class projectModel extends model
                 $title = "title='$budgetTitle'";
             }
 
-            if($id == 'estimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->project->workHour}'";
-            if($id == 'consume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->project->workHour}'";
-            if($id == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->project->workHour}'";
+            if($id == 'estimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->execution->workHour}'";
+            if($id == 'consume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->execution->workHour}'";
+            if($id == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->execution->workHour}'";
 
             echo "<td class='$class' $title>";
             switch($id)
@@ -1083,13 +1048,13 @@ class projectModel extends model
                     echo $project->teamCount;
                     break;
                 case 'estimate':
-                    echo $project->hours->totalEstimate . ' ' . $this->lang->project->workHourUnit;
+                    echo $project->hours->totalEstimate . ' ' . $this->lang->execution->workHourUnit;
                     break;
                 case 'consume':
-                    echo $project->hours->totalConsumed . ' ' . $this->lang->project->workHourUnit;
+                    echo $project->hours->totalConsumed . ' ' . $this->lang->execution->workHourUnit;
                     break;
                 case 'surplus':
-                    echo $project->hours->totalLeft     . ' ' . $this->lang->project->workHourUnit;
+                    echo $project->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;
                     break;
                 case 'progress':
                     echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}%</div></div>";
@@ -1113,18 +1078,18 @@ class projectModel extends model
 
                     $from      = $project->from == 'PRJ' ? 'PRJ' : 'pgmproject';
                     $openGroup = $project->from == 'PRJ' ? 'project' : 'project';
-                    common::printIcon('project', 'PRJEdit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$openGroup", '', $project->id);
-                    common::printIcon('project', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', '', $this->lang->project->team, $project->id);
-                    if($this->config->systemMode == 'new') common::printIcon('project', 'PRJGroup', "projectID=$project->id&projectID=$projectID", $project, 'list', 'lock', '', '', '', '', '', $project->id);
+                    common::printIcon('project', 'edit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$openGroup", '', $project->id);
+                    common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', '', $this->lang->execution->team, $project->id);
+                    if($this->config->systemMode == 'new') common::printIcon('project', 'group', "projectID=$project->id&projectID=$projectID", $project, 'list', 'lock', '', '', '', '', '', $project->id);
 
-                    if(common::hasPriv('project','PRJManageProducts') || common::hasPriv('project','PRJWhitelist') || common::hasPriv('project','PRJDelete'))
+                    if(common::hasPriv('project','manageProducts') || common::hasPriv('project','whitelist') || common::hasPriv('project','delete'))
                     {
                         echo "<div class='btn-group'>";
                         echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                         echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                        common::printIcon('project', 'PRJManageProducts', "projectID=$project->id&projectID=$projectID&from=$from", $project, 'list', 'link', '', 'btn-action', '', "data-group=$openGroup", $this->lang->project->manageProducts, $project->id);
-                        if($this->config->systemMode == 'new') common::printIcon('project', 'PRJWhitelist', "projectID=$project->id&projectID=$projectID&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-group=$openGroup", '', $project->id);
-                        if(common::hasPriv('project','PRJDelete')) echo html::a(inLink("PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->PRJDelete}'");
+                        common::printIcon('project', 'manageProducts', "projectID=$project->id&projectID=$projectID&from=$from", $project, 'list', 'link', '', 'btn-action', '', "data-group=$openGroup", $this->lang->project->manageProducts, $project->id);
+                        if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&projectID=$projectID&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-group=$openGroup", '', $project->id);
+                        if(common::hasPriv('project','delete')) echo html::a(inLink("delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->delete}'");
                         echo "</ul>";
                         echo "</div>";
                     }

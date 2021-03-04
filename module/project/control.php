@@ -126,7 +126,7 @@ class project extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
 
-        $this->view->normalProjectsHtml = $this->project->getTreeMenu(0, array('projectmodel', 'createPRJManageLink'), 0, 'dropmenu');
+        $this->view->normalProjectsHtml = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'dropmenu');
         $this->view->closedProjectsHtml = $closedProjectsHtml;
 
         $this->display();
@@ -169,26 +169,6 @@ class project extends control
         $parentProject   = $this->project->getPGMByID($parentProjectID);
         $availableBudget = $this->project->getAvailableBudget($parentProject);
         echo number_format($availableBudget, 2);
-    }
-
-    /**
-     * Update project order.
-     *
-     * @access public
-     * @return string
-     */
-    public function updateOrder()
-    {
-        $projects = $this->post->projects;
-        foreach($projects as $id => $order)
-        {    
-            $this->dao->update(TABLE_PROJECT)
-                ->set('`order`')->eq($order)
-                ->where('id')->eq($id)
-                ->exec();
-        }
-
-        $this->send(array('result' => 'success'));
     }
 
     /**
@@ -245,16 +225,16 @@ class project extends control
         $projectTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=PRJProjectTitle');
         $order        = explode('_', $orderBy);
         $sortField    = zget($this->config->project->sortFields, $order[0], 'id') . '_' . $order[1];
-        $projectStats = $this->project->getStats($projectID, $browseType, $queryID, $sortField, $pager, $projectTitle);
+        $projectStats = $this->loadModel('program')->getProjectStats($projectID, $browseType, $queryID, $sortField, $pager, $projectTitle);
 
-        $this->view->title      = $this->lang->project->PRJBrowse;
-        $this->view->position[] = $this->lang->project->PRJBrowse;
+        $this->view->title      = $this->lang->project->browse;
+        $this->view->position[] = $this->lang->project->browse;
 
         $this->view->projectStats = $projectStats;
         $this->view->pager        = $pager;
         $this->view->projectID    = $projectID;
         $this->view->project      = $this->project->getByID($projectID);
-        $this->view->PRJTree      = $this->project->getTreeMenu(0, array('projectmodel', 'createPRJManageLink'), 0, 'list');
+        $this->view->PRJTree      = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;
@@ -1208,21 +1188,6 @@ class project extends control
         $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 
         $this->display();
-    }
-
-    /**
-     * View a project.
-     *
-     * @param int $projectID
-     * @access public
-     * @return void
-     */
-    public function view($projectID)
-    {
-        $project = $this->project->getPGMByID($projectID);
-        if(!$project) die(js::error($this->lang->notFound) . js::locate('back'));
-
-        echo $this->fetch('project', 'PGMProduct', "projectID=$projectID");
     }
 
     /**

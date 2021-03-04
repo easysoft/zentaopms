@@ -29,7 +29,7 @@ class personnel extends control
         $this->setProgramNavMenu($programID);
         $this->app->loadLang('user');
 
-        $program = $this->loadModel('program')->getPGMByID($programID);
+        $program = $this->loadModel('program')->getByID($programID);
 
         /* Set the pager. */
         $this->app->loadClass('pager', true);
@@ -115,9 +115,9 @@ class personnel extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set back link. */
-        $goback = $this->session->PRJBrowse ? $this->session->PRJBrowse : $this->createLink('program', 'PRJWhitelist', "projectID=$objectID");
-        if($from == 'pgmbrowse')  $goback = $this->createLink('program', 'PGMBrowse');
-        if($from == 'pgmproject') $goback = $this->session->PGMProject ? $this->session->PGMProject : $this->createLink('program', 'PGMProject', "programID=$programID");
+        $goback = $this->session->PRJBrowse ? $this->session->PRJBrowse : $this->createLink('program', 'whitelist', "projectID=$objectID");
+        if($from == 'pgmbrowse')  $goback = $this->createLink('program', 'browse');
+        if($from == 'pgmproject') $goback = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "programID=$programID");
 
         $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->position[] = $this->lang->personnel->whitelist;
@@ -225,8 +225,8 @@ class personnel extends control
     {
         $this->loadModel('program');
         $this->lang->navGroup->program       = 'program';
-        $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
-        $this->program->setPGMViewMenu($programID);
+        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
+        $this->lang->program->mainMenuAction = $this->program->getMainAction();
+        $this->program->setViewMenu($programID);
     }
 }
