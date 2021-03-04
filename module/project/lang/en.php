@@ -140,13 +140,6 @@ $lang->project->currencySymbol['SGD'] = 'S$';
 $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "CMMI";
 
-$lang->project->categoryList['single']   = "Single product";
-$lang->project->categoryList['multiple'] = "Multiple products";
-
-$lang->project->lifeTimeList['short'] = "Short-Term";
-$lang->project->lifeTimeList['long']  = "Long-Term";
-$lang->project->lifeTimeList['ops']   = "DevOps";
-
 $lang->project->featureBar['all']       = 'All';
 $lang->project->featureBar['doing']     = 'Going';
 $lang->project->featureBar['wait']      = 'Waiting';

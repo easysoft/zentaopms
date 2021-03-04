@@ -98,6 +98,10 @@ $lang->execution->endList[93]  = '3 Months';
 $lang->execution->endList[186] = '6 Months';
 $lang->execution->endList[365] = '1 Year';
 
+$lang->execution->lifeTimeList['short'] = "Short-Term";
+$lang->execution->lifeTimeList['long']  = "Long-Term";
+$lang->execution->lifeTimeList['ops']   = "DevOps";
+
 $lang->team = new stdclass();
 $lang->team->account    = 'User';
 $lang->team->role       = 'Role';

@@ -201,11 +201,10 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getInfo($status = 'undone', $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
+    public function getInfoList($status = 'undone', $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
     {
         /* Init vars. */
-        $this->loadModel('project');
-        $projects = $this->getList(0, $status, 0, $orderBy, $pager);
+        $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager);
         if(empty($projects)) return array();
 
         $projectIdList = array_keys($projects);
@@ -222,11 +221,12 @@ class projectModel extends model
             ->fetchAll('PRJ');
 
         $this->app->loadClass('pager', $static = true);
+        $this->loadModel('execution');
         foreach($projects as $projectID => $project)
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
-            $project->executions = $this->project->getExecutionStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
+            $project->executions = $this->execution->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $this->getParentName($project->parent);
@@ -262,7 +262,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getOverview($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15)
+    public function getOverviewList($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15)
     {
         $queryType = strtolower($queryType);
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
