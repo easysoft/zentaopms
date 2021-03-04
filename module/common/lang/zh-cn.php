@@ -155,7 +155,7 @@ $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
 $lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|custom|browsestoryconcept|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
-if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-folder-open-o'></i> 项目集|$programModule|$programMethod|";
+if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> 项目集|$programModule|$programMethod|";
 
 $lang->dividerMenu = ',qa,report,admin,';
 
@@ -822,7 +822,7 @@ $lang->icons['product']   = 'product';
 $lang->icons['bug']       = 'bug';
 $lang->icons['task']      = 'check-sign';
 $lang->icons['tasks']     = 'tasks';
-$lang->icons['program']   = 'folder-open-o';
+$lang->icons['program']   = 'program';
 $lang->icons['project']   = 'project';
 $lang->icons['stage']     = 'waterfall';
 $lang->icons['sprint']    = 'sprint';

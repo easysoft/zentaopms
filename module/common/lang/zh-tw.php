@@ -139,7 +139,7 @@ list($projectModule, $projectMethod) = explode('-', $config->projectLink);
 /* 主導航菜單。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盤|my|index|';
-$lang->mainNav->program = "<i class='icon icon-folder-open-o'></i> 項目集|$programModule|$programMethod|";
+$lang->mainNav->program = "<i class='icon icon-program'></i> 項目集|$programModule|$programMethod|";
 $lang->mainNav->product = "<i class='icon icon-product'></i> 產品|$productModule|$productMethod|";
 $lang->mainNav->project = "<i class='icon icon-project'></i> 項目|$projectModule|$projectMethod|";
 $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
@@ -843,7 +843,7 @@ $lang->icons['product']   = 'product';
 $lang->icons['bug']       = 'bug';
 $lang->icons['task']      = 'check-sign';
 $lang->icons['tasks']     = 'tasks';
-$lang->icons['program']   = 'folder-open-o';
+$lang->icons['program']   = 'program';
 $lang->icons['project']   = 'project';
 $lang->icons['stage']     = 'waterfall';
 $lang->icons['sprint']    = 'sprint';
@@ -965,7 +965,7 @@ $lang->waterfall->subMenu->other->risk        = array('link' => '風險|risk|bro
 $lang->waterfall->subMenu->other->stakeholder = array('link' => '干係人|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->waterfall->setMenu = new stdclass();
-$lang->waterfall->setMenu = $lang->scrum->setMenu; 
+$lang->waterfall->setMenu = $lang->scrum->setMenu;
 
 $lang->waterfallproduct   = new stdclass();
 $lang->workestimation     = new stdclass();
