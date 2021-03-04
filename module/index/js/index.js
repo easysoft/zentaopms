@@ -359,7 +359,7 @@
         if(!app || lastOpenedApp !== appCode) return;
 
         if(url) app.appUrl = url;
-        else url = app.appUrl;
+        else url = app.appUrl || app.url;
         if(title) app.appTitle = title;
         else title = app.appTitle || app.text;
 
