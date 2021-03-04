@@ -8,7 +8,7 @@ $maxConsumed  = 0;
 <div class='panel-body'>
   <div class='table-row'>
     <div class='table-col chart-titles'>
-      <div class='chart-col-title strong'><span><?php echo $lang->program->PRJName;?></span></div>
+      <div class='chart-col-title strong'><span><?php echo $lang->project->name;?></span></div>
       <?php foreach($projects as $project):?>
       <?php
       $maxTeamCount = max($maxTeamCount, $project->teamCount);
@@ -37,7 +37,7 @@ $maxConsumed  = 0;
           <div class='chart-col-item'>
             <div class='progress'>
               <div class='progress-bar' style='width: <?php echo $maxConsumed ? (100 * $project->consumed / $maxConsumed) : 0; ?>%'>
-                <div class='progress-text' title="<?php echo $project->consumed . $lang->project->workHour;?>"><?php echo $project->consumed . $lang->project->workHourUnit;?></div>
+                <div class='progress-text' title="<?php echo $project->consumed . $lang->execution->workHour;?>"><?php echo $project->consumed . $lang->execution->workHourUnit;?></div>
               </div>
             </div>
           </div>

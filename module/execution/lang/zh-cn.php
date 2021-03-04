@@ -1,11 +1,11 @@
 <?php
 /**
- * The project module zh-cn file of ZenTaoMS.
+ * The execution module zh-cn file of ZenTaoMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id: zh-cn.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -97,6 +97,10 @@ $lang->execution->endList[62]  = '两个月';
 $lang->execution->endList[93]  = '三个月';
 $lang->execution->endList[186] = '半年';
 $lang->execution->endList[365] = '一年';
+
+$lang->execution->lifeTimeList['short'] = "短期";
+$lang->execution->lifeTimeList['long']  = "长期";
+$lang->execution->lifeTimeList['ops']   = "运维";
 
 $lang->team = new stdclass();
 $lang->team->account    = '用户';
