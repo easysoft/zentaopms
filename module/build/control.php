@@ -13,7 +13,7 @@ class build extends control
 {
     /**
      * Create a build.
-     * 
+     *
      * @param  int    $executionID
      * @param  int    $productID
      * @access public
@@ -69,8 +69,8 @@ class build extends control
 
     /**
      * Edit a build.
-     * 
-     * @param  int    $buildID 
+     *
+     * @param  int    $buildID
      * @access public
      * @return void
      */
@@ -146,15 +146,15 @@ class build extends control
 
     /**
      * View a build.
-     * 
-     * @param  int    $buildID 
-     * @param  string $type 
-     * @param  string $link 
-     * @param  string $param 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $buildID
+     * @param  string $type
+     * @param  string $link
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -225,11 +225,11 @@ class build extends control
         $this->view->branchName   = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
         $this->display();
     }
- 
+
     /**
      * Delete a build.
-     * 
-     * @param  int    $buildID 
+     *
+     * @param  int    $buildID
      * @param  string $confirm  yes|noe
      * @access public
      * @return void
@@ -267,8 +267,8 @@ class build extends control
 
     /**
      * AJAX: get builds of a product in html select.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  string $varName      the name of the select object to create
      * @param  string $build        build to selected
      * @param  int    $branch
@@ -282,7 +282,7 @@ class build extends control
         $branch = $branch ? "0,$branch" : $branch;
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
-        { 
+        {
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
             $builds = $this->build->getProductBuildPairs($productID, $branch, $params);
             if($isJsonView) die(json_encode($builds));
@@ -295,7 +295,7 @@ class build extends control
             else die(html::select($varName . "[$index][]", $builds, $build, 'size=4 class=form-control multiple'));
         }
         if($varName == 'resolvedBuild')
-        { 
+        {
             $params = ($type == 'all') ? '' : 'noterminate, nodone';
             $builds = $this->build->getProductBuildPairs($productID, $branch, $params);
             if($isJsonView) die(json_encode($builds));
@@ -304,59 +304,59 @@ class build extends control
     }
 
     /**
-     * AJAX: get builds of a project in html select.
-     * 
-     * @param  int    $projectID
+     * AJAX: get builds of a execution in html select.
+     *
+     * @param  int    $executionID
      * @param  string $varName      the name of the select object to create
      * @param  string $build        build to selected
-     * @param  int    $branch       
+     * @param  int    $branch
      * @param  int    $index        the index of batch create bug.
      * @param  bool   $needCreate   if need to append the link of create build
      * @param  string $type         get all builds or some builds belong to normal releases and projects are not done.
      * @access public
      * @return string
      */
-    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 0, $index = 0, $needCreate = false, $type = 'normal')
+    public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 0, $index = 0, $needCreate = false, $type = 'normal')
     {
         $branch = $branch ? "0,$branch" : $branch;
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
         {
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
-            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, $params, $build);
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, $params, $build);
             if($isJsonView) die(json_encode($builds));
             else die(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
         }
         if($varName == 'openedBuilds')
         {
-            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty');
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty');
             if($isJsonView) die(json_encode($builds));
             else die(html::select($varName . "[$index][]", $builds , $build, 'size=4 class=form-control multiple'));
         }
         if($varName == 'resolvedBuild')
-        { 
+        {
             $params = ($type == 'all') ? '' : 'noterminate, nodone';
-            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, $params, $build);
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, $params, $build);
             if($isJsonView) die(json_encode($builds));
             else die(html::select($varName, $builds, $build, "class='form-control'"));
         }
         if($varName == 'testTaskBuild')
         {
-            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
 
             if(empty($builds))
             {
-                $html  = html::a($this->createLink('build', 'create', "projectID=$projectID&productID=$productID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
+                $html  = html::a($this->createLink('build', 'create', "executionID=$executionID&productID=$productID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
                 $html .= '&nbsp; ';
-                $html .= html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh);
+                $html .= html::a("javascript:loadProjectBuilds($executionID)", $this->lang->refresh);
                 die($html);
             }
             die(html::select('build', $builds, $build, "class='form-control'"));
         }
         if($varName == 'dropdownList')
         {
-            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
 
             $list  = "<div class='list-group'>";
@@ -369,13 +369,13 @@ class build extends control
 
     /**
      * Link stories
-     * 
-     * @param  int    $buildID 
-     * @param  string $browseType 
-     * @param  int    $param 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $buildID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -443,9 +443,9 @@ class build extends control
     }
 
     /**
-     * Unlink story 
-     * 
-     * @param  int    $storyID 
+     * Unlink story
+     *
+     * @param  int    $storyID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -473,9 +473,9 @@ class build extends control
     }
 
     /**
-     * Batch unlink story. 
-     * 
-     * @param  string $confirm 
+     * Batch unlink story.
+     *
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -487,13 +487,13 @@ class build extends control
 
     /**
      * Link bugs.
-     * 
-     * @param  int    $buildID 
-     * @param  string $browseType 
-     * @param  int    $param 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $buildID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -563,10 +563,10 @@ class build extends control
     }
 
     /**
-     * Unlink story 
-     * 
+     * Unlink story
+     *
      * @param  int    $buildID
-     * @param  int    $bugID 
+     * @param  int    $bugID
      * @access public
      * @return void
      */
@@ -593,9 +593,9 @@ class build extends control
     }
 
     /**
-     * Batch unlink story. 
-     * 
-     * @param  int $buildID 
+     * Batch unlink story.
+     *
+     * @param  int $buildID
      * @access public
      * @return void
      */
