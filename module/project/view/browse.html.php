@@ -20,7 +20,7 @@ js::set('browseType', $browseType);
   <?php if($this->config->systemMode == 'new'):?>
   <div id="sidebarHeader">
     <div class="title">
-      <?php echo empty($project) ? $lang->project->project : $project->name;?>
+      <?php echo empty($project) ? $lang->project->common : $project->name;?>
       <?php if($projectID) echo html::a(inLink('PRJBrowse', 'projectID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>

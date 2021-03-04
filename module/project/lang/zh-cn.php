@@ -34,7 +34,6 @@ $lang->project->whitelist         = '项目白名单';
 $lang->project->addWhitelist      = '项目添加白名单';
 $lang->project->unbindWhielist    = '项目删除白名单';
 $lang->project->manageProducts    = '关联产品';
-$lang->project->view              = '项目集详情';
 $lang->project->copyTitle         = '请选择要复制的项目';
 $lang->project->errorSameProducts = '项目不能关联多个相同的产品。';
 $lang->project->errorNoProducts   = '最少关联一个产品';
@@ -42,8 +41,7 @@ $lang->project->copyNoProject     = '没有可用的项目来复制';
 $lang->project->searchByName      = '输入项目名称进行检索';
 
 /* Fields. */
-$lang->project->common             = '项目集';
-$lang->project->project            = '项目';
+$lang->project->common             = '项目';
 $lang->project->stage              = '阶段';
 $lang->project->PM                 = '负责人';
 $lang->project->name               = '项目名称';
