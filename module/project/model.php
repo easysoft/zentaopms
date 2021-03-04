@@ -77,7 +77,7 @@ class projectModel extends model
     {
         $count  = 0;
         $count += (int)$this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('parent')->eq($projectID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TASK)->where('PRJ')->eq($projectID)->fetch('count');
+        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TASK)->where('project')->eq($projectID)->fetch('count');
 
         return $count > 0;
     }
@@ -213,12 +213,12 @@ class projectModel extends model
             ->groupBy('root')
             ->fetchAll('root');
 
-        $estimates = $this->dao->select('PRJ, sum(estimate) as estimate')->from(TABLE_TASK)
-            ->where('PRJ')->in($projectIdList)
+        $estimates = $this->dao->select('project, sum(estimate) as estimate')->from(TABLE_TASK)
+            ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
+            ->groupBy('project')
+            ->fetchAll('project');
 
         $this->app->loadClass('pager', $static = true);
         $this->loadModel('execution');
@@ -280,21 +280,21 @@ class projectModel extends model
 
         $teams = $this->dao->select('root, count(*) as teams')->from(TABLE_TEAM)->where('root')->in($projectIdList)->groupBy('root')->fetchPairs();
 
-        $hours = $this->dao->select('PRJ,
+        $hours = $this->dao->select('project,
             cast(sum(consumed) as decimal(10,2)) as consumed,
             cast(sum(estimate) as decimal(10,2)) as estimate')
             ->from(TABLE_TASK)
-            ->where('PRJ')->in($projectIdList)
+            ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
+            ->groupBy('project')
+            ->fetchAll('project');
 
-        $leftTasks = $this->dao->select('PRJ, count(*) as tasks')->from(TABLE_TASK)
-            ->where('PRJ')->in($projectIdList)
+        $leftTasks = $this->dao->select('project, count(*) as tasks')->from(TABLE_TASK)
+            ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->in('wait,doing,pause')
-            ->groupBy('PRJ')
+            ->groupBy('project')
             ->fetchPairs();
 
         foreach($projectIdList as $projectID)
@@ -483,12 +483,12 @@ class projectModel extends model
      */
     public function getTotalBugByProject($projectIdList, $status)
     {
-        return $this->dao->select('PRJ, count(*) as bugs')->from(TABLE_BUG)
-            ->where('PRJ')->in($projectIdList)
+        return $this->dao->select('project, count(*) as bugs')->from(TABLE_BUG)
+            ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
-            ->groupBy('PRJ')
-            ->fetchPairs('PRJ');
+            ->groupBy('project')
+            ->fetchPairs('project');
     }
 
     /**
@@ -763,21 +763,22 @@ class projectModel extends model
             $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
                 ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
                 ->where('t1.account')->eq($this->app->user->account)
-                ->andWhere('t2.role')->eq('PRJAdmin')
+                ->andWhere('t2.role')->eq('projectAdmin')
                 ->fetch();
 
             if(!empty($groupPriv))
             {
-                $newProject = $groupPriv->PRJ . ",$projectID";
-                $this->dao->update(TABLE_USERGROUP)->set('PRJ')->eq($newProject)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
+                $newProject = $groupPriv->project . ",$projectID";
+                $this->dao->update(TABLE_USERGROUP)->set('project')->eq($newProject)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
             }
             else
             {
-                $PRJAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJAdmin')->fetch('id');
-                $groupPriv  = new stdclass();
+                $projectAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->fetch('id');
+
+                $groupPriv = new stdclass();
                 $groupPriv->account = $this->app->user->account;
-                $groupPriv->group   = $PRJAdminID;
-                $groupPriv->PRJ     = $projectID;
+                $groupPriv->group   = $projectAdminID;
+                $groupPriv->project = $projectID;
                 $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
@@ -1106,8 +1107,8 @@ class projectModel extends model
                         echo "</div>";
                     }
 
-                    $from      = $project->from == 'PRJ' ? 'PRJ' : 'pgmproject';
-                    $openApp   = $project->from == 'PRJ' ? 'project' : 'project';
+                    $from      = $project->from == 'project' ? 'project' : 'pgmproject';
+                    $openApp   = $project->from == 'project' ? 'project' : 'project';
                     common::printIcon('project', 'edit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-app=$openApp", '', $project->id);
                     common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', '', $this->lang->execution->team, $project->id);
                     if($this->config->systemMode == 'new') common::printIcon('project', 'group', "projectID=$project->id&projectID=$projectID", $project, 'list', 'lock', '', '', '', '', '', $project->id);

@@ -25,71 +25,71 @@
   <?php if(empty($projects)):?>
   <div class="table-empty-tip">
     <p>
-      <span class="text-muted"><?php echo $lang->program->noPRJ;?></span>
-      <?php if(common::hasPriv('program', 'createGuide')):?>
-      <?php echo html::a($this->createLink('program', 'createGuide'), "<i class='icon icon-plus'></i> " . $lang->my->createProgram, '', "class='btn btn-info' data-toggle=modal");?>
+      <span class="text-muted"><?php echo $lang->project->empty;?></span>
+      <?php if(common::hasPriv('project', 'createGuide')):?>
+      <?php echo html::a($this->createLink('project', 'createGuide'), "<i class='icon icon-plus'></i> " . $lang->my->createProgram, '', "class='btn btn-info' data-toggle=modal");?>
       <?php endif;?>
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-checkable='false'>
-    <table class='table table-fixed' id='programList'>
+  <form class='main-table' id='projectForm' method='post' data-ride='table' data-nested='true' data-checkable='false'>
+    <table class='table table-fixed' id='projectList'>
       <thead>
         <tr>
           <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
-          <th><?php echo $lang->program->PRJName;?></th>
+          <th><?php echo $lang->project->name;?></th>
           <?php if($status == 'openedbyme'):?>
-          <th class='w-80px'> <?php echo $lang->program->PRJStatus;?></th>
+          <th class='w-80px'> <?php echo $lang->project->status;?></th>
           <?php endif;?>
-          <th class='w-100px'><?php echo $lang->program->begin;?></th>
-          <th class='w-100px'><?php echo $lang->program->end;?></th>
-          <th class='text-right w-100px'><?php echo $lang->program->PRJBudget;?></th>
-          <th class='w-100px'><?php echo $lang->program->PRJPM;?></th>
+          <th class='w-100px'><?php echo $lang->project->begin;?></th>
+          <th class='w-100px'><?php echo $lang->project->end;?></th>
+          <th class='text-right w-100px'><?php echo $lang->project->budget;?></th>
+          <th class='w-100px'><?php echo $lang->project->PM;?></th>
           <th class='text-center w-180px'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
-      <tbody id='programTableList'>
+      <tbody id='projectTableList'>
         <?php foreach($projects as $project):?>
         <tr>
           <td class='c-id'><?php printf('%03d', $project->id);?></td>
           <td class='c-name text-left' title='<?php echo $project->name?>'>
-            <?php echo html::a($this->createLink('program', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project'");?>
+            <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project'");?>
           </td>
           <?php if($status == 'openedbyme'):?>
-          <td class='c-status'><span class="status-program status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
+          <td class='c-status'><span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
           <?php endif;?>
           <td class='text-left'><?php echo $project->begin;?></td>
           <td class='text-left'><?php echo $project->end == '0000-00-00' ? '' : $project->end;?></td>
-          <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format((float)$project->budget, 1);?>
-          <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $lang->program->future;?></td>
+          <?php $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->project->tenThousand : number_format((float)$project->budget, 1);?>
+          <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->future;?></td>
           <td>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
             <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
           </td>
           <td class='c-actions'>
-            <?php if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);?>
-            <?php if($project->status == 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
-            <?php if($project->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
-            <?php if(common::hasPriv('program','PRJSuspend') || (common::hasPriv('program','PRJClose') && $project->status != 'doing') || (common::hasPriv('program','PRJActivate') && $project->status != 'closed')):?>
+            <?php if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('project', 'start', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);?>
+            <?php if($project->status == 'doing')  common::printIcon('project', 'close',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
+            <?php if($project->status == 'closed') common::printIcon('project', 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
+            <?php if(common::hasPriv('project','suspend') || (common::hasPriv('project','close') && $project->status != 'doing') || (common::hasPriv('project','activate') && $project->status != 'closed')):?>
             <div class='btn-group'>
               <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
               <ul class='dropdown-menu pull-right text-center' role='menu' style="min-width:auto; padding: 5px 10px;">
-              <?php common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
-              <?php if($project->status != 'doing')  common::printIcon('program', 'PRJClose',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
-              <?php if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
+              <?php common::printIcon('project', 'suspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe', true);?>
+              <?php if($project->status != 'doing')  common::printIcon('project', 'close',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
+              <?php if($project->status != 'closed') common::printIcon('project', 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);?>
               </ul>
             </div>
             <?php endif;?>
-            <?php common::printIcon('program', 'PRJEdit', "projectID=$project->id&from=PRJ", $project, 'list', 'edit', '',  '', false, "data-group='project'", '', $project->id);?>
-            <?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', false, "data-group='project'", '', $project->id);?>
-            <?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'list', 'lock', '',  '', false, "data-group='project'", '', $project->id);?>
-            <?php if(common::hasPriv('program','PRJManageProducts') || common::hasPriv('program','PRJWhitelist') || common::hasPriv('program','PRJDelete')):?>
+            <?php common::printIcon('project', 'edit', "projectID=$project->id", $project, 'list', 'edit', '',  '', false, "data-group='project'", '', $project->id);?>
+            <?php common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', false, "data-group='project'", '', $project->id);?>
+            <?php common::printIcon('project', 'group', "projectID=$project->id", $project, 'list', 'lock', '',  '', false, "data-group='project'", '', $project->id);?>
+            <?php if(common::hasPriv('project','manageProducts') || common::hasPriv('project','whitelist') || common::hasPriv('project','delete')):?>
             <div class='btn-group'>
               <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
               <ul class='dropdown-menu pull-right text-center' role='menu'>
-                <?php common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$project->parent&from=PRJ", $project, 'list', 'link', '', '', false, "data-group='project'", '', $project->id);?>
-                <?php common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$project->parent&module=program&from=PRJ", $project, 'list', 'shield-check', '', '', false, "data-group='project'", '', $project->id);?>
-                <?php if(common::hasPriv('program','PRJDelete')) echo html::a($this->createLink("program", "PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->PRJDelete}' data-group='my'");?>
+                <?php common::printIcon('project', 'manageProducts', "projectID=$project->id&projectID=$project->parent", $project, 'list', 'link', '', '', false, "data-group='project'", '', $project->id);?>
+                <?php common::printIcon('project', 'whitelist', "projectID=$project->id&projectID=$project->parent&module=project", $project, 'list', 'shield-check', '', '', false, "data-group='project'", '', $project->id);?>
+                <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->project->delete}' data-group='my'");?>
               </ul>
             </div>
             <?php endif;?>

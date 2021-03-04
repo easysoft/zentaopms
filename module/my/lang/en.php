@@ -70,16 +70,6 @@ $lang->my->projectMenu->suspended  = 'Suspended';
 $lang->my->projectMenu->closed     = 'Closed';
 $lang->my->projectMenu->openedbyme = 'CreatedByMe';
 
-$lang->my->home = new stdclass();
-$lang->my->home->latest        = 'Dynamics';
-$lang->my->home->action        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>.";
-$lang->my->home->projects      = $lang->executionCommon;
-$lang->my->home->products      = $lang->productCommon;
-$lang->my->home->createProject = "Create {$lang->executionCommon}";
-$lang->my->home->createProduct = "Create {$lang->productCommon}";
-$lang->my->home->help          = "<a href='https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-workflow-46.html' target='_blank'>Help</a>";
-$lang->my->home->noProductsTip = "No {$lang->productCommon} found here.";
-
 $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = 'Basic Info';
 $lang->my->form->lblContact = 'Contact Info';

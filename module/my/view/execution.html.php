@@ -29,20 +29,20 @@
     </p>
   </div>
   <?php else:?>
-  <table class="table has-sort-head table-fixed" id='projectList'>
+  <table class="table has-sort-head table-fixed" id='executionList'>
     <thead>
       <tr class='text-left'>
         <th class='w-id'><?php echo $lang->idAB;?></th>
         <th class='c-name text-left'><?php echo $lang->my->name;?></th>
-        <th class='c-name text-left'><?php echo $lang->my->projects;?></th>
-        <th class='c-date'><?php echo $lang->project->begin;?></th>
-        <th class='c-date'><?php echo $lang->project->end;?></th>
+        <th class='c-name text-left'><?php echo $lang->my->execution;?></th>
+        <th class='c-date'><?php echo $lang->execution->begin;?></th>
+        <th class='c-date'><?php echo $lang->execution->end;?></th>
         <th class='c-status'><?php echo $lang->statusAB;?></th>
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
         <th class='w-70px'><?php echo $lang->my->hours;?></th>
-        <th class='w-90px'><?php echo $lang->project->assignedToMe;?></th>
-        <th class='w-60px'><?php echo $lang->project->progress;?></th>
+        <th class='w-90px'><?php echo $lang->execution->assignedToMe;?></th>
+        <th class='w-60px'><?php echo $lang->execution->progress;?></th>
       </tr>
     </thead>
     <tbody>

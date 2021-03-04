@@ -1048,8 +1048,8 @@ class userModel extends model
         /* Get all tasks and compute totalConsumed, totalLeft, totalWait, progress according to them. */
         $hours       = array();
         $emptyHour   = array('totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0, 'waitTasks' => 0, 'assignedToMeTasks' => 0);
-        $searchField = $type == 'project' ? 'PRJ' : 'project';
-        $tasks       = $this->dao->select('id, PRJ, project, consumed, `left`, status, assignedTo')
+        $searchField = $type == 'project' ? 'project' : 'execution';
+        $tasks       = $this->dao->select('id, project, project, consumed, `left`, status, assignedTo')
             ->from(TABLE_TASK)
             ->where('parent')->lt(1)
             ->andWhere($searchField)->in($projectIdList)->fi()
@@ -1080,7 +1080,7 @@ class userModel extends model
         }
 
         $projectIdList = array_keys($myProjectsList);
-        $projectList   = $this->loadModel('program')->getPRJByIdList($projectIdList);
+        $projectList   = $this->loadModel('project')->getByIdList($projectIdList);
 
         $myProjects = array();
         foreach($myProjectsList as $projects)

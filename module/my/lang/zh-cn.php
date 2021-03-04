@@ -70,16 +70,6 @@ $lang->my->projectMenu->suspended  = '已挂起';
 $lang->my->projectMenu->closed     = '已关闭';
 $lang->my->projectMenu->openedbyme = '由我创建';
 
-$lang->my->home = new stdclass();
-$lang->my->home->latest        = '最新动态';
-$lang->my->home->action        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>。";
-$lang->my->home->projects      = $lang->executionCommon;
-$lang->my->home->products      = $lang->productCommon;
-$lang->my->home->createProject = "添加{$lang->executionCommon}";
-$lang->my->home->createProduct = "添加{$lang->productCommon}";
-$lang->my->home->help          = "<a href='https://www.zentao.net/help-read-79236.html' target='_blank'>帮助文档</a>";
-$lang->my->home->noProductsTip = "这里还没有{$lang->productCommon}。";
-
 $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = '基本信息';
 $lang->my->form->lblContact = '联系信息';

@@ -203,7 +203,7 @@ class my extends control
         $this->view->position[] = $this->lang->my->story;
         $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->projects   = $this->loadModel('program')->getPRJPairs();
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
@@ -244,7 +244,7 @@ class my extends control
         $this->view->position[] = $this->lang->my->story;
         $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->projects   = $this->loadModel('program')->getPRJPairs();
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
@@ -319,13 +319,13 @@ class my extends control
         $this->view->position[] = $this->lang->my->task;
         $this->view->tabID      = 'task';
         $this->view->tasks      = $tasks;
-        $this->view->summary    = $this->loadModel('project')->summary($tasks);
+        $this->view->summary    = $this->loadModel('execution')->summary($tasks);
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
-        $this->view->projects   = $this->loadModel('program')->getPRJPairs();
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->mode       = 'task';
@@ -491,7 +491,7 @@ class my extends control
         $this->app->loadLang('project');
 
         $this->app->session->set('programList', $this->app->getURI(true));
-        $this->app->session->set('PRJBrowse', $this->app->getURI(true));
+        $this->app->session->set('projectBrowse', $this->app->getURI(true));
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
