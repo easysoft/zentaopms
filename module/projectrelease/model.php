@@ -15,15 +15,15 @@ class projectreleaseModel extends model
 {
     /**
      * Get release by id.
-     * 
-     * @param  int    $releaseID 
+     *
+     * @param  int    $releaseID
      * @param  bool   $setImgSize
      * @access public
      * @return object
      */
     public function getByID($releaseID, $setImgSize = false)
     {
-        $release = $this->dao->select('t1.*, t2.id as buildID, t2.filePath, t2.scmPath, t2.name as buildName, t2.project, t3.name as productName, t3.type as productType')
+        $release = $this->dao->select('t1.*, t2.id as buildID, t2.filePath, t2.scmPath, t2.name as buildName, t2.execution, t3.name as productName, t3.type as productType')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
@@ -52,12 +52,12 @@ class projectreleaseModel extends model
      */
     public function getList($projectID, $productID, $branch = 0, $type = 'all')
     {
-        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project, t4.name as executionName')
+        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.execution, t4.name as executionName')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
-            ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t3.project = t4.id')
-            ->where('t1.PRJ')->eq((int)$projectID)
+            ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t3.execution = t4.id')
+            ->where('t1.project')->eq((int)$projectID)
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC')
@@ -66,15 +66,15 @@ class projectreleaseModel extends model
 
     /**
      * Get last release.
-     * 
+     *
      * @param  int    $projectID
      * @access public
-     * @return bool | object 
+     * @return bool | object
      */
     public function getLast($projectID)
     {
         return $this->dao->select('id, name')->from(TABLE_RELEASE)
-            ->where('PRJ')->eq((int)$projectID)
+            ->where('project')->eq((int)$projectID)
             ->orderBy('date DESC')
             ->limit(1)
             ->fetch();
@@ -82,7 +82,7 @@ class projectreleaseModel extends model
 
     /**
      * Get release builds from project.
-     * 
+     *
      * @param  int    $projectID
      * @access public
      * @return array
@@ -91,7 +91,7 @@ class projectreleaseModel extends model
     {
         $releases = $this->dao->select('build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
-            ->andWhere('PRJ')->eq($projectID)
+            ->andWhere('project')->eq($projectID)
             ->fetchAll('build');
         return array_keys($releases);
     }
@@ -122,7 +122,7 @@ class projectreleaseModel extends model
         }
 
         $release = fixer::input('post')
-            ->add('PRJ', $this->session->PRJ)
+            ->add('project', $this->session->project)
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
             ->setDefault('stories', '')
@@ -151,14 +151,14 @@ class projectreleaseModel extends model
             else
             {
                 $build = new stdclass();
-                $build->PRJ = $this->session->PRJ;
-                $build->product = (int)$productID;
-                $build->branch  = (int)$branch;
-                $build->name    = $release->name;
-                $build->date    = $release->date;
-                $build->builder = $this->app->user->account;
-                $build->desc    = $release->desc;
-                $build->project = 0;
+                $build->project   = $this->session->project;
+                $build->product   = (int)$productID;
+                $build->branch    = (int)$branch;
+                $build->name      = $release->name;
+                $build->date      = $release->date;
+                $build->builder   = $this->app->user->account;
+                $build->desc      = $release->desc;
+                $build->execution = 0;
 
                 $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
                 $this->dao->insert(TABLE_BUILD)->data($build)
@@ -208,8 +208,8 @@ class projectreleaseModel extends model
 
     /**
      * Update a release.
-     * 
-     * @param  int    $releaseID 
+     *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
@@ -241,8 +241,8 @@ class projectreleaseModel extends model
 
     /**
      * Link stories
-     * 
-     * @param  int    $releaseID 
+     *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
@@ -277,10 +277,10 @@ class projectreleaseModel extends model
     }
 
     /**
-     * Unlink story 
-     * 
-     * @param  int    $releaseID 
-     * @param  int    $storyID 
+     * Unlink story
+     *
+     * @param  int    $releaseID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -294,9 +294,9 @@ class projectreleaseModel extends model
 
     /**
      * Link bugs.
-     * 
-     * @param  int    $releaseID 
-     * @param  string $type 
+     *
+     * @param  int    $releaseID
+     * @param  string $type
      * @access public
      * @return void
      */

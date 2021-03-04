@@ -27,15 +27,15 @@ class projectrelease extends control
         $products = array();
         $this->loadModel('product');
         $this->loadModel('release');
-        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
+        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->project);
         if(empty($this->view->products)) $this->locate($this->createLink('product', 'create'));
     }
 
     /**
      * Common actions.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
      * @access public
      * @return void
      */
@@ -45,7 +45,7 @@ class projectrelease extends control
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         /* Get product and product list by project. */
-        $products = $this->product->getProductPairsByProject($this->session->PRJ);
+        $products = $this->product->getProductPairsByProject($this->session->project);
         if(!$productID) $productID = key($products);
         $product = $this->product->getById($productID);
 
@@ -53,33 +53,33 @@ class projectrelease extends control
         $this->view->product  = $product;
         $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->branch   = $branch;
-        $this->view->project  = $this->loadModel('program')->getPRJById($this->session->PRJ);
+        $this->view->project  = $this->loadModel('project')->getByID($this->session->project);
     }
 
     /**
      * Browse releases.
-     * 
-     * @param  string $type 
+     *
+     * @param  string $type
      * @access public
      * @return void
      */
     public function browse($type = 'all')
     {
         $this->session->set('releaseList', $this->app->getURI(true));
-        $project = $this->loadModel('project')->getById($this->session->PRJ);
+        $execution = $this->loadModel('execution')->getById($this->session->project);
 
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->release->browse;
+        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->project    = $project;
-        $this->view->products   = $this->loadModel('product')->getProductsByProject($this->session->PRJ);
-        $this->view->releases   = $this->projectrelease->getList($this->session->PRJ, $type);
+        $this->view->execution  = $execution;
+        $this->view->products   = $this->loadModel('product')->getProductsByProject($this->session->project);
+        $this->view->releases   = $this->projectrelease->getList($this->session->project, $type);
         $this->view->type       = $type;
         $this->display();
     }
 
     /**
      * Create a release.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -99,10 +99,10 @@ class projectrelease extends control
         }
 
         /* Get the builds that can select. */
-        $productPairs  = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $productPairs  = $this->loadModel('product')->getProductPairsByProject($this->session->project);
         $productIdList = array_keys($productPairs);
         $builds        = $this->loadModel('build')->getProductBuildPairs($productIdList, 0, 0, 'notrunk');
-        $releaseBuilds = $this->projectrelease->getReleaseBuilds($this->session->PRJ);
+        $releaseBuilds = $this->projectrelease->getReleaseBuilds($this->session->project);
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
@@ -110,14 +110,14 @@ class projectrelease extends control
         $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
         $this->view->position[]  = $this->lang->release->create;
         $this->view->builds      = $builds;
-        $this->view->lastRelease = $this->projectrelease->getLast($this->session->PRJ);
+        $this->view->lastRelease = $this->projectrelease->getLast($this->session->project);
         $this->display();
     }
 
     /**
      * Edit a release.
-     * 
-     * @param  int    $releaseID 
+     *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
@@ -154,21 +154,21 @@ class projectrelease extends control
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->build      = $build;
-        $this->view->builds     = $this->loadModel('build')->getProjectBuildPairs($this->session->PRJ, $release->product, $release->branch, 'notrunk|withbranch');
+        $this->view->builds     = $this->loadModel('build')->getProjectBuildPairs($this->session->project, $release->product, $release->branch, 'notrunk|withbranch');
         $this->display();
     }
-                                                          
+
     /**
      * View a release.
-     * 
-     * @param  int    $releaseID 
-     * @param  string $type 
-     * @param  string $link 
-     * @param  string $param 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $releaseID
+     * @param  string $type
+     * @param  string $link
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -184,9 +184,9 @@ class projectrelease extends control
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
-        $release = $this->projectrelease->getById((int)$releaseID, true);
+        $release = $this->projectrelease->getByID((int)$releaseID, true);
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
-        
+
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)
                 ->beginIF($type == 'story')->orderBy($orderBy)->fi()
@@ -255,7 +255,7 @@ class projectrelease extends control
 
             $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
             $build   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$release->build)->fetch();
-            if(empty($build->project)) $this->loadModel('build')->delete(TABLE_BUILD, $build->id);
+            if(empty($build->execution)) $this->loadModel('build')->delete(TABLE_BUILD, $build->id);
 
             $this->executeHooks($releaseID);
 
@@ -282,7 +282,7 @@ class projectrelease extends control
 
     /**
      * Export the stories of release to HTML.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -391,13 +391,13 @@ class projectrelease extends control
 
     /**
      * Link stories
-     * 
-     * @param  int    $releaseID 
-     * @param  string $browseType 
-     * @param  int    $param 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $releaseID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -410,8 +410,8 @@ class projectrelease extends control
         }
         $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
 
-        $release = $this->projectrelease->getById($releaseID);
-        $build   = $this->loadModel('build')->getByID($release->build); 
+        $release = $this->projectrelease->getByID($releaseID);
+        $build   = $this->loadModel('build')->getByID($release->build);
         $this->commonAction($release->product);
         $this->loadModel('story');
         $this->loadModel('tree');
@@ -447,11 +447,11 @@ class projectrelease extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $build->project ? $build->project : '', 'story', $release->stories, $pager);
+            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $build->execution ? $build->execution : '', 'story', $release->stories, $pager);
         }
         else
         {
-            $allStories = $this->story->getProjectStories($build->project, 0, 0, 't1.`order`_desc', 'byProduct', $release->product, 'story', $release->stories, $pager);
+            $allStories = $this->story->getProjectStories($build->execution, 0, 0, 't1.`order`_desc', 'byProduct', $release->product, 'story', $release->stories, $pager);
         }
 
         $this->view->allStories     = $allStories;
@@ -465,10 +465,10 @@ class projectrelease extends control
     }
 
     /**
-     * Unlink story 
-     * 
-     * @param  int    $releaseID 
-     * @param  int    $storyID 
+     * Unlink story
+     *
+     * @param  int    $releaseID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -495,9 +495,9 @@ class projectrelease extends control
     }
 
     /**
-     * Batch unlink story. 
-     * 
-     * @param  int    $releaseID 
+     * Batch unlink story.
+     *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
@@ -509,14 +509,14 @@ class projectrelease extends control
 
     /**
      * Link bugs.
-     * 
-     * @param  int    $releaseID 
-     * @param  string $browseType 
-     * @param  int    $param 
-     * @param  string $type 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $releaseID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $type
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -531,7 +531,7 @@ class projectrelease extends control
         $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
         /* Set menu. */
         $release = $this->projectrelease->getByID($releaseID);
-        $build   = $this->loadModel('build')->getByID($release->build); 
+        $build   = $this->loadModel('build')->getByID($release->build);
         $this->commonAction($release->product);
 
         /* Load pager. */
@@ -547,7 +547,7 @@ class projectrelease extends control
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($release->product, $viewType = 'bug', $startModuleID = 0);
-        $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getExecutionPairsByProduct($release->product, 0, 'id_desc', $this->session->PRJ);
+        $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getExecutionPairsByProduct($release->product, 0, 'id_desc', $this->session->project);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($release->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         if($this->session->currentProductType == 'normal')
@@ -570,7 +570,7 @@ class projectrelease extends control
         {
             $allBugs = $this->bug->getBySearch($release->product, $release->branch, $queryID, 'id_desc', $releaseBugs, $pager);
         }
-        elseif($build->project)
+        elseif($build->execution)
         {
             if($type == 'bug')
             {
@@ -594,11 +594,11 @@ class projectrelease extends control
     }
 
     /**
-     * Unlink story 
-     * 
+     * Unlink story
+     *
      * @param  int    $releaseID
-     * @param  int    $bugID 
-     * @param  string $type 
+     * @param  int    $bugID
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -625,10 +625,10 @@ class projectrelease extends control
     }
 
     /**
-     * Batch unlink story. 
-     * 
-     * @param  int    $releaseID 
-     * @param  string $type 
+     * Batch unlink story.
+     *
+     * @param  int    $releaseID
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -640,9 +640,9 @@ class projectrelease extends control
 
     /**
      * Change status.
-     * 
-     * @param  int    $releaseID 
-     * @param  string $status 
+     *
+     * @param  int    $releaseID
+     * @param  string $status
      * @access public
      * @return void
      */
