@@ -22,7 +22,7 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::canModify('project', $project)):?>
+    <?php if(common::canModify('execution', $execution)):?>
     <?php common::printLink('projectrelease', 'create', '', "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
@@ -32,7 +32,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
-      <?php if(common::canModify('project', $project) and common::hasPriv('projectrelease', 'create')):?>
+      <?php if(common::canModify('execution', $execution) and common::hasPriv('projectrelease', 'create')):?>
       <?php echo html::a($this->createLink('projectrelease', 'create'), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -44,7 +44,7 @@
         <th class='w-id'><?php echo $lang->release->id;?></th>
         <th><?php echo $lang->release->name;?></th>
         <th class='w-product'><?php echo $lang->release->product;?></th>
-        <th class='w-project'><?php echo $lang->executionCommon;?></th>
+        <th class='w-execution'><?php echo $lang->executionCommon;?></th>
         <th class='w-100px'><?php echo $lang->release->build;?></th>
         <th class='c-date text-center w-100px'><?php echo $lang->release->date;?></th>
         <th class='text-center w-90px'><?php echo $lang->release->status;?></th>
@@ -61,14 +61,14 @@
       <tr>
         <td><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td>
-          <?php 
+          <?php
           $flagIcon = $release->marker ? "<icon class='icon icon-flag red' title='{$lang->release->marker}'></icon> " : '';
           echo html::a(inlink('view', "release=$release->id"), $release->name) . $flagIcon;
           ?>
         </td>
         <td title='<?php echo $release->productName?>'><?php echo $release->productName?></td>
         <td title='<?php echo $release->executionName?>'><?php echo $release->executionName?></td>
-        <td title='<?php echo $release->buildName?>'><?php echo empty($release->project) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
+        <td title='<?php echo $release->buildName?>'><?php echo empty($release->execution) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
         <td class='text-center'><?php echo $release->date;?></td>
         <?php $status = $this->processStatus('release', $release);?>
         <td class='c-status text-center' title='<?php echo $status;?>'>
