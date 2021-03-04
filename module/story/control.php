@@ -22,6 +22,7 @@ class story extends control
         parent::__construct($module, $method);
         $this->loadModel('product');
         $this->loadModel('project');
+        $this->loadModel('execution');
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->loadModel('action');
@@ -36,7 +37,7 @@ class story extends control
      * @param  int    $branch
      * @param  int    $moduleID
      * @param  int    $storyID
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  int    $bugID
      * @param  int    $planID
      * @param  int    $todoID
@@ -45,28 +46,28 @@ class story extends control
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
         $this->story->replaceURLang($type);
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
-        if($projectID)
+        if($executionID)
         {
-            $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
-            if($project->type == 'project')
+            $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
+            if($execution->type == 'project')
             {
                 $this->app->rawModule = 'projectstory';
                 $this->lang->navGroup->projectstory = 'project';
-                $this->lang->product->menu = $this->lang->menu->{$project->model};
+                $this->lang->product->menu = $this->lang->menu->{$execution->model};
             }
             else
             {
-                $this->app->rawModule = 'project';
-                $this->lang->navGroup->story = 'project';
+                $this->app->rawModule = 'execution';
+                $this->lang->navGroup->story = 'execution';
             }
-            $this->view->project = $project;
+            $this->view->execution = $execution;
         }
 
         /* Whether there is a object to transfer story, for example feedback. */
@@ -100,7 +101,7 @@ class story extends control
             $response['message'] = $this->lang->saveSuccess;
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
-            $storyResult = $this->story->create($projectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
+            $storyResult = $this->story->create($executionID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
             if(!$storyResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -112,15 +113,15 @@ class story extends control
             if($storyResult['status'] == 'exists')
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
-                if($projectID == 0)
+                if($executionID == 0)
                 {
                     $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}");
                 }
                 else
                 {
-                    $project            = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
-                    $moduleName         = $project->type == 'project' ? 'projectstory' : 'project';
-                    $param              = $project->type == 'project' ? "PRJ=$projectID" : "projectID=$projectID";
+                    $execution          = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
+                    $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
+                    $param              = $execution->type == 'project' ? "project=$executionID" : "executionID=$executionID";
                     $response['locate'] = $this->createLink($moduleName, 'story', $param);
                 }
                 $this->send($response);
@@ -136,10 +137,10 @@ class story extends control
             }
             $actionID = $this->action->create('story', $storyID, $action, '', $extra);
 
-            if($projectID != 0)
+            if($executionID != 0)
             {
-                if($projectID != $this->session->PRJ) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $projectID);
-                $this->loadModel('action')->create('story', $storyID, 'linked2prj', '', $this->session->PRJ);
+                if($executionID != $this->session->project) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $executionID);
+                $this->loadModel('action')->create('story', $storyID, 'linked2prj', '', $this->session->project);
             }
 
             if($todoID > 0)
@@ -156,12 +157,12 @@ class story extends control
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
-                $response['locate']  = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=0&projectID=$projectID&bugID=$bugID");
+                $response['locate']  = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=0&executionID=$executionID&bugID=$bugID");
                 $this->send($response);
             }
 
             $moduleID = $this->post->module ? $this->post->module : 0;
-            if($projectID == 0)
+            if($executionID == 0)
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
                 $productID = $this->post->product ? $this->post->product : $productID;
@@ -172,9 +173,9 @@ class story extends control
             else
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, true);
-                $project            = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
-                $moduleName         = $project->type == 'project' ? 'projectstory' : 'project';
-                $param              = $project->type == 'project' ? "productID=$productID" : "projectID=$projectID&orderBy=id_desc&browseType=unclosed";
+                $execution          = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
+                $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
+                $param              = $execution->type == 'project' ? "productID=$productID" : "executionID=$executionID&orderBy=id_desc&browseType=unclosed";
                 $response['locate'] = $this->createLink($moduleName, 'story', $param);
             }
             if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
@@ -182,9 +183,9 @@ class story extends control
         }
 
         /* Set products, users and module. */
-        if($projectID != 0)
+        if($executionID != 0)
         {
-            $products = $this->product->getProductPairsByProject($projectID);
+            $products = $this->product->getProductPairsByProject($executionID);
             $product  = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
         }
         else
@@ -306,7 +307,7 @@ class story extends control
         $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
         $this->view->productID        = $productID;
         $this->view->product          = $product;
-        $this->view->projectID        = $projectID;
+        $this->view->executionID      = $executionID;
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
         $this->view->spec             = $spec;
@@ -314,7 +315,7 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->URS              = $type == 'story' ? $this->story->getRequierements($productID) : '';
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $projectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->view->type             = $type;
 
         $this->display();
@@ -327,36 +328,36 @@ class story extends control
      * @param  int    $branch
      * @param  int    $moduleID
      * @param  int    $storyID
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  int    $plan
      * @param  string $type requirement|story
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $plan = 0, $type = 'story')
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story')
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
-        if($projectID)
+        if($executionID)
         {
-            $projects = $this->loadModel('project')->getExecutionPairs();
-            $this->project->setMenu($projects, $projectID);
+            $executions = $this->execution->getPairs();
+            $this->execution->setMenu($executions, $executionID);
 
-            $project  = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
-            if($project->type == 'project')
+            $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
+            if($execution->type == 'project')
             {
                 $this->app->rawModule = 'projectstory';
                 $this->lang->navGroup->story = 'project';
-                $this->lang->product->menu = $this->lang->menu->{$project->model};
+                $this->lang->product->menu = $this->lang->menu->{$execution->model};
             }
             else
             {
-                $this->app->rawModule = 'project';
-                $this->lang->navGroup->story = 'project';
+                $this->app->rawModule = 'execution';
+                $this->lang->navGroup->story = 'execution';
             }
-            $this->view->project = $project;
+            $this->view->execution = $execution;
         }
 
         /* Clear title when switching products and set the session for the current product. */
@@ -381,12 +382,12 @@ class story extends control
             foreach($mails as $mail) $stories[] = $mail->storyID;
 
             /* Project or execution linked stories. */
-            if($projectID)
+            if($executionID)
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
-                $this->loadModel('project')->linkStory($projectID, $stories, $products);
-                if($projectID != $this->session->PRJ) $this->loadModel('project')->linkStory($this->session->PRJ, $stories, $products);
+                $this->execution->linkStory($executionID, $stories, $products);
+                if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
             }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
@@ -402,11 +403,11 @@ class story extends control
             {
                 die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
             }
-            elseif($projectID)
+            elseif($executionID)
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, false);
-                $moduleName = $project->type == 'project' ? 'projectstory' : 'project';
-                $param      = $project->type == 'project' ? "productID=$productID" : "projectID=$projectID&orderBy=id_desc&browseType=unclosed";
+                $moduleName = $execution->type == 'project' ? 'projectstory' : 'execution';
+                $param      = $execution->type == 'project' ? "productID=$productID" : "executionID=$executionID&orderBy=id_desc&browseType=unclosed";
                 $link       = $this->createLink($moduleName, 'story', $param);
                 die(js::locate($link, 'parent'));
             }
@@ -497,7 +498,7 @@ class story extends control
         $this->view->branch           = $branch;
         $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $projectID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
+        $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
 
         $this->display();
     }
@@ -592,11 +593,11 @@ class story extends control
      * Batch edit story.
      *
      * @param  int    $productID
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function batchEdit($productID = 0, $projectID = 0, $branch = 0, $storyType = 'story')
+    public function batchEdit($productID = 0, $executionID = 0, $branch = 0, $storyType = 'story')
     {
         $this->lang->product->menu = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
@@ -649,22 +650,22 @@ class story extends control
             $this->view->position[]   = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
             $this->view->title        = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
         }
-        elseif($projectID)
+        elseif($executionID)
         {
-            /* The stories of a project. */
-            $this->lang->navGroup->story = 'project';
+            /* The stories of a execution. */
+            $this->lang->navGroup->story = 'execution';
             $moduleIndex = array_search('story', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-            $this->lang->story->menu = $this->lang->project->menu;
+            $this->lang->story->menu = $this->lang->execution->menu;
 
-            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $projectID);
-            $this->lang->set('menugroup.story', 'project');
-            $this->lang->story->menuOrder = $this->lang->project->menuOrder;
+            $this->execution->setMenu($this->execution->getExecutionPairs($this->session->project, 'all', 'nodeleted'), $executionID);
+            $this->lang->set('menugroup.story', 'execution');
+            $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
 
-            $project = $this->project->getByID($projectID);
+            $execution = $this->execution->getByID($executionID);
 
             $branchProduct  = false;
-            $linkedProducts = $this->project->getProducts($projectID);
+            $linkedProducts = $this->execution->getProducts($executionID);
             foreach($linkedProducts as $linkedProduct)
             {
                 if($linkedProduct->type != 'normal')
@@ -674,8 +675,8 @@ class story extends control
                 }
             }
 
-            $this->view->position[]  = html::a($this->createLink('project', 'story', "project=$project->id"), $project->name);
-            $this->view->title       = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->position[]  = html::a($this->createLink('execution', 'story', "execution=$execution->id"), $execution->name);
+            $this->view->title       = $execution->name . $this->lang->colon . $this->lang->story->batchEdit;
             $this->view->resetActive = true;
         }
         /* The stories of my. */
@@ -777,7 +778,7 @@ class story extends control
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->app->loadLang('testcase');
-        $this->app->loadLang('project');
+        $this->app->loadLang('execution');
 
         /* Assign. */
         $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
@@ -853,12 +854,12 @@ class story extends control
         $from = $this->app->openGroup;
         if($from == 'project')
         {
-            $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
+            $project = $this->dao->findById((int)$this->session->project)->from(TABLE_PROJECT)->fetch();
             $this->lang->product->menu = $this->lang->menu->{$project->model};
-            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $project->id);
+            $this->execution->setMenu($this->execution->getExecutionPairs($this->session->project, 'all', 'nodeleted'), $project->id);
 
             /* If status is done, can not create task from story. */
-            $execution = $this->loadModel('project')->getById($param);
+            $execution = $this->execution->getById($param);
             if($execution->status == 'done') $from = '';
         }
         else
@@ -870,7 +871,7 @@ class story extends control
 
             if($this->app->rawModule == 'projectstory')
             {
-                $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
+                $project = $this->dao->findById((int)$this->session->project)->from(TABLE_PROJECT)->fetch();
                 $this->lang->product->menu = $this->lang->menu->{$project->model};
             }
         }
@@ -894,8 +895,8 @@ class story extends control
         $this->view->track       = $this->story->getTrackByID($story->id);
         $this->view->users       = $users;
         $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
-        $this->view->projects    = $this->loadModel('project')->getExecutionPairs(0, 'all', 'nocode');
-        $this->view->project     = $this->loadModel('program')->getPRJByID($story->PRJ);
+        $this->view->executions  = $this->execution->getPairs(0, 'all', 'nocode');
+        $this->view->execution   = $this->execution->getByID($story->execution);
         $this->view->actions     = $this->action->getList('story', $storyID);
         $this->view->storyModule = $storyModule;
         $this->view->modulePath  = $modulePath;
@@ -1009,7 +1010,7 @@ class story extends control
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->app->loadLang('testcase');
-        $this->app->loadLang('project');
+        $this->app->loadLang('execution');
 
         $this->display();
     }
@@ -1096,11 +1097,11 @@ class story extends control
      * Batch close story.
      *
      * @param  int    $productID
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function batchClose($productID = 0, $projectID = 0)
+    public function batchClose($productID = 0, $execution = 0)
     {
         if($this->post->comments)
         {
@@ -1152,16 +1153,16 @@ class story extends control
             $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
             $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchClose;
         }
-        /* The stories of a project. */
-        elseif($projectID)
+        /* The stories of a execution. */
+        elseif($executionID)
         {
-            $this->lang->story->menu      = $this->lang->project->menu;
-            $this->lang->story->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getExecutionPairs($this->session->PRJ, 'all', 'nodeleted'), $projectID);
-            $this->lang->set('menugroup.story', 'project');
-            $project = $this->project->getByID($projectID);
-            $this->view->position[] = html::a($this->createLink('project', 'story', "project=$project->id"), $project->name);
-            $this->view->title      = $project->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->lang->story->menu      = $this->lang->execution->menu;
+            $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
+            $this->execution->setMenu($this->execution->getPairs($this->session->project, 'all', 'nodeleted'), $executionID);
+            $this->lang->set('menugroup.story', 'execution');
+            $execution = $this->execution->getByID($executionID);
+            $this->view->position[] = html::a($this->createLink('execution', 'story', "executionID=$execution->id"), $execution->name);
+            $this->view->title      = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
         }
         /* The stories of my. */
         else
@@ -1218,18 +1219,18 @@ class story extends control
     /**
      * Batch stories convert to tasks.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function batchToTask($projectID = 0)
+    public function batchToTask($executionID = 0)
     {
         if(!empty($_POST))
         {
             $response['result']  = 'success';
             $response['message'] = $this->lang->story->successToTask;
 
-            $this->story->batchToTask($projectID, $this->session->PRJ);
+            $this->story->batchToTask($executionID, $this->session->project);
 
             if(dao::isError())
             {
@@ -1238,7 +1239,7 @@ class story extends control
                 $this->send($response);
             }
 
-            $response['locate'] = $this->createLink('project', 'task', "projectID=$projectID");
+            $response['locate'] = $this->createLink('execution', 'task', "executionID=$executionID");
             $this->send($response);
         }
     }
@@ -1412,7 +1413,7 @@ class story extends control
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $tracks = $this->story->getTracks($productID, $branch, $pager);
 
-        if($this->app->rawModule == 'projectstory') $projectProducts = $this->product->getProductsByProject($this->session->PRJ);
+        if($this->app->rawModule == 'projectstory') $projectProducts = $this->product->getProductsByProject($this->session->project);
 
         $this->view->title      = $this->lang->story->track;
         $this->view->position[] = $this->lang->story->track;
@@ -1428,17 +1429,17 @@ class story extends control
      * Tasks of a story.
      *
      * @param  int    $storyID
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function tasks($storyID, $projectID = 0)
+    public function tasks($storyID, $executionID = 0)
     {
         $this->loadModel('task');
-        $tasks = $this->task->getStoryTasks($storyID, $projectID);
+        $tasks = $this->task->getStoryTasks($storyID, $executionID);
         $this->view->tasks   = $tasks;
         $this->view->users   = $this->user->getPairs('noletter');
-        $this->view->summary = $this->loadModel('project')->summary($tasks);
+        $this->view->summary = $this->execution->summary($tasks);
         $this->display();
     }
 
@@ -1446,14 +1447,14 @@ class story extends control
      * Bugs of a story.
      *
      * @param  int    $storyID
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function bugs($storyID, $projectID = 0)
+    public function bugs($storyID, $executionID = 0)
     {
         $this->loadModel('bug');
-        $this->view->bugs  = $this->bug->getStoryBugs($storyID, $projectID);
+        $this->view->bugs  = $this->bug->getStoryBugs($storyID, $executionID);
         $this->view->users = $this->user->getPairs('noletter');
         $this->display();
     }
@@ -1600,9 +1601,9 @@ class story extends control
     }
 
     /**
-     * AJAX: get stories of a project in html select.
+     * AJAX: get stories of a execution in html select.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  int    $productID
      * @param  int    $storyID
      * @param  string $number
@@ -1610,14 +1611,14 @@ class story extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProjectStories($projectID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $number = '', $type= 'full')
+    public function ajaxGetExecutionStories($executionID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $number = '', $type= 'full')
     {
         if($moduleID)
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
-        $stories = $this->story->getProjectStoryPairs($projectID, $productID, $branch, $moduleID, $type);
+        $stories = $this->story->getProjectStoryPairs($executionID, $productID, $branch, $moduleID, $type);
         if($this->app->getViewType() === 'json')
         {
             die(json_encode($stories));
@@ -1808,13 +1809,13 @@ class story extends control
      *
      * @param  int    $productID
      * @param  string $orderBy
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  string $browseType
      * @param  string $type requirement|story
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $projectID = 0, $browseType = '', $type = 'story')
+    public function export($productID, $orderBy, $executionID = 0, $browseType = '', $type = 'story')
     {
         /* format the fields of every story in order to export data. */
         if($_POST)
@@ -1843,7 +1844,7 @@ class story extends control
             }
             else
             {
-                $field = $projectID ? 't2.id' : 't1.id';
+                $field = $executionID ? 't2.id' : 't1.id';
                 $stmt  = $this->dbh->query($this->session->storyQueryCondition . ($this->post->exportType == 'selected' ? " AND $field IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
                 while($row = $stmt->fetch()) $stories[$row->id] = $row;
             }
@@ -1875,7 +1876,7 @@ class story extends control
                 }
             }
 
-            /* Get users, products and projects. */
+            /* Get users, products and executions. */
             $users    = $this->loadModel('user')->getPairs('noletter');
             $products = $this->product->getPairs('nocode');
 
@@ -2035,11 +2036,11 @@ class story extends control
                 if($story->parent > 0 && strpos($story->title, htmlentities('>')) !== 0) $story->title = '>' . $story->title;
             }
 
-            if($projectID)
+            if($executionID)
             {
                 $header = new stdclass();
-                $header->name      = 'project';
-                $header->tableName = TABLE_PROJECT;
+                $header->name      = 'execution';
+                $header->tableName = TABLE_EXECUTION;
 
                 $this->post->set('header', $header);
             }
@@ -2054,10 +2055,10 @@ class story extends control
         }
 
         $fileName = $type == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
-        if($projectID)
+        if($executionID)
         {
-            $projectName = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('name');
-            $fileName    = $projectName . $this->lang->dash . $fileName;
+            $executionName = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch('name');
+            $fileName      = $executionName . $this->lang->dash . $fileName;
         }
         else
         {
@@ -2100,7 +2101,7 @@ class story extends control
 
     /**
      * Ajax get story status.
-     * 
+     *
      * @param  string $method
      * @param  string $params
      * @access public

@@ -141,7 +141,7 @@ $(function()
     });
 });
 </script>
-<?php if(isset($project)) js::set('project', $project);?>
+<?php if(isset($execution)) js::set('execution', $execution);?>
 <?php js::set('storyType', $type);?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -53,7 +53,7 @@
     $openGroup  = 'product';
     if($this->app->rawModule == 'projectstory')
     {
-        $otherParam = "storyID=&projectID={$this->session->PRJ}";
+        $otherParam = "storyID=&projectID={$this->session->project}";
         $openGroup  = 'project';
     }
     ?>
@@ -74,7 +74,7 @@
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
       <!--
-      <?php if($project->model == 'waterfall' and $story->type == 'requirement'):?>
+      <?php if($execution->model == 'waterfall' and $story->type == 'requirement'):?>
         <?php if(!empty($track)):?>
         <div class="detail">
           <div class="detail-title"><?php echo $lang->story->track;?></div>
@@ -221,13 +221,13 @@
             echo "</div>";
         }
 
-        if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'plus', '', 'showinonlybody');
+        if($from == 'project') common::printIcon('task', 'create', "execution=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'plus', '', 'showinonlybody');
 
         echo $this->buildOperateMenu($story, 'view');
 
         echo "<div class='divider'></div>";
         common::printIcon('story', 'edit', "storyID=$story->id", $story);
-        common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, 'button', 'copy', '', '', '', "data-width='1050'");
+        common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, 'button', 'copy', '', '', '', "data-width='1050'");
         common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
@@ -430,22 +430,22 @@
           <div class="tab-pane <?php if(!$this->config->URAndSR) echo 'active';?>" id='legendProjectAndTask'>
             <ul class="list-unstyled">
               <?php
-              foreach($story->tasks as $projectTasks)
+              foreach($story->tasks as $executionTasks)
               {
-                  foreach($projectTasks as $task)
+                  foreach($executionTasks as $task)
                   {
-                      if(!isset($projects[$task->project])) continue;
-                      $projectName = $projects[$task->project];
+                      if(!isset($executions[$task->execution])) continue;
+                      $executionName = $executions[$task->execution];
                       $class = isonlybody() ? 'showinonlybody' : 'iframe';
                       echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "[T]$task->id $task->name", '', "class=$class data-width='80%'");
-                      echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName, '', "class='text-muted'") . '</li>';
+                      echo html::a($this->createLink('execution', 'browse', "executionID=$task->execution"), $executionName, '', "class='text-muted'") . '</li>';
                   }
               }
               if(count($story->tasks) == 0)
               {
-                  foreach($story->projects as $projectID => $project)
+                  foreach($story->executions as $executionID => $execution)
                   {
-                      echo "<li title='$project->name'>" . html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name, '', "class='text-muted'") . '</li>';
+                      echo "<li title='$execution->name'>" . html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name, '', "class='text-muted'") . '</li>';
                   }
               }
               ?>
