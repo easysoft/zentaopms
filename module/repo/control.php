@@ -12,7 +12,7 @@ class repo extends control
 {
     /**
      * Construct.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -28,7 +28,7 @@ class repo extends control
         }
 
         /* Set repo menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if(!$this->projectID)
         {
             $this->lang->navGroup->repo    = 'repo';
@@ -150,10 +150,10 @@ class repo extends control
     }
 
     /**
-     * Delete repo. 
-     * 
-     * @param  int    $repoID 
-     * @param  string $confirm 
+     * Delete repo.
+     *
+     * @param  int    $repoID
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -180,13 +180,13 @@ class repo extends control
     }
 
     /**
-     * View repo file. 
-     * 
-     * @param  int    $repoID 
-     * @param  string $entry 
-     * @param  string $revision 
-     * @param  string $showBug 
-     * @param  string $encoding 
+     * View repo file.
+     *
+     * @param  int    $repoID
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $showBug
+     * @param  string $encoding
      * @access public
      * @return void
      */
@@ -215,12 +215,12 @@ class repo extends control
         if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&revision=$revision"));
         $content  = $this->scm->cat($entry, $revision);
         $entry    = urldecode($entry);
-        $pathInfo = pathinfo($entry); 
+        $pathInfo = pathinfo($entry);
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
 
-        $suffix   = ''; 
-        if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]); 
+        $suffix   = '';
+        if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
         if(!$suffix or (!array_key_exists($suffix, $this->config->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repo->isBinary($content, $suffix) ? 'binary' : 'c';
 
         if(strpos($this->config->repo->images, "|$suffix|") !== false)
@@ -279,12 +279,12 @@ class repo extends control
     }
 
     /**
-     * Browse repo. 
-     * 
-     * @param  int    $repoID 
-     * @param  string $path 
-     * @param  string $revision 
-     * @param  int    $refresh 
+     * Browse repo.
+     *
+     * @param  int    $repoID
+     * @param  string $path
+     * @param  string $revision
+     * @param  int    $refresh
      * @access public
      * @return void
      */
@@ -394,14 +394,14 @@ class repo extends control
 
     /**
      * show repo log.
-     * 
-     * @param  int    $repoID 
-     * @param  string $entry 
-     * @param  string $revision 
-     * @param  string $type 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $repoID
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $type
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -547,12 +547,12 @@ class repo extends control
     }
 
     /**
-     * Blame repo file. 
-     * 
-     * @param  int    $repoID 
-     * @param  string $entry 
-     * @param  string $revision 
-     * @param  string $encoding 
+     * Blame repo file.
+     *
+     * @param  int    $repoID
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $encoding
      * @access public
      * @return void
      */
@@ -593,13 +593,13 @@ class repo extends control
 
     /**
      * Show diff.
-     * 
-     * @param  int    $repoID 
-     * @param  string $entry 
-     * @param  string $oldRevision 
-     * @param  string $newRevision 
-     * @param  string $showBug 
-     * @param  string $encoding 
+     *
+     * @param  int    $repoID
+     * @param  string $entry
+     * @param  string $oldRevision
+     * @param  string $newRevision
+     * @param  string $showBug
+     * @param  string $encoding
      * @access public
      * @return void
      */
@@ -612,9 +612,9 @@ class repo extends control
         $repo    = $this->repo->getRepoByID($repoID);
         $entry   = $this->repo->decodePath($entry);
 
-        $pathInfo = pathinfo($entry); 
-        $suffix   = ''; 
-        if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]); 
+        $pathInfo = pathinfo($entry);
+        $suffix   = '';
+        if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
 
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
         if($this->server->request_method == 'POST')
@@ -622,7 +622,7 @@ class repo extends control
             $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
             $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
 
-            if($this->post->arrange) 
+            if($this->post->arrange)
             {
                 $arrange = $this->post->arrange;
                 setcookie('arrange', $arrange);
@@ -700,13 +700,13 @@ class repo extends control
     }
 
     /**
-     * Download repo file. 
-     * 
-     * @param  int    $repoID 
-     * @param  string $path 
-     * @param  string $fromRevision 
-     * @param  string $toRevision 
-     * @param  string $type 
+     * Download repo file.
+     *
+     * @param  int    $repoID
+     * @param  string $path
+     * @param  string $fromRevision
+     * @param  string $toRevision
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -725,7 +725,7 @@ class repo extends control
 
     /**
      * Set Rules.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -753,9 +753,9 @@ class repo extends control
 
     /**
      * Show sync comment.
-     * 
-     * @param  int    $repoID 
-     * @param  string $branch 
+     *
+     * @param  int    $repoID
+     * @param  string $branch
      * @access public
      * @return void
      */
@@ -778,9 +778,9 @@ class repo extends control
 
     /**
      * Ajax sync comment.
-     * 
-     * @param  int    $repoID 
-     * @param  string $type 
+     *
+     * @param  int    $repoID
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -869,9 +869,9 @@ class repo extends control
 
     /**
      * Ajax sync git branch comment.
-     * 
-     * @param  int    $repoID 
-     * @param  string $branch 
+     *
+     * @param  int    $repoID
+     * @param  string $branch
      * @access public
      * @return void
      */
@@ -917,13 +917,13 @@ class repo extends control
 
     /**
      * Ajax show side logs.
-     * 
-     * @param  int    $repoID 
-     * @param  string $path 
-     * @param  string $type 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $repoID
+     * @param  string $path
+     * @param  string $type
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -949,10 +949,10 @@ class repo extends control
     }
 
     /**
-     * Ajax get svn tags 
-     * 
-     * @param  int    $repoID 
-     * @param  string $path 
+     * Ajax get svn tags
+     *
+     * @param  int    $repoID
+     * @param  string $path
      * @access public
      * @return void
      */
