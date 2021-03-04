@@ -95,9 +95,9 @@ class storyModel extends model
 
     /**
      * Get test stories.
-     * 
-     * @param  array  $storyIdList 
-     * @param  int    $projectID 
+     *
+     * @param  array  $storyIdList
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -168,10 +168,10 @@ class storyModel extends model
     public function getRequierements($productID)
     {
         return $this->dao->select('id,title')->from(TABLE_STORY)
-           ->where('deleted')->eq(0) 
-           ->andWhere('status')->ne('draft') 
-           ->andWhere('product')->eq($productID) 
-           ->andWhere('type')->eq('requirement') 
+           ->where('deleted')->eq(0)
+           ->andWhere('status')->ne('draft')
+           ->andWhere('product')->eq($productID)
+           ->andWhere('type')->eq('requirement')
            ->fetchPairs();
     }
 
@@ -570,8 +570,8 @@ class storyModel extends model
                     /* IF is requirement changed, notify its relation. */
                     $relations = $this->dao->select('BID')->from(TABLE_RELATION)
                         ->where('AType')->eq('requirement')
-                        ->andWhere('BType')->eq('story') 
-                        ->andWhere('relation')->eq('subdivideinto') 
+                        ->andWhere('BType')->eq('story')
+                        ->andWhere('relation')->eq('subdivideinto')
                         ->andWhere('AID')->eq($story->id)
                         ->fetchPairs();
 
@@ -774,10 +774,10 @@ class storyModel extends model
 
     /**
      * Update parent status.
-     * 
-     * @param  int    $storyID 
-     * @param  int    $parentID 
-     * @param  bool   $createAction 
+     *
+     * @param  int    $storyID
+     * @param  int    $parentID
+     * @param  bool   $createAction
      * @access public
      * @return mixed
      */
@@ -789,7 +789,7 @@ class storyModel extends model
 
         $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
         if(empty($oldParentStory)) return $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($storyID)->exec();
-        if($oldParentStory->parent != '-1') $this->dao->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec(); 
+        if($oldParentStory->parent != '-1') $this->dao->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
         $this->computeEstimate($parentID);
 
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_STORY)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
@@ -936,8 +936,8 @@ class storyModel extends model
 
     /**
      * Compute parent story estimate.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return bool
      */
@@ -1210,9 +1210,9 @@ class storyModel extends model
         $now      = helper::now();
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if($oldStory->type == 'requirement')
-        {   
-            foreach($stories as $id) 
-            {   
+        {
+            foreach($stories as $id)
+            {
                 $data = new stdclass();
                 $data->product  = $oldStory->product;
                 $data->AType    = 'requirement';
@@ -1235,7 +1235,7 @@ class storyModel extends model
                 $data->BVersion = $oldStory->version;
 
                 $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
-            }   
+            }
 
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate(helper::createLink('product', 'browse', "productID=$oldStory->product&branch=0&browseType=unclosed&queryID=0&type=story"), 'parent.parent'));
@@ -1619,8 +1619,8 @@ class storyModel extends model
 
     /**
      * Assign story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return array
      */
@@ -1920,25 +1920,25 @@ class storyModel extends model
         $tmpStoryType  = $storyType == 'story' ? 'requirement' : 'story';
 
         if($browseType == 'bySearch')
-        {   
+        {
             $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id', '', $tmpStoryType);
             foreach($stories2Link as $key => $story2Link)
-            {   
+            {
                 if($story2Link->id == $storyID) unset($stories2Link[$key]);
                 if(in_array($story2Link->id, explode(',', $story->$type))) unset($stories2Link[$key]);
-            }   
-        }   
+            }
+        }
         else
-        {   
+        {
             $status = $storyType == 'story' ? 'active' : 'all';
             $stories2Link = $this->getProductStories($story->product, $story->branch, 0, $status, $tmpStoryType, $orderBy = 'id_desc');
-        }   
+        }
 
         foreach($stories2Link as $id => $story)
-        {   
+        {
             if(in_array($story->id, array_keys($linkedStories))) unset($stories2Link[$id]);
             if($storyType == 'story' && $story->status == 'draft') unset($stories2Link[$id]);
-        }   
+        }
 
         return $stories2Link;
     }
@@ -2182,7 +2182,7 @@ class storyModel extends model
      * @param  string $orderBy
      * @param  string $projectID
      * @param  string $type requirement|story
-     * @param  string $excludeStories 
+     * @param  string $excludeStories
      * @param  object $pager
      * @access public
      * @return array
@@ -2297,7 +2297,7 @@ class storyModel extends model
      * @param  string $orderBy
      * @param  string $type
      * @param  int    $param
-     * @param  string $storyType 
+     * @param  string $storyType
      * @param  string $excludeStories
      * @param  object $pager
      * @access public
@@ -2485,9 +2485,9 @@ class storyModel extends model
 
     /**
      * Get parent story pairs.
-     * 
-     * @param  int    $productID 
-     * @param  string $append 
+     *
+     * @param  int    $productID
+     * @param  string $append
      * @access public
      * @return void
      */
@@ -3196,19 +3196,19 @@ class storyModel extends model
         if($type == 'requirement')
         {
             $relations = $this->dao->select('DISTINCT AID, BID')->from(TABLE_RELATION)
-              ->where('AID')->in(array_keys($stories))  
-              ->andWhere('AType')->eq('requirement')  
-              ->andWhere('BType')->eq('story')  
-              ->andWhere('relation')->eq('subdivideinto')  
+              ->where('AID')->in(array_keys($stories))
+              ->andWhere('AType')->eq('requirement')
+              ->andWhere('BType')->eq('story')
+              ->andWhere('relation')->eq('subdivideinto')
               ->fetchAll();
 
             $group = array();
-            foreach($relations as $relation) $group[$relation->AID][] = $relation->BID; 
+            foreach($relations as $relation) $group[$relation->AID][] = $relation->BID;
 
-            foreach($stories as $story) 
+            foreach($stories as $story)
             {
                 if(!isset($group[$story->id])) continue;
-                $story->children = $this->getByList($group[$story->id]); 
+                $story->children = $this->getByList($group[$story->id]);
             }
         }
 
@@ -3281,7 +3281,7 @@ class storyModel extends model
 
         $module    = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';
         $canView   = common::hasPriv($module, 'view');
-        $openGroup = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
+        $openApp   = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
         $storyLink = helper::createLink($module, 'view', "storyID=$story->id");
         $account   = $this->app->user->account;
         $id        = $col->id;
@@ -3347,7 +3347,7 @@ class storyModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a($storyLink, sprintf('%03d', $story->id), '', "data-group='$openGroup'");
+                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a($storyLink, sprintf('%03d', $story->id), '', "data-app='$openApp'");
                 }
                 else
                 {
@@ -3365,7 +3365,7 @@ class storyModel extends model
                 if($story->branch and isset($branches[$story->branch])) echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                 if($story->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
-                echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color' data-group='$openGroup'") : "<span style='color: $story->color'>{$story->title}</span>";
+                echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color' data-app='$openApp'") : "<span style='color: $story->color'>{$story->title}</span>";
                 if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';
                 break;
             case 'plan':
@@ -3895,7 +3895,7 @@ class storyModel extends model
      * @access public
      * @return int
      */
-    public function getStoryRelationCounts($storyID, $storyType = '') 
+    public function getStoryRelationCounts($storyID, $storyType = '')
     {
         $selectField    = ($storyType == 'story') ? 'AID' : 'BID';
         $conditionField = ($storyType == 'story') ? 'BID' : 'AID';
@@ -3959,7 +3959,7 @@ class storyModel extends model
     public function replaceURLang($type)
     {
         if($type == 'requirement')
-        {   
+        {
             $storyLang = $this->lang->story;
             $SRCommon  = $this->lang->SRCommon;
             $URCommon  = $this->lang->URCommon;
@@ -4000,7 +4000,7 @@ class storyModel extends model
 
             $storyLang->report->charts['storysPerProduct'] = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerProduct']);
             $storyLang->report->charts['storysPerModule']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerModule']);
-            $storyLang->report->charts['storysPerSource']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerSource']); 
+            $storyLang->report->charts['storysPerSource']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerSource']);
         }
     }
 }

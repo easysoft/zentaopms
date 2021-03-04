@@ -592,6 +592,7 @@ class commonModel extends model
 
             $item = new stdClass();
             $item->group      = $group;
+            $item->code       = $group;
             $item->active     = zget($lang->navGroup, $moduleName, '') == $group || $moduleName != 'program' && $moduleName == $group;
             $item->title      = $title;
             $item->moduleName = $currentModule;
@@ -1057,7 +1058,7 @@ class commonModel extends model
     {
         /* Add data-group attribute. */
         global $app;
-        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openGroup . '"';
+        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openApp . '"';
 
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
@@ -1151,7 +1152,7 @@ EOD;
         global $app, $lang, $config;
 
         /* Add data-group attribute. */
-        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openGroup . '"';
+        if(strpos($misc, 'data-group') === false) $misc .= ' data-group="' . $app->openApp . '"';
 
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;

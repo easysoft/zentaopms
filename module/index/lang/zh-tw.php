@@ -3,10 +3,10 @@ $lang->index->common = '首頁';
 $lang->index->index  = '首頁';
 $lang->index->search = '請輸入';
 
-$lang->index->tab = new stdClass();
-$lang->index->tab->open   = '打開';
-$lang->index->tab->reload = '刷新';
-$lang->index->tab->close  = '關閉';
+$lang->index->app = new stdClass();
+$lang->index->app->open   = '打開';
+$lang->index->app->reload = '刷新';
+$lang->index->app->close  = '關閉';
 
 $lang->index->upgradeVersion = '禪道新版本';
 $lang->index->currentVersion = '當前版本';
