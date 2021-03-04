@@ -1,6 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php js::set('weekend', $config->project->weekend);?>
+<?php js::set('weekend', $config->execution->weekend);?>
 <div id='mainContent' class='main-row'>
   <div class='side-col col-lg' id='sidebar'>
     <?php include 'blockreportlist.html.php';?>
@@ -66,7 +66,7 @@
             <thead>
               <tr class='colhead text-center'>
                 <th class="w-100px"><?php echo $lang->report->user;?></th>
-                <th><?php echo $lang->report->project;?></th>
+                <th><?php echo $lang->report->execution;?></th>
                 <th class="w-100px"><?php echo $lang->report->task;?></th>
                 <th class="w-100px"><?php echo $lang->report->remain;?></th>
                 <th class="w-100px"><?php echo $lang->report->taskTotal;?></th>
@@ -81,10 +81,10 @@
               <tr class="text-center">
                 <td rowspan="<?php echo count($load['task']);?>"><?php echo $users[$account];?></td>
                 <?php $id = 1;?>
-                <?php foreach($load['task'] as $project => $info):?>
+                <?php foreach($load['task'] as $execution => $info):?>
                 <?php $class = $color ? 'rowcolor' : '';?>
                 <?php if($id != 1) echo '<tr class="text-center">';?>
-                <td title='<?php echo $project?>' class="<?php echo $class;?> text-left"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $project);?></td>
+                <td title='<?php echo $execution?>' class="<?php echo $class;?> text-left"><?php echo html::a($this->createLink('execution', 'view', "executionID={$info['executionID']}"), $execution);?></td>
                 <td class="<?php echo $class;?>"><?php echo $info['count'];?></td>
                 <td class="<?php echo $class;?>"><?php echo $info['manhour'];?></td>
                 <?php if($id == 1):?>
