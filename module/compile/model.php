@@ -60,7 +60,7 @@ class compileModel extends model
     /**
      * Get last result.
      * 
-     * @param  int    $jobID 
+     * @param  int    $jobID
      * @access public
      * @return object
      */
@@ -115,7 +115,7 @@ class compileModel extends model
     /**
      * Execute compile
      * 
-     * @param  object $compile 
+     * @param  object $compile
      * @access public
      * @return bool
      */
