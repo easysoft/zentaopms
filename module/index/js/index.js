@@ -59,7 +59,7 @@
         var link = $.parseLink(urlOrModuleName);
         if(!link.moduleName || link.isOnlyBody) return '';
 
-        if(link.hash && link.hash.indexOf('app=') === 0) return link.hash.substr(5);
+        if(link.hash && link.hash.indexOf('app=') === 0) return link.hash.substr(4);
 
         /* Handling special situations */
         var moduleName      = link.moduleName;

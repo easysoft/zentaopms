@@ -143,7 +143,7 @@ $lang->mainNav->product = "<i class='icon icon-product'></i> 产品|$productModu
 if($config->systemMode == 'new')
 {
     $lang->mainNav->project   = "<i class='icon icon-project'></i> 项目|$projectModule|$projectMethod|";
-    $lang->mainNav->execution = "<i class='icon icon-sprint'></i> 执行|execution|task|";
+    $lang->mainNav->execution = "<i class='icon icon-run'></i> 执行|execution|task|";
 }
 else
 {

@@ -13,7 +13,7 @@ class install extends control
 {
     /**
      * Construct function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -28,7 +28,7 @@ class install extends control
 
     /**
      * Index page of install module.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -41,8 +41,8 @@ class install extends control
     }
 
     /**
-     * Checking agree license. 
-     * 
+     * Checking agree license.
+     *
      * @access public
      * @return void
      */
@@ -55,7 +55,7 @@ class install extends control
 
     /**
      * Check the system.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -97,7 +97,7 @@ class install extends control
 
     /**
      * Set configs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -109,7 +109,7 @@ class install extends control
 
     /**
      * Create the config file.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -168,7 +168,7 @@ class install extends control
 
     /**
      * Create company, admin.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -204,7 +204,7 @@ class install extends control
 
     /**
      * Join zentao community or login pms.
-     * 
+     *
      * @access public
      * @return void
      */

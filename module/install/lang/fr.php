@@ -33,7 +33,7 @@ $lang->install->links = <<<EOT
 ZenTao ALM est développé par <strong><a href='https://en.easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
 Site Officiel : <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
 Support Technique: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
-LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>Nature Easy Soft</a> 
+LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>Nature Easy Soft</a>
 Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Nature Easy Soft</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 
@@ -153,7 +153,7 @@ $lang->install->groupList['LIMITED']['name'] = 'Utilisateur restreint';
 $lang->install->groupList['LIMITED']['desc'] = 'Les utilisateurs peuvent seulement éditer ce qui les concernent.';
 
 $lang->install->cronList[''] = 'Moniteur Cron';
-$lang->install->cronList['moduleName=project&methodName=computeburn']   = 'Mise à jour Graphe Burndown';
+$lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Mise à jour Graphe Burndown';
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Rappel Tâches quotidiennes';
 $lang->install->cronList['moduleName=svn&methodName=run']               = 'Synchroniser SVN';
 $lang->install->cronList['moduleName=git&methodName=run']               = 'Synchroniser GIT';
