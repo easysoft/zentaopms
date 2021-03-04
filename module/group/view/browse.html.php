@@ -42,23 +42,23 @@
         <td title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
         <td title='<?php echo $users;?>' class="text-ellipsis"><?php echo $users;?></td>
         <td class='c-actions'>
-          <?php $isPRJAdmin = $group->role == 'PRJAdmin';?>
-          <?php $disabled   = $isPRJAdmin ? 'disabled' : '';?>
+          <?php $isProjectAdmin = $group->role == 'projectAdmin';?>
+          <?php $disabled       = $isProjectAdmin ? 'disabled' : '';?>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', "$disabled");?>
           <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php if($isPRJAdmin):?>
-          <?php common::printIcon('group', 'managePRJAdmin', "groupID=$group->id", $group, 'list', 'persons');?>
+          <?php if($isProjectAdmin):?>
+          <?php common::printIcon('group', 'manageProjectAdmin', "groupID=$group->id", $group, 'list', 'persons');?>
           <?php else:?>
-          <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'persons', '', "iframe", true, "data-width='90%'");?>
+          <?php common::printIcon('group', 'manageMember', "groupID=$group->id", $group, 'list', 'persons', '', "iframe", true, "data-width='90%'");?>
           <?php endif;?>
           <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', "iframe $disabled", true, "data-width='550'");?>
           <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', "iframe $disabled", true, "data-width='550'");?>
           <?php
-          if(common::hasPriv('group', 'delete'))
+          if(common::hasPriv('group', 'deProjecte'))
           {
-              if($isPRJAdmin)
+              if($isProjectAdmin)
               {
                   echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
               }

@@ -13,7 +13,7 @@ class group extends control
 {
     /**
      * Construct function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -26,7 +26,7 @@ class group extends control
 
     /**
      * Browse groups.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -49,7 +49,7 @@ class group extends control
 
     /**
      * Create a group.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -70,8 +70,8 @@ class group extends control
 
     /**
      * Edit a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
@@ -86,6 +86,7 @@ class group extends control
 
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
         $position[] = $this->lang->group->edit;
+
         $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->group    = $this->group->getById($groupID);
@@ -95,8 +96,8 @@ class group extends control
 
     /**
      * Copy a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
@@ -141,7 +142,7 @@ class group extends control
         $this->view->position[] = $this->lang->group->manageView;
 
         $this->view->group    = $group;
-        $this->view->programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('program')->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->programs = $this->dao->select('*')->from(TABLE_PROGRAM)->where('deleted')->eq('0')->andWhere('type')->eq('program')->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
 
@@ -185,7 +186,7 @@ class group extends control
 
             if($this->config->systemMode == 'classic')
             {
-                if(isset($groupPrivs['program']['prjbrowse']))
+                if(isset($groupPrivs['project']['browse']))
                 {
                     $groupPrivs['project']['list'] = 'list';
                 }
@@ -233,8 +234,8 @@ class group extends control
 
     /**
      * Manage members of a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @param  int    $deptID
      * @access public
      * @return void
@@ -268,18 +269,18 @@ class group extends control
 
     /**
      * Manage members of a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @param  int    $deptID
      * @access public
      * @return void
      */
-    public function managePRJAdmin($groupID, $deptID = 0)
+    public function manageProjectAdmin($groupID, $deptID = 0)
     {
         if(!empty($_POST))
         {
-            $this->group->updatePRJAdmin($groupID);
-            die(js::locate(inlink('managePRJAdmin', "group=$groupID"), 'parent'));
+            $this->group->updateProjectAdmin($groupID);
+            die(js::locate(inlink('manageProjectAdmin', "group=$groupID"), 'parent'));
         }
         $group        = $this->group->getById($groupID);
         $groupUsers   = $this->group->getUserPairs($groupID);
@@ -295,7 +296,7 @@ class group extends control
         $this->view->allUsers     = $allUsers;
         $this->view->group        = $group;
         $this->view->programs     = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('deleted')->eq(0)->fetchPairs();
-        $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createManagePRJAdminLink'), $groupID);
+        $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createManageProjectAdminLink'), $groupID);
         $this->view->groupUsers   = $groupUsers;
         $this->view->userPrograms = $userPrograms;
 
@@ -304,8 +305,8 @@ class group extends control
 
     /**
      * Delete a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @param  string $confirm  yes|no
      * @access public
      * @return void

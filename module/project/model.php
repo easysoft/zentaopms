@@ -390,19 +390,49 @@ class projectModel extends model
     }
 
     /**
-     * Get project pairs.
+     * Get project team member pairs.
      *
-     * @param  int    $projectID
+     * @param  int  $programID
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberPairs($programID = 0)
+    {
+      $projectList = $this->getPairsByProgram($programID);
+      if(!$projectList) return array('' => '');
+
+      $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+          ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+          ->where('t1.root')->in(array_keys($projectList))
+          ->andWhere('t1.type')->eq('project')
+          ->andWhere('t2.deleted')->eq(0)
+          ->fetchAll('account');
+      if(!$users) return array('' => '');
+
+      foreach($users as $account => $user)
+      {
+        $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
+        if(!empty($this->config->isINT)) $firstLetter = '';
+        $users[$account] = $firstLetter . ($user->realname ? $user->realname : $user->account);
+      }
+
+      return array('' => '') + $users;
+    }
+
+    /**
+     * Get project pairs by programID.
+     *
+     * @param  int    $programID
      * @param  status $status    all|wait|doing|suspended|closed|noclosed
      * @access public
      * @return object
      */
-    public function getPairs($projectID = 0, $status = 'all')
+    public function getPairsByProgram($programID = 0, $status = 'all')
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
-            ->beginIF($projectID)->andWhere('parent')->eq($projectID)->fi()
+            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($status != 'all' && $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()

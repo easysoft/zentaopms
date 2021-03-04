@@ -28,7 +28,7 @@
   </div>
   <div class="main-col">
     <form class='main-table table-members' method='post' target='hiddenwin'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
         <?php if($userPrograms):?>
         <?php $i = 0;?>
         <?php foreach($userPrograms as $account => $program):?>
@@ -70,7 +70,7 @@
         <?php endif;?>
         <tr>
           <td class='text-center form-actions' colspan='5'>
-            <?php 
+            <?php
             echo html::submitButton('', '', "btn btn-primary");
             echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
             echo html::hidden('foo'); // Just a var, to make sure $_POST is not empty.

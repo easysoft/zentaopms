@@ -3,8 +3,8 @@ class repoModel extends model
 {
     /**
      * Check repo priv.
-     * 
-     * @param  object $repo 
+     *
+     * @param  object $repo
      * @access public
      * @return bool
      */
@@ -26,10 +26,10 @@ class repoModel extends model
 
     /**
      * Set menu.
-     * 
-     * @param  array  $repos 
-     * @param  int    $repoID 
-     * @param  bool   $showSeleter 
+     *
+     * @param  array  $repos
+     * @param  int    $repoID
+     * @param  bool   $showSeleter
      * @access public
      * @return void
      */
@@ -104,12 +104,12 @@ class repoModel extends model
     }
 
     /**
-     * Create the select code of repos. 
-     * 
-     * @param  array     $repos 
-     * @param  int       $repoID 
-     * @param  string    $currentModule 
-     * @param  string    $currentMethod 
+     * Create the select code of repos.
+     *
+     * @param  array     $repos
+     * @param  int       $repoID
+     * @param  string    $currentModule
+     * @param  string    $currentMethod
      * @access public
      * @return string
      */
@@ -154,7 +154,7 @@ class repoModel extends model
         foreach($repos as $i => $repo)
         {
             $repo->acl = json_decode($repo->acl);
-            if(!$this->checkPriv($repo)) 
+            if(!$this->checkPriv($repo))
             {
                 unset($repos[$i]);
             }
@@ -169,8 +169,8 @@ class repoModel extends model
 
     /**
      * Get list by SCM.
-     * 
-     * @param  string $scm 
+     *
+     * @param  string $scm
      * @param  string $type  all|haspriv
      * @access public
      * @return array
@@ -287,7 +287,7 @@ class repoModel extends model
 
     /**
      * Get repo pairs.
-     * 
+     *
      * @param  int    $projectID
      * @access public
      * @return array
@@ -306,7 +306,7 @@ class repoModel extends model
         {
             $repo->acl = json_decode($repo->acl);
             $scm = $repo->SCM == 'Subversion' ? 'svn' : 'git';
-            if($this->checkPriv($repo)) 
+            if($this->checkPriv($repo))
             {
                 if($projectID)
                 {
@@ -326,9 +326,9 @@ class repoModel extends model
     }
 
     /**
-     * Get repo by id. 
-     * 
-     * @param  int    $repoID 
+     * Get repo by id.
+     *
+     * @param  int    $repoID
      * @access public
      * @return object
      */
@@ -344,8 +344,8 @@ class repoModel extends model
 
     /**
      * Get by id list.
-     * 
-     * @param  array  $idList 
+     *
+     * @param  array  $idList
      * @access public
      * @return array
      */
@@ -363,8 +363,8 @@ class repoModel extends model
 
     /**
      * Get git branches.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
      * @return array
      */
@@ -377,7 +377,7 @@ class repoModel extends model
 
     /**
      * Get commits.
-     * 
+     *
      * @param  object $repo
      * @param  string $entry
      * @param  string $revision
@@ -444,8 +444,8 @@ class repoModel extends model
 
     /**
      * Get latest commit.
-     * 
-     * @param  int    $repoID 
+     *
+     * @param  int    $repoID
      * @access public
      * @return object
      */
@@ -477,12 +477,12 @@ class repoModel extends model
     }
 
     /**
-     * Get revisions from db. 
-     * 
-     * @param  int    $repoID 
-     * @param  string $limit 
-     * @param  string $maxRevision 
-     * @param  string $minRevision 
+     * Get revisions from db.
+     *
+     * @param  int    $repoID
+     * @param  string $limit
+     * @param  string $maxRevision
+     * @param  string $minRevision
      * @access public
      * @return array
      */
@@ -508,9 +508,9 @@ class repoModel extends model
 
     /**
      * Get history.
-     * 
-     * @param  int    $repoID 
-     * @param  array  $revisions 
+     *
+     * @param  int    $repoID
+     * @param  array  $revisions
      * @access public
      * @return array
      */
@@ -526,9 +526,9 @@ class repoModel extends model
 
     /**
      * Get git revisionName.
-     * 
-     * @param  string $revision 
-     * @param  int    $commit 
+     *
+     * @param  string $revision
+     * @param  int    $commit
      * @access public
      * @return string
      */
@@ -540,10 +540,10 @@ class repoModel extends model
 
     /**
      * Get cache file.
-     * 
-     * @param  int    $repoID 
-     * @param  string $path 
-     * @param  int    $revision 
+     *
+     * @param  int    $repoID
+     * @param  string $path
+     * @param  int    $revision
      * @access public
      * @return string
      */
@@ -557,11 +557,11 @@ class repoModel extends model
 
     /**
      * Save commit.
-     * 
-     * @param  int    $repoID 
-     * @param  array  $logs 
-     * @param  int    $version 
-     * @param  string $branch 
+     *
+     * @param  int    $repoID
+     * @param  array  $logs
+     * @param  int    $version
+     * @param  string $branch
      * @access public
      * @return int
      */
@@ -610,11 +610,11 @@ class repoModel extends model
 
     /**
      * Save One Commit.
-     * 
-     * @param  int    $repoID 
-     * @param  object $commit 
-     * @param  int    $version 
-     * @param  string $branch 
+     *
+     * @param  int    $repoID
+     * @param  object $commit
+     * @param  int    $version
+     * @param  string $branch
      * @access public
      * @return int
      */
@@ -664,9 +664,9 @@ class repoModel extends model
 
     /**
      * Save exists log branch.
-     * 
-     * @param  int    $repoID 
-     * @param  string $branch 
+     *
+     * @param  int    $repoID
+     * @param  string $branch
      * @access public
      * @return void
      */
@@ -690,9 +690,9 @@ class repoModel extends model
 
     /**
      * Update commit count.
-     * 
-     * @param  int    $repoID 
-     * @param  int    $count 
+     *
+     * @param  int    $repoID
+     * @param  int    $count
      * @access public
      * @return void
      */
@@ -702,9 +702,9 @@ class repoModel extends model
     }
 
     /**
-     * Get unsync commits 
-     * 
-     * @param  object $repo 
+     * Get unsync commits
+     *
+     * @param  object $repo
      * @access public
      * @return array
      */
@@ -742,7 +742,7 @@ class repoModel extends model
 
     /**
      * Get pre and next revision.
-     * 
+     *
      * @param  object $repo
      * @param  string $entry
      * @param  string $revision
@@ -788,24 +788,24 @@ class repoModel extends model
         }
 
         $preRevision  = false;
-        $preAndNext   = new stdclass(); 
-        $preAndNext->pre  = ''; 
-        $preAndNext->next = ''; 
+        $preAndNext   = new stdclass();
+        $preAndNext->pre  = '';
+        $preAndNext->next = '';
         foreach($revisions as $version => $commit)
         {
             /* Get next object. */
             if($preRevision === true)
-            {   
+            {
                 $preAndNext->next = $version;
                 break;
-            }   
+            }
 
             /* Get pre object. */
             if($revision == $version)
-            {   
+            {
                 if($preRevision) $preAndNext->pre = $preRevision;
                 $preRevision = true;
-            }   
+            }
             if($preRevision !== true) $preRevision = $version;
         }
         return $preAndNext;
@@ -818,13 +818,13 @@ class repoModel extends model
      * @param  string $params
      * @param  string $viewType
      * @param  bool   $onlybody
-     * @param  int    $PRJID
+     * @param  int    $projectID
      * @access public
      * @return string
      */
-    public function createLink($method, $params = '', $viewType = '', $onlybody = false, $PRJID = 0)
+    public function createLink($method, $params = '', $viewType = '', $onlybody = false, $projectID = 0)
     {
-        if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType, $onlybody, $PRJID);
+        if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType, $onlybody, $projectID);
 
         $parsedParams = array();
         parse_str($params, $parsedParams);
@@ -841,7 +841,7 @@ class repoModel extends model
         }
 
         $params = http_build_query($parsedParams);
-        $link   = helper::createLink('repo', $method, $params, $viewType, $onlybody, $PRJID);
+        $link   = helper::createLink('repo', $method, $params, $viewType, $onlybody, $projectID);
         if(empty($pathParams)) return $link;
 
         $link .= strpos($link, '?') === false ? '?' : '&';
@@ -851,9 +851,9 @@ class repoModel extends model
 
     /**
      * Set back session/
-     * 
-     * @param  string $type 
-     * @param  bool   $withOtherModule 
+     *
+     * @param  string $type
+     * @param  bool   $withOtherModule
      * @access public
      * @return void
      */
@@ -875,8 +875,8 @@ class repoModel extends model
 
     /**
      * Set repo branch.
-     * 
-     * @param  string $branch 
+     *
+     * @param  string $branch
      * @access public
      * @return void
      */
@@ -888,8 +888,8 @@ class repoModel extends model
 
     /**
      * Mark synced status.
-     * 
-     * @param  int    $repoID 
+     *
+     * @param  int    $repoID
      * @access public
      * @return void
      */
@@ -901,8 +901,8 @@ class repoModel extends model
 
     /**
      * Fix commit.
-     * 
-     * @param  int    $repoID 
+     *
+     * @param  int    $repoID
      * @access public
      * @return void
      */
@@ -925,8 +925,8 @@ class repoModel extends model
 
     /**
      * Encode repo path.
-     * 
-     * @param  string $path 
+     *
+     * @param  string $path
      * @access public
      * @return string
      */
@@ -938,8 +938,8 @@ class repoModel extends model
 
     /**
      * Decode repo path.
-     * 
-     * @param  string $path 
+     *
+     * @param  string $path
      * @access public
      * @return string
      */
@@ -951,9 +951,9 @@ class repoModel extends model
 
     /**
      * Check content is binary.
-     * 
-     * @param  string $content 
-     * @param  string $suffix 
+     *
+     * @param  string $content
+     * @param  string $suffix
      * @access public
      * @return bool
      */
@@ -962,17 +962,17 @@ class repoModel extends model
         if(strpos($this->config->repo->binary, "|$suffix|") !== false) return true;
 
         $blk = substr($content, 0, 512);
-        return ( 
+        return (
             false ||
             substr_count($blk, "^\r\n")/512 > 0.3 ||
             substr_count($blk, "^ -~")/512 > 0.3 ||
             substr_count($blk, "\x00") > 0
-        ); 
+        );
     }
 
     /**
      * Check svn/git client.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1008,7 +1008,7 @@ class repoModel extends model
 
     /**
      * remove client version file.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1026,8 +1026,8 @@ class repoModel extends model
     }
 
     /**
-     * Check connection 
-     * 
+     * Check connection
+     *
      * @access public
      * @return void
      */
@@ -1078,7 +1078,7 @@ class repoModel extends model
             }
 
             exec($command, $output, $result);
-            if($result) 
+            if($result)
             {
                 $message = sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
                 if(stripos($message, 'Expected FS format between') !== false and strpos($message, 'found format') !== false)
@@ -1128,8 +1128,8 @@ class repoModel extends model
 
     /**
      * Replace comment link.
-     * 
-     * @param  string $comment 
+     *
+     * @param  string $comment
      * @access public
      * @return string
      */
@@ -1162,9 +1162,9 @@ class repoModel extends model
 
     /**
      * Add link.
-     * 
-     * @param  string $matches 
-     * @param  string $method 
+     *
+     * @param  string $matches
+     * @param  string $method
      * @access public
      * @return string
      */
@@ -1293,9 +1293,9 @@ class repoModel extends model
 
     /**
      * Iconv Comment.
-     * 
-     * @param  string $comment 
-     * @param  string $encodings 
+     *
+     * @param  string $comment
+     * @param  string $encodings
      * @access public
      * @return string
      */
@@ -1318,7 +1318,7 @@ class repoModel extends model
 
     /**
      * Process rules to REG.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -1369,10 +1369,10 @@ class repoModel extends model
 
     /**
      * Save action to pms.
-     * 
-     * @param  array    $objects 
-     * @param  object   $log 
-     * @param  string   $repoRoot 
+     *
+     * @param  array    $objects
+     * @param  object   $log
+     * @param  string   $repoRoot
      * @access public
      * @return void
      */
@@ -1393,7 +1393,7 @@ class repoModel extends model
         if(isset($actions['task']))
         {
             $this->loadModel('task');
-            $productsAndProjects = $this->getTaskProductsAndProjects($objects['tasks']);
+            $productsAndExecutions = $this->getTaskProductsAndExecutions($objects['tasks']);
             foreach($actions['task'] as $taskID => $taskActions)
             {
                 $task = $this->task->getById($taskID);
@@ -1401,8 +1401,8 @@ class repoModel extends model
 
                 $action->objectType = 'task';
                 $action->objectID   = $taskID;
-                $action->product    = $productsAndProjects[$taskID]['product'];
-                $action->project    = $productsAndProjects[$taskID]['project'];
+                $action->product    = $productsAndExecutions[$taskID]['product'];
+                $action->execution  = $productsAndExecutions[$taskID]['execution'];
                 $action->comment    = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . $action->comment;
                 foreach($taskActions as $taskAction => $params)
                 {
@@ -1445,8 +1445,8 @@ class repoModel extends model
                         $action->action     = $scm == 'svn' ? 'svncommited' : 'gitcommited';
                         $action->objectType = 'task';
                         $action->objectID   = $taskID;
-                        $action->product    = $productsAndProjects[$taskID]['product'];
-                        $action->project    = $productsAndProjects[$taskID]['project'];
+                        $action->product    = $productsAndExecutions[$taskID]['product'];
+                        $action->execution  = $productsAndExecutions[$taskID]['execution'];
 
                         $changes = $this->createActionChanges($log, $repoRoot, $scm);
                         $this->saveRecord($action, $changes);
@@ -1471,7 +1471,7 @@ class repoModel extends model
         if(isset($actions['bug']))
         {
             $this->loadModel('bug');
-            $productsAndProjects = $this->getBugProductsAndProjects($objects['bugs']);
+            $productsAndExecutions = $this->getBugProductsAndExecutions($objects['bugs']);
             foreach($actions['bug'] as $bugID => $bugActions)
             {
                 $bug = $this->bug->getByID($bugID);
@@ -1479,8 +1479,8 @@ class repoModel extends model
 
                 $action->objectType = 'bug';
                 $action->objectID   = $bugID;
-                $action->product    = $productsAndProjects[$bugID]->product;
-                $action->project    = $productsAndProjects[$bugID]->project;
+                $action->product    = $productsAndExecutions[$bugID]->product;
+                $action->execution  = $productsAndExecutions[$bugID]->execution;
                 foreach($bugActions as $bugAction => $params)
                 {
                     $_POST = array();
@@ -1507,16 +1507,16 @@ class repoModel extends model
 
         if($objects['stories'])
         {
-            $productsAndProjects = $this->getTaskProductsAndProjects($objects['stories']);
+            $productsAndExecutions = $this->getTaskProductsAndExecutions($objects['stories']);
             foreach($objects['stories'] as $storyID)
             {
                 $storyID = (int)$storyID;
-                if(!isset($productsAndProjects[$storyID])) continue;
+                if(!isset($productsAndExecutions[$storyID])) continue;
 
                 $action->objectType = 'story';
                 $action->objectID   = $storyID;
-                $action->product    = $productsAndProjects[$storyID]['product'];
-                $action->project    = $productsAndProjects[$storyID]['project'];
+                $action->product    = $productsAndExecutions[$storyID]['product'];
+                $action->execution  = $productsAndExecutions[$storyID]['execution'];
 
                 $this->saveRecord($action, $changes);
             }
@@ -1524,16 +1524,16 @@ class repoModel extends model
 
         if($objects['tasks'])
         {
-            $productsAndProjects = $this->getTaskProductsAndProjects($objects['tasks']);
+            $productsAndExecutions = $this->getTaskProductsAndExecutions($objects['tasks']);
             foreach($objects['tasks'] as $taskID)
             {
                 $taskID = (int)$taskID;
-                if(!isset($productsAndProjects[$taskID])) continue;
+                if(!isset($productsAndExecutions[$taskID])) continue;
 
                 $action->objectType = 'task';
                 $action->objectID   = $taskID;
-                $action->product    = $productsAndProjects[$taskID]['product'];
-                $action->project    = $productsAndProjects[$taskID]['project'];
+                $action->product    = $productsAndExecutions[$taskID]['product'];
+                $action->execution  = $productsAndExecutions[$taskID]['execution'];
 
                 $this->saveRecord($action, $changes);
             }
@@ -1541,16 +1541,16 @@ class repoModel extends model
 
         if($objects['bugs'])
         {
-            $productsAndProjects = $this->getBugProductsAndProjects($objects['bugs']);
+            $productsAndExecutions = $this->getBugProductsAndExecutions($objects['bugs']);
             foreach($objects['bugs'] as $bugID)
             {
                 $bugID = (int)$bugID;
-                if(!isset($productsAndProjects[$bugID])) continue;
+                if(!isset($productsAndExecutions[$bugID])) continue;
 
                 $action->objectType = 'bug';
                 $action->objectID   = $bugID;
-                $action->product    = $productsAndProjects[$bugID]->product;
-                $action->project    = $productsAndProjects[$bugID]->project;
+                $action->product    = $productsAndExecutions[$bugID]->product;
+                $action->execution  = $productsAndExecutions[$bugID]->execution;
 
                 $this->saveRecord($action, $changes);
             }
@@ -1561,7 +1561,7 @@ class repoModel extends model
 
     /**
      * Save an action to pms.
-     * 
+     *
      * @param  object $action
      * @param  object $log
      * @access public
@@ -1601,9 +1601,9 @@ class repoModel extends model
 
     /**
      * Create changes for action from a log.
-     * 
-     * @param  object    $log 
-     * @param  string    $repoRoot 
+     *
+     * @param  object    $log
+     * @param  string    $repoRoot
      * @access public
      * @return array
      */
@@ -1639,51 +1639,51 @@ class repoModel extends model
     }
 
     /**
-     * Get products and projects of tasks.
-     * 
-     * @param  array    $tasks 
+     * Get products and executions of tasks.
+     *
+     * @param  array    $tasks
      * @access public
      * @return array
      */
-    public function getTaskProductsAndProjects($tasks)
+    public function getTaskProductsAndExecutions($tasks)
     {
         $records = array();
-        $products = $this->dao->select('t1.id,t1.project,t2.product')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project = t2.project')
+        $products = $this->dao->select('t1.id,t1.execution,t2.product')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.execution = t2.project')
             ->where('t1.id')->in($tasks)->fetchGroup('id','product');
 
-        $projects = $this->dao->select('id, project')->from(TABLE_TASK)->where('id')->in($tasks)->fetchPairs();
+        $executions = $this->dao->select('id, execution')->from(TABLE_TASK)->where('id')->in($tasks)->fetchPairs();
 
-        foreach($projects as $taskID => $projectID)
+        foreach($executions as $taskID => $executionID)
         {
             $record = array();
-            $record['project'] = $projectID;
-            $record['product'] = isset($products[$taskID]) ? "," . join(',', array_keys($products[$taskID])) . "," : ",0,";
+            $record['execution'] = $executionID;
+            $record['product']   = isset($products[$taskID]) ? "," . join(',', array_keys($products[$taskID])) . "," : ",0,";
             $records[$taskID] = $record;
         }
         return $records;
     }
 
     /**
-     * Get products and projects of bugs.
-     * 
-     * @param  array    $bugs 
+     * Get products and executions of bugs.
+     *
+     * @param  array    $bugs
      * @access public
      * @return array
      */
-    public function getBugProductsAndProjects($bugs)
+    public function getBugProductsAndExecutions($bugs)
     {
-        $records = $this->dao->select('id, project, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
+        $records = $this->dao->select('id, execution, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
         foreach($records as $record) $record->product = ",{$record->product},";
         return $records;
     }
 
     /**
      * Build URL.
-     * 
-     * @param  string $methodName 
-     * @param  string $url 
-     * @param  int    $revision 
+     *
+     * @param  string $methodName
+     * @param  string $url
+     * @param  int    $revision
      * @access public
      * @return string
      */

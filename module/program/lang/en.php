@@ -14,6 +14,7 @@ $lang->program->parent    = 'Parent';
 $lang->program->allInput  = 'Input';
 $lang->program->teamCount = 'Team';
 $lang->program->longTime  = 'Long-Term';
+$lang->program->view      = 'Program Detail';
 
 /* Actions. */
 $lang->program->common               = 'Program';
