@@ -66,15 +66,15 @@ $status = $this->session->testTaskVersionStatus;
     <thead>
     <?php $vars = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <tr>
-        <th class='c-id text-left'>   <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
-        <th class='w-200px text-left'><?php common::printOrderLink('name',     $orderBy, $vars, $lang->testtask->name);?></th>
-        <th class='text-left'>        <?php common::printOrderLink('product',  $orderBy, $vars, $lang->testtask->product);?></th>
-        <th class='text-left'>        <?php common::printOrderLink('exection', $orderBy, $vars, $lang->testtask->exection);?></th>
-        <th class='text-left'>        <?php common::printOrderLink('build',    $orderBy, $vars, $lang->testtask->build);?></th>
-        <th class='c-user text-left'> <?php common::printOrderLink('owner',    $orderBy, $vars, $lang->testtask->owner);?></th>
-        <th class='w-100px text-left'><?php common::printOrderLink('begin',    $orderBy, $vars, $lang->testtask->begin);?></th>
-        <th class='w-100px text-left'><?php common::printOrderLink('end',      $orderBy, $vars, $lang->testtask->end);?></th>
-        <th class='w-80px text-left'> <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+        <th class='c-id text-left'>   <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
+        <th class='w-200px text-left'><?php common::printOrderLink('name',      $orderBy, $vars, $lang->testtask->name);?></th>
+        <th class='text-left'>        <?php common::printOrderLink('product',   $orderBy, $vars, $lang->testtask->product);?></th>
+        <th class='text-left'>        <?php common::printOrderLink('execution', $orderBy, $vars, $lang->testtask->execution);?></th>
+        <th class='text-left'>        <?php common::printOrderLink('build',     $orderBy, $vars, $lang->testtask->build);?></th>
+        <th class='c-user text-left'> <?php common::printOrderLink('owner',     $orderBy, $vars, $lang->testtask->owner);?></th>
+        <th class='w-100px text-left'><?php common::printOrderLink('begin',     $orderBy, $vars, $lang->testtask->begin);?></th>
+        <th class='w-100px text-left'><?php common::printOrderLink('end',       $orderBy, $vars, $lang->testtask->end);?></th>
+        <th class='w-80px text-left'> <?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
         <?php
         $extendFields = $this->testtask->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";

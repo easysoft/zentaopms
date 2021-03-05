@@ -352,8 +352,8 @@ class testtaskModel extends model
 
             if($task->execution)
             {
-                $task->executionName = $this->dao->select('name')->from(TABLE_EXECUTION)->where('id')->eq($task->exection)->fetch('name');
-                $task->branch        = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($task->exection)->andWhere('product')->eq($task->product)->fetch('branch');
+                $task->executionName = $this->dao->select('name')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch('name');
+                $task->branch        = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($task->execution)->andWhere('product')->eq($task->product)->fetch('branch');
             }
 
             $build = $this->dao->select('branch,name')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
@@ -1121,7 +1121,7 @@ class testtaskModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
-            ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.exection')->notin($skipExecutionIDList)->fi()
+            ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
             ->beginIF($limit)->limit($limit)->fi()
             ->query();
 
