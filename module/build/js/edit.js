@@ -1,15 +1,15 @@
-var projectID = $('#project').val();
-function loadProjects()
+var executionID = $('#execution').val();
+function loadExecutons()
 {
     var productID = $('#product').val();
     var branchID  = $('#branch').length > 0 ? $('#branch').val() : 0;
-    $('#projectsBox').load(createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branchID), function()
+    $('#executionsBox').load(createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&executionID=' + executionID + '&branch=' + branchID), function()
     {
-        $('#projectsBox #project').chosen().removeAttr('onchange');
+        $('#executionsBox #execution').chosen().removeAttr('onchange');
     });
 }
 
 $(document).on('change', '#product,#branch', function()
 {
-    loadProjects();
+    loadExecutons();
 })

@@ -22,7 +22,7 @@
       </h2>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' id='dataform' enctype='multipart/form-data'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
         <tr>
           <th><?php echo $lang->build->product;?></th>
           <td>
@@ -45,9 +45,9 @@
         </tr>
         <tr>
           <?php $disabled = $testtaskID ? 'disabled' : '';?>
-          <th><?php echo $lang->build->project;?></th>
-          <td id='projectsBox'><?php echo html::select('project', $executions, $build->project, "class='form-control chosen' required $disabled");?></td>
-          <td><?php if($disabled) echo $lang->build->notice->changeProject;?></td>
+          <th><?php echo $lang->build->execution;?></th>
+          <td id='executionsBox'><?php echo html::select('execution', $executions, $build->execution, "class='form-control chosen' required $disabled");?></td>
+          <td><?php if($disabled) echo $lang->build->notice->changeExecution;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->build->name;?></th>

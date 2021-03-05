@@ -30,7 +30,7 @@ $lang->build->basicInfo = 'Basic Info';
 $lang->build->id            = 'ID';
 $lang->build->product       = $lang->productCommon;
 $lang->build->branch        = 'Platform/Branch';
-$lang->build->project       = $lang->executionCommon;
+$lang->build->execution     = $lang->executionCommon;
 $lang->build->name          = 'Name';
 $lang->build->date          = 'Date';
 $lang->build->builder       = 'Builder';
@@ -49,8 +49,8 @@ $lang->build->noProduct     = " <span style='color:red'>This {$lang->executionCo
 $lang->build->noBuild       = 'No builds yet.';
 
 $lang->build->notice = new stdclass();
-$lang->build->notice->changeProduct = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
-$lang->build->notice->changeProject = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
+$lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
+$lang->build->notice->changeExecution = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
 
 $lang->build->finishStories = "  Finished {$lang->SRCommon} %s";
 $lang->build->resolvedBugs  = '  Resolved Bug %s';
@@ -62,4 +62,5 @@ $lang->build->placeholder->filePath = ' Download path for this Build.';
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, created by <strong>$actor</strong>, Build <strong>$extra</strong>.' . "\n";
+
 $lang->backhome = 'back';

@@ -41,7 +41,7 @@ class testcase extends control
         $this->loadModel('user');
 
         /* Set test case menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if(!$this->projectID)
         {
             $this->app->loadConfig('qa');
@@ -360,7 +360,7 @@ class testcase extends control
             $modules = $this->loadModel('tree')->getStoryModule($currentModuleID);
             $modules = $this->tree->getAllChildID($modules);
         }
-        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false); 
+        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
 
         /* Set custom. */
@@ -1557,10 +1557,10 @@ class testcase extends control
     /**
      * Show import data
      *
-     * @param  int        $productID 
-     * @param  int        $branch 
-     * @param  int        $pagerID 
-     * @param  int        $maxImport 
+     * @param  int        $productID
+     * @param  int        $branch
+     * @param  int        $pagerID
+     * @param  int        $maxImport
      * @param  string|int $insert     0 is covered old, 1 is insert new.
      * @access public
      * @return void
@@ -1800,7 +1800,7 @@ class testcase extends control
     }
 
     /**
-     * Export case getModuleByStory 
+     * Export case getModuleByStory
      *
      * @params int $storyID
      * @return void
@@ -1808,7 +1808,7 @@ class testcase extends control
     public function ajaxGetStoryModule($storyID)
     {
         $story = $this->dao->select('module')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
-        $moduleID = !empty($story) ? $story->module : 0; 
+        $moduleID = !empty($story) ? $story->module : 0;
         die(json_encode(array('moduleID'=> $moduleID)));
     }
 

@@ -73,7 +73,7 @@ class testcaseModel extends model
             ->add('fromBug', $bugID)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa', 'project', $this->session->project)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
@@ -165,7 +165,7 @@ class testcaseModel extends model
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
-            if($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa') $data[$i]->PRJ = $this->session->PRJ;
+            if($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa') $data[$i]->project = $this->session->project;
             $data[$i]->branch       = $cases->branch[$i];
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
@@ -242,7 +242,7 @@ class testcaseModel extends model
         return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.product')->eq((int)$productID)
-            ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
@@ -271,7 +271,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->leftJoin(TABLE_SUITECASE)->alias('t3')->on('t1.id=t3.case')
             ->where('t1.product')->eq((int)$productID)
-            ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t3.suite')->eq((int)$suiteID)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
@@ -364,7 +364,7 @@ class testcaseModel extends model
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
                 ->andWhere('t1.product')->eq($productID)
-                ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
+                ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
                 ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
@@ -455,7 +455,7 @@ class testcaseModel extends model
      */
     public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
-        return $this->dao->select('t1.*,t2.PRJ,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t1.*,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.assignedTo')->eq($account)
@@ -495,7 +495,7 @@ class testcaseModel extends model
      */
     public function getStoryCases($storyID)
     {
-        return $this->dao->select('id, PRJ, title, pri, type, status, lastRunner, lastRunDate, lastRunResult')
+        return $this->dao->select('id, project, title, pri, type, status, lastRunner, lastRunDate, lastRunResult')
             ->from(TABLE_CASE)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
@@ -1124,7 +1124,7 @@ class testcaseModel extends model
             }
             else
             {
-                if($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa') $caseData->PRJ = $this->session->PRJ;
+                if($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa') $caseData->project = $this->session->project;
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
