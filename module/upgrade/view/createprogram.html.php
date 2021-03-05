@@ -2,13 +2,13 @@
   <caption class='strong'><?php echo $lang->upgrade->program;?></caption>
   <tr>
     <th>
-      <span class="pgm-exist hidden"><?php echo $lang->upgrade->existPGM;?></span>
-      <span class="pgm-no-exist"><?php echo $lang->program->PGMName;?></span>
+      <span class="pgm-exist hidden"><?php echo $lang->upgrade->existProgram;?></span>
+      <span class="pgm-no-exist"><?php echo $lang->program->name;?></span>
     </th>
     <td class='required'>
       <div class='input-group'>
         <?php echo html::select("programs", $programs, $programID, "class='form-control hidden pgm-exist' onchange='getProjectByProgram(this)'");?>
-        <?php echo html::input("PGMName", isset($programName) ? $programName : '', "class='form-control pgm-no-exist'");?>
+        <?php echo html::input("programName", isset($programName) ? $programName : '', "class='form-control pgm-no-exist'");?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />
@@ -20,18 +20,18 @@
     </td>
   </tr>
   <tr>
-    <th><?php echo $lang->program->PGMCommon . $lang->program->PGMStatus;?></th>
-    <td><?php echo html::select('PGMStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
+    <th><?php echo $lang->program->common . $lang->program->status;?></th>
+    <td><?php echo html::select('programStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
   </tr>
-  <tr class='PRJName'>
+  <tr class='projectName'>
     <th>
-      <span class="prj-exist hidden"><?php echo $lang->upgrade->existPRJ;?></span>
-      <span class="prj-no-exist"><?php echo $lang->program->PRJName;?></span>
+      <span class="prj-exist hidden"><?php echo $lang->upgrade->existProject;?></span>
+      <span class="prj-no-exist"><?php echo $lang->project->name;?></span>
     </th>
     <td class='required'>
       <div class='input-group'>
-        <?php echo html::select("projects", $projects, '', "class='form-control hidden prj-exist' onchange='getPGMStatus(project, this.value)'");?>
-        <?php echo html::input("PRJName", isset($sprintName) ? $sprintName : '', "class='form-control prj-no-exist'");?>
+        <?php echo html::select("projects", $projects, '', "class='form-control hidden prj-exist' onchange='getProgramStatus(project, this.value)'");?>
+        <?php echo html::input("projectName", isset($sprintName) ? $sprintName : '', "class='form-control prj-no-exist'");?>
         <?php if(count($projects)):?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
@@ -43,9 +43,9 @@
       </div>
     </td>
   </tr>
-  <tr class='PGMParams'>
-    <th><?php echo $lang->program->PRJStatus;?></th>
-    <td><?php echo html::select('PRJStatus', $lang->program->statusList, '', "class='form-control chosen'");?></td>
+  <tr class='programParams'>
+    <th><?php echo $lang->project->status;?></th>
+    <td><?php echo html::select('projectStatus', $lang->project->statusList, '', "class='form-control chosen'");?></td>
   </tr>
   <tr class='LineName'>
     <th>
@@ -67,29 +67,29 @@
       </div>
     </td>
   </tr>
-  <tr class='PGMParams'>
-    <th><?php echo $lang->program->PRJPM;?></th>
+  <tr class='programParams'>
+    <th><?php echo $lang->project->PM;?></th>
     <td><?php echo html::select('PM', array('' => '') + $users, '', "class='form-control chosen'");?></td>
   </tr>
-  <tr class='PGMParams'>
-    <th><?php echo $lang->program->dateRange;?></th>
+  <tr class='programParams'>
+    <th><?php echo $lang->project->dateRange;?></th>
     <td>
       <div class='input-group'>
-        <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
-        <span class='input-group-addon'><?php echo $lang->program->to;?></span>
-        <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->end . "' required");?>
+        <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
+        <span class='input-group-addon'><?php echo $lang->project->to;?></span>
+        <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->end . "' required");?>
         <span class='input-group-addon' id='longTimeBox'>
           <div class="checkbox-primary">
             <input type="checkbox" name="longTime" value="1" id="longTime">
-            <label for="longTime"><?php echo $lang->program->PRJLongTime;?></label>
+            <label for="longTime"><?php echo $lang->project->longTime;?></label>
           </div>
         </span>
       </div>
     </td>
   </tr>
-  <tr class='PGMParams'>
+  <tr class='programParams'>
     <th><?php echo $lang->project->acl;?></th>
-    <td><?php echo nl2br(html::radio('acl', $lang->program->PGMPRJAclList, 'open', '', 'block'));?></td>
+    <td><?php echo nl2br(html::radio('acl', $lang->project->aclList, 'open', '', 'block'));?></td>
   </tr>
 </table>
 <div class='table-foot text-center'><?php echo html::submitButton();?></div>

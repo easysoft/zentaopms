@@ -25,7 +25,7 @@ $lang->upgrade->warnningContent = <<<EOT
 <pre>
 1. Nutzen Sie phpMyAdmin um die Sicherung zu erstellen.
 2. Nutzen Sie mysql Befehle um das Backup zu erstellen.
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>dateiname</span> 
+   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>dateiname</span>
    Passen Sie den roten Text entsprechend Ihres Systems an.
    e.g. mysqldump -u root -p zentao >zentao.bak
 </pre>
@@ -98,15 +98,15 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>These iterations can be selected to fall under a new project.</p>
 EOD;
 
-$lang->upgrade->line      = 'Product Line';
-$lang->upgrade->program   = 'Merge Project';
-$lang->upgrade->existPGM  = 'Existing programs';
-$lang->upgrade->existPRJ  = 'Existing projects';
-$lang->upgrade->existLine = 'Existing' . $lang->productCommon . ' lines';
-$lang->upgrade->product   = $lang->productCommon;
-$lang->upgrade->project   = 'Iteration';
-$lang->upgrade->repo      = 'Repo';
-$lang->upgrade->mergeRepo = 'Merge Repo';
+$lang->upgrade->line         = 'Product Line';
+$lang->upgrade->program      = 'Merge Project';
+$lang->upgrade->existProgram = 'Existing programs';
+$lang->upgrade->existProject = 'Existing projects';
+$lang->upgrade->existLine    = 'Existing' . $lang->productCommon . ' lines';
+$lang->upgrade->product      = $lang->productCommon;
+$lang->upgrade->project      = 'Iteration';
+$lang->upgrade->repo         = 'Repo';
+$lang->upgrade->mergeRepo    = 'Merge Repo';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';

@@ -25,7 +25,7 @@ $lang->upgrade->warnningContent = <<<EOT
 <pre>
 1. Sử dụng phpMyAdmin để sao lưu.
 2. Sử dụng mysqlCommand để sao lưu.
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> 
+   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
    Thay đổi văn bản màu đỏ thành tên người dùng và cơ sở dữ liệu tương ứng.
    ví dụ:  mysqldump -u root -p zentao >zentao.bak
 </pre>
@@ -99,15 +99,15 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>These iterations can be selected to fall under a new project.</p>
 EOD;
 
-$lang->upgrade->line      = 'Product Line';
-$lang->upgrade->program   = 'Merge Project';
-$lang->upgrade->existPGM  = 'Existing programs';
-$lang->upgrade->existPRJ  = 'Existing projects';
-$lang->upgrade->existLine = 'Existing' . $lang->productCommon . ' lines';
-$lang->upgrade->product   = $lang->productCommon;
-$lang->upgrade->project   = 'Iteration';
-$lang->upgrade->repo      = 'Repo';
-$lang->upgrade->mergeRepo = 'Merge Repo';
+$lang->upgrade->line         = 'Product Line';
+$lang->upgrade->program      = 'Merge Project';
+$lang->upgrade->existProgram = 'Existing programs';
+$lang->upgrade->existProject = 'Existing projects';
+$lang->upgrade->existLine    = 'Existing' . $lang->productCommon . ' lines';
+$lang->upgrade->product      = $lang->productCommon;
+$lang->upgrade->project      = 'Iteration';
+$lang->upgrade->repo         = 'Repo';
+$lang->upgrade->mergeRepo    = 'Merge Repo';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';
