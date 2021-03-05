@@ -71,9 +71,9 @@ js::set('isStepsTemplate', $isStepsTemplate);
           </tr>
           <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
           <tr>
-            <th><?php echo ($showexEcution) ? $lang->bug->execution : $lang->bug->type;?></th>
+            <th><?php echo ($showExecution) ? $lang->bug->execution : $lang->bug->type;?></th>
 
-            <?php if(!$showexEcution):?>
+            <?php if(!$showExecution):?>
             <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
             <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
             <td>
@@ -106,7 +106,7 @@ js::set('isStepsTemplate', $isStepsTemplate);
             <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
             <td>
               <div class='input-group'>
-                <?php echo html::select('assignedTo', $ExecutionMembers, $assignedTo, "class='form-control chosen'");?>
+                <?php echo html::select('assignedTo', $executionMembers, $assignedTo, "class='form-control chosen'");?>
                 <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
               </div>
             </td>

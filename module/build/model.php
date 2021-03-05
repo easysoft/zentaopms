@@ -50,24 +50,24 @@ class buildModel extends model
     }
 
     /**
-     * Get builds of a execution.
+     * Get builds of a project.
      *
-     * @param  int    $executionID
+     * @param  int    $projectID
      * @param  string $type
      * @param  int    $param
      * @access public
      * @return array
      */
-    public function getExecutionBuilds($executionID = 0, $type = 'all', $param = 0)
+    public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0)
     {
-        return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t3.name as productName, t4.name as branchName')
+        return $this->dao->select('t1.*, t2.name as projectName, t2.id as projectID, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
-            ->where('t1.execution')->eq((int)$executionID)
+            ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.execution')->ne(0)
+            ->andWhere('t1.project')->ne(0)
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->orderBy('t1.date DESC, t1.id desc')
@@ -75,9 +75,9 @@ class buildModel extends model
     }
 
     /**
-     * Get builds of a execution in pairs.
+     * Get builds of a project in pairs.
      *
-     * @param  int    $executionID
+     * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $params       noempty|notrunk, can be a set of them
@@ -85,7 +85,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionBuildPairs($executionID, $productID, $branch = 0, $params = '', $buildID = 0)
+    public function getProjectBuildPairs($projectID, $productID, $branch = 0, $params = '', $buildID = 0)
     {
         $sysBuilds      = array();
         $selectedBuilds = array();
@@ -93,11 +93,11 @@ class buildModel extends model
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
         if($buildID != 0) $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchPairs();
 
-        $executionBuilds = $this->dao->select('t1.id, t1.name, t1.execution, t2.status as executionStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+        $projectBuilds = $this->dao->select('t1.id, t1.name, t1.project, t2.status as projectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
-            ->where('t1.execution')->eq((int)$executionID)
+            ->where('t1.project')->eq((int)$projectID)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
             ->andWhere('t1.deleted')->eq(0)
@@ -105,9 +105,9 @@ class buildModel extends model
 
         /* Set builds and filter terminate releases. */
         $builds = array();
-        foreach($executionBuilds as $buildID => $build)
+        foreach($projectBuilds as $buildID => $build)
         {
-            if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->executionStatus === 'done')) continue;
+            if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->projectStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
             $builds[$buildID] = $build->name;
         }
@@ -125,14 +125,14 @@ class buildModel extends model
     }
 
     /**
-     * Get builds of a execution by search.
+     * Get builds of a project by search.
      *
-     * @param  int    $executionID
+     * @param  int    $projectID
      * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function getExecutionBuildsBySearch($executionID, $queryID)
+    public function getProjectBuildsBySearch($projectID, $queryID)
     {
         /* If there are saved query conditions, reset the session. */
         if((int)$queryID)
@@ -140,19 +140,19 @@ class buildModel extends model
             $query = $this->loadModel('search')->getQuery($queryID);
             if($query)
             {
-                $this->session->set('executionBuildQuery', $query->sql);
-                $this->session->set('executionBuildForm', $query->form);
+                $this->session->set('projectBuildQuery', $query->sql);
+                $this->session->set('projectBuildForm', $query->form);
             }
         }
-        if($this->session->executionBuildQuery == false) $this->session->set('executionBuildQuery', ' 1 = 1');
+        if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
 
-        $buildQuery = $this->session->executionBuildQuery;
+        $buildQuery = $this->session->projectBuildQuery;
 
         /* Distinguish between repeated fields. */
-        $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`', 'execution' => '`execution`');
+        $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`', 'project' => '`project`');
         foreach($fields as $field)
         {
-            if(strpos($this->session->executionBuildQuery, $field) !== false)
+            if(strpos($this->session->projectBuildQuery, $field) !== false)
             {
                 $buildQuery = str_replace($field, "t1." . $field, $buildQuery);
             }

@@ -1678,7 +1678,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('execution as name, count(execution) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('execution')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $executions = $this->loadModel('execution')->getExecutionPairs($this->session->project);
+        $executions = $this->loadModel('execution')->getPairs($this->session->project);
 
         $maxLength = 12;
         if(common::checkNotCN()) $maxLength = 22;

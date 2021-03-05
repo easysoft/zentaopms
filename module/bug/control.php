@@ -147,7 +147,7 @@ class bug extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get executios. */
-        $executions = $this->loadModel('execution')->getExecutionPairs($this->projectID, 'all', 'empty|withdelete');
+        $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete');
 
         /* Get bugs. */
         $bugs = $this->bug->getBugs($productID, $executions, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
@@ -1558,7 +1558,7 @@ class bug extends control
             /* Get users, products and executions. */
             $users      = $this->loadModel('user')->getPairs('noletter');
             $products   = $this->loadModel('product')->getPairs();
-            $executions = $this->loadModel('execution')->getExecutionPairs($this->projectID, 'all', 'all');
+            $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'all');
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();

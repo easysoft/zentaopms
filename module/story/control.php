@@ -896,7 +896,7 @@ class story extends control
         $this->view->users       = $users;
         $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
         $this->view->executions  = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->execution   = $this->execution->getByID($story->project);
+        $this->view->execution   = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
         $this->view->actions     = $this->action->getList('story', $storyID);
         $this->view->storyModule = $storyModule;
         $this->view->modulePath  = $modulePath;
@@ -1618,7 +1618,7 @@ class story extends control
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
-        $stories = $this->story->getProjectStoryPairs($executionID, $productID, $branch, $moduleID, $type);
+        $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type);
         if($this->app->getViewType() === 'json')
         {
             die(json_encode($stories));
