@@ -1143,7 +1143,7 @@ class user extends control
         $this->display();
     }
 
-	/** 
+	/**
      * crop avatar
      *
      * @param  int    $image
@@ -1151,7 +1151,7 @@ class user extends control
      * @return void
      */
     public function cropAvatar($image)
-    {   
+    {
         $image = $this->loadModel('file')->getByID($image);
 
         if(!empty($_POST))
@@ -1161,7 +1161,7 @@ class user extends control
             $this->dao->update(TABLE_USER)->set('avatar')->eq($image->webPath)->where('account')->eq($this->app->user->account)->exec();
             $this->app->user->avatar = $image->webPath;
             exit('success');
-        }   
+        }
 
         $this->view->user  = $this->user->getById($this->app->user->account);
         $this->view->title = $this->lang->user->cropAvatar;
@@ -1221,9 +1221,9 @@ class user extends control
 
     /**
      * Ajax print templates.
-     * 
-     * @param  int    $type 
-     * @param  string $link 
+     *
+     * @param  int    $type
+     * @param  string $link
      * @access public
      * @return void
      */
@@ -1265,7 +1265,7 @@ class user extends control
 
     /**
      * Ajax get more user.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1292,7 +1292,7 @@ class user extends control
 
     /**
      * Refresh random for login
-     * 
+     *
      * @access public
      * @return void
      */

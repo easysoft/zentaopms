@@ -50,17 +50,17 @@
           <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
           <th class='w-70px'><?php echo $lang->statusAB;?></th>
         </tr>
-      </thead>   
+      </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
         <tr class='text-left'>
-          <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', false, $task->PRJ), sprintf('%03d', $task->id));?></td>
+          <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', false, $task->project), sprintf('%03d', $task->id));?></td>
           <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID", '', false, $task->PRJ), $task->projectName);?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID", '', false, $task->project), $task->projectName);?></td>
           <td class='text-left nobr'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
-            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', false, $task->PRJ), $task->name, null, "style='color: $task->color'");?>
+            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', false, $task->project), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='hours' title="<?php echo $task->estimate . ' ' . $lang->project->workHour;?>"><?php echo $task->estimate . ' ' . $lang->project->workHourUnit;?></td>
           <td class='hours' title="<?php echo $task->consumed . ' ' . $lang->project->workHour;?>"><?php echo $task->consumed . ' ' . $lang->project->workHourUnit;?></td>
@@ -70,7 +70,7 @@
         </tr>
         <?php endforeach;?>
       </tbody>
-    </table> 
+    </table>
     <?php if($tasks):?>
     <div class="table-footer"><?php $pager->show('right', 'pagerjs');?></div>
     <?php endif;?>
