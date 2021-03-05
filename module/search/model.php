@@ -231,9 +231,9 @@ class searchModel extends model
      */
     public function setDefaultParams($fields, $params)
     {
-        $hasProduct = false;
-        $hasProject = false;
-        $hasUser    = false;
+        $hasProduct   = false;
+        $hasExecution = false;
+        $hasUser      = false;
 
         $appendUsers     = array();
         $module          = $_SESSION['searchParams']['module'];
@@ -578,13 +578,13 @@ class searchModel extends model
             {
                 if(!isset($this->config->objectTables[$record->objectType])) continue;
                 $table       = $this->config->objectTables[$record->objectType];
-                $projectID   = $this->dao->select('project')->from($table)->where('id')->eq($record->objectID)->fetch('project');
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $projectID);
+                $executionID = $this->dao->select('execution')->from($table)->where('id')->eq($record->objectID)->fetch('execution');
+                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $executionID);
             }
             elseif($module == 'issue')
             {
-                $issue             = $this->dao->select('id,project,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
-                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
+                $issue             = $this->dao->select('id,execution,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
+                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->execution);
                 $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
             }
             elseif($module == 'story')
@@ -595,13 +595,13 @@ class searchModel extends model
             }
             elseif($module == 'execution')
             {
-                $project           = $this->dao->select('id,type,project')->from(TABLE_PROJECT)->where('id')->eq($record->objectID)->fetch();
-                $record->url       = helper::createLink('project', $method, "id={$record->objectID}", '', false, $project->project);
-                $record->extraType = $project->type;
+                $execution         = $this->dao->select('id,type,project')->from(TABLE_PROJECT)->where('id')->eq($record->objectID)->fetch();
+                $record->url       = helper::createLink('execution', $method, "id={$record->objectID}", '', false, $execution->project);
+                $record->extraType = $execution->type;
             }
             elseif($module == 'project')
             {
-                $record->url = helper::createLink('program', 'index', "id={$record->objectID}", '', false, 0, true);
+                $record->url = helper::createLink('project', 'index', "id={$record->objectID}", '', false, 0, true);
             }
             else
             {
@@ -757,7 +757,7 @@ class searchModel extends model
         foreach($objectPairs as $objectType => $objectIdList)
         {
             $objectProducts = array();
-            $objectProjects = array();
+            $objectExecutions = array();
             if(!isset($this->config->objectTables[$objectType])) continue;
             $table = $this->config->objectTables[$objectType];
             if(strpos(',bug,case,productplan,release,story,testtask,', ",$objectType,") !== false)
@@ -766,14 +766,14 @@ class searchModel extends model
             }
             elseif(strpos(',build,task,testreport,', ",$objectType,") !== false)
             {
-               $objectProjects = $this->dao->select('id,project')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('project', 'id');
+               $objectExecutions = $this->dao->select('id,execution')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('execution', 'id');
             }
             elseif($objectType == 'effort')
             {
-                $efforts = $this->dao->select('id,product,project')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll();
+                $efforts = $this->dao->select('id,product,execution')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll();
                 foreach($efforts as $effort)
                 {
-                    $objectProjects[$effort->project][$effort->id] = $effort;
+                    $objectExecutions[$effort->execution][$effort->id] = $effort;
                     $effortProducts = explode(',', trim($effort->product, ','));
                     foreach($effortProducts as $effortProduct) $objectProducts[$effortProduct][$effort->id] = $effort;
                 }
@@ -899,10 +899,10 @@ class searchModel extends model
                     }
                 }
             }
-            foreach($objectProjects as $projectID => $idList)
+            foreach($objectExecutions as $executionID => $idList)
             {
-                if(empty($projectID)) continue;
-                if(strpos(",$executions,", ",$projectID,") === false)
+                if(empty($executionID)) continue;
+                if(strpos(",$executions,", ",$executionID,") === false)
                 {
                     foreach($idList as $object)
                     {
