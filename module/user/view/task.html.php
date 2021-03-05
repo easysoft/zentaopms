@@ -56,7 +56,7 @@
         <tr class='text-left'>
           <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', false, $task->project), sprintf('%03d', $task->id));?></td>
           <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('execution', 'browse', "projectid=$task->projectID", '', false, $task->project), $task->projectName);?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('execution', 'browse', "executionID=$task->executionID", '', false, $task->project), $task->executionName);?></td>
           <td class='text-left nobr'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
