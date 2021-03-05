@@ -758,12 +758,12 @@ class todoModel extends model
             }
 
             $todoIdList = array_unique($todoIdList);
-            if($type == 'task')     $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_TASK)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
-            if($type == 'bug')      $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_BUG)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
-            if($type == 'issue')    $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_ISSUE)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
-            if($type == 'risk')     $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_RISK)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
-            if($type == 'review')   $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_REVIEW)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
-            if($type == 'testtask') $projectIdList[$type] = $this->dao->select('id,PRJ')->from(TABLE_TESTTASK)->where('id')->in($todoIdList)->fetchPairs('id', 'PRJ');
+            if($type == 'task')     $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_TASK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
+            if($type == 'bug')      $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_BUG)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
+            if($type == 'issue')    $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_ISSUE)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
+            if($type == 'risk')     $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_RISK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
+            if($type == 'review')   $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_REVIEW)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
+            if($type == 'testtask') $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_TESTTASK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
         }
 
         return $projectIdList;

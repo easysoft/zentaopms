@@ -22,7 +22,7 @@ $(function()
         }
         var onlybody  = config.onlybody;
         var projectID = $('#project').val();
-        var link      = createLink('task', 'create', 'projectID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView, 'no', projectID);
+        var link      = createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView, 'no', projectID);
 
         location.href = link;
     })

@@ -78,7 +78,7 @@
                     echo "<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'>{$this->lang->more}<span class='caret'></span></button>";
                     echo "<ul class='dropdown-menu pull-right' role='menu'>";
                     if($createStoryPriv) echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
-                    if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#projectModal' data-backdrop='false' data-moveable='true' data-position='center' id='toTaskLink'") . '</li>';
+                    if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#executionModal' data-backdrop='false' data-moveable='true' data-position='center' id='toTaskLink'") . '</li>';
                     if($createBugPriv)   echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#projectProductModal' data-backdrop='false' data-moveable='true' data-position='center' id='toBugLink'") . '</li>';
                     echo "</ul>";
                     if($isonlybody) $_GET['onlybody'] = 'yes';
@@ -187,12 +187,12 @@
 <div id="mainActions" class='main-actions'>
   <div class="container"></div>
 </div>
-<div class="modal fade" id="projectModal">
+<div class="modal fade" id="executionModal">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->project->selectExecution;?></h4>
+        <h4 class="modal-title"><?php echo $lang->execution->selectExecution;?></h4>
       </div>
       <div class="modal-body">
         <?php if(empty($projects)):?>
@@ -282,7 +282,7 @@
   </div>
 </div>
 <?php js::set('todoID', $todo->id);?>
-<?php js::set('selectExecution', $lang->project->selectExecution);?>
+<?php js::set('selectExecution', $lang->execution->selectExecution);?>
 <?php else:?>
 <?php echo $lang->todo->thisIsPrivate;?>
 <?php endif;?>

@@ -399,8 +399,8 @@ class todo extends control
             $this->lang->set('menugroup.todo', $from);
         }
 
-        $projects = $this->loadModel('program')->getPRJPairs();
-        if(!isset($this->session->PRJ)) $this->session->set('PRJ', key($projects));
+        $projects = $this->loadModel('project')->getPairs();
+        if(!isset($this->session->project)) $this->session->set('project', key($projects));
 
         $this->view->title           = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;
         $this->view->position[]      = $this->lang->todo->view;
@@ -411,9 +411,9 @@ class todo extends control
         $this->view->actions         = $this->loadModel('action')->getList('todo', $todoID);
         $this->view->from            = $from;
         $this->view->projects        = $projects;
-        $this->view->executions      = $this->loadModel('project')->getExecutionPairs($this->session->PRJ);
+        $this->view->executions      = $this->loadModel('execution')->getPairs($this->session->project);
         $this->view->products        = $this->loadModel('product')->getPairs();
-        $this->view->projectProducts = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $this->view->projectProducts = $this->loadModel('product')->getProductPairsByProject($this->session->project);
 
         $this->display();
     }
@@ -661,9 +661,9 @@ class todo extends control
      */
     public function ajaxGetExecutionPairs($projectID)
     {
-        $this->session->set('PRJ', $projectID);
+        $this->session->set('project', $projectID);
 
-        $executions = $this->loadModel('project')->getExecutionsByProject($projectID, 'undone');
+        $executions = $this->loadModel('execution')->getByProject($projectID, 'undone');
         foreach($executions as $id => $execution) $executions[$id] = $execution->name;
 
         die(html::select('execution', $executions, '', "class='form-control chosen'"));
@@ -678,7 +678,7 @@ class todo extends control
      */
     public function ajaxGetProductPairs($projectID)
     {
-        $this->session->set('PRJ', $projectID);
+        $this->session->set('project', $projectID);
 
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
         die(html::select('product', $products, '', "class='form-control chosen'"));
