@@ -13,12 +13,12 @@ class search extends control
 {
     /**
      * Build search form.
-     * 
-     * @param  string  $module 
-     * @param  array   $searchFields 
-     * @param  array   $fieldParams 
-     * @param  string  $actionURL 
-     * @param  int     $queryID 
+     *
+     * @param  string  $module
+     * @param  array   $searchFields
+     * @param  array   $fieldParams
+     * @param  string  $actionURL
+     * @param  int     $queryID
      * @access public
      * @return void
      */
@@ -50,7 +50,7 @@ class search extends control
 
     /**
      * Build query
-     * 
+     *
      * @access public
      * @return void
      */
@@ -123,8 +123,8 @@ class search extends control
 
     /**
      * Ajax remove from menu.
-     * 
-     * @param  int    $queryID 
+     *
+     * @param  int    $queryID
      * @access public
      * @return void
      */
@@ -135,7 +135,7 @@ class search extends control
 
     /**
      * Build All index.
-     * 
+     *
      * @param  string  $type
      * @param  int     $lastID
      * @access public
@@ -199,7 +199,7 @@ class search extends control
         $this->session->set('docList',         $uri);
         $this->session->set('productList',     $uri);
         $this->session->set('productPlanList', $uri);
-        $this->session->set('projectList',     $uri);
+        $this->session->set('executionList',   $uri);
         $this->session->set('releaseList',     $uri);
         $this->session->set('storyList',       $uri);
         $this->session->set('taskList',        $uri);

@@ -15,9 +15,9 @@ class searchModel extends model
 {
 
     /**
-     * Set search params to session. 
-     * 
-     * @param  array    $searchConfig 
+     * Set search params to session.
+     *
+     * @param  array    $searchConfig
      * @access public
      * @return void
      */
@@ -75,7 +75,7 @@ class searchModel extends model
 
     /**
      * Build the query to execute.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -133,7 +133,7 @@ class searchModel extends model
             }
             elseif($operator == "notinclude")
             {
-                $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%"); 
+                $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%");
             }
             elseif($operator == 'belong')
             {
@@ -187,10 +187,10 @@ class searchModel extends model
 
     /**
      * Init the search session for the first time search.
-     * 
-     * @param  string   $module 
-     * @param  array    $fields 
-     * @param  array    $fieldParams 
+     *
+     * @param  string   $module
+     * @param  array    $fields
+     * @param  array    $fieldParams
      * @access public
      * @return void
      */
@@ -223,9 +223,9 @@ class searchModel extends model
 
     /**
      * Set default params for selection.
-     * 
-     * @param  array  $fields 
-     * @param  array  $params 
+     *
+     * @param  array  $fields
+     * @param  array  $params
      * @access public
      * @return array
      */
@@ -256,9 +256,9 @@ class searchModel extends model
         foreach($fields as $fieldName)
         {
             if(empty($params[$fieldName])) continue;
-            if($params[$fieldName]['values'] == 'products') $hasProduct = true;
-            if($params[$fieldName]['values'] == 'users')    $hasUser    = true;
-            if($params[$fieldName]['values'] == 'projects') $hasProject = true;
+            if($params[$fieldName]['values'] == 'products')   $hasProduct   = true;
+            if($params[$fieldName]['values'] == 'users')      $hasUser      = true;
+            if($params[$fieldName]['values'] == 'executions') $hasExecution = true;
         }
 
         if($hasUser)
@@ -266,8 +266,8 @@ class searchModel extends model
             $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
             $users['$@me'] = $this->lang->search->me;
         }
-        if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->PRJ);
-        if($hasProject) $projects = array('' => '') + $this->loadModel('project')->getExecutionPairs($this->session->PRJ);
+        if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->project);
+        if($hasExecution) $executions = array('' => '') + $this->loadModel('execution')->getExecutionPairs($this->session->project);
 
         foreach($fields as $fieldName)
         {
@@ -277,8 +277,8 @@ class searchModel extends model
                 if(!empty($this->config->user->moreLink)) $this->config->moreLinks["field{$fieldName}"] = $this->config->user->moreLink;
                 $params[$fieldName]['values'] = $users;
             }
-            if($params[$fieldName]['values'] == 'products') $params[$fieldName]['values']  = $products;
-            if($params[$fieldName]['values'] == 'projects') $params[$fieldName]['values']  = $projects;
+            if($params[$fieldName]['values'] == 'products')   $params[$fieldName]['values'] = $products;
+            if($params[$fieldName]['values'] == 'executions') $params[$fieldName]['values'] = $executions;
             if(is_array($params[$fieldName]['values']))
             {
                 /* For build right sql when key is 0 and is not null.  e.g. confirmed field. */
@@ -302,8 +302,8 @@ class searchModel extends model
 
     /**
      * Get a query.
-     * 
-     * @param  int    $queryID 
+     *
+     * @param  int    $queryID
      * @access public
      * @return string
      */
@@ -330,7 +330,7 @@ class searchModel extends model
 
     /**
      * Save current query to db.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -375,8 +375,8 @@ class searchModel extends model
 
     /**
      * Get title => id pairs of a user.
-     * 
-     * @param  string    $module 
+     *
+     * @param  string    $module
      * @access public
      * @return array
      */
@@ -395,10 +395,10 @@ class searchModel extends model
 
     /**
      * Get records by the condition.
-     * 
-     * @param  string    $module 
+     *
+     * @param  string    $module
      * @param  string    $moduleIdList
-     * @param  string    $conditions 
+     * @param  string    $conditions
      * @access public
      * @return array
      */
@@ -417,7 +417,7 @@ class searchModel extends model
         $query    = '`' . $conditions['field1'] . '`';
         $operator = $conditions['operator1'];
         $value    = $conditions['value1'];
-        
+
         if(!isset($this->lang->search->operators[$operator])) $operator = '=';
         if($operator == "include")
         {
@@ -425,13 +425,13 @@ class searchModel extends model
         }
         elseif($operator == "notinclude")
         {
-            $where .= ' NOT LIKE ' . $this->dbh->quote("%$value%"); 
+            $where .= ' NOT LIKE ' . $this->dbh->quote("%$value%");
         }
         else
         {
             $query .= $operator . ' ' . $this->dbh->quote($value) . ' ';
         }
-        
+
         foreach($moduleIdList as $id)
         {
             if(!$id) continue;
@@ -448,9 +448,9 @@ class searchModel extends model
 
     /**
      * Format the results.
-     * 
-     * @param  array    $results 
-     * @param  string   $module 
+     *
+     * @param  array    $results
+     * @param  string   $module
      * @access public
      * @return array
      */
@@ -464,11 +464,11 @@ class searchModel extends model
     }
 
     /**
-      Replace dynamic account and date. 
-     * 
-     * @param  string $query 
+      Replace dynamic account and date.
+     *
+     * @param  string $query
      * @access public
-     * @return string 
+     * @return string
      */
     public function replaceDynamic($query)
     {
@@ -494,9 +494,9 @@ class searchModel extends model
 
     /**
      * get search results of keywords.
-     * 
-     * @param  string    $keywords 
-     * @param  object    $pager 
+     *
+     * @param  string    $keywords
+     * @param  object    $pager
      * @param  string    $type
      * @access public
      * @return array
@@ -514,8 +514,8 @@ class searchModel extends model
             $splitedWords = $spliter->utf8Split($word);
 
             $trimedWord     = trim($splitedWords['words']);
-            $against       .= '"' . $trimedWord . '" '; 
-            $againstCond   .= '+"' . $trimedWord . '" '; 
+            $against       .= '"' . $trimedWord . '" ';
+            $againstCond   .= '+"' . $trimedWord . '" ';
             if(is_numeric($word) and strlen($word) == 5) $againstCond .= "-\" $word \" ";
 
             $likeWord      = is_numeric($word) ? $word : $trimedWord;
@@ -578,13 +578,13 @@ class searchModel extends model
             {
                 if(!isset($this->config->objectTables[$record->objectType])) continue;
                 $table       = $this->config->objectTables[$record->objectType];
-                $projectID   = $this->dao->select('PRJ')->from($table)->where('id')->eq($record->objectID)->fetch('PRJ');
+                $projectID   = $this->dao->select('project')->from($table)->where('id')->eq($record->objectID)->fetch('project');
                 $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $projectID);
             }
             elseif($module == 'issue')
             {
-                $issue             = $this->dao->select('id,PRJ,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
-                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->PRJ);
+                $issue             = $this->dao->select('id,project,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
+                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
                 $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
             }
             elseif($module == 'story')
@@ -614,9 +614,9 @@ class searchModel extends model
 
     /**
      * Save an index item.
-     * 
+     *
      * @param  string    $objectType article|blog|page|product|thread|reply|
-     * @param  int       $objectID 
+     * @param  int       $objectID
      * @access public
      * @return void
      */
@@ -637,10 +637,10 @@ class searchModel extends model
         $index->content = '';
         $contentFields  = explode(',', $fields->content . ',comment');
         foreach($contentFields as $field)
-        {   
+        {
             if(empty($field)) continue;
             $index->content .= $object->$field;
-        }   
+        }
 
         $spliter = $this->app->loadClass('spliter');
 
@@ -655,9 +655,9 @@ class searchModel extends model
     }
 
     /**
-     * Save dict info. 
-     * 
-     * @param  array    $words 
+     * Save dict info.
+     *
+     * @param  array    $words
      * @access public
      * @return void
      */
@@ -672,8 +672,8 @@ class searchModel extends model
 
     /**
      * Transfer unicode to words.
-     * 
-     * @param  string    $string 
+     *
+     * @param  string    $string
      * @access public
      * @return void
      */
@@ -691,9 +691,9 @@ class searchModel extends model
 
     /**
      * Get summary of results.
-     * 
-     * @param  string    $content 
-     * @param  string    $words 
+     *
+     * @param  string    $content
+     * @param  string    $words
      * @access public
      * @return string
      */
@@ -710,9 +710,9 @@ class searchModel extends model
         $matches = $matches[0];
         $score   = 0;
         $needle  = '';
-        foreach($matches as $matched) 
+        foreach($matches as $matched)
         {
-            if(strlen($matched) > $score) 
+            if(strlen($matched) > $score)
             {
                 $content = str_replace($needle, strip_tags($needle), $content);
                 $needle  = $matched;
@@ -919,9 +919,9 @@ class searchModel extends model
 
     /**
      * Mark keywords in content.
-     * 
-     * @param  string    $content 
-     * @param  string    $keywords 
+     *
+     * @param  string    $content
+     * @param  string    $keywords
      * @access public
      * @return void
      */
@@ -990,7 +990,7 @@ class searchModel extends model
 
     /**
      * Build all search index.
-     * 
+     *
      * @param  string    $type
      * @param  int       $lastID
      * @access public
@@ -1087,9 +1087,9 @@ class searchModel extends model
 
     /**
      * Delete index of an object.
-     * 
-     * @param  string    $objectType 
-     * @param  int       $objectID 
+     *
+     * @param  string    $objectType
+     * @param  int       $objectID
      * @access public
      * @return void
      */
