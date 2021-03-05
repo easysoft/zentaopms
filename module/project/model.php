@@ -631,26 +631,26 @@ class projectModel extends model
             }
         }
 
-        $parentProject = new stdClass();
+        $program = new stdClass();
         if($project->parent)
         {
-            $parentProject = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-            if($parentProject)
+            $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
+            if($program)
             {
                 /* Child project begin cannot less than parent. */
-                if($project->begin < $parentProject->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $parentProject->begin);
+                if($project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
 
                 /* When parent set end then child project end cannot greater than parent. */
-                if($parentProject->end != '0000-00-00' and $project->end > $parentProject->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $parentProject->end);
+                if($program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
 
                 if(dao::isError()) return false;
             }
 
-            /* The budget of a child project cannot beyond the remaining budget of the parent project. */
-            $project->budgetUnit = $parentProject->budgetUnit;
-            if(isset($project->budget) and $parentProject->budget != 0)
+            /* The budget of a child project cannot beyond the remaining budget of the parent program. */
+            $project->budgetUnit = $program->budgetUnit;
+            if(isset($project->budget) and $program->budget != 0)
             {
-                $availableBudget = $this->getAvailableBudget($parentProject);
+                $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
                 if($project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->project->beyondParentBudget;
             }
 
@@ -726,7 +726,7 @@ class projectModel extends model
                 $product = new stdclass();
                 $product->name         = $this->post->productName ? $this->post->productName : $project->name;
                 $product->bind         = $this->post->productName ? 0 : 1;
-                $product->project      = $project->parent ? current(array_filter(explode(',', $parentProject->path))) : 0;
+                $product->project      = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
                 $product->acl          = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO           = $project->PM;
                 $product->createdBy    = $this->app->user->account;
@@ -817,24 +817,24 @@ class projectModel extends model
 
         if($project->parent)
         {
-            $parentProject = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
+            $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
 
-            if($parentProject)
+            if($program)
             {
                 /* Child project begin cannot less than parent. */
-                if($project->begin < $parentProject->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $parentProject->begin);
+                if($project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
 
                 /* When parent set end then child project end cannot greater than parent. */
-                if($parentProject->end != '0000-00-00' and $project->end > $parentProject->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $parentProject->end);
+                if($program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
 
                 if(dao::isError()) return false;
             }
 
             /* The budget of a child project cannot beyond the remaining budget of the parent project. */
-            $project->budgetUnit = $parentProject->budgetUnit;
-            if($project->budget != 0 and $parentProject->budget != 0)
+            $project->budgetUnit = $program->budgetUnit;
+            if($project->budget != 0 and $program->budget != 0)
             {
-                $availableBudget = $this->getAvailableBudget($parentProject);
+                $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
                 if($project->budget > $availableBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->project->beyondParentBudget;
             }
         }

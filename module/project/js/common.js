@@ -289,17 +289,17 @@ $(function()
  * @access public
  * @return void
  */
-function setBudgetTipsAndAclList(parentProgramID)
+function setBudgetTipsAndAclList(programID)
 {
-    if(parentProgramID != 0)
+    if(programID != 0)
     {
-        $.get(createLink('project', 'ajaxGetAvailableBudget', "parentProgramID=" + parentProgramID), function(availableBudget)
+        $.get(createLink('project', 'ajaxGetBudgetLeft', "programID=" + programID), function(budgetLeft)
         {
-            parentProgram = PGMList[parentProgramID];
+            parentProgram = PGMList[programID];
             projectBudget = parentProgram.budget;
             PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
-            budgetNotes = projectBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + availableBudget) : '';
+            budgetNotes = projectBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + budgetLeft) : '';
             $('#budget').attr('placeholder', budgetNotes);
         });
         $('.aclBox').html($('#subPGMAcl').html());

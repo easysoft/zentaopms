@@ -25,7 +25,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function createGuide($projectID = 0, $from = 'PRJ')
+    public function createGuide($projectID = 0, $from = 'project')
     {
         $this->view->from      = $from;
         $this->view->projectID = $projectID;
@@ -42,12 +42,12 @@ class project extends control
      */
     public function updateChildUserView($projectID = 0, $account = array())
     {
-        $childPGMList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$projectID,%")->andWhere('type')->eq('project')->fetchPairs();
-        $childPRJList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$projectID,%")->andWhere('type')->eq('project')->fetchPairs();
+        $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$projectID,%")->andWhere('type')->eq('project')->fetchPairs();
+        $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$projectID,%")->andWhere('type')->eq('project')->fetchPairs();
         $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('project')->eq($projectID)->fetchPairs();
 
-        if(!empty($childPGMList))  $this->user->updateUserView($childPGMList, 'project',  array($account));
-        if(!empty($childPRJList))  $this->user->updateUserView($childPRJList, 'project',  array($account));
+        if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'project',  array($account));
+        if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project',  array($account));
         if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', array($account));
     }
 
@@ -158,20 +158,6 @@ class project extends control
     }
 
     /**
-     * Ajax get available budget.
-     *
-     * @param  int    $parentProjectID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetAvailableBudget($parentProjectID)
-    {
-        $parentProject   = $this->project->getPGMByID($parentProjectID);
-        $availableBudget = $this->project->getAvailableBudget($parentProject);
-        echo number_format($availableBudget, 2);
-    }
-
-    /**
      * Project index view.
      *
      * @param  int    $projectID
@@ -181,23 +167,23 @@ class project extends control
     public function index($projectID = 0)
     {
         $this->lang->navGroup->project = 'project';
-        $projectID = $this->project->savePRJState($projectID, $this->project->getPairs());
+        $projectID = $this->project->saveState($projectID, $this->project->getPairs());
 
         $project = $this->project->getByID($projectID);
         if(empty($project) || $project->type != 'project') die(js::error($this->lang->notFound) . js::locate('back'));
 
-        if(!$projectID) $this->locate($this->createLink('project', 'PRJbrowse')); 
-        setCookie("lastPRJ", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        if(!$projectID) $this->locate($this->createLink('project', 'browse')); 
+        setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $this->view->title      = $this->lang->project->common . $this->lang->colon . $this->lang->project->PRJIndex;
-        $this->view->position[] = $this->lang->project->PRJIndex;
+        $this->view->title      = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
+        $this->view->position[] = $this->lang->project->index;
         $this->view->project    = $project;
 
         $this->display();
     }
 
     /**
-     * Projects list.
+     * Project list.
      *
      * @param  int    $projectID
      * @param  string $browseType
@@ -211,9 +197,8 @@ class project extends control
      */
     public function browse($projectID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->lang->project->menu = $this->lang->PRJ->menu;
         if($this->session->moreProjectLink) $this->lang->project->mainMenuAction = html::a($this->session->moreProjectLink, '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
-        $this->app->session->set('PRJBrowse', $this->app->getURI(true));
+        $this->app->session->set('projectBrowse', $this->app->getURI(true));
         $this->loadModel('datatable');
         $this->session->set('projectList', $this->app->getURI(true));
 
@@ -222,10 +207,10 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-        $projectTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=PRJProjectTitle');
+        $projectTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=projectTitle');
         $order        = explode('_', $orderBy);
         $sortField    = zget($this->config->project->sortFields, $order[0], 'id') . '_' . $order[1];
-        $projectStats = $this->loadModel('program')->getProjectStats($projectID, $browseType, $queryID, $sortField, $pager, $projectTitle);
+        $projectStats = $this->project->getStats($projectID, $browseType, $queryID, $sortField, $pager, $projectTitle);
 
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;
@@ -234,7 +219,7 @@ class project extends control
         $this->view->pager        = $pager;
         $this->view->projectID    = $projectID;
         $this->view->project      = $this->project->getByID($projectID);
-        $this->view->PRJTree      = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
+        $this->view->ProjectTree  = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;
@@ -254,12 +239,12 @@ class project extends control
         $this->loadModel('setting');
         if($_POST)
         {
-            $PRJProjectTitle = $this->post->PRJProjectTitle;
-            $this->setting->setItem($this->app->user->account . '.project.PRJProjectTitle', $PRJProjectTitle);
+            $projectTitle = $this->post->projectTitle;
+            $this->setting->setItem($this->app->user->account . '.project.projectTitle', $projectTitle);
             die(js::reload('parent.parent'));
         }
 
-        $status = $this->setting->getItem('owner=' . $this->app->user->account . '&module=project&key=PRJProjectTitle');
+        $status = $this->setting->getItem('owner=' . $this->app->user->account . '&module=project&key=projectTitle');
         $this->view->status = empty($status) ? '0' : $status;
         $this->display();
     }
@@ -268,26 +253,24 @@ class project extends control
      * Create a project.
      *
      * @param  string $model
-     * @param  int    $projectID
-     * @param  string $from PRJ|PGM
+     * @param  int    $programID
+     * @param  string $from project|program
      * @param  int    $copyProjectID
      * @access public
      * @return void
      */
-    public function create($model = 'waterfall', $projectID = 0, $from = 'PRJ', $copyProjectID = '')
+    public function create($model = 'waterfall', $programID = 0, $from = 'project', $copyProjectID = '')
     {
-        if($from == 'PRJ') $this->lang->project->menu = $this->lang->PRJ->menu;
-
         if($_POST)
         {
-            $projectID = $this->project->PRJCreate();
+            $projectID = $this->project->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
-            if($from == 'PGM')
+            if($from == 'program')
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PGMBrowse')));
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
             }
             else
             {
@@ -311,7 +294,7 @@ class project extends control
 
         $products      = array();
         $productPlans  = array();
-        $parentProject = $this->project->getPGMByID($projectID);
+        $parentProgram = $this->loadModel('program')->getByID($programID);
 
         if($copyProjectID)
         {
@@ -322,7 +305,7 @@ class project extends control
             $acl         = $copyProject->acl;
             $auth        = $copyProject->auth;
             $whitelist   = $copyProject->whitelist;
-            $projectID   = $copyProject->parent;
+            $programID   = $copyProject->parent;
             $model       = $copyProject->model;
 
             $products = $this->project->getProducts($copyProjectID);
@@ -332,8 +315,8 @@ class project extends control
             }
         }
 
-        $this->view->title      = $this->lang->project->PRJCreate;
-        $this->view->position[] = $this->lang->project->PRJCreate;
+        $this->view->title      = $this->lang->project->create;
+        $this->view->position[] = $this->lang->project->create;
 
         $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
@@ -353,10 +336,10 @@ class project extends control
         $this->view->copyProjectID   = $copyProjectID;
         $this->view->from            = $from;
         $this->view->projectList     = $this->project->getParentPairs();
-        $this->view->parentProject   = $parentProject;
+        $this->view->parentProgram   = $parentProgram;
         $this->view->URSRPairs       = $this->loadModel('custom')->getURSRPairs();
-        $this->view->availableBudget = $this->project->getAvailableBudget($parentProject);
-        $this->view->budgetUnitList  = $this->project->getBudgetUnitList();
+        $this->view->availableBudget = $this->program->getBudgetLeft($parentProgram);
+        $this->view->budgetUnitList  = $this->program->getBudgetUnitList();
 
         $this->display();
     }
@@ -365,11 +348,11 @@ class project extends control
      * Edit a project.
      *
      * @param  int    $projectID
-     * @param  string $from  PRJ|pgmbrowse|pgmproject
+     * @param  string $from  project|program|programProject
      * @access public
      * @return void
      */
-    public function edit($projectID = 0, $from = 'PRJ')
+    public function edit($projectID = 0, $from = 'project')
     {
         $this->app->loadLang('custom');
         $this->app->loadLang('project');
@@ -384,7 +367,7 @@ class project extends control
 
         if($_POST)
         {
-            $changes = $this->project->PRJUpdate($projectID);
+            $changes = $this->project->update($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
@@ -393,9 +376,9 @@ class project extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $locateLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJView', "projectID=$projectID");
-            if($from == 'pgmbrowse')  $locateLink = inLink('PGMBrowse');
-            if($from == 'pgmproject') $locateLink = $this->session->PGMProject ? $this->session->PGMProject : inLink('PGMProject', "projectID=$projectID");
+            $locateLink = $this->session->projectBrowse ? $this->session->projectBrowse : inLink('view', "projectID=$projectID");
+            if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
+            if($from == 'programProject') $locateLink = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
@@ -425,8 +408,8 @@ class project extends control
             $productPlans[$product->id] = $this->productplan->getPairs($product->id);
         }
 
-        $this->view->title      = $this->lang->project->PRJEdit;
-        $this->view->position[] = $this->lang->project->PRJEdit;
+        $this->view->title      = $this->lang->project->edit;
+        $this->view->position[] = $this->lang->project->edit;
 
         $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
         $this->view->users                = $this->user->getPairs('noclosed|nodeleted');
@@ -441,7 +424,7 @@ class project extends control
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
         $this->view->from                 = $from;
         $this->view->parentProject        = $parentProject;
-        $this->view->availableBudget      = $this->project->getAvailableBudget($parentProject) + (float)$project->budget;
+        $this->view->availableBudget      = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;
         $this->view->budgetUnitList       = $this->project->getBudgetUnitList();
 
         $this->display();
@@ -464,7 +447,7 @@ class project extends control
 
         if($this->post->names)
         {
-            $allChanges = $this->project->PRJBatchUpdate();
+            $allChanges = $this->project->batchUpdate();
 
             if(!empty($allChanges))
             {
@@ -509,7 +492,7 @@ class project extends control
         $moduleIndex = array_search('project', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
-        $this->app->session->set('PRJBrowse', $this->app->getURI(true));
+        $this->app->session->set('projectBrowse', $this->app->getURI(true));
 
         $products = $this->loadModel('product')->getProductsByProject($projectID);;
         $linkedBranches = array();
@@ -522,8 +505,8 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
 
-        $this->view->title        = $this->lang->project->PRJView; 
-        $this->view->position     = $this->lang->project->PRJView;
+        $this->view->title        = $this->lang->project->view; 
+        $this->view->position     = $this->lang->project->view;
         $this->view->projectID    = $projectID;
         $this->view->project      = $this->project->getByID($projectID);
         $this->view->products     = $products;
@@ -583,7 +566,7 @@ class project extends control
     {
         if(!empty($_POST))
         {
-            $_POST['PRJ'] = $projectID;
+            $_POST['project'] = $projectID;
             $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::closeModal('parent.parent'));
@@ -604,7 +587,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageView($groupID, $projectID, $projectID)
+    public function manageView($groupID, $projectID, $programID)
     {
         $this->lang->navGroup->project = 'project';
         $this->lang->project->menu = $this->lang->scrum->setMenu;
@@ -616,7 +599,7 @@ class project extends control
             $this->group->updateView($groupID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PRJGroup', "projectID=$projectID&projectID=$projectID")));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$projectID&programID=$programID")));
         }
 
         $group = $this->group->getById($groupID);
@@ -626,8 +609,8 @@ class project extends control
         $this->view->position[] = $this->lang->group->manageView;
 
         $this->view->group    = $group;
-        $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('project')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
-        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('id')->eq($group->PRJ)->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('program')->eq($group->project)->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('id')->eq($group->project)->orderBy('order_desc')->fetchPairs('id', 'name');
 
         $this->display();
     }
@@ -666,7 +649,7 @@ class project extends control
             if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('PRJGroup', "projectID=$group->PRJ")));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$group->project")));
         }
 
         if($type == 'byGroup')
@@ -694,7 +677,7 @@ class project extends control
             $this->view->version    = $version;
 
             /* Unset not project privs. */
-            $project = $this->project->getByID($group->PRJ);
+            $project = $this->project->getByID($group->project);
             foreach($this->lang->resource as $method => $label)
             {
                 if(!in_array($method, $this->config->projectPriv->{$project->model})) unset($this->lang->resource->$method);
@@ -722,7 +705,7 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
-            $link = $this->createLink('project', 'PRJManageMembers', "projectID=$projectID");
+            $link = $this->createLink('project', 'manageMembers', "projectID=$projectID");
             $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
 
@@ -735,8 +718,8 @@ class project extends control
         $roles     = $this->user->getUserRoles(array_keys($users));
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
 
-        $this->view->title      = $this->lang->project->PRJManageMembers . $this->lang->colon . $project->name;
-        $this->view->position[] = $this->lang->project->PRJManageMembers;
+        $this->view->title      = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
+        $this->view->position[] = $this->lang->project->manageMembers;
 
         $this->view->project        = $project;
         $this->view->users          = $users;
@@ -796,7 +779,7 @@ class project extends control
         if(!empty($_POST))
          {
              $group = $this->group->getByID($groupID);
-             $_POST['PRJ'] = $group->PRJ;
+             $_POST['project'] = $group->project;
              $this->group->copy($groupID);
              if(dao::isError()) die(js::error(dao::getError()));
              die(js::closeModal('parent.parent', 'this'));
@@ -1011,7 +994,7 @@ class project extends control
         if($confirm == 'no')
         {
             $project = $this->project->getByID($projectID);
-            echo js::confirm(sprintf($this->lang->project->PRJConfirmDelete, $project->name), $this->createLink('project', 'PRJDelete', "projectID=$projectID&confirm=yes"));
+            echo js::confirm(sprintf($this->lang->project->confirmDelete, $project->name), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes"));
             die();
         }
         else
@@ -1021,7 +1004,7 @@ class project extends control
             $this->dao->update(TABLE_PROJECT)->set('deleted')->eq(1)->where('id')->in(array_keys($projectIdList))->exec();
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
             $this->project->updateUserView($projectID);
-            $this->session->set('PRJ', '');
+            $this->session->set('project', '');
 
             die(js::reload('parent'));
         }
@@ -1056,10 +1039,10 @@ class project extends control
     /**
      * Get white list personnel.
      *
-     * @param  int    $projectID
+     * @param  int    $programID
      * @param  int    $projectID
      * @param  string $module
-     * @param  string $from  PRJ|pgmbrowse|pgmproject
+     * @param  string $from  project|program|programProject
      * @param  string $objectType
      * @param  string $orderby
      * @param  int    $recTotal
@@ -1068,21 +1051,21 @@ class project extends control
      * @access public
      * @return void
      */
-    public function whitelist($projectID = 0, $projectID = 0, $module = 'project', $from = 'PRJ', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist($programID = 0, $projectID = 0, $module = 'project', $from = 'project', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if($from == 'PRJ') 
+        if($from == 'project') 
         {
             $this->lang->navGroup->project = 'project';
             $this->lang->project->menu = $this->lang->scrum->setMenu;
             $moduleIndex = array_search('project', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         }
-        if($from == 'pgmproject')
+        if($from == 'programproject')
         {
-            $this->app->rawMethod = 'pgmproject';
+            $this->app->rawMethod = 'programproject';
             $this->lang->navGroup->project     = 'project';
-            $this->lang->project->switcherMenu = $this->project->getPGMSwitcher($projectID, true);
-            $this->project->setPGMViewMenu($projectID);
+            $this->lang->project->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
+            $this->program->setViewMenu($programID);
         }
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
@@ -1098,7 +1081,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function addWhitelist($projectID = 0, $deptID = 0, $projectID = 0, $from = 'PRJ')
+    public function addWhitelist($projectID = 0, $deptID = 0, $projectID = 0, $from = 'project')
     {
         /* Navigation stay in project when enter from project list. */
         $this->adjustNavigation($from, $projectID);
@@ -1124,11 +1107,11 @@ class project extends control
      *
      * @param  int     $projectID
      * @param  int     $projectID
-     * @param  string $from  PRJ|pgmbrowse|pgmproject
+     * @param  string $from  project|program|programproject
      * @access public
      * @return void
      */
-    public function manageProducts($projectID, $projectID = 0, $from = 'PRJ')
+    public function manageProducts($projectID, $projectID = 0, $from = 'project')
     {
         /* Navigation stay in project when enter from project list. */
         $this->adjustNavigation($from, $projectID);
@@ -1151,17 +1134,18 @@ class project extends control
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            $locateLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('PRJManageProducts', "projectID=$projectID");
-            if($from == 'pgmbrowse')  $locateLink = inLink('PGMBrowse');
-            if($from == 'pgmproject') $locateLink = $this->session->PGMProject ? $this->session->PGMProject : inLink('PGMProject', "projectID=$projectID");
+            $locateLink = $this->session->projectBrowse ? $this->session->projectBrowse : inLink('manageProducts', "projectID=$projectID");
+            if($from == 'program')  $locateLink = inLink('PGMBrowse');
+            if($from == 'programproject') $locateLink = $this->session->programProject ? $this->session->programProject : inLink('programProject', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
         $this->loadModel('product');
+        $this->loadModel('program');
         $project = $this->project->getById($projectID);
 
-        $allProducts        = $this->project->getPGMProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts     = $this->project->getProducts($project->id);
+        $allProducts        = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
+        $linkedProducts     = $this->program->getProducts($project->id);
         $linkedBranches     = array();
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
@@ -1236,10 +1220,10 @@ class project extends control
      */
     public function adjustNavigation($from = '', $projectID = 0)
     {
-        if($from == 'prjbrowse') $this->lang->project->menu = $this->lang->PRJ->menu;
+        if($from == 'prjbrowse') $this->lang->project->menu = $this->lang->project->menu;
         if($from == 'pgmbrowse') $this->lang->navGroup->project = 'project';
 
-        if($from == 'PRJ')
+        if($from == 'project')
         {
             $this->lang->navGroup->project = 'project';
             $this->lang->project->menu = $this->lang->scrum->setMenu;

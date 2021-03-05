@@ -275,7 +275,7 @@ class programModel extends model
                 $program->budgetUnit = $parentProgram->budgetUnit;
                 if(isset($program->budget) and $parentProgram->budget != 0)
                 {
-                    $availableBudget = $this->getAvailableBudget($parentProgram);
+                    $availableBudget = $this->getBudgetLeft($parentProgram);
                     if($program->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
                 }
 
@@ -389,7 +389,7 @@ class programModel extends model
             $program->budgetUnit = $parentProgram->budgetUnit;
             if($program->budget != 0 and $parentProgram->budget != 0)
             {
-                $availableBudget = $this->getAvailableBudget($parentProgram);
+                $availableBudget = $this->getBudgetLeft($parentProgram);
                 if($program->budget > $availableBudget + $oldProgram->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
