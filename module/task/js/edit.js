@@ -1,86 +1,86 @@
-$(function() 
+$(function()
 {
     $('.record-estimate-toggle').modalTrigger({width:900, type:'iframe', afterHide: function(){parent.location.href=parent.location.href;}});
 })
 
 /**
- * Load module, stories and members. 
- * 
- * @param  int    $projectID 
+ * Load module, stories and members.
+ *
+ * @param  int    $executionID
  * @access public
  * @return void
  */
-function loadAll(projectID)
+function loadAll(executionID)
 {
-    if(!changeProjectConfirmed)
+    if(!changeExecutionConfirmed)
     {
-        firstChoice = confirm(confirmChangeProject);
-        changeProjectConfirmed = true;    // Only notice the user one time.
+        firstChoice = confirm(confirmChangeExecution);
+        changeExecutionConfirmed = true;    // Only notice the user one time.
     }
-    if(changeProjectConfirmed && firstChoice)
+    if(changeExecutionConfirmed && firstChoice)
     {
-        loadModuleMenu(projectID); 
-        loadProjectStories(projectID);
-        loadProjectMembers(projectID);
+        loadModuleMenu(executionID);
+        loadExecutionStories(executionID);
+        loadExecutionMembers(executionID);
     }
     else
     {
-        $('#project').val(oldProjectID);
-        $("#project").trigger("chosen:updated");
+        $('#execution').val(oldExecutionID);
+        $("#execution").trigger("chosen:updated");
     }
 }
 
 /**
- * Load module of the project. 
- * 
- * @param  int    $projectID 
+ * Load module of the execution.
+ *
+ * @param  int    $executionID
  * @access public
  * @return void
  */
-function loadModuleMenu(projectID)
+function loadModuleMenu(executionID)
 {
-    var link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + projectID + '&viewtype=task');
+    var link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task');
     $('#moduleIdBox').load(link, function(){$('#module').chosen();});
 }
 
 /**
- * Load stories of the project. 
- * 
- * @param  int    $projectID 
+ * Load stories of the execution.
+ *
+ * @param  int    $executionID
  * @access public
  * @return void
  */
-function loadProjectStories(projectID, moduleID)
+function loadExecutionStories(executionID, moduleID)
 {
     if(typeof(moduleID) == 'undefined') moduleID = 0;
-    var link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=' + oldStoryID);
+    var link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen();});
 }
 
 /**
- * Load team members of the project. 
- * 
- * @param  int    $projectID 
+ * Load team members of the execution.
+ *
+ * @param  int    $executionID
  * @access public
  * @return void
  */
-function loadProjectMembers(projectID)
+function loadExecutionMembers(executionID)
 {
-    var link = createLink('project', 'ajaxGetMembers', 'projectID=' + projectID + '&assignedTo=' + oldAssignedTo);
+    var link = createLink('execution', 'ajaxGetMembers', 'executionID=' + executionID + '&assignedTo=' + oldAssignedTo);
     $('#assignedToIdBox').load(link, function(){$('#assignedToIdBox').find('select').chosen()});
 }
 
 /**
  * Load module related
- * 
+ *
  * @access public
  * @return void
  */
 function loadModuleRelated()
 {
-    moduleID  = $('#module').val();
-    projectID = $('#project').val();
-    loadProjectStories(projectID, moduleID)
+    moduleID    = $('#module').val();
+    executionID = $('#execution').val();
+    loadExecutionStories(executionID, moduleID)
 }
 
 /* empty function. */
@@ -148,7 +148,7 @@ $(document).ready(function()
     {
         var moduleID = $('#moduleIdBox #module').val();
         var extra    = $(this).prop('checked') ? 'allModule' : '';
-        $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + projectID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
+        $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
         {
             $('#moduleIdBox #module').val(moduleID).attr('onchange', "loadModuleRelated()").chosen();
         });

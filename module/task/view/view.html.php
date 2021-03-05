@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('project', 'browse', "projectID=$task->project");?>
+<?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('execution', 'browse', "executionID=$task->execution");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -39,8 +39,8 @@
   <div class="btn-toolbar pull-right">
     <?php
     $checkObject = new stdclass();
-    $checkObject->project = $task->project;
-    $link = $this->createLink('task', 'create', "project={$task->project}&storyID={$task->story}&moduleID={$task->module}");
+    $checkObject->execution = $task->execution;
+    $link = $this->createLink('task', 'create', "execution={$task->execution}&storyID={$task->story}&moduleID={$task->module}");
     if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
     ?>
   </div>
@@ -55,7 +55,7 @@
           <?php echo !empty($task->desc) ? $task->desc : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
         </div>
       </div>
-      <?php if($project->type != 'ops'):?>
+      <?php if($execution->type != 'ops'):?>
       <?php if($task->fromBug != 0):?>
       <div class="detail">
         <div class="detail-title"><?php echo $lang->bug->steps;?></div>
@@ -126,7 +126,7 @@
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'assignTo', "executionID=$child->execution&taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
@@ -157,8 +157,8 @@
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$task->deleted):?>
         <?php
-        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'split', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
-        common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
+        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'split', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
+        common::printIcon('task', 'assignTo',       "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
         common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
@@ -172,8 +172,8 @@
 
         if(!isonlybody()) echo "<div class='divider'></div>";
         common::printIcon('task', 'edit', "taskID=$task->id", $task, 'button', '', '', 'showinonlybody');
-        common::printIcon('task', 'create', "projctID={$task->project}&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
-        common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", $task, 'button', 'trash', 'hiddenwin');
+        common::printIcon('task', 'create', "projctID={$task->execution}&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
+        common::printIcon('task', 'delete', "executionID=$task->execution&taskID=$task->id", $task, 'button', 'trash', 'hiddenwin');
         if($task->parent > 0) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
         ?>
         <?php endif;?>
@@ -196,7 +196,7 @@
               <tbody>
                 <tr>
                   <th class='w-90px'><?php echo $lang->task->execution;?></th>
-                  <td><?php if(!common::printLink('project', 'view', "projectID=$task->project", $project->name)) echo $project->name;?></td>
+                  <td><?php if(!common::printLink('execution', 'view', "executionID=$task->execution", $execution->name)) echo $execution->name;?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->module;?></th>
@@ -218,7 +218,7 @@
                      foreach($modulePath as $key => $module)
                      {
                          $moduleTitle .= $module->name;
-                         if(!common::printLink('project', 'task', "projectID=$task->project&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                         if(!common::printLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
                          if(isset($modulePath[$key + 1]))
                          {
                              $moduleTitle .= '/';
@@ -231,7 +231,7 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
-                <?php if($project->type != 'ops'):?>
+                <?php if($execution->type != 'ops'):?>
                 <tr class='nofixed'>
                   <th><?php echo $lang->task->story;?></th>
                   <td>

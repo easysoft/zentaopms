@@ -80,8 +80,8 @@ js::set('dittoNotice', $dittoNotice);
           <?php
           if(!isset($execution))
           {
-              $prjInfo = $this->project->getById($tasks[$taskID]->project);
-              $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task');
+              $prjInfo = $this->execution->getById($tasks[$taskID]->execution);
+              $modules = $this->tree->getOptionMenu($tasks[$taskID]->execution, $viewType = 'task');
               foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $prjInfo->name. $moduleName;
               $modules = array('ditto' => $this->lang->task->ditto) + $modules;
           }
@@ -91,7 +91,7 @@ js::set('dittoNotice', $dittoNotice);
             <?php $disableHour = (isset($teams[$taskID]) or $tasks[$taskID]->parent < 0) ? "disabled='disabled'" : '';?>
             <?php
             $members      = array('' => '', 'ditto' => $this->lang->task->ditto);
-            $teamAccounts = array_keys($executionTeams[$tasks[$taskID]->project]);
+            $teamAccounts = array_keys($executionTeams[$tasks[$taskID]->execution]);
             foreach($teamAccounts as $teamAccount) $members[$teamAccount] = $users[$teamAccount];
             $members['closed'] = 'Closed';
 

@@ -14,6 +14,6 @@ $(function()
 
 function changeChartType(type)
 {
-    $('form').attr('action', createLink('task', 'report', 'projectID=' + projectID + '&browseType=' + browseType + '&chartType=' + type));
+    $('form').attr('action', createLink('task', 'report', 'executionID=' + executionID + '&browseType=' + browseType + '&chartType=' + type));
     $('form').find('#submit').click();
 }
