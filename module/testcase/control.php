@@ -344,10 +344,10 @@ class testcase extends control
         $position[] = $this->lang->testcase->create;
 
         /* Set story and currentModuleID. */
-        if($storyID and empty($moduleID))
+        if($storyID)
         {
-            $story    = $this->loadModel('story')->getByID($storyID);
-            $moduleID = $story->module;
+            $story = $this->loadModel('story')->getByID($storyID);
+            if(empty($moduleID)) $moduleID = $story->module;
         }
         $currentModuleID = (int)$moduleID;
 
