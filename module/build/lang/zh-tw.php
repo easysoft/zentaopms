@@ -30,7 +30,7 @@ $lang->build->basicInfo = '基本信息';
 $lang->build->id            = 'ID';
 $lang->build->product       = $lang->productCommon;
 $lang->build->branch        = '平台/分支';
-$lang->build->project       = '所屬' . $lang->executionCommon;
+$lang->build->execution     = '所屬' . $lang->executionCommon;
 $lang->build->name          = '名稱編號';
 $lang->build->date          = '打包日期';
 $lang->build->builder       = '構建者';
@@ -49,8 +49,8 @@ $lang->build->noProduct     = " <span style='color:red'>該{$lang->executionComm
 $lang->build->noBuild       = '暫時沒有版本。';
 
 $lang->build->notice = new stdclass();
-$lang->build->notice->changeProduct = "已經關聯{$lang->SRCommon}、Bug或提交測試單的版本，不能修改其所屬{$lang->productCommon}";
-$lang->build->notice->changeProject = "提交測試單的版本，不能修改其所屬{$lang->executionCommon}";
+$lang->build->notice->changeProduct   = "已經關聯{$lang->SRCommon}、Bug或提交測試單的版本，不能修改其所屬{$lang->productCommon}";
+$lang->build->notice->changeExecution = "提交測試單的版本，不能修改其所屬{$lang->executionCommon}";
 
 $lang->build->finishStories = " 本次共完成 %s 個{$lang->SRCommon}";
 $lang->build->resolvedBugs  = ' 本次共解決 %s 個Bug';
@@ -62,4 +62,5 @@ $lang->build->placeholder->filePath = ' 該版本軟件包下載存儲地址';
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, 由 <strong>$actor</strong> 創建版本 <strong>$extra</strong>。' . "\n";
+
 $lang->backhome = '返回';

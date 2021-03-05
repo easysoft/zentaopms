@@ -24,7 +24,7 @@ tbody tr td:first-child input{display:none;}
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('project', 'build', "projectID=$build->project");?>
+    <?php $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('execution', 'build', "executionID=$build->execution");?>
     <?php common::printBack($browseLink, 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
