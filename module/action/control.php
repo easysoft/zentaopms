@@ -12,13 +12,13 @@
 class action extends control
 {
     /**
-     * Trash 
-     * 
-     * @param  string $type all|hidden 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Trash.
+     *
+     * @param  string $type all|hidden
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -60,8 +60,8 @@ class action extends control
 
     /**
      * Undelete an object.
-     * 
-     * @param  int    $actionID 
+     *
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -72,9 +72,9 @@ class action extends control
     }
 
     /**
-     * Hide an deleted object. 
-     * 
-     * @param  int    $actionID 
+     * Hide an deleted object.
+     *
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -86,8 +86,8 @@ class action extends control
 
     /**
      * Hide all deleted objects.
-     * 
-     * @param  string $confirm 
+     *
+     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
@@ -105,10 +105,10 @@ class action extends control
     }
 
     /**
-     * Comment. 
-     * 
-     * @param  string $objectType 
-     * @param  int    $objectID 
+     * Comment.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
      * @access public
      * @return void
      */
@@ -127,8 +127,8 @@ class action extends control
 
     /**
      * Edit comment of a action.
-     * 
-     * @param  int    $actionID 
+     *
+     * @param  int    $actionID
      * @access public
      * @return void
      */
