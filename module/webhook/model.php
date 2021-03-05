@@ -5,18 +5,18 @@
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     webhook 
+ * @package     webhook
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 class webhookModel extends model
 {
     /**
-     * Get a webhook by id. 
-     * 
+     * Get a webhook by id.
+     *
      * @param  int    $id
      * @access public
-     * @return object 
+     * @return object
      */
     public function getByID($id)
     {
@@ -25,8 +25,8 @@ class webhookModel extends model
     }
 
     /**
-     * Get webhook list. 
-     * 
+     * Get webhook list.
+     *
      * @param  string $orderBy
      * @param  object $pager
      * @param  bool   $decode
@@ -44,13 +44,13 @@ class webhookModel extends model
     }
 
     /**
-     * Get log list of a webhook. 
-     * 
+     * Get log list of a webhook.
+     *
      * @param  int    $id
-     * @param  string $orderBy 
-     * @param  object $pager 
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
-     * @return array 
+     * @return array
      */
     public function getLogList($id, $orderBy = 'date_desc', $pager = null)
     {
@@ -116,8 +116,8 @@ class webhookModel extends model
     }
 
     /**
-     * Get saved data list. 
-     * 
+     * Get saved data list.
+     *
      * @access public
      * @return array
      */
@@ -130,7 +130,7 @@ class webhookModel extends model
 
     /**
      * Get bind users.
-     * 
+     *
      * @param  int    $webhookID
      * @param  array  $users
      * @access public
@@ -145,8 +145,8 @@ class webhookModel extends model
     }
 
     /**
-     * Create a webhook. 
-     * 
+     * Create a webhook.
+     *
      * @access public
      * @return bool
      */
@@ -156,7 +156,7 @@ class webhookModel extends model
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('products', ',')
-            ->join('projects', ',')
+            ->join('executions', ',')
             ->skipSpecial('url')
             ->trim('agentId,appKey,appSecret,wechatAgentId,wechatCorpId,wechatCorpSecret,feishuAppId,feishuAppSecret')
             ->remove('allParams, allActions')
@@ -206,7 +206,7 @@ class webhookModel extends model
             $webhook->secret = json_encode($webhook->secret);
             $webhook->url    = $this->config->webhook->feishuApiUrl;
         }
-        
+
         $this->dao->insert(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret,wechatCorpId,wechatCorpSecret,wechatAgentId,feishuAppId,feishuAppSecret')
             ->batchCheck($this->config->webhook->create->requiredFields, 'notempty')
             ->autoCheck()
@@ -215,8 +215,8 @@ class webhookModel extends model
     }
 
     /**
-     * Update a webhook. 
-     * 
+     * Update a webhook.
+     *
      * @param  int    $id
      * @access public
      * @return bool
@@ -227,9 +227,9 @@ class webhookModel extends model
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->setDefault('products', '')
-            ->setDefault('projects', '')
+            ->setDefault('executions', '')
             ->join('products', ',')
-            ->join('projects', ',')
+            ->join('executions', ',')
             ->skipSpecial('url')
             ->trim('agentId,appKey,appSecret,wechatAgentId,wechatCorpId,wechatCorpSecret,feishuAppId,feishuAppSecret')
             ->remove('allParams, allActions')
@@ -287,8 +287,8 @@ class webhookModel extends model
 
     /**
      * Bind ding openID.
-     * 
-     * @param  int    $webhookID 
+     *
+     * @param  int    $webhookID
      * @access public
      * @return bool
      */
@@ -316,14 +316,14 @@ class webhookModel extends model
     }
 
     /**
-     * Send data. 
-     * 
-     * @param  string $objectType 
-     * @param  int    $objectID 
-     * @param  string $actionType 
-     * @param  int    $actionID 
+     * Send data.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $actionType
+     * @param  int    $actionID
      * @access public
-     * @return bool 
+     * @return bool
      */
     public function send($objectType, $objectID, $actionType, $actionID, $actor = '')
     {
@@ -355,11 +355,11 @@ class webhookModel extends model
     }
 
     /**
-     * Build data. 
-     * 
-     * @param  string $objectType 
-     * @param  int    $objectID 
-     * @param  string $actionType 
+     * Build data.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $actionType
      * @param  int    $actionID
      * @param  object $webhook
      * @access public
@@ -380,9 +380,9 @@ class webhookModel extends model
             $intersect       = array_intersect($webhookProducts, $actionProduct);
             if(!$intersect) return false;
         }
-        if($webhook->projects)
+        if($webhook->executions)
         {
-            if(strpos(",$webhook->projects,", ",$action->project,") === false) return false;
+            if(strpos(",$webhook->executions,", ",$action->execution,") === false) return false;
         }
 
         static $users = array();
@@ -437,10 +437,10 @@ class webhookModel extends model
     }
 
     /**
-     * Get view link. 
-     * 
-     * @param  string $objectType 
-     * @param  int    $objectID 
+     * Get view link.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
      * @access public
      * @return string
      */
@@ -460,13 +460,13 @@ class webhookModel extends model
     }
 
     /**
-     * Get hook data for dingding. 
-     * 
-     * @param  string $title 
-     * @param  string $text 
-     * @param  string $mobile 
+     * Get hook data for dingding.
+     *
+     * @param  string $title
+     * @param  string $text
+     * @param  string $mobile
      * @access public
-     * @return object 
+     * @return object
      */
     public function getDingdingData($title, $text, $mobile)
     {
@@ -493,15 +493,15 @@ class webhookModel extends model
     }
 
     /**
-     * Get hook data for bearychat. 
-     * 
-     * @param  string $text 
-     * @param  string $mobile 
-     * @param  string $email 
-     * @param  string $objectType 
-     * @param  int    $objectID 
+     * Get hook data for bearychat.
+     *
+     * @param  string $text
+     * @param  string $mobile
+     * @param  string $email
+     * @param  string $objectType
+     * @param  int    $objectID
      * @access public
-     * @return object 
+     * @return object
      */
     public function getBearychatData($text, $mobile, $email, $objectType, $objectID)
     {
@@ -520,7 +520,7 @@ class webhookModel extends model
                 {
                     $attachment = array();
                     $attachment['title'] = $file->title;
-                    $attachment['images'][]['url'] = common::getSysURL() . $this->file->webPath . $file->pathname; 
+                    $attachment['images'][]['url'] = common::getSysURL() . $this->file->webPath . $file->pathname;
                     $data->attachments[] = $attachment;
                 }
             }
@@ -531,10 +531,10 @@ class webhookModel extends model
 
     /**
      * Get weixin data.
-     * 
-     * @param  string $title 
-     * @param  string $text 
-     * @param  string $mobile 
+     *
+     * @param  string $title
+     * @param  string $text
+     * @param  string $mobile
      * @access public
      * @return object
      */
@@ -564,8 +564,8 @@ class webhookModel extends model
 
     /**
      * Get openID list.
-     * 
-     * @param  int    $actionID 
+     *
+     * @param  int    $actionID
      * @access public
      * @return string
      */
@@ -588,13 +588,13 @@ class webhookModel extends model
     }
 
     /**
-     * Post hook data. 
-     * 
-     * @param  object $webhook 
-     * @param  string $sendData 
-     * @param  int    $actionID 
+     * Post hook data.
+     *
+     * @param  object $webhook
+     * @param  string $sendData
+     * @param  int    $actionID
      * @access public
-     * @return int 
+     * @return int
      */
     public function fetchHook($webhook, $sendData, $actionID = 0)
     {
@@ -677,11 +677,11 @@ class webhookModel extends model
     }
 
     /**
-     * Save datas. 
-     * 
-     * @param  int    $webhookID 
-     * @param  int    $actionID 
-     * @param  string $data 
+     * Save datas.
+     *
+     * @param  int    $webhookID
+     * @param  int    $actionID
+     * @param  string $data
      * @access public
      * @return bool
      */
@@ -702,14 +702,14 @@ class webhookModel extends model
     }
 
     /**
-     * Save log. 
+     * Save log.
      *
-     * @param  object $webhook 
-     * @param  int    $actionID 
-     * @param  string $data 
+     * @param  object $webhook
+     * @param  int    $actionID
+     * @param  string $data
      * @param  string $result
      * @access public
-     * @return bool 
+     * @return bool
      */
     public function saveLog($webhook, $actionID, $data, $result)
     {
@@ -729,10 +729,10 @@ class webhookModel extends model
 
     /**
      * Set sent status.
-     * 
-     * @param  array  $idList 
-     * @param  string $status 
-     * @param  string $time 
+     *
+     * @param  array  $idList
+     * @param  string $status
+     * @param  string $time
      * @access public
      * @return void
      */

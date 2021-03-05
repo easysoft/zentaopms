@@ -11,8 +11,8 @@ ALTER TABLE `zt_project` ADD `percent` float unsigned NOT NULL DEFAULT '0' AFTER
 ALTER TABLE `zt_project` ADD `path` varchar(255) NOT NULL AFTER `parent`;
 ALTER TABLE `zt_project` ADD `grade` tinyint unsigned NOT NULL AFTER `path`;
 ALTER TABLE `zt_project` ADD `auth` char(30) NOT NULL AFTER `percent`;
-ALTER TABLE `zt_project` ADD `milestone` enum('0','1') NOT NULL default '0' AFTER `percent`; 
-ALTER TABLE `zt_project` ADD `attribute` varchar(30) NOT NULL DEFAULT '' AFTER `budgetUnit`; 
+ALTER TABLE `zt_project` ADD `milestone` enum('0','1') NOT NULL default '0' AFTER `percent`;
+ALTER TABLE `zt_project` ADD `attribute` varchar(30) NOT NULL DEFAULT '' AFTER `budgetUnit`;
 ALTER TABLE `zt_project` ADD `realBegan` date NOT NULL AFTER `end`;
 ALTER TABLE `zt_project` ADD `realEnd` date NOT NULL AFTER `realBegan`;
 ALTER TABLE `zt_project` ADD `version` smallint(6) NOT NULL AFTER `desc`;
@@ -23,17 +23,18 @@ ALTER TABLE `zt_project` ADD `output` text NOT NULL AFTER `milestone`;
 ALTER TABLE `zt_project` ADD `lastEditedBy` varchar(30) NOT NULL DEFAULT '' AFTER `openedVersion`;
 ALTER TABLE `zt_project` ADD `lastEditedDate` datetime NOT NULL AFTER `lastEditedBy`;
 
-ALTER TABLE `zt_action` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
-ALTER TABLE `zt_bug` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
-ALTER TABLE `zt_build` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
-ALTER TABLE `zt_burn` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
-ALTER TABLE `zt_doc` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
-ALTER TABLE `zt_relation` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
-ALTER TABLE `zt_relation` CHANGE `program` `project` mediumint(8) unsigned NOT NULL; 
-ALTER TABLE `zt_doclib` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
-ALTER TABLE `zt_task` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
-ALTER TABLE `zt_testreport` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
-ALTER TABLE `zt_testtask` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL; 
+ALTER TABLE `zt_action` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_bug` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_build` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_burn` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_doc` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_relation` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_relation` CHANGE `program` `project` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_doclib` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_task` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_testreport` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_testtask` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_webhook` CHANGE `projects` `executions` mediumint(8) unsigned NOT NULL;
 
 ALTER TABLE `zt_task` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_doc` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
@@ -138,7 +139,7 @@ ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `modul
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '0', '*', '*', '*', 'moduleName=weekly&methodName=computeWeekly', '更新项目周报', 'system', 0, 'normal', '2020-08-27 10:07:53');
 
-ALTER TABLE `zt_story` ADD `URChanged` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`; 
+ALTER TABLE `zt_story` ADD `URChanged` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`;
 
 ALTER TABLE `zt_team` MODIFY `type` enum('project','task','stage','sprint') NOT NULL DEFAULT 'project' AFTER `root`;
 
@@ -182,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `zt_searchdict` (
   PRIMARY KEY (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES 
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,  'product',      'dashboard'),
 (1,  'product',      'manageLine'),
 (1,  'projectstory', 'story'),

@@ -5,17 +5,17 @@
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     webhook 
+ * @package     webhook
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 class webhook extends control
 {
     /**
-     * Construct 
-     * 
-     * @param  string $moduleName 
-     * @param  string $methodName 
+     * Construct
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
@@ -26,12 +26,12 @@ class webhook extends control
     }
 
     /**
-     * Browse webhooks. 
-     * 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Browse webhooks.
+     *
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -53,8 +53,8 @@ class webhook extends control
     }
 
     /**
-     * Create a webhook. 
-     * 
+     * Create a webhook.
+     *
      * @access public
      * @return void
      */
@@ -70,7 +70,7 @@ class webhook extends control
         $this->app->loadLang('action');
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
         $this->view->products   = $this->loadModel('product')->getPairs();
-        $this->view->projects   = $this->loadModel('project')->getExecutionPairs();
+        $this->view->executions = $this->loadModel('execution')->getPairs();
         $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
         $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
         $this->view->position[] = $this->lang->webhook->create;
@@ -78,9 +78,9 @@ class webhook extends control
     }
 
     /**
-     * Edit a webhook. 
-     * 
-     * @param  int    $id 
+     * Edit a webhook.
+     *
+     * @param  int    $id
      * @access public
      * @return void
      */
@@ -101,15 +101,15 @@ class webhook extends control
         $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
         $this->view->position[] = $this->lang->webhook->edit;
         $this->view->products   = $this->loadModel('product')->getPairs();
-        $this->view->projects   = $this->loadModel('project')->getExecutionPairs();
+        $this->view->executions = $this->loadModel('execution')->getPairs();
         $this->view->webhook    = $webhook;
 
         $this->display();
     }
 
     /**
-     * Delete a webhook. 
-     * 
+     * Delete a webhook.
+     *
      * @param  int    $id
      * @access public
      * @return void
@@ -123,13 +123,13 @@ class webhook extends control
     }
 
     /**
-     * Browse logs of a webhook. 
-     * 
-     * @param  int    $id 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Browse logs of a webhook.
+     *
+     * @param  int    $id
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -141,7 +141,7 @@ class webhook extends control
         $this->session->set('productPlanList', $uri);
         $this->session->set('releaseList',     $uri);
         $this->session->set('storyList',       $uri);
-        $this->session->set('projectList',     $uri);
+        $this->session->set('executionList',   $uri);
         $this->session->set('taskList',        $uri);
         $this->session->set('buildList',       $uri);
         $this->session->set('bugList',         $uri);
@@ -166,11 +166,11 @@ class webhook extends control
 
     /**
      * Bind dingtalk userid.
-     * 
-     * @param  int    $id 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $id
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -265,8 +265,8 @@ class webhook extends control
 
     /**
      * choose dept.
-     * 
-     * @param  int    $id 
+     *
+     * @param  int    $id
      * @access public
      * @return void
      */
@@ -302,22 +302,22 @@ class webhook extends control
     }
 
     /**
-     * Send data by async. 
-     * 
+     * Send data by async.
+     *
      * @access public
      * @return void
      */
     public function asyncSend()
     {
         $webhooks = $this->webhook->getList($orderBy = 'id_desc', $pager = null, $decode = false);
-        if(empty($webhooks)) 
+        if(empty($webhooks))
         {
             echo "NO WEBHOOK EXIST.\n";
             return false;
         }
 
         $dataList = $this->webhook->getDataList();
-        if(empty($dataList)) 
+        if(empty($dataList))
         {
             echo "OK\n";
             return true;
@@ -341,7 +341,7 @@ class webhook extends control
                 }
                 $this->webhook->saveLog($webhook, $data->action, $data->data, $result);
             }
-            
+
             $this->webhook->setSentStatus($data->id, 'sended', $now);
         }
 
