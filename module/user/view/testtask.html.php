@@ -29,7 +29,7 @@
         <tr>
           <th class='w-id'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
           <th>                <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
-          <th>                <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
+          <th>                <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->execution);?></th>
           <th>                <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
           <th class='w-100px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
           <th class='w-100px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
@@ -41,7 +41,7 @@
         <tr>
           <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', false, $task->project), sprintf('%03d', $task->id));?></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', false, $task->project), $task->name);?></td>
-          <td class='nobr'><?php echo $task->projectName?></td>
+          <td class='nobr'><?php echo $task->executionName?></td>
           <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build", '', false, $task->project), $task->buildName));?></td>
           <td><?php echo $task->begin?></td>
           <td><?php echo $task->end?></td>

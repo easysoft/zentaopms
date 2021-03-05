@@ -1018,7 +1018,7 @@ class userModel extends model
      * Get projects a user participated.
      *
      * @param  string $account
-     * @param  string $type
+     * @param  string $type project|execution
      * @param  string $status
      * @access public
      * @return array
@@ -1049,7 +1049,7 @@ class userModel extends model
         $hours       = array();
         $emptyHour   = array('totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0, 'waitTasks' => 0, 'assignedToMeTasks' => 0);
         $searchField = $type == 'project' ? 'project' : 'execution';
-        $tasks       = $this->dao->select('id, project, project, consumed, `left`, status, assignedTo')
+        $tasks       = $this->dao->select('id, project, execution, consumed, `left`, status, assignedTo')
             ->from(TABLE_TASK)
             ->where('parent')->lt(1)
             ->andWhere($searchField)->in($projectIdList)->fi()

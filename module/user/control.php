@@ -25,6 +25,7 @@ class user extends control
         $this->loadModel('company')->setMenu();
         $this->loadModel('dept');
         $this->loadModel('todo');
+        $this->loadModel('execution');
         $this->app->loadLang('project');
         $this->app->loadModuleConfig($this->moduleName);//Finish task #5118.(Fix bug #2271)
     }
@@ -385,7 +386,7 @@ class user extends control
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
         $this->view->position[] = $this->lang->user->execution;
         $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getProjects($account, array('sprint', 'stage'), 'all', $pager);
+        $this->view->executions = $this->user->getProjects($account, 'execution', 'all', $pager);
         $this->view->user       = $user;
         $this->view->pager      = $pager;
 
