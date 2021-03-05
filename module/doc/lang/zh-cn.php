@@ -13,7 +13,7 @@
 $lang->doc->common         = '文档';
 $lang->doc->id             = '文档编号';
 $lang->doc->product        = '所属' . $lang->productCommon;
-$lang->doc->project        = '所属' . $lang->executionCommon;
+$lang->doc->execution        = '所属' . $lang->executionCommon;
 $lang->doc->lib            = '所属文档库';
 $lang->doc->module         = '所属分类';
 $lang->doc->title          = '文档标题';
@@ -99,16 +99,16 @@ $lang->doc->search         = '搜索';
 $lang->doc->allProduct     = '所有' . $lang->productCommon;
 $lang->doc->allProject     = '所有' . $lang->executionCommon;
 
-$lang->doc->libTypeList['product'] = $lang->productCommon . '文档库';
-$lang->doc->libTypeList['project'] = $lang->executionCommon . '文档库';
-$lang->doc->libTypeList['custom']  = '自定义文档库';
+$lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
+$lang->doc->libTypeList['execution'] = $lang->executionCommon . '文档库';
+$lang->doc->libTypeList['custom']    = '自定义文档库';
 
 $lang->doc->libIconList['product'] = 'icon-cube';
-$lang->doc->libIconList['project'] = 'icon-stack';
+$lang->doc->libIconList['execution'] = 'icon-stack';
 $lang->doc->libIconList['custom']  = 'icon-folder-o';
 
 $lang->doc->systemLibs['product'] = $lang->productCommon;
-$lang->doc->systemLibs['project'] = $lang->executionCommon;
+$lang->doc->systemLibs['execution'] = $lang->executionCommon;
 
 $lang->doc->aclList['open']    = '公开';
 $lang->doc->aclList['custom']  = '自定义';
@@ -175,8 +175,8 @@ $lang->doc->errorEmptyLib      = '文档库暂无数据。';
 
 $lang->doc->noticeAcl['lib']['product']['default'] = '有所选产品访问权限的用户可以访问。';
 $lang->doc->noticeAcl['lib']['product']['custom']  = '有所选产品访问权限或白名单里的用户可以访问。';
-$lang->doc->noticeAcl['lib']['project']['default'] = "有所选{$lang->executionCommon}访问权限的用户可以访问。";
-$lang->doc->noticeAcl['lib']['project']['custom']  = "有所选{$lang->executionCommon}访问权限或白名单里的用户可以访问。";
+$lang->doc->noticeAcl['lib']['execution']['default'] = "有所选{$lang->executionCommon}访问权限的用户可以访问。";
+$lang->doc->noticeAcl['lib']['execution']['custom']  = "有所选{$lang->executionCommon}访问权限或白名单里的用户可以访问。";
 $lang->doc->noticeAcl['lib']['custom']['open']     = '所有人都可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['custom']   = '白名单的用户可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['private']  = '只有创建者自己可以访问。';
@@ -196,7 +196,7 @@ $lang->doclib->user    = '用户';
 $lang->doclib->files   = '附件库';
 $lang->doclib->all     = '所有文档库';
 $lang->doclib->select  = '选择文档库';
-$lang->doclib->project = $lang->executionCommon . '库';
+$lang->doclib->execution = $lang->executionCommon . '库';
 $lang->doclib->product = $lang->productCommon . '库';
 
 $lang->doclib->aclListA['default'] = '默认';
@@ -207,14 +207,14 @@ $lang->doclib->aclListB['custom']  = '自定义';
 $lang->doclib->aclListB['private'] = '私有';
 
 $lang->doclib->create['product'] = '创建' . $lang->productCommon . '文档库';
-$lang->doclib->create['project'] = '创建' . $lang->executionCommon . '文档库';
+$lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档库';
 $lang->doclib->create['custom']  = '创建自定义文档库';
 
 $lang->doclib->main['product'] = $lang->productCommon . '主库';
-$lang->doclib->main['project'] = $lang->executionCommon . '主库';
+$lang->doclib->main['execution'] = $lang->executionCommon . '主库';
 
 $lang->doclib->tabList['product'] = $lang->productCommon;
-$lang->doclib->tabList['project'] = $lang->executionCommon;
+$lang->doclib->tabList['execution'] = $lang->executionCommon;
 $lang->doclib->tabList['custom']  = '自定义';
 
 $lang->doclib->nameList['custom'] = '自定义文档库名称';

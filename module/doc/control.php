@@ -25,10 +25,11 @@ class doc extends control
         $this->loadModel('action');
         $this->loadModel('product');
         $this->loadModel('project');
+        $this->loadModel('execution');
         $this->from      = $this->cookie->from ? $this->cookie->from : 'doc';
         $this->productID = $this->cookie->product ? $this->cookie->product : '0';
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if($this->from == 'doc') $this->session->set('PRJ', '');
+        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
+        if($this->from == 'doc') $this->session->set('project', '');
         if(!$this->projectID) $this->lang->navGroup->doc = 'doc';
     }
 
@@ -63,7 +64,7 @@ class doc extends control
         $this->view->myDocs           = $this->doc->getDocsByBrowseType(0, 'openedbyme', 0, 0, 'addedDate_desc', $pager);
         $this->view->statisticInfo    = $this->doc->getStatisticInfo();
         $this->view->users            = $this->user->getPairs('noletter');
-        $this->view->doingProjects    = $this->project->getExecutionsByProject($this->projectID, 'undone', 5);
+        $this->view->doingExecutions  = $this->execution->getByProject($this->projectID, 'undone', 5);
 
         $this->display();
     }
@@ -71,11 +72,12 @@ class doc extends control
     /**
      * Browse docs.
      *
-     * @param  string|int $libID    product|project or the int id of custom library
+     * @param  string|int $libID    product|execution or the int id of custom library
      * @param  int    $moduleID
      * @param  int    $productID
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  string $orderBy
+     * @param  string $from  doc|project|product
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
@@ -95,16 +97,16 @@ class doc extends control
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
 
         $type = '';
-        $productID = 0;
-        $projectID = 0;
+        $productID   = 0;
+        $executionID = 0;
         if($libID)
         {
-            $lib       = $this->doc->getLibByID($libID);
-            $type      = $lib->type;
-            $productID = $lib->product;
-            $projectID = $lib->project;
+            $lib         = $this->doc->getLibByID($libID);
+            $type        = $lib->type;
+            $productID   = $lib->product;
+            $executionID = $lib->execution;
 
-            if($type != 'product' and $type != 'project') $from = 'doc';
+            if($type != 'product' and $type != 'execution') $from = 'doc';
         }
 
         $this->libs = $this->doc->getLibs($type, '', $libID);
@@ -126,13 +128,12 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $lib->project);
-            $this->lang->set('menugroup.doc', 'project');
+            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $lib->project);
         }
         else
         {
             $menuType = (!$type && (in_array($browseType, array_keys($this->lang->doc->fastMenuList)) || $browseType == 'bysearch')) ? $browseType : $type;
-            $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $projectID);
+            $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $executionID);
         }
         $this->session->set('docList', $this->app->getURI(true));
 
@@ -176,14 +177,14 @@ class doc extends control
         }
 
         $attachLibs = array();
-        if(!empty($lib) and (!empty($lib->product) or !empty($lib->project)) and $browseType != 'bymodule')
+        if(!empty($lib) and (!empty($lib->product) or !empty($lib->execution)) and $browseType != 'bymodule')
         {
-            $count = $this->dao->select('count(*) as count')->from(TABLE_DOCLIB)->where('project')->eq($lib->project)->andWhere('product')->eq($lib->product)->fetch('count');
+            $count = $this->dao->select('count(*) as count')->from(TABLE_DOCLIB)->where('execution')->eq($lib->execution)->andWhere('product')->eq($lib->product)->fetch('count');
             if($count == 1 and $type and isset($lib->$type))
             {
                 $objectLibs = $this->doc->getLibsByObject($type, $lib->$type);
-                if(isset($objectLibs['project'])) $attachLibs['project'] = $objectLibs['project'];
-                if(isset($objectLibs['files']))   $attachLibs['files']   = $objectLibs['files'];
+                if(isset($objectLibs['execution'])) $attachLibs['execution'] = $objectLibs['execution'];
+                if(isset($objectLibs['files']))     $attachLibs['files']     = $objectLibs['files'];
             }
         }
 
@@ -230,18 +231,18 @@ class doc extends control
             }
         }
 
-        $projectID = $this->session->PRJ;
-        $products  = $this->product->getProductPairsByProject($projectID, 'noclosed');
-        $projects  = $this->project->getExecutionsByProject($projectID, 'all', 0, true);
+        $projectID  = $this->session->project;
+        $products   = $this->product->getProductPairsByProject($projectID, 'noclosed');
+        $executions = $this->execution->getByProject($projectID, 'all', 0, true);
 
         $libTypeList = $this->lang->doc->libTypeList;
-        if(empty($products)) unset($libTypeList['product']);
-        if(empty($projects)) unset($libTypeList['project']);
+        if(empty($products))   unset($libTypeList['product']);
+        if(empty($executions)) unset($libTypeList['execution']);
 
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->user->getPairs('nocode');
         $this->view->products    = $products;
-        $this->view->projects    = $projects;
+        $this->view->executions  = $executions;
         $this->view->type        = $type;
         $this->view->libTypeList = $libTypeList;
         $this->view->objectID    = $objectID;
@@ -270,8 +271,8 @@ class doc extends control
         }
 
         $lib = $this->doc->getLibByID($libID);
-        if(!empty($lib->product)) $this->view->product = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($lib->product)->fetch();
-        if(!empty($lib->project)) $this->view->project = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($lib->project)->fetch();
+        if(!empty($lib->product))   $this->view->product   = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($lib->product)->fetch();
+        if(!empty($lib->execution)) $this->view->execution = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->eq($lib->execution)->fetch();
         $this->view->lib     = $lib;
         $this->view->groups  = $this->loadModel('group')->getPairs();
         $this->view->users   = $this->user->getPairs('noletter', $lib->users);
@@ -290,7 +291,7 @@ class doc extends control
      */
     public function deleteLib($libID, $confirm = 'no')
     {
-        if($libID == 'product' or $libID == 'project') die();
+        if($libID == 'product' or $libID == 'execution') die();
         if($confirm == 'no')
         {
             die(js::confirm($this->lang->doc->confirmDeleteLib, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes")));
@@ -363,14 +364,14 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $lib->project);
+            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         }
         else
         {
-            $this->doc->setMenu($type, $libID, $moduleID, $lib->product, $lib->project);
+            $this->doc->setMenu($type, $libID, $moduleID, $lib->product, $lib->execution);
         }
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->create;
@@ -455,7 +456,7 @@ class doc extends control
         }
         else
         {
-            $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->project);
+            $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->execution);
         }
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
@@ -516,13 +517,13 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
+            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
         else
         {
             /* Set menu. */
-            $this->doc->setMenu($type, $doc->lib, $doc->module, $lib->product, $lib->project);
+            $this->doc->setMenu($type, $doc->lib, $doc->module, $lib->product, $lib->execution);
         }
 
         $this->view->title      = "DOC #$doc->id $doc->title - " . $lib->name;
@@ -770,12 +771,12 @@ class doc extends control
 
         $libName = $this->lang->doc->libTypeList[$type];
         $crumb   = html::a(inlink('allLibs', "type=$type&product=$product"), $libName);
-        if($product and $type == 'project') $crumb = $this->doc->getProductCrumb($product);
+        if($product and $type == 'executionCommon') $crumb = $this->doc->getProductCrumb($product);
 
         $this->view->title      = $libName;
         $this->view->position[] = $libName;
 
-        $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID = 0, $projectID = 0, $crumb);
+        $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID = 0, $executionID = 0, $crumb);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -783,7 +784,7 @@ class doc extends control
 
         $libs    = $this->doc->getAllLibsByType($type, $pager);
         $subLibs = array();
-        if($type == 'product' or $type == 'project')
+        if($type == 'product' or $type == 'execution')
         {
             $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs));
             if($this->cookie->browseType == 'bylist') $this->view->users = $this->user->getPairs('noletter');
@@ -803,7 +804,7 @@ class doc extends control
     }
 
     /**
-     * Show files for product or project.
+     * Show files for product or execution.
      *
      * @param  string $type
      * @param  int    $objectID
@@ -846,31 +847,31 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
+            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
         else
         {
             $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->executionCommon) . $this->lang->doc->separator;
-            if($this->productID and $type == 'project') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
+            if($this->productID and $type == 'execution') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
             $crumb .= $this->lang->doc->separator . ' ' . $this->lang->doclib->files;
 
-            $productID = 0;
-            $projectID = 0;
+            $productID   = 0;
+            $executionID = 0;
             if($type == 'product')
             {
                 $productID = $objectID;
                 if(!$this->product->checkPriv($objectID)) $this->accessDenied();
             }
 
-            if($type == 'project')
+            if($type == 'execution')
             {
-                $projectID = $objectID;
-                if(!$this->project->checkPriv($objectID)) $this->accessDenied();
+                $executionID = $objectID;
+                if(!$this->executionID->checkPriv($objectID)) $this->accessDenied();
             }
 
-            $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID, $projectID, $crumb);
+            $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID, $executionID, $crumb);
         }
 
         /* Load pager. */
@@ -912,7 +913,7 @@ class doc extends control
     }
 
     /**
-     * Show libs for product or project
+     * Show libs for product or execution.
      *
      * @param  string $type
      * @param  int    $objectID
@@ -946,17 +947,17 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
+            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $objectID);
             $this->lang->set('menugroup.doc', 'project');
         }
         else
         {
             $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->executionCommon) . $this->lang->doc->separator;
-            if($this->productID and $type == 'project') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
+            if($this->productID and $type == 'execution') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
-            $productID = $type == 'product' ? $objectID : 0;
-            $projectID = $type == 'project' ? $objectID : 0;
-            $this->doc->setMenu($type, 0, 0, $productID, $projectID, $crumb);
+            $productID   = $type == 'product'   ? $objectID : 0;
+            $executionID = $type == 'execution' ? $objectID : 0;
+            $this->doc->setMenu($type, 0, 0, $productID, $executionID, $crumb);
         }
 
         /* Set Custom. */
