@@ -377,6 +377,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
   `type` varchar(30) NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
+  `project` mediumint(8) unsigned NOT NULL,
   `execution` mediumint(8) unsigned NOT NULL,
   `name` varchar(60) NOT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
