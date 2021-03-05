@@ -15,7 +15,7 @@ class tree extends control
 
     /**
      * Module browse.
-     * 
+     *
      * @param  int    $rootID
      * @param  string $viewType         story|bug|case|doc
      * @param  int    $currentModuleID
@@ -98,7 +98,7 @@ class tree extends control
             if($from == 'project')
             {
                 $this->lang->navGroup->tree = 'project';
-                $productPairs = $this->product->getProductPairsByProject($this->session->PRJ);
+                $productPairs = $this->product->getProductPairsByProject($this->session->project);
             }
             elseif($from == 'qa')
             {
@@ -141,7 +141,7 @@ class tree extends control
             if($from == 'project')
             {
                 $this->lang->navGroup->tree = 'project';
-                $productPairs = $this->product->getProductPairsByProject($this->session->PRJ);
+                $productPairs = $this->product->getProductPairsByProject($this->session->project);
             }
             elseif($from == 'qa')
             {
@@ -209,12 +209,12 @@ class tree extends control
                 $this->lang->tree->menu      = $this->lang->project->menu;
                 $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
 
-                /* The PRJ parameter needs to be present when the tree module belongs to the project grouping. */
-                if($this->session->docList && $this->session->PRJ && strpos($this->session->docList, 'PRJ') === false) $this->session->set('docList', $this->session->docList . '?PRJ=' . $this->session->PRJ);
+                /* The project parameter needs to be present when the tree module belongs to the project grouping. */
+                if($this->session->docList && $this->session->project && strpos($this->session->docList, 'project') === false) $this->session->set('docList', $this->session->docList . '?project=' . $this->session->project);
             }
 
             if($from == 'doc') $this->lang->navGroup->doc = 'doc';
-            $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+            $type = $lib->product ? 'product' : ($lib->execution ? 'project' : 'custom');
             $this->doc->setMenu($type, $rootID, $currentModuleID);
             $this->lang->tree->menu      = $this->lang->doc->menu;
             $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
@@ -226,7 +226,7 @@ class tree extends control
         }
         elseif($viewType == 'line')
         {
-            $products = $this->product->getPairs('', $this->session->PRJ);
+            $products = $this->product->getPairs('', $this->session->project);
 
             $this->lang->set('menugroup.tree', 'product');
             $this->product->setMenu($products, $rootID, $branch, 'line', '', 'line');
@@ -287,63 +287,60 @@ class tree extends control
 
     /**
      * Browse task module.
-     * 
-     * @param  int    $rootID 
-     * @param  int    $productID 
-     * @param  int    $currentModuleID 
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @param  int    $currentModuleID
      * @access public
      * @return void
      */
     public function browseTask($rootID, $productID = 0, $currentModuleID = 0)
     {
-        $this->lang->navGroup->tree = 'project';
+        $this->lang->navGroup->tree = 'execution';
 
-        /* Get project. */
-        $project = $this->loadModel('project')->getById($rootID);
-        $this->view->root = $project;
+        /* Get execution. */
+        $execution = $this->loadModel('execution')->getById($rootID);
+        $this->view->root = $execution;
 
         /* Get all associated products. */
-        $products = $this->project->getProducts($rootID);
+        $products = $this->execution->getProducts($rootID);
         $this->view->products = $products;
 
-        $projects = $this->project->getExecutionPairs($this->session->PRJ);
+        $executions = $this->execution->getPairs($this->session->project);
 
         /* Set menu. */
-        $this->lang->set('menugroup.tree', 'project');
-        $this->project->setMenu($projects, $rootID);
-        $this->lang->tree->menu      = $this->lang->project->menu;
-        $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
+        $this->lang->set('menugroup.tree', 'execution');
+        $this->execution->setMenu($executions, $rootID);
+        $this->lang->tree->menu      = $this->lang->execution->menu;
+        $this->lang->tree->menuOrder = $this->lang->execution->menuOrder;
 
-        unset($projects[$rootID]);
-        $currentProject = key($projects);
-        $parentModules  = $this->tree->getParents($currentModuleID);
-        $newModule      = (version_compare($project->openedVersion, '4.1', '>') and $products) ? true : false;
+        unset($executions[$rootID]);
+        $parentModules = $this->tree->getParents($currentModuleID);
+        $newModule     = (version_compare($execution->openedVersion, '4.1', '>') and $products) ? true : false;
 
-        $title      = $this->lang->tree->manageProject;
-        $position[] = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);
-        $position[] = $this->lang->tree->manageProject;
+        $title      = $this->lang->tree->manageExecution;
+        $position[] = html::a($this->createLink('execution', 'task', "executionID=$rootID"), $execution->name);
+        $position[] = $this->lang->tree->manageExecution;
 
         $this->view->title           = $title;
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->productID       = $productID;
-        $this->view->allProject      = $projects;
+        $this->view->allProject      = $executions;
         $this->view->newModule       = $newModule;
-        $this->view->currentProject  = $currentProject;
-        $this->view->projectModules  = $this->tree->getTaskOptionMenu($currentProject, $productID);
         $this->view->modules         = $this->tree->getTaskTreeMenu($rootID, $productID, $rooteModuleID = 0, array('treeModel', 'createTaskManageLink'), 'allModule');
         $this->view->sons            = $this->tree->getTaskSons($rootID, $productID, $currentModuleID);
         $this->view->parentModules   = $parentModules;
         $this->view->currentModuleID = $currentModuleID;
         $this->view->tree            = $this->tree->getTaskStructure($rootID, $productID);
-        $this->view->canBeChanged    = common::canModify('project', $project); // Determines whether an object is editable.
+        $this->view->canBeChanged    = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->display();
-    } 
+    }
 
     /**
      * Edit a module.
-     * 
-     * @param  int    $moduleID 
+     *
+     * @param  int    $moduleID
      * @access public
      * @return void
      */
@@ -393,9 +390,9 @@ class tree extends control
 
     /**
      * Fix path, grades.
-     * 
-     * @param  string    $root 
-     * @param  string    $type 
+     *
+     * @param  string    $root
+     * @param  string    $type
      * @access public
      * @return void
      */
@@ -407,7 +404,7 @@ class tree extends control
 
     /**
      * Update modules' orders.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -422,9 +419,9 @@ class tree extends control
 
     /**
      * Manage child modules.
-     * 
-     * @param  int    $rootID 
-     * @param  string $viewType 
+     *
+     * @param  int    $rootID
+     * @param  string $viewType
      * @access public
      * @return void
      */
@@ -442,9 +439,9 @@ class tree extends control
 
     /**
      * Delete a module.
-     * 
-     * @param  int    $rootID 
-     * @param  int    $moduleID 
+     *
+     * @param  int    $rootID
+     * @param  int    $moduleID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -468,8 +465,8 @@ class tree extends control
 
     /**
      * AJAX: Get the option menu of modules.
-     * 
-     * @param  int    $rootID 
+     *
+     * @param  int    $rootID
      * @param  string $viewType
      * @param  int    $branch
      * @param  int    $rootModuleID
@@ -483,7 +480,7 @@ class tree extends control
     {
         if($viewType == 'task')
         {
-            $optionMenu = $this->tree->getTaskOptionMenu($rootID, 0, 0, $extra); 
+            $optionMenu = $this->tree->getTaskOptionMenu($rootID, 0, 0, $extra);
         }
         else
         {
@@ -531,11 +528,11 @@ class tree extends control
 
     /**
      * Ajax get drop menu.
-     * 
-     * @param  int    $rootID 
-     * @param  string $module 
-     * @param  string $method 
-     * @param  string $extra 
+     *
+     * @param  int    $rootID
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
      * @access public
      * @return void
      */
@@ -581,9 +578,9 @@ class tree extends control
 
     /**
      * AJAX: get a module's son modules.
-     * 
-     * @param  int    $moduleID 
-     * @param  int    $rootID 
+     *
+     * @param  int    $moduleID
+     * @param  int    $rootID
      * @param  string $type
      * @access public
      * @return string json_encoded modules.
