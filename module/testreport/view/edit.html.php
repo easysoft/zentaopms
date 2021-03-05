@@ -34,7 +34,7 @@
                 <div class='input-group-btn hidden' id='refresh'>
                   <a onclick=refreshPage() class='btn' data-toggle='modal' data-type='iframe'><?php echo $lang->refresh?></a>
                 </div>
-                <?php echo html::hidden('product', $productIdList) . html::hidden('project', $project->id) . html::hidden('tasks', $tasks);?>
+                <?php echo html::hidden('product', $productIdList) . html::hidden('execution', $execution->id) . html::hidden('tasks', $tasks);?>
               </div>
             </td>
             <td>
@@ -57,7 +57,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->testreport->goal?></th>
-            <td colspan='2'><?php echo $project->desc?></td>
+            <td colspan='2'><?php echo $execution->desc?></td>
             <td></td>
           </tr>
           <tr>

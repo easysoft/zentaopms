@@ -51,8 +51,8 @@
         <td class='text-left' title='<?php $report->title?>'><?php echo html::a(inlink('view', "reportID=$report->id&from=$objectType"), $report->title)?></td>
         <td><?php echo zget($users, $report->createdBy);?></td>
         <td><?php echo substr($report->createdDate, 2);?></td>
-        <?php $projectName = $report->project ? '#' . $report->project . $projects[$report->project] : '';?>
-        <td class='text-left' title='<?php echo $projectName?>'><?php echo $projectName;?></td>
+        <?php $executionName = $report->execution ? '#' . $report->execution . $executions[$report->execution] : '';?>
+        <td class='text-left' title='<?php echo $executionName?>'><?php echo $executionName;?></td>
         <?php
         $taskName = '';
         foreach(explode(',', $report->tasks) as $taskID) $taskName .= '#' . $taskID . $tasks[$taskID] . ' ';

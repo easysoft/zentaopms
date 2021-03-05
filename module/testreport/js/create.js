@@ -1,6 +1,6 @@
 $(function()
 {
-    if(objectType == 'project') $('#subNavbar ul li[data-id=qa]').addClass('active');
+    if(objectType == 'project' $('#subNavbar ul li[data-id=qa]').addClass('active');
     $('#mainContent .main-header h2 #selectTask').change(function()
     {
         var taskID = $(this).val();

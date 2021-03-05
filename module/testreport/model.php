@@ -13,17 +13,17 @@ class testreportModel extends model
 {
     /**
      * Set menu.
-     * 
-     * @param  array  $products 
-     * @param  int    $productID 
-     * @param  int    $branch 
+     *
+     * @param  array  $products
+     * @param  int    $productID
+     * @param  int    $branch
      * @access public
      * @return void
      */
     public function setMenu($products, $productID, $branch = 0)
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'testreport', 'browse', $this->session->PRJ, $branch);
+        $selectHtml = $this->product->select($products, $productID, 'testreport', 'browse', $this->session->project, $branch);
 
         /* Remove branch. */
         if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
@@ -49,7 +49,7 @@ class testreportModel extends model
 
     /**
      * Create report.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -57,7 +57,7 @@ class testreportModel extends model
     {
         $data = fixer::input('post')
             ->stripTags($this->config->testreport->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testreport != 'qa', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testreport != 'qa', 'project', $this->session->project)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('stories', ',')
@@ -83,9 +83,9 @@ class testreportModel extends model
     }
 
     /**
-     * Update report. 
-     * 
-     * @param  int    $reportID 
+     * Update report.
+     *
+     * @param  int    $reportID
      * @access public
      * @return array
      */
@@ -119,8 +119,8 @@ class testreportModel extends model
 
     /**
      * Get report by id.
-     * 
-     * @param  int    $reportID 
+     *
+     * @param  int    $reportID
      * @access public
      * @return object
      */
@@ -136,12 +136,12 @@ class testreportModel extends model
 
     /**
      * Get report list.
-     * 
-     * @param  int    $objectID 
-     * @param  string $objectType 
-     * @param  string $extra 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $extra
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -149,7 +149,7 @@ class testreportModel extends model
     {
         $objectID = (int)$objectID;
         return $this->dao->select('*')->from(TABLE_TESTREPORT)->where('deleted')->eq(0)
-            ->beginIF($this->lang->navGroup->testreport != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->lang->navGroup->testreport != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->beginIF($objectType == 'project')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('project')->fi()
             ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
             ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()
@@ -160,12 +160,12 @@ class testreportModel extends model
 
     /**
      * Get bug info.
-     * 
-     * @param  array  $tasks 
-     * @param  array  $productIdList 
-     * @param  string $begin 
-     * @param  string $end 
-     * @param  array  $builds 
+     *
+     * @param  array  $tasks
+     * @param  array  $productIdList
+     * @param  string $begin
+     * @param  string $end
+     * @param  array  $builds
      * @access public
      * @return array
      */
@@ -283,12 +283,12 @@ class testreportModel extends model
 
     /**
      * Get task cases.
-     * 
-     * @param  array  $tasks 
-     * @param  string $begin 
-     * @param  string $end 
-     * @param  string $idList 
-     * @param  object $pager 
+     *
+     * @param  array  $tasks
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $idList
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -352,9 +352,9 @@ class testreportModel extends model
 
     /**
      * Get result summary.
-     * 
-     * @param  array    $tasks 
-     * @param  array    $cases 
+     *
+     * @param  array    $tasks
+     * @param  array    $cases
      * @param  string   $begin
      * @param  string   $end
      * @access public
@@ -383,9 +383,9 @@ class testreportModel extends model
 
     /**
      * Get per run result for testreport.
-     * 
-     * @param  array    $tasks 
-     * @param  array    $cases 
+     *
+     * @param  array    $tasks
+     * @param  array    $cases
      * @param  string   $begin
      * @param  string   $end
      * @access public
@@ -410,14 +410,14 @@ class testreportModel extends model
         $this->app->loadLang('testcase');
         foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result])? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
 
-        return $datas; 
+        return $datas;
     }
 
     /**
      * Get per case runner for testreport.
-     * 
-     * @param  array    $tasks 
-     * @param  array    $cases 
+     *
+     * @param  array    $tasks
+     * @param  array    $cases
      * @param  string   $begin
      * @param  string   $end
      * @access public
@@ -442,17 +442,17 @@ class testreportModel extends model
         $users = $this->loadModel('user')->getPairs('noclosed|noletter');
         foreach($datas as $result => $data) $data->name = $result ? zget($users, $result, $result) : $this->lang->testtask->unexecuted;
 
-        return $datas; 
+        return $datas;
     }
 
     /**
      * Get bugs for test
-     * 
-     * @param  array  $builds 
-     * @param  array  $product 
-     * @param  string $begin 
-     * @param  string $end 
-     * @param  string $type 
+     *
+     * @param  array  $builds
+     * @param  array  $product
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -474,8 +474,8 @@ class testreportModel extends model
 
     /**
      * Get stories for test
-     * 
-     * @param  array  $builds 
+     *
+     * @param  array  $builds
      * @return void
      */
     public function getStories4Test($builds)

@@ -13,7 +13,7 @@ $(function()
 
 /**
  * Change date then show refresh btn.
- * 
+ *
  * @access public
  * @return void
  */
@@ -24,7 +24,7 @@ function changeDate()
 
 /**
  * Refresh page.
- * 
+ *
  * @access public
  * @return void
  */
@@ -48,7 +48,7 @@ function refreshPage()
 
     if(method == 'create')
     {
-        location.href = createLink('testreport', 'create', "project=" + objectID + "&objectType=" + objectType + "&extra=" + extra + "&begin=" + begin + "&end=" + end);
+        location.href = createLink('testreport', 'create', "objectID=" + objectID + "&objectType=" + objectType + "&extra=" + extra + "&begin=" + begin + "&end=" + end);
     }
     else if(method == 'edit')
     {
