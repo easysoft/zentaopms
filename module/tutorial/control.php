@@ -62,7 +62,7 @@ class tutorial extends control
 
     /**
      * Exit tutorial mode
-     * 
+     *
      * @param  string $referer
      * @access public
      * @return void
@@ -77,7 +77,7 @@ class tutorial extends control
 
     /**
      * Ajax quit tutorial mode
-     * 
+     *
      * @access public
      * @return void
      */
@@ -89,11 +89,11 @@ class tutorial extends control
     }
 
     /**
-     * Wizard. 
-     * 
-     * @param  string $module 
-     * @param  string $method 
-     * @param  string $params 
+     * Wizard.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $params
      * @access public
      * @return void
      */
@@ -120,8 +120,8 @@ class tutorial extends control
         {
             $target = 'parent';
             if(($module == 'story' or $module == 'task' or $module == 'bug') and $method == 'create') $target = 'self';
-            if($module == 'project' and $method == 'linkStory') $target = 'self';
-            if($module == 'project' and $method == 'managemembers') $target = 'self';
+            if($module == 'execution' and $method == 'linkStory') $target = 'self';
+            if($module == 'execution' and $method == 'managemembers') $target = 'self';
             die(js::locate(helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params)), $target));
         }
         die($this->fetch($module, $method, $params));
@@ -129,8 +129,8 @@ class tutorial extends control
 
     /**
      * Ajax save novice result.
-     * 
-     * @param  string $novice 
+     *
+     * @param  string $novice
      * @param  string $reload
      *
      * @access public
