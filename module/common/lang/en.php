@@ -110,9 +110,9 @@ $lang->notPage       = 'Sorry, the features you are visiting are in development!
 $lang->showAll       = '[[Show All]]';
 $lang->selectedItems = 'Seleted <strong>{0}</strong> items';
 
-$lang->future       = 'Waiting';
-$lang->year         = 'Year';
-$lang->workingHour  = 'Hours';
+$lang->future      = 'Waiting';
+$lang->year        = 'Year';
+$lang->workingHour = 'Hours';
 
 $lang->sprintCommon = $lang->iterationCommon . '/Phase';
 
@@ -157,7 +157,6 @@ $lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|custom|es
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> Program|$programModule|$programMethod|";
 
-$lang->reporting = new stdclass();
 $lang->dividerMenu = ',qa,report,admin,';
 
 /* Program set menu. */
@@ -599,7 +598,6 @@ $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
-$lang->menugroup->report      = 'report';
 $lang->menugroup->people      = 'admin';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
@@ -895,7 +893,7 @@ $lang->icons['score']              = 'tint';
 /* Scrum menu. */
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
-$lang->menu->scrum->programindex   = 'Index|program|index|project={PROJECT}';
+$lang->menu->scrum->index          = 'Index|project|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
 $lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story', 'subModule' => 'story', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
@@ -904,7 +902,7 @@ $lang->menu->scrum->ci             = 'Code|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->scrum->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
-$lang->menu->scrum->projectsetting = array('link' => 'Setting|program|prjview|project={PROJECT}', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
+$lang->menu->scrum->projectsetting = array('link' => 'Setting|project|view|project={PROJECT}', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
 $lang->scrum = new stdclass();
 $lang->scrum->subMenu = new stdclass();
@@ -912,15 +910,15 @@ $lang->scrum->subMenu->other = new stdclass();
 $lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
 
 $lang->scrum->setMenu = new stdclass();
-$lang->scrum->setMenu->view      = array('link' => 'View|program|prjview|project={PROJECT}');
-$lang->scrum->setMenu->products  = array('link' => 'Product|program|PRJManageProducts|project={PROJECT}', 'alias' => 'prjmanageproducts');
-$lang->scrum->setMenu->group     = array('link' => 'Priv Group|program|PRJGroup|project={PROJECT}', 'alias' => 'prjgroup,prjmanageview,prjmanagepriv');
-$lang->scrum->setMenu->members   = array('link' => 'Member|program|PRJManageMembers|project={PROJECT}', 'alias' => 'prjmanagemembers');
-$lang->scrum->setMenu->whitelist = array('link' => 'White List|program|PRJWhitelist|project={PROJECT}', 'subModule' => 'personnel');
+$lang->scrum->setMenu->view      = array('link' => 'View|project|view|project={PROJECT}');
+$lang->scrum->setMenu->products  = array('link' => 'Product|project|manageProducts|project={PROJECT}', 'alias' => 'manageproducts');
+$lang->scrum->setMenu->group     = array('link' => 'Priv Group|project|group|project={PROJECT}', 'alias' => 'group,manageview,managepriv');
+$lang->scrum->setMenu->members   = array('link' => 'Member|project|manageMembers|project={PROJECT}', 'alias' => 'managemembers');
+$lang->scrum->setMenu->whitelist = array('link' => 'White List|project|whitelist|project={PROJECT}', 'subModule' => 'personnel');
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
-$lang->menu->waterfall->programindex   = array('link' => 'Dashboard|program|index|project={PROJECT}');
+$lang->menu->waterfall->index          = array('link' => 'Dashboard|project|index|project={PROJECT}');
 $lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|browse|project={PROJECT}', 'subModule' => 'programplan');
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|project={PROJECT}');
@@ -933,7 +931,7 @@ $lang->menu->waterfall->qa             = 'QA|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
 $lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc,workestimation,durationestimation,budget,pssp,measrecord,report');
-$lang->menu->waterfall->projectsetting = array('link' => 'Setting|program|prjview|project={PROJECT}', 'alias' => 'prjedit,prjmanageproducts,prjgroup,prjmanagemembers,prjmanageview,prjmanagepriv,prjwhitelist,prjaddwhitelist');
+$lang->menu->waterfall->projectsetting = array('link' => 'Setting|project|view|project={PROJECT}', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();
