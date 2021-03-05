@@ -20,8 +20,8 @@ class custom extends control
     public function index()
     {
         if(common::hasPriv('custom', 'set')) die(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
-        if(common::hasPriv('custom', 'product')) die(js::locate(inlink('product')));
-        if(common::hasPriv('custom', 'project')) die(js::locate(inlink('project')));
+        if(common::hasPriv('custom', 'product'))   die(js::locate(inlink('product')));
+        if(common::hasPriv('custom', 'execution')) die(js::locate(inlink('execution')));
 
         foreach($this->lang->custom->system as $sysObject)
         {
@@ -461,7 +461,7 @@ class custom extends control
     }
 
     /**
-     * Set whether the project is read-only.
+     * Set whether the execution is read-only.
      *
      * @access public
      * @return void
@@ -470,11 +470,11 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.common.CRProject', $this->post->project);
+            $this->loadModel('setting')->setItem('system.common.CRExecution', $this->post->execution);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
-        $this->view->title      = $this->lang->custom->project;
+        $this->view->title      = $this->lang->custom->execution;
         $this->view->position[] = $this->lang->custom->common;
         $this->view->position[] = $this->view->title;
 
@@ -650,7 +650,7 @@ class custom extends control
      */
     public function ajaxGetMenu($module = 'main', $method = '', $type = '')
     {
-        if($this->config->global->flow == 'full')     $this->loadModel('project')->setMenu(array(), 0);
+        if($this->config->global->flow == 'full')     $this->loadModel('execution')->setMenu(array(), 0);
         if($type === 'all')
         {
             $menu = array();

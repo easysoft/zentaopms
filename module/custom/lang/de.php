@@ -19,7 +19,7 @@ $lang->custom->score                = 'Score';
 $lang->custom->timezone             = 'Timezone';
 $lang->custom->scoreReset           = 'Reset Score';
 $lang->custom->scoreTitle           = 'Point Feature';
-$lang->custom->project              = $lang->sprintCommon;
+$lang->custom->execution            = $lang->sprintCommon;
 $lang->custom->product              = $lang->productCommon;
 $lang->custom->convertFactor        = 'Convert factor';
 $lang->custom->region               = 'Interval';
@@ -31,6 +31,7 @@ $lang->custom->URStory              = "User requirements";
 $lang->custom->SRStory              = "Software requirements";
 $lang->custom->epic                 = "Epic";
 $lang->custom->default              = "Default";
+$lang->custom->mode                 = "Mode";
 $lang->custom->scrumStory           = "Story";
 $lang->custom->waterfallCommon      = "Waterfall";
 $lang->custom->buildin              = "Buildin";
@@ -70,25 +71,25 @@ $lang->custom->saveTips            = 'After clicking save, the current %s will b
 
 $lang->custom->numberError = 'The interval must be greater than zero!';
 
-$lang->custom->closedProject = 'Closed ' . $lang->sprintCommon;
-$lang->custom->closedProduct = 'Closed ' . $lang->productCommon;
+$lang->custom->closedExecution = 'Closed ' . $lang->sprintCommon;
+$lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
-$lang->custom->object['program']  = 'Project';
-$lang->custom->object['product']  = $lang->productCommon;
-$lang->custom->object['project']  = $lang->sprintCommon;
-$lang->custom->object['story']    = 'Story';
-$lang->custom->object['task']     = 'Task';
-$lang->custom->object['bug']      = 'Bug';
-$lang->custom->object['testcase'] = 'Case';
-$lang->custom->object['testtask'] = 'Build';
-$lang->custom->object['todo']     = 'Todo';
-$lang->custom->object['user']     = 'User';
-$lang->custom->object['block']    = 'ClosedBlock';
+$lang->custom->object['project']   = 'Project';
+$lang->custom->object['product']   = $lang->productCommon;
+$lang->custom->object['execution'] = $lang->sprintCommon;
+$lang->custom->object['story']     = 'Story';
+$lang->custom->object['task']      = 'Task';
+$lang->custom->object['bug']       = 'Bug';
+$lang->custom->object['testcase']  = 'Case';
+$lang->custom->object['testtask']  = 'Build';
+$lang->custom->object['todo']      = 'Todo';
+$lang->custom->object['user']      = 'User';
+$lang->custom->object['block']     = 'ClosedBlock';
 
-$lang->custom->program = new stdClass();
-$lang->custom->program->currencySetting    = 'Currency Setting';
-$lang->custom->program->defaultCurrency    = 'Default Currency';
-$lang->custom->program->fields['unitList'] = 'Unit List';
+$lang->custom->project = new stdClass();
+$lang->custom->project->currencySetting    = 'Currency Setting';
+$lang->custom->project->defaultCurrency    = 'Default Currency';
+$lang->custom->project->fields['unitList'] = 'Unit List';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = 'Priority';
@@ -150,22 +151,22 @@ $lang->custom->allLang     = 'All Language';
 $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userFieldNotice   = 'Control whether the above fields are displayed on the user-related page. Leave it blank to display all.';
-$lang->custom->notice->canNotAdd         = 'These items are parameters of calculation, so customized creation is not enabled.';
-$lang->custom->notice->forceReview       = '%s Review is required for certain submitters.';
-$lang->custom->notice->forceNotReview    = "%s Review is NOT required for certain submitters.";
-$lang->custom->notice->longlife          = 'Define shelved bugs.';
-$lang->custom->notice->invalidNumberKey  = 'Priority list key should be a natural and not greater than 255.';
-$lang->custom->notice->invalidStringKey  = 'The key should be a combination of lowercase English letters, numbers or underscores';
-$lang->custom->notice->cannotSetTimezone = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
-$lang->custom->notice->noClosedBlock     = 'You have no blocks that are closed permanently.';
-$lang->custom->notice->required          = 'The selected field is required.';
-$lang->custom->notice->conceptResult     = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>。';
-$lang->custom->notice->conceptPath       = 'Go to Admin -> Custom -> Concept to set it.';
-$lang->custom->notice->readOnlyOfProduct = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
-$lang->custom->notice->readOnlyOfProject = 'If Change Forbidden, any change on tasks, builds, efforts and stories of the closed project is also forbidden.';
-$lang->custom->notice->URSREmpty         = 'Custom requirement name can not be empty!';
-$lang->custom->notice->confirmDelete     = 'Are you sure you want to delete it?';
+$lang->custom->notice->userFieldNotice     = 'Control whether the above fields are displayed on the user-related page. Leave it blank to display all.';
+$lang->custom->notice->canNotAdd           = 'These items are parameters of calculation, so customized creation is not enabled.';
+$lang->custom->notice->forceReview         = '%s Review is required for certain submitters.';
+$lang->custom->notice->forceNotReview      = "%s Review is NOT required for certain submitters.";
+$lang->custom->notice->longlife            = 'Define shelved bugs.';
+$lang->custom->notice->invalidNumberKey    = 'Priority list key should be a natural and not greater than 255.';
+$lang->custom->notice->invalidStringKey    = 'The key should be a combination of lowercase English letters, numbers or underscores';
+$lang->custom->notice->cannotSetTimezone   = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
+$lang->custom->notice->noClosedBlock       = 'You have no blocks that are closed permanently.';
+$lang->custom->notice->required            = 'The selected field is required.';
+$lang->custom->notice->conceptResult       = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>。';
+$lang->custom->notice->conceptPath         = 'Go to Admin -> Custom -> Concept to set it.';
+$lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
+$lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->sprintCommon} is also forbidden.";
+$lang->custom->notice->URSREmpty           = 'Custom requirement name can not be empty!';
+$lang->custom->notice->confirmDelete       = 'Are you sure you want to delete it?';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to go to Project Homepage?";
@@ -215,12 +216,12 @@ $lang->custom->scoreStatus[0] = 'Off';
 $lang->custom->CRProduct[1] = 'Change Allowed';
 $lang->custom->CRProduct[0] = 'Change Forbidden';
 
-$lang->custom->CRProject[1] = 'Change Allowed';
-$lang->custom->CRProject[0] = 'Change Forbidden';
+$lang->custom->CRExecution[1] = 'Change Allowed';
+$lang->custom->CRExecution[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
-$lang->custom->moduleName['project']     = $lang->sprintCommon;
+$lang->custom->moduleName['execution']   = $lang->sprintCommon;
 
 $lang->custom->conceptQuestions['overview'] = "1. Which combination of management fits your company?";
 $lang->custom->conceptQuestions['URAndSR']  = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
@@ -229,6 +230,10 @@ $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();
 $lang->custom->conceptOptions->story['0'] = 'Requirement';
 $lang->custom->conceptOptions->story['1'] = 'Story';
+
+$lang->custom->conceptOptions->URAndSR = array();
+$lang->custom->conceptOptions->URAndSR['1'] = 'Yes';
+$lang->custom->conceptOptions->URAndSR['0'] = 'No';
 
 $lang->custom->conceptOptions->hourPoint      = array();
 $lang->custom->conceptOptions->hourPoint['0'] = 'Stunde';

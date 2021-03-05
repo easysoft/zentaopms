@@ -306,7 +306,7 @@ class customModel extends model
     }
 
     /**
-     * Get module menu data, if module is 'main' then return main menu
+     * Get module menu data, if module is 'main' then return main menu.
      * @param  string   $module
      * @param  boolean  $rebuild
      * @access public
@@ -373,7 +373,7 @@ class customModel extends model
     {
         global $lang, $app, $dbh;
         if(!isset($lang->$module->featureBar[$method])) return;
-        $queryModule = $module == 'project' ? 'task' : ($module == 'product' ? 'story' : $module);
+        $queryModule = $module == 'execution' ? 'task' : ($module == 'product' ? 'story' : $module);
         $shortcuts   = $dbh->query('select id, title from ' . TABLE_USERQUERY . " where `account` = '{$app->user->account}' AND `module` = '{$queryModule}' AND `shortcut` = '1' order by id")->fetchAll();
 
         if($shortcuts)
@@ -618,7 +618,7 @@ class customModel extends model
     }
 
     /**
-     * Set product and project concept.
+     * Set product and project and sprint concept.
      *
      * @access public
      * @return void
@@ -634,7 +634,7 @@ class customModel extends model
 
         foreach($this->config->executionCommonList as $clientLang => $executionCommonList)
         {
-            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$executionCommonList[$oldConfig]}', '{$executionCommonList[$newConfig]}')")->where('source')->eq('project')->exec();
+            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$executionCommonList[$oldConfig]}', '{$executionCommonList[$newConfig]}')")->where('source')->eq('execution')->exec();
         }
     }
 

@@ -18,7 +18,7 @@ $config->custom->requiredModules[20] = 'story';
 $config->custom->requiredModules[25] = 'productplan';
 $config->custom->requiredModules[30] = 'release';
 
-$config->custom->requiredModules[35] = 'project';
+$config->custom->requiredModules[35] = 'execution';
 $config->custom->requiredModules[40] = 'task';
 $config->custom->requiredModules[45] = 'build';
 
@@ -46,8 +46,8 @@ $config->custom->fieldList['story']['review']        = 'reviewedDate,comment';
 $config->custom->fieldList['productplan']            = 'begin,end,desc';
 $config->custom->fieldList['release']['create']      = 'desc';
 $config->custom->fieldList['release']['edit']        = 'desc';
-$config->custom->fieldList['project']['create']      = 'days,desc';
-$config->custom->fieldList['project']['edit']        = 'days,desc,PO,PM,QD,RD';
+$config->custom->fieldList['execution']['create']    = 'days,desc';
+$config->custom->fieldList['execution']['edit']      = 'days,desc,PO,PM,QD,RD';
 $config->custom->fieldList['task']['create']         = 'story,pri,estimate,desc,estStarted,deadline';
 $config->custom->fieldList['task']['edit']           = 'pri,estimate,estStarted,deadline';
 $config->custom->fieldList['task']['finish']         = 'comment';
