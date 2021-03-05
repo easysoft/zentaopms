@@ -658,7 +658,7 @@ class story extends control
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
             $this->lang->story->menu = $this->lang->execution->menu;
 
-            $this->execution->setMenu($this->execution->getExecutionPairs($this->session->project, 'all', 'nodeleted'), $executionID);
+            $this->execution->setMenu($this->execution->getPairs($this->session->project, 'all', 'nodeleted'), $executionID);
             $this->lang->set('menugroup.story', 'execution');
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
 
@@ -856,7 +856,7 @@ class story extends control
         {
             $project = $this->dao->findById((int)$this->session->project)->from(TABLE_PROJECT)->fetch();
             $this->lang->product->menu = $this->lang->menu->{$project->model};
-            $this->execution->setMenu($this->execution->getExecutionPairs($this->session->project, 'all', 'nodeleted'), $project->id);
+            $this->execution->setMenu($this->execution->getPairs($this->session->project, 'all', 'nodeleted'), $project->id);
 
             /* If status is done, can not create task from story. */
             $execution = $this->execution->getById($param);
