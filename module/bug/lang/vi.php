@@ -1,8 +1,8 @@
 <?php
 /**
- * The bug module English file of ZenTaoPMS.
+ * The bug module Vietnamese file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  bug
@@ -17,7 +17,7 @@ $lang->bug->branch           = 'Branch/Platform';
 $lang->bug->productplan      = 'Kế hoạch';
 $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
-$lang->bug->project          = $lang->executionCommon;
+$lang->bug->execution        = $lang->executionCommon;
 $lang->bug->story            = 'Câu chuyện';
 $lang->bug->storyVersion     = 'Phiên bản câu chuyện';
 $lang->bug->color            = 'Màu';
@@ -172,13 +172,13 @@ $lang->bug->legendRelated               = 'Thông tin liên quan';
 $lang->bug->buttonConfirm = 'Xác nhận';
 
 /* Interactive prompt. */
-$lang->bug->summary              = "Tổng <strong>%s</strong> bugs, và <strong>%s</strong> kích hoạt.";
-$lang->bug->confirmChangeProduct = "Mọi sự thay đổi tới {$lang->productCommon} sẽ là nguyên nhân liên kết {$lang->executionCommon}, câu chuyện và nhiệm vụ thay đổi. Bạn có muốn làm điều này?";
-$lang->bug->confirmDelete        = 'Bạn có muốn xóa bug này?';
-$lang->bug->remindTask           = 'Bug này đã chuyển thành một nhiệm vụ. Bạn có muốn cập nhật tình trạng của nhiệm vụ(ID %s)?';
-$lang->bug->skipClose            = 'Bug %s được kích hoạt. Bạn không thể đóng nó.';
-$lang->bug->projectAccessDenied  = "Truy cập của bạn tới {$lang->executionCommon} mà Bug này sở hữu bị từ chối!";
-$lang->bug->stepsNotEmpty        = "The reproduction step cannot be empty.";
+$lang->bug->summary               = "Tổng <strong>%s</strong> bugs, và <strong>%s</strong> kích hoạt.";
+$lang->bug->confirmChangeProduct  = "Mọi sự thay đổi tới {$lang->productCommon} sẽ là nguyên nhân liên kết {$lang->executionCommon}, câu chuyện và nhiệm vụ thay đổi. Bạn có muốn làm điều này?";
+$lang->bug->confirmDelete         = 'Bạn có muốn xóa bug này?';
+$lang->bug->remindTask            = 'Bug này đã chuyển thành một nhiệm vụ. Bạn có muốn cập nhật tình trạng của nhiệm vụ(ID %s)?';
+$lang->bug->skipClose             = 'Bug %s được kích hoạt. Bạn không thể đóng nó.';
+$lang->bug->executionAccessDenied = "Truy cập của bạn tới {$lang->executionCommon} mà Bug này sở hữu bị từ chối!";
+$lang->bug->stepsNotEmpty         = "The reproduction step cannot be empty.";
 
 /* Template. */
 $lang->bug->tplStep   = "<p>[Các bước]</p><br/>";
@@ -197,7 +197,7 @@ $lang->bug->priList[2] = '2';
 $lang->bug->priList[3] = '3';
 $lang->bug->priList[4] = '4';
 
-$lang->bug->osList['']  = '';
+$lang->bug->osList['']        = '';
 $lang->bug->osList['all']     = 'Tất cả';
 $lang->bug->osList['windows'] = 'Windows';
 $lang->bug->osList['win10']   = 'Windows 10';
@@ -220,7 +220,7 @@ $lang->bug->osList['osx']     = 'OS X';
 $lang->bug->osList['unix']    = 'Unix';
 $lang->bug->osList['others']  = 'Khác';
 
-$lang->bug->browserList[''] = '';
+$lang->bug->browserList['']         = '';
 $lang->bug->browserList['all']      = 'Tất cả';
 $lang->bug->browserList['ie']       = 'IE series';
 $lang->bug->browserList['ie11']     = 'IE11';
@@ -243,7 +243,7 @@ $lang->bug->browserList['maxthon']  = 'Maxthon';
 $lang->bug->browserList['uc']       = 'UC';
 $lang->bug->browserList['other']    = 'Khác';
 
-$lang->bug->typeList[''] = '';
+$lang->bug->typeList['']             = '';
 $lang->bug->typeList['codeerror']    = 'Lỗi mã nguồn';
 $lang->bug->typeList['config']       = 'Lỗi cấu hình';
 $lang->bug->typeList['install']      = 'Lỗi cài đặt';
@@ -254,7 +254,7 @@ $lang->bug->typeList['automation']   = 'Lỗi Script';
 $lang->bug->typeList['designdefect'] = 'Lỗi thiết kế';
 $lang->bug->typeList['others']       = 'Lỗi khác';
 
-$lang->bug->statusList[''] = '';
+$lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Kích hoạt';
 $lang->bug->statusList['resolved'] = 'Đã giải quyết';
 $lang->bug->statusList['closed']   = 'Đã đóng';
@@ -262,7 +262,7 @@ $lang->bug->statusList['closed']   = 'Đã đóng';
 $lang->bug->confirmedList[1] = 'Có';
 $lang->bug->confirmedList[0] = 'Không';
 
-$lang->bug->resolutionList[''] = '';
+$lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'Như thiết kế';
 $lang->bug->resolutionList['duplicate']  = 'Đã nhân bản';
 $lang->bug->resolutionList['external']   = 'External';
@@ -278,7 +278,7 @@ $lang->bug->report->common = 'Báo cáo';
 $lang->bug->report->select = 'Chọn loại báo cáo';
 $lang->bug->report->create = 'Tạo báo cáo';
 
-$lang->bug->report->charts['bugsPerProject']        = 'Bugs '.$lang->executionCommon;
+$lang->bug->report->charts['bugsPerExecution']      = 'Bugs '.$lang->executionCommon;
 $lang->bug->report->charts['bugsPerBuild']          = 'Bugs mỗi bản dựng';
 $lang->bug->report->charts['bugsPerModule']         = 'Bugs mỗi Module';
 $lang->bug->report->charts['openedBugsPerDay']      = 'Bugs đã báo cáo mỗi ngày';
@@ -303,7 +303,7 @@ $lang->bug->report->options->type   = 'pie';
 $lang->bug->report->options->width  = 500;
 $lang->bug->report->options->height = 140;
 
-$lang->bug->report->bugsPerProject        = new stdclass();
+$lang->bug->report->bugsPerExecution      = new stdclass();
 $lang->bug->report->bugsPerBuild          = new stdclass();
 $lang->bug->report->bugsPerModule         = new stdclass();
 $lang->bug->report->openedBugsPerDay      = new stdclass();
@@ -322,7 +322,7 @@ $lang->bug->report->bugsPerAssignedTo     = new stdclass();
 $lang->bug->report->bugLiveDays           = new stdclass();
 $lang->bug->report->bugHistories          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph        = new stdclass();
+$lang->bug->report->bugsPerExecution->graph      = new stdclass();
 $lang->bug->report->bugsPerBuild->graph          = new stdclass();
 $lang->bug->report->bugsPerModule->graph         = new stdclass();
 $lang->bug->report->openedBugsPerDay->graph      = new stdclass();
@@ -341,12 +341,12 @@ $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph->xAxisName  = $lang->executionCommon;
-$lang->bug->report->bugsPerBuild->graph->xAxisName    = 'Bản dựng';
-$lang->bug->report->bugsPerModule->graph->xAxisName   = 'Module';
+$lang->bug->report->bugsPerExecution->graph->xAxisName = $lang->executionCommon;
+$lang->bug->report->bugsPerBuild->graph->xAxisName     = 'Bản dựng';
+$lang->bug->report->bugsPerModule->graph->xAxisName    = 'Module';
 
-$lang->bug->report->openedBugsPerDay->type              = 'bar';
-$lang->bug->report->openedBugsPerDay->graph->xAxisName  = 'Ngày';
+$lang->bug->report->openedBugsPerDay->type             = 'bar';
+$lang->bug->report->openedBugsPerDay->graph->xAxisName = 'Ngày';
 
 $lang->bug->report->resolvedBugsPerDay->type             = 'bar';
 $lang->bug->report->resolvedBugsPerDay->graph->xAxisName = 'Ngày';
@@ -391,12 +391,10 @@ $lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['assigntome']   = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
+$lang->bug->featureBar['browse']['toclosed']     = $lang->bug->toClosed;
+$lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
+$lang->bug->featureBar['browse']['more']         = $lang->more;
 
-
-$lang->bug->featureBar['browse']['more']   = $lang->more;
-
-$lang->bug->moreSelects['toclosed']      = $lang->bug->toClosed;
-$lang->bug->moreSelects['unresolved']    = $lang->bug->unResolved;
 $lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->moreSelects['longlifebugs']  = $lang->bug->longLifeBugs;

@@ -69,11 +69,11 @@ js::set('isStepsTemplate', $isStepsTemplate);
               </div>
             </td>
           </tr>
-          <?php $showProject = (strpos(",$showFields,", ',project,') !== false);?>
+          <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
           <tr>
-            <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->type;?></th>
+            <th><?php echo ($showexEcution) ? $lang->bug->execution : $lang->bug->type;?></th>
 
-            <?php if(!$showProject):?>
+            <?php if(!$showexEcution):?>
             <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
             <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
             <td>
@@ -90,8 +90,8 @@ js::set('isStepsTemplate', $isStepsTemplate);
               </div>
             </td>
             <?php endif;?>
-            <?php if($showProject):?>
-            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $executionID, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
+            <?php if($showExecution):?>
+            <td><span id='executionIdBox'><?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></span></td>
             <?php endif;?>
             <td>
               <div class='input-group' id='buildBox'>
@@ -106,7 +106,7 @@ js::set('isStepsTemplate', $isStepsTemplate);
             <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
             <td>
               <div class='input-group'>
-                <?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?>
+                <?php echo html::select('assignedTo', $ExecutionMembers, $assignedTo, "class='form-control chosen'");?>
                 <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
               </div>
             </td>
@@ -120,7 +120,7 @@ js::set('isStepsTemplate', $isStepsTemplate);
             </td>
           </tr>
           <?php endif;?>
-          <?php if($showProject):?>
+          <?php if($showExecution):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
           <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
           <tr>

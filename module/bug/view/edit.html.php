@@ -16,10 +16,10 @@ include '../../common/view/datepicker.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('page'                   , 'edit');
 js::set('changeProductConfirmed' , false);
-js::set('changeProjectConfirmed' , false);
+js::set('changeExecutionConfirmed' , false);
 js::set('confirmChangeProduct'   , $lang->bug->confirmChangeProduct);
 js::set('planID'                 , $bug->plan);
-js::set('oldProjectID'           , $bug->project);
+js::set('oldExecutionID'         , $bug->execution);
 js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
@@ -175,8 +175,8 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             <table class='table table-form'>
               <tbody>
                 <tr>
-                  <th class='w-85px'><?php echo $lang->bug->project;?></th>
-                  <td><span id='projectIdBox'><?php echo html::select('project', $projects, $bug->project, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
+                  <th class='w-85px'><?php echo $lang->bug->execution;?></th>
+                  <td><span id='executionIdBox'><?php echo html::select('execution', $executions, $bug->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->story;?></th>

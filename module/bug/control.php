@@ -47,7 +47,7 @@ class bug extends control
         $this->loadModel('task');
 
         /* Set bug menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if(!$this->projectID)
         {
             $this->app->loadConfig('qa');
@@ -146,11 +146,11 @@ class bug extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* Get projects. */
-        $projects = $this->loadModel('project')->getExecutionPairs($this->projectID, 'all', 'empty|withdelete');
+        /* Get executios. */
+        $executions = $this->loadModel('execution')->getExecutionPairs($this->projectID, 'all', 'empty|withdelete');
 
         /* Get bugs. */
-        $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
+        $bugs = $this->bug->getBugs($productID, $executions, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
@@ -202,7 +202,7 @@ class bug extends control
         $this->view->memberPairs   = $this->user->getPairs('noletter|nodeleted');
         $this->view->branch        = $branch;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
-        $this->view->projects      = $projects;
+        $this->view->executions    = $executions;
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID);
         $this->view->stories       = $storyList;
         $this->view->tasks         = $taskList;
@@ -259,7 +259,7 @@ class bug extends control
      *
      * @param  int    $productID
      * @param  string $branch
-     * @param  string $extras       others params, forexample, projectID=10,moduleID=10
+     * @param  string $extras       others params, forexample, executionID=10,moduleID=10
      * @access public
      * @return void
      */
@@ -343,9 +343,9 @@ class bug extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
 
-            if(isset($output['projectID']))
+            if(isset($output['executionID']))
             {
-                $location = $this->createLink('project', 'bug', "projectID={$output['projectID']}");
+                $location = $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
             }
             else
             {
@@ -364,7 +364,7 @@ class bug extends control
         $this->bug->setMenu($this->products, $productID, $branch);
 
         /* Init vars. */
-        $projectID   = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
+        $projectID   = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
         $moduleID    = 0;
         $executionID = 0;
         $taskID      = 0;
@@ -405,7 +405,7 @@ class bug extends control
         {
             $bug = $this->bug->getById($bugID);
             extract((array)$bug);
-            $executionID = $bug->project;
+            $executionID = $bug->execution;
             $moduleID    = $bug->module;
             $taskID      = $bug->task;
             $storyID     = $bug->story;
@@ -436,7 +436,7 @@ class bug extends control
         if($executionID)
         {
             $builds  = $this->loadModel('build')->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,noterminate,nodone');
-            $stories = $this->story->getProjectStoryPairs($executionID);
+            $stories = $this->story->getExecutionStoryPairs($executionID);
         }
         else
         {
@@ -447,15 +447,15 @@ class bug extends control
 
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
 
-        /* Set team members of the latest project as assignedTo list. */
-        $latestProject  = $this->product->getLatestProject($productID);
-        $projectMembers = array();
-        if(!empty($latestProject)) $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted', $moduleOwner);
-        if(empty($projectMembers)) $projectMembers = $this->view->users;
-        if($assignedTo and !isset($projectMembers[$assignedTo]))
+        /* Set team members of the latest execution as assignedTo list. */
+        $latestExecution  = $this->product->getLatestProject($productID);
+        $executionMembers = array();
+        if(!empty($latestExecution)) $executionMembers = $this->loadModel('execution')->getTeamMemberPairs($latestExecution->id, 'nodeleted', $moduleOwner);
+        if(empty($executionMembers)) $executionMembers = $this->view->users;
+        if($assignedTo and !isset($executionMembers[$assignedTo]))
         {
             $user = $this->loadModel('user')->getById($assignedTo);
-            if($user) $projectMembers[$assignedTo] = $user->realname;
+            if($user) $executionMembers[$assignedTo] = $user->realname;
         }
 
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
@@ -478,7 +478,7 @@ class bug extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->stories          = $stories;
-        $this->view->projects         = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
+        $this->view->executions       = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
         $this->view->builds           = $builds;
         $this->view->moduleID         = (int)$moduleID;
         $this->view->executionID      = $executionID;
@@ -494,7 +494,7 @@ class bug extends control
         $this->view->steps            = htmlspecialchars($steps);
         $this->view->os               = $os;
         $this->view->browser          = $browser;
-        $this->view->projectMembers   = $projectMembers;
+        $this->view->executionMembers = $executionMembers;
         $this->view->assignedTo       = $assignedTo;
         $this->view->deadline         = $deadline;
         $this->view->mailto           = $mailto;
@@ -538,7 +538,7 @@ class bug extends control
         if($executionID)
         {
             $builds  = $this->loadModel('build')->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty');
-            $stories = $this->story->getProjectStoryPairs($executionID);
+            $stories = $this->story->getExecutionStoryPairs($executionID);
         }
         else
         {
@@ -571,7 +571,7 @@ class bug extends control
             $showFields = trim($showFields, ',');
         }
 
-        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
+        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
@@ -585,7 +585,7 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
         $this->view->users            = $this->user->getPairs('devfirst|nodeleted');
-        $this->view->projects         = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
+        $this->view->executions       = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
         $this->view->executionID      = $executionID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleID         = $moduleID;
@@ -607,10 +607,10 @@ class bug extends control
         /* Judge bug exits or not. */
         $bug = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->PRJ   = $bug->PRJ;
-        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
+        $this->session->project = $bug->project;
+        $this->view->products   = $this->products = $this->product->getProductPairsByProject($this->session->project);
 
-        $this->bug->checkBugProjectPriv($bug);
+        $this->bug->checkBugExecutionPriv($bug);
 
         /* Update action. */
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
@@ -624,7 +624,7 @@ class bug extends control
         {
             session_write_close();
             $this->lang->set('menugroup.bug', 'repo');
-            $repos = $this->loadModel('repo')->getRepoPairs($this->session->PRJ);
+            $repos = $this->loadModel('repo')->getRepoPairs($this->session->project);
             $this->repo->setMenu($repos);
             $this->lang->bug->menu = $this->lang->repo->menu;
         }
@@ -719,9 +719,9 @@ class bug extends control
         /* Get the info of bug, current product and modue. */
         $bug             = $this->bug->getById($bugID);
         $productID       = $bug->product;
-        $projectID       = $bug->project;
+        $executionID     = $bug->execution;
         $currentModuleID = $bug->module;
-        $this->bug->checkBugProjectPriv($bug);
+        $this->bug->checkBugExecutionPriv($bug);
 
         /* Set the menu. */
         $this->bug->setMenu($this->products, $productID, $bug->branch);
@@ -733,9 +733,9 @@ class bug extends control
 
         /* Assign. */
         $allBuilds = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, 'noempty');
-        if($projectID)
+        if($executionID)
         {
-            $openedBuilds = $this->build->getExecutionBuildPairs($projectID, $productID, $bug->branch, 'noempty,noterminate,nodone');
+            $openedBuilds = $this->build->getExecutionBuildPairs($executionID, $productID, $bug->branch, 'noempty,noterminate,nodone');
         }
         else
         {
@@ -755,7 +755,7 @@ class bug extends control
         $oldResolvedBuild = array();
         if(($bug->resolvedBuild) and isset($allBuilds[$bug->resolvedBuild])) $oldResolvedBuild[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
 
-        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
+        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
@@ -763,11 +763,11 @@ class bug extends control
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         $this->view->currentModuleID  = $currentModuleID;
-        $this->view->projects         = $this->product->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
-        $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
+        $this->view->executions       = $this->product->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
+        $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
         $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
-        $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
-        $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->project, $bug->testtask);
+        $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
+        $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
@@ -909,7 +909,7 @@ class bug extends control
     public function assignTo($bugID)
     {
         $bug = $this->bug->getById($bugID);
-        $this->bug->checkBugProjectPriv($bug);
+        $this->bug->checkBugExecutionPriv($bug);
 
         /* Set menu. */
         $this->bug->setMenu($this->products, $bug->product, $bug->branch);
@@ -995,11 +995,11 @@ class bug extends control
     /**
      * Batch update assign of bug.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function batchAssignTo($projectID, $type = 'project')
+    public function batchAssignTo($executionID, $type = 'execution')
     {
         if(!empty($_POST) && isset($_POST['bugIDList']))
         {
@@ -1017,7 +1017,7 @@ class bug extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
         if($type == 'product' || $type == 'my') die(js::locate($this->session->bugList, 'parent'));
-        die(js::locate($this->createLink('project', 'bug', "projectID=$projectID")));
+        die(js::locate($this->createLink('execution', 'bug', "executionID=$executionID")));
     }
 
     /**
@@ -1044,7 +1044,7 @@ class bug extends control
 
         $bug       = $this->bug->getById($bugID);
         $productID = $bug->product;
-        $this->bug->checkBugProjectPriv($bug);
+        $this->bug->checkBugExecutionPriv($bug);
         $this->bug->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->confirmBug;
@@ -1120,7 +1120,7 @@ class bug extends control
             }
         }
 
-        $projectID  = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
+        $projectID  = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
         $bug        = $this->bug->getById($bugID);
         $productID  = $bug->product;
         $users      = $this->user->getPairs('noclosed');
@@ -1128,7 +1128,7 @@ class bug extends control
         if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
         unset($this->lang->bug->resolutionList['tostory']);
 
-        $this->bug->checkBugProjectPriv($bug);
+        $this->bug->checkBugExecutionPriv($bug);
         $this->bug->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
@@ -1138,7 +1138,7 @@ class bug extends control
         $this->view->bug        = $bug;
         $this->view->users      = $users;
         $this->view->assignedTo = $assignedTo;
-        $this->view->projects   = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
+        $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
         $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($productID, $branch = $bug->branch, 'all');
         $this->view->actions    = $this->action->getList('bug', $bugID);
         $this->display();
@@ -1197,7 +1197,7 @@ class bug extends control
 
         $bug       = $this->bug->getById($bugID);
         $productID = $bug->product;
-        $this->bug->checkBugProjectPriv($bug);
+        $this->bug->checkBugExecutionPriv($bug);
         $this->bug->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
@@ -1244,7 +1244,7 @@ class bug extends control
 
         $bug       = $this->bug->getById($bugID);
         $productID = $bug->product;
-        $this->bug->checkBugProjectPriv($bug);
+        $this->bug->checkBugExecutionPriv($bug);
         $this->bug->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->close;
@@ -1271,7 +1271,7 @@ class bug extends control
         /* Get bug and queryID. */
         $bug     = $this->bug->getById($bugID);
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
-        $this->bug->checkBugProjectPriv($bug);
+        $this->bug->checkBugExecutionPriv($bug);
 
         /* Set the menu. */
         $this->bug->setMenu($this->products, $bug->product, $bug->branch);
@@ -1374,7 +1374,7 @@ class bug extends control
     public function confirmStoryChange($bugID)
     {
         $bug = $this->bug->getById($bugID);
-        $this->bug->checkBugProjectPriv($bug);
+        $this->bug->checkBugExecutionPriv($bug);
         $this->dao->update(TABLE_BUG)->set('storyVersion')->eq($bug->latestStoryVersion)->where('id')->eq($bugID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'confirmed', '', $bug->latestStoryVersion);
         die(js::reload('parent'));
@@ -1458,41 +1458,41 @@ class bug extends control
     }
 
     /**
-     * AJAX: get team members of the project as assignedTo list.
+     * AJAX: get team members of the executions as assignedTo list.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  string $selectedUser
      * @access public
      * @return string
      */
-    public function ajaxLoadAssignedTo($projectID, $selectedUser = '')
+    public function ajaxLoadAssignedTo($executionID, $selectedUser = '')
     {
-        $projectMembers = $this->loadModel('project')->getTeamMemberPairs($projectID, '', $selectedUser);
+        $executionMembers = $this->loadModel('execution')->getTeamMemberPairs($executionID, '', $selectedUser);
 
-        die(html::select('assignedTo', $projectMembers, $selectedUser, 'class="form-control"'));
+        die(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));
     }
 
     /**
-     * AJAX: get team members of the latest project of a product as assignedTo list.
+     * AJAX: get team members of the latest executions of a product as assignedTo list.
      *
      * @param  int    $productID
      * @param  string $selectedUser
      * @access public
      * @return string
      */
-    public function ajaxLoadProjectTeamMembers($productID, $selectedUser = '')
+    public function ajaxLoadExecutionTeamMembers($productID, $selectedUser = '')
     {
-        $latestProject = $this->product->getLatestProject($productID);
-        if(!empty($latestProject))
+        $latestExecution = $this->product->getLatestProject($productID);
+        if(!empty($latestExecution))
         {
-            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted', $selectedUser);
+            $executionMembers = $this->loadModel('execution')->getTeamMemberPairs($latestExecution->id, 'nodeleted', $selectedUser);
         }
         else
         {
-            $projectMembers = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
+            $executionMembers = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
         }
 
-        die(html::select('assignedTo', $projectMembers, $selectedUser, 'class="form-control"'));
+        die(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));
     }
 
     /**
@@ -1528,11 +1528,11 @@ class bug extends control
      * @param  string $productID
      * @param  string $orderBy
      * @param  string $browseType
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $browseType = '', $projectID = 0)
+    public function export($productID, $orderBy, $browseType = '', $executionID = 0)
     {
         if($_POST)
         {
@@ -1555,10 +1555,10 @@ class bug extends control
                 ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
                 ->orderBy($orderBy)->fetchAll('id');
 
-            /* Get users, products and projects. */
-            $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs();
-            $projects = $this->loadModel('project')->getExecutionPairs($this->projectID, 'all', 'all');
+            /* Get users, products and executions. */
+            $users      = $this->loadModel('user')->getPairs('noletter');
+            $products   = $this->loadModel('product')->getPairs();
+            $executions = $this->loadModel('execution')->getExecutionPairs($this->projectID, 'all', 'all');
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();
@@ -1604,7 +1604,7 @@ class bug extends control
             $relatedBuilds  = array('trunk' => $this->lang->trunk) + $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedModules = $this->loadModel('tree')->getAllModulePairs('bug');
-            
+
             foreach($bugs as $bug)
             {
                 if($this->post->fileType == 'csv')
@@ -1615,17 +1615,17 @@ class bug extends control
                 }
 
                 /* fill some field with useful value. */
-                $bug->product = !isset($products[$bug->product])     ? '' : $products[$bug->product] . "(#$bug->product)";
-                $bug->project = !isset($projects[$bug->project])     ? '' : $projects[$bug->project] . "(#$bug->project)";
-                $bug->story   = !isset($relatedStories[$bug->story]) ? '' : $relatedStories[$bug->story] . "(#$bug->story)";
-                $bug->task    = !isset($relatedTasks[$bug->task])    ? '' : $relatedTasks[$bug->task] . "($bug->task)";
-                $bug->case    = !isset($relatedCases[$bug->case])    ? '' : $relatedCases[$bug->case] . "($bug->case)";
+                $bug->product   = !isset($products[$bug->product])     ? '' : $products[$bug->product] . "(#$bug->product)";
+                $bug->execution = !isset($executions[$bug->execution]) ? '' : $executions[$bug->execution] . "(#$bug->execution)";
+                $bug->story     = !isset($relatedStories[$bug->story]) ? '' : $relatedStories[$bug->story] . "(#$bug->story)";
+                $bug->task      = !isset($relatedTasks[$bug->task])    ? '' : $relatedTasks[$bug->task] . "($bug->task)";
+                $bug->case      = !isset($relatedCases[$bug->case])    ? '' : $relatedCases[$bug->case] . "($bug->case)";
 
                 if(isset($relatedModules[$bug->module]))       $bug->module        = $relatedModules[$bug->module] . "(#$bug->module)";
                 if(isset($relatedBugs[$bug->duplicateBug]))    $bug->duplicateBug  = $relatedBugs[$bug->duplicateBug] . "($bug->duplicateBug)";
                 if(isset($relatedBuilds[$bug->resolvedBuild])) $bug->resolvedBuild = $relatedBuilds[$bug->resolvedBuild] . "(#$bug->resolvedBuild)";
                 if(isset($relatedBranch[$bug->branch]))        $bug->branch        = $relatedBranch[$bug->branch] . "(#$bug->branch)";
-                
+
                 if(isset($bugLang->priList[$bug->pri]))               $bug->pri        = $bugLang->priList[$bug->pri];
                 if(isset($bugLang->typeList[$bug->type]))             $bug->type       = $bugLang->typeList[$bug->type];
                 if(isset($bugLang->severityList[$bug->severity]))     $bug->severity   = $bugLang->severityList[$bug->severity];
@@ -1641,8 +1641,8 @@ class bug extends control
                 if(isset($users[$bug->lastEditedBy])) $bug->lastEditedBy = $users[$bug->lastEditedBy];
                 if(isset($users[$bug->closedBy]))     $bug->closedBy     = $users[$bug->closedBy];
 
-                $bug->title          = htmlspecialchars_decode($bug->title,ENT_QUOTES);   
-     
+                $bug->title          = htmlspecialchars_decode($bug->title,ENT_QUOTES);
+
                 if($bug->linkBug)
                 {
                     $tmpLinkBugs = array();
@@ -1704,11 +1704,11 @@ class bug extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $fileName    = $this->lang->bug->common;
-        if($projectID)
+        $fileName = $this->lang->bug->common;
+        if($executionID)
         {
-            $projectName = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('name');
-            $fileName    = $projectName . $this->lang->dash . $fileName;
+            $executionName = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch('name');
+            $fileName      = $executionName . $this->lang->dash . $fileName;
         }
         else
         {
@@ -1741,16 +1741,16 @@ class bug extends control
 
     /**
      * Ajax get bug filed options for auto test.
-     * 
-     * @param  int    $productID 
-     * @param  int    $projectID 
+     *
+     * @param  int    $productID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function ajaxGetBugFieldOptions($productID, $projectID = 0)
+    public function ajaxGetBugFieldOptions($productID, $executionID = 0)
     {
         $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
-        $builds   = $this->loadModel('build')->getExecutionBuildPairs($projectID, $productID);
+        $builds   = $this->loadModel('build')->getExecutionBuildPairs($executionID, $productID);
         $type     = $this->lang->bug->typeList;
         $pri      = $this->lang->bug->priList;
         $severity = $this->lang->bug->severityList;

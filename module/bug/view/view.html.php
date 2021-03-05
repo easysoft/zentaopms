@@ -82,7 +82,7 @@
         common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
         common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
 
-        common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', '', $lang->bug->toStory);
+        common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', '', $lang->bug->toStory);
         common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
 
         echo $this->buildOperateMenu($bug, 'view');
@@ -207,7 +207,7 @@
                 <tr>
                   <th><?php echo $lang->bug->deadline;?></th>
                   <td>
-                    <?php 
+                    <?php
                     if($bug->deadline) echo  $bug->deadline;
                     if(isset($bug->delay)) printf($lang->bug->delayWarning, $bug->delay);
                     ?>
@@ -236,8 +236,8 @@
             <table class='table table-data'>
               <tbody>
                 <tr>
-                  <th class='w-60px'><?php echo $lang->bug->project;?></th>
-                  <td><?php if($bug->project) echo html::a($this->createLink('project', 'browse', "projectid=$bug->project"), $bug->projectName);?></td>
+                  <th class='w-60px'><?php echo $lang->bug->execution;?></th>
+                  <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'browse', "executionid=$bug->execution"), $bug->executionName);?></td>
                 </tr>
                 <tr class='nofixed'>
                   <th><?php echo $lang->bug->story;?></th>

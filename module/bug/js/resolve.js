@@ -36,13 +36,13 @@ $(function()
         {
             $('#resolvedBuildBox').addClass('hidden');
             $('#newBuildBox').removeClass('hidden');
-            $('#newBuildProjectBox').removeClass('hidden');
+            $('#newBuildExecutionBox').removeClass('hidden');
         }
         else
         {
             $('#resolvedBuildBox').removeClass('hidden');
             $('#newBuildBox').addClass('hidden');
-            $('#newBuildProjectBox').addClass('hidden');
+            $('#newBuildExecutionBox').addClass('hidden');
         }
     })
 })

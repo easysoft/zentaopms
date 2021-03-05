@@ -11,39 +11,39 @@ $config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
 $config->bug->resolve->requiredFields = 'resolution';
 
 $config->bug->list = new stdclass();
-$config->bug->list->allFields = 'id, module, project, story, task, 
+$config->bug->list->allFields = 'id, module, execution, story, task,
     title, keywords, severity, pri, type, os, browser, hardware,
     found, steps, status, deadline, activatedCount, confirmed, mailto,
-    openedBy, openedDate, openedBuild, 
+    openedBy, openedDate, openedBuild,
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
-    closedBy, closedDate, 
-    duplicateBug, linkBug, 
+    closedBy, closedDate,
+    duplicateBug, linkBug,
     case,
     lastEditedBy,
     lastEditedDate';
 
 $config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
 
-$config->bug->list->exportFields = 'id, product, branch, module, project, story, task, 
+$config->bug->list->exportFields = 'id, product, branch, module, execution, story, task,
     title, keywords, severity, pri, type, os, browser,
     steps, status, deadline, activatedCount, confirmed, mailto,
-    openedBy, openedDate, openedBuild, 
+    openedBy, openedDate, openedBuild,
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
-    closedBy, closedDate, 
-    duplicateBug, linkBug, 
+    closedBy, closedDate,
+    duplicateBug, linkBug,
     case,
     lastEditedBy,
     lastEditedDate, files';
 
-$config->bug->list->customCreateFields      = 'project,story,task,pri,severity,os,browser,deadline,mailto,keywords';
-$config->bug->list->customBatchCreateFields = 'project,steps,type,pri,deadline,severity,os,browser,keywords';
+$config->bug->list->customCreateFields      = 'execution,story,task,pri,severity,os,browser,deadline,mailto,keywords';
+$config->bug->list->customBatchCreateFields = 'execution,steps,type,pri,deadline,severity,os,browser,keywords';
 $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,status,resolvedBy,resolution,os,browser,keywords';
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
-$config->bug->custom->batchCreateFields = 'project,deadline,steps,type,severity,os,browser';
+$config->bug->custom->batchCreateFields = 'execution,deadline,steps,type,severity,os,browser';
 $config->bug->custom->batchEditFields   = 'type,severity,pri,branch,assignedTo,deadline,status,resolvedBy,resolution';
 
 $config->bug->editor = new stdclass();
@@ -72,7 +72,7 @@ $config->bug->search['fields']['product']        = $lang->bug->product;
 $config->bug->search['fields']['branch']         = '';
 $config->bug->search['fields']['plan']           = $lang->bug->productplan;
 $config->bug->search['fields']['id']             = $lang->bug->id;
-$config->bug->search['fields']['project']        = $lang->bug->project;
+$config->bug->search['fields']['execution']      = $lang->bug->execution;
 
 $config->bug->search['fields']['severity']       = $lang->bug->severity;
 $config->bug->search['fields']['pri']            = $lang->bug->pri;
@@ -115,7 +115,7 @@ $config->bug->search['params']['product']       = array('operator' => '=',      
 $config->bug->search['params']['branch']        = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->bug->search['params']['plan']          = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->bug->search['params']['module']        = array('operator' => 'belong',  'control' => 'select', 'values' => 'modules');
-$config->bug->search['params']['project']       = array('operator' => '=',       'control' => 'select', 'values' => 'projects');
+$config->bug->search['params']['execution']     = array('operator' => '=',       'control' => 'select', 'values' => 'executions');
 
 $config->bug->search['params']['severity']      = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->severityList);
 $config->bug->search['params']['pri']           = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->priList);
@@ -183,10 +183,10 @@ $config->bug->datatable->fieldList['type']['fixed']    = 'no';
 $config->bug->datatable->fieldList['type']['width']    = '90';
 $config->bug->datatable->fieldList['type']['required'] = 'no';
 
-$config->bug->datatable->fieldList['project']['title']    = 'project';
-$config->bug->datatable->fieldList['project']['fixed']    = 'no';
-$config->bug->datatable->fieldList['project']['width']    = '120';
-$config->bug->datatable->fieldList['project']['required'] = 'no';
+$config->bug->datatable->fieldList['execution']['title']    = 'execution';
+$config->bug->datatable->fieldList['execution']['fixed']    = 'no';
+$config->bug->datatable->fieldList['execution']['width']    = '120';
+$config->bug->datatable->fieldList['execution']['required'] = 'no';
 
 $config->bug->datatable->fieldList['plan']['title']    = 'plan';
 $config->bug->datatable->fieldList['plan']['fixed']    = 'no';

@@ -21,16 +21,16 @@ $(function()
 
 /**
  * Load all fields.
- * 
- * @param  int $productID 
+ *
+ * @param  int $productID
  * @access public
  * @return void
  */
 function loadAll(productID)
 {
-    if(page == 'create') 
+    if(page == 'create')
     {
-        loadProjectTeamMembers(productID);
+        loadExecutionTeamMembers(productID);
         setAssignedTo();
     }
 
@@ -54,8 +54,8 @@ function loadAll(productID)
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         $('#task').chosen();
         loadProductBranches(productID)
-        loadProductModules(productID); 
-        loadProductProjects(productID); 
+        loadProductModules(productID);
+        loadProductExecutions(productID);
         loadProductBuilds(productID);
         loadProductplans(productID);
         loadProductStories(productID);
@@ -65,7 +65,7 @@ function loadAll(productID)
 
 /**
  * Load by branch.
- * 
+ *
  * @access public
  * @return void
  */
@@ -75,14 +75,14 @@ function loadBranch()
     $('#task').chosen();
     productID = $('#product').val();
     loadProductModules(productID);
-    loadProductProjects(productID); 
+    loadProductExecutions(productID);
     loadProductBuilds(productID);
     loadProductplans(productID);
     loadProductStories(productID);
 }
 
 /**
-  *Load all builds of one project or product.
+  *Load all builds of one execution or product.
   *
   * @param  object $object
   * @access public
@@ -98,15 +98,15 @@ function loadAllBuilds(object)
     }
     else
     {
-        productID = $('#product').val();
-        projectID = $('#project').val();
+        productID   = $('#product').val();
+        executionID = $('#execution').val();
 
         var buildBox = '';
         if(page == 'edit') buildBox = $(object).closest('.input-group').attr('id');
 
-        if(projectID)
+        if(executionID)
         {
-            loadAllProjectBuilds(projectID, productID, buildBox);
+            loadAllExecutionBuilds(executionID, productID, buildBox);
         }
         else
         {
@@ -115,23 +115,23 @@ function loadAllBuilds(object)
     }
 }
 
-/** 
-  * Load all builds of the project.
+/**
+  * Load all builds of the execution.
   *
-  * @param  int    $projectID
+  * @param  int    $executionID
   * @param  int    $productID
   * @param  string $buildBox
   * @access public
   * @return void
   */
-function loadAllProjectBuilds(projectID, productID, buildBox)
+function loadAllExecutionBuilds(executionID, productID, buildBox)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
     if(page == 'create')
     {
         oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
-        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=true&type=all');
+        link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=true&type=all');
         $.get(link, function(data)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
@@ -146,7 +146,7 @@ function loadAllProjectBuilds(projectID, productID, buildBox)
     {
         if(buildBox == 'openedBuildBox')
         {
-            link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=true&type=all');
+            link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=true&type=all');
             $('#openedBuildBox').load(link, function(){$(this).find('select').chosen()});
         }
         if(buildBox == 'resolvedBuildBox')
@@ -157,7 +157,7 @@ function loadAllProjectBuilds(projectID, productID, buildBox)
     }
 }
 
-/** 
+/**
   * Load all builds of the product.
   *
   * @param  int    $productID
@@ -169,7 +169,7 @@ function loadAllProductBuilds(productID, buildBox)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    if(page == 'create') 
+    if(page == 'create')
     {
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&type=all');
         $.get(link, function(data)
@@ -199,8 +199,8 @@ function loadAllProductBuilds(productID, buildBox)
 
 /**
  * Load product's modules.
- * 
- * @param  int    $productID 
+ *
+ * @param  int    $productID
  * @access public
  * @return void
  */
@@ -210,16 +210,16 @@ function loadProductModules(productID)
     if(typeof(branch) == 'undefined') branch = 0;
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
     $('#moduleIdBox').load(link, function()
-    {   
+    {
         $(this).find('select').chosen()
         if(typeof(bugModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon' style='border-left-width: 1px;'>" + bugModule + "</span>");
     });
 }
 
 /**
- * Load product stories 
- * 
- * @param  int    $productID 
+ * Load product stories
+ *
+ * @param  int    $productID
  * @access public
  * @return void
  */
@@ -232,20 +232,20 @@ function loadProductStories(productID)
 }
 
 /**
- * Load projects of product. 
- * 
- * @param  int    $productID 
+ * Load executions of product.
+ *
+ * @param  int    $productID
  * @access public
  * @return void
  */
-function loadProductProjects(productID)
+function loadProductExecutions(productID)
 {
-    required = $('#project_chosen').hasClass('required');
+    required = $('#execution_chosen').hasClass('required');
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&projectID=' + oldProjectID + '&branch=' + branch);
-    $('#projectIdBox').load(link, function()
+    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&executionID=' + oldExecutionID + '&branch=' + branch);
+    $('#executionIdBox').load(link, function()
     {
         $(this).find('select').chosen();
         if(required) $(this).addClass('required');
@@ -254,8 +254,8 @@ function loadProductProjects(productID)
 
 /**
  * Load product plans.
- * 
- * @param  productID $productID 
+ *
+ * @param  productID $productID
  * @access public
  * @return void
  */
@@ -268,9 +268,9 @@ function loadProductplans(productID)
 }
 
 /**
- * Load product builds. 
- * 
- * @param  productID $productID 
+ * Load product builds.
+ *
+ * @param  productID $productID
  * @access public
  * @return void
  */
@@ -301,21 +301,21 @@ function loadProductBuilds(productID)
 }
 
 /**
- * Load project related bugs and tasks.
- * 
- * @param  int    $projectID 
+ * Load execution related bugs and tasks.
+ *
+ * @param  int    $executionID
  * @access public
  * @return void
  */
-function loadProjectRelated(projectID)
+function loadExecutionRelated(executionID)
 {
-    if(projectID)
+    if(executionID)
     {
-        loadProjectTasks(projectID);
-        loadProjectStories(projectID);
-        loadProjectBuilds(projectID);
-        loadAssignedTo(projectID);
-        loadTestTasks($('#product').val(), projectID);
+        loadExecutionTasks(executionID);
+        loadExecutionStories(executionID);
+        loadExecutionBuilds(executionID);
+        loadAssignedTo(executionID);
+        loadTestTasks($('#product').val(), executionID);
     }
     else
     {
@@ -327,15 +327,15 @@ function loadProjectRelated(projectID)
 }
 
 /**
- * Load project tasks.
- * 
- * @param  projectID $projectID 
+ * Load execution tasks.
+ *
+ * @param  executionID $executionID
  * @access public
  * @return void
  */
-function loadProjectTasks(projectID)
+function loadExecutionTasks(executionID)
 {
-    link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID + '&taskID=' + oldTaskID);
+    link = createLink('task', 'ajaxGetExecutionTasks', 'executionID=' + executionID + '&taskID=' + oldTaskID);
     $.post(link, function(data)
     {
         if(!data) data = '<select id="task" name="task" class="form-control"></select>';
@@ -347,28 +347,28 @@ function loadProjectTasks(projectID)
 }
 
 /**
- * Load project stories.
- * 
- * @param  projectID $projectID 
+ * Load execution stories.
+ *
+ * @param  executionID $executionID
  * @access public
  * @return void
  */
-function loadProjectStories(projectID)
+function loadExecutionStories(executionID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&branch=' + branch + '&moduleID=0&storyID=' + oldStoryID);
+    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&branch=' + branch + '&moduleID=0&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen();});
 }
 
 /**
- * Load builds of a project.
- * 
- * @param  int      $projectID 
+ * Load builds of a execution.
+ *
+ * @param  int      $executionID
  * @access public
  * @return void
  */
-function loadProjectBuilds(projectID)
+function loadExecutionBuilds(executionID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
@@ -377,7 +377,7 @@ function loadProjectBuilds(projectID)
 
     if(page == 'create')
     {
-        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch + "&index=0&needCreate=true");
+        link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch + "&index=0&needCreate=true");
         $.get(link, function(data)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
@@ -391,9 +391,9 @@ function loadProjectBuilds(projectID)
     }
     else
     {
-        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
+        link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
         $('#openedBuildBox').load(link, function(){$(this).find('select').val(oldOpenedBuild).chosen()});
-        
+
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
         $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
@@ -402,9 +402,9 @@ function loadProjectBuilds(projectID)
 
 /**
  * Set story field.
- * 
- * @param  moduleID $moduleID 
- * @param  productID $productID 
+ *
+ * @param  moduleID $moduleID
+ * @param  productID $productID
  * @param  storyID $storyID
  * @access public
  * @return void
@@ -426,8 +426,8 @@ function setStories(moduleID, productID, storyID)
 
 /**
  * Load product branches.
- * 
- * @param  int $productID 
+ *
+ * @param  int $productID
  * @access public
  * @return void
  */
@@ -452,16 +452,16 @@ var oldAssignedToTitle = $("#assignedTo").find("option:selected").text();
 var oldAssignedTo      = $("#assignedTo").find("option:selected").val();
 
 /**
- * Load team members of the project as assignedTo list.
+ * Load team members of the execution as assignedTo list.
  *
- * @param  int     $projectID 
+ * @param  int     $executionID
  * @access public
  * @return void
  */
-function loadAssignedTo(projectID, selectedUser)
+function loadAssignedTo(executionID, selectedUser)
 {
     selectedUser = (typeof(selectedUser) == 'undefined') ? '' : $('#assignedTo').val();
-    link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + selectedUser);
+    link = createLink('bug', 'ajaxLoadAssignedTo', 'executionID=' + executionID + '&selectedUser=' + selectedUser);
     $.get(link, function(data)
     {
         var defaultOption = '<option title="' + oldAssignedToTitle + '" value="' + oldAssignedTo + '" selected="selected">' + oldAssignedToTitle + '</option>';
@@ -479,16 +479,16 @@ var oldTestTask      = $("#testtask").find("option:selected").val();
 
 /**
  * Load test tasks.
- * 
- * @param  int $productID 
- * @param  int $projectID 
+ *
+ * @param  int $productID
+ * @param  int $executionID
  * @access public
  * @return void
  */
-function loadTestTasks(productID, projectID)
+function loadTestTasks(productID, executionID)
 {
-    if(typeof(projectID) == 'undefined') projectID = 0;
-    link = createLink('testtask', 'ajaxGetTestTasks', 'productID=' + productID + '&projectID=' + projectID);
+    if(typeof(executionID) == 'undefined') executionID = 0;
+    link = createLink('testtask', 'ajaxGetTestTasks', 'productID=' + productID + '&executionID=' + executionID);
     $.get(link, function(data)
     {
         var defaultOption = '<option title="' + oldTestTaskTitle + '" value="' + oldTestTask + '" selected="selected">' + oldTestTaskTitle + '</option>';
@@ -500,30 +500,30 @@ function loadTestTasks(productID, projectID)
 
 /**
  * notice for create build.
- * 
+ *
  * @access public
  * @return void
  */
 function notice()
 {
     $('#buildBoxActions').empty().hide();
-    if($('#openedBuild').find('option').length <= 1) 
+    if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
-        if($('#project').length == 0 || $('#project').val() == '')
+        if($('#execution').length == 0 || $('#execution').val() == '')
         {
             var branch = $('#branch').val();
             if(typeof(branch) == 'undefined') branch = 0;
-            var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch); 
+            var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch);
             link += config.requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
             html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createBuild + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }
         else
         {
-            projectID = $('#project').val();
-            html += '<a href="' + createLink('build', 'create','projectID=' + projectID) + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
-            html += '<a href="javascript:loadProjectBuilds(' + projectID + ')">' + refresh + '</a>';
+            executionID = $('#execution').val();
+            html += '<a href="' + createLink('build', 'create','executionID=' + executionID) + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
+            html += '<a href="javascript:loadExecutionBuilds(' + executionID + ')">' + refresh + '</a>';
         }
         var $bba = $('#buildBoxActions');
         if($bba.length)

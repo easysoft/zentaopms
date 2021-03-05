@@ -20,15 +20,15 @@ function loadAllUsers()
 }
 
 /**
-  * Load team members of the latest project of a product as assignedTo list.
+  * Load team members of the latest execution of a product as assignedTo list.
   *
   * @param  int    $productID
   * @access public
   * @return void
   */
-function loadProjectTeamMembers(productID)
+function loadExecutionTeamMembers(productID)
 {
-    var link = createLink('bug', 'ajaxLoadProjectTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
+    var link = createLink('bug', 'ajaxLoadExecutionTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
     $('#assignedToBox').load(link, function(){$('#assignedTo').chosen();});
 }
 
@@ -92,11 +92,11 @@ $(function()
     var assignedto = $('#assignedTo').val();
     changeProductConfirmed = true;
     oldStoryID             = $('#story').val() || 0;
-    oldProjectID           = 0;
+    oldExecutionID           = 0;
     oldOpenedBuild         = '';
     oldTaskID              = $('#oldTaskID').val() || 0;
 
-    if($('#project').val()) loadProjectRelated($('#project').val());
+    if($('#execution').val()) loadExecutionRelated($('#execution').val());
     if(!assignedto) setTimeout(function(){setAssignedTo(moduleID, productID)}, 500);
     notice();
 

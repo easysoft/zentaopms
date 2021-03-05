@@ -111,7 +111,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     <?php if(common::canModify('product', $product)):?>
     <?php if(!common::checkNotCN()):?>
     <?php
-    common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
+    common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&executionID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
     if(commonModel::isTutorialMode())
     {
         $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
@@ -147,7 +147,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <?php $disabled = common::hasPriv('bug', 'batchCreate') ? '' : "class='disabled'";?>
         <li <?php echo $disabled?>>
         <?php
-          $batchLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID");
+          $batchLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&executionID=0&moduleID=$moduleID");
           echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate) . "</li>";
         ?>
         </li>
@@ -236,7 +236,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <tbody>
           <?php foreach($bugs as $bug):?>
           <tr data-id='<?php echo $bug->id?>'>
-            <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
+            <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
           </tr>
           <?php endforeach;?>
         </tbody>

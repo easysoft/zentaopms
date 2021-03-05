@@ -46,10 +46,10 @@
       <table class='table table-form'>
         <thead>
           <tr>
-            <th class='w-50px'><?php echo $lang->idAB;?></th> 
+            <th class='w-50px'><?php echo $lang->idAB;?></th>
             <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'> <?php echo $lang->product->branch;?></th>
             <th class='w-120px<?php echo zget($requiredFields, 'module', '', ' required');?>'> <?php echo $lang->bug->module;?></th>
-            <th class='w-130px<?php echo zget($visibleFields, 'project', ' hidden') . zget($requiredFields, 'project', '', ' required');?>'><?php echo $lang->bug->project;?></th>
+            <th class='w-130px<?php echo zget($visibleFields, 'execution', ' hidden') . zget($requiredFields, 'execution', '', ' required');?>'><?php echo $lang->bug->execution;?></th>
             <th class='w-100px required'><?php echo $lang->bug->openedBuild;?></th>
             <th class='c-title required'><?php echo $lang->bug->title;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'deadline', ' hidden') . zget($requiredFields, 'deadline', '', ' required');?>'><?php echo $lang->bug->deadline;?></th>
@@ -69,7 +69,7 @@
         <tbody>
           <?php
           $moduleOptionMenu       += array('ditto' => $lang->bug->ditto);
-          $projects               += array('ditto' => $lang->bug->ditto);
+          $executions             += array('ditto' => $lang->bug->ditto);
           $lang->bug->typeList    += array('ditto' => $lang->bug->ditto);
           $lang->bug->priList     += array('ditto' => $lang->bug->ditto);
           $lang->bug->osList      += array('ditto' => $lang->bug->ditto);
@@ -90,7 +90,7 @@
             <td class='text-center'><?php echo $i+1;?></td>
             <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, $i)'");?></td>
             <td><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $executionID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
+            <td class='<?php echo zget($visibleFields, 'execution', ' hidden')?>' style='overflow:visible'><?php echo html::select("executions[$i]", $executions, $executionID, "class='form-control chosen' onchange='loadExecutionBuilds($productID, this.value, $i)'");?></td>
             <td id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, 'trunk', "class='form-control chosen' multiple");?></td>
             <td>
               <div class='input-group'>
@@ -133,7 +133,7 @@
             <td><?php echo $i+1;?></td>
             <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, $i)'");?></td>
             <td><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $executionID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
+            <td class='<?php echo zget($visibleFields, 'execution', ' hidden')?>' style='overflow:visible'><?php echo html::select("executions[$i]", $executions, $executionID, "class='form-control chosen' onchange='loadExecutionBuilds($productID, this.value, $i)'");?></td>
             <td id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
             <td>
               <div class='input-group'>
@@ -179,7 +179,7 @@
       <td>%s</td>
       <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[%s]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, \"%s\")'");?></td>
       <td><?php echo html::select("modules[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[%s]", $projects, $executionID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, \"%s\")'");?></td>
+      <td class='<?php echo zget($visibleFields, 'execution', ' hidden')?>' style='overflow:visible'><?php echo html::select("executions[%s]", $executions, $executionID, "class='form-control chosen' onchange='loadExecutionBuilds($productID, this.value, \"%s\")'");?></td>
       <td id='buildBox%s'><?php echo html::select("openedBuilds[%s][]", $builds, '', "class='form-control chosen' multiple");?></td>
       <td>
         <div class='input-group'>
