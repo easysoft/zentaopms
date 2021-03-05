@@ -22,15 +22,15 @@
           <th class="text-left"><?php echo $lang->user->name;?></th>
           <th class='w-status'><?php echo $lang->statusAB;?></th>
           <th class='w-user'><?php echo $lang->team->role;?></th>
-          <th class='w-date'><?php echo $lang->project->begin;?></th>
-          <th class='w-date'><?php echo $lang->project->end;?></th>
+          <th class='w-date'><?php echo $lang->execution->begin;?></th>
+          <th class='w-date'><?php echo $lang->execution->end;?></th>
           <th class='w-date'><?php echo $lang->team->join;?></th>
           <th class='w-110px'><?php echo $lang->team->hours;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($executions as $execution):?>
-        <?php $executionLink = $this->createLink('project', 'view', "projectID=$execution->id", '', false, $execution->project);?>
+        <?php $executionLink = $this->createLink('execution', 'view', "executionID=$execution->id", '', false, $execution->project);?>
         <tr>
           <td><?php echo html::a($executionLink, $execution->id);?></td>
           <td>
@@ -38,9 +38,9 @@
             <?php echo html::a($executionLink, $execution->name);?>
           </td>
           <?php if(isset($execution->delay)):?>
-          <td class='project-delay'><?php echo $lang->project->delayed;?></td>
+          <td class='project-delay'><?php echo $lang->execution->delayed;?></td>
           <?php else:?>
-          <td class='project-<?php echo $execution->status?>'><?php echo $this->processStatus('project', $execution);?></td>
+          <td class='project-<?php echo $execution->status?>'><?php echo $this->processStatus('execution', $execution);?></td>
           <?php endif;?>
           <td><?php echo $execution->role;?></td>
           <td><?php echo $execution->begin;?></td>

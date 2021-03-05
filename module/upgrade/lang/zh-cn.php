@@ -25,7 +25,7 @@ $lang->upgrade->warnningContent = <<<EOT
 <pre>
 1. 可以通过phpMyAdmin进行备份。
 2. 使用mysql命令行的工具。
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> 
+   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
    要将上面红色的部分分别替换成对应的用户名和禅道系统的数据库名。
    比如： mysqldump -u root -p zentao >zentao.bak
 </pre>
@@ -85,15 +85,15 @@ $lang->upgrade->to15Mode['new']     = '全新项目集管理模式';
 $lang->upgrade->selectedModeTips['classic'] = '后续您还可以在后台-自定义里面切换为全新项目集管理的模式。';
 $lang->upgrade->selectedModeTips['new']     = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';
 
-$lang->upgrade->line      = '产品线';
-$lang->upgrade->program   = '目标项目集和项目';
-$lang->upgrade->existPGM  = '已有项目集';
-$lang->upgrade->existPRJ  = '已有项目';
-$lang->upgrade->existLine = '已有' . $lang->productCommon . '线';
-$lang->upgrade->product   = $lang->productCommon;
-$lang->upgrade->project   = '迭代';
-$lang->upgrade->repo      = '版本库';
-$lang->upgrade->mergeRepo = '归并版本库';
+$lang->upgrade->line         = '产品线';
+$lang->upgrade->program      = '目标项目集和项目';
+$lang->upgrade->existProgram = '已有项目集';
+$lang->upgrade->existProject = '已有项目';
+$lang->upgrade->existLine    = '已有' . $lang->productCommon . '线';
+$lang->upgrade->product      = $lang->productCommon;
+$lang->upgrade->project      = '迭代';
+$lang->upgrade->repo         = '版本库';
+$lang->upgrade->mergeRepo    = '归并版本库';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->projectEmpty       = '所属项目不能为空！';

@@ -23,9 +23,9 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
-        if((version_compare($this->config->installedVersion, '15', '<') 
-            || strpos($this->config->installedVersion, 'biz') !== false 
-            || strpos($this->config->installedVersion, 'pro') !== false) 
+        if((version_compare($this->config->installedVersion, '15', '<')
+            || strpos($this->config->installedVersion, 'biz') !== false
+            || strpos($this->config->installedVersion, 'pro') !== false)
             && strpos($this->config->installedVersion, 'max') === false)
         {
             /* Judge upgrade step. */
@@ -60,7 +60,7 @@ class upgrade extends control
 
     /**
      * Backup.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -74,7 +74,7 @@ class upgrade extends control
 
     /**
      * Select the version of old zentao.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -90,7 +90,7 @@ class upgrade extends control
 
     /**
      * Confirm the version.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -110,7 +110,7 @@ class upgrade extends control
 
     /**
      * Execute the upgrading.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -124,7 +124,7 @@ class upgrade extends control
         $result = $this->upgrade->deleteFiles();
         if($result)
         {
-            $result[] = $this->lang->upgrade->afterDeleted; 
+            $result[] = $this->lang->upgrade->afterDeleted;
 
             $this->view->result = 'fail';
             $this->view->errors  = $result;
@@ -152,8 +152,8 @@ class upgrade extends control
 
     /**
      * Guide to 15 version.
-     * 
-     * @param  string    $fromVersion 
+     *
+     * @param  string    $fromVersion
      * @access public
      * @return void
      */
@@ -174,7 +174,7 @@ class upgrade extends control
 
     /**
      * Merge program tips.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -197,6 +197,7 @@ class upgrade extends control
     {
         $this->session->set('upgrading', true);
         $this->app->loadLang('program');
+        $this->app->loadLang('project');
         $this->app->loadLang('product');
 
         if($_POST)
@@ -295,7 +296,7 @@ class upgrade extends control
         $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('grade')->eq(0)->andWhere('path')->eq('')->fetch('count');
 
         /* When all products and projects merged then finish and locate afterExec page. */
-        if(empty($noMergedProductCount) and empty($noMergedSprintCount)) 
+        if(empty($noMergedProductCount) and empty($noMergedSprintCount))
         {
             $this->upgrade->initUserView();
             $this->upgrade->setDefaultPriv();
@@ -379,7 +380,7 @@ class upgrade extends control
             $productGroup   = array();
             foreach($sprintProducts as $sprintID => $products)
             {
-                if(count($products) > 1) 
+                if(count($products) > 1)
                 {
                     unset($noMergedSprints[$sprintID]);
                     $productGroup[] = array_keys($products);
@@ -471,7 +472,7 @@ class upgrade extends control
 
     /**
      * Merge Repos.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -509,7 +510,7 @@ class upgrade extends control
     public function ajaxGetProjectPairsByProgram($programID = 0)
     {
         $projects = array('' => '') + $this->upgrade->getProjectPairsByProgram($programID);
-        die(html::select('projects', $projects, '', 'class="form-control prj-exist" onchange="getPGMStatus(\'project\', this.value)"'));
+        die(html::select('projects', $projects, '', 'class="form-control prj-exist" onchange="getProgramStatus(\'project\', this.value)"'));
     }
 
     /**
@@ -528,9 +529,9 @@ class upgrade extends control
 
     /**
      * After execute.
-     * 
-     * @param  string $fromVersion 
-     * @param  string $processed 
+     *
+     * @param  string $fromVersion
+     * @param  string $processed
      * @access public
      * @return void
      */
@@ -567,7 +568,7 @@ class upgrade extends control
 
     /**
      * Consistency.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -588,7 +589,7 @@ class upgrade extends control
 
     /**
      * Check extension.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -634,9 +635,9 @@ class upgrade extends control
 
     /**
      * Ajax update file.
-     * 
-     * @param  string $type 
-     * @param  int    $lastID 
+     *
+     * @param  string $type
+     * @param  int    $lastID
      * @access public
      * @return void
      */
@@ -666,7 +667,7 @@ class upgrade extends control
 
     /**
      * Ajax get product name.
-     * 
+     *
      * @param  int    $productID
      * @access public
      * @return void
@@ -683,7 +684,7 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function ajaxGetPGMStatus($programID)
+    public function ajaxGetProgramStatus($programID)
     {
         die($this->dao->select('status')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch('status'));
     }

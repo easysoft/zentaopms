@@ -4,11 +4,11 @@ $(function()
     $('#source .cell').height($('#source').height());
     $('#programBox .cell').height($('#programBox').height() - 20);
 
-    PGMBegin = $('.PGMParams #begin').val();
-    PGMEnd   = $('.PGMParams #end').val();
-    setPGMBegin(PGMBegin);
-    setPGMEnd(PGMEnd);
-    setPRJPM();
+    programBegin = $('.programParams #begin').val();
+    programEnd   = $('.programParams #end').val();
+    setProgramBegin(programBegin);
+    setProgramEnd(programEnd);
+    setProjectPM();
 
     setProgramByProduct($(':checkbox:checked[data-productid]'));
 
@@ -23,23 +23,23 @@ $(function()
         {
             $('[data-line=' + value + ']').prop('checked', false)
         }
-        setPGMBegin(PGMBegin);
-        setPGMEnd(PGMEnd);
-        setPRJPM();
+        setProgramBegin(programBegin);
+        setProgramEnd(programEnd);
+        setProjectPM();
     })
 
-    var PGMOriginEnd = $('#end').val();
+    var programOriginEnd = $('#end').val();
     $('#longTime').change(function()
     {
         if($(this).prop('checked'))
         {
-            PGMOriginEnd = $('#end').val();
+            programOriginEnd = $('#end').val();
             $('#end').val('').attr('disabled', 'disabled');
             $('#days').val('');
         }
         else
         {
-            $('#end').val(PGMOriginEnd).removeAttr('disabled');
+            $('#end').val(programOriginEnd).removeAttr('disabled');
         }
     });
 
@@ -66,19 +66,19 @@ $(function()
         $('[data-product=' + firstProduct.val() + ']').prop('checked', true);
 
         /* Replace program name. */
-        $('#PGMName').val($(this).text());
+        $('#programName').val($(this).text());
 
         /* Replace project name. */
         var productID = $(target).find('.lineGroup .productList input[name*="product"]').val();
         var link = createLink('upgrade', 'ajaxGetProductName', 'productID=' + productID);
         $.post(link, function(data)
         {
-            $('#PRJName').val(data);
+            $('#projectName').val(data);
         })
 
-        setPGMBegin(PGMBegin);
-        setPGMEnd(PGMEnd);
-        setPRJPM();
+        setProgramBegin(programBegin);
+        setProgramEnd(programEnd);
+        setProjectPM();
     })
 
     $('[name^=products]').change(function()
@@ -97,9 +97,9 @@ $(function()
         {
             $('[data-product=' + value + ']').prop('checked', false)
         }
-        setPGMBegin(PGMBegin);
-        setPGMEnd(PGMEnd);
-        setPRJPM();
+        setProgramBegin(programBegin);
+        setProgramEnd(programEnd);
+        setProjectPM();
 
         hiddenProject();
     })
@@ -116,9 +116,9 @@ $(function()
 
             setProgramByProduct($(':checkbox[data-productid=' + productID + ']'));
         }
-        setPGMBegin(PGMBegin);
-        setPGMEnd(PGMEnd);
-        setPRJPM();
+        setProgramBegin(programBegin);
+        setProgramEnd(programEnd);
+        setProjectPM();
 
         hiddenProject();
     })
@@ -152,7 +152,7 @@ function getProjectByProgram(obj)
     })
 
     getLineByProgram();
-    getPGMStatus('program', programID);
+    getProgramStatus('program', programID);
 }
 
 /**
@@ -198,7 +198,7 @@ function toggleProgram(obj)
         $('form .pgm-no-exist').removeClass('hidden');
         $('form .pgm-exist').addClass('hidden');
         $programs.attr('disabled', 'disabled');
-        $('.PGMStatus').show();
+        $('.programStatus').show();
 
         $('form #newProject0').prop('checked', true);
         $('form #newLine0').prop('checked', true);
@@ -209,7 +209,7 @@ function toggleProgram(obj)
     {
         $('form .pgm-exist').removeClass('hidden');
         $('form .pgm-no-exist').addClass('hidden');
-        $('.PGMStatus').hide();
+        $('.programStatus').hide();
 
         if(!$('#newProgram0').prop('disabled'))
         {
@@ -217,7 +217,7 @@ function toggleProgram(obj)
         }
 
         var programID = $('#programs').val();
-        getPGMStatus('program', programID);
+        getProgramStatus('program', programID);
     }
 }
 
@@ -246,7 +246,7 @@ function toggleLine(obj)
     {
         $('form .line-exist').removeClass('hidden');
         $('form .line-no-exist').addClass('hidden');
-        $('.PGMStatus').hide();
+        $('.programStatus').hide();
         $lines.removeAttr('disabled');
 
         $('form #newProgram0').prop('checked', false);
@@ -270,20 +270,20 @@ function toggleProject(obj)
 
     var $projects  = $obj.closest('table').find('#projects');
     var $programs  = $obj.closest('table').find('#programs');
-    var $PGMParams = $obj.closest('table').find('.PGMParams');
+    var $programParams = $obj.closest('table').find('.programParams');
     if($obj.prop('checked'))
     {
         $('form .prj-no-exist').removeClass('hidden');
         $('form .prj-exist').addClass('hidden');
-        $PGMParams.removeClass('hidden');
+        $programParams.removeClass('hidden');
         $projects.attr('disabled', 'disabled');
     }
     else
     {
         $('form .prj-exist').removeClass('hidden');
         $('form .prj-no-exist').addClass('hidden');
-        $PGMParams.addClass('hidden');
-        $('#PRJStatus').closest('tr').removeClass('hidden');
+        $programParams.addClass('hidden');
+        $('#projectStatus').closest('tr').removeClass('hidden');
         $projects.removeAttr('disabled');
 
         if($('#newProgram0').prop('checked'))
@@ -306,23 +306,23 @@ function hiddenProject()
 {
     if($('[name^=sprints]:checked').length == 0)
     {
-        $(".PGMParams input").attr('disabled' ,'disabled');
-        $(".PGMParams select").attr('disabled' ,'disabled').trigger('chosen:updated');
-        $('.PGMParams').hide();
+        $(".programParams input").attr('disabled' ,'disabled');
+        $(".programParams select").attr('disabled' ,'disabled').trigger('chosen:updated');
+        $('.programParams').hide();
 
-        $(".PRJName input").attr('disabled' ,'disabled');
-        $(".PRJName select").attr('disabled' ,'disabled').trigger('chosen:updated');
-        $('.PRJName').hide();
+        $(".projectName input").attr('disabled' ,'disabled');
+        $(".projectName select").attr('disabled' ,'disabled').trigger('chosen:updated');
+        $('.projectName').hide();
     }
     else
     {
-        $(".PRJName input").removeAttr('disabled');
-        $(".PRJName select").removeAttr('disabled').trigger('chosen:updated');
-        $('.PRJName').show();
+        $(".projectName input").removeAttr('disabled');
+        $(".projectName select").removeAttr('disabled').trigger('chosen:updated');
+        $('.projectName').show();
 
-        $(".PGMParams input").removeAttr('disabled');
-        $(".PGMParams select").removeAttr('disabled').trigger('chosen:updated');
-        $('.PGMParams').show();
+        $(".programParams input").removeAttr('disabled');
+        $(".programParams select").removeAttr('disabled').trigger('chosen:updated');
+        $('.programParams').show();
 
         if($('#newProject0').is(':checked')) $('#projects').attr('disabled', 'disabled');
     }
@@ -385,82 +385,82 @@ function setProgramByProduct(product)
  * @access public
  * @return void
  */
-function setPRJStatus()
+function setProjectStatus()
 {
-    var PRJStatus = 'closed';
+    var projectStatus = 'closed';
     $(':checkbox:checked[data-status]').each(function()
     {
         var status = $(this).attr('data-status');
-        if(status == 'doing' || status == 'suspended') 
+        if(status == 'doing' || status == 'suspended')
         {
-            PRJStatus = 'doing';
+            projectStatus = 'doing';
             return false;
         }
 
-        if(status == 'wait') PRJStatus = 'wait';
+        if(status == 'wait') projectStatus = 'wait';
     });
-    if($(':checkbox:checked[data-status]').length == 0) PRJStatus = 'wait';
+    if($(':checkbox:checked[data-status]').length == 0) projectStatus = 'wait';
 
-    $('#PRJStatus').val(PRJStatus);
-    $('#PRJStatus').trigger('chosen:updated');
+    $('#projectStatus').val(projectStatus);
+    $('#projectStatus').trigger('chosen:updated');
 
-    setPGMStatus(PRJStatus);
+    setProgramStatus(projectStatus);
 }
 
 /**
  * Set program status.
  *
- * @param  string $PRJStatus
+ * @param  string $projectStatus
  * @access public
  * @return void
  */
-function setPGMStatus(PRJStatus)
+function setProgramStatus(projectStatus)
 {
-    var PGMStatus = 'wait';
-    if(PRJStatus != 'wait') PGMStatus = 'doing';
-    if(PRJStatus == 'closed') PGMStatus = 'closed';
+    var programStatus = 'wait';
+    if(projectStatus != 'wait') programStatus = 'doing';
+    if(projectStatus == 'closed') programStatus = 'closed';
 
-    $('#PGMStatus').val(PGMStatus);
-    $('#PGMStatus').trigger('chosen:updated');
+    $('#programStatus').val(programStatus);
+    $('#programStatus').trigger('chosen:updated');
 }
 
 /**
  * Set program begin time.
  *
- * @param  string $PGMBegin
+ * @param  string $programBegin
  * @access public
  * @return void
  */
-function setPGMBegin(PGMBegin)
+function setProgramBegin(programBegin)
 {
     $(':checkbox:checked[data-begin]').each(function()
     {
         begin = $(this).attr('data-begin').substr(0, 10);
         if(begin == '0000-00-00') return true;
 
-        if(begin < PGMBegin)
+        if(begin < programBegin)
         {
-            PGMBegin = begin;
-            $('.PGMParams #begin').val(PGMBegin);
+            programBegin = begin;
+            $('.programParams #begin').val(programBegin);
         }
     });
 
-    setPRJStatus();
+    setProjectStatus();
 }
 
 /*
  * Set program end time.
  *
- * @param  string $PGMEnd
+ * @param  string $programEnd
  * @access public
  * @return void
  */
-function setPGMEnd(PGMEnd)
+function setProgramEnd(programEnd)
 {
     var length = $(':checkbox:checked[data-end]').length;
     if(length == 0)
     {
-        $('.PGMParams #end').val('');
+        $('.programParams #end').val('');
         return false;
     }
 
@@ -469,10 +469,10 @@ function setPGMEnd(PGMEnd)
         end = $(this).attr('data-end').substr(0, 10);
         if(end == '0000-00-00') return true;
 
-        if(end > PGMEnd)
+        if(end > programEnd)
         {
-            PGMEnd = end;
-            $('.PGMParams #end').val(PGMEnd);
+            programEnd = end;
+            $('.programParams #end').val(programEnd);
         }
     });
 }
@@ -483,7 +483,7 @@ function setPGMEnd(PGMEnd)
  * @access public
  * @return void
  */
-function setPRJPM()
+function setProjectPM()
 {
     var PM = [];
     $(':checkbox:checked[data-pm]').each(function()
@@ -607,12 +607,12 @@ function computeEndDate(delta)
  * @access public
  * @return void
  */
-function getPGMStatus(objectType, objectID)
+function getProgramStatus(objectType, objectID)
 {
-    var link = createLink('upgrade', 'ajaxGetPGMStatus', 'objectID=' + objectID);
+    var link = createLink('upgrade', 'ajaxGetProgramStatus', 'objectID=' + objectID);
     $.post(link, function(data)
     {
-        if(objectType == 'program') $('#PGMStatus').val(data).trigger("chosen:updated");
-        if(objectType == 'project') $('#PRJStatus').val(data).trigger("chosen:updated");
+        if(objectType == 'program') $('#programStatus').val(data).trigger("chosen:updated");
+        if(objectType == 'project') $('#projectStatus').val(data).trigger("chosen:updated");
     })
 }

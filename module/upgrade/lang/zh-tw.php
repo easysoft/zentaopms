@@ -23,7 +23,7 @@ $lang->upgrade->warnningContent = <<<EOT
 <pre>
 1. 可以通過phpMyAdmin進行備份。
 2. 使用mysql命令行的工具。
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> 
+   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
    要將上面紅色的部分分別替換成對應的用戶名和禪道系統的資料庫名。
    比如： mysqldump -u root -p zentao >zentao.bak
 </pre>
@@ -77,14 +77,14 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>可以選擇這些迭代歸屬於某個新項目下。</p>
 EOD;
 
-$lang->upgrade->line      = '產品綫';
-$lang->upgrade->program   = '目標項目集和項目';
-$lang->upgrade->existPGM  = '已有項目集';
-$lang->upgrade->existPRJ  = '已有項目';
-$lang->upgrade->product   = $lang->productCommon;
-$lang->upgrade->project   = '迭代';
-$lang->upgrade->repo      = '版本庫';
-$lang->upgrade->mergeRepo = '歸併版本庫';
+$lang->upgrade->line         = '產品綫';
+$lang->upgrade->program      = '目標項目集和項目';
+$lang->upgrade->existProgram = '已有項目集';
+$lang->upgrade->existProject = '已有項目';
+$lang->upgrade->product      = $lang->productCommon;
+$lang->upgrade->project      = '迭代';
+$lang->upgrade->repo         = '版本庫';
+$lang->upgrade->mergeRepo    = '歸併版本庫';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->projectEmpty       = '項目不能爲空！';
