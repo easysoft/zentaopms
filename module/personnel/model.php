@@ -120,7 +120,7 @@ class personnelModel extends model
     public function getRiskInput($accounts, $projects)
     {
         $risks = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_RISK)
-            ->where('PRJ')->in(array_keys($projects))
+            ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
@@ -154,7 +154,7 @@ class personnelModel extends model
     public function getIssueInput($accounts, $projects)
     {
         $issues = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_ISSUE)
-            ->where('PRJ')->in(array_keys($projects))
+            ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
@@ -282,8 +282,8 @@ class personnelModel extends model
      */
     public function getProjectTaskInput($projects, $accounts)
     {
-        $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,PRJ')->from(TABLE_TASK)
-          ->where('PRJ')->in(array_keys($projects))
+        $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,project')->from(TABLE_TASK)
+          ->where('project')->in(array_keys($projects))
           ->andWhere('deleted')->eq('0')
           ->fetchAll('id');
 

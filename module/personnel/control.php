@@ -92,7 +92,7 @@ class personnel extends control
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @param  int    $programID
-     * @param  string $from       PRJ|pgmbrowse|pgmproject
+     * @param  string $from       project|program|programproject
      * @access public
      * @return void
      */
@@ -115,9 +115,9 @@ class personnel extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set back link. */
-        $goback = $this->session->PRJBrowse ? $this->session->PRJBrowse : $this->createLink('program', 'whitelist', "projectID=$objectID");
-        if($from == 'pgmbrowse')  $goback = $this->createLink('program', 'browse');
-        if($from == 'pgmproject') $goback = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "programID=$programID");
+        $goback = $this->session->projectBrowse ? $this->session->projectBrowse : $this->createLink('program', 'whitelist', "projectID=$objectID");
+        if($from == 'program')  $goback = $this->createLink('program', 'browse');
+        if($from == 'programproject') $goback = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "programID=$programID");
 
         $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->position[] = $this->lang->personnel->whitelist;
@@ -142,7 +142,7 @@ class personnel extends control
      * @param  string  $objectType  program|project|product|sprint
      * @param  string  $module
      * @param  int     $programID
-     * @param  string  $from        PRJ|pgmbrowse|pgmproject
+     * @param  string  $from        project|program|programproject
      * @access public
      * @return void
      */
@@ -157,7 +157,7 @@ class personnel extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
             $locateLink = $this->session->whitelistBrowse ? $this->session->whitelistBrowse : $this->createLink($module, 'whitelist', "objectID=$objectID");
-            $openApp = $module == 'program' ? ($from == 'PRJ' || $from == 'my' ? '#open=project' : '#open=program') : '';
+            $openApp = $module == 'program' ? ($from == 'project' || $from == 'my' ? '#open=project' : '#open=program') : '';
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $openApp));
         }
 

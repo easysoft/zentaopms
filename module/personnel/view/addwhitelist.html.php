@@ -15,7 +15,6 @@
 <?php js::set('objectType', $objectType);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php $moduleMethod = $module == 'program' ? 'PRJAddWhitelist' : 'addWhitelist';?>
     <div class='input-group space w-200px'>
       <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
       <?php echo html::select('dept', $depts, $deptID, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
@@ -84,7 +83,7 @@
           <td colspan='6' class='text-left form-actions'>
             <?php echo html::submitButton(); ?>
             <?php $gobackURL = $this->session->whitelistBrowse;?>
-            <?php $dataGroup = $module == 'program' ? ($from == 'PRJ' || $from == 'my' ? "data-group='project'" : "data-group='program'") : '';?>
+            <?php $dataGroup = $module == 'program' ? ($from == 'project' || $from == 'my' ? "data-group='project'" : "data-group='program'") : '';?>
             <?php echo empty($gobackURL) ? html::backButton() : html::a($gobackURL, $lang->goback, '', "class='btn btn-back btn-wide' $dataGroup");?>
           </td>
         </tr>
@@ -105,7 +104,7 @@
 </div>
 <?php js::set('index', $i);?>
 <?php js::set('module', $module);?>
-<?php js::set('moduleMethod', $moduleMethod);?>
+<?php js::set('moduleMethod', 'addWhitelist');?>
 <?php js::set('programID', $programID);?>
 <?php js::set('from', $from);?>
 <?php include '../../common/view/footer.html.php';?>

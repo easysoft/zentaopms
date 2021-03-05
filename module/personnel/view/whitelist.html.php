@@ -12,17 +12,15 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <?php $openApp = $module == 'program' ? ($from == 'PRJ' || $from == 'my' ? "data-group='project'" : "data-group='program'") : '';?>
+  <?php $openApp = $module == 'program' ? ($from == 'project' || $from == 'my' ? "data-group='project'" : "data-group='program'") : '';?>
   <div class="btn-toolbar pull-left">
     <?php if($module == 'program') echo html::a($goback, $lang->goback, '', 'class="btn btn-secondary"');?>
-    <?php $moduleMethod = $module == 'program' ? 'PRJWhitelist' : 'whitelist';?>
     <?php $vars         = $module == 'program' ? "objectID=$objectID&programID=$programID&module=$module&from=$from" : "objectID=$objectID";?>
-    <?php echo html::a($this->createLink($module, $moduleMethod, $vars), '<span class="text">' . $lang->personnel->whitelist . '</span>', '', "class='btn btn-link btn-active-text' $openApp");?>
+    <?php echo html::a($this->createLink($module, 'whitelist', $vars), '<span class="text">' . $lang->personnel->whitelist . '</span>', '', "class='btn btn-link btn-active-text' $openApp");?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php $moduleMethod = $module == 'program' ? 'PRJAddWhitelist' : 'addWhitelist';?>
     <?php $vars         = $module == 'program' ? "objectID=$objectID&deptID=0&programID=$programID&from=$from" : "objectID=$objectID";?>
-    <?php common::printLink($module, $moduleMethod, $vars, "<i class='icon icon-plus'></i>" . $lang->personnel->addWhitelist, '', "class='btn btn-primary' $openApp");?>
+    <?php common::printLink($module, 'addWhitelist', $vars, "<i class='icon icon-plus'></i>" . $lang->personnel->addWhitelist, '', "class='btn btn-primary' $openApp");?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
