@@ -19,11 +19,11 @@ class actionModel extends model
 
     /**
      * Create a action.
-     * 
-     * @param  string $objectType 
-     * @param  int    $objectID 
-     * @param  string $actionType 
-     * @param  string $comment 
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $actionType
+     * @param  string $comment
      * @param  string $extra        the extra info of this action, according to different modules and actions, can set different extra.
      * @param  string $actor
      * @param  bool   $autoDelete
@@ -36,7 +36,7 @@ class actionModel extends model
         $actor      = $actor ? $actor : $this->app->user->account;
         $actionType = strtolower($actionType);
         if($actor == 'guest' and $actionType == 'logout') return false;
-        
+
         $action = new stdclass();
 
         $objectType = str_replace('`', '', $objectType);
@@ -60,7 +60,7 @@ class actionModel extends model
         /* Get product and project for this object. */
         $productAndProject = $this->getProductAndProject($action->objectType, $objectID);
         $action->product   = $productAndProject['product'];
-        $action->project   = $actionType == 'unlinkedfromproject' ? (int)$extra : (int)$productAndProject['project'];
+        $action->execution = $actionType == 'unlinkedfromproject' ? (int)$extra : (int)$productAndProject['project'];
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dbh->lastInsertID();
@@ -76,9 +76,9 @@ class actionModel extends model
 
     /**
      * Update read field of action when view a task/bug.
-     * 
-     * @param  string $objectType 
-     * @param  int    $objectID 
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
      * @access public
      * @return void
      */
@@ -94,8 +94,8 @@ class actionModel extends model
 
     /**
      * Get the unread actions.
-     * 
-     * @param  int    $actionID 
+     *
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -135,9 +135,9 @@ class actionModel extends model
 
     /**
      * Get product and project of an object.
-     * 
-     * @param  string $objectType 
-     * @param  int    $objectID 
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
      * @access public
      * @return array
      */
@@ -148,7 +148,7 @@ class actionModel extends model
         /* If objectType is product or project, return the objectID. */
         if($objectType == 'product') return array('product' => ",$objectID,", 'project' => 0);
         if($objectType == 'program') return array('product' => "", 'project' => $objectID);
-        if($objectType == 'project') 
+        if($objectType == 'project')
         {
             $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
             $productList = ',' . join(',', array_keys($products)) . ',';
@@ -171,7 +171,7 @@ class actionModel extends model
             /* Process story, release and task. */
             if($objectType == 'story')   $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
-            if($objectType == 'task')    
+            if($objectType == 'task')
             {
                 if($record->story != 0)
                 {
@@ -200,9 +200,9 @@ class actionModel extends model
 
     /**
      * Get actions of an object.
-     * 
-     * @param  int    $objectType 
-     * @param  int    $objectID 
+     *
+     * @param  int    $objectType
+     * @param  int    $objectID
      * @access public
      * @return array
      */
@@ -324,13 +324,13 @@ class actionModel extends model
             }
             /* Code for waterfall. */
             elseif($actionName == 'createrequirements')
-            {    
+            {
                 $names = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($action->extra)->fetchPairs('id', 'title');
                 $action->extra = '';
                 if($names)
-                {    
+                {
                     foreach($names as $id => $name) $action->extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
-                }    
+                }
                 $action->extra = trim(trim($action->extra), ',');
             }
             elseif($actionName == 'totask' or $actionName == 'linkchildtask' or $actionName == 'unlinkchildrentask' or $actionName == 'linkparenttask' or $actionName == 'unlinkparenttask' or $actionName == 'deletechildrentask')
@@ -418,7 +418,7 @@ class actionModel extends model
                     if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
                 }
             }
-            
+
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
         }
@@ -428,8 +428,8 @@ class actionModel extends model
 
     /**
      * process Project Actions change actionStype
-     * 
-     * @param  array    $actions 
+     *
+     * @param  array    $actions
      * @access public
      * @return void
      */
@@ -454,8 +454,8 @@ class actionModel extends model
 
     /**
      * Get an action record.
-     * 
-     * @param  int    $actionID 
+     *
+     * @param  int    $actionID
      * @access public
      * @return object
      */
@@ -471,10 +471,10 @@ class actionModel extends model
 
     /**
      * Get deleted objects.
-     * 
-     * @param  string    $type all|hidden 
-     * @param  string    $orderBy 
-     * @param  object    $pager 
+     *
+     * @param  string    $type all|hidden
+     * @param  string    $orderBy
+     * @param  object    $pager
      * @access public
      * @return array
      */
@@ -488,7 +488,7 @@ class actionModel extends model
         if(!$trashes) return array();
 
         /* Group trashes by objectType, and get there name field. */
-        foreach($trashes as $object) 
+        foreach($trashes as $object)
         {
             $object->objectType = str_replace('`', '', $object->objectType);
             $typeTrashes[$object->objectType][] = $object->objectID;
@@ -512,8 +512,8 @@ class actionModel extends model
 
     /**
      * Get histories of an action.
-     * 
-     * @param  int    $actionID 
+     *
+     * @param  int    $actionID
      * @access public
      * @return array
      */
@@ -524,16 +524,16 @@ class actionModel extends model
 
     /**
      * Log histories for an action.
-     * 
-     * @param  int    $actionID 
-     * @param  array  $changes 
+     *
+     * @param  int    $actionID
+     * @param  array  $changes
      * @access public
      * @return void
      */
     public function logHistory($actionID, $changes)
     {
         if(empty($actionID)) return false;
-        foreach($changes as $change) 
+        foreach($changes as $change)
         {
             if(is_object($change))
             {
@@ -549,8 +549,8 @@ class actionModel extends model
 
     /**
      * Print actions of an object.
-     * 
-     * @param  array    $action 
+     *
+     * @param  array    $action
      * @access public
      * @return void
      */
@@ -611,7 +611,7 @@ class actionModel extends model
             /* Fix bug #741. */
             if(isset($desc['extra'])) $desc['extra'] = $this->lang->$objectType->{$desc['extra']};
 
-            if(isset($desc['extra'][$extra])) 
+            if(isset($desc['extra'][$extra]))
             {
                 echo str_replace('$extra', $desc['extra'][$extra], $desc['main']);
             }
@@ -628,7 +628,7 @@ class actionModel extends model
 
     /**
      * Get actions as dynamic.
-     * 
+     *
      * @param  string $account
      * @param  string $period
      * @param  string $orderBy
@@ -661,7 +661,7 @@ class actionModel extends model
             $condition = "(product =',0,' AND execution = '0')";
             if($executionCondition) $condition .= ' OR ' . $executionCondition;
             if($productCondition)   $condition .= ' OR ' . $productCondition;
-            if($this->app->user->admin) $condition = 1; 
+            if($this->app->user->admin) $condition = 1;
         }
 
         $this->loadModel('doc');
@@ -699,7 +699,7 @@ class actionModel extends model
 
     /**
      * Get dynamic show action
-     * 
+     *
      * @return String
      */
     public function getActionCondition()
@@ -720,17 +720,17 @@ class actionModel extends model
     }
 
     /**
-     * Get dynamic by search. 
-     * 
-     * @param  array  $products 
-     * @param  array  $projects 
-     * @param  int    $queryID 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     * Get dynamic by search.
+     *
+     * @param  array  $products
+     * @param  array  $projects
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
      * @param  string $date
      * @param  string $direction
      * @access public
-     * @return array 
+     * @return array
      */
     public function getDynamicBySearch($products, $projects, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next')
     {
@@ -783,13 +783,13 @@ class actionModel extends model
     }
 
     /**
-     * Get actions by SQL. 
-     * 
-     * @param  string $sql 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     * Get actions by SQL.
+     *
+     * @param  string $sql
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
-     * @return array 
+     * @return array
      */
     public function getBySQL($sql, $orderBy, $pager = null)
     {
@@ -805,8 +805,8 @@ class actionModel extends model
 
     /**
      * Transform the actions for display.
-     * 
-     * @param  int    $actions 
+     *
+     * @param  int    $actions
      * @access public
      * @return void
      */
@@ -861,7 +861,7 @@ class actionModel extends model
                 {
                     if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
                     if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-                    if($todo->private == 1 and $todo->account != $this->app->user->account) 
+                    if($todo->private == 1 and $todo->account != $this->app->user->account)
                     {
                         $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
                     }
@@ -870,7 +870,7 @@ class actionModel extends model
                         $objectNames[$objectType][$id] = $todo->name;
                     }
                 }
-            } 
+            }
         }
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
@@ -931,7 +931,7 @@ class actionModel extends model
 
     /**
      * Compute the begin date and end date of a period.
-     * 
+     *
      * @param  string    $period   all|today|yesterday|twodaysago|latest2days|thisweek|lastweek|thismonth|lastmonth
      * @access public
      * @return array
@@ -967,9 +967,9 @@ class actionModel extends model
 
     /**
      * Print changes of every action.
-     * 
-     * @param  string    $objectType 
-     * @param  array     $histories 
+     *
+     * @param  string    $objectType
+     * @param  array     $histories
      * @access public
      * @return void
      */
@@ -1012,8 +1012,8 @@ class actionModel extends model
 
     /**
      * Undelete a record.
-     * 
-     * @param  int      $actionID 
+     *
+     * @param  int      $actionID
      * @access public
      * @return void
      */
@@ -1079,9 +1079,9 @@ class actionModel extends model
     }
 
     /**
-     * Hide an object. 
-     * 
-     * @param  int    $actionID 
+     * Hide an object.
+     *
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -1096,7 +1096,7 @@ class actionModel extends model
 
     /**
      * Hide all deleted objects.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1111,8 +1111,8 @@ class actionModel extends model
 
     /**
      * Update comment of a action.
-     * 
-     * @param  int    $actionID 
+     *
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -1134,9 +1134,9 @@ class actionModel extends model
 
     /**
      * Build date group by actions
-     * 
-     * @param  array  $actions 
-     * @param  string $direction 
+     *
+     * @param  array  $actions
+     * @param  string $direction
      * @param  string $type all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
      * @access public
      * @return array
@@ -1175,9 +1175,9 @@ class actionModel extends model
 
     /**
      * Check Has pre or next.
-     * 
-     * @param  string $date 
-     * @param  string $direction 
+     *
+     * @param  string $date
+     * @param  string $direction
      * @access public
      * @return bool
      */
