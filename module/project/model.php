@@ -737,7 +737,7 @@ class projectModel extends model
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
-            $this->loadModel('project')->updateProducts($projectID);
+            $this->updateProducts($projectID);
 
             if(isset($_POST['newProduct']) || (!$project->parent && empty($linkedProductsCount)))
             {
@@ -745,7 +745,7 @@ class projectModel extends model
                 $product = new stdclass();
                 $product->name         = $this->post->productName ? $this->post->productName : $project->name;
                 $product->bind         = $this->post->productName ? 0 : 1;
-                $product->project      = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
+                $product->program      = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
                 $product->acl          = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO           = $project->PM;
                 $product->createdBy    = $this->app->user->account;
@@ -776,7 +776,7 @@ class projectModel extends model
             /* Save order. */
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            $this->setTreePath($projectID);
+            $this->loadModel('program')->setTreePath($projectID);
 
             /* Add project admin. */
             $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
@@ -894,7 +894,7 @@ class projectModel extends model
         if(!dao::isError())
         {
             $this->updateProductProgram($oldProject->parent, $project->parent, $_POST['products']);
-            $this->loadModel('project')->updateProducts($projectID, $_POST['products']);
+            $this->updateProducts($projectID, $_POST['products']);
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
             $whitelist = explode(',', $project->whitelist);
@@ -1188,7 +1188,7 @@ class projectModel extends model
             }
 
             $data = new stdclass();
-            $data->project = $executionID;
+            $data->project = $projectID;
             $data->product = $productID;
             $data->branch  = $branch;
             $data->plan    = isset($plans[$productID]) ? $plans[$productID] : $oldPlan;
@@ -1197,8 +1197,8 @@ class projectModel extends model
         }
 
         /* Delete the execution linked products that is not linked with the execution. */
-        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('execution')->eq((int)$executionID)->fetchPairs('id');
-        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('execution')->in($executions)->andWhere('product')->notin($products)->exec();
+        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq((int)$projectID)->fetchPairs('id');
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
 
         $oldProductKeys = array_keys($oldProjectProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
