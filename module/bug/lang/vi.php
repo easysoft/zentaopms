@@ -159,7 +159,7 @@ $lang->bug->createBuild   = 'Mới';
 /* Legend list。*/
 $lang->bug->legendBasicInfo             = 'Thông tin cơ bản';
 $lang->bug->legendAttatch               = 'Files';
-$lang->bug->legendPrjStoryTask          = $lang->executionCommon . '/Câu chuyện/Nhiệm vụ';
+$lang->bug->legendExecStoryTask         = $lang->executionCommon . '/Câu chuyện/Nhiệm vụ';
 $lang->bug->lblTypeAndSeverity          = 'Loại/Mức độ';
 $lang->bug->lblSystemBrowserAndHardware = 'Hệ thống/Trình duyệt';
 $lang->bug->legendSteps                 = 'Các bước Repro';

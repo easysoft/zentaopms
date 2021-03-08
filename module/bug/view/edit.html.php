@@ -171,7 +171,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             </table>
           </div>
           <div class='detail'>
-            <div class='detail-title'><?php echo $lang->bug->legendPrjStoryTask;?></div>
+            <div class='detail-title'><?php echo $lang->bug->legendExecStoryTask;?></div>
             <table class='table table-form'>
               <tbody>
                 <tr>
