@@ -67,10 +67,10 @@ class report extends control
         $this->view->title      = $this->lang->report->executionDeviation;
         $this->view->position[] = $this->lang->report->executionDeviation;
 
-        $this->view->executons = $this->report->getExecutions($begin, $end);
-        $this->view->begin     = $begin;
-        $this->view->end       = $end;
-        $this->view->submenu   = 'executon';
+        $this->view->executions = $this->report->getExecutions($begin, $end);
+        $this->view->begin      = $begin;
+        $this->view->end        = $end;
+        $this->view->submenu    = 'execution';
         $this->display();
     }
 
@@ -118,7 +118,7 @@ class report extends control
         $this->view->end        = $end;
         $this->view->bugs       = $this->report->getBugs($begin, $end, $product, $execution);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-        $this->view->executions = array('' => '') + $this->loadModel('execution')->getExecutionPairs();
+        $this->view->executions = array('' => '') + $this->loadModel('execution')->getPairs();
         $this->view->products   = array('' => '') + $this->loadModel('product')->getPairs();
         $this->view->execution  = $execution;
         $this->view->product    = $product;

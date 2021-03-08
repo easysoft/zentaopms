@@ -89,15 +89,15 @@ class reportModel extends model
     }
 
     /**
-     * Get executons.
+     * Get executions.
      *
      * @access public
      * @return void
      */
-    public function getExecutons($begin = 0, $end = 0)
+    public function getExecutions($begin = 0, $end = 0)
     {
-        $tasks = $this->dao->select('t1.*,t2.name as executonName')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.executon = t2.id')
+        $tasks = $this->dao->select('t1.*,t2.name as executionName')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
@@ -109,23 +109,23 @@ class reportModel extends model
             ->orderBy('t2.end_desc')
             ->fetchAll();
 
-        $executons = array();
+        $executions = array();
         foreach($tasks as $task)
         {
-            $executonID = $task->executon;
-            if(!isset($executons[$executonID]))
+            $executionID = $task->execution;
+            if(!isset($executions[$executionID]))
             {
-                $executons[$executonID] = new stdclass();
-                $executons[$executonID]->estimate = 0;
-                $executons[$executonID]->consumed = 0;
+                $executions[$executionID] = new stdclass();
+                $executions[$executionID]->estimate = 0;
+                $executions[$executionID]->consumed = 0;
             }
 
-            $executons[$executonID]->name      = $task->executonName;
-            $executons[$executonID]->estimate += $task->estimate;
-            $executons[$executonID]->consumed += $task->consumed;
+            $executions[$executionID]->name      = $task->executionName;
+            $executions[$executionID]->estimate += $task->estimate;
+            $executions[$executionID]->consumed += $task->consumed;
         }
 
-        return $executons;
+        return $executions;
     }
 
     /**
