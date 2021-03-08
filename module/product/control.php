@@ -127,7 +127,7 @@ class product extends control
         /* Lower browse type. */
         $browseType = strtolower($browseType);
 
-        /* Load datatable. */
+        /* Load datatable and execution. */
         $this->loadModel('datatable');
         $this->loadModel('execution');
 
@@ -203,7 +203,7 @@ class product extends control
         {
             $this->session->set('currentProductType', $product->type);
             $projectProducts = $this->product->getProductsByProject($this->session->project);
-            $productPlans    = $this->loadModel('execution')->getPlans($projectProducts);
+            $productPlans    = $this->execution->getPlans($projectProducts);
 
             if($browseType == 'bybranch') $param = $branch;
             $stories = $this->story->getExecutionStories($this->session->project, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);

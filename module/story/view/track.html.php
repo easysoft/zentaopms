@@ -84,7 +84,7 @@
               <?php endif;?>
               <td>
                 <?php foreach($story->cases as $caseID => $case):?>
-                <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', false, $case->execution), $case->title, '', "title='$case->title'") . '<br/>';?>
+                <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', false, $case->project), $case->title, '', "title='$case->title'") . '<br/>';?>
                 <?php endforeach;?>
               </td>
               <?php if(isset($config->maxVersion)):?>
