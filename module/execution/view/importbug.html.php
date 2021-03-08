@@ -19,7 +19,7 @@ var browseType = '<?php echo $browseType;?>';
 </script>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a(inlink('importBug', "projectID=$projectID"), "<span class='text'>{$lang->project->importBug}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a(inlink('importBug', "executionID=$executionID"), "<span class='text'>{$lang->execution->importBug}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
 </div>
 <div id='mainContent'>
@@ -63,7 +63,7 @@ var browseType = '<?php echo $browseType;?>';
           <td style='overflow:visible'><?php echo html::select("pri[$bug->id]", $lang->task->priList, 3, "class='form-control chosen'");?></td>
           <td style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='form-control chosen'");?></td>
           <td><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="form-control"');?></td>
-          <?php $deadline = ($bug->deadline > helper::today() and $bug->deadline > $project->begin) ? $bug->deadline : '0000-00-00';?>
+          <?php $deadline = ($bug->deadline > helper::today() and $bug->deadline > $execution->begin) ? $bug->deadline : '0000-00-00';?>
           <td><?php echo html::input("deadline[$bug->id]", $deadline, 'size=4 class="form-control form-date"');?></td>
         </tr>
         <?php endforeach;?>

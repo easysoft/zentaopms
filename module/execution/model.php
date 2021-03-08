@@ -62,12 +62,12 @@ class executionModel extends model
      */
     public function setMenu($executions, $executionID, $buildID = 0, $extra = '')
     {
-        $execution = $this->getByID($this->session->project);
+        $project = $this->getByID($this->session->project);
         if(empty($executions))
         {
-            if($execution->model == 'waterfall')
+            if($project->model == 'waterfall')
             {
-                if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'execution') die(js::locate(helper::createLink('programplan', 'create', "executionID=$execution->id")));
+                if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'execution') die(js::locate(helper::createLink('programplan', 'create', "projectID=$project->id")));
             }
             else
             {
@@ -75,21 +75,8 @@ class executionModel extends model
             }
         }
 
-        if(!$executionID and $this->session->project) $executionID = $this->session->project;
-
-        $execution   = $this->getById($executionID);
-        $isProgram = false;
-        if(!empty($execution))
-        {
-            $isProgram = $execution->model;
-            $execution   = $isProgram ? $execution : $this->getByID($execution->parent);
-        }
-
-        if($isProgram)
-        {
-            $executionID = $this->session->project;
-            if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
-        }
+        if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
+        if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
 
         $this->session->set('execution', $executionID);
 
@@ -176,9 +163,7 @@ class executionModel extends model
      */
     public function select($executions, $executionID, $buildID, $currentModule, $currentMethod, $extra = '')
     {
-        if(!$executions) return false;
-
-        if(!$executionID) return;
+        if(!$executions or !$executionID) return false;
 
         $isMobile = $this->app->viewType == 'mhtml';
 
@@ -189,11 +174,11 @@ class executionModel extends model
         {
             if(isset($currentExecution->type) and $currentExecution->type == 'program') return;
 
-            if(isset($currentExecution->execution)) $execution = $this->loadModel('execution')->getByID($currentExecution->execution);
+            if($currentExecution->project) $project = $this->loadModel('project')->getByID($currentExecution->project);
 
-            if(isset($execution) and $execution->model == 'waterfall')
+            if(isset($project) and $project->model == 'waterfall')
             {
-                $productID = $this->loadModel('product')->getProductIDByExecution($currentExecution->id);
+                $productID   = $this->loadModel('product')->getProductIDByProject($project->id);
                 $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
                 $currentExecution->name = $productName . '/' . $currentExecution->name;
             }
@@ -290,10 +275,10 @@ class executionModel extends model
     public function saveState($executionID, $executions)
     {
         /* When the cookie and session do not exist, get it from the database. */
-        if(empty($executionID) && isset($this->config->execution->lastExecution) && isset($executions[$this->config->execution->lastExecution]))
+        if(empty($executionID) and isset($this->config->execution->lastExecution) and isset($executions[$this->config->execution->lastExecution]))
         {
             $this->session->set('execution', $this->config->execution->lastExecution);
-            return $this->session->project;
+            return $this->session->execution;
         }
 
         if($executionID > 0) $this->session->set('execution', (int)$executionID);
@@ -304,13 +289,13 @@ class executionModel extends model
             $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
             $this->session->set('execution', $executionID);
         }
-        if($executionID == 0 and $this->session->project == '') $this->session->set('execution', key($executions));
-        if(!isset($executions[$this->session->project]))
+        if($executionID == 0 and $this->session->execution == '') $this->session->set('execution', key($executions));
+        if(!isset($executions[$this->session->execution]))
         {
             $this->session->set('execution', key($executions));
-            if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->project},") === false) $this->accessDenied();
+            if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->execution},") === false) $this->accessDenied();
         }
-        return $this->session->project;
+        return $this->session->execution;
     }
 
     /**
@@ -326,7 +311,7 @@ class executionModel extends model
         $this->lang->execution->team = $this->lang->execution->teamname;
 
         /* Determine whether to add a sprint or a stage according to the model of the execution. */
-        $execution    = $this->getByID($this->session->project);
+        $execution  = $this->getByID($this->session->project);
         $sprintType = $this->config->systemMode == 'new' ? zget($this->config->execution->modelList, $execution->model, '') : 'sprint';
 
         /* If the execution model is a stage, determine whether the product is linked. */
@@ -377,7 +362,7 @@ class executionModel extends model
         /* Add the creater to the team. */
         if(!dao::isError())
         {
-            $executionID     = $this->dao->lastInsertId();
+            $executionID   = $this->dao->lastInsertId();
             $today         = helper::today();
             $creatorExists = false;
 

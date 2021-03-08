@@ -1,11 +1,11 @@
 <?php
 /**
- * The task view file of project module of ZenTaoPMS.
+ * The task view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id: task.html.php 4894 2013-06-25 01:28:39Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -21,11 +21,11 @@ js::set('executionID', $executionID);
 js::set('browseType', $browseType);
 
 /* Set unfold parent taskID. */
-$unfoldTasks = isset($config->project->task->unfoldTasks) ? json_decode($config->project->task->unfoldTasks, true) : array();
+$unfoldTasks = isset($config->execution->task->unfoldTasks) ? json_decode($config->execution->task->unfoldTasks, true) : array();
 $unfoldTasks = zget($unfoldTasks, $executionID, array());
 js::set('unfoldTasks', $unfoldTasks);
-js::set('unfoldAll',   $lang->project->treeLevel['all']);
-js::set('foldAll',     $lang->project->treeLevel['root']);
+js::set('unfoldAll',   $lang->execution->treeLevel['all']);
+js::set('foldAll',     $lang->execution->treeLevel['root']);
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
@@ -55,14 +55,14 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
   </div>
   <div class="btn-toolbar pull-left">
     <?php
-    foreach(customModel::getFeatureMenu('project', 'task') as $menuItem)
+    foreach(customModel::getFeatureMenu('execution', 'task') as $menuItem)
     {
         if($execution->type == 'ops' && $menuItem->name == 'needconfirm') continue;
         if(isset($menuItem->hidden)) continue;
         $menuType = $menuItem->name;
         if($menuType == 'QUERY')
         {
-            $searchBrowseLink = $this->createLink('project', 'task', "project=$executionID&type=bySearch&param=%s");
+            $searchBrowseLink = $this->createLink('execution', 'task', "execution=$executionID&type=bySearch&param=%s");
             $isBySearch       = $this->session->taskBrowseType == 'bysearch';
             include '../../common/view/querymenu.html.php';
         }
@@ -72,7 +72,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
             $label  .= $menuType == $this->session->taskBrowseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
             $active  = $menuType == $this->session->taskBrowseType ? 'btn-active-text' : '';
             $title   = $menuType == 'needconfirm' ? "title='{$lang->task->storyChange}'" : '';
-            echo html::a(inlink('task', "project=$executionID&type=$menuType"), $label, '', "id='{$menuType}' class='btn btn-link $active' $title");
+            echo html::a(inlink('task', "execution=$executionID&type=$menuType"), $label, '', "id='{$menuType}' class='btn btn-link $active' $title");
         }
         elseif($menuType == 'status')
         {
@@ -80,18 +80,18 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
             $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
             $current        = $menuItem->text;
             $active         = '';
-            if(isset($lang->project->statusSelects[$taskBrowseType]))
+            if(isset($lang->execution->statusSelects[$taskBrowseType]))
             {
-                $current = "<span class='text'>{$lang->project->statusSelects[$taskBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                $current = "<span class='text'>{$lang->execution->statusSelects[$taskBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
                 $active  = 'btn-active-text';
             }
             echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
             echo "<ul class='dropdown-menu'>";
-            foreach($lang->project->statusSelects as $key => $value)
+            foreach($lang->execution->statusSelects as $key => $value)
             {
                 if($key == '') continue;
                 echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
-                echo html::a($this->createLink('project', 'task', "project=$executionID&type=$key"), $value);
+                echo html::a($this->createLink('execution', 'task', "execution=$executionID&type=$key"), $value);
             }
             echo '</ul></div>';
         }
@@ -103,7 +103,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
     <?php
     if(!isset($browseType)) $browseType = '';
     if(!isset($orderBy))    $orderBy = '';
-    common::printIcon('task', 'report', "project=$executionID&browseType=$browseType", '', 'button', 'bar-chart muted');
+    common::printIcon('task', 'report', "execution=$executionID&browseType=$browseType", '', 'button', 'bar-chart muted');
     ?>
 
     <div class="btn-group dropdown-hover">
@@ -112,53 +112,53 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
         <?php
         $class = common::hasPriv('task', 'export') ? '' : "class=disabled";
         $misc  = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
-        $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$executionID&orderBy=$orderBy&type=$browseType") : '#';
+        $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=$browseType") : '#';
         echo "<li $class>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
 
-    <?php if(common::canModify('project', $execution)):?>
+    <?php if(common::canModify('execution', $execution)):?>
     <div class="btn-group dropdown-hover">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu pull-right" id='importActionMenu'>
         <?php
-        $class = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
-        $misc  = common::hasPriv('project', 'importTask') ? "class='import'" : "class=disabled";
-        $link  = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$execution->id") : '#';
-        echo "<li $class>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+        $class = common::hasPriv('execution', 'importTask') ? '' : "class=disabled";
+        $misc  = common::hasPriv('execution', 'importTask') ? "class='import'" : "class=disabled";
+        $link  = common::hasPriv('execution', 'importTask') ? $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
+        echo "<li $class>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
 
-        $class = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
-        $misc  = common::hasPriv('project', 'importBug') ? "class='import'" : "class=disabled";
-        $link  = common::hasPriv('project', 'importBug') ? $this->createLink('project', 'importBug', "project=$execution->id") : '#';
-        echo "<li $class>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        $class = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
+        $misc  = common::hasPriv('execution', 'importBug') ? "class='import'" : "class=disabled";
+        $link  = common::hasPriv('execution', 'importBug') ? $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
+        echo "<li $class>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
     <?php endif;?>
     <?php
     $checkObject = new stdclass();
-    $checkObject->project = $executionID;
+    $checkObject->execution = $executionID;
     ?>
     <?php if(!common::checkNotCN()):?>
     <?php
-    $link = $this->createLink('task', 'batchCreate', "project=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+    $link = $this->createLink('task', 'batchCreate', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
     if($canBeChanged and common::hasPriv('task', 'batchCreate', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");
 
-    $link = $this->createLink('task', 'create', "project=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
+    $link = $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     if($canBeChanged and common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
     ?>
     <?php else:?>
     <?php
     echo "<div class='btn-group dropdown-hover'>";
-    $link = $this->createLink('task', 'create', "project=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
+    $link = $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     if($canBeChanged and common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create} </span><span class='caret'>", '', "class='btn btn-primary'");
     ?>
     <ul class='dropdown-menu'>
       <?php $disabled = common::hasPriv('task', 'batchCreate') ? '' : "class='disabled'";?>
       <li <?php echo $disabled?>>
       <?php
-        $batchLink = $this->createLink('task', 'batchCreate', "project=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+        $batchLink = $this->createLink('task', 'batchCreate', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
         echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->task->batchCreate) . "</li>";
       ?>
       </li>
@@ -185,12 +185,12 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
       <p>
         <span class="text-muted"><?php echo $lang->task->noTask;?></span>
         <?php if($canBeChanged and common::hasPriv('task', 'create')):?>
-        <?php echo html::a($this->createLink('task', 'create', "project=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+        <?php echo html::a($this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
     </div>
     <?php else:?>
-    <form class="main-table table-task skip-iframe-modal" method="post" id='projectTaskForm'>
+    <form class="main-table table-task skip-iframe-modal" method="post" id='executionTaskForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
@@ -201,7 +201,7 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
 
       if($useDatatable) include '../../common/view/datatable.html.php';
 
-      $customFields = $this->datatable->getSetting('project');
+      $customFields = $this->datatable->getSetting('execution');
       if($execution->type == 'ops')
       {
           foreach($customFields as $id => $customField)
@@ -358,9 +358,9 @@ js::set('foldAll',     $lang->project->treeLevel['root']);
 $(function()
 {
     // Update table summary text
-    var checkedSummary = '<?php echo $lang->project->checkedSummary?>';
-    var pageSummary    = '<?php echo $lang->project->pageSummary?>';
-    $('#projectTaskForm').table(
+    var checkedSummary = '<?php echo $lang->execution->checkedSummary?>';
+    var pageSummary    = '<?php echo $lang->execution->pageSummary?>';
+    $('#executionTaskForm').table(
     {
         statisticCreator: function(table)
         {

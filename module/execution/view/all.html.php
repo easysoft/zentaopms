@@ -1,11 +1,11 @@
 <?php
 /**
- * The html template file of all method of project module of ZenTaoPMS.
+ * The html template file of all method of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id: index.html.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
  */
 ?>
@@ -26,24 +26,24 @@
 </style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php foreach($lang->project->featureBar['all'] as $key => $label):?>
-    <?php echo html::a(inlink("all", "status=$key&projectID=$project->id&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
+    <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
+    <?php echo html::a(inlink("all", "status=$key&executionID=$execution->id&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
     <div class='input-control space w-180px'>
-      <?php echo html::select('product', $products, $productID, "class='chosen form-control' onchange='byProduct(this.value, $projectID, \"$status\")'");?>
+      <?php echo html::select('product', $products, $productID, "class='chosen form-control' onchange='byProduct(this.value, $executionID, \"$status\")'");?>
     </div>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printLink('project', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
-    <?php if(common::hasPriv('project', 'create')) echo html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
+    <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent'>
-  <?php $canOrder = (common::hasPriv('project', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
-  <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
-  <form class='main-table' id='projectsForm' method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>' data-ride='table'>
-    <table class='table has-sort-head table-fixed' id='projectList'>
-      <?php $vars = "status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+  <?php $canOrder = (common::hasPriv('execution', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
+  <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
+  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit', "executionID=$executionID");?>' data-ride='table'>
+    <table class='table has-sort-head table-fixed' id='executionList'>
+      <?php $vars = "status=$status&executionID=$executionID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='c-id'>
@@ -54,28 +54,28 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
-          <th class='w-150px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
-          <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
-          <th class='w-90px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
-          <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
-          <th class='w-70px'><?php echo $lang->project->totalEstimate;?></th>
-          <th class='w-70px'><?php echo $lang->project->totalConsumed;?></th>
-          <th class='w-70px'><?php echo $lang->project->totalLeft;?></th>
-          <th class='w-150px'><?php echo $lang->project->progress;?></th>
-          <th class='w-100px'><?php echo $lang->project->burn;?></th>
+          <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->execution->name);?></th>
+          <th class='w-150px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->execution->code);?></th>
+          <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->PM);?></th>
+          <th class='w-90px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
+          <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->execution->status);?></th>
+          <th class='w-70px'><?php echo $lang->execution->totalEstimate;?></th>
+          <th class='w-70px'><?php echo $lang->execution->totalConsumed;?></th>
+          <th class='w-70px'><?php echo $lang->execution->totalLeft;?></th>
+          <th class='w-150px'><?php echo $lang->execution->progress;?></th>
+          <th class='w-100px'><?php echo $lang->execution->burn;?></th>
           <?php if($canOrder):?>
-          <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->orderAB);?></th>
+          <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->execution->orderAB);?></th>
           <?php endif;?>
         </tr>
       </thead>
-      <tbody class='sortable' id='projectTableList'>
+      <tbody class='sortable' id='executionTableList'>
         <?php foreach($executionStats as $execution):?>
         <tr data-id='<?php echo $execution->id ?>' data-order='<?php echo $execution->order ?>'>
           <td class='c-id'>
             <?php if($canBatchEdit):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='projectIDList[<?php echo $execution->id;?>]' value='<?php echo $execution->id;?>' />
+              <input type='checkbox' name='executionIDList[<?php echo $execution->id;?>]' value='<?php echo $execution->id;?>' />
               <label></label>
             </div>
             <?php endif;?>
@@ -83,8 +83,8 @@
           </td>
           <td class='text-left <?php if(!empty($execution->children)) echo 'has-child';?>' title='<?php echo $execution->name?>'>
             <?php
-            if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->project->delayed}</span> ";
-            echo !empty($execution->children) ? $execution->name : html::a($this->createLink('project', 'view', 'project=' . $execution->id), $execution->name);
+            if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
+            echo !empty($execution->children) ? $execution->name : html::a($this->createLink('execution', 'view', 'execution=' . $execution->id), $execution->name);
             ?>
             <?php if(!empty($execution->children)):?>
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
@@ -93,9 +93,9 @@
           <td class='text-left' title="<?php echo $execution->code;?>"><?php echo $execution->code;?></td>
           <td><?php echo zget($users, $execution->PM);?></td>
           <td><?php echo $execution->end;?></td>
-          <?php $projectStatus = $this->processStatus('project', $execution);?>
-          <td class='c-status' title='<?php echo $projectStatus;?>'>
-            <span class="status-project status-<?php echo $execution->status?>"><?php echo $projectStatus;?></span>
+          <?php $executionStatus = $this->processStatus('execution', $execution);?>
+          <td class='c-status' title='<?php echo $executionStatus;?>'>
+            <span class="status-execution status-<?php echo $execution->status?>"><?php echo $executionStatus;?></span>
           </td>
           <td><?php echo $execution->hours->totalEstimate . ' ' . $config->hourUnit;?></td>
           <td><?php echo $execution->hours->totalConsumed . ' ' . $config->hourUnit;?></td>
@@ -121,7 +121,7 @@
              <td class='c-id'>
                <?php if($canBatchEdit):?>
                <div class="checkbox-primary">
-                 <input type='checkbox' name='projectIDList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' />
+                 <input type='checkbox' name='executionIDList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' />
                  <label></label>
                </div>
                <?php endif;?>
@@ -129,17 +129,17 @@
              </td>
              <td class='text-left' title='<?php echo $child->name?>'>
                <?php
-               if(isset($child->delay)) echo "<span class='label label-danger label-badge'>{$lang->project->delayed}</span> ";
+               if(isset($child->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
                echo "<span class='label label-badge label-light' title='{$lang->programplan->children}'>{$lang->programplan->childrenAB}</span>";
-               echo html::a($this->createLink('project', 'view', 'project=' . $child->id), $child->name);
+               echo html::a($this->createLink('execution', 'view', 'execution=' . $child->id), $child->name);
                ?>
              </td>
              <td class='text-left' title="<?php echo $child->code;?>"><?php echo $child->code;?></td>
              <td><?php echo zget($users, $child->PM);?></td>
              <td><?php echo $child->end;?></td>
-             <?php $projectStatus = $this->processStatus('project', $child);?>
-             <td class='c-status' title='<?php echo $projectStatus;?>'>
-               <span class="status-project status-<?php echo $child->status?>"><?php echo $projectStatus;?></span>
+             <?php $executionStatus = $this->processStatus('execution', $child);?>
+             <td class='c-status' title='<?php echo $executionStatus;?>'>
+               <span class="status-execution status-<?php echo $child->status?>"><?php echo $executionStatus;?></span>
              </td>
              <td><?php echo $child->hours->totalEstimate;?></td>
              <td><?php echo $child->hours->totalConsumed;?></td>
@@ -166,9 +166,9 @@
     <div class='table-footer'>
       <?php if($canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->batchEdit, '', 'btn');?></div>
+      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->execution->batchEdit, '', 'btn');?></div>
       <?php endif;?>
-      <?php if(!$canOrder and common::hasPriv('project', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->project->updateOrder, '', "class='btn'");?>
+      <?php if(!$canOrder and common::hasPriv('execution', 'updateOrder')) echo html::a(inlink('all', "status=$status&executionID=$executionID&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->execution->updateOrder, '', "class='btn'");?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

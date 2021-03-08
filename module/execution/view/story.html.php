@@ -1,22 +1,22 @@
 <?php
 /**
- * The story view file of project module of ZenTaoPMS.
+ * The story view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id: story.html.php 5117 2013-07-12 07:03:14Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
-<?php $canOrder = common::hasPriv('project', 'storySort');?>
+<?php $canOrder = common::hasPriv('execution', 'storySort');?>
 <?php include '../../common/view/header.html.php';?>
 <?php if($canOrder) include '../../common/view/sortable.html.php';?>
 <?php js::set('moduleID', $this->cookie->storyModuleParam);?>
 <?php js::set('productID', $this->cookie->storyProductParam);?>
 <?php js::set('branchID', str_replace(',', '_', $this->cookie->storyBranchParam));?>
-<?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
+<?php js::set('confirmUnlinkStory', $lang->execution->confirmUnlinkStory)?>
 <?php js::set('typeError', sprintf($this->lang->error->notempty, $this->lang->task->type))?>
 <?php js::set('workingHourError', sprintf($this->lang->error->notempty, $this->lang->workingHour))?>
 <div id="mainMenu" class="clearfix">
@@ -25,7 +25,7 @@
     <?php
     $sidebarName = isset($product) ? $product->name : (isset($branch) ? $branch : $module->name);
     $removeType  = isset($product) ? 'byproduct' : (isset($branch) ? 'bybranch' : 'bymodule');
-    $removeLink  = inlink('story', "projectID=$project->id&orderBy=$orderBy&type=$removeType&param=0&recTotal=0&recPerPage={$pager->recPerPage}");
+    $removeLink  = inlink('story', "executionID=$execution->id&orderBy=$orderBy&type=$removeType&param=0&recTotal=0&recPerPage={$pager->recPerPage}");
     ?>
     <div class="title" title='<?php echo $sidebarName;?>'>
       <?php echo $sidebarName;?>
@@ -35,22 +35,22 @@
   <?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php
-    if(common::hasPriv('project', 'story'))
+    if(common::hasPriv('execution', 'story'))
     {
-        echo html::a($this->createLink('project', 'story', "projectID=$project->id&orderBy=order_desc&type=all"), "<span class='text'>{$lang->story->allStories}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
-        echo html::a($this->createLink('project', 'story', "projectID=$project->id&orderBy=order_desc&type=unclosed"), "<span class='text'>{$lang->story->unclosed}</span>" . ($type == 'unclosed' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'unclosed' ? " btn-active-text" : '') . "'");
+        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<span class='text'>{$lang->story->allStories}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
+        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=unclosed"), "<span class='text'>{$lang->story->unclosed}</span>" . ($type == 'unclosed' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'unclosed' ? " btn-active-text" : '') . "'");
     }
-    if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "projectID=$project->id"), "<span class='text'>{$lang->project->kanban}</span>", '', "class='btn btn-link'");
+    if(common::hasPriv('execution', 'storykanban')) echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<span class='text'>{$lang->execution->kanban}</span>", '', "class='btn btn-link'");
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <?php
-    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&projectID=$project->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export' data-group='project'");
+    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export' data-group='execution'");
 
-    if(common::canModify('project', $project))
+    if(common::canModify('execution', $execution))
     {
-        $this->lang->story->create = $this->lang->project->createStory;
+        $this->lang->story->create = $this->lang->execution->createStory;
         if($productID and !$this->loadModel('story')->checkForceReview())
         {
             echo "<div class='btn-group dropdown-hover'>";
@@ -59,26 +59,26 @@
             echo '</button>';
             echo "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
             $storyModuleID = (int)$this->cookie->storyModuleParam;
-            if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->create, '', "data-group='project'") . '</li>';
-            if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->batchCreate, '', "data-group='project'") . '</li>';
+            if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id"), $lang->story->create, '', "data-group='execution'") . '</li>';
+            if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id"), $lang->story->batchCreate, '', "data-group='execution'") . '</li>';
             echo '</ul>';
             echo '</div>';
         }
 
         if(commonModel::isTutorialMode())
         {
-            $wizardParams = helper::safe64Encode("project=$project->id");
-            echo html::a($this->createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->project->linkStory}",'', "class='btn btn-link link-story-btn'");
+            $wizardParams = helper::safe64Encode("execution=$execution->id");
+            echo html::a($this->createLink('tutorial', 'wizard', "module=execution&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->execution->linkStory}",'', "class='btn btn-link link-story-btn'");
         }
         else
         {
             echo "<div class='btn-group dropdown-hover'>";
             echo "<button type='button' class='btn btn-primary' id='linkButton'>";
-            echo "<i class='icon-link'></i> {$lang->project->linkStory} <span class='caret'></span>";
+            echo "<i class='icon-link'></i> {$lang->execution->linkStory} <span class='caret'></span>";
             echo '</button>';
             echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
-            if(common::hasPriv('project', 'linkStory')) echo '<li>' . html::a(inlink('linkStory', "project=$project->id"), $lang->project->linkStory). "</li>";
-            if(common::hasPriv('project', 'importPlanStories')) echo '<li>' . html::a('#linkStoryByPlan', $lang->project->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
+            if(common::hasPriv('execution', 'linkStory')) echo '<li>' . html::a(inlink('linkStory', "execution=$execution->id"), $lang->execution->linkStory). "</li>";
+            if(common::hasPriv('execution', 'importPlanStories')) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
             echo '</ul>';
             echo '</div>';
         }
@@ -95,18 +95,18 @@
     </div>
   </div>
   <div class="main-col">
-    <div id='queryBox' data-module='projectStory' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
+    <div id='queryBox' data-module='executionStory' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
-        <?php if(common::canModify('project', $project) and common::hasPriv('project', 'linkStory')):?>
-        <?php echo html::a($this->createLink('project', 'linkStory', "project=$project->id"), "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?>
+        <?php if(common::canModify('execution', $execution) and common::hasPriv('execution', 'linkStory')):?>
+        <?php echo html::a($this->createLink('execution', 'linkStory', "execution=$execution->id"), "<i class='icon icon-link'></i> " . $lang->execution->linkStory, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
     </div>
     <?php else:?>
-    <form class='main-table table-story skip-iframe-modal' method='post' id='projectStoryForm'>
+    <form class='main-table table-story skip-iframe-modal' method='post' id='executionStoryForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
@@ -118,12 +118,12 @@
           $canBatchEdit         = common::hasPriv('story', 'batchEdit');
           $canBatchClose        = common::hasPriv('story', 'batchClose');
           $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
-          $canBatchUnlink       = common::hasPriv('project', 'batchUnlinkStory');
+          $canBatchUnlink       = common::hasPriv('execution', 'batchUnlinkStory');
           $canBatchToTask       = common::hasPriv('story', 'batchToTask');
 
           $canBatchAction       = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
           ?>
-          <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+          <?php $vars = "executionID={$execution->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
             <th class='c-id {sorter:false}'>
               <?php if($canBatchAction):?>
               <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -133,10 +133,10 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <?php if($canOrder):?>
-            <th class='w-60px c-sort {sorter:false}'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->orderAB);?></th>
+            <th class='w-60px c-sort {sorter:false}'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->execution->orderAB);?></th>
             <?php endif;?>
             <th class='c-pri {sorter:false}'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-            <th class='c-name {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->project->storyTitle);?></th>
+            <th class='c-name {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->execution->storyTitle);?></th>
             <th class='c-user {sorter:false}'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='c-user {sorter:false}'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
             <th class='c-estimate w-80px {sorter:false}'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
@@ -151,13 +151,13 @@
         <tbody id='storyTableList' class='sortable'>
           <?php foreach($stories as $key => $story):?>
           <?php
-          $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&param=$project->id");
+          $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&param=$execution->id");
           $totalEstimate += $story->estimate;
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
             <td class='cell-id'>
               <?php if($canBatchAction):?>
-              <?php echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id"), sprintf('%03d', $story->id), null, "data-group='project'");?>
+              <?php echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$execution->id"), sprintf('%03d', $story->id), null, "data-group='execution'");?>
               <?php else:?>
               <?php printf('%03d', $story->id);?>
               <?php endif;?>
@@ -169,7 +169,7 @@
             <td class='c-name' title="<?php echo $story->title?>">
               <?php if(isset($branchGroups[$story->product][$story->branch])) echo "<span class='label label-outline label-badge'>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
               <?php if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";?>
-              <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color' data-group='project'");?>
+              <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color' data-group='execution'");?>
             </td>
             <td class='c-user' title='<?php echo zget($users, $story->openedBy);?>'><?php echo zget($users, $story->openedBy);?></td>
             <td class='c-user' title='<?php echo zget($users, $story->assignedTo);?>'><?php echo zget($users, $story->assignedTo);?></td>
@@ -181,48 +181,48 @@
             <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
             <td class='linkbox'>
               <?php
-              $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&projectID=$project->id");
+              $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&executionID=$execution->id");
               $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
               ?>
             <td>
               <?php
-              $bugsLink = $this->createLink('story', 'bugs', "storyID=$story->id&projectID=$project->id");
+              $bugsLink = $this->createLink('story', 'bugs', "storyID=$story->id&executionID=$execution->id");
               $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
               ?>
             </td>
             <td>
               <?php
-              $casesLink = $this->createLink('story', 'cases', "storyID=$story->id&projectID=$project->id");
+              $casesLink = $this->createLink('story', 'cases', "storyID=$story->id&executionID=$execution->id");
               $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
               ?>
             </td>
             <td class='c-actions'>
               <?php
-              $hasDBPriv = common::hasDBPriv($project, 'project');
+              $hasDBPriv = common::hasDBPriv($execution, 'execution');
               if($canBeChanged)
               {
-                  $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
+                  $param = "executionID={$execution->id}&story={$story->id}&moduleID={$story->module}";
 
-                  $lang->task->create = $lang->project->wbs;
+                  $lang->task->create = $lang->execution->wbs;
                   if(commonModel::isTutorialMode())
                   {
                       $wizardParams = helper::safe64Encode($param);
-                      echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$lang->project->wbs}'");
+                      echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$lang->execution->wbs}'");
                   }
                   else
                   {
                       if($hasDBPriv) common::printIcon('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create');
                   }
 
-                  $lang->task->batchCreate = $lang->project->batchWBS;
-                  if($hasDBPriv) common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'pluses');
+                  $lang->task->batchCreate = $lang->execution->batchWBS;
+                  if($hasDBPriv) common::printIcon('task', 'batchCreate', "executionID={$execution->id}&story={$story->id}", '', 'list', 'pluses');
 
                   $lang->testcase->batchCreate = $lang->testcase->create;
                   if($productID && $hasDBPriv) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
 
-                  if($canBeChanged and common::hasPriv('project', 'unlinkStory', $project))
+                  if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))
                   {
-                      common::printIcon('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
+                      common::printIcon('execution', 'unlinkStory', "executionID=$execution->id&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
                   }
               }
               ?>
@@ -239,7 +239,7 @@
           <div class='btn-group dropup'>
             <?php
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
-            $actionLink = $this->createLink('story', 'batchEdit', "productID=0&projectID=$project->id");
+            $actionLink = $this->createLink('story', 'batchEdit', "productID=0&executionID=$execution->id");
             echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");
             ?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
@@ -253,7 +253,7 @@
           <?php
           if($canBatchClose)
           {
-              $actionLink = $this->createLink('story', 'batchClose', "productID=0&projectID=$project->id");
+              $actionLink = $this->createLink('story', 'batchClose', "productID=0&executionID=$execution->id");
               echo html::commonButton($lang->close, "data-form-action='$actionLink'");
           }
           ?>
@@ -266,7 +266,7 @@
             foreach($lang->story->stageList as $key => $stage)
             {
                 if(empty($key)) continue;
-                if(strpos('wait|planned|projected', $key) !== false) continue;
+                if(strpos('wait|planned|executioned', $key) !== false) continue;
                 $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
                 echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
             }
@@ -275,10 +275,10 @@
           </div>
           <?php endif;?>
           <?php
-          if(common::hasPriv('project', 'batchUnlinkStory'))
+          if(common::hasPriv('execution', 'batchUnlinkStory'))
           {
-              $actionLink = $this->createLink('project', 'batchUnlinkStory', "projectID=$project->id");
-              echo html::commonButton($lang->project->unlinkStoryAB, "data-form-action='$actionLink'");
+              $actionLink = $this->createLink('execution', 'batchUnlinkStory', "executionID=$execution->id");
+              echo html::commonButton($lang->execution->unlinkStoryAB, "data-form-action='$actionLink'");
           }
           ?>
         </div>
@@ -295,12 +295,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->project->linkStoryByPlan;?></h4><?php echo '(' . $lang->project->linkStoryByPlanTips . ')';?>
+        <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $lang->execution->linkStoryByPlanTips . ')';?>
       </div>
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->project->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
         </div>
       </div>
     </div>
@@ -315,7 +315,7 @@
         <h4 class="modal-title"><?php echo $lang->story->batchToTask;?></h4>
       </div>
       <div class="modal-body">
-        <form method='post' class='form-ajax' action='<?php echo $this->createLink('story', 'batchToTask', "projectID=$project->id");?>'>
+        <form method='post' class='form-ajax' action='<?php echo $this->createLink('story', 'batchToTask', "executionID=$execution->id");?>'>
           <table class='table table-form'>
             <tr>
               <th class="<?php echo strpos($this->app->getClientLang(), 'zh') === false ? 'w-140px' : 'w-80px';?>"><?php echo $lang->task->type?></th>
@@ -349,7 +349,7 @@
   </div>
 </div>
 <?php js::set('checkedSummary', $lang->product->checkedSummary);?>
-<?php js::set('projectID', $project->id);?>
+<?php js::set('executionID', $execution->id);?>
 <?php js::set('orderBy', $orderBy)?>
 <script>
 $(function()
@@ -357,7 +357,7 @@ $(function()
     // Update table summary text
     <?php $storyCommon = $lang->SRCommon;?>
     var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
-    $('#projectStoryForm').table(
+    $('#executionStoryForm').table(
     {
         statisticCreator: function(table)
         {

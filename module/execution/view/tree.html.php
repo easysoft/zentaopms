@@ -1,11 +1,11 @@
 <?php
 /**
- * The project tree view file of project module of ZenTaoPMS.
+ * The execution tree view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Hao Sun <sunhao@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id: tree.html.php 4894 2013-06-25 01:28:39Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -15,7 +15,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    foreach($lang->project->treeLevel as $name => $btnLevel)
+    foreach($lang->execution->treeLevel as $name => $btnLevel)
     {
         if(empty($tree) && ($name == 'root' or $name == 'all')) continue;
         $icon = '';
@@ -29,34 +29,34 @@
     <?php
     if(!isset($browseType)) $browseType = '';
     if(!isset($orderBy))    $orderBy = '';
-    $link = common::hasPriv('task', 'report', $project) ?  $this->createLink('task', 'report', "project=$projectID&browseType=$browseType") : '#';
+    $link = common::hasPriv('task', 'report', $execution) ?  $this->createLink('task', 'report', "execution=$executionID&browseType=$browseType") : '#';
     echo html::a($link, "<i class='icon icon-bar-chart muted'></i> <span class='text'>{$lang->task->reportChart}</span>", '', 'class="btn btn-link"');
     ?>
-    <?php if(common::canModify('project', $project)):?>
+    <?php if(common::canModify('execution', $execution)):?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
         <?php
-        $misc = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
-        $link = common::hasPriv('project', 'importTask') ?  $this->createLink('project', 'importTask', "project=$project->id") : '#';
-        echo "<li $misc>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+        $misc = common::hasPriv('execution', 'importTask') ? '' : "class=disabled";
+        $link = common::hasPriv('execution', 'importTask') ?  $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
+        echo "<li $misc>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
 
-        $misc = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
-        $link = common::hasPriv('project', 'importBug') ?  $this->createLink('project', 'importBug', "project=$project->id") : '#';
-        echo "<li $misc>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        $misc = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
+        $link = common::hasPriv('execution', 'importBug') ?  $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
+        echo "<li $misc>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
     <?php endif;?>
     <?php
-    $misc = "class='btn btn-link iframe" . (common::hasPriv('task', 'export', $project) ? '' : ' disabled') . "' data-width='700'";
-    $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=tree") : '#';
+    $misc = "class='btn btn-link iframe" . (common::hasPriv('task', 'export', $execution) ? '' : ' disabled') . "' data-width='700'";
+    $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=tree") : '#';
     echo html::a($link, "<i class='icon icon-export muted'></i> <span class='text'>{$lang->export}</span>", '', $misc);
 
     $checkObject = new stdclass();
-    $checkObject->project = $projectID;
+    $checkObject->execution = $executionID;
     $misc = common::hasPriv('task', 'create', $checkObject) ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
-    $link = common::hasPriv('task', 'create', $checkObject) ?  $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
+    $link = common::hasPriv('task', 'create', $checkObject) ?  $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
     echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->task->create, '', $misc);
     ?>
   </div>
@@ -68,7 +68,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->task->noTask;?></span>
       <?php if(common::hasPriv('task', 'create', $checkObject)):?>
-      <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>

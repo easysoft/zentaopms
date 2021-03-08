@@ -1,4 +1,4 @@
-<?php js::set('projectID', $projectID);?>
+<?php js::set('executionID', $executionID);?>
 <?php js::set('module', $module);?>
 <?php js::set('method', $method);?>
 <?php js::set('extra', $extra);?>
@@ -6,30 +6,30 @@
 $iCharges = 0;
 $others   = 0;
 $dones    = 0;
-$projectNames = array();
+$executionNames = array();
 $myProjectsHtml     = '';
 $normalProjectsHtml = '';
 $closedProjectsHtml = '';
-foreach($projects as $project)
+foreach($executions as $execution)
 {
-    if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account) $iCharges++;
-    if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account)) $others++;
-    if($project->status == 'done' or $project->status == 'closed') $dones++;
-    $projectNames[] = $project->name;
+    if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account) $iCharges++;
+    if($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account)) $others++;
+    if($execution->status == 'done' or $execution->status == 'closed') $dones++;
+    $executionNames[] = $execution->name;
 }
-$projectsPinYin = common::convert2Pinyin($projectNames);
+$executionsPinYin = common::convert2Pinyin($executionNames);
 
-foreach($projects as $project)
+foreach($executions as $execution)
 {
-    if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
+    if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
     {
-        $myProjectsHtml .= html::a(sprintf($link, $project->id), "<i class='icon icon-{$lang->icons[$project->type]}'></i> " . $project->name, '', "class='text-important' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+        $myProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $execution->name, '', "class='text-important' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
     }
-    else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
+    else if($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account))
     {
-        $normalProjectsHtml .= html::a(sprintf($link, $project->id), "<i class='icon icon-{$lang->icons[$project->type]}'></i> " . $project->name, '', "title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+        $normalProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $execution->name, '', "title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
     }
-    else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), "<i class='icon icon-{$lang->icons[$project->type]}'></i> " . $project->name, '', "title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+    else if($execution->status == 'done' or $execution->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $execution->name, '', "title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
 }
 ?>
 <div class="table-row">
@@ -38,19 +38,19 @@ foreach($projects as $project)
     <?php
     if(!empty($myProjectsHtml))
     {
-        echo "<div class='heading'>{$lang->project->mine}</div>";
+        echo "<div class='heading'>{$lang->execution->mine}</div>";
         echo $myProjectsHtml;
         if(!empty($myProjectsHtml))
         {
-            echo "<div class='heading'>{$lang->project->other}</div>";
+            echo "<div class='heading'>{$lang->execution->other}</div>";
         }
     }
     echo $normalProjectsHtml;
     ?>
     </div>
     <div class="col-footer">
-      <?php echo html::a(helper::createLink('program', 'prjbrowse'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
-      <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->project->doneProjects?><i class='icon icon-angle-right'></i></a>
+      <?php echo html::a(helper::createLink('program', 'prjbrowse'), '<i class="icon icon-cards-view muted"></i> ' . $lang->execution->all, '', 'class="not-list-item"'); ?>
+      <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->execution->doneProjects?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
   <div class="table-col col-right">

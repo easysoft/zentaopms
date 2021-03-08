@@ -16,10 +16,10 @@
 <div>
   <div id='titlebar'>
     <div class='heading'>
-      <?php echo html::icon($lang->icons['doc']);?> <?php echo $lang->project->doc;?>
+      <?php echo html::icon($lang->icons['doc']);?> <?php echo $lang->execution->doc;?>
     </div>
     <div class='actions'>
-      <?php common::printIcon('doc', 'create', "libID=" . key($libs) . "&moduleID=0&productID=0&projectID=$project->id&from=project");?>
+      <?php common::printIcon('doc', 'create', "libID=" . key($libs) . "&moduleID=0&productID=0&executionID=$execution->id&from=execution");?>
     </div>
   </div>
   <table class='table table-fixed tablesorter' align='center' id='docList'>

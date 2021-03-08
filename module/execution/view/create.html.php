@@ -35,7 +35,7 @@
 <?php js::set('holders', $lang->execution->placeholder);?>
 <?php js::set('errorSameProducts', $lang->execution->errorSameProducts);?>
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
-<?php js::set('isStage', $isStage);?>
+<?php js::set('isSprint', $isSprint);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -79,25 +79,23 @@
           <th><?php echo $lang->execution->teamname;?></th>
           <td><?php echo html::input('team', $team, "class='form-control'");?></td><td></td><td></td>
         </tr>
-        <?php if(!$isSprint):?>
         <tr>
           <th><?php echo $lang->execution->type;?></th>
           <td>
           <?php
-          if($isStage)
+          if($isSprint)
           {
-              echo html::select('attribute', $lang->stage->typeList, '', "class='form-control'");
+              echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'");
           }
           else
           {
-              echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'");
+              echo html::select('attribute', $lang->stage->typeList, '', "class='form-control'");
           }
           ?>
           </td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
-        <?php endif;?>
-        <?php if($isStage):?>
+        <?php if(!$isSprint):?>
         <tr>
           <th><?php echo $lang->programplan->percent;?></th>
           <td>
@@ -117,7 +115,7 @@
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->execution->manageProducts;?></th>
-          <td class='text-left' id="<?php echo $isStage ? '' : 'productsBox';?>" colspan="3">
+          <td class='text-left' id='productsBox' colspan="3">
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
@@ -132,7 +130,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <div class='col-sm-4'>
-                <div class="input-group <?php echo $isStage ? 'required' : '';?>">
+                <div class="input-group">
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
                 </div>

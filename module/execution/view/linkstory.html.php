@@ -1,11 +1,11 @@
 <?php
 /**
- * The link story view of project module of ZenTaoPMS.
+ * The link story view of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id: linkstory.html.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
@@ -17,11 +17,11 @@
 </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->linkStory;?></span></span>
-    <?php if($executionStories and ($this->app->rawModule == 'project')):?>
-    <span class='btn btn-link'><span class='text'><?php echo $lang->project->linkPRJStoryTip;?></span></span>
-    <?php elseif($this->app->rawModule == 'project'):?>
-    <span class='btn btn-link'><span class='text'><?php echo $lang->project->linkAllStoryTip;?></span></span>
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->linkStory;?></span></span>
+    <?php if($executionStories and ($this->app->rawModule == 'execution')):?>
+    <span class='btn btn-link'><span class='text'><?php echo $lang->execution->linkPRJStoryTip;?></span></span>
+    <?php elseif($this->app->rawModule == 'execution'):?>
+    <span class='btn btn-link'><span class='text'><?php echo $lang->execution->linkAllStoryTip;?></span></span>
     <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -97,7 +97,7 @@
     </div>
     <?php else:?>
     <div class="table-empty-tip">
-      <p><span class="text-muted"><?php echo $lang->project->whyNoStories;?></p>
+      <p><span class="text-muted"><?php echo $lang->execution->whyNoStories;?></p>
     </div>
     <?php endif;?>
   </form>

@@ -170,21 +170,21 @@
   <div class="detail-content">
     <ul class="list-unstyled">
       <?php
-      foreach($story->tasks as $projectTasks)
+      foreach($story->tasks as $executionTasks)
       {
-          foreach($projectTasks as $task)
+          foreach($executionTasks as $task)
           {
-              if(!isset($projects[$task->project])) continue;
-              $projectName = $projects[$task->project];
+              if(!isset($executions[$task->execution])) continue;
+              $executionName = $executions[$task->execution];
               echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "#$task->id $task->name", '', "class='iframe' data-width='80%'");
-              echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName, '', "class='text-muted'") . '</li>';
+              echo html::a($this->createLink('execution', 'browse', "executionID=$task->execution"), $executionName, '', "class='text-muted'") . '</li>';
           }
       }
       if(count($story->tasks) == 0)
       {
-          foreach($story->projects as $projectID => $project)
+          foreach($story->executions as $executionID => $execution)
           {
-              echo "<li title='$project->name'>" . html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name, '', "class='text-muted'") . '</li>';
+              echo "<li title='$execution->name'>" . html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name, '', "class='text-muted'") . '</li>';
           }
       }
       ?>

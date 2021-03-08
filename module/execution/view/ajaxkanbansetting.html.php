@@ -1,11 +1,11 @@
 <?php
 /**
- * The kanban setting view file of project module of ZenTaoPMS.
+ * The kanban setting view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -21,19 +21,19 @@ form {padding: 30px 0 40px;}
     <div id='mainContent' class='main-content'>
       <div class='center-block'>
         <div class='main-header'>
-          <h2><?php echo $lang->project->kanbanSetting;?></h2>
+          <h2><?php echo $lang->execution->kanbanSetting;?></h2>
         </div>
         <form target='hiddenwin' method='post'>
           <table class='table table-form'>
-            <?php if(common::hasPriv('project', 'kanbanHideCols')):?>
+            <?php if(common::hasPriv('execution', 'kanbanHideCols')):?>
             <tr class='statusTR'>
-              <th class='text-right w-200px'><?php echo $lang->project->kanbanHideCols?></th>
+              <th class='text-right w-200px'><?php echo $lang->execution->kanbanHideCols?></th>
               <td><?php echo html::radio('allCols', $lang->kanbanSetting->optionList, $setting->allCols)?></td>
             </tr>
             <?php endif;?>
-            <?php if(common::hasPriv('project', 'kanbanColsColor')):?>
+            <?php if(common::hasPriv('execution', 'kanbanColsColor')):?>
             <tr class='statusTR'>
-              <th class='text-right'><?php echo $lang->project->kanbanColsColor?></th>
+              <th class='text-right'><?php echo $lang->execution->kanbanColsColor?></th>
               <td>
                 <div class='row'>
                   <?php foreach($setting->colorList as $status => $color):?>
@@ -52,7 +52,7 @@ form {padding: 30px 0 40px;}
               <td colspan='2' class='form-actions text-center'>
                 <?php
                 echo html::submitButton();
-                echo '&nbsp;' . html::a(inlink('ajaxResetKanban', "projectID=$projectID"), $lang->project->resetKanban, 'hiddenwin', "class='btn btn-wide'");
+                echo '&nbsp;' . html::a(inlink('ajaxResetKanban', "executionID=$executionID"), $lang->execution->resetKanban, 'hiddenwin', "class='btn btn-wide'");
                 ?>
               </td>
             </tr>

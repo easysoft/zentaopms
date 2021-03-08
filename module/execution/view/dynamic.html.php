@@ -22,14 +22,14 @@
         $active = 'btn-active-text';
         $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
     }
-    echo html::a(inlink('dynamic', "projectID=$projectID&type=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
+    echo html::a(inlink('dynamic', "executionID=$executionID&type=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
     <?php endforeach;?>
     <div class="btn-group">
       <?php
       $withSearch = count($accountPairs) > 8;
       $active     = $param ? 'btn-active-text' : '';
-      $current    = $param ? zget($accountPairs, $account, $account) : $lang->project->viewByUser;
+      $current    = $param ? zget($accountPairs, $account, $account) : $lang->execution->viewByUser;
       $current    = "<span class='text'>" . $current . '</span>' . ' <span class="caret"></span>';
       ?>
       <?php echo html::a('###', $current, '', "class='btn btn-link $active' data-toggle='dropdown'");?>
@@ -48,7 +48,7 @@
           {
               if(!$userID) continue;
               $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $userID, '') . '"') : '';
-              echo html::a($this->createLink('project', 'dynamic', "productID=$projectID&type=account&param=$userID"), $name);
+              echo html::a($this->createLink('execution', 'dynamic', "productID=$executionID&type=account&param=$userID"), $name);
           }
           ?>
         </div>
@@ -104,8 +104,8 @@ $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
 $lastDate  = substr($action->originalDate, 0, 10);
 $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
 $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-$preLink   = $hasPre ? inlink('dynamic', "projectID=$projectID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
-$nextLink  = $hasNext ? inlink('dynamic', "projectID=$projectID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+$preLink   = $hasPre ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
+$nextLink  = $hasNext ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
 ?>
 <?php if($hasPre or $hasNext):?>
 <div id="mainActions" class='main-actions'>

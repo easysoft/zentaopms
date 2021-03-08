@@ -1,10 +1,10 @@
 <?php
 /**
- * The kanban view file of project module of ZenTaoPMS.
+ * The kanban view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @author      Wang Yidong, Zhu Jinyong
- * @package     project
+ * @package     execution
  * @version     $Id: kanban.html.php $
  */
 ?>
@@ -12,10 +12,10 @@
 <?php js::set('statusMap', $statusMap);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-right'>
-    <?php echo html::a($this->createLink('project', 'ajaxKanbanSetting', "projectID=$projectID"), "<i class='icon-cog muted'></i> " . $lang->project->kanbanSetting, '', "class='iframe btn btn-link'");?>
-    <?php if(common::hasPriv('project', 'printKanban')) echo html::a($this->createLink('project', 'printKanban', "projectID=$projectID"), "<i class='icon-printer muted'></i> " . $lang->project->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->project->printKanban}' data-width='500'");?>
+    <?php echo html::a($this->createLink('execution', 'ajaxKanbanSetting', "executionID=$executionID"), "<i class='icon-cog muted'></i> " . $lang->execution->kanbanSetting, '', "class='iframe btn btn-link'");?>
+    <?php if(common::hasPriv('execution', 'printKanban')) echo html::a($this->createLink('execution', 'printKanban', "executionID=$executionID"), "<i class='icon-printer muted'></i> " . $lang->execution->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->execution->printKanban}' data-width='500'");?>
     <?php
-    $link = $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=kanban");
+    $link = $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=kanban");
     if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-export muted'></i> " . $lang->task->export, '', "class='btn btn-link iframe export' data-width='700'");
     ?>
     <?php if($canBeChanged):?>
@@ -26,21 +26,21 @@
       </button>
       <ul class='dropdown-menu' id='importActionMenu'>
         <?php
-        $misc = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
-        $link = common::hasPriv('project', 'importTask') ?  $this->createLink('project', 'importTask', "project=$project->id") : '#';
-        echo "<li $misc>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+        $misc = common::hasPriv('execution', 'importTask') ? '' : "class=disabled";
+        $link = common::hasPriv('execution', 'importTask') ?  $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
+        echo "<li $misc>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
 
-        $misc = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
-        $link = common::hasPriv('project', 'importBug') ?  $this->createLink('project', 'importBug', "project=$project->id") : '#';
-        echo "<li $misc>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        $misc = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
+        $link = common::hasPriv('execution', 'importBug') ?  $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
+        echo "<li $misc>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
     <?php
     $checkObject = new stdclass();
-    $checkObject->project = $projectID;
+    $checkObject->execution = $executionID;
     $misc = common::hasPriv('task', 'create', $checkObject) ? "class='btn btn-primary iframe' data-width='1200px'" : "class='btn btn-primary disabled'";
-    $link = common::hasPriv('task', 'create', $checkObject) ?  $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''), '', true) : '#';
+    $link = common::hasPriv('task', 'create', $checkObject) ?  $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''), '', true) : '#';
     echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->task->create, '', $misc);
     ?>
     <?php endif;?>
@@ -68,7 +68,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->task->noTask;?></span>
       <?php if($canBeChanged and common::hasPriv('task', 'create', $checkObject)):?>
-      <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -78,16 +78,16 @@
       <tr>
         <th class="c-board c-side has-btn">
           <div class="dropdown">
-            <?php $dropTitle = $type == 'story' ? $lang->project->orderList[$storyOrder] : $lang->task->$type;?>
+            <?php $dropTitle = $type == 'story' ? $lang->execution->orderList[$storyOrder] : $lang->task->$type;?>
             <button type="button" data-toggle="dropdown" class="btn btn-block btn-link"><?php echo $dropTitle;?> <span class="caret"></span></button>
             <ul class='dropdown-menu text-left'>
-              <?php foreach($lang->project->orderList as $key => $value):?>
+              <?php foreach($lang->execution->orderList as $key => $value):?>
               <li <?php echo ($type == 'story' and $storyOrder == $key) ? " class='active'" : '' ?>>
-                <?php echo html::a($this->createLink('project', 'kanban', "projectID=$projectID&type=story&orderBy=$key"), $value);?>
+                <?php echo html::a($this->createLink('execution', 'kanban', "executionID=$executionID&type=story&orderBy=$key"), $value);?>
               </li>
               <?php endforeach;?>
-              <?php echo "<li" . ($type == 'assignedTo' ? " class='active'" : '') . ">" . html::a(inlink('kanban', "project=$projectID&type=assignedTo"), $lang->project->groups['assignedTo']) . "</li>";?>
-              <?php echo "<li" . ($type == 'finishedBy' ? " class='active'" : '') . ">" . html::a(inlink('kanban', "project=$projectID&type=finishedBy"), $lang->project->groups['finishedBy']) . "</li>";?>
+              <?php echo "<li" . ($type == 'assignedTo' ? " class='active'" : '') . ">" . html::a(inlink('kanban', "execution=$executionID&type=assignedTo"), $lang->execution->groups['assignedTo']) . "</li>";?>
+              <?php echo "<li" . ($type == 'finishedBy' ? " class='active'" : '') . ">" . html::a(inlink('kanban', "execution=$executionID&type=finishedBy"), $lang->execution->groups['finishedBy']) . "</li>";?>
             </ul>
           </div>
         </th>
@@ -124,9 +124,9 @@
                   <ul class='dropdown-menu pull-right'>
                     <?php
                     $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
-                    echo (common::hasPriv('task', 'create'))         ? '<li>' . html::a($this->createLink('task', 'create', "projectID=$story->project&storyID=$story->id&moduleID=$story->module", '', true), $lang->project->wbs, '', $misc) : '' . '</li>';
-                    echo (common::hasPriv('task', 'batchCreate'))    ? '<li>' . html::a($this->createLink('task', 'batchCreate', "projectID=$story->project&storyID=$story->id&moduleID=0&taskID=0&iframe=true", '', true), $lang->project->batchWBS, '', $misc) : '' . '</li>';
-                    echo (common::hasPriv('project', 'unlinkStory')) ? '<li>' . html::a($this->createLink('project', 'unlinkStory', "projectID=$story->project&storyID=$story->story&confirm=no", '', true), $lang->project->unlinkStory, 'hiddenwin') : '' . '</li>';
+                    echo (common::hasPriv('task', 'create'))         ? '<li>' . html::a($this->createLink('task', 'create', "executionID=$story->execution&storyID=$story->id&moduleID=$story->module", '', true), $lang->execution->wbs, '', $misc) : '' . '</li>';
+                    echo (common::hasPriv('task', 'batchCreate'))    ? '<li>' . html::a($this->createLink('task', 'batchCreate', "executionID=$story->execution&storyID=$story->id&moduleID=0&taskID=0&iframe=true", '', true), $lang->execution->batchWBS, '', $misc) : '' . '</li>';
+                    echo (common::hasPriv('execution', 'unlinkStory')) ? '<li>' . html::a($this->createLink('execution', 'unlinkStory', "executionID=$story->execution&storyID=$story->story&confirm=no", '', true), $lang->execution->unlinkStory, 'hiddenwin') : '' . '</li>';
                     $misc = "data-toggle='modal' data-type='iframe'";
                     echo (common::hasPriv('story', 'close'))         ? '<li>' . html::a($this->createLink('story', 'close', "storyID=$story->id", '', true), $lang->story->close, '', $misc) : '' . '</li>';
                     ?>
@@ -173,7 +173,7 @@
                     if(empty($task->assignedTo)) $assignedToRealName = "<span class='text-primary'>{$lang->task->noAssigned}</span>";
                     if(common::hasPriv('task', 'assignTo', $task))
                     {
-                        echo html::a($this->createLink('task', 'assignTo', "projectID={$task->project}&taskID={$task->id}", '', true), '<i class="icon icon-hand-right"></i> ' . $assignedToRealName, '', 'class="btn btn-icon-left kanbaniframe task-assignedTo"');
+                        echo html::a($this->createLink('task', 'assignTo', "executionID={$task->execution}&taskID={$task->id}", '', true), '<i class="icon icon-hand-right"></i> ' . $assignedToRealName, '', 'class="btn btn-icon-left kanbaniframe task-assignedTo"');
                     }
                     else
                     {
@@ -230,5 +230,5 @@
   </table>
   <?php endif;?>
 </div>
-<?php echo js::set('projectID', $projectID);?>
+<?php echo js::set('executionID', $executionID);?>
 <?php include '../../common/view/footer.html.php';?>

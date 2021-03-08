@@ -32,7 +32,7 @@
       common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list', '', '', 'btn btn-info btn-icon');
       if(empty($task->team) or empty($task->children))
       {
-          common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'plus', '', 'btn btn-info btn-icon', '', '', $lang->task->children);
+          common::printIcon('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'plus', '', 'btn btn-info btn-icon', '', '', $lang->task->children);
       }
       ?>
     </div>
@@ -44,7 +44,7 @@
     <?php echo !empty($task->desc) ? $task->desc : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
-<?php if($project->type != 'ops'):?>
+<?php if($execution->type != 'ops'):?>
 <?php if($task->fromBug != 0):?>
 <div class="detail" open>
   <div class="detail-title"><?php echo $lang->bug->steps;?></div>

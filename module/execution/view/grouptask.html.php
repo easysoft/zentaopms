@@ -1,11 +1,11 @@
 <?php
 /**
- * The task group view file of project module of ZenTaoPMS.
+ * The task group view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id: grouptask.html.php 4143 2013-01-18 07:01:06Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -15,12 +15,12 @@
   <div class="btn-toolbar pull-left">
     <?php if(!empty($tasks)):?>
     <div class="pull-left table-group-btns">
-      <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->project->treeLevel['root'];?> <i class="icon-fold-all"></i></button>
-      <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->project->treeLevel['all'];?> <i class="icon-unfold-all"></i></button>
+      <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->execution->treeLevel['root'];?> <i class="icon-fold-all"></i></button>
+      <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->execution->treeLevel['all'];?> <i class="icon-unfold-all"></i></button>
     </div>
     <?php endif;?>
-    <?php if(isset($lang->project->groupFilter[$groupBy])):?>
-    <?php foreach($lang->project->groupFilter[$groupBy] as $filterKey => $name):?>
+    <?php if(isset($lang->execution->groupFilter[$groupBy])):?>
+    <?php foreach($lang->execution->groupFilter[$groupBy] as $filterKey => $name):?>
     <?php
     $active = '';
     $name   = "<span class='text'>{$name}</span>";
@@ -30,17 +30,17 @@
         $active = 'btn-active-text';
     }
     ?>
-    <?php echo html::a(inlink('grouptask', "projectID=$projectID&groupBy=$groupBy&filter=$filterKey"), $name, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy&filter=$filterKey"), $name, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php else:?>
-    <?php echo html::a(inlink('grouptask', "projectID=$projectID&groupBy=$groupBy"), "<span class='text'>{$lang->project->allTasks}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy"), "<span class='text'>{$lang->execution->allTasks}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link btn-active-text'");?>
     <?php endif;?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php
     if(!isset($browseType)) $browseType = '';
     if(!isset($orderBy))    $orderBy = '';
-    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'bar-chart muted');
+    common::printIcon('task', 'report', "execution=$executionID&browseType=$browseType", '', 'button', 'bar-chart muted');
     ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>
@@ -48,33 +48,33 @@
         <?php
         $class = common::hasPriv('task', 'export') ? '' : "class=disabled";
         $misc  = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
-        $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
+        $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=$browseType") : '#';
         echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
-    <?php if(common::canModify('project', $project)):?>
+    <?php if(common::canModify('execution', $execution)):?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
         <?php
-        $class = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
-        $misc  = common::hasPriv('project', 'importTask') ? "class='import'" : "class=disabled";
-        $link  = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$project->id") : '#';
-        echo "<li $class>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+        $class = common::hasPriv('execution', 'importTask') ? '' : "class=disabled";
+        $misc  = common::hasPriv('execution', 'importTask') ? "class='import'" : "class=disabled";
+        $link  = common::hasPriv('execution', 'importTask') ? $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
+        echo "<li $class>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
 
-        $class = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
-        $misc  = common::hasPriv('project', 'importBug') ? "class='import'" : "class=disabled";
-        $link  = common::hasPriv('project', 'importBug') ? $this->createLink('project', 'importBug', "project=$project->id") : '#';
-        echo "<li $class>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        $class = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
+        $misc  = common::hasPriv('execution', 'importBug') ? "class='import'" : "class=disabled";
+        $link  = common::hasPriv('execution', 'importBug') ? $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
+        echo "<li $class>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
     <?php endif;?>
     <?php
     $checkObject = new stdclass();
-    $checkObject->project = $projectID;
-    $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+    $checkObject->execution = $executionID;
+    $link = $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
     if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
     ?>
   </div>
@@ -85,7 +85,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->task->noTask;?></span>
       <?php if(common::hasPriv('task', 'create', $checkObject)):?>
-      <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -96,16 +96,16 @@
         <th class="c-side text-left has-btn group-menu">
           <div class="dropdown">
             <a href="" data-toggle="dropdown" class="btn text-left btn-block btn-link clearfix">
-              <span class='pull-left'><?php echo zget($lang->project->groups, $groupBy, null);?></span>
+              <span class='pull-left'><?php echo zget($lang->execution->groups, $groupBy, null);?></span>
               <i class="icon icon-caret-down hl-primary text-primary pull-right"></i>
             </a>
             <ul class="dropdown-menu">
-              <?php foreach($lang->project->groups as $key => $value):?>
+              <?php foreach($lang->execution->groups as $key => $value):?>
               <?php
               if(empty($key)) continue;
-              if($project->type == 'ops' && $key == 'story') continue;
+              if($execution->type == 'ops' && $key == 'story') continue;
               $active = $key == $groupBy ? "class='active'" : '';
-              echo "<li $active>"; common::printLink('project', 'groupTask', "project=$projectID&groupBy=$key", $value); echo '</li>';
+              echo "<li $active>"; common::printLink('execution', 'groupTask', "execution=$executionID&groupBy=$key", $value); echo '</li>';
               ?>
               <?php endforeach;?>
             </ul>
@@ -183,8 +183,8 @@
             <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $groupName, '', "class='text-primary' title='$groupName'");?>
             <div class='groupSummary small'>
 
-            <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHoursAB, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
-            <?php printf($lang->project->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate . $lang->project->workHourUnit, $groupConsumed . $lang->project->workHourUnit, $groupLeft . $lang->project->workHourUnit);?>
+            <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->execution->memberHoursAB, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
+            <?php printf($lang->execution->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate . $lang->execution->workHourUnit, $groupConsumed . $lang->execution->workHourUnit, $groupLeft . $lang->execution->workHourUnit);?>
             </div>
           </div>
         </td>
@@ -202,17 +202,17 @@
         <td class="c-status"><span class='status-task status-<?php echo $task->status;?>'> <?php echo $this->processStatus('task', $task);?></span></td>
         <td class="c-assign text-left"><?php echo "<span class='$assignedToClass'>" . $task->assignedToRealName . "</span>";?></td>
         <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
-        <td class="c-hours em" title="<?php echo $task->estimate . ' ' . $lang->project->workHour;?>"><?php echo $task->estimate . ' ' . $lang->project->workHourUnit;?></td>
-        <td class="c-hours em" title="<?php echo $task->consumed . ' ' . $lang->project->workHour;?>"><?php echo $task->consumed . ' ' . $lang->project->workHourUnit;?></td>
-        <td class="c-hours em" title="<?php echo $task->left     . ' ' . $lang->project->workHour;?>"><?php echo $task->left     . ' ' . $lang->project->workHourUnit;?></td>
+        <td class="c-hours em" title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . ' ' . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours em" title="<?php echo $task->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $task->consumed . ' ' . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours em" title="<?php echo $task->left     . ' ' . $lang->execution->workHour;?>"><?php echo $task->left     . ' ' . $lang->execution->workHourUnit;?></td>
         <td class="c-num em"><?php echo $task->progress . '%';?></td>
         <td class="c-type"><?php echo zget($lang->task->typeList, $task->type);?></td>
         <td class='c-date <?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
         <td class="c-actions">
-          <?php if(common::canModify('project', $project)):?>
-          <?php common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);?>
+          <?php if(common::canModify('execution', $execution)):?>
+          <?php common::printIcon('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('task', 'edit', "taskid=$task->id", '', 'list');?>
-          <?php common::printIcon('task', 'delete', "projectID=$task->project&taskid=$task->id", '', 'list', 'trash', 'hiddenwin');?>
+          <?php common::printIcon('task', 'delete', "executionID=$task->execution&taskid=$task->id", '', 'list', 'trash', 'hiddenwin');?>
           <?php endif;?>
         </td>
       </tr>
@@ -225,9 +225,9 @@
         </td>
         <td colspan='13'>
           <div class="table-row segments-list">
-          <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
-          <?php printf($lang->project->countSummary, $groupSum, $groupDoing, $groupWait);?>
-          <?php printf($lang->project->timeSummary, $groupEstimate . $lang->project->workHourUnit, $groupConsumed . $lang->project->workHourUnit, $groupLeft . $lang->project->workHourUnit);?>
+          <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->execution->memberHours, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
+          <?php printf($lang->execution->countSummary, $groupSum, $groupDoing, $groupWait);?>
+          <?php printf($lang->execution->timeSummary, $groupEstimate . $lang->execution->workHourUnit, $groupConsumed . $lang->execution->workHourUnit, $groupLeft . $lang->execution->workHourUnit);?>
           </div>
         </td>
       </tr>

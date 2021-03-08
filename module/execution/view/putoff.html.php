@@ -1,11 +1,11 @@
 <?php
 /**
- * The delay file of project module of ZenTaoPMS.
+ * The delay file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang<wwccss@gmail.com>
- * @package     project 
+ * @package     execution 
  * @version     $Id: delay.html.php 935 2013-01-16 07:49:24Z wwccss@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -16,10 +16,10 @@
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
-      <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
-      <?php echo isonlybody() ? ("<span title='$project->name'>" . $project->name . '</span>') : html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
+      <span class='prefix label-id'><strong><?php echo $execution->id;?></strong></span>
+      <?php echo isonlybody() ? ("<span title='$execution->name'>" . $execution->name . '</span>') : html::a($this->createLink('execution', 'view', 'execution=' . $execution->id), $execution->name, '_blank');?>
       <?php if(!isonlybody()):?>
-      <small><?php echo $lang->arrow . $lang->project->putoff;?></small>
+      <small><?php echo $lang->arrow . $lang->execution->putoff;?></small>
       <?php endif;?>
     </h2>
   </div>
@@ -27,16 +27,16 @@
     <table class='table table-form'>
       <tbody>
         <tr>
-          <th class='w-80px'><?php echo $lang->project->dateRange;?></th>
+          <th class='w-80px'><?php echo $lang->execution->dateRange;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "'");?>
-              <span class='input-group-addon'><?php echo $lang->project->to;?></span>
-              <?php echo html::input('end', $project->end, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->end . "'");?>
+              <?php echo html::input('begin', $execution->begin, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->execution->begin . "'");?>
+              <span class='input-group-addon'><?php echo $lang->execution->to;?></span>
+              <?php echo html::input('end', $execution->end, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->execution->end . "'");?>
               <div class='input-group-btn'>
-                <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><?php echo $lang->project->byPeriod;?> <span class='caret'></span></button>
+                <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><?php echo $lang->execution->byPeriod;?> <span class='caret'></span></button>
                 <ul class='dropdown-menu'>
-                  <?php foreach ($lang->project->endList as $key => $name):?>
+                  <?php foreach ($lang->execution->endList as $key => $name):?>
                   <li><a href='javascript:computeEndDate("<?php echo $key;?>")'><?php echo $name;?></a></li>
                   <?php endforeach;?>
                 </ul>
@@ -46,20 +46,20 @@
           <td class='w-100px'></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->days;?></th>
+          <th><?php echo $lang->execution->days;?></th>
           <td colspan='2'>
             <div class='input-group'>
-            <?php echo html::input('days', $project->days, "class='form-control'");?>
-              <span class='input-group-addon'><?php echo $lang->project->day;?></span>
+            <?php echo html::input('days', $execution->days, "class='form-control'");?>
+              <span class='input-group-addon'><?php echo $lang->execution->day;?></span>
             </div>
           </td> 
           <td></td>
         </tr> 
         <tr class='hide'>
-          <th><?php echo $lang->project->status;?></th>
-          <td><?php echo html::hidden('status', $project->status);?></td>
+          <th><?php echo $lang->execution->status;?></th>
+          <td><?php echo html::hidden('status', $execution->status);?></td>
         </tr>
-        <?php $this->printExtendFields($project, 'table', 'columns=3');?>
+        <?php $this->printExtendFields($execution, 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='3'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
@@ -73,5 +73,5 @@
   <hr class='small' />
   <div class='main'><?php include '../../common/view/action.html.php';?></div>
 </div>
-<?php js::set('weekend', $config->project->weekend);?>
+<?php js::set('weekend', $config->execution->weekend);?>
 <?php include '../../common/view/footer.html.php';?>

@@ -66,8 +66,8 @@ class execution extends control
 
         if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
 
-        $this->view->title         = $this->lang->execution->index;
-        $this->view->position[]    = $this->lang->execution->index;
+        $this->view->title      = $this->lang->execution->index;
+        $this->view->position[] = $this->lang->execution->index;
 
         $this->display();
     }
@@ -132,14 +132,6 @@ class execution extends control
      */
     public function task($executionID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        /* Save last PRJ. */
-        if($this->config->systemMode == 'new')
-        {
-            $executionID = $this->project->saveState($this->session->project, $this->project->getPairs());
-            if(!$executionID) $this->locate($this->createLink('program', 'PRJbrowse'));
-            setCookie("lastPRJ", $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        }
-
         $this->loadModel('tree');
         $this->loadModel('search');
         $this->loadModel('task');
@@ -1211,51 +1203,42 @@ class execution extends control
             }
         }
 
-        $this->view->isSprint = false;
-        $execution = $this->execution->getById($this->session->project);
-
+        $isSprint = true;
         if($this->config->systemMode == 'new')
         {
-            if($execution->model == 'scrum' && isset($this->config->custom->sprintConcept) and $this->config->custom->sprintConcept == 1)
+            $project = $this->project->getById($this->session->project);
+            if($project->model == 'scrum')
             {
-                $this->view->isSprint = true;
-
                 unset($this->lang->execution->endList[62]);
                 unset($this->lang->execution->endList[93]);
                 unset($this->lang->execution->endList[186]);
                 unset($this->lang->execution->endList[365]);
             }
-
-            $this->view->isStage    = $execution->model == 'waterfall' ? true : false;
-            $this->view->iconObject = $execution->model == 'waterfall' ? 'stage' : 'sprint';
-        }
-        else
-        {
-            $this->view->isStage = false;
         }
 
         $executionID = key($this->executions);
         $this->execution->setMenu($this->executions, $executionID);
 
-        $this->view->title         = $this->lang->execution->create;
-        $this->view->position[]    = $this->view->title;
+        $this->view->title           = $this->lang->execution->create;
+        $this->view->position[]      = $this->view->title;
         $this->view->executions      = array('' => '') + $this->executions;
-        $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->allProducts   = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->session->project);
-        $this->view->acl           = $acl;
-        $this->view->plan          = $plan;
-        $this->view->name          = $name;
-        $this->view->code          = $code;
-        $this->view->team          = $team;
+        $this->view->groups          = $this->loadModel('group')->getPairs();
+        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->session->project);
+        $this->view->acl             = $acl;
+        $this->view->plan            = $plan;
+        $this->view->name            = $name;
+        $this->view->code            = $code;
+        $this->view->team            = $team;
         $this->view->executionID     = $executionID;
-        $this->view->productID     = $productID;
-        $this->view->products      = $products;
-        $this->view->productPlan   = array(0 => '') + $productPlan;
-        $this->view->productPlans  = array(0 => '') + $productPlans;
-        $this->view->whitelist     = $whitelist;
+        $this->view->productID       = $productID;
+        $this->view->products        = $products;
+        $this->view->productPlan     = array(0 => '') + $productPlan;
+        $this->view->productPlans    = array(0 => '') + $productPlans;
+        $this->view->whitelist       = $whitelist;
         $this->view->copyExecutionID = $copyExecutionID;
-        $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $this->view->users           = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->isSprint        = $isSprint;
         $this->display();
     }
 
@@ -1350,25 +1333,21 @@ class execution extends control
             $productPlans[$product->id] = $this->productplan->getPairs($product->id);
         }
 
-        $this->view->isSprint = false;
+        $isSprint = true;
         if($this->config->systemMode == 'new')
         {
-            $PRJData = $this->execution->getById($this->session->project);
-            if($PRJData->model == 'scrum' && isset($this->config->custom->sprintConcept) && $this->config->custom->sprintConcept == 1)
+            $project = $this->project->getById($this->session->project);
+            if($project->model == 'scrum')
             {
-                $this->view->isSprint = true;
-
                 unset($this->lang->execution->endList[62]);
                 unset($this->lang->execution->endList[93]);
                 unset($this->lang->execution->endList[186]);
                 unset($this->lang->execution->endList[365]);
             }
-
-            $this->view->isStage = $PRJData->model == 'waterfall' ? true : false;
-        }
-        else
-        {
-            $this->view->isStage = false;
+            else
+            {
+                $isSprint = false;
+            }
         }
 
         $this->loadModel('user');
@@ -1399,6 +1378,7 @@ class execution extends control
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->productPlans         = $productPlans;
         $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
+        $this->view->isSprint             = $isSprint;
         $this->display();
     }
 
@@ -1461,17 +1441,17 @@ class execution extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
-        $PRJData = $this->execution->getById($this->session->project);
+        $project = $this->project->getById($this->session->project);
 
-        $this->view->title         = $this->lang->execution->batchEdit;
-        $this->view->position[]    = $this->lang->execution->batchEdit;
+        $this->view->title           = $this->lang->execution->batchEdit;
+        $this->view->position[]      = $this->lang->execution->batchEdit;
         $this->view->executionIDList = $executionIDList;
         $this->view->executions      = $executions;
-        $this->view->pmUsers       = $pmUsers;
-        $this->view->poUsers       = $poUsers;
-        $this->view->qdUsers       = $qdUsers;
-        $this->view->rdUsers       = $rdUsers;
-        $this->view->isStage       = $PRJData->model == 'waterfall' ? true : false;
+        $this->view->pmUsers         = $pmUsers;
+        $this->view->poUsers         = $poUsers;
+        $this->view->qdUsers         = $qdUsers;
+        $this->view->rdUsers         = $rdUsers;
+        $this->view->isStage         = $project->model == 'waterfall' ? true : false;
         $this->display();
     }
 
@@ -1670,7 +1650,7 @@ class execution extends control
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->app->loadLang('program');
-        $this->session->project = $execution->execution;
+        $this->session->project = $execution->project;
 
         /* Execution not found to prevent searching for .*/
         if(!isset($this->executions[$execution->id])) $this->executions = $this->execution->getPairs($execution->execution, 'all', 'nocode');
@@ -2884,7 +2864,7 @@ class execution extends control
         $this->view->cases      = $cases;
         $this->view->story      = $story;
         $this->view->users      = $users;
-        $this->view->executions   = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'nocode');
+        $this->view->executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'nocode');
         $this->view->actions    = $this->loadModel('action')->getList('story', $storyID);
         $this->view->modulePath = $modulePath;
         $this->view->version    = $version == 0 ? $story->version : $version;

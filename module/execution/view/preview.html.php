@@ -128,7 +128,7 @@ $dataType = '';
             </tr>
             <tr>
               <td align='center'><?php echo $lang->task->leftThisTime?></td>
-              <td align='center'><?php if($content->left) echo $content->left . $lang->project->workHourUnit;?></td>
+              <td align='center'><?php if($content->left) echo $content->left . $lang->execution->workHourUnit;?></td>
               <td></td>
               <td></td>
               <td></td>
@@ -236,14 +236,14 @@ function initBurnChar()
         labels: <?php echo json_encode($chartData['labels'])?>,
         datasets: [
         {
-            label: "<?php echo $lang->project->charts->burn->graph->reference;?>",
+            label: "<?php echo $lang->execution->charts->burn->graph->reference;?>",
             color: "#CCC",
             fillColor: "rgba(0,0,0,0)",
             showTooltips: false,
             data: <?php echo $chartData['baseLine']?>
         },
         {
-            label: "<?php echo $lang->project->charts->burn->graph->actuality;?>",
+            label: "<?php echo $lang->execution->charts->burn->graph->actuality;?>",
             color: "#0033CC",
             data: <?php echo $chartData['burnLine']?>
         }]

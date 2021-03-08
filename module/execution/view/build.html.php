@@ -1,45 +1,45 @@
 <?php
 /**
- * The build view file of project module of ZenTaoPMS.
+ * The build view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id: build.html.php 4262 2013-01-24 08:48:56Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
-<?php js::set('projectID', $projectID)?>
+<?php js::set('executionID', $executionID)?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <?php
-    $label  = "<span class='text'>{$lang->project->build}</span>";
+    $label  = "<span class='text'>{$lang->execution->build}</span>";
     $active = '';
     if($type == 'all')
     {
         $active = 'btn-active-text';
         $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
     }
-    echo html::a(inlink('build', "projectID={$projectID}&type=all"), $label, '', "class='btn btn-link $active' id='all'")
+    echo html::a(inlink('build', "executionID={$executionID}&type=all"), $label, '', "class='btn btn-link $active' id='all'")
     ?>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
   </div>
-    <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->project->byQuery;?></a>
+    <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   <div class="btn-toolbar pull-right">
-    <?php if(common::canModify('project', $project)) common::printLink('build', 'create', "project=$project->id", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary'");?>
+    <?php if(common::canModify('execution', $execution)) common::printLink('build', 'create', "execution=$execution->id", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
   <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox" data-module='executionBuild'></div>
-  <?php if(empty($projectBuilds)):?>
+  <?php if(empty($executionBuilds)):?>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->build->noBuild;?></span>
-      <?php if(common::canModify('project', $project) and common::hasPriv('build', 'create')):?>
-      <?php echo html::a($this->createLink('build', 'create', "project=$project->id"), "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-info'");?>
+      <?php if(common::canModify('execution', $execution) and common::hasPriv('build', 'create')):?>
+      <?php echo html::a($this->createLink('build', 'create', "execution=$execution->id"), "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -59,7 +59,7 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($projectBuilds as $productID => $builds):?>
+        <?php foreach($executionBuilds as $productID => $builds):?>
         <?php foreach($builds as $index => $build):?>
         <tr data-id="<?php echo $productID;?>">
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink('build', 'view', "buildID=$build->id"), sprintf('%03d', $build->id));?></td>
@@ -78,9 +78,9 @@
             {
                 echo html::a($this->createLink('build', 'view', "buildID=$build->id&type=story&link=true"), "<i class='icon icon-link'></i>", '', "class='btn' title='{$lang->build->linkStory}'");
             }
-            common::printIcon('testtask', 'create', "product=$build->product&project=$project->id&build=$build->id", $build, 'list', 'bullhorn');
-            $lang->project->bug = $lang->project->viewBug;
-            common::printIcon('project', 'bug',  "project=$project->id&orderBy=status&build=$build->id", $build, 'list');
+            common::printIcon('testtask', 'create', "product=$build->product&execution=$execution->id&build=$build->id", $build, 'list', 'bullhorn');
+            $lang->execution->bug = $lang->execution->viewBug;
+            common::printIcon('execution', 'bug',  "execution=$execution->id&orderBy=status&build=$build->id", $build, 'list');
             common::printIcon('build',   'edit', "buildID=$build->id", $build, 'list');
             if(common::hasPriv('build',  'delete', $build))
             {

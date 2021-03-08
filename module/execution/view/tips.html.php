@@ -1,9 +1,9 @@
 <div style='margin: 0 auto; max-width: 400px'>
-  <p><strong><?php echo $lang->project->afterInfo;?></strong></p>
+  <p><strong><?php echo $lang->execution->afterInfo;?></strong></p>
   <div>
-    <?php echo html::a($this->createLink('project', 'team', "projectID=$projectID"), $lang->project->setTeam, '', "class='btn'");?>
-    <?php if($project->type != 'ops') echo html::a($this->createLink('project', 'linkstory', "projectID=$projectID"), $lang->project->linkStory, '', "class='btn'");?>
-    <?php echo html::a($this->createLink('task', 'create', "project=$projectID"), $lang->project->createTask, '', "class='btn'");?>
-    <?php echo html::a($this->createLink('project', 'task', "projectID=$projectID"), $lang->project->goback, '', "class='btn'");?>
+    <?php echo html::a($this->createLink('execution', 'team', "executionID=$executionID"), $lang->execution->setTeam, '', "class='btn'");?>
+    <?php if($execution->type != 'ops') echo html::a($this->createLink('execution', 'linkstory', "executionID=$executionID"), $lang->execution->linkStory, '', "class='btn'");?>
+    <?php echo html::a($this->createLink('task', 'create', "execution=$executionID"), $lang->execution->createTask, '', "class='btn'");?>
+    <?php echo html::a($this->createLink('execution', 'task', "executionID=$executionID"), $lang->execution->goback, '', "class='btn'");?>
   </div>
 </div>

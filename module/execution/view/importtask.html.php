@@ -1,11 +1,11 @@
 <?php
 /**
- * The importtask view file of project module of ZenTaoPMS.
+ * The importtask view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id: importtask.html.php 4669 2013-04-23 02:28:08Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -13,11 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
-    <?php echo html::a($this->createLink('project', 'importTask', "project=$projectID"), "<span class='text'>{$lang->project->importTask}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a($this->createLink('execution', 'importTask', "execution=$executionID"), "<span class='text'>{$lang->execution->importTask}</span>", '', "class='btn btn-link btn-active-text'");?>
     <div class='input-control input-group space w-150px'>
-      <?php $projects = array(0 => $lang->project->allProjects) + $projects;?>
-      <span class='input-group-addon'><?php echo $lang->project->selectProject;?></span>
-      <?php  echo html::select('fromproject', $projects, $fromProject, "onchange='reload($projectID, this.value)' class='form-control chosen'");?>
+      <?php $executions = array(0 => $lang->execution->allProjects) + $executions;?>
+      <span class='input-group-addon'><?php echo $lang->execution->selectProject;?></span>
+      <?php  echo html::select('fromexecution', $executions, $fromProject, "onchange='reload($executionID, this.value)' class='form-control chosen'");?>
     </div>
   </div>
 </div>
@@ -32,7 +32,7 @@
             </div>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='w-150px'><?php echo $lang->project->name ?></th>
+          <th class='w-150px'><?php echo $lang->execution->name ?></th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
           <th class='w-p30'><?php echo $lang->task->name;?></th>
           <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
@@ -53,11 +53,11 @@
             </div>
             <?php printf('%03d', $task->id);?>
           </td>
-          <td><?php echo $projects[$task->project];?></td>
+          <td><?php echo $executions[$task->execution];?></td>
           <td><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
           <td class='text-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
           <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
-          <td title="<?php echo $task->left . ' ' . $lang->project->workHour;?>"><?php echo $task->left . ' ' . $lang->project->workHourUnit;?></td>
+          <td title="<?php echo $task->left . ' ' . $lang->execution->workHour;?>"><?php echo $task->left . ' ' . $lang->execution->workHourUnit;?></td>
           <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
           <td><span class='status-task status-<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></span></td>
           <td class='text-left nobr'>
@@ -82,7 +82,7 @@
     <?php if($tasks2Imported):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->project->importTask, '', 'btn btn-secondary btn-wide');?></div>
+      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->execution->importTask, '', 'btn btn-secondary btn-wide');?></div>
     </div>
     <?php endif;?>
   </form>

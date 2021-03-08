@@ -38,7 +38,7 @@ $(function()
 
     var adjustMainCol = function()
     {
-        if(!isStage) $('.main-form .col-main').css('width', Math.max(250, Math.floor(($('#productsBox').outerWidth() - 50)/3) + 10));
+        if(isSprint) $('.main-form .col-main').css('width', Math.max(250, Math.floor(($('#productsBox').outerWidth() - 50)/3) + 10));
     };
     adjustMainCol();
     $(window).on('resize', adjustMainCol);
