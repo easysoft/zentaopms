@@ -1142,7 +1142,7 @@ CREATE TABLE IF NOT EXISTS `zt_usergroup` (
   `account` char(30) NOT NULL default '',
   `group` mediumint(8) unsigned NOT NULL default '0',
   `project` text NOT NULL,
-  UNIQUE KEY `account` (`account`,`group`,`project`)
+  UNIQUE KEY `account` (`account`,`group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_userquery`;
 CREATE TABLE IF NOT EXISTS `zt_userquery` (
