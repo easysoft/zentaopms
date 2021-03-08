@@ -61,6 +61,7 @@ $lang->admin->safe->weak       = 'Schwache Passwörter';
 $lang->admin->safe->reason     = 'Typ';
 $lang->admin->safe->checkWeak  = 'Schwache Passwörter prüfen';
 $lang->admin->safe->changeWeak = 'Ihr Passwort ist schwach. Bitte ändern.';
+$lang->admin->safe->loginCaptcha = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Passwort nach der ersten Anmeldung ändern';
 
 $lang->admin->safe->modeList[0] = 'N/A';
@@ -79,5 +80,8 @@ $lang->admin->safe->reasonList['birthday'] = 'Entspricht Ihrem Geburtstag';
 $lang->admin->safe->modifyPasswordList[1] = 'Ja';
 $lang->admin->safe->modifyPasswordList[0] = 'Nein';
 
-$lang->admin->safe->noticeMode   = 'Passwort prüfen bei Anmeldung, Anlage und Bearbeitung von Benutzern..';
+$lang->admin->safe->loginCaptchaList[1] = 'Ja';
+$lang->admin->safe->loginCaptchaList[0] = 'Nein';
+
+$lang->admin->safe->noticeMode   = 'Password will be checked when a user logs in, or a user is added or edited.';
 $lang->admin->safe->noticeStrong = '';

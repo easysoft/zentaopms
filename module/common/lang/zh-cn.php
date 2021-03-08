@@ -179,14 +179,14 @@ else
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => '产品|program|product|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "项目|program|project|program=%s");
-$lang->program->viewMenu->personnel   = array('link' => "人员|personnel|accessible|program=%s");
+$lang->program->viewMenu->personnel   = array('link' => "人员|personnel|putinto|program=%s");
 $lang->program->viewMenu->stakeholder = array('link' => "干系人|program|stakeholder|program=%s", 'alias' => 'createstakeholder');
 
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
+$lang->personnel->menu->putinto    = array('link' => "投入人员|personnel|putinto|program=%s");
 $lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|program=%s");
 $lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|program=%s", 'alias' => 'addwhitelist');
-$lang->personnel->menu->putinto    = array('link' => "投入人员|personnel|putinto|program=%s");
 
 /* Scrum menu. */
 $lang->product = new stdclass();
@@ -293,7 +293,7 @@ $lang->index->menu->project = "浏览{$lang->executionCommon}|project|browse";
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->index       = '首页|my|index';
+$lang->my->menu->index       = '仪表盘|my|index';
 $lang->my->menu->calendar    = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->myWork      = array('link' => '待处理|my|work|mode=task');
 if($config->systemMode == 'new')

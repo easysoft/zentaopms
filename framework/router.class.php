@@ -217,9 +217,9 @@ class router extends baseRouter
         /* User preference init. */
         $config->URSR        = $URSR;
         $config->URAndSR     = $URAndSR;
-        $config->programLink = 'program-pgmbrowse';
+        $config->programLink = 'program-browse';
         $config->productLink = 'product-all';
-        $config->projectLink = 'program-prjbrowse';
+        $config->projectLink = 'project-browse';
 
         /* Get user preference. */
         $account     = isset($this->session->user->account) ? $this->session->user->account : '';
