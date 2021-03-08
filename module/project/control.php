@@ -115,7 +115,7 @@ class project extends control
      */
     public function ajaxGetDropMenu($projectID = 0, $module, $method)
     {
-        $closedProjects = $this->project->getList(0, 'closed', 0, 'id_desc');
+        $closedProjects = $this->program->getProjectList(0, 'closed', 0, 'id_desc');
 
         $closedProjectNames = array();
         foreach($closedProjects as $project) $closedProjectNames = common::convert2Pinyin($closedProjectNames);

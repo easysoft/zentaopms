@@ -110,74 +110,74 @@ class programModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)
             ->andWhere('id')->in($this->app->user->view->programs)
-			->orWhere('id')->in($this->app->user->view->projects)
-			->fi()
-			->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
-			->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
-			->orderBy($orderBy)
-			->page($pager)
-			->fetchAll('id');
-	}
+            ->orWhere('id')->in($this->app->user->view->projects)
+            ->fi()
+            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
 
-	/**
-	 * Get project list data.
-	 *
-	 * @param  int       $programID
-	 * @param  string    $browseType
-	 * @param  string    $queryID
-	 * @param  string    $orderBy
-	 * @param  object    $pager
-	 * @param  int       $programTitle
-	 * @param  int       $projectMine
-	 * @access public
-	 * @return object
-	 */
-	public function getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $projectMine = 0)
-	{
-		$path = '';
-		if($programID)
-		{
-			$program = $this->getByID($programID);
-			$path    = $program->path;
-		}
+	  /**
+     * Get project list data.
+     *
+     * @param  int       $programID
+     * @param  string    $browseType
+     * @param  string    $queryID
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @param  int       $programTitle
+     * @param  int       $projectMine
+     * @access public
+     * @return object
+     */
+    public function getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $projectMine = 0)
+    {
+        $path = '';
+        if($programID)
+        {
+            $program = $this->getByID($programID);
+            $path    = $program->path;
+		    }
 
-		$projectList = $this->dao->select('*')->from(TABLE_PROJECT)
-			->where('deleted')->eq('0')
-			->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
-			->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
-			->beginIF($path)->andWhere('path')->like($path . '%')->fi()
-			->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
-			->beginIF(!$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
-			->beginIF($this->cookie->projectMine or $projectMine)
-			->andWhere('openedBy', true)->eq($this->app->user->account)
-			->orWhere('PM')->eq($this->app->user->account)
-			->markRight(1)
-			->fi()
-			->orderBy($orderBy)
-			->page($pager)
-			->fetchAll('id');
+        $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
+            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($this->cookie->projectMine or $projectMine)
+            ->andWhere('openedBy', true)->eq($this->app->user->account)
+            ->orWhere('PM')->eq($this->app->user->account)
+            ->markRight(1)
+            ->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
 
-		/* Determine how to display the name of the program. */
-		if($programTitle and $this->config->systemMode == 'new')
-		{
-			$programList = $this->getPairs();
-			foreach($projectList as $id => $project)
-			{
-				$path = explode(',', $project->path);
-				$path = array_filter($path);
-				array_pop($path);
-				$programID = $programTitle == 'base' ? current($path) : end($path);
-				if(empty($path) || $programID == $id) continue;
+        /* Determine how to display the name of the program. */
+        if($programTitle and $this->config->systemMode == 'new')
+        {
+            $programList = $this->getPairs();
+            foreach($projectList as $id => $project)
+            {
+                $path = explode(',', $project->path);
+                $path = array_filter($path);
+                array_pop($path);
+                $programID = $programTitle == 'base' ? current($path) : end($path);
+                if(empty($path) || $programID == $id) continue;
 
-				$programName = isset($programList[$programID]) ? $programList[$programID] : '';
+                $programName = isset($programList[$programID]) ? $programList[$programID] : '';
 
-				$projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
-			}
-		}
-		return $projectList;
-	}
+                $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
+            }
+        }
+        return $projectList;
+    }
 
-	/**
+    /**
      * Get stakeholders by program id.
      *
      * @param  int     $programID
