@@ -33,11 +33,13 @@ $config->action->objectNameFields['job']         = 'name';
 $config->action->commonImgSize = 870;
 
 $config->action->majorList = array();
-$config->action->majorList['task']    = array('assigned', 'finished', 'activated');
-$config->action->majorList['bug']     = array('assigned', 'resolved');
-$config->action->majorList['release'] = array('opened');
-$config->action->majorList['build']   = array('opened');
-$config->action->majorList['product'] = array('opened', 'edited');
-$config->action->majorList['project'] = array('opened', 'edited');
+$config->action->majorList['task']      = array('assigned', 'finished', 'activated');
+$config->action->majorList['bug']       = array('assigned', 'resolved');
+$config->action->majorList['release']   = array('opened');
+$config->action->majorList['build']     = array('opened');
+$config->action->majorList['product']   = array('opened', 'edited');
+$config->action->majorList['program']   = array('opened', 'edited');
+$config->action->majorList['project']   = array('opened', 'edited');
+$config->action->majorList['execution'] = array('opened', 'edited');
 
-$config->action->needGetPRJType = 'story,build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design';
+$config->action->needGetProjectType = 'story,build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design';

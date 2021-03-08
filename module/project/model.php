@@ -492,6 +492,25 @@ class projectModel extends model
     }
 
     /**
+     * Get products of a project.
+     *
+     * @param  int    $projectID
+     * @param  bool   $withBranch
+     * @access public
+     * @return array
+     */
+    public function getProducts($projectID, $withBranch = true)
+    {
+        $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')
+            ->on('t1.product = t2.id')
+            ->where('t1.project')->eq((int)$projectID)
+            ->andWhere('t2.deleted')->eq(0);
+        if(!$withBranch) return $query->fetchPairs('id', 'name');
+        return $query->fetchAll('id');
+    }
+
+    /**
      * Build the query.
      *
      * @param  int    $projectID
