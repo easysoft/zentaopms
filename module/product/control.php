@@ -129,6 +129,7 @@ class product extends control
 
         /* Load datatable. */
         $this->loadModel('datatable');
+        $this->loadModel('execution');
 
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);

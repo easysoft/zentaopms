@@ -21,8 +21,8 @@
 $unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories = zget($unfoldStories, $productID, array());
 js::set('unfoldStories', $unfoldStories);
-js::set('unfoldAll',     $lang->project->treeLevel['all']);
-js::set('foldAll',       $lang->project->treeLevel['root']);
+js::set('unfoldAll',     $lang->execution->treeLevel['all']);
+js::set('foldAll',       $lang->execution->treeLevel['root']);
 js::set('storyType',     $storyType);
 $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
 $isProjectStory = $this->app->rawModule == 'projectstory';
