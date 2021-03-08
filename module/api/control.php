@@ -13,7 +13,7 @@ class api extends control
 {
     /**
      * Return session to the client.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -28,9 +28,9 @@ class api extends control
 
     /**
      * Execute a module's model's method, return the result.
-     * 
-     * @param  string    $moduleName 
-     * @param  string    $methodName 
+     *
+     * @param  string    $moduleName
+     * @param  string    $methodName
      * @param  string    $params        param1=value1,param2=value2, don't use & to join them.
      * @access public
      * @return string
@@ -60,9 +60,9 @@ class api extends control
 
     /**
      * The interface of api.
-     * 
-     * @param  int    $filePath 
-     * @param  int    $action 
+     *
+     * @param  int    $filePath
+     * @param  int    $action
      * @access public
      * @return void
      */
@@ -86,10 +86,10 @@ class api extends control
             $data    = json_decode($content->data);
             $data    = '<xmp>' . print_r($data, true) . '</xmp>';
 
-            $response['result']  = 'success';
-            $response['status']  = $status;
-            $response['url']     = $result['url'];
-            $response['data']    = $data;
+            $response['result'] = 'success';
+            $response['status'] = $status;
+            $response['url']    = $result['url'];
+            $response['data']   = $data;
             $this->send($response);
         }
 
@@ -99,9 +99,9 @@ class api extends control
     }
 
     /**
-     * Query sql; 
-     * 
-     * @param  string $keyField 
+     * Query sql.
+     *
+     * @param  string $keyField
      * @access public
      * @return void
      */

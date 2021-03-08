@@ -12,15 +12,15 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class="modal-header">
-  <h4 class="modal-title"><i class="icon-cog"></i><?php echo $lang->project->PRJModuleSetting;?></h4>
+  <h4 class="modal-title"><i class="icon-cog"></i><?php echo $lang->project->moduleSetting;?></h4>
 </div>
 <div class="modal-body" style="max-height: 564px; overflow: visible;">
   <form class="form-condensed" method="post" target="hiddenwin">
     <table class="table table-form">
       <tbody>
         <tr>
-          <td class="w-180px"><?php echo $lang->project->PRJModuleOpen;?></td>
-          <td><?php echo html::radio('PRJProgramTitle', $lang->project->PRJProgramTitle, $status);?></td>
+          <td class="w-180px"><?php echo $lang->project->moduleOpen;?></td>
+          <td><?php echo html::radio('programTitle', $lang->project->programTitle, $status);?></td>
         </tr>
         <tr>
           <td colspan="2" class="text-center"><?php echo html::submitButton();?></td>

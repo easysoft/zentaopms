@@ -63,7 +63,7 @@ class my extends control
 
     /**
      * My calendar.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -74,13 +74,13 @@ class my extends control
 
     /**
      * My work view.
-     * 
-     * @param  string $mode 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $mode
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -94,13 +94,13 @@ class my extends control
 
     /**
      * My contribute view.
-     * 
-     * @param  string $mode 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $mode
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -530,6 +530,7 @@ class my extends control
     public function execution($type = 'undone', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->app->loadLang('project');
+        $this->app->loadLang('execution');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -550,12 +551,12 @@ class my extends control
      * My issues.
      *
      * @access public
-     * @param  string $type 
+     * @param  string $type
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
-     * @return void   
+     * @return void
      */
     public function issue($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
@@ -578,7 +579,7 @@ class my extends control
      * My risks.
      *
      * @access public
-     * @param  string $type 
+     * @param  string $type
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -847,9 +848,9 @@ class my extends control
 
         $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
         $this->view->URSR             = isset($this->config->URSR) ? $this->config->URSR : $this->setting->getItem('owner=system&module=custom&key=URSR');
-        $this->view->programLink      = isset($this->config->programLink) ? $this->config->programLink : 'program-pgmbrowse';
+        $this->view->programLink      = isset($this->config->programLink) ? $this->config->programLink : 'program-browse';
         $this->view->productLink      = isset($this->config->productLink) ? $this->config->productLink : 'product-all';
-        $this->view->projectLink      = isset($this->config->projectLink) ? $this->config->projectLink : 'program-prjbrowse';
+        $this->view->projectLink      = isset($this->config->projectLink) ? $this->config->projectLink : 'project-browse';
         $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
 
         $this->display();
@@ -905,7 +906,7 @@ class my extends control
     }
 
     /**
-     * Upload avatar. 
+     * Upload avatar.
      *
      * @access public
      * @return void
@@ -913,10 +914,10 @@ class my extends control
     public function uploadAvatar()
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
-        {   
+        {
             $result = $this->loadModel('user')->uploadAvatar();
             $this->send($result);
-        }   
+        }
     }
 
     /**

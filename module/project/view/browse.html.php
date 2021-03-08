@@ -21,7 +21,7 @@ js::set('browseType', $browseType);
   <div id="sidebarHeader">
     <div class="title">
       <?php echo empty($project) ? $lang->project->common : $project->name;?>
-      <?php if($projectID) echo html::a(inLink('PRJBrowse', 'projectID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
+      <?php if($projectID) echo html::a(inLink('browse', 'projectID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>
   <?php endif;?>
@@ -30,9 +30,9 @@ js::set('browseType', $browseType);
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('PRJBrowse', "projectID=$projectID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "projectID=$projectID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('PRJMine', array('1' => $lang->project->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
+    <?php echo html::checkbox('projectMine', array('1' => $lang->project->mine), '', $this->cookie->projectMine ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(isset($this->config->maxVersion)):?>
@@ -49,9 +49,9 @@ js::set('browseType', $browseType);
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
-      <?php echo $PRJTree;?>
+      <?php echo $projectTree;?>
       <div class="text-center">
-        <?php common::printLink('project', 'PRJProgramTitle', '', $lang->project->moduleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
+        <?php common::printLink('project', 'projectProgramTitle', '', $lang->project->moduleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
       </div>
     </div>
   </div>
@@ -60,16 +60,16 @@ js::set('browseType', $browseType);
     <?php if(empty($projectStats)):?>
     <div class="table-empty-tip">
       <p>
-        <span class="text-muted"><?php echo $lang->project->noPRJ;?></span>
+        <span class="text-muted"><?php echo $lang->project->empty;?></span>
         <?php if($this->config->systemMode == 'new'):?>
-        <?php common::printLink('project', 'createGuide', "projectID=$projectID", '<i class="icon icon-plus"></i>' . $lang->project->PRJCreate, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
+        <?php common::printLink('project', 'createGuide', "projectID=$projectID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
         <?php else:?>
-        <?php common::printLink('project', 'create', '', '<i class="icon icon-plus"></i>' . $lang->project->PRJCreate, '', 'class="btn btn-info btn-wide"');?>
+        <?php common::printLink('project', 'create', '', '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide"');?>
         <?php endif;?>
       </p>
     </div>
     <?php else:?>
-    <form class='main-table' id='PRJForm' method='post' data-ride="table">
+    <form class='main-table' id='projectForm' method='post' data-ride="table">
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
@@ -78,13 +78,13 @@ js::set('browseType', $browseType);
         $setting = $this->datatable->getSetting('project');
       ?>
       <table class='table has-sort-head'>
-      <?php $canBatchEdit = $this->config->systemMode == 'new' ? common::hasPriv('project', 'PRJBatchEdit') : common::hasPriv('project', 'batchEdit');?>
+      <?php $canBatchEdit = $this->config->systemMode == 'new' ? common::hasPriv('project', 'batchEdit') : common::hasPriv('project', 'batchEdit');?>
         <thead>
           <tr>
             <?php
               foreach($setting as $value)
               {
-                if($value->id == 'PRJStatus' and $browseType !== 'all') $value->show = false;
+                if($value->id == 'status' and $browseType !== 'all') $value->show = false;
                 if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
               }
             ?>
@@ -92,7 +92,7 @@ js::set('browseType', $browseType);
         </thead>
         <tbody class="sortable" id='projectTableList'>
           <?php foreach($projectStats as $project):?>
-          <?php $project->from = 'PRJ';?>
+          <?php $project->from = 'project';?>
           <tr data-id="<?php echo $project->id;?>">
             <?php foreach($setting as $value) $this->project->printCell($value, $project, $users, $projectID);?>
           </tr>
@@ -107,7 +107,7 @@ js::set('browseType', $browseType);
         <?php
         if($canBatchEdit)
         {
-            $actionLink = $this->config->systemMode == 'new' ? $this->createLink('project', 'PRJBatchEdit', 'from=prjbrowse') : $this->createLink('project', 'batchEdit');
+            $actionLink = $this->config->systemMode == 'new' ? $this->createLink('project', 'batchEdit', 'from=prjbrowse') : $this->createLink('project', 'batchEdit');
             $misc       = "data-form-action='$actionLink'";
             echo html::commonButton($lang->edit, $misc);
         }

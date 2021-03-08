@@ -152,14 +152,14 @@ class program extends control
         $this->view->title      = $this->lang->program->create;
         $this->view->position[] = $this->lang->program->create;
 
-        $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
-        $this->view->poUsers         = $this->user->getPairs('noclosed|nodeleted|pofirst');
-        $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->parentProgram   = $parentProgram;
-        $this->view->parents         = $this->program->getParentPairs();
-        $this->view->programList     = $this->program->getList();
-        $this->view->budgetUnitList  = $this->project->getBudgetUnitList();
-        $this->view->availableBudget = $this->program->getBudgetLeft($parentProgram);
+        $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
+        $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst');
+        $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->parentProgram  = $parentProgram;
+        $this->view->parents        = $this->program->getParentPairs();
+        $this->view->programList    = $this->program->getList();
+        $this->view->budgetUnitList = $this->project->getBudgetUnitList();
+        $this->view->budgetLeft     = $this->program->getBudgetLeft($parentProgram);
 
         $this->display();
     }
@@ -633,7 +633,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function ajaxGetPGMDropMenu($programID = 0, $module, $method)
+    public function ajaxGetDropMenu($programID = 0, $module, $method)
     {
         $this->view->programID = $programID;
         $this->view->module    = $module;

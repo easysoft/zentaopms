@@ -684,8 +684,8 @@ class actionModel extends model
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
-            ->beginIF(!empty($executions))->markLeft()->orWhere('execution')->in(array_keys($executions))->fi()->markRight()
-            ->beginIF(!empty($products))->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
+            ->beginIF(!empty($executions))->markLeft()->orWhere('execution')->in($executions)->fi()->markRight()
+            ->beginIF(!empty($products))->markLeft()->orWhere('product')->in($products)->fi()->markRight()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
             ->beginIF($executionID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
@@ -974,7 +974,7 @@ class actionModel extends model
 
     /**
      * Print changes of every action.
-     * 
+     *
      * @param  string    $objectType
      * @param  array     $histories
      * @param  bool      $canChangeTag

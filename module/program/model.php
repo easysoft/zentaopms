@@ -128,11 +128,11 @@ class programModel extends model
 	 * @param  string    $orderBy
 	 * @param  object    $pager
 	 * @param  int       $programTitle
-	 * @param  int       $PRJMine
+	 * @param  int       $projectMine
 	 * @access public
 	 * @return object
 	 */
-	public function getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
+	public function getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $projectMine = 0)
 	{
 		$path = '';
 		if($programID)
@@ -148,7 +148,7 @@ class programModel extends model
 			->beginIF($path)->andWhere('path')->like($path . '%')->fi()
 			->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
 			->beginIF(!$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
-			->beginIF($this->cookie->PRJMine or $PRJMine)
+			->beginIF($this->cookie->projectMine or $projectMine)
 			->andWhere('openedBy', true)->eq($this->app->user->account)
 			->orWhere('PM')->eq($this->app->user->account)
 			->markRight(1)
@@ -308,28 +308,28 @@ class programModel extends model
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
-            $this->file->updateObjectID($this->post->uid, $programID, 'project');
+            $this->file->updateObjectID($this->post->uid, $programID, 'program');
             $this->setTreePath($programID);
 
             /* Add program admin.*/
             $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
                 ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
                 ->where('t1.account')->eq($this->app->user->account)
-                ->andWhere('t2.role')->eq('PRJAdmin')
+                ->andWhere('t2.role')->eq('programAdmin')
                 ->fetch();
 
             if(!empty($groupPriv))
             {
-                $newProgram = $groupPriv->PRJ . ",$programID";
-                $this->dao->update(TABLE_USERGROUP)->set('PRJ')->eq($newProgram)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
+                $newProgram = $groupPriv->project . ",$programID";
+                $this->dao->update(TABLE_USERGROUP)->set('program')->eq($newProgram)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
             }
             else
             {
-                $PRJAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJAdmin')->fetch('id');
+                $programAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('programAdmin')->fetch('id');
                 $groupPriv  = new stdclass();
                 $groupPriv->account = $this->app->user->account;
-                $groupPriv->group   = $PRJAdminID;
-                $groupPriv->PRJ     = $programID;
+                $groupPriv->group   = $programAdminID;
+                $groupPriv->project = $programID;
                 $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
@@ -624,12 +624,12 @@ class programModel extends model
         $this->loadModel('user')->updateUserView($programID, 'program', $changedAccounts);
 
         /* Update children user view. */
-        $childPGMList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
-        $childPRJList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
+        $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
+        $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
         $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
 
-        if(!empty($childPGMList))  $this->user->updateUserView($childPGMList, 'program', $changedAccounts);
-        if(!empty($childPRJList))  $this->user->updateUserView($childPRJList, 'project', $changedAccounts);
+        if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'program', $changedAccounts);
+        if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project', $changedAccounts);
         if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', $changedAccounts);
     }
 
@@ -799,14 +799,14 @@ class programModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $programTitle
-     * @param  int    $PRJMine
+     * @param  int    $projectMine
      * @access public
      * @return array
      */
-    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
+    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $projectMine = 0)
     {
         /* Init vars. */
-        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $PRJMine);
+        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $projectMine);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
@@ -815,12 +815,12 @@ class programModel extends model
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, PRJ, estimate, consumed, `left`, status, closedReason')
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
             ->from(TABLE_TASK)
-            ->where('PRJ')->in($projectKeys)
+            ->where('project')->in($projectKeys)
             ->andWhere('parent')->lt(1)
             ->andWhere('deleted')->eq(0)
-            ->fetchGroup('PRJ', 'id');
+            ->fetchGroup('project', 'id');
 
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $projectID => $projectTasks)

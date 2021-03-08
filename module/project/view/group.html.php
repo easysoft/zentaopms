@@ -19,7 +19,7 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->group->browse;?></span></span>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php if(common::hasPriv('project', 'PRJCreateGroup')) echo html::a($this->createLink('project', 'PRJCreateGroup', "projectID=$projectID&projectID=$projectID", '', true), '<i class="icon-plus"></i> ' . $lang->group->create, '', 'class="btn btn-primary iframe" data-width="550"');?>
+    <?php if(common::hasPriv('project', 'createGroup')) echo html::a($this->createLink('project', 'createGroup', "projectID=$projectID&projectID=$projectID", '', true), '<i class="icon-plus"></i> ' . $lang->group->create, '', 'class="btn btn-primary iframe" data-width="550"');?>
   </div>
 </div>
 <div id='mainContent' class='main-table'>
@@ -44,12 +44,12 @@
         <td class='c-actions'>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php $disabled = $group->role == 'limited' ? 'disabled' : '';?>
-          <?php common::printIcon('project', 'PRJManageView', "groupID=$group->id&projectID=$projectID&projectID=$projectID", $group, 'list', 'eye', '', $disabled);?>
-          <?php common::printIcon('project', 'PRJManagePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
+          <?php common::printIcon('project', 'manageView', "groupID=$group->id&projectID=$projectID&projectID=$projectID", $group, 'list', 'eye', '', $disabled);?>
+          <?php common::printIcon('project', 'managePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
-          <?php common::printIcon('project', 'PRJManageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
-          <?php common::printIcon('project', 'PRJEditGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
-          <?php common::printIcon('project', 'PRJCopyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
+          <?php common::printIcon('project', 'manageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
+          <?php common::printIcon('project', 'editGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php common::printIcon('project', 'copyGroup', "groupID=$group->id", $group, 'list', 'copy', '', "iframe $disabled", 'yes', "data-width='550'");?>
           <?php
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {

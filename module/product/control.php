@@ -72,11 +72,11 @@ class product extends control
      * @param  string $status
      * @param  int    $productID
      * @param  int    $branch
-     * @param  int    $PRJMine
+     * @param  int    $projectMine
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0, $branch = 0, $PRJMine = 0)
+    public function project($status = 'all', $productID = 0, $branch = 0, $projectMine = 0)
     {
         $this->product->setMenu($this->products, $productID, $branch);
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
@@ -87,7 +87,7 @@ class product extends control
 
         /* Get PM id list. */
         $accounts     = array();
-        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $PRJMine);
+        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $projectMine);
         foreach($projectStats as $project)
         {
             if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
@@ -200,11 +200,11 @@ class product extends control
         if($this->app->rawModule == 'projectstory')
         {
             $this->session->set('currentProductType', $product->type);
-            $projectProducts = $this->product->getProductsByProject($this->session->PRJ);
+            $projectProducts = $this->product->getProductsByProject($this->session->project);
             $productPlans    = $this->loadModel('project')->getPlans($projectProducts);
 
             if($browseType == 'bybranch') $param = $branch;
-            $stories = $this->story->getProjectStories($this->session->PRJ, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
+            $stories = $this->story->getProjectStories($this->session->project, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
@@ -299,7 +299,7 @@ class product extends control
             $this->executeHooks($productID);
 
             $moduleName = $programID ? 'program'    : $this->moduleName;
-            $methodName = $programID ? 'pgmproduct' : 'browse';
+            $methodName = $programID ? 'product' : 'browse';
             $param      = $programID ? "programID=$programID" : "productID=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
@@ -308,7 +308,7 @@ class product extends control
         if($programID)
         {
             $this->app->rawModule = 'program';
-            $this->app->rawMethod = 'pgmproduct';
+            $this->app->rawMethod = 'product';
             $this->lang->navGroup->program = 'program';
             $this->loadModel('program')->setPGMViewMenu($programID);
             $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
@@ -435,7 +435,7 @@ class product extends control
             $this->executeHooks($productID);
 
             $moduleName = $programID ? 'program'    : 'product';
-            $methodName = $programID ? 'pgmproduct' : 'view';
+            $methodName = $programID ? 'product' : 'view';
             $param      = $programID ? "programID=$programID" : "product=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
@@ -450,7 +450,7 @@ class product extends control
         if($programID)
         {
             $this->app->rawModule = 'program';
-            $this->app->rawMethod = 'pgmproduct';
+            $this->app->rawMethod = 'product';
             $this->lang->navGroup->program = 'program';
             $this->loadModel('program')->setPGMViewMenu($programID);
             $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
@@ -520,7 +520,7 @@ class product extends control
                 }
             }
 
-            $locate = $this->createLink('program', 'pgmproduct', "programID=$programID");
+            $locate = $this->createLink('program', 'product', "programID=$programID");
             die(js::locate($locate, 'parent'));
         }
 
@@ -542,7 +542,7 @@ class product extends control
 
         /* Navigation remains under the program. */
         $this->app->rawModule = 'program';
-        $this->app->rawMethod = 'pgmproduct';
+        $this->app->rawMethod = 'product';
         $this->lang->navGroup->program = 'program';
         $this->loadModel('program')->setPGMViewMenu($programID);
         $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
@@ -899,7 +899,7 @@ class product extends control
 
         $moduleGroup = zget($this->lang->navGroup, $module);
         $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
-        $products    = $moduleGroup == 'project' ? $this->product->getProductsByProject($this->session->PRJ) : $this->product->getList();
+        $products    = $moduleGroup == 'project' ? $this->product->getProductsByProject($this->session->project) : $this->product->getList();
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
@@ -907,7 +907,7 @@ class product extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
         $this->view->products  = $products;
-        $this->view->projectID = $moduleGroup == 'project' ? $this->session->PRJ : 0;
+        $this->view->projectID = $moduleGroup == 'project' ? $this->session->project : 0;
         $this->view->programs  = $this->loadModel('program')->getPGMPairs(true);
         $this->view->openApp   = $moduleGroup;
         $this->display();
@@ -957,7 +957,7 @@ class product extends control
             $moduleIndex = array_search('product', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
-            $this->view->project = $this->loadModel('program')->getPRJById($this->session->PRJ);
+            $this->view->project = $this->loadModel('project')->getById($this->session->project);
         }
 
         $this->loadModel($fromModule)->setMenu($this->products, key($this->products));
@@ -1168,7 +1168,7 @@ class product extends control
         $this->session->set('productList', $this->app->getURI(true));
 
         /* Get all product list. Locate to the create product page if there is no product. */
-        $this->products = $this->product->getPairs('', $this->session->PRJ);
+        $this->products = $this->product->getPairs('', $this->session->project);
         if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
 
         /* Get current product. */

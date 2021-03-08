@@ -492,7 +492,7 @@ class story extends control
         $this->view->pri              = $pri;
         $this->view->productID        = $productID;
         $this->view->estimate         = $estimate;
-        $this->view->storyTitle       = $title;
+        $this->view->storyTitle       = isset($story->title) ? $story->title : '';
         $this->view->spec             = $spec;
         $this->view->type             = $type;
         $this->view->branch           = $branch;

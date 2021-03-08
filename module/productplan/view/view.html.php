@@ -392,7 +392,7 @@
                   <?php endif;?>
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', false, $bug->PRJ), $bug->title);?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', false, $bug->project), $bug->title);?></td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
                 <td>

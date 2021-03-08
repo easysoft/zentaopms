@@ -19,39 +19,39 @@
 <?php js::set('from', $from);?>
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
-<?php js::set('longTime', $lang->project->PRJLongTime);?>
-<?php $requiredFields = $config->project->PRJCreate->requiredFields;?>
+<?php js::set('longTime', $lang->project->longTime);?>
+<?php $requiredFields = $config->project->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->project->PRJCreate . ' - ' . zget($lang->project->modelList, $model, '');?></h2>
+      <h2><?php echo $lang->project->create . ' - ' . zget($lang->project->modelList, $model, '');?></h2>
       <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->PRJCopy;?></button>
+        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       </div>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->project->PGMParent;?></th>
+          <th class='w-120px'><?php echo $lang->project->parent;?></th>
           <td><?php echo html::select('parent', $projectList, $projectID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
           <td>
-            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->PGMTips;?>"></icon>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->program->tips;?>"></icon>
           </td>
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->PRJName;?></th>
+          <th><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->PRJPM;?></th>
+          <th><?php echo $lang->project->PM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->PRJBudget;?></th>
+          <th><?php echo $lang->project->budget;?></th>
           <td>
             <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->project->PGMParentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft : '';?>
               <?php echo html::input('budget', '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
@@ -138,14 +138,14 @@
         </tr>
         <?php $this->printExtendFields('', 'table');?>
         <tr>
-          <th><?php echo $lang->project->PRJDesc;?></th>
+          <th><?php echo $lang->project->desc;?></th>
           <td colspan='3'>
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $lang->project->PRJAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
+          <td colspan='3' class='aclBox'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
         <tr class="hidden" id="whitelistBox">
           <th><?php echo $lang->whitelist;?></th>
@@ -155,7 +155,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->auth;?></th>
-          <td colspan='3'><?php echo html::radio('auth', $lang->project->PRJAuthList, $auth, '', 'block');?></td>
+          <td colspan='3'><?php echo html::radio('auth', $lang->project->authList, $auth, '', 'block');?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
@@ -196,10 +196,10 @@
     </div>
   </div>
 </div>
-<div id='PRJAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->project->PRJAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
+<div id='projectAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
-<div id='PGMAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->project->PGMPRJAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
+<div id='programAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->program->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php if($fromModule != 'product' && !empty($project)):?>
 <div class="table-empty-tip">
-  <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('program', 'PRJManageProducts', "projectID=$project->id&programID=$project->parent", "<i class='icon icon-plus'></i> " . $lang->program->PRJManageProducts, '', "class='btn btn-info'");?></p>
+  <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('project', 'manageProducts', "projectID=$project->id&programID=$project->parent", "<i class='icon icon-plus'></i> " . $lang->project->manageProducts, '', "class='btn btn-info'");?></p>
 </div>
 <script>$("#menuNav .nav li a[href*='product']").closest('li').removeClass('active');</script>
 <?php else:?>

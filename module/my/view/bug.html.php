@@ -101,8 +101,8 @@
             <?php endif;?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', '', $bug->PRJ), $bug->title, null, "style='color: $bug->color' title={$bug->title} data-group='project'");?></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('product', 'view', "productID=$bug->product", '', '', $bug->PRJ), $bug->productName, null, "title={$bug->productName} data-group='product'");?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', '', $bug->project), $bug->title, null, "style='color: $bug->color' title={$bug->title} data-group='project'");?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('product', 'view', "productID=$bug->product", '', '', $bug->project), $bug->productName, null, "title={$bug->productName} data-group='product'");?></td>
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <?php if($type != 'openedBy'): ?>
           <td><?php echo zget($users, $bug->openedBy);?></td>
@@ -119,11 +119,11 @@
             if($canBeChanged)
             {
                 $params = "bugID=$bug->id";
-                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true, '', '', $bug->PRJ);
-                common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true, '', '', $bug->PRJ);
-                common::printIcon('bug', 'close',      $params, $bug, 'list', '',        '', 'iframe', true, '', '', $bug->PRJ);
-                common::printIcon('bug', 'edit',       $params, $bug, 'list', '',        '', '',       '',   '', '', $bug->PRJ);
-                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', '', '', '', '', $bug->PRJ);
+                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true, '', '', $bug->project);
+                common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true, '', '', $bug->project);
+                common::printIcon('bug', 'close',      $params, $bug, 'list', '',        '', 'iframe', true, '', '', $bug->project);
+                common::printIcon('bug', 'edit',       $params, $bug, 'list', '',        '', '',       '',   '', '', $bug->project);
+                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', '', '', '', '', $bug->project);
             }
             ?>
           </td>
@@ -139,13 +139,13 @@
         <?php
         if($canBatchConfirm)
         {
-          $actionLink = $this->createLink('bug', 'batchConfirm', '', '', '', $bug->PRJ);
+          $actionLink = $this->createLink('bug', 'batchConfirm', '', '', '', $bug->project);
           $misc = "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"";
           echo html::commonButton($lang->bug->confirmBug, $misc);
         }
         if($canBatchClose)
         {
-          $actionLink = $this->createLink('bug', 'batchClose', '', '', '', $bug->PRJ);
+          $actionLink = $this->createLink('bug', 'batchClose', '', '', '', $bug->project);
           $misc = "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"";
           echo html::commonButton($lang->bug->close, $misc);
         }
@@ -156,7 +156,7 @@
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo?> <span class="caret"></span></button>
           <?php
           $withSearch = count($memberPairs) > 10;
-          $actionLink = $this->createLink('bug', 'batchAssignTo', "productID=0&type=my", '', '', $bug->PRJ);
+          $actionLink = $this->createLink('bug', 'batchAssignTo', "productID=0&type=my", '', '', $bug->project);
           echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
           if($withSearch)
           {

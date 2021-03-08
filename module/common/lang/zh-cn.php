@@ -293,7 +293,7 @@ $lang->index->menu->project = "浏览{$lang->executionCommon}|project|browse";
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->index       = '首页|my|index';
+$lang->my->menu->index       = '仪表盘|my|index';
 $lang->my->menu->calendar    = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->myWork      = array('link' => '待处理|my|work|mode=task');
 if($config->systemMode == 'new')
