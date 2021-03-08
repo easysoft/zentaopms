@@ -68,7 +68,7 @@ ALTER TABLE `zt_user` ADD `analysis` text NOT NULL AFTER `nature`;
 ALTER TABLE `zt_user` ADD `strategy` text NOT NULL AFTER `analysis`;
 ALTER TABLE `zt_user` CHANGE `avatar` `avatar` text NOT NULL AFTER `commiter`;
 
-REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'URSR', '3');
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'URSR', '6');
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'unitList', 'CNY,USD');
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'defaultCurrency', 'CNY');
 
@@ -323,6 +323,9 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (11, 'user',         'cropAvatar');
 
 INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
-('zh-cn', 'custom', 'URSRList', '1', '{\"SRName\":\"\\u7814\\u53d1\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),('zh-cn', 'custom', 'URSRList', '2', '{\"SRName\":\"\\u8f6f\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '1'),
-('zh-cn', 'custom', 'URSRList', '3', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u9700\\u6c42\"}', '1'),
-('zh-cn', 'custom', 'URSRList', '4', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u53f2\\u8bd7\"}', '1');
+('zh-cn', 'custom', 'URSRList', '1', '{\"SRName\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '2', '{\"SRName\":\"\\u7814\\u53d1\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '3', '{\"SRName\":\"\\u8f6f\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '4', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u9700\\u6c42\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '5', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u53f2\\u8bd7\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '6', '{\"SRName\":\"\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1');
