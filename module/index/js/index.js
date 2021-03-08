@@ -94,11 +94,6 @@
                 return link.prj ? 'project' : 'report';
             }
         }
-        if(moduleName === 'program')
-        {
-            if(methodLowerCase.indexOf('pgm') === 0) return 'program';
-            if(methodLowerCase === 'index' || methodLowerCase.indexOf('prj') === 0) return 'project';
-        }
         if(moduleName === 'story' && methodLowerCase === 'zerocase')
         {
             return link.params.from == 'project' ? 'project' : 'qa';

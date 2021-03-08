@@ -168,7 +168,7 @@ class project extends control
     public function index($projectID = 0)
     {
         $this->lang->navGroup->project = 'project';
-        $projectID = $this->project->saveState($projectID, $this->project->getPairs());
+        $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
         $project = $this->project->getByID($projectID);
         if(empty($project) || $project->type != 'project') die(js::error($this->lang->notFound) . js::locate('back'));
