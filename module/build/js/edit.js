@@ -1,5 +1,5 @@
 var executionID = $('#execution').val();
-function loadExecutons()
+function loadExecutions()
 {
     var productID = $('#product').val();
     var branchID  = $('#branch').length > 0 ? $('#branch').val() : 0;
@@ -11,5 +11,5 @@ function loadExecutons()
 
 $(document).on('change', '#product,#branch', function()
 {
-    loadExecutons();
+    loadExecutions();
 })

@@ -497,11 +497,11 @@ $lang->projectrelease->menu = new stdclass();
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
-$lang->report->menu->annual  = array('link' => 'Annual Summary|report|annualData|year=&dept=&userID=' . (isset($_SESSION['user']) ? zget($_SESSION['user'], 'id', 0) : 0), 'target' => '_blank');
-$lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
-$lang->report->menu->project = array('link' => $lang->executionCommon . '|report|projectdeviation');
-$lang->report->menu->test    = array('link' => 'Request|report|bugcreate', 'alias' => 'bugassign');
-$lang->report->menu->staff   = array('link' => 'Company|report|workload');
+$lang->report->menu->annual    = array('link' => 'Annual Summary|report|annualData|year=&dept=&userID=' . (isset($_SESSION['user']) ? zget($_SESSION['user'], 'id', 0) : 0), 'target' => '_blank');
+$lang->report->menu->product   = array('link' => $lang->productCommon . '|report|productsummary');
+$lang->report->menu->execution = array('link' => $lang->executionCommon . '|report|executiondeviation');
+$lang->report->menu->test      = array('link' => 'Request|report|bugcreate', 'alias' => 'bugassign');
+$lang->report->menu->staff     = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
 $lang->report->notice->help = 'Note: The report is generated on the results of browsing the list. Click, e.g. AssignedToMe, then click Create Report to generate a report based on AssignedToMe list.';

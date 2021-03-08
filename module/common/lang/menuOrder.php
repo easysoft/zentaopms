@@ -131,7 +131,7 @@ $lang->doc->menuOrder[30] = 'create';
 /* report menu order. */
 $lang->report->menuOrder[5]  = 'annual';
 $lang->report->menuOrder[10] = 'product';
-$lang->report->menuOrder[15] = 'project';
+$lang->report->menuOrder[15] = 'execution';
 $lang->report->menuOrder[20] = 'test';
 $lang->report->menuOrder[25] = 'staff';
 
