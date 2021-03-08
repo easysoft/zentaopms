@@ -165,15 +165,15 @@ $lang->program->menu = new stdclass();
 $lang->program->menu->index   = 'Home|program|index|';
 $lang->program->menu->browse  = array('link' => 'Program|program|browse|', 'alias' => 'create,edit,group,managepriv,manageview,managemembers');
 
-$lang->PRJ = new stdclass();
-$lang->PRJ->menu = new stdclass();
+$lang->project = new stdclass();
+$lang->project->menu = new stdclass();
 if($config->systemMode == 'new')
 {
-    $lang->PRJ->menu->browse = array('link' => 'Project|project|browse|');
+    $lang->project->menu->browse = array('link' => 'Project|project|browse|');
 }
 else
 {
-    $lang->PRJ->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
+    $lang->project->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
 }
 
 $lang->program->viewMenu = new stdclass();

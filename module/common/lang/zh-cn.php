@@ -165,15 +165,15 @@ $lang->program->menu = new stdclass();
 //$lang->program->menu->index   = '主页|program|index|';
 $lang->program->menu->browse  = array('link' => '项目集|program|browse|');
 
-$lang->PRJ = new stdclass();
-$lang->PRJ->menu = new stdclass();
+$lang->project = new stdclass();
+$lang->project->menu = new stdclass();
 if($config->systemMode == 'new')
 {
-    $lang->PRJ->menu->browse = array('link' => '项目|project|browse|');
+    $lang->project->menu->browse = array('link' => '项目|project|browse|');
 }
 else
 {
-    $lang->PRJ->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
+    $lang->project->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
 }
 
 $lang->program->viewMenu = new stdclass();
