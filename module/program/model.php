@@ -875,4 +875,18 @@ class programModel extends model
         }
         return $stats;
     }
+
+    /**
+     * Get budget unit list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBudgetUnitList()
+    {
+        $budgetUnitList = array();
+        foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+
+        return $budgetUnitList;
+    }
 }

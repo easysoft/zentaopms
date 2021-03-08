@@ -219,7 +219,7 @@ class adminModel extends model
     {
         $register = new stdclass();
         $register->company = $this->app->company->name;
-        xregister->email   = $this->app->user->email;
+        $register->email   = $this->app->user->email;
         return $register;
     }
 

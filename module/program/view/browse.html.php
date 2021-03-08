@@ -30,7 +30,7 @@
     <?php if(isset($this->config->maxVersion)):?>
     <?php common::printLink('project', 'createGuide', "programID=0&from=PGM", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php elseif($this->config->systemMode == 'new'):?>
-    <?php common::printLink('project', 'create', "mode=scrum&programID=0&from=PGM", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('project', 'create', "mode=scrum&programID=0&from=program", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
     <?php endif;?>
   </div>
 </div>

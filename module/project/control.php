@@ -322,10 +322,10 @@ class project extends control
         $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
         $this->view->copyProjects    = $this->project->getPairsByModel();
         $this->view->products        = $products;
-        $this->view->allProducts     = array('0' => '') + $this->project->getPGMProductPairs($projectID);
+        $this->view->allProducts     = array('0' => '') + $this->program->getProductPairs($programID);
         $this->view->productPlans    = array('0' => '') + $productPlans;
         $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->projectID       = $projectID;
+        $this->view->programID       = $programID;
         $this->view->model           = $model;
         $this->view->name            = $name;
         $this->view->code            = $code;
@@ -335,7 +335,7 @@ class project extends control
         $this->view->whitelist       = $whitelist;
         $this->view->copyProjectID   = $copyProjectID;
         $this->view->from            = $from;
-        $this->view->projectList     = $this->project->getParentPairs();
+        $this->view->programList     = $this->program->getParentPairs();
         $this->view->parentProgram   = $parentProgram;
         $this->view->URSRPairs       = $this->loadModel('custom')->getURSRPairs();
         $this->view->availableBudget = $this->program->getBudgetLeft($parentProgram);
@@ -438,7 +438,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function batchEdit($from = 'prjbrowse', $projectID = 0)
+    public function batchEdit($from = 'browse', $projectID = 0)
     {
         $this->loadModel('action');
 
@@ -526,11 +526,11 @@ class project extends control
      * Project browse groups.
      *
      * @param  int    $projectID
-     * @param  int    $projectID
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function group($projectID = 0, $projectID = 0)
+    public function group($projectID = 0, $programID = 0)
     {
         $this->lang->navGroup->project = 'project';
         $this->lang->project->menu = $this->lang->scrum->setMenu;
@@ -548,7 +548,7 @@ class project extends control
         $this->view->position   = $position;
         $this->view->groups     = $groups;
         $this->view->projectID  = $projectID;
-        $this->view->projectID  = $projectID;
+        $this->view->programID  = $programID;
         $this->view->groupUsers = $groupUsers;
 
         $this->display();
@@ -558,11 +558,10 @@ class project extends control
      * Project create a group.
      *
      * @param  int    $projectID
-     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function createGroup($projectID = 0, $projectID = 0)
+    public function createGroup($projectID = 0)
     {
         if(!empty($_POST))
         {
@@ -583,7 +582,7 @@ class project extends control
      *
      * @param  int    $groupID
      * @param  int    $projectID
-     * @param  int    $projectID
+     * @param  int    $programID
      * @access public
      * @return void
      */
@@ -1076,17 +1075,17 @@ class project extends control
      *
      * @param  int     $projectID
      * @param  int     $deptID
-     * @param  int     $projectID
+     * @param  int     $programID
      * @param  int     $from
      * @access public
      * @return void
      */
-    public function addWhitelist($projectID = 0, $deptID = 0, $projectID = 0, $from = 'project')
+    public function addWhitelist($projectID = 0, $deptID = 0, $programID = 0, $from = 'project')
     {
         /* Navigation stay in project when enter from project list. */
         $this->adjustNavigation($from, $projectID);
 
-        echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=project&projectID=$projectID&from=$from");
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=project&programID=$programID&from=$from");
     }
 
     /*
@@ -1106,12 +1105,12 @@ class project extends control
      * Manage products.
      *
      * @param  int     $projectID
-     * @param  int     $projectID
+     * @param  int     $programID
      * @param  string $from  project|program|programproject
      * @access public
      * @return void
      */
-    public function manageProducts($projectID, $projectID = 0, $from = 'project')
+    public function manageProducts($projectID, $programID = 0, $from = 'project')
     {
         /* Navigation stay in project when enter from project list. */
         $this->adjustNavigation($from, $projectID);
@@ -1135,7 +1134,7 @@ class project extends control
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
             $locateLink = $this->session->projectBrowse ? $this->session->projectBrowse : inLink('manageProducts', "projectID=$projectID");
-            if($from == 'program')  $locateLink = inLink('PGMBrowse');
+            if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
             if($from == 'programproject') $locateLink = $this->session->programProject ? $this->session->programProject : inLink('programProject', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
@@ -1177,17 +1176,17 @@ class project extends control
     /**
      * AJAX: Check products.
      *
-     * @param  int    $projectID
+     * @param  int    $programID
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxCheckProduct($projectID, $projectID)
+    public function ajaxCheckProduct($programID, $projectID)
     {
         /* Set vars. */
         $project   = $this->project->getByID($projectID);
-        $oldTopPGM = $this->project->getTopPGMByID($project->parent);
-        $newTopPGM = $this->project->getTopPGMByID($projectID);
+        $oldTopPGM = $this->loadModel('program')->getTopByID($project->parent);
+        $newTopPGM = $this->program->getTopByID($programID);
 
         if($oldTopPGM == $newTopPGM) die();
 
@@ -1220,8 +1219,8 @@ class project extends control
      */
     public function adjustNavigation($from = '', $projectID = 0)
     {
-        if($from == 'prjbrowse') $this->lang->project->menu = $this->lang->project->menu;
-        if($from == 'pgmbrowse') $this->lang->navGroup->project = 'project';
+        if($from == 'browse') $this->lang->project->menu = $this->lang->project->menu;
+        if($from == 'program') $this->lang->navGroup->project = 'project';
 
         if($from == 'project')
         {

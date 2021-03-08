@@ -179,14 +179,14 @@ else
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => 'Product|program|product|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "Project|program|project|program=%s");
-$lang->program->viewMenu->personnel   = array('link' => "Member|personnel|accessible|program=%s");
+$lang->program->viewMenu->personnel   = array('link' => "Member|personnel|putinto|program=%s");
 $lang->program->viewMenu->stakeholder = array('link' => "Stakeholder|program|stakeholder|program=%s", 'alias' => 'createstakeholder');
 
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
+$lang->personnel->menu->putinto    = array('link' => "Investment|personnel|putinto|program=%s");
 $lang->personnel->menu->accessible = array('link' => "Accessible|personnel|accessible|program=%s");
 $lang->personnel->menu->whitelist  = array('link' => "Whitelist|personnel|whitelist|program=%s", 'alias' => 'addwhitelist');
-$lang->personnel->menu->putinto    = array('link' => "Investment|personnel|putinto|program=%s");
 
 /* Scrum menu. */
 $lang->product = new stdclass();
