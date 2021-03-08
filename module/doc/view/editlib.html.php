@@ -28,10 +28,10 @@
         <td><?php echo $product->name?></td>
       </tr>
       <?php endif;?>
-      <?php if(!empty($lib->project)):?>
+      <?php if(!empty($lib->execution)):?>
       <tr>
-        <th class='w-130px'><?php echo $lang->doc->project?></th>
-        <td><?php echo $project->name?></td>
+        <th class='w-130px'><?php echo $lang->doc->execution?></th>
+        <td><?php echo $execution->name?></td>
       </tr>
       <?php endif;?>
       <tr>
@@ -43,7 +43,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->doclib->control;?></th>
-        <?php if($lib->type == 'product' or $lib->type == 'project'):?>
+        <?php if($lib->type == 'product' or $lib->type == 'execution'):?>
         <td>
           <?php echo html::radio('acl', $lang->doclib->aclListA, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
           <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>

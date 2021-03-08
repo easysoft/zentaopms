@@ -72,7 +72,7 @@
                 <td class="text-center"><?php echo sprintf('%03d', $file->id);?></td>
                 <td class="c-url">
                   <?php
-                  if($type == 'project' && in_array($file->objectType, array('task', 'build')))
+                  if($type == 'execution' && in_array($file->objectType, array('task', 'build')))
                   {
                       $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
                   }
@@ -149,7 +149,7 @@
                 ?>
                 </a>
                 <?php
-                if($type == 'project' && in_array($file->objectType, array('task', 'build')))
+                if($type == 'execution' && in_array($file->objectType, array('task', 'build')))
                 {
                     $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
                 }

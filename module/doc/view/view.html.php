@@ -187,10 +187,10 @@ js::set('docID', $doc->id);
                 <td><?php echo $doc->productName;?></td>
               </tr>
               <?php endif;?>
-              <?php if($doc->projectName):?>
+              <?php if($doc->executionName):?>
               <tr>
-                <th class='w-80px'><?php echo $lang->doc->project;?></th>
-                <td><?php echo $doc->projectName;?></td>
+                <th class='w-80px'><?php echo $lang->doc->execution;?></th>
+                <td><?php echo $doc->executionName;?></td>
               </tr>
               <?php endif;?>
               <tr>

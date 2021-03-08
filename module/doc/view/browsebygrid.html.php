@@ -87,9 +87,9 @@
         <div class="col">
           <?php
           $browseLink = '';
-          if($libType == 'project')
+          if($libType == 'execution')
           {
-              $browseLink = inlink('allLibs', "type=project&product={$currentLib->product}");
+              $browseLink = inlink('allLibs', "type=execution&product={$currentLib->product}");
           }
           elseif($libType == 'files')
           {

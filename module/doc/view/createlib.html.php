@@ -29,9 +29,9 @@
               <th><?php echo $lang->doc->product?></th>
               <td><?php echo html::select('product', $products, $type == 'product' ? $objectID : '', "class='form-control chosen' data-drop_direction='down'")?></td>
             </tr>
-            <tr class='project hidden'>
-              <th><?php echo $lang->doc->project?></th>
-              <td><?php echo html::select('project', $projects, $type == 'project' ? $objectID : '', "class='form-control chosen' data-drop_direction='down'")?></td>
+            <tr class='execution hidden'>
+              <th><?php echo $lang->doc->execution?></th>
+              <td><?php echo html::select('execution', $executions, $type == 'execution' ? $objectID : '', "class='form-control chosen' data-drop_direction='down'")?></td>
             </tr>
             <tr>
               <th><?php echo $lang->doclib->name?></th>

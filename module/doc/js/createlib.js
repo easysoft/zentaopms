@@ -14,19 +14,19 @@ function changeByLibType(libType)
     if(libType == 'product')
     {
         $('table tr.product').removeClass('hidden');
-        $('table tr.project').addClass('hidden');
+        $('table tr.execution').addClass('hidden');
         changeDoclibAcl(libType);
     }
-    else if(libType == 'project')
+    else if(libType == 'execution')
     {
         $('table tr.product').addClass('hidden');
-        $('table tr.project').removeClass('hidden');
+        $('table tr.execution').removeClass('hidden');
         changeDoclibAcl(libType);
     }
     else
     {
         $('table tr.product').addClass('hidden');
-        $('table tr.project').addClass('hidden');
+        $('table tr.execution').addClass('hidden');
         changeDoclibAcl(libType);
     }
 
@@ -37,7 +37,7 @@ function changeByLibType(libType)
 
 function changeDoclibAcl(libType)
 {
-    if(libType == 'product' || libType == 'project')
+    if(libType == 'product' || libType == 'execution')
     {
         $('form input[name="acl"]').closest('td').find('span:first').html($('#aclBoxA td').html());
     }

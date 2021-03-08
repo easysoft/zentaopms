@@ -45,7 +45,7 @@ class execution extends control
             $this->executions = $this->execution->getPairs($this->session->project, 'all', 'nocode');
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
-        $this->objectType = $this->config->systemMode == 'classic' ? 'execution' : 'exection';
+        $this->objectType = $this->config->systemMode == 'classic' ? 'project' : 'execution';
     }
 
     /**

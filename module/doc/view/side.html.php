@@ -4,8 +4,8 @@ foreach($lang->doclib->tabList as $libType => $typeName) $sideLibs[$libType] = $
 $allModules = $this->loadModel('tree')->getDocStructure();
 
 $sideSubLibs = array();
-$sideSubLibs['product'] = $this->doc->getSubLibGroups('product', array_keys($sideLibs['product']));
-$sideSubLibs['project'] = $this->doc->getSubLibGroups('project', array_keys($sideLibs['project']));
+$sideSubLibs['product']   = $this->doc->getSubLibGroups('product', array_keys($sideLibs['product']));
+$sideSubLibs['execution'] = $this->doc->getSubLibGroups('execution', array_keys($sideLibs['execution']));
 if($this->methodName != 'browse')
 {
     $browseType = '';
@@ -32,7 +32,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
             <?php if(empty($sideLibs[$tabValue])):?>
             <li>
             <?php
-            if($lang->navGroup->doc == 'doc' and $tabValue == 'project')
+            if($lang->navGroup->doc == 'doc' and $tabValue == 'execution')
             {
                 echo $lang->noData;
             }
@@ -71,10 +71,10 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
               <ul>
                 <?php foreach($sideSubLibs[$tabValue][$tabMenuID] as $subLibID => $subLibName):?>
                 <?php
-                if($subLibID == 'project')
+                if($subLibID == 'execution')
                 {
-                    $subLibLink  = inlink('allLibs', "type=project&product=$tabMenuID");
-                    $activeClass = ($this->methodName == 'alllibs' && $type == 'project' && $$tabValue == $tabMenuID) ? "class='active'" : '';
+                    $subLibLink  = inlink('allLibs', "type=execution&product=$tabMenuID");
+                    $activeClass = ($this->methodName == 'alllibs' && $type == 'execution' && $$tabValue == $tabMenuID) ? "class='active'" : '';
                     $icon        = 'icon-stack';
                 }
                 elseif($subLibID == 'files')
@@ -173,7 +173,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
       <?php
       if(common::hasPriv('doc', 'sort'))
       {
-          echo html::a('###', "<i class='icon-sort'></i> {$lang->doc->orderLib}", '', "id='orderLib' class='text-secondary small " . (($type != 'product' and $type !='project') ? '' : 'hidden') . "' style='padding-left:5px;'");
+          echo html::a('###', "<i class='icon-sort'></i> {$lang->doc->orderLib}", '', "id='orderLib' class='text-secondary small " . (($type != 'product' and $type !='execution') ? '' : 'hidden') . "' style='padding-left:5px;'");
           echo html::a('javascript:saveOrder()', "<i class='icon-checked'></i> {$lang->save}", '', "id='saveOrder' class='text-secondary small hidden' style='padding-left:10px;'");
       }
       ?>
@@ -217,13 +217,13 @@ $(function()
             $tabs.find('.tab-content .tab-pane#' + type).addClass('active');
         }
         $.cookie('docSideType', '');
-        $('#mainRow .side-col .side-footer #orderLib').toggleClass('hidden', (type == 'product' || type == 'project'));
+        $('#mainRow .side-col .side-footer #orderLib').toggleClass('hidden', (type == 'product' || type == 'execution'));
     }
 
     $('#mainRow .side-col .tabs .nav-tabs li a').click(function()
     {
         var href     = $(this).attr('href');
-        var canOrder = !(href.indexOf('product') > 0 || href.indexOf('project') > 0);
+        var canOrder = !(href.indexOf('product') > 0 || href.indexOf('execution') > 0);
         if(!canOrder)
         {
             $(this).closest('.side-col').find('.side-footer #orderLib').addClass('hidden');

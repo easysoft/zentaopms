@@ -12,7 +12,7 @@
 ?>
 <?php $pageCSS .= $this->doc->appendNavCSS();?>
 <?php include '../../common/view/header.html.php';?>
-<?php if($this->from == 'project'):;?>
+<?php if($this->from == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
 <div class="fade main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
@@ -37,12 +37,12 @@
       <div class='panel-body'>
         <div class="row row-grid files-grid" data-size="300">
           <?php foreach($libs as $libID => $lib):?>
-          <?php if($libID == 'project' and $from != 'doc') continue;?>
+          <?php if($libID == 'execution' and $from != 'doc') continue;?>
           <?php if(strpos($config->doc->custom->objectLibs, 'files') === false && $libID == 'files') continue;?>
           <?php if(strpos($config->doc->custom->objectLibs, 'customFiles') === false && isset($lib->main) && !$lib->main) continue;?>
 
           <?php $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");?>
-          <?php if($libID == 'project') $libLink = inlink('allLibs', "type=project&product=$object->id");?>
+          <?php if($libID == 'execution') $libLink = inlink('allLibs', "type=execution&product=$object->id");?>
           <?php if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id&from=$from");?>
 
           <?php $icon = 'icon-folder text-yellow';?>
@@ -51,10 +51,10 @@
           <div class="col">
               <a class="file" href="<?php echo $libLink;?>" data-group=<?php echo $from;?>>
               <i class="file-icon icon <?php echo $icon;?>"></i>
-              <div class="file-name"><?php echo ($libID != 'project' && $libID != 'files' && strpos($lib->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $lib->name;?></div>
+              <div class="file-name"><?php echo ($libID != 'execution' && $libID != 'files' && strpos($lib->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $lib->name;?></div>
               <div class="text-primary file-info"><?php echo  $lib->allCount . $lang->doc->item;?></div>
             </a>
-            <?php if($libID != 'project' and $libID != 'files'):?>
+            <?php if($libID != 'execution' and $libID != 'files'):?>
             <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <?php $collectTitle = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
             <div class="actions">
