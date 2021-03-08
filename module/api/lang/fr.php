@@ -28,3 +28,4 @@ $lang->api->post      = 'Se référer à la liste si POST Debug';
 
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'Cette interface SQL ne supporte que les requêtes SELECT.';
+$lang->api->error->disabled   = 'For security reasons, this feature is disabled. You can go to the config directory and modify the configuration item %s to open this function.';

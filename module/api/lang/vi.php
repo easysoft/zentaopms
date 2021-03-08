@@ -28,3 +28,4 @@ $lang->api->post      = 'Tham chiếu tới danh sách trang nếu POST Debug';
 
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'Giao diện SQL chỉ cho phép truy vấn SELECT.';
+$lang->api->error->disabled   = 'For security reasons, this feature is disabled. You can go to the config directory and modify the configuration item %s to open this function.';
