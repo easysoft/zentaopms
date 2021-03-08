@@ -220,8 +220,8 @@
 $(function()
 {
     /* Update table summary text. */
-    var checkedSummary = '<?php echo $lang->project->checkedSummary?>';
-    var pageSummary    = '<?php echo $lang->project->pageSummary?>';
+    var checkedSummary = '<?php echo $lang->execution->checkedSummary?>';
+    var pageSummary    = '<?php echo $lang->execution->pageSummary?>';
 
     $('#myTaskForm').table(
     {
