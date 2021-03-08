@@ -170,9 +170,9 @@ class projectModel extends model
      */
     public function getMainAction($module, $method)
     {
-        $link = html::a(helper::createLink('project', 'prjbrowse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
+        $link = html::a(helper::createLink('project', 'browse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
         $html = "<p style='padding-top:5px;'>" . $link . "</p>";
-        return common::hasPriv('project', 'prjbrowse') ? $html : '';
+        return common::hasPriv('project', 'browse') ? $html : '';
     }
 
     /**
@@ -1147,5 +1147,233 @@ class projectModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Update products of a project.
+     *
+     * @param  int    $projectID
+     * @param  array  $products
+     * @access public
+     * @return void
+     */
+    public function updateProducts($projectID, $products = '')
+    {
+        $this->loadModel('user');
+        $products           = isset($_POST['products']) ? $_POST['products'] : $products;
+        $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
+        $members = array_keys($this->getTeamMembers($projectID));
+        if(empty($products))
+        {
+            $this->user->updateUserView(array_keys($oldProjectProducts), 'product', $members);
+            return true;
+        }
+
+        $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
+        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();;
+
+        $existedProducts = array();
+        foreach($products as $i => $productID)
+        {
+            if(empty($productID)) continue;
+            if(isset($existedProducts[$productID])) continue;
+
+            $oldPlan = 0;
+            $branch  = isset($branches[$i]) ? $branches[$i] : 0;
+            if(isset($oldProjectProducts[$productID][$branch]))
+            {
+                $oldProjectProduct = $oldProjectProducts[$productID][$branch];
+                $oldPlan           = $oldProjectProduct->plan;
+            }
+
+            $data = new stdclass();
+            $data->project = $executionID;
+            $data->product = $productID;
+            $data->branch  = $branch;
+            $data->plan    = isset($plans[$productID]) ? $plans[$productID] : $oldPlan;
+            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            $existedProducts[$productID] = true;
+        }
+
+        /* Delete the execution linked products that is not linked with the execution. */
+        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('execution')->eq((int)$executionID)->fetchPairs('id');
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('execution')->in($executions)->andWhere('product')->notin($products)->exec();
+
+        $oldProductKeys = array_keys($oldProjectProducts);
+        $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
+        if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
+    }
+
+    /**
+     * Get team members.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getTeamMembers($projectID)
+    {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembers();
+
+        $project = $this->getByID($projectID);
+        $type    = $this->config->systemMode == 'new' ? $project->type : 'project';
+        if(empty($project)) return array();
+
+        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.root')->eq((int)$projectID)
+            ->andWhere('t1.type')->eq($type)
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchAll('account');
+    }
+
+    /**
+     * Get project stats.
+     *
+     * @param  int     $projectID
+     * @param  string  $status
+     * @param  int     $productID
+     * @param  int     $itemCounts
+     * @param  string  $orderBy
+     * @param  object  $pager
+     * @access public
+     * @return void
+     */
+    public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null)
+    {
+        if(empty($productID))
+        {
+            $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('project')->eq($projectID)
+                ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->eq($status)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+                ->andWhere('deleted')->eq('0')
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        else
+        {
+            $executions = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+                ->where('t1.product')->eq($productID)
+                ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
+                ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
+                ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+                ->andWhere('t2.deleted')->eq('0')
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
+        $hours     = array();
+        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+
+        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $tasks = $this->dao->select('id, execution, estimate, consumed, `left`, status, closedReason')
+            ->from(TABLE_TASK)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('execution', 'id');
+
+        /* Compute totalEstimate, totalConsumed, totalLeft. */
+        foreach($tasks as $executionID => $executionTasks)
+        {
+            $hour = (object)$emptyHour;
+            foreach($executionTasks as $task)
+            {
+                if($task->status != 'cancel')
+                {
+                    $hour->totalEstimate += $task->estimate;
+                    $hour->totalConsumed += $task->consumed;
+                }
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+            }
+            $hours[$executionID] = $hour;
+        }
+
+        /* Compute totalReal and progress. */
+        foreach($hours as $hour)
+        {
+            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
+            $hour->totalConsumed = round($hour->totalConsumed, 1);
+            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
+        }
+
+        /* Get burndown charts datas. */
+        $burns = $this->dao->select('execution, date AS name, `left` AS value')
+            ->from(TABLE_BURN)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere('task')->eq(0)
+            ->orderBy('date desc')
+            ->fetchGroup('execution', 'name');
+
+        foreach($burns as $executionID => $executionBurns)
+        {
+            /* If executionBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
+            $begin = $executions[$executionID]->begin;
+            $end   = $executions[$executionID]->end;
+            if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
+            $executionBurns = $this->processBurnData($executionBurns, $itemCounts, $begin, $end);
+
+            /* Shorter names. */
+            foreach($executionBurns as $executionBurn)
+            {
+                $executionBurn->name = substr($executionBurn->name, 5);
+                unset($executionBurn->execution);
+            }
+
+            ksort($executionBurns);
+            $burns[$executionID] = $executionBurns;
+        }
+
+        /* Process executions. */
+        $parents  = array();
+        $children = array();
+        foreach($executions as $key => $execution)
+        {
+            /* Process the end time. */
+            $execution->end = date(DT_DATE1, strtotime($execution->end));
+
+            /* Judge whether the execution is delayed. */
+            if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
+            {
+                $delay = helper::diffDate(helper::today(), $execution->end);
+                if($delay > 0) $execution->delay = $delay;
+            }
+
+            /* Process the burns. */
+            $execution->burns = array();
+            $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
+            foreach($burnData as $data) $execution->burns[] = $data->value;
+
+            /* Process the hours. */
+            $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
+
+            $execution->children = array();
+            $execution->grade == 1 ? $parents[$execution->id] = $execution : $children[$execution->parent][] = $execution;
+        }
+
+        /* In the case of the waterfall model, calculate the sub-stage. */
+        $execution = $this->loadModel('execution')->getById($this->session->project);
+        if($execution and $execution->model == 'waterfall')
+        {
+            foreach($parents as $id => $execution)
+            {
+                $execution->children = isset($children[$id]) ? $children[$id] : array();
+                unset($children[$id]);
+            }
+        }
+
+        $orphan = array();
+        foreach($children as $child) $orphan = array_merge($child, $orphan);
+
+        return array_merge($parents, $orphan);
     }
 }
