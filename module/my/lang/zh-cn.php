@@ -76,7 +76,7 @@ $lang->my->form->lblContact = '联系信息';
 $lang->my->form->lblAccount = '帐号信息';
 
 $lang->my->programLink = '项目集默认着陆页';
-$lang->my->productLink = '产品默认着陆页'; 
+$lang->my->productLink = '产品默认着陆页';
 $lang->my->projectLink = '项目默认着陆页';
 
 $lang->my->programLinkList = array();
