@@ -23,7 +23,7 @@
       <?php echo $user->avatar ? html::image($user->avatar) : strtoupper($user->account[0]);?>
       </span>
       <span class='user-name'><?php echo $user->realname;?></span>
-      <span class='user-role'><?php echo zget($lang->user->roleList, $user->role);?></span>
+      <span class='user-role'><?php echo zget($lang->user->roleList, $user->role, '');?></span>
     </div>
     <div class='row'>
       <table>
@@ -37,7 +37,7 @@
           <th><?php echo $lang->user->account;?></th>
           <td><?php echo $user->account;?></td>
           <th><?php echo $lang->user->email;?></th>
-          <td title='<?php echo $user->email;?>'><?php echo $user->email;?></td>
+          <td title='<?php echo $user->email;?>'><?php echo html::mailto($user->email);?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->dept;?></th>
@@ -58,7 +58,7 @@
           ?>
           </td>
           <th><?php echo $lang->user->role;?></th>
-          <td><?php echo zget($lang->user->roleList, $user->role);?></td>
+          <td><?php echo zget($lang->user->roleList, $user->role, '');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->join;?></th>
