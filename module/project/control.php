@@ -495,7 +495,7 @@ class project extends control
 
         $this->app->session->set('projectBrowse', $this->app->getURI(true));
 
-        $products = $this->loadModel('product')->getProductsByProject($projectID);;
+        $products = $this->loadModel('product')->getProducts($projectID);;
         $linkedBranches = array();
         foreach($products as $product)
         {

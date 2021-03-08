@@ -303,7 +303,7 @@ class productModel extends model
      */
     public function getProductPairsByProject($projectID, $status = 'all')
     {
-        $products = empty($projectID) ? $this->getList() : $this->getProductsByProject($projectID, $status);
+        $products = empty($projectID) ? $this->getList() : $this->getProducts($projectID, $status);
         $pairs    = array();
         if(!empty($products))
         {
@@ -321,7 +321,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProductsByProject($projectID, $status = 'all')
+    public function getProducts($projectID, $status = 'all')
     {
         return $this->dao->select('t1.branch, t1.plan, t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -378,7 +378,7 @@ class productModel extends model
         $products = array();
         if($projectID)
         {
-            $pairs    = $this->getProductsByProject($projectID);
+            $pairs    = $this->getProducts($projectID);
             $products = $this->getByIdList(array_keys($pairs));
         }
         else

@@ -202,7 +202,7 @@ class product extends control
         if($this->app->rawModule == 'projectstory')
         {
             $this->session->set('currentProductType', $product->type);
-            $projectProducts = $this->product->getProductsByProject($this->session->project);
+            $projectProducts = $this->product->getProducts($this->session->project);
             $productPlans    = $this->execution->getPlans($projectProducts);
 
             if($browseType == 'bybranch') $param = $branch;
@@ -901,7 +901,7 @@ class product extends control
 
         $moduleGroup = zget($this->lang->navGroup, $module);
         $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
-        $products    = $moduleGroup == 'project' ? $this->product->getProductsByProject($this->session->project) : $this->product->getList();
+        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList();
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
