@@ -6,7 +6,7 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: en.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @version     $Id: fr.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        https://www.zentao.pm
  */
 $lang->action->common     = 'Log';

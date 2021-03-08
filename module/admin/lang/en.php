@@ -54,13 +54,14 @@ $lang->admin->bind->caption = 'Link Account';
 $lang->admin->bind->success = "Account is linked!";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common     = 'Security Policy';
-$lang->admin->safe->set        = 'Password Settings';
-$lang->admin->safe->password   = 'Password Strength';
-$lang->admin->safe->weak       = 'Common Weak Passwords';
-$lang->admin->safe->reason     = 'Type';
-$lang->admin->safe->checkWeak  = 'Weak Password Scan';
-$lang->admin->safe->changeWeak = 'Force to change weak password';
+$lang->admin->safe->common       = 'Security Policy';
+$lang->admin->safe->set          = 'Password Settings';
+$lang->admin->safe->password     = 'Password Strength';
+$lang->admin->safe->weak         = 'Common Weak Passwords';
+$lang->admin->safe->reason       = 'Type';
+$lang->admin->safe->checkWeak    = 'Weak Password Scan';
+$lang->admin->safe->changeWeak   = 'Force to change weak password';
+$lang->admin->safe->loginCaptcha = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Force to change password after first login';
 
 $lang->admin->safe->modeList[0] = 'I don\'t care.';
@@ -78,6 +79,9 @@ $lang->admin->safe->reasonList['birthday'] = 'Same as DOB';
 
 $lang->admin->safe->modifyPasswordList[1] = 'Yes';
 $lang->admin->safe->modifyPasswordList[0] = 'No';
+
+$lang->admin->safe->loginCaptchaList[1] = 'Yes'
+$lang->admin->safe->loginCaptchaList[0] = 'No';
 
 $lang->admin->safe->noticeMode   = 'Password will be checked when a user logs in, or a user is added or edited.';
 $lang->admin->safe->noticeStrong = '';

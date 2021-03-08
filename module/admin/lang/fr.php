@@ -61,6 +61,7 @@ $lang->admin->safe->weak       = 'Mots de passes non sécurisés courrants';
 $lang->admin->safe->reason     = 'Type';
 $lang->admin->safe->checkWeak  = 'Balayage des mots de passe faibles';
 $lang->admin->safe->changeWeak = 'Forcer le changement des mots de passe faibles';
+$lang->admin->safe->loginCaptcha = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Forcer le changement du mot de passe après la première connexion';
 
 $lang->admin->safe->modeList[0] = "Contrôle Modéré";
@@ -78,6 +79,9 @@ $lang->admin->safe->reasonList['birthday'] = 'Identique à la date de naissance'
 
 $lang->admin->safe->modifyPasswordList[1] = 'Oui';
 $lang->admin->safe->modifyPasswordList[0] = 'Non';
+
+$lang->admin->safe->loginCaptchaList[1] = 'Oui'
+$lang->admin->safe->loginCaptchaList[0] = 'Non';
 
 $lang->admin->safe->noticeMode   = "Le mot de passe sera vérifié quand un utilisateur se connectera ou qu'un utilisateur sera créé ou modifier.";
 $lang->admin->safe->noticeStrong = '';
