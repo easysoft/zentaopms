@@ -219,7 +219,7 @@ class project extends control
         $this->view->pager        = $pager;
         $this->view->projectID    = $projectID;
         $this->view->project      = $this->project->getByID($projectID);
-        $this->view->ProjectTree  = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
+        $this->view->projectTree  = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;

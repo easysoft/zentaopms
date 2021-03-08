@@ -864,11 +864,11 @@ class productModel extends model
      * @param  int       $productID
      * @param  string    $browseType
      * @param  int       $branch
-     * @param  int       $PRJMine
+     * @param  int       $projectMine
      * @access public
      * @return array
      */
-    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $PRJMine = 0)
+    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $projectMine = 0)
     {
         $projectList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -876,7 +876,7 @@ class productModel extends model
             ->andWhere('t2.type')->eq('project')
             ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($this->cookie->PRJMine or $PRJMine)
+            ->beginIF($this->cookie->projectMine or $projectMine)
             ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t2.PM')->eq($this->app->user->account)
             ->markRight(1)
@@ -899,13 +899,13 @@ class productModel extends model
      * @param  int       $productID
      * @param  string    $browseType
      * @param  int       $branch
-     * @param  int       $PRJMine
+     * @param  int       $projectMine
      * @access public
      * @return array
      */
-    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $PRJMine = 0)
+    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $projectMine = 0)
     {
-        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $PRJMine);
+        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $projectMine);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
@@ -914,12 +914,12 @@ class productModel extends model
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, PRJ, estimate, consumed, `left`, status, closedReason')
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
             ->from(TABLE_TASK)
-            ->where('PRJ')->in($projectKeys)
+            ->where('project')->in($projectKeys)
             ->andWhere('parent')->lt(1)
             ->andWhere('deleted')->eq(0)
-            ->fetchGroup('PRJ', 'id');
+            ->fetchGroup('project', 'id');
 
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $projectID => $projectTasks)
@@ -990,7 +990,7 @@ class productModel extends model
         if(empty($productID)) return array();
         if(empty($projectID)) return $this->getAllExecutionPairsByProduct($productID, $branch);
 
-        $project = $this->loadModel('program')->getPRJByID($projectID);
+        $project = $this->loadModel('project')->getByID($projectID);
         $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
         $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -1059,7 +1059,7 @@ class productModel extends model
         foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
 
         $executionPairs = array();
-        $projectPairs   = $this->loadModel('program')->getPRJPairsByIdList($projectIdList);
+        $projectPairs   = $this->loadModel('project')->getPairsByIdList($projectIdList);
         foreach($executions as $id => $execution)
         {
             if($execution->grade == 2 && isset($executions[$execution->parent]))

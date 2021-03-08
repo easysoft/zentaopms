@@ -14,19 +14,19 @@
 <?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
 <?php js::set('changeProgram', $lang->project->changeProgram);?>
-<?php $requiredFields = $config->project->PRJEdit->requiredFields;?>
+<?php $requiredFields = $config->project->edit->requiredFields;?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $lang->project->PRJBatchEdit;?></h2>
+    <h2><?php echo $lang->project->batchEdit;?></h2>
   </div>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchEditForm">
     <table class="table table-form">
       <thead>
         <tr>
           <th class='w-40px'><?php echo $lang->idAB;?></th>
-          <th class='w-200px'><?php echo $lang->project->PGMParent;?></th>
-          <th class='c-name required'><?php echo $lang->project->PRJName;?></th>
-          <th class="w-150px <?php echo strpos($requiredFields, 'PM') !== false ?  'required' : '';?>"> <?php echo $lang->project->PRJPM;?></th>
+          <th class='w-200px'><?php echo $lang->project->parent;?></th>
+          <th class='c-name required'><?php echo $lang->project->name;?></th>
+          <th class="w-150px <?php echo strpos($requiredFields, 'PM') !== false ?  'required' : '';?>"> <?php echo $lang->project->PM;?></th>
           <th class='w-120px required'><?php echo $lang->project->begin;?></th>
           <th class='w-120px required'><?php echo $lang->project->end;?></th>
           <th class='w-250px'><?php echo $lang->project->acl;?></th>
@@ -34,7 +34,7 @@
       </thead>
       <tbody>
         <?php foreach($projects as $projectID => $project):?>
-        <?php $aclList = $project->parent ? $lang->project->PGMPRJAcls : $lang->project->PRJAcls;?>
+        <?php $aclList = $project->parent ? $lang->program->aclList : $lang->project->aclList;?>
         <tr>
           <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIdList[$projectID]", $projectID);?></td>
           <td><?php echo html::select("parents[$projectID]", $projectList, $project->parent, "class='form-control chosen' data-id='$projectID' data-name='{$project->name}' data-parent='{$project->parent}'");?></td>
@@ -46,7 +46,7 @@
           <td>
             <?php
               $disabledEnd = $project->end == LONG_TIME ? 'disabled' : '';
-              $end         = $project->end == LONG_TIME ? $lang->project->PRJLongTime : $project->end;
+              $end         = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
               echo html::input("ends[$projectID]", $end, "class='form-control form-date' $disabledEnd onchange='computeWorkDays(this.id);' placeholder='" . $lang->project->end . "'");
               echo html::hidden("dayses[$projectID]", $project->days);
             ?>

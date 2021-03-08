@@ -17,39 +17,39 @@
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>
-<?php js::set('longTime', $lang->project->PRJLongTime);?>
+<?php js::set('longTime', $lang->project->longTime);?>
 <?php js::set('from', $from);?>
 <?php js::set('unmodifiableProducts', $unmodifiableProducts)?>
 <?php js::set('tip', $lang->project->notAllowRemoveProducts);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
-<?php $aclList = $project->parent ? $lang->project->PGMPRJAclList : $lang->project->PRJAclList;?>
-<?php $requiredFields = $config->project->PRJEdit->requiredFields;?>
+<?php $aclList = $project->parent ? $lang->program->aclList : $lang->project->aclList;?>
+<?php $requiredFields = $config->project->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->project->PRJEdit;?></h2>
+      <h2><?php echo $lang->project->edit;?></h2>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->project->PGMParent;?></th>
+          <th class='w-120px'><?php echo $lang->program->parent;?></th>
           <td><?php echo html::select('parent', $projectList, $project->parent, "class='form-control chosen'");?></td>
           <td></td>
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->PRJName;?></th>
+          <th><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->PRJPM;?></th>
+          <th><?php echo $lang->project->PM;?></th>
           <td><?php echo html::select('PM', $PMUsers, $project->PM, "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->PRJBudget;?></th>
+          <th><?php echo $lang->project->budget;?></th>
           <td>
             <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->project->PGMParentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
               <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($project->budget == 0 ? 'disabled ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
@@ -74,7 +74,7 @@
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
               <?php
                 $disabledEnd = $project->end == LONG_TIME ? 'disabled' : '';
-                $end         = $project->end == LONG_TIME ? $lang->project->PRJLongTime : $project->end;
+                $end         = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
                 echo html::input('end', $end, "class='form-control form-date' onchange='computeWorkDays();' $disabledEnd placeholder='" . $lang->project->end . "' required");
               ?>
             </div>
@@ -136,7 +136,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->PRJDesc;?></th>
+          <th><?php echo $lang->project->desc;?></th>
           <td colspan='3'>
             <?php echo html::textarea('desc', $project->desc, "rows='6' class='form-control kindeditor' hidefocus='true'" . (strpos($requiredFields, 'desc') !== false ? ' required' : ''));?>
           </td>
@@ -153,7 +153,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->auth;?></th>
-          <td colspan='3'><?php echo html::radio('auth', $lang->project->PRJAuthList, $project->auth, '', 'block');?></td>
+          <td colspan='3'><?php echo html::radio('auth', $lang->project->authList, $project->auth, '', 'block');?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
@@ -168,11 +168,11 @@
     </form>
   </div>
 </div>
-<div id='PRJAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->project->PRJAclList, $project->acl == 'project' ? 'private' : 'open', "onclick='setWhite(this.value);'", 'block'));?>
+<div id='projectAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl == 'project' ? 'private' : 'open', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
-<div id='PGMAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->project->PGMPRJAclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
+<div id='ProgramAcl' class='hidden'>
+  <?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div class="modal fade" id="promptBox">
   <div class="modal-dialog mw-600px">
