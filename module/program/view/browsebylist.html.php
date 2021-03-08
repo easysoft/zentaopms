@@ -49,7 +49,7 @@
           <?php if($program->type == 'program'):?>
           <?php echo html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name);?>
           <?php else:?>
-          <?php echo html::a($this->createLink('program', 'index', "programID=$program->id", '', '', $program->id), $program->name);?>
+          <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name);?>
           <?php endif;?>
         </td>
         <td>
