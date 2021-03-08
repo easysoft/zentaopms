@@ -23,7 +23,7 @@
         <tbody>
           <?php if($this->config->systemMode == 'new'):?>
           <tr>
-            <th class='w-140px'><?php echo $lang->program->PGMCommon;?></th>
+            <th class='w-140px'><?php echo $lang->program->common;?></th>
             <td><?php echo html::select('program', $programs, '', "class='form-control chosen' required");?></td><td></td>
           </tr>
           <?php endif;?>
@@ -57,7 +57,7 @@
               <?php echo html::select('type', $productTypeList, 'normal', "class='form-control'");?>
             </td>
             <td></td>
-          </tr>  
+          </tr>
           <tr class='hide'>
             <th><?php echo $lang->product->status;?></th>
             <td><?php echo html::hidden('status', 'normal');?></td>
