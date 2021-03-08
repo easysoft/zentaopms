@@ -165,15 +165,15 @@ $lang->program->menu = new stdclass();
 $lang->program->menu->index  = 'Home|program|index|';
 $lang->program->menu->browse = array('link' => 'Program|program|browse|', 'alias' => 'create,edit,group,managepriv,manageview,managemembers');
 
-$lang->PRJ = new stdclass();
-$lang->PRJ->menu = new stdclass();
+$lang->project = new stdclass();
+$lang->project->menu = new stdclass();
 if($config->systemMode == 'new')
 {
-    $lang->PRJ->menu->browse = array('link' => 'Project|project|browse|');
+    $lang->project->menu->browse = array('link' => 'Project|project|browse|');
 }
 else
 {
-    $lang->PRJ->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
+    $lang->project->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
 }
 
 $lang->program->viewMenu = new stdclass();
@@ -497,11 +497,11 @@ $lang->projectrelease->menu = new stdclass();
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
-$lang->report->menu->annual  = array('link' => 'Tóm tắt năm|report|annualData|year=&dept=&userID=' . (isset($_SESSION['user']) ? zget($_SESSION['user'], 'id', 0) : 0), 'target' => '_blank');
-$lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
-$lang->report->menu->project = array('link' => $lang->executionCommon . '|report|projectdeviation');
-$lang->report->menu->test    = array('link' => 'Yêu cầu|report|bugcreate', 'alias' => 'bugassign');
-$lang->report->menu->staff   = array('link' => 'Doanh nghiệp|report|workload');
+$lang->report->menu->annual    = array('link' => 'Tóm tắt năm|report|annualData|year=&dept=&userID=' . (isset($_SESSION['user']) ? zget($_SESSION['user'], 'id', 0) : 0), 'target' => '_blank');
+$lang->report->menu->product   = array('link' => $lang->productCommon . '|report|productsummary');
+$lang->report->menu->execution = array('link' => $lang->executionCommon . '|report|executiondeviation');
+$lang->report->menu->test      = array('link' => 'Yêu cầu|report|bugcreate', 'alias' => 'bugassign');
+$lang->report->menu->staff     = array('link' => 'Doanh nghiệp|report|workload');
 
 $lang->report->notice = new stdclass();
 $lang->report->notice->help = 'Ghi chú: The report is generated on the results of browsing the list. Click, ví dụ:  AssignedToMe, then click Create Report to generate a report based on AssignedToMe list.';

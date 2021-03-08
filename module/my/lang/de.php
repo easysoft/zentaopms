@@ -70,30 +70,20 @@ $lang->my->projectMenu->suspended  = 'Suspended';
 $lang->my->projectMenu->closed     = 'Closed';
 $lang->my->projectMenu->openedbyme = 'CreatedByMe';
 
-$lang->my->home = new stdclass();
-$lang->my->home->latest        = 'Verlauf';
-$lang->my->home->action        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>.";
-$lang->my->home->projects      = $lang->executionCommon;
-$lang->my->home->products      = $lang->productCommon;
-$lang->my->home->createProject = "Erstelle {$lang->executionCommon}";
-$lang->my->home->createProduct = "Erstelle {$lang->productCommon}";
-$lang->my->home->help          = "<a href='http://www.zentao.net/help-read-79236.html' target='_blank'>Hilfe</a>";
-$lang->my->home->noProductsTip = "Kein {$lang->productCommon} gefunden.";
-
 $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = 'Basis Info';
 $lang->my->form->lblContact = 'Kontakt Info';
 $lang->my->form->lblAccount = 'Konto Info';
 
 $lang->my->programLink = 'Program Default Page';
-$lang->my->productLink = 'Product Default Page'; 
+$lang->my->productLink = 'Product Default Page';
 $lang->my->projectLink = 'Project Default Page';
 
 $lang->my->programLinkList = array();
-//$lang->my->programLinkList['program-home']     = 'The default access to the program home page, you can understand the company’s overall strategic planning status';
-$lang->my->programLinkList['program-pgmbrowse']  = 'By default, you go to the program list, where you can view all of the programs';
-//$lang->my->programLinkList['program-pgmindex'] = 'By default, you go to the most recent program dashboard to see the current program overview';
-$lang->my->programLinkList['program-pgmproject'] = 'By default, you go to the list of items in the most recent program, and you can view all items under the current program';
+//$lang->my->programLinkList['program-home']  = 'The default access to the program home page, you can understand the company’s overall strategic planning status';
+$lang->my->programLinkList['program-browse']  = 'By default, you go to the program list, where you can view all of the programs';
+//$lang->my->programLinkList['program-index'] = 'By default, you go to the most recent program dashboard to see the current program overview';
+$lang->my->programLinkList['program-project'] = 'By default, you go to the list of items in the most recent program, and you can view all items under the current program';
 
 $lang->my->productLinkList = array();
 $lang->my->productLinkList['product-index']     = 'The default access to the product home page, you can understand the company’s overall product status';
@@ -103,7 +93,7 @@ $lang->my->productLinkList['product-browse']    = 'By default, go to the list of
 
 global $config;
 $lang->my->projectLinkList = array();
-//$lang->my->projectLinkList['program-home']    = 'The default access to the project home page, you can understand the overall project status of the company';
-$lang->my->projectLinkList['program-prjbrowse'] = 'By default, you go to the project list, where you can view all the projects';
-if($config->systemMode == 'new') $lang->my->projectLinkList['program-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
-$lang->my->projectLinkList['project-task']      = 'By default, you go to the task list for the most recent project iteration to see the task information for the current iteration';
+//$lang->my->projectLinkList['project-home'] = 'The default access to the project home page, you can understand the overall project status of the company';
+$lang->my->projectLinkList['project-browse'] = 'By default, you go to the project list, where you can view all the projects';
+$lang->my->projectLinkList['project-task']   = 'By default, you go to the task list for the most recent project iteration to see the task information for the current iteration';
+if($config->systemMode == 'new') $lang->my->projectLinkList['program-index'] = 'By default, go to the most recent project dashboard to see the current project overview';

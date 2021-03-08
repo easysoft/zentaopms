@@ -178,7 +178,7 @@ class docModel extends model
                 ->andWhere()
                 ->markLeft(1)
                 ->where('`type`')->eq('custom')
-                ->orWhere('project')->in($executionIdList)
+                ->orWhere('execution')->in($executionIdList)
                 ->orWhere('product')->in($productIdList)
                 ->markRight(1)
                 ->orderBy('id_desc')

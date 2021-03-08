@@ -32,13 +32,13 @@
     <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
       <tr>
-        <th class='w-id'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
-        <th>                <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
-        <th class='w-120px'><?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
-        <th class='w-120px'><?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
-        <th class='w-90px'> <?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
-        <th class='w-90px'> <?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
-        <th class='w-80px'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
+        <th class='w-id'>   <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
+        <th>                <?php common::printOrderLink('name',      $orderBy, $vars, $lang->testtask->name);?></th>
+        <th class='w-120px'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->testtask->execution);?></th>
+        <th class='w-120px'><?php common::printOrderLink('build',     $orderBy, $vars, $lang->testtask->build);?></th>
+        <th class='w-90px'> <?php common::printOrderLink('begin',     $orderBy, $vars, $lang->testtask->begin);?></th>
+        <th class='w-90px'> <?php common::printOrderLink('end',       $orderBy, $vars, $lang->testtask->end);?></th>
+        <th class='w-80px'> <?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
         <th class='c-actions-6'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -46,22 +46,22 @@
       <?php foreach($tasks as $task):?>
       <tr>
         <td class="c-id"><?php printf('%03d', $task->id);?></td>
-        <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', '', $task->PRJ), $task->name, '', "data-group='project'");?></td>
-        <td class='nobr'><?php echo $task->projectName?></td>
-        <td class='nobr' title='<?php echo $task->buildName;?>'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build", '', '', $task->PRJ), $task->buildName, '', "data-group='project'"));?></td>
+        <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', '', $task->project), $task->name, '', "data-group='project'");?></td>
+        <td class='nobr'><?php echo $task->executionName?></td>
+        <td class='nobr' title='<?php echo $task->buildName;?>'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build", '', '', $task->project), $task->buildName, '', "data-group='project'"));?></td>
         <td><?php echo $task->begin?></td>
         <td><?php echo $task->end?></td>
         <td title='<?php echo $task->status?>'><span class="status-task status-<?php echo $task->status?>"><?php echo $this->processStatus('testtask', $task);?></span></td>
         <td class='c-actions'>
           <?php
-          common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap', '', '', '', '', '', $task->PRJ);
-          common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true, 'data-width=800px', '', $task->PRJ);
-          common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link', '', '', '', '', '', $task->PRJ);
-          common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag', '', '', '', '', '', $task->PRJ);
-          common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true, '', '', $task->PRJ);
+          common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap', '', '', '', '', '', $task->project);
+          common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true, 'data-width=800px', '', $task->project);
+          common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link', '', '', '', '', '', $task->project);
+          common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag', '', '', '', '', '', $task->project);
+          common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true, '', '', $task->project);
           if(common::hasPriv('testtask', 'delete', $task))
           {
-              $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes", '', '', $task->PRJ);
+              $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes", '', '', $task->project);
               echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
           }
           ?>

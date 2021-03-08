@@ -1204,7 +1204,7 @@ CREATE TABLE IF NOT EXISTS `zt_expect` (
   `progress` text NOT NULL,
   `createdBy` char(30) NOT NULL,
   `createdDate` date NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0' 
+  `deleted` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_webhook`;
 CREATE TABLE IF NOT EXISTS `zt_webhook` (
@@ -1262,7 +1262,7 @@ CREATE TABLE IF NOT EXISTS `zt_score` (
 
 -- DROP TABLE IF EXISTS `zt_relation`;
 CREATE TABLE IF NOT EXISTS `zt_relation` (
-  `id` int(8) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+  `id` int(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `project` mediumint(8) NOT NULL,
   `product` mediumint(8) NOT NULL,
   `execution` mediumint(8) NOT NULL,
@@ -4126,14 +4126,16 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (12,'my','limited');
 
 INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
-('zh-cn', 'custom', 'URSRList', '1', '{\"SRName\":\"\\u7814\\u53d1\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
-('zh-cn', 'custom', 'URSRList', '2', '{\"SRName\":\"\\u8f6f\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '1'),
-('zh-cn', 'custom', 'URSRList', '3', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u9700\\u6c42\"}', '1'),
-('zh-cn', 'custom', 'URSRList', '4', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u53f2\\u8bd7\"}', '1');
+('zh-cn', 'custom', 'URSRList', '1', '{\"SRName\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '2', '{\"SRName\":\"\\u7814\\u53d1\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '3', '{\"SRName\":\"\\u8f6f\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '4', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u9700\\u6c42\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '5', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u53f2\\u8bd7\"}', '1'),
+('zh-cn', 'custom', 'URSRList', '6', '{\"SRName\":\"\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1');
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'hourPoint',   '1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct',   '1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRExecution', '1');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'URSR', '3');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'URSR', '6');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'unitList', 'CNY,USD');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'defaultCurrency', 'CNY');

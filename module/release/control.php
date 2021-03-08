@@ -78,10 +78,16 @@ class release extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
+        $builds        = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'notrunk|withbranch', false);
+        $releaseBuilds = $this->release->getReleaseBuilds($productID, $branch);
+        foreach($releaseBuilds as $build) unset($builds[$build]);
+        unset($builds['trunk']);
+
         $this->commonAction($productID, $branch);
         $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
         $this->view->position[]  = $this->lang->release->create;
         $this->view->productID   = $productID;
+        $this->view->builds      = $builds;
         $this->view->lastRelease = $this->release->getLast($productID, $branch);
         $this->display();
     }
@@ -114,13 +120,17 @@ class release extends control
         $this->loadModel('bug');
         $this->loadModel('build');
 
-        /* Get release. */
+        /* Get release and build. */
         $release = $this->release->getById((int)$releaseID);
         $this->commonAction($release->product, $release->branch);
+        $build = $this->build->getById($release->build);
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
+        $this->view->build      = $build;
+        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($release->product, $release->branch, 'notrunk|withbranch', false);
+
         $this->display();
     }
 
@@ -140,7 +150,7 @@ class release extends control
      */
     public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $release = $this->release->getById((int)$releaseID, true);
+        $release = $this->release->getByID((int)$releaseID, true);
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
 
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true));
@@ -417,7 +427,7 @@ class release extends control
         }
         else
         {
-            $allStories = $this->story->getProjectStories($build->execution, 0, 0, 't1.`order`_desc', 'byProduct', $release->product, 'story', $release->stories, $pager);
+            $allStories = $this->story->getExecutionStories($build->execution, 0, 0, 't1.`order`_desc', 'byProduct', $release->product, 'story', $release->stories, $pager);
         }
 
         $this->view->allStories     = $allStories;

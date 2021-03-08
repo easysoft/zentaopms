@@ -684,8 +684,8 @@ class actionModel extends model
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
-            ->beginIF(!empty($executions))->markLeft()->orWhere('execution')->in(array_keys($executions))->fi()->markRight()
-            ->beginIF(!empty($products))->markLeft()->orWhere('product')->in(array_keys($products))->fi()->markRight()
+            ->beginIF(!empty($executions))->markLeft()->orWhere('execution')->in($executions)->fi()->markRight()
+            ->beginIF(!empty($products))->markLeft()->orWhere('product')->in($products)->fi()->markRight()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
             ->beginIF($executionID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
@@ -974,7 +974,7 @@ class actionModel extends model
 
     /**
      * Print changes of every action.
-     * 
+     *
      * @param  string    $objectType
      * @param  array     $histories
      * @param  bool      $canChangeTag
@@ -1032,24 +1032,13 @@ class actionModel extends model
         if($action->objectType == 'product')
         {
             $product = $this->dao->select('id,name,code,acl')->from(TABLE_PRODUCT)->where('id')->eq($action->objectID)->fetch();
-            $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere("(`name`='{$product->name}'" . ($product->code ? " OR `code`='{$product->code}'" : '') . ")")->fetch('count');
-            if($count > 0)
-            {
-                echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['product']));
-                die(js::locate(helper::createLink('product', 'edit', "productID=$action->objectID&action=undelete&extra=$actionID"), 'parent'));
-            }
             if($product->acl != 'open') $this->loadModel('user')->updateUserView($product->id, 'product');
         }
-        elseif($action->objectType == 'project')
+        elseif(in_array($action->objectType, array('program', 'project', 'execution')))
         {
-            $project = $this->dao->select('id,name,code,acl')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
-            $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere("(`name`='{$project->name}'" . ($project->code ? " OR `code`='{$project->code}'" : '') . ")")->fetch('count');
-            if($count > 0)
-            {
-                echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['project']));
-                die(js::locate(helper::createLink('project', 'edit', "projectID=$action->objectID&action=undelete&extra=$actionID"), 'parent'));
-            }
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($project->id, 'project');
+            $project    = $this->dao->select('id,acl')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
+            $objecttype = $action->objectType == 'execution' ? 'sprint' : $action->objectType;
+            if($project->acl != 'open') $this->loadModel('user')->updateUserView($project->id, $objecttype);
         }
         elseif($action->objectType == 'module')
         {
@@ -1069,8 +1058,15 @@ class actionModel extends model
             if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
         }
 
+        /* Revert userView products when undelete execution. */
+        if($action->objectType == 'execution')
+        {
+            $products = $this->loadModel('execution')->getProducts($project->id, $withBranch = false);
+            if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
+        }
+
         /* Revert doclib when undelete product or project. */
-        if($action->objectType == 'project' or $action->objectType == 'product')
+        if($action->objectType == 'execution' or $action->objectType == 'product')
         {
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
         }
@@ -1084,18 +1080,6 @@ class actionModel extends model
         /* Update action record in action table. */
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($actionID)->exec();
         $this->create($action->objectType, $action->objectID, 'undeleted');
-    }
-
-    public function updateUserView($objectType = '')
-    {
-        $project = $this->dao->select('id,name,code,acl')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
-        $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere("(`name`='{$project->name}'" . ($project->code ? " OR `code`='{$project->code}'" : '') . ")")->fetch('count');
-        if($count > 0 && $objectType == 'execution')
-        {
-            echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['project']));
-            die(js::locate(helper::createLink('project', 'edit', "projectID=$action->objectID&action=undelete&extra=$actionID"), 'parent'));
-        }
-        if($project->acl != 'open') $this->loadModel('user')->updateUserView($project->id, 'project');
     }
 
     /**
@@ -1204,6 +1188,7 @@ class actionModel extends model
     public function hasPreOrNext($date, $direction = 'next')
     {
         $condition = $this->session->actionQueryCondition;
+
         /* Remove date condition for direction. */
         $condition = preg_replace("/AND +date[\<\>]'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $count     = $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where($condition)

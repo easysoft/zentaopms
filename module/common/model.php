@@ -1723,7 +1723,7 @@ EOD;
         {
             $this->app->user = $this->session->user;
 
-            $inProject = (isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'project') || ($module == 'program' && $method == 'index');
+            $inProject = (isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'project');
             if(!defined('IN_UPGRADE') and $inProject)
             {
                 /* Check program priv. */
@@ -1767,7 +1767,6 @@ EOD;
 
         /* If is the program admin, have all program privs. */
         $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
-        if($module == 'program' && strpos($method, 'prj') !== false) $inProject = true;
         if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
 
         /* If not super admin, check the rights. */
@@ -1813,7 +1812,7 @@ EOD;
         $programRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
             ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
             ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group=t3.group')
-            ->where('t1.PRJ')->eq($program->id)
+            ->where('t1.project')->eq($program->id)
             ->andWhere('t2.account')->eq($this->app->user->account)
             ->fetchAll();
 
