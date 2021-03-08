@@ -162,8 +162,8 @@ $lang->dividerMenu = ',qa,report,admin,';
 /* Program set menu. */
 $lang->program = new stdclass();
 $lang->program->menu = new stdclass();
-//$lang->program->menu->index   = '主页|program|index|';
-$lang->program->menu->browse  = array('link' => '项目集|program|browse|');
+//$lang->program->menu->index  = '主页|program|index|';
+$lang->program->menu->browse = array('link' => '项目集|program|browse|');
 
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();

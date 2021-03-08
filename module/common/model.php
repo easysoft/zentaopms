@@ -1723,7 +1723,7 @@ EOD;
         {
             $this->app->user = $this->session->user;
 
-            $inProject = (isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'project') || ($module == 'program' && $method == 'index');
+            $inProject = (isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'project');
             if(!defined('IN_UPGRADE') and $inProject)
             {
                 /* Check program priv. */
@@ -1767,7 +1767,6 @@ EOD;
 
         /* If is the program admin, have all program privs. */
         $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
-        if($module == 'program' && strpos($method, 'project') !== false) $inProject = true;
         if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
 
         /* If not super admin, check the rights. */
