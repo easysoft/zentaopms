@@ -1767,7 +1767,7 @@ EOD;
 
         /* If is the program admin, have all program privs. */
         $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
-        if($module == 'program' && strpos($method, 'prj') !== false) $inProject = true;
+        if($module == 'program' && strpos($method, 'project') !== false) $inProject = true;
         if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
 
         /* If not super admin, check the rights. */
