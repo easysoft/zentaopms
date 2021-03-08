@@ -122,8 +122,8 @@
             <?php if(!empty($attachLibs) and $browseType != 'bysearch'):?>
             <?php foreach($attachLibs as $libType => $attachLib):?>
             <tr>
-              <?php if($libType == 'project'):?>
-              <td class="c-name"><?php echo html::a(inlink('allLibs', "type=project&product={$currentLib->product}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
+              <?php if($libType == 'execution'):?>
+              <td class="c-name"><?php echo html::a(inlink('allLibs', "type=execution&product={$currentLib->product}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
               <?php elseif($libType == 'files'):?>
               <td class="c-name"><?php echo html::a(inlink('showFiles', "type=$type&objectID={$currentLib->$type}&from=$from"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
               <?php endif;?>

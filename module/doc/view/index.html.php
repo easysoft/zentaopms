@@ -126,26 +126,26 @@
       <div class="col-sm-7">
         <div class="panel block-files block-sm" style="height: 290px;">
           <div class="panel-heading">
-            <div class="panel-title"><?php echo $lang->project->undone . (common::checkNotCN() ? "{$lang->executionCommon}s" : "$lang->executionCommon");?></div>
+            <div class="panel-title"><?php echo $lang->execution->undone . (common::checkNotCN() ? "{$lang->executionCommon}s" : "$lang->executionCommon");?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'allLibs', 'type=project'), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'allLibs', 'type=execution'), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <div class="panel-body has-table">
             <table class="table table-borderless table-fixed-head table-hover">
               <thead>
                 <tr>
-                  <th class="c-name"><?php echo $lang->project->name;?></th>
-                  <th class="c-date"><?php echo $lang->project->begin;?></th>
-                  <th class="c-date"><?php echo $lang->project->end;?></th>
+                  <th class="c-name"><?php echo $lang->execution->name;?></th>
+                  <th class="c-date"><?php echo $lang->execution->begin;?></th>
+                  <th class="c-date"><?php echo $lang->execution->end;?></th>
                 </tr>
               </thead>
               <tbody>
-                <?php foreach($doingProjects as $project):?>
-                <tr data-url="<?php echo $this->createLink('doc', 'objectLibs', "type=project&objectID={$project->id}")?>">
-                  <td class="c-name"><i class="icon icon-folder text-yellow"></i> <?php echo $project->name;?></td>
-                  <td class="c-datetime"><?php echo formatTime($project->begin);?></td>
-                  <td class="c-datetime"><?php echo formatTime($project->end);?></td>
+                <?php foreach($doingProjects as $execution):?>
+                <tr data-url="<?php echo $this->createLink('doc', 'objectLibs', "type=execution&objectID={$execution->id}")?>">
+                  <td class="c-name"><i class="icon icon-folder text-yellow"></i> <?php echo $execution->name;?></td>
+                  <td class="c-datetime"><?php echo formatTime($execution->begin);?></td>
+                  <td class="c-datetime"><?php echo formatTime($execution->end);?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>

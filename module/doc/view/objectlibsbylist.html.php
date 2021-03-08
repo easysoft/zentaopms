@@ -21,18 +21,18 @@
         </thead>
         <tbody>
           <?php foreach($libs as $libID => $lib):?>
-          <?php if($libID == 'project' and $from != 'doc') continue;?>
+          <?php if($libID == 'execution' and $from != 'doc') continue;?>
           <?php if(strpos($config->doc->custom->objectLibs, 'files') === false && $libID == 'files') continue;?>
           <?php if(strpos($config->doc->custom->objectLibs, 'customFiles') === false && isset($lib->main) && !$lib->main) continue;?>
 
           <?php $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");?>
-          <?php if($libID == 'project') $libLink = inlink('allLibs', "type=project&product=$object->id");?>
-          <?php if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id&from=$from");?>
+          <?php if($libID == 'execution') $libLink = inlink('allLibs', "type=execution&product=$object->id");?>
+          <?php if($libID == 'files')     $libLink = inlink('showFiles', "type=$type&objectID=$object->id&from=$from");?>
           <tr>
             <td class="c-name"><?php echo html::a($libLink, $lib->name);?></td>
             <td class="c-num"><?php echo  $lib->allCount . $lang->doc->item;?></td>
             <td class="c-actions">
-              <?php if($canBeChanged and $libID != 'project' and $libID != 'files'):?>
+              <?php if($canBeChanged and $libID != 'execution' and $libID != 'files'):?>
               <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
               <?php $collectTitle = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
               <?php if(common::hasPriv('doc', 'collect')):?>

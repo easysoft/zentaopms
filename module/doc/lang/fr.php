@@ -13,7 +13,7 @@
 $lang->doc->common         = 'Gestion Documentaire';
 $lang->doc->id             = 'ID';
 $lang->doc->product        = $lang->productCommon;
-$lang->doc->execution        = $lang->executionCommon;
+$lang->doc->execution      = $lang->executionCommon;
 $lang->doc->lib            = 'Bibliothèque';
 $lang->doc->module         = 'Catégorie';
 $lang->doc->title          = 'Nom';
@@ -96,18 +96,18 @@ $lang->doc->removeMenu     = 'Décoller du Menu';
 $lang->doc->search         = 'Rechercher';
 
 /* 查询条件列表 */
-$lang->doc->allProduct     = 'Tous les ' . $lang->productCommon . 's';
-$lang->doc->allProject     = 'Tous les ' . $lang->executionCommon . 's';
+$lang->doc->allProduct = 'Tous les ' . $lang->productCommon . 's';
+$lang->doc->allProject = 'Tous les ' . $lang->executionCommon . 's';
 
-$lang->doc->libTypeList['product'] = $lang->productCommon . ' Library';
+$lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';
 $lang->doc->libTypeList['execution'] = 'Bibliothèque ' . $lang->executionCommon;
-$lang->doc->libTypeList['custom']  = 'Bib. Personnalisée';
+$lang->doc->libTypeList['custom']    = 'Bib. Personnalisée';
 
-$lang->doc->libIconList['product'] = 'icon-cube';
+$lang->doc->libIconList['product']   = 'icon-cube';
 $lang->doc->libIconList['execution'] = 'icon-stack';
-$lang->doc->libIconList['custom']  = 'icon-folder-o';
+$lang->doc->libIconList['custom']    = 'icon-folder-o';
 
-$lang->doc->systemLibs['product'] = $lang->productCommon;
+$lang->doc->systemLibs['product']   = $lang->productCommon;
 $lang->doc->systemLibs['execution'] = $lang->executionCommon;
 
 $lang->doc->aclList['open']    = 'Public';
@@ -173,13 +173,13 @@ $lang->doc->noOpenedDoc        = "Vous n'avez pas ajouté de documents.";
 $lang->doc->noCollectedDoc     = "Vous avez aucun document dans vos favoris.";
 $lang->doc->errorEmptyLib      = 'No data in document library.';
 
-$lang->doc->noticeAcl['lib']['product']['default'] = 'Les utilisateurs qui ont accès au Product peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['product']['custom']  = 'Les utilisateurs qui ont accès au Product ou les utilisateurs de la Liste Blanche peuvent y accéder.';
+$lang->doc->noticeAcl['lib']['product']['default']   = 'Les utilisateurs qui ont accès au Product peuvent y accéder.';
+$lang->doc->noticeAcl['lib']['product']['custom']    = 'Les utilisateurs qui ont accès au Product ou les utilisateurs de la Liste Blanche peuvent y accéder.';
 $lang->doc->noticeAcl['lib']['execution']['default'] = 'Les utilisateurs qui ont accès au Projet peuvent y accéder.';
 $lang->doc->noticeAcl['lib']['execution']['custom']  = 'Les utilisateurs qui ont accès au Projet ou les utilisateurs de la Liste Blanche peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['custom']['open']     = 'Tous les utilisateurs peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['custom']['custom']   = 'Les utilisateurs de la Liste Blanche peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['custom']['private']  = 'Seulement le créateur de la Bibliothèque peut y accéder.';
+$lang->doc->noticeAcl['lib']['custom']['open']       = 'Tous les utilisateurs peuvent y accéder.';
+$lang->doc->noticeAcl['lib']['custom']['custom']     = 'Les utilisateurs de la Liste Blanche peuvent y accéder.';
+$lang->doc->noticeAcl['lib']['custom']['private']    = 'Seulement le créateur de la Bibliothèque peut y accéder.';
 
 $lang->doc->noticeAcl['doc']['open']    = 'Les utilisateurs qui ont accès à la Bibliothèque à laquelle le document appartient peuvent y accéder.';
 $lang->doc->noticeAcl['doc']['custom']  = 'Les utilisateurs de la Liste Blanche peuvent y accéder.';
@@ -189,15 +189,15 @@ $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'URL';
 
 $lang->doclib = new stdclass();
-$lang->doclib->name    = 'Nom';
-$lang->doclib->control = "Contrôle d'Accès";
-$lang->doclib->group   = 'Groupe';
-$lang->doclib->user    = 'Utilisateur';
-$lang->doclib->files   = 'Pièces Jointes';
-$lang->doclib->all     = 'Toutes les Libraries';
-$lang->doclib->select  = 'Sélect.';
+$lang->doclib->name      = 'Nom';
+$lang->doclib->control   = "Contrôle d'Accès";
+$lang->doclib->group     = 'Groupe';
+$lang->doclib->user      = 'Utilisateur';
+$lang->doclib->files     = 'Pièces Jointes';
+$lang->doclib->all       = 'Toutes les Libraries';
+$lang->doclib->select    = 'Sélect.';
 $lang->doclib->execution = 'Bibliothèque ' . $lang->executionCommon;
-$lang->doclib->product = $lang->productCommon . ' Library';
+$lang->doclib->product   = $lang->productCommon . ' Library';
 
 $lang->doclib->aclListA['default'] = 'Défaut';
 $lang->doclib->aclListA['custom']  = 'Person.';
@@ -206,15 +206,15 @@ $lang->doclib->aclListB['open']    = 'Public';
 $lang->doclib->aclListB['custom']  = 'Person.';
 $lang->doclib->aclListB['private'] = 'Privée';
 
-$lang->doclib->create['product'] = 'Créer ' . $lang->productCommon . ' Library';
+$lang->doclib->create['product']   = 'Créer ' . $lang->productCommon . ' Library';
 $lang->doclib->create['execution'] = 'Créer ' . 'Bibliothèque ' . $lang->executionCommon;
-$lang->doclib->create['custom']  = 'Créer Bibliothèque Personnelle';
+$lang->doclib->create['custom']    = 'Créer Bibliothèque Personnelle';
 
-$lang->doclib->main['product'] =  'Bibliothèque Principale';
-$lang->doclib->main['execution'] =  'Bibliothèque Principale';
+$lang->doclib->main['product']   = 'Bibliothèque Principale';
+$lang->doclib->main['execution'] = 'Bibliothèque Principale';
 
-$lang->doclib->tabList['product'] = $lang->productCommon;
+$lang->doclib->tabList['product']   = $lang->productCommon;
 $lang->doclib->tabList['execution'] = $lang->executionCommon;
-$lang->doclib->tabList['custom']  = 'Personnelle';
+$lang->doclib->tabList['custom']    = 'Personnelle';
 
 $lang->doclib->nameList['custom'] = 'Nom personnalisé';

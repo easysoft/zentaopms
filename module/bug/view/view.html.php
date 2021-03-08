@@ -101,7 +101,7 @@
       <div class='tabs'>
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#legendBasicInfo' data-toggle='tab'><?php echo $lang->bug->legendBasicInfo;?></a></li>
-          <li><a href='#legendPrjStoryTask' data-toggle='tab'><?php echo $lang->bug->legendPrjStoryTask;?></a></li>
+          <li><a href='#legendExecStoryTask' data-toggle='tab'><?php echo $lang->bug->legendExecStoryTask;?></a></li>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
@@ -232,7 +232,7 @@
               </tbody>
             </table>
           </div>
-          <div class='tab-pane' id='legendPrjStoryTask'>
+          <div class='tab-pane' id='legendExecStoryTask'>
             <table class='table table-data'>
               <tbody>
                 <tr>

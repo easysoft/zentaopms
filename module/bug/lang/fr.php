@@ -159,7 +159,7 @@ $lang->bug->createBuild   = 'Nouveau';
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = 'Infos de Base';
 $lang->bug->legendAttatch               = 'Fichiers';
-$lang->bug->legendPrjStoryTask          = $lang->executionCommon . '/Story/Tâche';
+$lang->bug->legendExecStoryTask         = $lang->executionCommon . '/Story/Tâche';
 $lang->bug->lblTypeAndSeverity          = 'Type/Severité';
 $lang->bug->lblSystemBrowserAndHardware = 'Système/Browser';
 $lang->bug->legendSteps                 = 'Etapes Repro';

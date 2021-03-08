@@ -13,7 +13,7 @@
 $lang->doc->common       = 'Tài liệu';
 $lang->doc->id           = 'ID';
 $lang->doc->product      = $lang->productCommon;
-$lang->doc->execution      = $lang->executionCommon;
+$lang->doc->execution    = $lang->executionCommon;
 $lang->doc->lib          = 'Thư viện';
 $lang->doc->module       = 'Danh mục';
 $lang->doc->title        = 'Tên';
@@ -99,15 +99,15 @@ $lang->doc->search     = 'Tìm kiếm';
 $lang->doc->allProduct = 'All' . $lang->productCommon;
 $lang->doc->allProject = 'All' . $lang->executionCommon;
 
-$lang->doc->libTypeList['product'] = $lang->productCommon . ' thư viện';
+$lang->doc->libTypeList['product']   = $lang->productCommon . ' thư viện';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . ' thư viện';
-$lang->doc->libTypeList['custom']  = 'Tùy biến thư viện';
+$lang->doc->libTypeList['custom']    = 'Tùy biến thư viện';
 
-$lang->doc->libIconList['product'] = 'icon-cube';
+$lang->doc->libIconList['product']   = 'icon-cube';
 $lang->doc->libIconList['execution'] = 'icon-stack';
-$lang->doc->libIconList['custom']  = 'icon-folder-o';
+$lang->doc->libIconList['custom']    = 'icon-folder-o';
 
-$lang->doc->systemLibs['product'] = $lang->productCommon;
+$lang->doc->systemLibs['product']   = $lang->productCommon;
 $lang->doc->systemLibs['execution'] = $lang->executionCommon;
 
 $lang->doc->aclList['open']    = 'Công khai';
@@ -173,13 +173,13 @@ $lang->doc->noOpenedDoc        = 'Bạn chưa tạo any documents.';
 $lang->doc->noCollectedDoc     = 'Bạn có not favorited any documents.';
 $lang->doc->errorEmptyLib      = 'No data in document library.';
 
-$lang->doc->noticeAcl['lib']['product']['default'] = 'Users who can access the selected product có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['product']['custom']  = 'Users who can access the selected product or users in the whiltelist có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['product']['default']   = 'Users who can access the selected product có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['product']['custom']    = 'Users who can access the selected product or users in the whiltelist có thể truy cập nó.';
 $lang->doc->noticeAcl['lib']['execution']['default'] = 'Users who can access the selected execution có thể truy cập nó.';
 $lang->doc->noticeAcl['lib']['execution']['custom']  = 'Users who can access the selected execution or users in the whiltelist có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['custom']['open']     = 'Tất cả users có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['custom']['custom']   = 'Users in the whitelist có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['custom']['private']  = 'Chỉ the one who created it có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['custom']['open']       = 'Tất cả users có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['custom']['custom']     = 'Users in the whitelist có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['custom']['private']    = 'Chỉ the one who created it có thể truy cập nó.';
 
 $lang->doc->noticeAcl['doc']['open']    = 'Users who can access the document library which the document belongs có thể truy cập nó.';
 $lang->doc->noticeAcl['doc']['custom']  = 'Users in the whiltelist có thể truy cập nó.';
@@ -188,16 +188,16 @@ $lang->doc->noticeAcl['doc']['private'] = 'Chỉ the one who created it có th�
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'URL';
 
-$lang->doclib          = new stdclass();
-$lang->doclib->name    = 'Tên';
-$lang->doclib->control = 'Quyền truy cập';
-$lang->doclib->group   = 'Nhóm';
-$lang->doclib->user    = 'Người dùng';
-$lang->doclib->files   = 'Attachments';
-$lang->doclib->all     = 'Tất cả Libraries';
-$lang->doclib->select  = 'Chọn';
+$lang->doclib            = new stdclass();
+$lang->doclib->name      = 'Tên';
+$lang->doclib->control   = 'Quyền truy cập';
+$lang->doclib->group     = 'Nhóm';
+$lang->doclib->user      = 'Người dùng';
+$lang->doclib->files     = 'Attachments';
+$lang->doclib->all       = 'Tất cả Libraries';
+$lang->doclib->select    = 'Chọn';
 $lang->doclib->execution = $lang->executionCommon . ' thư viện';
-$lang->doclib->product = $lang->productCommon . ' thư viện';
+$lang->doclib->product   = $lang->productCommon . ' thư viện';
 
 $lang->doclib->aclListA['default'] = 'Mặc định';
 $lang->doclib->aclListA['custom']  = 'Tùy biến';
@@ -207,14 +207,14 @@ $lang->doclib->aclListB['custom']  = 'Tùy biến';
 $lang->doclib->aclListB['private'] = 'Riêng tư';
 
 $lang->doclib->create['product']   = 'Tạo ' . $lang->productCommon . ' thư viện';
-$lang->doclib->create['execution']   = 'Tạo ' . $lang->executionCommon . ' thư viện';
+$lang->doclib->create['execution'] = 'Tạo ' . $lang->executionCommon . ' thư viện';
 $lang->doclib->create['custom']    = 'Tạo Custom thư viện';
 
-$lang->doclib->main['product'] =  'Primary thư viện';
-$lang->doclib->main['execution'] =  'Primary thư viện';
+$lang->doclib->main['product']   = 'Primary thư viện';
+$lang->doclib->main['execution'] = 'Primary thư viện';
 
-$lang->doclib->tabList['product'] = $lang->productCommon;
+$lang->doclib->tabList['product']   = $lang->productCommon;
 $lang->doclib->tabList['execution'] = $lang->executionCommon;
-$lang->doclib->tabList['custom']  = 'Tùy biến';
+$lang->doclib->tabList['custom']    = 'Tùy biến';
 
 $lang->doclib->nameList['custom'] = 'Tùy biến tên';

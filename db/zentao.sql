@@ -943,7 +943,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
 CREATE TABLE IF NOT EXISTS `zt_team` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `root` mediumint(8) unsigned NOT NULL default '0',
-  `type` enum('project','task','stage','sprint') NOT NULL DEFAULT 'project',
+  `type` enum('project','task','execution') NOT NULL DEFAULT 'project',
   `account` char(30) NOT NULL default '',
   `role` char(30) NOT NULL default '',
   `limited` char(8) NOT NULL default 'no',
