@@ -18,7 +18,7 @@
       <h2><?php echo $lang->release->create;?></h2>
     </div>
     <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
         <tbody>
           <tr>
             <th><?php echo $lang->release->name;?></th>
@@ -30,6 +30,10 @@
               </div>
               <?php if($lastRelease) echo '(' . $lang->release->last . ': ' . $lastRelease->name . ')';?>
             </td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->release->build;?></th>
+            <td><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>
@@ -48,7 +52,7 @@
           <tr>
             <th><?php echo $lang->files;?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
-          </tr>  
+          </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
@@ -57,7 +61,7 @@
           </tr>
         </tbody>
       </table>
-    </form>  
+    </form>
   </div>
 </div>
 <script>
