@@ -354,7 +354,7 @@
                     <tr>
                       <th><?php echo $lang->release->build;?></th>
                       <td title='<?php echo $release->buildName?>'>
-                          <?php echo ($release->execution) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
+                          <?php echo ($release->project) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
                       </td>
                     </tr>
                     <tr>
