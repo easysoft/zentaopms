@@ -65,13 +65,13 @@ $lang->product->unResolvedBugsTitle   = 'Active Bugs';
 $lang->product->assignToNullBugs      = 'Nicht zugewiesene [B]';
 $lang->product->assignToNullBugsTitle = 'Unassigned Bugs';
 
-$lang->product->confirmDelete    = " Möchten Sie {$lang->productCommon} löschen?";
-$lang->product->errorNoProduct   = "Kein {$lang->productCommon} erstellt!";
-$lang->product->accessDenied     = "Sie haben keinen Zugriff auf {$lang->productCommon}.";
-$lang->product->PGMChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
-$lang->product->notChangePGMTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
-$lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
-$lang->product->changePGMError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
+$lang->product->confirmDelete        = " Möchten Sie {$lang->productCommon} löschen?";
+$lang->product->errorNoProduct       = "Kein {$lang->productCommon} erstellt!";
+$lang->product->accessDenied         = "Sie haben keinen Zugriff auf {$lang->productCommon}.";
+$lang->product->programChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
+$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
+$lang->product->confirmChangeProgram = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
+$lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";

@@ -14,7 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noProject', false);?>
 <?php js::set('oldProgramID', $product->program);?>
-<?php js::set('canChangePGM', $canChangePGM);?>
+<?php js::set('canChangeProgram', $canChangeProgram);?>
 <?php js::set('singleLinkProjects', $singleLinkProjects);?>
 <?php js::set('multipleLinkProjects', $multipleLinkProjects);?>
 <style>
@@ -70,11 +70,11 @@
           <tr>
             <th><?php echo $lang->product->desc;?></th>
             <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($product->desc), "rows='8' class='form-control'");?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->acl;?></th>
             <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->product->aclList, $product->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
-          </tr>  
+          </tr>
           <tr class="<?php if($product->acl == 'open') echo 'hidden';?>" id="whitelistBox">
             <th><?php echo $lang->whitelist;?></th>
             <td><?php echo html::select('whitelist[]', $users, $product->whitelist, 'class="form-control chosen" multiple');?></td>
@@ -97,15 +97,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <?php if($canChangePGM):?>
+        <?php if($canChangeProgram):?>
         <h4 class="modal-title"><?php echo $lang->product->changeProgram;?></h4>
         <?php endif;?>
       </div>
       <div class="modal-body">
         <table class='table table-form'>
-          <?php if(!$canChangePGM):?>
+          <?php if(!$canChangeProgram):?>
           <tr>
-            <th class='text-left'><?php echo $lang->product->notChangePGMTip;?></th>
+            <th class='text-left'><?php echo $lang->product->notChangeProgramTip;?></th>
           </tr>
           <?php foreach($linkStoriesProjects as $project):?>
           <tr>
@@ -115,7 +115,7 @@
           <?php endif;?>
           <?php if($singleLinkProjects):?>
           <tr>
-            <th class='text-left'><?php echo $lang->product->PGMChangeTip;?></th>
+            <th class='text-left'><?php echo $lang->product->programChangeTip;?></th>
           </tr>
           <?php foreach($singleLinkProjects as $project):?>
           <tr>
@@ -125,7 +125,7 @@
           <?php endif;?>
           <?php if($multipleLinkProjects):?>
           <tr>
-            <th class='text-left'><?php echo $lang->product->confirmChangePGM;?></th>
+            <th class='text-left'><?php echo $lang->product->confirmChangeProgram;?></th>
           </tr>
           <tr>
             <td><?php echo html::checkbox('projects', $multipleLinkProjects);?></td>

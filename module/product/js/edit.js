@@ -3,10 +3,10 @@ $(function()
     $('#program').change(function()
     {
         var programID = $(this).val();
-        if(!canChangePGM || singleLinkProjects.length !== 0 || multipleLinkProjects.length !== 0)
+        if(!canChangeProgram || singleLinkProjects.length !== 0 || multipleLinkProjects.length !== 0)
         {
             $('#changeProgram').modal({show: true});
-            if(!canChangePGM)
+            if(!canChangeProgram)
             {
                 $('#program').val(oldProgramID);
                 $('#program').trigger("chosen:updated");

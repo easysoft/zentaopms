@@ -311,9 +311,9 @@ class product extends control
             $this->app->rawModule = 'program';
             $this->app->rawMethod = 'product';
             $this->lang->navGroup->program = 'program';
-            $this->loadModel('program')->setPGMViewMenu($programID);
-            $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
-            $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
+            $this->loadModel('program')->setViewMenu($programID);
+            $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
+            $this->lang->program->mainMenuAction = $this->program->getMainAction();
         }
 
         $this->loadModel('user');
@@ -362,7 +362,7 @@ class product extends control
         /* Init vars. */
         $product              = $this->product->getById($productID);
         $unmodifiableProjects = array();
-        $canChangePGM         = true;
+        $canChangeProgram     = true;
         $singleLinkProjects   = array();
         $multipleLinkProjects = array();
         $linkStoriesProjects  = array();
@@ -375,7 +375,7 @@ class product extends control
             ->andWhere('t2.deleted')->eq('0')
             ->fetchPairs('project', 'product');
 
-        if(!empty($unmodifiableProjects)) $canChangePGM = false;
+        if(!empty($unmodifiableProjects)) $canChangeProgram = false;
 
         /* Get the projects linked with this product. */
         $projectPairs = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -389,7 +389,7 @@ class product extends control
         {
             foreach($projectPairs as $projectID => $projectName)
             {
-                if($canChangePGM)
+                if($canChangeProgram)
                 {
                     $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
                     if(count($products) == 1)
@@ -453,9 +453,9 @@ class product extends control
             $this->app->rawModule = 'program';
             $this->app->rawMethod = 'product';
             $this->lang->navGroup->program = 'program';
-            $this->loadModel('program')->setPGMViewMenu($programID);
-            $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
-            $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
+            $this->loadModel('program')->setViewMenu($programID);
+            $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
+            $this->lang->program->mainMenuAction = $this->program->getMainAction();
         }
 
         /* Get the relevant person in charge. */
@@ -488,7 +488,7 @@ class product extends control
         $this->view->programs             = array('') + $this->loadModel('program')->getTopPairs();
         $this->view->lines                = $lines;
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
-        $this->view->canChangePGM         = $canChangePGM;
+        $this->view->canChangeProgram     = $canChangeProgram;
         $this->view->singleLinkProjects   = $singleLinkProjects;
         $this->view->multipleLinkProjects = $multipleLinkProjects;
         $this->view->linkStoriesProjects  = $linkStoriesProjects;
@@ -545,9 +545,9 @@ class product extends control
         $this->app->rawModule = 'program';
         $this->app->rawMethod = 'product';
         $this->lang->navGroup->program = 'program';
-        $this->loadModel('program')->setPGMViewMenu($programID);
-        $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
+        $this->loadModel('program')->setViewMenu($programID);
+        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
+        $this->lang->program->mainMenuAction = $this->program->getMainAction();
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst', $appendPoUsers);
@@ -909,7 +909,7 @@ class product extends control
         $this->view->extra     = $extra;
         $this->view->products  = $products;
         $this->view->projectID = $moduleGroup == 'project' ? $this->session->project : 0;
-        $this->view->programs  = $this->loadModel('program')->getPGMPairs(true);
+        $this->view->programs  = $this->loadModel('program')->getPairs(true);
         $this->view->openApp   = $moduleGroup;
         $this->display();
     }

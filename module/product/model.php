@@ -444,11 +444,11 @@ class productModel extends model
 
         /* init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
-        {    
+        {
             $storyMethods = ",track,create,batchcreate,batchclose,";
             if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
             if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
-        }    
+        }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
         $this->app->loadLang('project');
@@ -576,7 +576,7 @@ class productModel extends model
                 ->fetchPairs('project', 'product');
             if(!empty($unmodifiableProjects))
             {
-                dao::$errors[] = $this->lang->product->changePGMError;
+                dao::$errors[] = $this->lang->product->changeProgramError;
                 return false;
             }
         }
@@ -698,8 +698,8 @@ class productModel extends model
         foreach($data->modules as $id => $name)
         {
             if(!$name) continue;
-            $line->name  = strip_tags(trim($name)); 
-            $line->root  = $data->programs[$id]; 
+            $line->name  = strip_tags(trim($name));
+            $line->root  = $data->programs[$id];
 
             if(is_numeric($id))
             {
