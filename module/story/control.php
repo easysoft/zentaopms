@@ -1413,7 +1413,7 @@ class story extends control
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $tracks = $this->story->getTracks($productID, $branch, $pager);
 
-        if($this->app->rawModule == 'projectstory') $projectProducts = $this->product->getProductsByProject($this->session->project);
+        if($this->app->rawModule == 'projectstory') $projectProducts = $this->product->getProducts($this->session->project);
 
         $this->view->title      = $this->lang->story->track;
         $this->view->position[] = $this->lang->story->track;

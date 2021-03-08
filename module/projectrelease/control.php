@@ -71,7 +71,7 @@ class projectrelease extends control
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
         $this->view->execution  = $execution;
-        $this->view->products   = $this->loadModel('product')->getProductsByProject($this->session->project);
+        $this->view->products   = $this->loadModel('product')->getProducts($this->session->project);
         $this->view->releases   = $this->projectrelease->getList($this->session->project, $type);
         $this->view->type       = $type;
         $this->display();
