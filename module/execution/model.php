@@ -2846,30 +2846,6 @@ class executionModel extends model
     }
 
     /**
-     * Build execution build search form.
-     *
-     * @param  array  $products
-     * @param  int    $queryID
-     * @param  string $actionURL
-     * @param  string $type execution|execution
-     * @access public
-     * @return void
-     */
-    public function buildExecutionBuildSearchForm($products, $queryID, $actionURL, $type = 'execution')
-    {
-        $this->loadModel('build');
-
-        /* Set search param. */
-        if($type == 'execution') $this->config->build->search['module'] = 'executionBuild';
-        if($type == 'execution')   $this->config->build->search['module'] = 'executionBuild';
-        $this->config->build->search['actionURL'] = $actionURL;
-        $this->config->build->search['queryID']   = $queryID;
-        $this->config->build->search['params']['product']['values'] = $products;
-
-        $this->loadModel('search')->setSearchParams($this->config->build->search);
-    }
-
-    /**
      * Get Kanban tasks
      *
      * @param  int    $executionID

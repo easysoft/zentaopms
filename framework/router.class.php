@@ -3,7 +3,7 @@
  * 此文件包括ZenTaoPHP框架的三个类：router, config, lang。
  * The router, config and lang class file of ZenTaoPHP framework.
  *
- * The author disclaims copyright to this source code. In place of 
+ * The author disclaims copyright to this source code. In place of
  * a legal notice, here is a blessing:
  *
  *  May you do good and not evil.
@@ -48,9 +48,9 @@ class router extends baseRouter
     public $rawParams;
 
     /**
-     * 原始URI 
-     * 
-     * @var string   
+     * 原始URI
+     *
+     * @var string
      * @access public
      */
     public $rawURI;
@@ -66,8 +66,8 @@ class router extends baseRouter
 
     /**
      * Get the $moduleRoot var.
-     * 
-     * @param  string $appName 
+     *
+     * @param  string $appName
      * @access public
      * @return string
      */
@@ -146,7 +146,7 @@ class router extends baseRouter
 
     /**
      * Set common lang.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -203,7 +203,7 @@ class router extends baseRouter
 
         $model = new stdclass();
         $model->model = 'scrum';
-        if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
+        if($this->session->project) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->project}")->fetch();
 
         $iterationKey = $projectKey;
         if(isset($model->model) && $model->model == 'waterfall') $projectKey = STAGE_KEY;
@@ -242,7 +242,7 @@ class router extends baseRouter
             /* Get UR pairs and SR pairs. */
             $URPairs  = array();
             $SRPairs  = array();
-            foreach($URSRList as $id => $value) 
+            foreach($URSRList as $id => $value)
             {
                 $URSR = json_decode($value->value);
                 $URPairs[$value->key] = $URSR->URName;
@@ -387,7 +387,7 @@ class router extends baseRouter
      *
      * @param   bool    $exitIfNone     没有找到该控制器文件的情况：如果该参数为true，则终止程序；如果为false，则打印错误日志
      *                                  The controller file was not found: if the parameter is true, the program is terminated;
-     *                                                                     if false, the error log is printed. 
+     *                                                                     if false, the error log is printed.
      * @access  public
      * @return  bool
      */
@@ -558,7 +558,7 @@ class router extends baseRouter
     /**
      * 获取$URL。
      * Get the $URL.
-     * 
+     *
      * @param  bool $full  true, the URI contains the webRoot, else only hte URI.
      * @access public
      * @return string
@@ -586,7 +586,7 @@ class router extends baseRouter
      */
     public function mergeParams($defaultParams, $passedParams)
     {
-        if(isset($_GET['PRJ'])) $this->session->set('PRJ', $_GET['PRJ']);
+        if(isset($_GET['project'])) $this->session->set('project', $_GET['project']);
         /* If the isFlow is true, reset the passed params. */
         if($this->isFlow)
         {

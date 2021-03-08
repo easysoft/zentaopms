@@ -83,6 +83,7 @@ class product extends control
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         $this->app->loadLang('my');
+        $this->app->loadLang('execution');
         $this->app->loadLang('program');
 
         /* Get PM id list. */
@@ -201,10 +202,10 @@ class product extends control
         {
             $this->session->set('currentProductType', $product->type);
             $projectProducts = $this->product->getProductsByProject($this->session->project);
-            $productPlans    = $this->loadModel('project')->getPlans($projectProducts);
+            $productPlans    = $this->loadModel('execution')->getPlans($projectProducts);
 
             if($browseType == 'bybranch') $param = $branch;
-            $stories = $this->story->getProjectStories($this->session->project, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
+            $stories = $this->story->getExecutionStories($this->session->project, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
@@ -332,7 +333,7 @@ class product extends control
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->programs   = array('') + $this->loadModel('program')->getTopPGMPairs('', 'noclosed');
+        $this->view->programs   = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
         $this->view->lines      = $this->config->systemMode == 'new' ? array() : array('' => '') + $this->product->getLinePairs();
         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
@@ -484,7 +485,7 @@ class product extends control
         $this->view->qdUsers              = $qdUsers;
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->programs             = array('') + $this->loadModel('program')->getTopPGMPairs();
+        $this->view->programs             = array('') + $this->loadModel('program')->getTopPairs();
         $this->view->lines                = $lines;
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
         $this->view->canChangePGM         = $canChangePGM;
@@ -1027,7 +1028,7 @@ class product extends control
         $this->view->title      = $this->lang->product->line;
         $this->view->position[] = $this->lang->product->line;
 
-        $this->view->programs = array('') + $this->loadModel('program')->getTopPGMPairs();
+        $this->view->programs = array('') + $this->loadModel('program')->getTopPairs();
         $this->view->lines    = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
         $this->display();
     }

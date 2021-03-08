@@ -12,10 +12,10 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->project->featureBar['all'] as $key => $label):?>
+    <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php echo html::a(inlink("project", "status=$key&productID=$productID"), "<span class='text'>{$label}</span>" . ($status == $key ? " <span class='label label-light label-badge'>" . count($projectStats) . "</span>" : ''), '', "class='btn btn-link" . ($status == $key ? ' btn-active-text' : '') . "' id='{$key}Tab'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('projectMine', array('1' => $lang->program->mine), '', $this->cookie->projectMine ? 'checked=checked' : '');?>
+    <?php echo html::checkbox('projectMine', array('1' => $lang->project->mine), '', $this->cookie->projectMine ? 'checked=checked' : '');?>
     <div class="tip"><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content=<?php echo $lang->product->projectInfo;?>></icon></div>
   </div>
 </div>

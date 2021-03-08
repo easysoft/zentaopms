@@ -1047,7 +1047,7 @@ class block extends control
 
         /* Get projects. */
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
-        $executions = $this->loadModel('project')->getOrderedExecutions($projectID, $status, $count);
+        $executions = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count);
         if(empty($executions))
         {
             $this->view->executions = $executions;
@@ -1588,7 +1588,7 @@ class block extends control
     public function printProjectOverviewBlock()
     {
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
-        $executions = $this->loadModel('project')->getExecutionList($projectID);
+        $executions = $this->loadModel('execution')->getList($projectID);
 
         $total = 0;
         foreach($executions as $execution)

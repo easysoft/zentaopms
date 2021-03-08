@@ -335,7 +335,7 @@ class projectModel extends model
      */
     public function getWorkhour($projectID)
     {
-        $executions = $this->loadModel('project')->getExecutionPairs($projectID);
+        $executions = $this->loadModel('execution')->getPairs($projectID);
 
         $total = $this->dao->select('
             ROUND(SUM(estimate), 2) AS totalEstimate,
@@ -371,7 +371,7 @@ class projectModel extends model
      */
     public function getStatData($projectID)
     {
-        $executions = $this->loadModel('project')->getExecutionPairs($projectID);
+        $executions = $this->loadModel('execution')->getPairs($projectID);
         $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
             ->where('t2.project')->eq($projectID)
@@ -534,6 +534,30 @@ class projectModel extends model
             ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
+    }
+
+    /**
+     * Build project build search form.
+     *
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $type execution|execution
+     * @access public
+     * @return void
+     */
+    public function buildProjectBuildSearchForm($products, $queryID, $actionURL, $type = 'execution')
+    {
+        $this->loadModel('build');
+
+        /* Set search param. */
+        if($type == 'execution') $this->config->build->search['module'] = 'executionBuild';
+        if($type == 'execution')   $this->config->build->search['module'] = 'executionBuild';
+        $this->config->build->search['actionURL'] = $actionURL;
+        $this->config->build->search['queryID']   = $queryID;
+        $this->config->build->search['params']['product']['values'] = $products;
+
+        $this->loadModel('search')->setSearchParams($this->config->build->search);
     }
 
     /**

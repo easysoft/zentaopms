@@ -7,7 +7,7 @@
  *
  * The author disclaims copyright to this source code. In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -56,19 +56,19 @@ class baseHelper
      * @param string|array $vars           the params passed to the method, can be array('key' => 'value') or key1=value1&key2=value2) or key1=value1&key2=value2
      * @param string       $viewType       the view type
      * @param bool         $onlyBody       pass onlyBody=yes to the link thus the app can control the header and footer hide or show..
-     * @param bool         $PRJID          set PRJ id in to session.
-     * @param bool         $removePRJ      if true, remove PRJ param.
+     * @param bool         $projectID          set project id in to session.
+     * @param bool         $removeProject      if true, remove project param.
      * @static
      * @access public
      * @return string the link string.
      */
-    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false, $PRJID = 0, $removePRJ = false)
+    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false, $projectID = 0, $removeProject = false)
     {
         /* 设置$appName和$moduleName。Set appName and moduleName. */
         global $app, $config;
-        $PRJID = $PRJID ? $PRJID : $app->session->PRJ;
+        $projectID = $projectID ? $projectID : $app->session->project;
 
-        if(strpos($moduleName, '.') !== false) 
+        if(strpos($moduleName, '.') !== false)
         {
             list($appName, $moduleName) = explode('.', $moduleName);
         }
@@ -88,7 +88,7 @@ class baseHelper
         if($config->requestType == 'PATH_INFO2') $link .= '/';
 
         /**
-         * #1: RequestType为GET。When the requestType is GET. 
+         * #1: RequestType为GET。When the requestType is GET.
          * Input: moduleName=article&methodName=index&var1=value1. Output: ?m=article&f=index&var1=value1.
          *
          */
@@ -99,11 +99,11 @@ class baseHelper
             foreach($vars as $key => $value) $link .= "&$key=$value";
 
             $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
+            return self::processProjectParam($link, $projectID, $onlyBody, $moduleName, $removeProject);
         }
 
         /**
-         * #2: 方法名不是默认值或者是默认值，但有传参。MethodName equals the default method or vars not empty. 
+         * #2: 方法名不是默认值或者是默认值，但有传参。MethodName equals the default method or vars not empty.
          * Input: moduleName=article&methodName=view. Output: article-view.html
          * Input: moduleName=article&methodName=view. Output: article-index-abc.html
          *
@@ -115,23 +115,23 @@ class baseHelper
             $link .= '.' . $viewType;
 
             $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
+            return self::processProjectParam($link, $projectID, $onlyBody, $moduleName, $removeProject);
         }
 
         /**
-         * #3: 方法名为默认值且没有传参且模块名为默认值。MethodName is the default and moduleName is default and vars empty. 
+         * #3: 方法名为默认值且没有传参且模块名为默认值。MethodName is the default and moduleName is default and vars empty.
          * Input: moduleName=index&methodName=index. Output: index.html
          *
          */
         if($moduleName == $config->default->module)
         {
-            $link .= $config->default->method . '.' . $viewType; 
+            $link .= $config->default->method . '.' . $viewType;
             $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
+            return self::processProjectParam($link, $projectID, $onlyBody, $moduleName, $removeProject);
         }
 
         /**
-         * #4: 方法名为默认值且没有传参且模块名不为默认值，viewType和app指定的相等。MethodName is default but moduleName not and viewType equal app's viewType.. 
+         * #4: 方法名为默认值且没有传参且模块名不为默认值，viewType和app指定的相等。MethodName is default but moduleName not and viewType equal app's viewType..
          * Input: moduleName=article&methodName=index&viewType=html. Output: /article/
          *
          */
@@ -139,44 +139,44 @@ class baseHelper
         {
             $link .= $moduleName . '/';
             $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
+            return self::processProjectParam($link, $projectID, $onlyBody, $moduleName, $removeProject);
         }
 
         /**
-         * #5: 方法名为默认值且没有传参且模块名不为默认值，viewType有另外指定。MethodName is default but moduleName not and viewType no equls app's viewType. 
+         * #5: 方法名为默认值且没有传参且模块名不为默认值，viewType有另外指定。MethodName is default but moduleName not and viewType no equls app's viewType.
          * Input: moduleName=article&methodName=index&viewType=json. Output: /article.json
          *
          */
         $link .= $moduleName . '.' . $viewType;
         $link  = self::processOnlyBodyParam($link, $onlyBody);
-        return self::processPRJParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
+        return self::processProjectParam($link, $projectID, $onlyBody, $moduleName, $removeProject);
     }
 
     /**
-     *  处理PRJ 参数。
-     *  Process the PRJID param in url.
-     * 
-     *  如果传参的时候设定了$PRJID，在生成链接的时候继续追加。
+     *  处理project 参数。
+     *  Process the projectID param in url.
+     *
+     *  如果传参的时候设定了$projectID，在生成链接的时候继续追加。
      *  If $progrmID in the url, append it to the link.
-     *  
-     *  @param  string  $link 
-     *  @param  int     $PRJID
+     *
+     *  @param  string  $link
+     *  @param  int     $projectID
      *  @param  bool    $onlybody
      *  @param  string  $moduleName
-     *  @param  bool    $removePRJ
+     *  @param  bool    $removeProject
      *  @static
      *  @access public
      *  @return string
      */
-    public static function processPRJParam($link, $PRJID = '', $onlybody = false, $moduleName = '', $removePRJ = false)
+    public static function processProjectParam($link, $projectID = '', $onlybody = false, $moduleName = '', $removeProject = false)
     {
         global $config, $lang;
 
-        if(!$PRJID || $removePRJ) return $link;
+        if(!$projectID || $removeProject) return $link;
         $isProject = (zget($lang->navGroup, $moduleName) == 'project');
         if(!$isProject and $moduleName != 'program') return $link;
 
-        $link .= strpos($link, '?') === false ? "?PRJ=$PRJID" : "&PRJ=$PRJID";
+        $link .= strpos($link, '?') === false ? "?project=$projectID" : "&project=$projectID";
         return $link;
     }
 
@@ -186,9 +186,9 @@ class baseHelper
      *
      * 如果传参的时候设定了$onlyBody为真，或者当前页面请求中包含了onlybody=yes，在生成链接的时候继续追加。
      * If $onlyBody set to true or onlybody=yes in the url, append onlyBody param to the link.
-     * 
-     * @param  string  $link 
-     * @param  bool    $onlyBody 
+     *
+     * @param  string  $link
+     * @param  bool    $onlyBody
      * @static
      * @access public
      * @return string
@@ -204,7 +204,7 @@ class baseHelper
     /**
      * 检查是否是onlybody模式。
      * Check in only body mode or not.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -214,7 +214,7 @@ class baseHelper
     }
 
     /**
-     * 使用helper::import()来引入文件，不要直接使用include或者require. 
+     * 使用helper::import()来引入文件，不要直接使用include或者require.
      * Using helper::import() to import a file, instead of include or require.
      *
      * @param string    $file   the file to be imported.
@@ -241,7 +241,7 @@ class baseHelper
     /**
      * 将数组或者列表转化成 IN( 'a', 'b') 的形式。
      * Convert a list to  IN('a', 'b') string.
-     * 
+     *
      * @param   string|array $idList   列表，可以是数组或者用逗号隔开的列表。The id lists, can be a array or a string joined with comma.
      * @static
      * @access  public
@@ -249,11 +249,11 @@ class baseHelper
      */
     static public function dbIN($idList)
     {
-        if(is_array($idList)) 
+        if(is_array($idList))
         {
             if(!function_exists('get_magic_quotes_gpc') or !get_magic_quotes_gpc())
             {
-                foreach($idList as $key=>$value) $idList[$key] = addslashes($value); 
+                foreach($idList as $key=>$value) $idList[$key] = addslashes($value);
             }
             return "IN ('" . join("','", $idList) . "')";
         }
@@ -266,7 +266,7 @@ class baseHelper
     /**
      * 安全的Base64编码，框架对'/'字符比较敏感，转换为'.'。
      * Create safe base64 encoded string for the framework.
-     * 
+     *
      * @param   string  $string   the string to encode.
      * @static
      * @access  public
@@ -280,7 +280,7 @@ class baseHelper
     /**
      * 解码base64，先将之前的'.' 转换回'/'
      * Decode the string encoded by safe64Encode.
-     * 
+     *
      * @param   string  $string   the string to decode
      * @static
      * @access  public
@@ -294,7 +294,7 @@ class baseHelper
     /**
      * JSON编码，自动处理转义的问题。
      * JSON encode, process the slashes.
-     * 
+     *
      * @param   mixed  $data   the object to encode
      * @static
      * @access  public
@@ -307,8 +307,8 @@ class baseHelper
 
     /**
      * Encrypt password.
-     * 
-     * @param  string    $password 
+     *
+     * @param  string    $password
      * @static
      * @access public
      * @return string
@@ -341,8 +341,8 @@ class baseHelper
 
     /**
      * Decrypt password.
-     * 
-     * @param  string $password 
+     *
+     * @param  string $password
      * @static
      * @access public
      * @return string
@@ -377,9 +377,9 @@ class baseHelper
     /**
      * 判断是否是utf8编码
      * Judge a string is utf-8 or not.
-     * 
+     *
      * @author hmdker@gmail.com
-     * @param  string    $string 
+     * @param  string    $string
      * @see    http://php.net/manual/en/function.mb-detect-encoding.php
      * @static
      * @access public
@@ -387,7 +387,7 @@ class baseHelper
      */
     static public function isUTF8($string)
     {
-        $c    = 0; 
+        $c    = 0;
         $b    = 0;
         $bits = 0;
         $len  = strlen($string);
@@ -419,7 +419,7 @@ class baseHelper
     /**
      * 去掉UTF-8 Bom头。
      * Remove UTF-8 Bom.
-     * 
+     *
      * @param  string    $string
      * @access public
      * @return string
@@ -435,9 +435,9 @@ class baseHelper
      * Enhanced substr version: support multibyte languages like Chinese.
      *
      * @param string    $string
-     * @param int       $length 
-     * @param string    $append 
-     * @return string 
+     * @param int       $length
+     * @param string    $append
+     * @return string
      */
     public static function substr($string, $length, $append = '')
     {
@@ -453,7 +453,7 @@ class baseHelper
 
     /**
      * Get browser name and version.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -489,8 +489,8 @@ class baseHelper
     }
 
     /**
-     * Get client os from agent info. 
-     * 
+     * Get client os from agent info.
+     *
      * @static
      * @access public
      * @return string
@@ -525,17 +525,17 @@ class baseHelper
         $osList['/webos/i']              = 'Mobile';
 
         foreach ($osList as $regex => $value)
-        { 
-            if(preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) return $value; 
-        }   
+        {
+            if(preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) return $value;
+        }
 
         return 'unknown';
     }
-    
+
     /**
      *  计算两个日期相差的天数，取整。
      *  Compute the diff days of two date.
-     * 
+     *
      * @param   string $date1   the first date.
      * @param   string $date2   the sencond date.
      * @access  public
@@ -549,7 +549,7 @@ class baseHelper
     /**
      *  获取当前时间，使用common语言文件定义的DT_DATETIME1常量。
      *  Get now time use the DT_DATETIME1 constant defined in the lang file.
-     * 
+     *
      * @access  public
      * @return  datetime  now
      */
@@ -573,7 +573,7 @@ class baseHelper
     /**
      *  获取当前日期，使用common语言文件定义的DT_TIME1常量。
      *  Get now time use the DT_TIME1 constant defined in the lang file.
-     * 
+     *
      * @access  public
      * @return  date  today
      */
@@ -585,7 +585,7 @@ class baseHelper
     /**
      *  判断日期是不是零。
      *  Judge a date is zero or not.
-     * 
+     *
      * @access  public
      * @return  bool
      */
@@ -597,7 +597,7 @@ class baseHelper
     /**
      *  列出目录中符合该正则表达式的文件。
      *  Get files match the pattern under a directory.
-     * 
+     *
      * @access  public
      * @return  array   the files match the pattern
      */
@@ -614,8 +614,8 @@ class baseHelper
     /**
      * 切换目录。第一次调用的时候记录当前的路径，再次调用的时候切换回之前的路径。
      * Change directory: first call, save the $cwd, secend call, change to $cwd.
-     * 
-     * @param  string $path 
+     *
+     * @param  string $path
      * @static
      * @access public
      * @return void
@@ -639,7 +639,7 @@ class baseHelper
      *
      * @param  string $domain
      * @return string $siteCode
-     **/ 
+     **/
     public static function parseSiteCode($domain)
     {
         global $config;
@@ -674,7 +674,7 @@ class baseHelper
     /**
      * 检查是否是AJAX请求。
      * Check is ajax request.
-     * 
+     *
      * @static
      * @access public
      * @return bool
@@ -689,8 +689,8 @@ class baseHelper
     /**
      * 301跳转。
      * Header 301 Moved Permanently.
-     * 
-     * @param  string    $locate 
+     *
+     * @param  string    $locate
      * @access public
      * @return void
      */
@@ -700,11 +700,11 @@ class baseHelper
         die(header('Location:' . $locate));
     }
 
-    /** 
+    /**
      * 获取远程IP。
-     * Get remote ip. 
-     * 
-     * @param  bool  $proxy 
+     * Get remote ip.
+     *
+     * @param  bool  $proxy
      * @access public
      * @return string
      */
@@ -724,8 +724,8 @@ class baseHelper
 
     /**
      * Restart session.
-     * 
-     * @param  string $sessionID 
+     *
+     * @param  string $sessionID
      * @static
      * @access public
      * @return void
@@ -741,8 +741,8 @@ class baseHelper
 
     /**
      * Check DB to repair table.
-     * 
-     * @param  object  $exception 
+     *
+     * @param  object  $exception
      * @static
      * @access public
      * @return string
@@ -779,7 +779,7 @@ class baseHelper
  *
  * @param  string        $methodName  the method name
  * @param  string|array  $vars        the params passed to the method, can be array('key' => 'value') or key1=value1&key2=value2)
- * @param  string        $viewType    
+ * @param  string        $viewType
  * @return string the link string.
  */
 function inLink($methodName = 'index', $vars = '', $viewType = '')
@@ -806,7 +806,7 @@ function cycle($items)
 /**
  * 获取当前时间的Unix时间戳，精确到微妙。
  * Get current microtime.
- * 
+ *
  * @access public
  * @return float current time.
  */
@@ -819,8 +819,8 @@ function getTime()
 /**
  * 打印变量的信息
  * dump a var.
- * 
- * @param mixed $var 
+ *
+ * @param mixed $var
  * @access public
  * @return void
  */
@@ -850,10 +850,10 @@ function isLocalIP()
 
 /**
  * 获取webRoot。
- * Get web root. 
- * 
+ * Get web root.
+ *
  * @access public
- * @return string 
+ * @return string
  */
 function getWebRoot($full = false)
 {
@@ -868,7 +868,7 @@ function getWebRoot($full = false)
         }
         $path = empty($path) ? '/' : preg_replace('/\/www$/', '/www/', $path);
     }
-    
+
     if($full)
     {
         $http = (isset($_SERVER['HTTPS']) and strtolower($_SERVER['HTTPS']) != 'off') ? 'https://' : 'http://';
@@ -883,9 +883,9 @@ function getWebRoot($full = false)
 /**
  * 当数组/对象变量$var存在$key项时，返回存在的对应值或设定值，否则返回$key或不存在的设定值。
  * When the $var has the $key, return it, esle result one default value.
- * 
- * @param  array|object    $var 
- * @param  string|int      $key 
+ *
+ * @param  array|object    $var
+ * @param  string|int      $key
  * @param  mixed           $valueWhenNone     value when the key not exits.
  * @param  mixed           $valueWhenExists   value when the key exits.
  * @access public

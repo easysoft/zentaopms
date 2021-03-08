@@ -2367,9 +2367,9 @@ class storyModel extends model
 
             $stories = $this->dao->select('distinct t1.*, t2.*,t3.branch as productBranch,t4.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.execution = t3.project')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
                 ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t2.product = t4.id')
-                ->where('t1.execution')->eq((int)$executionID)
+                ->where('t1.project')->eq((int)$executionID)
                 ->andWhere('t2.type')->eq($storyType)
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($execution->type == 'project')

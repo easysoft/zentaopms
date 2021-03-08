@@ -381,7 +381,7 @@ class baseRouter
         $this->setErrorHandler();
         $this->setTimezone();
         $this->startSession();
-        $this->setPRJ();
+        $this->setProject();
         $this->setOpenApp();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
@@ -855,15 +855,15 @@ class baseRouter
     }
 
     /**
-     * 从Get里取progarm id 设置到session中。
-     * Get progarm id from Get and set it to session.
+     * 从Get里取project id 设置到session中。
+     * Get project id from Get and set it to session.
      *
      * @access public
      * @return void
      */
-    public function setPRJ()
+    public function setProject()
     {
-        if(isset($_GET['PRJ'])) $this->session->set('PRJ', $_GET['PRJ']); //Set PRJ id into session.
+        if(isset($_GET['project'])) $this->session->set('project', $_GET['project']); //Set project id into session.
     }
 
     /**

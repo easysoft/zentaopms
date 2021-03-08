@@ -146,7 +146,7 @@ class execution extends control
         /* Get products by execution. */
         $execution   = $this->commonAction($executionID, $status);
         $executionID = $execution->id;
-        $products    = $this->loadModel('product')->getProductPairsByExecution($executionID);
+        $products    = $this->loadModel('product')->getProductPairsByProject($executionID);
         setcookie('preExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Save the recently five executions visited in the cookie. */

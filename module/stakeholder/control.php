@@ -1,7 +1,7 @@
 <?php
 class stakeholder extends control
 {
-    /**  
+    /**
      * Stakeholder list.
      *
      * @param  string $browseType
@@ -33,7 +33,7 @@ class stakeholder extends control
         $this->display();
     }
 
-    /**  
+    /**
      * Create a stakeholder.
      *
      * @param  int programID
@@ -50,7 +50,7 @@ class stakeholder extends control
             $response['message'] = $this->lang->saveSuccess;
 
             if(!$stakeholderID or dao::isError())
-            {    
+            {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
                 $this->send($response);
@@ -74,7 +74,7 @@ class stakeholder extends control
             $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
             $this->program->setViewMenu($programID);
 
-            $this->view->members = $this->loadModel('project')->getProjectTeamMemberPairs($programID);
+            $this->view->members = $this->loadModel('project')->getTeamMemberPairs($programID);
         }
         else
         {
@@ -89,19 +89,19 @@ class stakeholder extends control
         $this->display();
     }
 
-    /**  
+    /**
      * Batch create stakeholders.
      *
      * @access public
      * @return void
      */
-    public function batchCreate($dept = '', $parentID = 0) 
-    {    
+    public function batchCreate($dept = '', $parentID = 0)
+    {
         if($_POST)
-        {    
+        {
             $this->stakeholder->batchCreate();
             die(js::locate($this->createLink('stakeholder', 'browse'), 'parent'));
-        }    
+        }
 
         $this->loadModel('user');
         $this->loadModel('dept');
@@ -122,7 +122,7 @@ class stakeholder extends control
         $this->display();
     }
 
-    /**  
+    /**
      * Edit a stakeholder.
      *
      * @param  int $stakeholderID
@@ -140,7 +140,7 @@ class stakeholder extends control
             $response['message'] = $this->lang->saveSuccess;
 
             if(dao::isError())
-            {    
+            {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
                 $this->send($response);
@@ -170,7 +170,7 @@ class stakeholder extends control
         $this->display();
     }
 
-    /**  
+    /**
      * Ajax get members.
      *
      * @param  string $user
@@ -180,11 +180,11 @@ class stakeholder extends control
      */
     public function ajaxGetMembers($user = '', $programID = 0)
     {
-        $members = $programID == 0 ? $this->loadModel('execution')->getTeamMemberPairs($this->session->project) : $this->loadModel('project')->getProjectTeamMemberPairs($programID);
+        $members = $programID == 0 ? $this->loadModel('execution')->getTeamMemberPairs($this->session->project) : $this->loadModel('project')->getTeamMemberPairs($programID);
         die(html::select('user', $members, $user, "class='form-control chosen'"));
     }
 
-    /**  
+    /**
      * Ajax get company user.
      *
      * @param  string $user
@@ -194,14 +194,14 @@ class stakeholder extends control
      */
     public function ajaxGetCompanyUser($user = '', $programID = 0)
     {
-        $members = $programID == 0 ? $this->loadModel('execution')->getTeamMemberPairs($this->session->project) : $this->loadModel('project')->getProjectTeamMemberPairs($programID);
+        $members = $programID == 0 ? $this->loadModel('execution')->getTeamMemberPairs($this->session->project) : $this->loadModel('project')->getTeamMemberPairs($programID);
         $users   = $this->loadModel('user')->getPairs('noclosed');
         $companyUsers = array('' => '') + array_diff($users, $members);
 
         die(html::select('user', $companyUsers, $user, "class='form-control chosen'"));
     }
 
-    /**  
+    /**
      * Ajax get outside user.
      *
      * @access public
@@ -214,7 +214,7 @@ class stakeholder extends control
         die(html::select('user', $users, '', "class='form-control chosen' onchange=changeUser(this.value);"));
     }
 
-    /**  
+    /**
      * Ajax get control.
      *
      * @access public
@@ -235,21 +235,21 @@ class stakeholder extends control
         if(isset($stakeholders['inside']))
         {
             $insideList = array();
-            foreach($stakeholders['inside'] as $user) 
+            foreach($stakeholders['inside'] as $user)
             {
                 $partake = isset($partakeList->{$user->account}) ? $partakeList->{$user->account} : '';
                 $insideList[] = "<td style='width: 100px;'>" . html::select("partake[$activityID][$user->account]", $this->lang->stakeholder->planField->partakeList, $partake, "class='form-control'") . '</td>';
-            }   
+            }
         }
 
         if(isset($stakeholders['outside']))
         {
             $outsideList = array();
-            foreach($stakeholders['outside'] as $user) 
+            foreach($stakeholders['outside'] as $user)
             {
                 $partake = isset($partakeList->{$user->account}) ? $partakeList->{$user->account} : '';
                 $outsideList[] = "<td style='width: 100px;'>" . html::select("partake[$activityID][$user->account]", $this->lang->stakeholder->planField->partakeList, $partake, "class='form-control'") . '</td>';
-            }   
+            }
         }
 
         $partakeList = array_merge($insideList, $outsideList);

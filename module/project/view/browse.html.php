@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php
 js::set('orderBy', $orderBy);
-js::set('projectID', $projectID);
+js::set('programID', $programID);
 js::set('browseType', $browseType);
 ?>
 <div id="mainMenu" class="clearfix">
@@ -21,7 +21,7 @@ js::set('browseType', $browseType);
   <div id="sidebarHeader">
     <div class="title">
       <?php echo empty($project) ? $lang->project->common : $project->name;?>
-      <?php if($projectID) echo html::a(inLink('browse', 'projectID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
+      <?php if($programID) echo html::a(inLink('browse', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>
   <?php endif;?>
@@ -30,13 +30,13 @@ js::set('browseType', $browseType);
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "projectID=$projectID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php echo html::checkbox('projectMine', array('1' => $lang->project->mine), '', $this->cookie->projectMine ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(isset($this->config->maxVersion)):?>
-    <?php common::printLink('project', 'createGuide', "projectID=$projectID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php elseif($this->config->systemMode == 'new'):?>
     <?php common::printLink('project', 'create', 'mode=scrum', '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
     <?php else:?>
@@ -62,7 +62,7 @@ js::set('browseType', $browseType);
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
         <?php if($this->config->systemMode == 'new'):?>
-        <?php common::printLink('project', 'createGuide', "projectID=$projectID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
+        <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
         <?php else:?>
         <?php common::printLink('project', 'create', '', '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide"');?>
         <?php endif;?>
@@ -74,7 +74,7 @@ js::set('browseType', $browseType);
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
-        $vars = "projectID=$projectID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+        $vars = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
         $setting = $this->datatable->getSetting('project');
       ?>
       <table class='table has-sort-head'>
@@ -94,7 +94,7 @@ js::set('browseType', $browseType);
           <?php foreach($projectStats as $project):?>
           <?php $project->from = 'project';?>
           <tr data-id="<?php echo $project->id;?>">
-            <?php foreach($setting as $value) $this->project->printCell($value, $project, $users, $projectID);?>
+            <?php foreach($setting as $value) $this->project->printCell($value, $project, $users, $programID);?>
           </tr>
           <?php endforeach;?>
         </tbody>

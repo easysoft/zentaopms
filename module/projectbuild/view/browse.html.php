@@ -106,7 +106,7 @@
       </div>
       <div class="modal-body">
         <div class='input-group'>
-          <?php echo html::select('projects', $projects, '', "class='form-control chosen' id=project");?>
+          <?php echo html::select('executions', $executions, '', "class='form-control chosen' id=project");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->build->create, "id='createBuildButton'", 'btn btn-primary');?></span>
         </div>
       </div>

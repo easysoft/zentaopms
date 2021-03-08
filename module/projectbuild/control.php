@@ -22,8 +22,9 @@ class projectBuild extends control
     public function browse($projectID = 0, $type = 'all', $param = 0)
     {
         $this->loadModel('project');
+        $this->loadModel('execution');
         $this->loadModel('build');
-        $project = $this->loadModel('program')->getPRJByID($projectID);
+        $project = $this->project->getByID($projectID);
 
         /* Get products' list. */
         $products = $this->project->getProducts($projectID, false);
@@ -34,9 +35,9 @@ class projectBuild extends control
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('projectbuild', 'browse', "projectID=$projectID&type=bysearch&queryID=myQueryID");
 
-        $projects = $this->project->getExecutionsByProject($projectID, 'all', '', true);
+        $executions = $this->execution->getByProject($projectID, 'all', '', true);
         $this->config->build->search['fields']['project'] = $this->project->lang->executionCommon;
-        $this->config->build->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $projects);
+        $this->config->build->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
 
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project');
 
@@ -57,9 +58,9 @@ class projectBuild extends control
         }
 
         /* Header and position. */
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->build;
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->execution->build;
         $this->view->position[] = html::a(inlink('browse', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->project->build;
+        $this->view->position[] = $this->lang->execution->build;
 
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->buildsTotal   = count($builds);
@@ -68,7 +69,7 @@ class projectBuild extends control
         $this->view->product       = $type == 'product' ? $param : 'all';
         $this->view->project       = $project;
         $this->view->products      = $products;
-        $this->view->projects      = $projects;
+        $this->view->executions    = $executions;
         $this->view->type          = $type;
 
         $this->display();

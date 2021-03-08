@@ -175,11 +175,11 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
     else
     {
         echo "<button type='button' class='btn btn-primary' id='linkButton'>";
-        echo "<i class='icon-link'></i> {$lang->project->linkStory} <span class='caret'></span>";
+        echo "<i class='icon-link'></i> {$lang->execution->linkStory} <span class='caret'></span>";
         echo '</button>';
         echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
-        if(common::hasPriv('projectstory', 'linkStory')) echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project={$this->session->project}"), $lang->project->linkStory). "</li>";
-        if(common::hasPriv('project', 'importPlanStories')) echo '<li>' . html::a('#linkStoryByPlan', $lang->project->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
+        if(common::hasPriv('projectstory', 'linkStory')) echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project={$this->session->project}"), $lang->execution->linkStory). "</li>";
+        if(common::hasPriv('project', 'importPlanStories')) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
         echo '</ul>';
     }
     ?>
