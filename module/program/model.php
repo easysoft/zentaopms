@@ -311,28 +311,6 @@ class programModel extends model
             $this->file->updateObjectID($this->post->uid, $programID, 'program');
             $this->setTreePath($programID);
 
-            /* Add program admin.*/
-            $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
-                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
-                ->where('t1.account')->eq($this->app->user->account)
-                ->andWhere('t2.role')->eq('programAdmin')
-                ->fetch();
-
-            if(!empty($groupPriv))
-            {
-                $newProgram = $groupPriv->project . ",$programID";
-                $this->dao->update(TABLE_USERGROUP)->set('program')->eq($newProgram)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
-            }
-            else
-            {
-                $programAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('programAdmin')->fetch('id');
-                $groupPriv  = new stdclass();
-                $groupPriv->account = $this->app->user->account;
-                $groupPriv->group   = $programAdminID;
-                $groupPriv->project = $programID;
-                $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
-            }
-
             return $programID;
         }
     }

@@ -1142,7 +1142,7 @@ CREATE TABLE IF NOT EXISTS `zt_usergroup` (
   `account` char(30) NOT NULL default '',
   `group` mediumint(8) unsigned NOT NULL default '0',
   `project` text NOT NULL,
-  UNIQUE KEY `account` (`account`,`group`)
+  UNIQUE KEY `account` (`account`,`group`,`project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_userquery`;
 CREATE TABLE IF NOT EXISTS `zt_userquery` (
@@ -4137,5 +4137,5 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct',   '1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRExecution', '1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'URSR', '6');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'unitList', 'CNY,USD');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'program', '', 'defaultCurrency', 'CNY');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'project', '', 'unitList', 'CNY,USD');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'project', '', 'defaultCurrency', 'CNY');

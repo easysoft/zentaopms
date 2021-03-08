@@ -246,19 +246,19 @@ function adjustPlanBoxMargin()
 $(function()
 {
     $('#privList > tbody > tr > th input[type=checkbox]').change(function()
-    {   
+    {
         var id      = $(this).attr('id');
         var checked = $(this).prop('checked');
 
         if(id == 'allChecker')
-        {   
+        {
             $('input[type=checkbox]').prop('checked', checked);
-        }   
+        }
         else
-        {   
+        {
             $(this).parents('tr').find('input[type=checkbox]').prop('checked', checked);
-        }   
-    }); 
+        }
+    });
 })
 
 /**
@@ -295,9 +295,9 @@ function setBudgetTipsAndAclList(programID)
     {
         $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + programID), function(budgetLeft)
         {
-            parentProgram = PGMList[programID];
+            parentProgram = programList[programID];
             programBudget = parentProgram.budget;
-            PGMBudgetUnit = currencySymbol[program.budgetUnit];
+            PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
             budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + budgetLeft) : '';
             $('#budget').attr('placeholder', budgetNotes);

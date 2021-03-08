@@ -60,7 +60,7 @@
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td><?php echo $program->begin;?></td>
-        <td><?php echo $program->end == LONG_TIME ? $lang->program->PRJLongTime : $program->end;?></td>
+        <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td class='c-actions'>
           <?php if($program->type == 'program'):?>
           <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'start', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->start);?>

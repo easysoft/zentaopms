@@ -38,7 +38,7 @@
 <?php js::set('currencySymbol', $lang->project->currencySymbol);?>
 <?php js::set('PGMParentBudget', $lang->program->parentBudget);?>
 <?php js::set('future', $lang->project->future);?>
-<?php js::set('PGMList', $PGMList);?>
+<?php js::set('programList', $programList);?>
 <?php $aclList = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -157,10 +157,10 @@
   </div>
 </div>
 <div id='PGMAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->PGMAclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->program->aclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div id='subPGMAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->subPGMAclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->program->subAclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <?php js::set('parentProgramID', isset($parentProgram->id) ? $parentProgram->id : 0);?>
 <?php include '../../common/view/footer.html.php';?>
