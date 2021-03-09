@@ -61,7 +61,6 @@ class execution extends control
     {
         if($locate == 'yes') $this->locate($this->createLink('execution', 'task'));
 
-        if($this->app->viewType != 'mhtml') unset($this->lang->execution->menu->index);
         $this->commonAction($executionID);
 
         if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
