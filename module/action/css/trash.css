@@ -1,2 +1,3 @@
-.table-footer .table-actions{width:auto;visibility:visible;opacity:1;}
-.table-footer .table-actions .text{line-height:28px;}
+.table-footer .table-actions {width: auto; visibility: visible; opacity: 1;}
+.table-footer .table-actions .text {line-height: 28px;}
+table tbody tr td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

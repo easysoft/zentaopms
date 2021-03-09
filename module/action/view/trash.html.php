@@ -59,7 +59,7 @@
             }
             else
             {
-                echo html::a($this->createLink($module, $methodName, $params), $action->objectName);
+                echo html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title={$action->objectName}");
             }
             ?>
           </td>
