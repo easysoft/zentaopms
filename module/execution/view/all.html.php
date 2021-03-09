@@ -27,7 +27,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
-    <?php echo html::a(inlink("all", "status=$key&executionID=$execution->id&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
+    <?php echo html::a(inlink("all", "status=$key&executionID=$executionID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
     <div class='input-control space w-180px'>
       <?php echo html::select('product', $products, $productID, "class='chosen form-control' onchange='byProduct(this.value, $executionID, \"$status\")'");?>

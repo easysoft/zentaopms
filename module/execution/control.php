@@ -2579,28 +2579,36 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'all', $executionID = 0, $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $executionID = 0, $from = 'execution', $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('my');
+        $this->app->loadLang('product');
         $this->app->loadLang('programplan');
-        if($this->executions)
+        if($from == 'execution')
         {
-            $execution   = $this->commonAction($executionID);
-            $executionID = $execution->id;
+            if($this->executions)
+            {
+                $execution   = $this->commonAction($executionID);
+                $executionID = $execution->id;
+            }
+            $this->session->set('executionList', $this->app->getURI(true));
         }
-        $this->session->set('executionList', $this->app->getURI(true));
+        elseif($from == 'project')
+        {
+            $this->lang->navGroup->execution = 'project';
+        }
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->execution->allExecution;
-        $this->view->position[] = $this->lang->execution->allExecution;
+        $this->view->title      = $this->lang->execution->allExecutions;
+        $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $this->view->executionStats = $this->execution->getStats($this->session->project, $status, $productID, 0, 30, $orderBy, $pager);
-        $this->view->products       = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByExecution($this->session->project);
+        $this->view->executionStats = $this->project->getStats($this->session->project, $status, $productID, 0, 30, $orderBy, $pager);
+        $this->view->products       = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->project);
         $this->view->productID      = $productID;
-        $this->view->executionID      = $executionID;
+        $this->view->executionID    = $executionID;
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');

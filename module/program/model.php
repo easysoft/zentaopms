@@ -139,7 +139,7 @@ class programModel extends model
         {
             $program = $this->getByID($programID);
             $path    = $program->path;
-		    }
+        }
 
         $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')

@@ -30,8 +30,8 @@ $lang->waterfall->menuOrder[65] = 'other';
 $lang->waterfall->menuOrder[70] = 'projectsetting';
 
 /* Sort of main menu. */
-$lang->scrum->menuOrder[5]  = 'programindex';
-$lang->scrum->menuOrder[10] = 'project';
+$lang->scrum->menuOrder[5]  = 'index';
+$lang->scrum->menuOrder[10] = 'execution';
 $lang->scrum->menuOrder[15] = 'projectstory';
 $lang->scrum->menuOrder[20] = 'qa';
 $lang->scrum->menuOrder[25] = 'ci';

@@ -167,7 +167,7 @@ class project extends control
      */
     public function index($projectID = 0)
     {
-        $this->lang->navGroup->project = 'project';
+        $this->lang->noMenuModule[] = 'project';
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
         $project = $this->project->getByID($projectID);
@@ -426,6 +426,7 @@ class project extends control
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
         $this->view->from                 = $from;
         $this->view->parentProject        = $parentProject;
+        $this->view->parentProgram        = $this->loadModel('program')->getByID($project->parent);
         $this->view->availableBudget      = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;
         $this->view->budgetUnitList       = $this->project->getBudgetUnitList();
 
@@ -1146,7 +1147,7 @@ class project extends control
         $project = $this->project->getById($projectID);
 
         $allProducts        = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts     = $this->program->getProducts($project->id);
+        $linkedProducts     = $this->product->getProducts($project->id);
         $linkedBranches     = array();
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */

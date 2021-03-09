@@ -647,7 +647,6 @@ $lang->navGroup->pssp           = 'project';
 $lang->navGroup->auditplan      = 'project';
 $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
-$lang->navGroup->build          = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->projectbuild   = 'project';
 $lang->navGroup->repo           = 'project';
@@ -659,6 +658,7 @@ $lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
+$lang->navGroup->build     = 'execution';
 
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
@@ -962,6 +962,6 @@ $lang->stakeholder->menu->list  = array('link' => 'Stakeholder List|stakeholder|
 $lang->stakeholder->menu->issue = array('link' => 'Issue|stakeholder|issue|');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');

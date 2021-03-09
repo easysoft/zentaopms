@@ -2369,7 +2369,7 @@ EOD;
         }
         if($group == 'project')
         {
-            if($config->systemMode == 'classic' or $methodName == 'browse')
+            if($config->systemMode == 'classic' or ($moduleName == 'project' and $methodName == 'browse'))
             {
                 $lang->menu = $lang->project->menu;
             }
