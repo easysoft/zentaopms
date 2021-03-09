@@ -875,7 +875,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createProjectStoryLink($type, $module, $extra)
+    public function createExecutionStoryLink($type, $module, $extra)
     {
         $executionID = $extra['executionID'];
         $productID   = $extra['productID'];

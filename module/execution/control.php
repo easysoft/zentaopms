@@ -2236,15 +2236,15 @@ class execution extends control
             $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
 
-        if($execution->execution != 0) $executionStories = $this->story->getStoryPairs($execution->execution);
+        if($execution->project != 0) $projectStories = $this->story->getExecutionStoryPairs($execution->project);
 
-        $executionStories = $this->story->getStoryPairs($executionID);
+        $executionStories = $this->story->getExecutionStoryPairs($executionID);
         foreach($allStories as $id => $story)
         {
             if(isset($executionStories[$story->id])) unset($allStories[$id]);
 
             if($story->parent < 0) unset($allStories[$id]);
-            if(!empty($executionStories) and !isset($executionStories[$story->id])) unset($allStories[$id]);
+            if(!empty($projectStories) and !isset($projectStories[$story->id])) unset($allStories[$id]);
         }
 
         /* Pager. */
