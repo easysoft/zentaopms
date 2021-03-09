@@ -845,7 +845,7 @@ class block extends control
         $this->app->loadLang('task');
         $this->app->loadLang('story');
 
-        /* Set program status and count. */
+        /* Set project status and count. */
         $status = isset($this->params->type)  ? $this->params->type       : 'all';
         $count  = isset($this->params->count) ? (int)$this->params->count : 15;
 
@@ -873,8 +873,10 @@ class block extends control
         {
             if($project->model == 'scrum')
             {
+                $this->app->loadClass('pager', $static = true);
+                $pager = pager::init(0, 3, 1);
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
-                $project->executions = $this->project->getStats($projectID, 'all', 0, 0, 30, 'id_asc');
+                $project->executions = $this->project->getStats($projectID, 'all', 0, 0, 30, 'id_asc', $pager);
             }
             elseif($project->model == 'waterfall' and isset($this->config->maxVersion))
             {

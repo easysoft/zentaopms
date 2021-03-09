@@ -1337,13 +1337,14 @@ class projectModel extends model
             ->orderBy('date desc')
             ->fetchGroup('execution', 'name');
 
+        $this->loadModel('execution');
         foreach($burns as $executionID => $executionBurns)
         {
             /* If executionBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
             $begin = $executions[$executionID]->begin;
             $end   = $executions[$executionID]->end;
             if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
-            $executionBurns = $this->loadModel('execution')->processBurnData($executionBurns, $itemCounts, $begin, $end);
+            $executionBurns = $this->execution->processBurnData($executionBurns, $itemCounts, $begin, $end);
 
             /* Shorter names. */
             foreach($executionBurns as $executionBurn)
@@ -1384,8 +1385,8 @@ class projectModel extends model
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
-        $execution = $this->loadModel('execution')->getById($this->session->project);
-        if($execution and $execution->model == 'waterfall')
+        $project = $this->getByID($this->session->project);
+        if($project and $project->model == 'waterfall')
         {
             foreach($parents as $id => $execution)
             {

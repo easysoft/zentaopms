@@ -108,7 +108,7 @@ $(function()
         <?php foreach($projects as $project):?>
         <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
           <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>
-          <?php echo html::a(helper::createLink('program', 'index', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->index}");?>
+          <?php echo html::a(helper::createLink('project', 'index', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->index}");?>
         </li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
