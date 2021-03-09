@@ -338,7 +338,7 @@ $lang->story->menu = $lang->product->menu;
 /* 执行视图菜单设置。*/
 $lang->execution = new stdclass();
 $lang->execution->menu = new stdclass();
-$lang->execution->menu->home     = '仪表盘|execution|index|';
+$lang->execution->menu->index    = '仪表盘|execution|index|';
 $lang->execution->menu->task     = array('link' => '任务|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
 $lang->execution->menu->kanban   = array('link' => '看板|execution|kanban|executionID=%s');
 $lang->execution->menu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
