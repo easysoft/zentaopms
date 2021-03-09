@@ -364,7 +364,7 @@ class bug extends control
         $this->bug->setMenu($this->products, $productID, $branch);
 
         /* Init vars. */
-        $projectID   = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
+        $projectID   = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
         $moduleID    = 0;
         $executionID = 0;
         $taskID      = 0;
@@ -571,7 +571,7 @@ class bug extends control
             $showFields = trim($showFields, ',');
         }
 
-        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
+        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
@@ -607,8 +607,8 @@ class bug extends control
         /* Judge bug exits or not. */
         $bug = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->project = $bug->project;
-        $this->view->products   = $this->products = $this->product->getProductPairsByProject($this->session->project);
+        $this->session->PRJ = $bug->project;
+        $this->view->products   = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
 
         $this->bug->checkBugExecutionPriv($bug);
 
@@ -624,7 +624,7 @@ class bug extends control
         {
             session_write_close();
             $this->lang->set('menugroup.bug', 'repo');
-            $repos = $this->loadModel('repo')->getRepoPairs($this->session->project);
+            $repos = $this->loadModel('repo')->getRepoPairs($this->session->PRJ);
             $this->repo->setMenu($repos);
             $this->lang->bug->menu = $this->lang->repo->menu;
         }
@@ -755,7 +755,7 @@ class bug extends control
         $oldResolvedBuild = array();
         if(($bug->resolvedBuild) and isset($allBuilds[$bug->resolvedBuild])) $oldResolvedBuild[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
 
-        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
+        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
@@ -1120,7 +1120,7 @@ class bug extends control
             }
         }
 
-        $projectID  = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
+        $projectID  = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
         $bug        = $this->bug->getById($bugID);
         $productID  = $bug->product;
         $users      = $this->user->getPairs('noclosed');

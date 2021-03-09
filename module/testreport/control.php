@@ -422,7 +422,7 @@ class testreport extends control
     {
         $report  = $this->testreport->getById($reportID);
         if(!$report) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->project = $report->project;
+        $this->session->PRJ = $report->project;
 
         $execution = $this->execution->getById($report->execution);
         if($from == 'product' and is_numeric($report->product))
@@ -535,7 +535,7 @@ class testreport extends control
     {
         if($objectType == 'product')
         {
-            $projectID      = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->project;
+            $projectID      = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->PRJ;
             $this->products = $this->product->getProductPairsByProject($projectID);
             if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testreport")));
             $productID      = $this->product->saveState($objectID, $this->products);
@@ -544,7 +544,7 @@ class testreport extends control
         }
         elseif($objectType == 'project')
         {
-            $this->executions = $this->execution->getPairs($this->session->project, 'all', 'nocode');
+            $this->executions = $this->execution->getPairs($this->session->PRJ, 'all', 'nocode');
             $executionID      = $this->execution->saveState($objectID, $this->executions);
             $this->execution->setMenu($this->executions, $executionID);
             $this->lang->testreport->menu = $this->lang->execution->menu;

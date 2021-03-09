@@ -23,7 +23,7 @@ $isQa      = $rawModule == 'qa';
         <?php if($isQa)      echo isset($lang->qa->switcherMenu) ? $lang->qa->switcherMenu : '';?>
         <?php if($this->config->systemMode == 'new'):?>
         <?php if($isProgram) echo isset($lang->program->switcherMenu) ? $lang->program->switcherMenu : '';?>
-        <?php if($isProject) echo $this->loadModel('project')->getSwitcher($this->session->project, $app->rawModule, $app->rawMethod);?>
+        <?php if($isProject) echo $this->loadModel('project')->getSwitcher($this->session->PRJ, $app->rawModule, $app->rawMethod);?>
         <?php elseif($this->config->systemMode == 'classic'):?>
         <?php if($isProject) echo isset($lang->project->switcherMenu) ? $lang->project->switcherMenu : '';;?>
         <?php endif;?>

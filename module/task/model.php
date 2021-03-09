@@ -47,7 +47,7 @@ class taskModel extends model
             ->setDefault('execution', $executionID)
             ->setDefault('estimate,left,story', 0)
             ->setDefault('status', 'wait')
-            ->setIF($this->config->systemMode == 'new', 'project', $this->session->project)
+            ->setIF($this->config->systemMode == 'new', 'project', $this->session->PRJ)
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('estStarted', '0000-00-00')
@@ -303,7 +303,7 @@ class taskModel extends model
             $data[$i]->pri        = $tasks->pri[$i];
             $data[$i]->estimate   = $tasks->estimate[$i];
             $data[$i]->left       = $tasks->estimate[$i];
-            $data[$i]->project    = $this->config->systemMode == 'new' ? $this->session->project : 0;
+            $data[$i]->project    = $this->config->systemMode == 'new' ? $this->session->PRJ : 0;
             $data[$i]->execution  = $executionID;
             $data[$i]->estStarted = empty($tasks->estStarted[$i]) ? '0000-00-00' : $tasks->estStarted[$i];
             $data[$i]->deadline   = empty($tasks->deadline[$i]) ? '0000-00-00' : $tasks->deadline[$i];
@@ -2534,7 +2534,7 @@ class taskModel extends model
 
         $datas = $this->processData4Report($tasks, '', 'execution');
 
-        $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'all');
+        $executions = $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'all');
         foreach($datas as $executionID => $data)
         {
             $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
@@ -3260,7 +3260,7 @@ class taskModel extends model
     public function getExtraRequiredFields()
     {
         /* Add required fields to waterfall execution. */
-        $execution = $this->loadModel('project')->getByID($this->session->project);
+        $execution = $this->loadModel('project')->getByID($this->session->PRJ);
         if(!empty($execution) && $execution->model == 'waterfall')
         {
             $this->config->task->create->requiredFields .= ',estStarted,deadline';

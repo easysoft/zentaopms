@@ -23,7 +23,7 @@ class testreportModel extends model
     public function setMenu($products, $productID, $branch = 0)
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'testreport', 'browse', $this->session->project, $branch);
+        $selectHtml = $this->product->select($products, $productID, 'testreport', 'browse', $this->session->PRJ, $branch);
 
         /* Remove branch. */
         if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
@@ -57,7 +57,7 @@ class testreportModel extends model
     {
         $data = fixer::input('post')
             ->stripTags($this->config->testreport->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testreport != 'qa', 'project', $this->session->project)
+            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testreport != 'qa', 'project', $this->session->PRJ)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('stories', ',')
@@ -149,7 +149,7 @@ class testreportModel extends model
     {
         $objectID = (int)$objectID;
         return $this->dao->select('*')->from(TABLE_TESTREPORT)->where('deleted')->eq(0)
-            ->beginIF($this->lang->navGroup->testreport != 'qa')->andWhere('project')->eq($this->session->project)->fi()
+            ->beginIF($this->lang->navGroup->testreport != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
             ->beginIF($objectType == 'project')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('project')->fi()
             ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
             ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()

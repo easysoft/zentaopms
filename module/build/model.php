@@ -144,15 +144,15 @@ class buildModel extends model
                 $this->session->set('projectBuildForm', $query->form);
             }
         }
-        if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
+        if($this->session->PRJBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
 
-        $buildQuery = $this->session->projectBuildQuery;
+        $buildQuery = $this->session->PRJBuildQuery;
 
         /* Distinguish between repeated fields. */
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`', 'project' => '`project`');
         foreach($fields as $field)
         {
-            if(strpos($this->session->projectBuildQuery, $field) !== false)
+            if(strpos($this->session->PRJBuildQuery, $field) !== false)
             {
                 $buildQuery = str_replace($field, "t1." . $field, $buildQuery);
             }
@@ -293,7 +293,7 @@ class buildModel extends model
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.product')->in($products)
-            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->PRJ)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
@@ -354,7 +354,7 @@ class buildModel extends model
         $build->bugs    = '';
 
         $build = fixer::input('post')
-            ->setDefault('project', $this->session->project)
+            ->setDefault('project', $this->session->PRJ)
             ->setDefault('product', 0)
             ->setDefault('branch', 0)
             ->cleanInt('product,branch')

@@ -139,8 +139,8 @@ class story extends control
 
             if($executionID != 0)
             {
-                if($executionID != $this->session->project) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $executionID);
-                $this->loadModel('action')->create('story', $storyID, 'linked2prj', '', $this->session->project);
+                if($executionID != $this->session->PRJ) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $executionID);
+                $this->loadModel('action')->create('story', $storyID, 'linked2prj', '', $this->session->PRJ);
             }
 
             if($todoID > 0)
@@ -387,7 +387,7 @@ class story extends control
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
                 $this->execution->linkStory($executionID, $stories, $products);
-                if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
+                if($executionID != $this->session->PRJ) $this->execution->linkStory($this->session->PRJ, $stories, $products);
             }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
@@ -658,7 +658,7 @@ class story extends control
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
             $this->lang->story->menu = $this->lang->execution->menu;
 
-            $this->execution->setMenu($this->execution->getPairs($this->session->project, 'all', 'nodeleted'), $executionID);
+            $this->execution->setMenu($this->execution->getPairs($this->session->PRJ, 'all', 'nodeleted'), $executionID);
             $this->lang->set('menugroup.story', 'execution');
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
 
@@ -854,9 +854,9 @@ class story extends control
         $from = $this->app->openApp;
         if($from == 'project')
         {
-            $project = $this->dao->findById((int)$this->session->project)->from(TABLE_PROJECT)->fetch();
+            $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
             $this->lang->product->menu = $this->lang->menu->{$project->model};
-            $this->execution->setMenu($this->execution->getPairs($this->session->project, 'all', 'nodeleted'), $project->id);
+            $this->execution->setMenu($this->execution->getPairs($this->session->PRJ, 'all', 'nodeleted'), $project->id);
 
             /* If status is done, can not create task from story. */
             $execution = $this->execution->getById($param);
@@ -871,7 +871,7 @@ class story extends control
 
             if($this->app->rawModule == 'projectstory')
             {
-                $project = $this->dao->findById((int)$this->session->project)->from(TABLE_PROJECT)->fetch();
+                $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
                 $this->lang->product->menu = $this->lang->menu->{$project->model};
             }
         }
@@ -1158,7 +1158,7 @@ class story extends control
         {
             $this->lang->story->menu      = $this->lang->execution->menu;
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
-            $this->execution->setMenu($this->execution->getPairs($this->session->project, 'all', 'nodeleted'), $executionID);
+            $this->execution->setMenu($this->execution->getPairs($this->session->PRJ, 'all', 'nodeleted'), $executionID);
             $this->lang->set('menugroup.story', 'execution');
             $execution = $this->execution->getByID($executionID);
             $this->view->position[] = html::a($this->createLink('execution', 'story', "executionID=$execution->id"), $execution->name);
@@ -1230,7 +1230,7 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->story->successToTask;
 
-            $this->story->batchToTask($executionID, $this->session->project);
+            $this->story->batchToTask($executionID, $this->session->PRJ);
 
             if(dao::isError())
             {
@@ -1413,7 +1413,7 @@ class story extends control
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $tracks = $this->story->getTracks($productID, $branch, $pager);
 
-        if($this->app->rawModule == 'projectstory') $projectProducts = $this->product->getProducts($this->session->project);
+        if($this->app->rawModule == 'projectstory') $projectProducts = $this->product->getProducts($this->session->PRJ);
 
         $this->view->title      = $this->lang->story->track;
         $this->view->position[] = $this->lang->story->track;

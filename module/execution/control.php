@@ -539,7 +539,7 @@ class execution extends control
         $this->app->session->set('executionList', $uri);
 
         $this->loadModel('bug');
-        $executions = $this->execution->getPairs($this->session->project, 'all', 'nocode');
+        $executions = $this->execution->getPairs($this->session->PRJ, 'all', 'nocode');
         $this->execution->setMenu($executions, $executionID);
 
         /* Load pager. */
@@ -990,7 +990,7 @@ class execution extends control
         $this->view->orderBy      = $orderBy;
         $this->view->tasks        = $productTasks;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products     = $this->loadModel('product')->getPairs('', $this->session->project);
+        $this->view->products     = $this->loadModel('product')->getPairs('', $this->session->PRJ);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
@@ -1205,7 +1205,7 @@ class execution extends control
         $isSprint = true;
         if($this->config->systemMode == 'new')
         {
-            $project = $this->project->getById($this->session->project);
+            $project = $this->project->getById($this->session->PRJ);
             if($project->model == 'scrum')
             {
                 unset($this->lang->execution->endList[62]);
@@ -1222,7 +1222,7 @@ class execution extends control
         $this->view->position[]      = $this->view->title;
         $this->view->executions      = array('' => '') + $this->executions;
         $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->session->project);
+        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $this->view->acl             = $acl;
         $this->view->plan            = $plan;
         $this->view->name            = $name;
@@ -1335,7 +1335,7 @@ class execution extends control
         $isSprint = true;
         if($this->config->systemMode == 'new')
         {
-            $project = $this->project->getById($this->session->project);
+            $project = $this->project->getById($this->session->PRJ);
             if($project->model == 'scrum')
             {
                 unset($this->lang->execution->endList[62]);
@@ -1440,7 +1440,7 @@ class execution extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
-        $project = $this->project->getById($this->session->project);
+        $project = $this->project->getById($this->session->PRJ);
 
         $this->view->title           = $this->lang->execution->batchEdit;
         $this->view->position[]      = $this->lang->execution->batchEdit;
@@ -1649,7 +1649,7 @@ class execution extends control
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->app->loadLang('program');
-        $this->session->project = $execution->project;
+        $this->session->PRJ = $execution->project;
 
         /* Execution not found to prevent searching for .*/
         if(!isset($this->executions[$execution->id])) $this->executions = $this->execution->getPairs($execution->execution, 'all', 'nocode');
@@ -2604,8 +2604,8 @@ class execution extends control
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $this->view->executionStats = $this->project->getStats($this->session->project, $status, $productID, 0, 30, $orderBy, $pager);
-        $this->view->products       = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->project);
+        $this->view->executionStats = $this->project->getStats($this->session->PRJ, $status, $productID, 0, 30, $orderBy, $pager);
+        $this->view->products       = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $this->view->productID      = $productID;
         $this->view->executionID    = $executionID;
         $this->view->pager          = $pager;
@@ -2697,7 +2697,7 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $executionStats = $this->execution->getStats($this->session->project, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
+            $executionStats = $this->execution->getStats($this->session->PRJ, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
             $users        = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)
             {
@@ -2826,7 +2826,7 @@ class execution extends control
             }
             $planStories = array_keys($planStory);
             $this->execution->linkStory($executionID, $planStories, $planProducts);
-            if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $planStories, $planProducts);
+            if($executionID != $this->session->PRJ) $this->execution->linkStory($this->session->PRJ, $planStories, $planProducts);
         }
 
         $moduleName = 'execution';
@@ -2871,7 +2871,7 @@ class execution extends control
         $this->view->cases      = $cases;
         $this->view->story      = $story;
         $this->view->users      = $users;
-        $this->view->executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'nocode');
+        $this->view->executions = $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'nocode');
         $this->view->actions    = $this->loadModel('action')->getList('story', $storyID);
         $this->view->modulePath = $modulePath;
         $this->view->version    = $version == 0 ? $story->version : $version;

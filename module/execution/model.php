@@ -64,7 +64,7 @@ class executionModel extends model
     {
         if(empty($executions))
         {
-            $project = $this->loadModel('project')->getByID($this->session->project);
+            $project = $this->loadModel('project')->getByID($this->session->PRJ);
             if($project->model == 'waterfall')
             {
                 if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'execution') die(js::locate(helper::createLink('programplan', 'create', "projectID=$project->id")));
@@ -212,7 +212,7 @@ class executionModel extends model
      */
     public function tree()
     {
-        $products     = $this->loadModel('product')->getPairs('nocode', $this->session->project);
+        $products     = $this->loadModel('product')->getPairs('nocode', $this->session->PRJ);
         $productGroup = $this->getProductGroupList();
         $executionTree  = "<ul class='tree tree-lines'>";
         foreach($productGroup as $productID => $executions)
@@ -324,7 +324,7 @@ class executionModel extends model
         $this->lang->execution->team = $this->lang->execution->teamname;
 
         /* Determine whether to add a sprint or a stage according to the model of the execution. */
-        $execution  = $this->getByID($this->session->project);
+        $execution  = $this->getByID($this->session->PRJ);
         $sprintType = $this->config->systemMode == 'new' ? zget($this->config->execution->modelList, $execution->model, '') : 'sprint';
 
         /* If the execution model is a stage, determine whether the product is linked. */
@@ -343,8 +343,8 @@ class executionModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('team', substr($this->post->name,0, 30))
-            ->setIF($this->config->systemMode == 'new', 'execution', $this->session->project)
-            ->setIF($this->config->systemMode == 'new', 'parent', $this->session->project)
+            ->setIF($this->config->systemMode == 'new', 'execution', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new', 'parent', $this->session->PRJ)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->add('type', $sprintType)
@@ -416,7 +416,7 @@ class executionModel extends model
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
-                $this->addExecutionMembers($this->session->project, array($member));
+                $this->addExecutionMembers($this->session->PRJ, array($member));
             }
 
             /* Create doc lib. */
@@ -1825,7 +1825,7 @@ class executionModel extends model
 
             $task = new stdClass();
             $task->bug          = $bug;
-            $task->PRJ          = $this->session->project;
+            $task->PRJ          = $this->session->PRJ;
             $task->execution      = $executionID;
             $task->story        = $bug->story;
             $task->storyVersion = $bug->storyVersion;
@@ -1993,7 +1993,7 @@ class executionModel extends model
             $data->order   = ++$lastOrder;
             $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
             $this->story->setStage($storyID);
-            $action = $executionID == $this->session->project ? 'linked2prj' : 'linked2execution';
+            $action = $executionID == $this->session->PRJ ? 'linked2prj' : 'linked2execution';
             $this->action->create('story', $storyID, $action, '', $executionID);
         }
     }
@@ -2037,7 +2037,7 @@ class executionModel extends model
             }
         }
         $this->linkStory($executionID, $planStories, $planProducts);
-        $this->linkStory($this->session->project, $planStories, $planProducts);
+        $this->linkStory($this->session->PRJ, $planStories, $planProducts);
         if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate(helper::createLink('execution', 'create', "productID=&executionID=$executionID"));
     }
 

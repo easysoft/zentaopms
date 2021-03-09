@@ -56,17 +56,17 @@ class baseHelper
      * @param string|array $vars           the params passed to the method, can be array('key' => 'value') or key1=value1&key2=value2) or key1=value1&key2=value2
      * @param string       $viewType       the view type
      * @param bool         $onlyBody       pass onlyBody=yes to the link thus the app can control the header and footer hide or show..
-     * @param bool         $projectID      set project id in to session.
-     * @param bool         $removeProject  if true, remove project param.
+     * @param bool         $PRJID      set PRJ id in to session.
+     * @param bool         $removePRJ  if true, remove PRJ param.
      * @static
      * @access public
      * @return string the link string.
      */
-    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false, $projectID = 0, $removeProject = false)
+    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false, $PRJID = 0, $removePRJ = false)
     {
         /* 设置$appName和$moduleName。Set appName and moduleName. */
         global $app, $config;
-        $projectID = $projectID ? $projectID : $app->session->project;
+        $PRJID = $PRJID ? $PRJID : $app->session->PRJ;
 
         if(strpos($moduleName, '.') !== false)
         {
@@ -99,7 +99,7 @@ class baseHelper
             foreach($vars as $key => $value) $link .= "&$key=$value";
 
             $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $projectID, $onlyBody, $moduleName, $removeProject);
+            return self::processProjectParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
         }
 
         /**
@@ -115,7 +115,7 @@ class baseHelper
             $link .= '.' . $viewType;
 
             $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $projectID, $onlyBody, $moduleName, $removeProject);
+            return self::processProjectParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
         }
 
         /**
@@ -127,7 +127,7 @@ class baseHelper
         {
             $link .= $config->default->method . '.' . $viewType;
             $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $projectID, $onlyBody, $moduleName, $removeProject);
+            return self::processProjectParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
         }
 
         /**
@@ -139,7 +139,7 @@ class baseHelper
         {
             $link .= $moduleName . '/';
             $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $projectID, $onlyBody, $moduleName, $removeProject);
+            return self::processProjectParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
         }
 
         /**
@@ -149,34 +149,34 @@ class baseHelper
          */
         $link .= $moduleName . '.' . $viewType;
         $link  = self::processOnlyBodyParam($link, $onlyBody);
-        return self::processProjectParam($link, $projectID, $onlyBody, $moduleName, $removeProject);
+        return self::processProjectParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
     }
 
     /**
-     *  处理project 参数。
-     *  Process the projectID param in url.
+     *  处理PRJ 参数。
+     *  Process the PRJID param in url.
      *
-     *  如果传参的时候设定了$projectID，在生成链接的时候继续追加。
+     *  如果传参的时候设定了$PRJID，在生成链接的时候继续追加。
      *  If $progrmID in the url, append it to the link.
      *
      *  @param  string  $link
-     *  @param  int     $projectID
+     *  @param  int     $PRJID
      *  @param  bool    $onlybody
      *  @param  string  $moduleName
-     *  @param  bool    $removeProject
+     *  @param  bool    $removePRJ
      *  @static
      *  @access public
      *  @return string
      */
-    public static function processProjectParam($link, $projectID = '', $onlybody = false, $moduleName = '', $removeProject = false)
+    public static function processProjectParam($link, $PRJID = '', $onlybody = false, $moduleName = '', $removePRJ = false)
     {
         global $config, $lang;
 
-        if(!$projectID || $removeProject) return $link;
+        if(!$PRJID || $removePRJ) return $link;
         $app = zget($lang->navGroup, $moduleName);
         if($app != 'project' and $app != 'execution') return $link;
 
-        $link .= strpos($link, '?') === false ? "?project=$projectID" : "&project=$projectID";
+        $link .= strpos($link, '?') === false ? "?PRJ=$PRJID" : "&PRJ=$PRJID";
         return $link;
     }
 

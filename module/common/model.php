@@ -392,7 +392,7 @@ class commonModel extends model
             {
                 if($group == 'program')
                 {
-                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->project);
+                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->PRJ);
                 }
                 elseif($group == 'product' && $menuItem->name == 'doc')
                 {
@@ -472,7 +472,7 @@ class commonModel extends model
                 if(isset($lang->$model->subMenu->$key))
                 {
                     $programSubMenu = $lang->$model->subMenu->$key;
-                    $subMenu        = common::createSubMenu($programSubMenu, $app->session->project);
+                    $subMenu        = common::createSubMenu($programSubMenu, $app->session->PRJ);
 
                     if(!empty($subMenu))
                     {
@@ -1732,7 +1732,7 @@ EOD;
             if(!defined('IN_UPGRADE') and $inProject)
             {
                 /* Check program priv. */
-                if($this->session->project and strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
+                if($this->session->PRJ and strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false and !$this->app->user->admin) $this->loadModel('program')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }
@@ -1772,7 +1772,7 @@ EOD;
 
         /* If is the program admin, have all program privs. */
         $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
-        if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
+        if($inProject && $app->session->PRJ && strpos(",{$app->user->rights['projects']},", ",{$app->session->PRJ},") !== false) return true;
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
@@ -1812,8 +1812,8 @@ EOD;
     public function resetProgramPriv($module, $method)
     {
         /* Get user program priv. */
-        if(!$this->app->session->project) return;
-        $program       = $this->dao->findByID($this->app->session->project)->from(TABLE_PROJECT)->fetch();
+        if(!$this->app->session->PRJ) return;
+        $program       = $this->dao->findByID($this->app->session->PRJ)->from(TABLE_PROJECT)->fetch();
         $programRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
             ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
             ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group=t3.group')
@@ -2398,7 +2398,7 @@ EOD;
 
             if(strpos($link, "{PRODUCT}") !== false)   $link = str_replace('{PRODUCT}', $app->session->product, $link);
             if(strpos($link, "{EXECUTION}") !== false) $link = str_replace('{EXECUTION}', $app->session->execution, $link);
-            if(strpos($link, "{PROJECT}") !== false)   $link = str_replace('{PROJECT}', $app->session->project, $link);
+            if(strpos($link, "{PROJECT}") !== false)   $link = str_replace('{PROJECT}', $app->session->PRJ, $link);
 
             if(is_array($setting))
             {
@@ -2426,7 +2426,7 @@ EOD;
     public static function getProjectMainMenu($moduleName)
     {
         global $app, $lang, $dbh, $config;
-        $project = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->project}'")->fetch();
+        $project = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
         if(empty($project)) return;
 
         self::initProjectSubmenu();
@@ -2461,7 +2461,7 @@ EOD;
     public static function getProgramModuleMenu($moduleName, $methodName)
     {
         global $app, $lang, $dbh;
-        $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->project}'")->fetch();
+        $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
         if(empty($program)) return;
         if($program->model == 'waterfall')
         {

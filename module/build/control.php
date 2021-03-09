@@ -100,7 +100,7 @@ class build extends control
         $build = $this->build->getById((int)$buildID);
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs($this->session->project), $build->execution);
+        $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution);
 
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
@@ -113,7 +113,7 @@ class build extends control
             $execution->name = '';
         }
 
-        $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project);
+        $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->PRJ);
         if(!isset($executions[$build->execution])) $executions[$build->execution] = $execution->name;
 
         $productGroups = $this->execution->getProducts($build->execution);
@@ -162,7 +162,7 @@ class build extends control
     {
         $build = $this->build->getByID((int)$buildID, true);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->project = $build->project;
+        $this->session->PRJ = $build->project;
 
         /* Set session and load modules. */
         if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
@@ -195,8 +195,8 @@ class build extends control
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
         /* Set menu. */
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->project), $build->execution, $buildID);
-        $executions = $this->execution->getPairs($this->session->project, 'all', 'empty');
+        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution, $buildID);
+        $executions = $this->execution->getPairs($this->session->PRJ, 'all', 'empty');
 
         $this->view->title         = "BUILD #$build->id $build->name - " . $executions[$build->execution];
         $this->view->position[]    = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $executions[$build->execution]);
@@ -390,7 +390,7 @@ class build extends control
         $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
         $build   = $this->build->getById($buildID);
         $product = $this->loadModel('product')->getById($build->product);
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->project), $build->execution);
+        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution);
         $this->loadModel('story');
         $this->loadModel('tree');
         $this->loadModel('product');
@@ -509,7 +509,7 @@ class build extends control
         /* Set menu. */
         $build   = $this->build->getByID($buildID);
         $product = $this->loadModel('product')->getByID($build->product);
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->project), $build->execution);
+        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -524,7 +524,7 @@ class build extends control
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, $viewType = 'bug', $startModuleID = 0);
-        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($build->product, 0, 'id_desc', $this->session->project);
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($build->product, 0, 'id_desc', $this->session->PRJ);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
