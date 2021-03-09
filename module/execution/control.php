@@ -2403,8 +2403,8 @@ class execution extends control
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $this->view->position[] = $this->lang->execution->dynamic;
 
-        $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|useid');
-        $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted');
+        $this->view->userIdPairs  = $this->execution->getTeamMemberPairs($executionID, 'nodeleted|useid');
+        $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         /* Assign. */
         $this->view->executionID  = $executionID;
