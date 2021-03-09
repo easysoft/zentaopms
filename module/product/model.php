@@ -246,10 +246,11 @@ class productModel extends model
      * @param  string $status
      * @param  int    $limit
      * @param  int    $line
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0)
+    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $orderBy = '')
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
@@ -265,7 +266,7 @@ class productModel extends model
             ->orWhere('createdBy')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->orderBy('`order` desc')
+            ->orderBy($orderBy . '`order` desc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }
@@ -318,10 +319,11 @@ class productModel extends model
      *
      * @param  int    $projectID
      * @param  int    $status   all|noclosed
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getProducts($projectID, $status = 'all')
+    public function getProducts($projectID, $status = 'all', $orderBy = '')
     {
         return $this->dao->select('t1.branch, t1.plan, t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -331,7 +333,7 @@ class productModel extends model
             ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->orderBy('t2.order desc')
+            ->orderBy($orderBy . 't2.order desc')
             ->fetchAll('id');
     }
 

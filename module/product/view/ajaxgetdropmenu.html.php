@@ -22,7 +22,8 @@ $closedProductsHtml = '';
 
 foreach($products as $product)
 {
-    $productName = $product->program ? zget($programs, $product->program, '') . '/' . $product->name : $product->name;
+    $productName  = $product->program ? zget($programs, $product->program, '') . '/' : '';
+    $productName .= $product->line ? zget($lines, $product->line, '') . '/' . $product->name : $product->name;
     if($product->status == 'normal' and $product->PO == $this->app->user->account)
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
