@@ -221,12 +221,11 @@ class projectModel extends model
             ->fetchAll('project');
 
         $this->app->loadClass('pager', $static = true);
-        $this->loadModel('execution');
         foreach($projects as $projectID => $project)
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
-            $project->executions = $this->execution->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
+            $project->executions = $this->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $this->getParentName($project->parent);
