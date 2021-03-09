@@ -27,6 +27,7 @@ $lang->waterfall->menuOrder[50] = 'projectbuild';
 $lang->waterfall->menuOrder[55] = 'projectrelease';
 $lang->waterfall->menuOrder[60] = 'weekly';
 $lang->waterfall->menuOrder[65] = 'other';
+$lang->waterfall->menuOrder[68] = 'dynamic';
 $lang->waterfall->menuOrder[70] = 'projectsetting';
 
 /* Sort of main menu. */
@@ -39,6 +40,7 @@ $lang->scrum->menuOrder[30] = 'doc';
 $lang->scrum->menuOrder[35] = 'projectbuild';
 $lang->scrum->menuOrder[40] = 'projectrelease';
 $lang->scrum->menuOrder[45] = 'other';
+$lang->scrum->menuOrder[48] = 'dynamic';
 $lang->scrum->menuOrder[50] = 'projectsetting';
 
 /* index menu order. */
