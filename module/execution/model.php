@@ -301,8 +301,8 @@ class executionModel extends model
 
     /**
      * Set project into session.
-     * 
-     * @param  int    $executionID 
+     *
+     * @param  int    $executionID
      * @access public
      * @return void
      */
@@ -2846,7 +2846,7 @@ class executionModel extends model
     {
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
-        $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+        $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecution);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->config->execution->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
