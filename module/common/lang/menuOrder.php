@@ -60,15 +60,15 @@ $lang->my->menuOrder[55] = 'contacts';
 $lang->todo->menuOrder = $lang->my->menuOrder;
 
 /* product menu order. */
-$lang->product->menuOrder[5]  = 'requirement';
+$lang->product->menuOrder[5]  = 'dashboard';
 $lang->product->menuOrder[10] = 'story';
 $lang->product->menuOrder[15] = 'plan';
+$lang->product->menuOrder[30] = 'project';
 $lang->product->menuOrder[20] = 'release';
 $lang->product->menuOrder[25] = 'roadmap';
-$lang->product->menuOrder[30] = 'project';
+$lang->product->menuOrder[30] = 'requirement';
 $lang->product->menuOrder[35] = 'track';
 $lang->product->menuOrder[40] = 'doc';
-$lang->product->menuOrder[45] = 'dashboard';
 $lang->product->menuOrder[50] = 'dynamic';
 $lang->product->menuOrder[55] = 'setting';
 $lang->product->menuOrder[60] = 'create';
