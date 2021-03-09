@@ -895,7 +895,8 @@ $lang->menu->scrum->doc            = '文档|doc|index|';
 $lang->menu->scrum->qa             = '测试|qa|index';
 $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
-$lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse');
+$lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse|project={PROJECT}');
+$lang->menu->scrum->dynamic        = array('link' => '动态|project|dynamic');
 $lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
 $lang->menu->scrum->projectsetting = array('link' => '设置|project|view|project={PROJECT}', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
@@ -925,6 +926,7 @@ $lang->menu->waterfall->track          = array('link' => '矩阵|projectstory|tr
 $lang->menu->waterfall->qa             = '测试|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => '发布|projectrelease|browse');
 $lang->menu->waterfall->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
+$lang->menu->waterfall->dynamic        = array('link' => '动态|project|dynamic|project={PROJECT}');
 $lang->menu->waterfall->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc,workestimation,durationestimation,budget,pssp,measrecord,report');
 $lang->menu->waterfall->projectsetting = array('link' => '设置|project|view|project={PROJECT}', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 

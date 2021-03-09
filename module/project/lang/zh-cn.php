@@ -28,6 +28,7 @@ $lang->project->addProduct        = '新建产品';
 $lang->project->manageGroupMember = '维护分组用户';
 $lang->project->moduleSetting     = '列表设置';
 $lang->project->moduleOpen        = '显示项目集名';
+$lang->project->dynamic           = '动态';
 $lang->project->updateOrder       = '排序';
 $lang->project->sort              = '项目排序';
 $lang->project->whitelist         = '项目白名单';
