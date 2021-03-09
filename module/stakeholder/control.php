@@ -105,6 +105,7 @@ class stakeholder extends control
 
         $this->loadModel('user');
         $this->loadModel('dept');
+        $this->loadModel('execution');
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
 
         $this->view->title      = $this->lang->stakeholder->batchCreate;
@@ -117,7 +118,7 @@ class stakeholder extends control
         $this->view->projectID          = $this->session->PRJ;
         $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
         $this->view->stakeholders       = $this->stakeholder->getStakeholders('all', 'id_desc');
-        $this->view->parentStakeholders = $this->program->getStakeholders($parentID, 't1.id_desc');
+        $this->view->parentStakeholders = $this->loadModel('program')->getStakeholders($parentID, 't1.id_desc');
 
         $this->display();
     }
