@@ -22,13 +22,13 @@
         <?php if($longBlock):?>
         <?php $thClass = common::checkNotCN() ? 'w-85px' : 'c-hours';?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
-        <th class='<?php echo $thClass?>'><?php echo $lang->project->totalEstimate;?></th>
-        <th class="c-hours"><?php echo $lang->project->totalConsumed;?></th>
-        <th class="c-hours"><?php echo $lang->project->totalLeft;?></th>
+        <th class='<?php echo $thClass?>'><?php echo $lang->execution->totalEstimate;?></th>
+        <th class="c-hours"><?php echo $lang->execution->totalConsumed;?></th>
+        <th class="c-hours"><?php echo $lang->execution->totalLeft;?></th>
         <?php endif;?>
         <th class="c-progress"><?php echo $lang->project->progress;?></th>
         <?php if($longBlock):?>
-        <th><?php echo $lang->project->burn;?></th>
+        <th><?php echo $lang->execution->burn;?></th>
         <?php endif;?>
       </tr>
     </thead>
@@ -37,23 +37,23 @@
      <?php foreach($executionStats as $execution):?>
       <?php
       $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
-      $viewLink = $this->createLink('project', 'task', 'project=' . $execution->id);
+      $viewLink = $this->createLink('execution', 'task', 'execution=' . $execution->id);
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($this->createLink('project', 'task', 'project=' . $execution->id), $execution->name, '', "title='$execution->name'");?></nobr></td>
+        <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $execution->name, '', "title='$execution->name'");?></nobr></td>
         <td class="c-date"><?php echo $execution->end;?></td>
         <?php if($longBlock):?>
         <td class="w-70px">
           <?php if(isset($execution->delay)):?>
-          <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'><?php echo $lang->project->delayed;?></span>
+          <span class="status-project status-delayed" title='<?php echo $lang->execution->delayed;?>'><?php echo $lang->execution->delayed;?></span>
           <?php else:?>
           <?php $statusName = $this->processStatus('project', $execution);?>
           <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
           <?php endif;?>
         </td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalEstimate . ' ' . $lang->project->workHour;?>"><?php echo $execution->hours->totalEstimate . ' ' . $lang->project->workHourUnit;?></td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalConsumed . ' ' . $lang->project->workHour;?>"><?php echo $execution->hours->totalConsumed . ' ' . $lang->project->workHourUnit;?></td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalLeft     . ' ' . $lang->project->workHour;?>"><?php echo $execution->hours->totalLeft     . ' ' . $lang->project->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalEstimate . ' ' . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalConsumed . ' ' . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHourUnit;?></td>
         <?php endif;?>
         <td class="c-progress">
           <div class="progress progress-text-left">
