@@ -62,6 +62,8 @@ class executionModel extends model
      */
     public function setMenu($executions, $executionID, $buildID = 0, $extra = '')
     {
+        if($this->app->rawMethod != 'index' and $this->app->rawMethod != 'all') $this->lang->execution->menu = $this->lang->execution->viewMenu;
+
         if(empty($executions))
         {
             $project = $this->loadModel('project')->getByID($this->session->PRJ);

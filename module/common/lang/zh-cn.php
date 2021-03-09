@@ -338,19 +338,22 @@ $lang->story->menu = $lang->product->menu;
 /* 执行视图菜单设置。*/
 $lang->execution = new stdclass();
 $lang->execution->menu = new stdclass();
-$lang->execution->menu->index    = '仪表盘|execution|index|';
-$lang->execution->menu->task     = array('link' => '任务|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
-$lang->execution->menu->kanban   = array('link' => '看板|execution|kanban|executionID=%s');
-$lang->execution->menu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
-$lang->execution->menu->view     = array('link' => '视图|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
-$lang->execution->menu->story    = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->execution->menu->bug      = array('link' => 'Bug|execution|bug|executionID=%s');
-$lang->execution->menu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->menu->testtask = array('link' => '测试单|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
-$lang->execution->menu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
-$lang->execution->menu->product  = $lang->productCommon . '|execution|manageproducts|executionID=%s';
-$lang->execution->menu->team     = array('link' => '团队|execution|team|executionID=%s', 'alias' => 'managemembers');
-$lang->execution->menu->more     = array('link' => '更多|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->execution->menu->index = '仪表盘|execution|index|';
+$lang->execution->menu->list  = '执行|execution|all|';
+
+$lang->execution->viewMenu = new stdclass();
+$lang->execution->viewMenu->task     = array('link' => '任务|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
+$lang->execution->viewMenu->kanban   = array('link' => '看板|execution|kanban|executionID=%s');
+$lang->execution->viewMenu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
+$lang->execution->viewMenu->view     = array('link' => '视图|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->execution->viewMenu->story    = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
+$lang->execution->viewMenu->bug      = array('link' => 'Bug|execution|bug|executionID=%s');
+$lang->execution->viewMenu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
+$lang->execution->viewMenu->testtask = array('link' => '测试单|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->viewMenu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
+$lang->execution->viewMenu->product  = $lang->productCommon . '|execution|manageproducts|executionID=%s';
+$lang->execution->viewMenu->team     = array('link' => '团队|execution|team|executionID=%s', 'alias' => 'managemembers');
+$lang->execution->viewMenu->more     = array('link' => '更多|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
 $lang->execution->subMenu = new stdclass();
 $lang->execution->subMenu->view = new stdclass();
@@ -367,7 +370,7 @@ $lang->execution->subMenu->more->whitelist = array('link' => '白名单|executio
 $lang->execution->subMenu->more->action    = array('link' => '动态|execution|dynamic|executionID=%s');
 $lang->execution->subMenu->more->view      = array('link' => '概况|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 
-$lang->execution->dividerMenu = ',task,story,doc,';
+$lang->execution->dividerMenu = ',story,doc,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
