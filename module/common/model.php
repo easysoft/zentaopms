@@ -2362,6 +2362,11 @@ EOD;
             $lang->menu      = $lang->feedback->menu;
             $lang->menuOrder = $lang->feedback->menuOrder;
         }
+        if($group == 'execution')
+        {
+            $lang->menu      = $lang->execution->menu;
+            $lang->menuOrder = $lang->execution->menuOrder;
+        }
         if($group == 'project')
         {
             $lang->menu = $config->systemMode == 'new' ? self::getProgramMainMenu($moduleName) : $lang->project->menu;

@@ -14,7 +14,7 @@ $lang->my->testCase        = '我的用例';
 $lang->my->story           = "我的{$lang->SRCommon}";
 $lang->my->createProgram   = '添加項目';
 $lang->my->project         = "我的項目";
-$lang->my->execution       = "我的{$lang->execution->common}";
+$lang->my->execution       = "我的{$lang->executionCommon}";
 $lang->my->issue           = '我的問題';
 $lang->my->risk            = '我的風險';
 $lang->my->profile         = '我的檔案';
@@ -44,7 +44,7 @@ $lang->my->myExecutions = "我參與的階段/衝刺/迭代";
 $lang->my->name         = '名稱';
 $lang->my->code         = '代號';
 $lang->my->projects     = '所屬項目';
-$lang->my->executions   = '所屬' . $lang->execution->common;
+$lang->my->executions   = '所屬' . $lang->executionCommon;
 
 $lang->my->executionMenu = new stdclass();
 $lang->my->executionMenu->undone = '未結束';

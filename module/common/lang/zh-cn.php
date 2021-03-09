@@ -116,11 +116,6 @@ $lang->workingHour = '工时';
 
 $lang->sprintCommon = $lang->iterationCommon . '/阶段';
 
-$lang->execution = new stdclass();
-$lang->execution->common = '执行';
-$lang->execution->sprint = '迭代';
-$lang->execution->stage  = '阶段';
-
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = '状态';
@@ -252,7 +247,7 @@ $lang->searchObjects['caselib']     = '用例库';
 $lang->searchObjects['testreport']  = '测试报告';
 $lang->searchObjects['program']     = '项目集';
 $lang->searchObjects['project']     = '项目';
-$lang->searchObjects['execution']   = $lang->execution->common;
+$lang->searchObjects['execution']   = $lang->executionCommon;
 $lang->searchObjects['user']        = '用户';
 $lang->searchTips                   = '编号(ctrl+g)';
 
@@ -339,43 +334,43 @@ $lang->story = new stdclass();
 $lang->story->menu = $lang->product->menu;
 
 /* 项目视图菜单设置。*/
-$lang->project = new stdclass();
-$lang->project->menu = new stdclass();
+$lang->execution = new stdclass();
+$lang->execution->menu = new stdclass();
 
-$lang->project->menu->task     = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
-$lang->project->menu->kanban   = array('link' => '看板|project|kanban|projectID=%s');
-$lang->project->menu->burn     = array('link' => '燃尽图|project|burn|projectID=%s');
-$lang->project->menu->view     = array('link' => '视图|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
-$lang->project->menu->story    = array('link' => "{$lang->SRCommon}|project|story|projectID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->bug      = array('link' => 'Bug|project|bug|projectID=%s');
-$lang->project->menu->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
-$lang->project->menu->doc      = array('link' => '文档|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
-$lang->project->menu->team     = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->more     = array('link' => '更多|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->execution->menu->task     = array('link' => '任务|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
+$lang->execution->menu->kanban   = array('link' => '看板|execution|kanban|executionID=%s');
+$lang->execution->menu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
+$lang->execution->menu->view     = array('link' => '视图|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->execution->menu->story    = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
+$lang->execution->menu->bug      = array('link' => 'Bug|execution|bug|executionID=%s');
+$lang->execution->menu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
+$lang->execution->menu->testtask = array('link' => '测试单|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->menu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
+$lang->execution->menu->product  = $lang->productCommon . '|execution|manageproducts|executionID=%s';
+$lang->execution->menu->team     = array('link' => '团队|execution|team|executionID=%s', 'alias' => 'managemembers');
+$lang->execution->menu->more     = array('link' => '更多|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
-$lang->project->subMenu = new stdclass();
-$lang->project->subMenu->view = new stdclass();
-$lang->project->subMenu->view->groupTask = '分组视图|project|grouptask|projectID=%s';
-$lang->project->subMenu->view->tree      = '树状图|project|tree|projectID=%s';
+$lang->execution->subMenu = new stdclass();
+$lang->execution->subMenu->view = new stdclass();
+$lang->execution->subMenu->view->groupTask = '分组视图|execution|grouptask|executionID=%s';
+$lang->execution->subMenu->view->tree      = '树状图|execution|tree|executionID=%s';
 
-$lang->project->subMenu->qa = new stdclass();
-$lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
-$lang->project->subMenu->qa->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->subMenu->qa->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->subMenu->qa = new stdclass();
+$lang->execution->subMenu->qa->bug      = 'Bug|execution|bug|executionID=%s';
+$lang->execution->subMenu->qa->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
+$lang->execution->subMenu->qa->testtask = array('link' => '测试单|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->subMenu->more = new stdclass();
-$lang->project->subMenu->more->whitelist = array('link' => '白名单|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
-$lang->project->subMenu->more->action    = array('link' => '动态|project|dynamic|projectID=%s');
-$lang->project->subMenu->more->view      = array('link' => '概况|project|view|projectID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+$lang->execution->subMenu->more = new stdclass();
+$lang->execution->subMenu->more->whitelist = array('link' => '白名单|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
+$lang->execution->subMenu->more->action    = array('link' => '动态|execution|dynamic|executionID=%s');
+$lang->execution->subMenu->more->view      = array('link' => '概况|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 
-$lang->project->dividerMenu = ',project,programplan,projectbuild,story,doc,other,';
+$lang->execution->dividerMenu = ',execution,programplan,executionbuild,story,doc,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
-$lang->task->menu  = $lang->project->menu;
-$lang->build->menu = $lang->project->menu;
+$lang->task->menu  = $lang->execution->menu;
+$lang->build->menu = $lang->execution->menu;
 
 /* QA视图菜单设置。*/
 $lang->qa = new stdclass();
@@ -636,7 +631,6 @@ $lang->navGroup->story       = 'product';
 $lang->navGroup->tree        = 'product';
 
 $lang->navGroup->project     = 'project';
-$lang->navGroup->task        = 'project';
 $lang->navGroup->qa          = 'project';
 $lang->navGroup->bug         = 'project';
 $lang->navGroup->doc         = 'project';
@@ -666,6 +660,9 @@ $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';
 $lang->navGroup->report         = 'project';
 $lang->navGroup->measrecord     = 'project';
+
+$lang->navGroup->execution = 'execution';
+$lang->navGroup->task      = 'execution';
 
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
@@ -969,11 +966,6 @@ $lang->stakeholder->menu->list  = array('link' => '干系人列表|stakeholder|b
 $lang->stakeholder->menu->issue = array('link' => '问题管理|stakeholder|issue|');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
-if($config->systemMode == 'classic')
-{
-    $lang->noMenuModule[] = 'project';
-    $lang->noMenuModule[] = 'task';
-}
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');

@@ -116,11 +116,6 @@ $lang->workingHour  = 'Heures';
 
 $lang->sprintCommon = $lang->iterationCommon . '/Phase';
 
-$lang->execution = new stdclass();
-$lang->execution->common = 'Execution';
-$lang->execution->sprint = 'Iteration';
-$lang->execution->stage  = 'Phase';
-
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = 'Statut';
@@ -252,7 +247,7 @@ $lang->searchObjects['caselib']     = 'Case Library';
 $lang->searchObjects['testreport']  = 'CR de Test';
 $lang->searchObjects['program']     = 'Program';
 $lang->searchObjects['project']     = 'Project';
-$lang->searchObjects['execution']   = $lang->execution->common;
+$lang->searchObjects['execution']   = $lang->executionCommon;
 $lang->searchObjects['user']        = 'User';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
@@ -339,43 +334,43 @@ $lang->story = new stdclass();
 $lang->story->menu = $lang->product->menu;
 
 /* Project menu settings. */
-$lang->project = new stdclass();
-$lang->project->menu = new stdclass();
+$lang->execution = new stdclass();
+$lang->execution->menu = new stdclass();
 
-$lang->project->menu->task     = array('link' => 'Tâche|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
-$lang->project->menu->kanban   = array('link' => 'Kanban|project|kanban|projectID=%s');
-$lang->project->menu->burn     = array('link' => 'Atterrissage|project|burn|projectID=%s');
-$lang->project->menu->view     = array('link' => 'View|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
-$lang->project->menu->story    = array('link' => "Story|project|story|projectID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->bug      = array('link' => 'Bug|project|bug|projectID=%s');
-$lang->project->menu->build    = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask = array('link' => 'Recette|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
-$lang->project->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
-$lang->project->menu->team     = array('link' => 'Equipe|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->more     = array('link' => 'More|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->execution->menu->task     = array('link' => 'Tâche|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
+$lang->execution->menu->kanban   = array('link' => 'Kanban|execution|kanban|executionID=%s');
+$lang->execution->menu->burn     = array('link' => 'Atterrissage|execution|burn|executionID=%s');
+$lang->execution->menu->view     = array('link' => 'View|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->execution->menu->story    = array('link' => "Story|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
+$lang->execution->menu->bug      = array('link' => 'Bug|execution|bug|executionID=%s');
+$lang->execution->menu->build    = array('link' => 'Build|execution|build|executionID=%s', 'subModule' => 'build');
+$lang->execution->menu->testtask = array('link' => 'Recette|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
+$lang->execution->menu->product  = $lang->productCommon . '|execution|manageproducts|executionID=%s';
+$lang->execution->menu->team     = array('link' => 'Equipe|execution|team|executionID=%s', 'alias' => 'managemembers');
+$lang->execution->menu->more     = array('link' => 'More|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
-$lang->project->subMenu = new stdclass();
-$lang->project->subMenu->view = new stdclass();
-$lang->project->subMenu->view->groupTask = 'Vision Groupée|project|grouptask|projectID=%s';
-$lang->project->subMenu->view->tree      = 'Arborescence|project|tree|projectID=%s';
+$lang->execution->subMenu = new stdclass();
+$lang->execution->subMenu->view = new stdclass();
+$lang->execution->subMenu->view->groupTask = 'Vision Groupée|execution|grouptask|executionID=%s';
+$lang->execution->subMenu->view->tree      = 'Arborescence|execution|tree|executionID=%s';
 
-$lang->project->subMenu->qa = new stdclass();
-$lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
-$lang->project->subMenu->qa->build    = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->subMenu->qa->testtask = array('link' => 'Recette|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->subMenu->qa = new stdclass();
+$lang->execution->subMenu->qa->bug      = 'Bug|execution|bug|executionID=%s';
+$lang->execution->subMenu->qa->build    = array('link' => 'Build|execution|build|executionID=%s', 'subModule' => 'build');
+$lang->execution->subMenu->qa->testtask = array('link' => 'Recette|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->subMenu->more = new stdclass();
-$lang->project->subMenu->more->whitelist = array('link' => 'Whitelist|project|whitelist|projectID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
-$lang->project->subMenu->more->action    = array('link' => 'Historique|project|dynamic|projectID=%s');
-$lang->project->subMenu->more->view      = array('link' => "Vue d'ensemble|project|view|projectID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+$lang->execution->subMenu->more = new stdclass();
+$lang->execution->subMenu->more->whitelist = array('link' => 'Whitelist|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
+$lang->execution->subMenu->more->action    = array('link' => 'Historique|execution|dynamic|executionID=%s');
+$lang->execution->subMenu->more->view      = array('link' => "Vue d'ensemble|execution|view|executionID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 
-$lang->project->dividerMenu = ',project,programplan,projectbuild,story,doc,other,';
+$lang->execution->dividerMenu = ',execution,programplan,executionbuild,story,doc,other,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
-$lang->task->menu  = $lang->project->menu;
-$lang->build->menu = $lang->project->menu;
+$lang->task->menu  = $lang->execution->menu;
+$lang->build->menu = $lang->execution->menu;
 
 /* QA menu settings. */
 $lang->qa = new stdclass();
@@ -636,7 +631,6 @@ $lang->navGroup->story       = 'product';
 $lang->navGroup->tree        = 'product';
 
 $lang->navGroup->project     = 'project';
-$lang->navGroup->task        = 'project';
 $lang->navGroup->qa          = 'project';
 $lang->navGroup->bug         = 'project';
 $lang->navGroup->doc         = 'project';
@@ -666,6 +660,9 @@ $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';
 $lang->navGroup->report         = 'project';
 $lang->navGroup->measrecord     = 'project';
+
+$lang->navGroup->execution = 'execution';
+$lang->navGroup->task      = 'execution';
 
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
@@ -969,11 +966,6 @@ $lang->stakeholder->menu->list  = array('link' => 'Stakeholder List|stakeholder|
 $lang->stakeholder->menu->issue = array('link' => 'Issue|stakeholder|issue|');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
-if($config->systemMode == 'classic')
-{
-    $lang->noMenuModule[] = 'project';
-    $lang->noMenuModule[] = 'task';
-}
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');

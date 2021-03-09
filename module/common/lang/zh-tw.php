@@ -117,7 +117,7 @@ $lang->workingHour = '工時';
 $lang->sprintCommon = $lang->iterationCommon . '/階段';
 
 $lang->execution = new stdclass();
-$lang->execution->common = '執行';
+$lang->executionCommon = '執行';
 $lang->execution->sprint = '迭代';
 $lang->execution->stage  = '階段';
 
@@ -252,7 +252,7 @@ $lang->searchObjects['caselib']     = '用例庫';
 $lang->searchObjects['testreport']  = '測試報告';
 $lang->searchObjects['program']     = '項目集';
 $lang->searchObjects['project']     = '項目';
-$lang->searchObjects['execution']   = $lang->execution->common;
+$lang->searchObjects['execution']   = $lang->executionCommon;
 $lang->searchObjects['user']        = '用戶';
 $lang->searchTips                   = '編號(ctrl+g)';
 

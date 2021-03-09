@@ -337,7 +337,7 @@ $lang->block->availableBlocks->issue    = 'My Issues';
 
 $lang->block->moduleList['program'] = 'Project';
 $lang->block->moduleList['product'] = $lang->productCommon;
-$lang->block->moduleList['project'] = $lang->execution->common;
+$lang->block->moduleList['project'] = $lang->executionCommon;
 $lang->block->moduleList['qa']      = 'QA';
 $lang->block->moduleList['todo']    = 'Việc làm';
 
@@ -377,9 +377,9 @@ $lang->block->modules['product']->availableBlocks->release   = 'Phát hành';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->statistic = $lang->execution->common . ' thống';
-$lang->block->modules['project']->availableBlocks->overview  = $lang->execution->common . ' xem';
-$lang->block->modules['project']->availableBlocks->list      = $lang->execution->common . ' danh sách';
+$lang->block->modules['project']->availableBlocks->statistic = $lang->executionCommon . ' thống';
+$lang->block->modules['project']->availableBlocks->overview  = $lang->executionCommon . ' xem';
+$lang->block->modules['project']->availableBlocks->list      = $lang->executionCommon . ' danh sách';
 $lang->block->modules['project']->availableBlocks->task      = 'Nhiệm vụ';
 $lang->block->modules['project']->availableBlocks->build     = 'Bản dựng';
 
