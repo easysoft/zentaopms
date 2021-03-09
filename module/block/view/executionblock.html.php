@@ -1,6 +1,6 @@
 <?php
 /**
- * The project list block view file of block module of ZenTaoPMS.
+ * The project block view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -11,14 +11,14 @@
  */
 ?>
 <?php if(empty($executionStats)): ?>
-<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+<div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
 <div class="panel-body has-table scrollbar-hover">
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-projects tablesorter'>
     <thead>
       <tr class='text-center'>
-        <th class='c-name text-left'><?php echo $lang->project->name;?></th>
-        <th class="c-date"><?php echo $lang->project->end;?></th>
+        <th class='c-name text-left'><?php echo $lang->execution->name;?></th>
+        <th class="c-date"><?php echo $lang->execution->end;?></th>
         <?php if($longBlock):?>
         <?php $thClass = common::checkNotCN() ? 'w-85px' : 'c-hours';?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>

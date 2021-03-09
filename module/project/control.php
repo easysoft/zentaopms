@@ -198,6 +198,7 @@ class project extends control
      */
     public function browse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->lang->noMenuModule[] = 'project';
         if($this->session->moreProjectLink) $this->lang->project->mainMenuAction = html::a($this->session->moreProjectLink, '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
         $this->app->session->set('projectBrowse', $this->app->getURI(true));
         $this->loadModel('datatable');

@@ -221,12 +221,11 @@ class projectModel extends model
             ->fetchAll('project');
 
         $this->app->loadClass('pager', $static = true);
-        $this->loadModel('execution');
         foreach($projects as $projectID => $project)
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
-            $project->executions = $this->execution->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
+            $project->executions = $this->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $this->getParentName($project->parent);
@@ -1131,7 +1130,7 @@ class projectModel extends model
                     echo $project->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;
                     break;
                 case 'progress':
-                    echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}%</div></div>";
+                    echo "<div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}</div></div>";
                     break;
                 case 'actions':
                     if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('project', 'start', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);
@@ -1344,7 +1343,7 @@ class projectModel extends model
             $begin = $executions[$executionID]->begin;
             $end   = $executions[$executionID]->end;
             if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
-            $executionBurns = $this->processBurnData($executionBurns, $itemCounts, $begin, $end);
+            $executionBurns = $this->loadModel('execution')->processBurnData($executionBurns, $itemCounts, $begin, $end);
 
             /* Shorter names. */
             foreach($executionBurns as $executionBurn)

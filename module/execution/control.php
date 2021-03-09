@@ -42,7 +42,7 @@ class execution extends control
 
         if(!in_array($this->methodName, array('computeburn', 'ajaxgetrecentexecutions')))
         {
-            $this->executions = $this->execution->getPairs($this->session->project, 'all', 'nocode');
+            $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
         $this->objectType = $this->config->systemMode == 'classic' ? 'project' : 'execution';
@@ -282,7 +282,7 @@ class execution extends control
         if(empty($groupBy))$groupBy = 'story';
         if(($groupBy == 'story') and ($execution->type == 'ops'))$groupBy = 'status';
         $sort        = $this->loadModel('common')->appendOrder($groupBy);
-        $tasks       = $this->loadModel('task')->getTasks($executionID, $productID = 0, $status = 'all', $modules = 0, $sort);
+        $tasks       = $this->loadModel('task')->getExecutionTasks($executionID, $productID = 0, $status = 'all', $modules = 0, $sort);
         $groupBy     = str_replace('`', '', $groupBy);
         $taskLang    = $this->lang->task;
         $groupByList = array();
@@ -738,7 +738,7 @@ class execution extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getStories($executionID, 0, 0, $sort, $type, $param, 'story', '', $pager);
+        $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, 'story', '', $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $users   = $this->user->getPairs('noletter');
@@ -790,21 +790,21 @@ class execution extends control
 
         /* Get execution's product. */
         $productID    = 0;
-        $productPairs = $this->loadModel('product')->getProductPairsByExecution($executionID);
+        $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
         if($productPairs) $productID = key($productPairs);
 
         /* Assign. */
         $this->view->title        = $title;
         $this->view->position     = $position;
         $this->view->productID    = $productID;
-        $this->view->execution      = $execution;
+        $this->view->execution    = $execution;
         $this->view->stories      = $stories;
         $this->view->allPlans     = $allPlans;
         $this->view->summary      = $this->product->summary($stories);
         $this->view->orderBy      = $orderBy;
         $this->view->type         = $this->session->executionStoryBrowseType;
         $this->view->param        = $param;
-        $this->view->moduleTree   = $this->loadModel('tree')->getStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createExecutionStoryLink'));
+        $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createExecutionStoryLink'));
         $this->view->tabID        = 'story';
         $this->view->storyTasks   = $storyTasks;
         $this->view->storyBugs    = $storyBugs;
@@ -857,7 +857,7 @@ class execution extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
-        $bugs  = $this->bug->getBugs($executionID, $build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->getExecutionBugs($executionID, $build, $type, $param, $sort, '', $pager);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -917,7 +917,7 @@ class execution extends control
         $type      = strtolower($type);
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('execution', 'build', "executionID=$executionID&type=bysearch&queryID=myQueryID");
-        $this->execution->buildExecutionBuildSearchForm($products, $queryID, $actionURL, 'execution');
+        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'execution');
 
         /* Get builds. */
         if($type == 'bysearch')
@@ -926,7 +926,7 @@ class execution extends control
         }
         else
         {
-            $builds = $this->loadModel('build')->getBuilds((int)$executionID, $type, $param);
+            $builds = $this->loadModel('build')->getExecutionBuilds((int)$executionID, $type, $param);
         }
 
         /* Set execution builds. */
@@ -978,7 +978,7 @@ class execution extends control
 
         $productTasks = array();
 
-        $tasks = $this->testtask->getTasks($executionID, $orderBy, $pager);
+        $tasks = $this->testtask->getExecutionTasks($executionID, $orderBy, $pager);
         foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
 
         $this->view->title        = $this->executions[$executionID] . $this->lang->colon . $this->lang->testtask->common;
@@ -1306,7 +1306,7 @@ class execution extends control
         $position[] = $this->lang->execution->edit;
 
         $allProducts     = array(0 => '');
-        $executionProsucts = $this->execution->getProducts($execution->execution);
+        $executionProsucts = $this->execution->getProducts($execution->project);
         foreach($executionProsucts as $product) $allProducts[$product->id] = $product->name;
 
         $linkedProducts = $this->execution->getProducts($execution->id);
@@ -1316,7 +1316,7 @@ class execution extends control
         $unmodifiableProducts = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            $executionStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('execution')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll('story');
+            $executionStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll('story');
             if(!empty($executionStories)) array_push($unmodifiableProducts, $productID);
         }
 
@@ -1718,8 +1718,8 @@ class execution extends control
         $this->execution->setMenu($this->executions, $executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
         $tasks   = $this->execution->getKanbanTasks($executionID, "id");
-        $bugs    = $this->loadModel('bug')->getBugs($executionID);
-        $stories = $this->loadModel('story')->getStories($executionID, 0, 0, $orderBy);
+        $bugs    = $this->loadModel('bug')->getExecutionBugs($executionID);
+        $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);
@@ -2031,7 +2031,7 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->manageProducts;
 
-        $allProducts     = $this->product->getProductPairsByExecution($execution->execution);
+        $allProducts     = $this->product->getProductPairsByProject($execution->project);
         $linkedProducts  = $this->execution->getProducts($execution->id);
         $linkedBranches  = array();
 
@@ -2039,7 +2039,7 @@ class execution extends control
         $unmodifiableProducts = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            $executionStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('execution')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll('story');
+            $executionStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll('story');
             if(!empty($executionStories)) array_push($unmodifiableProducts, $productID);
         }
 
@@ -2353,12 +2353,12 @@ class execution extends control
     public function dynamic($executionID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
         /* Save session. */
-        $uri   = $this->app->getURI(true);
+        $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri);
         $this->session->set('productPlanList', $uri);
         $this->session->set('releaseList',     $uri);
         $this->session->set('storyList',       $uri);
-        $this->session->set('executionList',     $uri);
+        $this->session->set('executionList',   $uri);
         $this->session->set('taskList',        $uri);
         $this->session->set('buildList',       $uri);
         $this->session->set('bugList',         $uri);
@@ -2403,8 +2403,8 @@ class execution extends control
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $this->view->position[] = $this->lang->execution->dynamic;
 
-        $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|useid');
-        $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted');
+        $this->view->userIdPairs  = $this->execution->getTeamMemberPairs($executionID, 'nodeleted|useid');
+        $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         /* Assign. */
         $this->view->executionID  = $executionID;
@@ -2481,12 +2481,12 @@ class execution extends control
     {
         $execution = $this->execution->getByID($executionID);
 
-        $this->view->link      = $this->execution->getLink($module, $method, $extra);
+        $this->view->link        = $this->execution->getLink($module, $method, $extra);
         $this->view->executionID = $executionID;
-        $this->view->module    = $module;
-        $this->view->method    = $method;
-        $this->view->extra     = $extra;
-        $this->view->executions  = $this->execution->getsByExecution($execution->execution);
+        $this->view->module      = $module;
+        $this->view->method      = $method;
+        $this->view->extra       = $extra;
+        $this->view->executions  = $this->execution->getByProject($execution->project);
         $this->display();
     }
 
@@ -2558,10 +2558,10 @@ class execution extends control
         $idList   = explode(',', trim($this->post->storys, ','));
         $orderBy  = $this->post->orderBy;
 
-        $order = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('execution')->eq($executionID)->orderBy('order_asc')->fetch('order');
+        $order = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
         foreach($idList as $storyID)
         {
-            $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->exec();
+            $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('project')->eq($executionID)->exec();
             $order++;
         }
     }

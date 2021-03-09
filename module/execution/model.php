@@ -62,9 +62,9 @@ class executionModel extends model
      */
     public function setMenu($executions, $executionID, $buildID = 0, $extra = '')
     {
-        $project = $this->getByID($this->session->project);
         if(empty($executions))
         {
+            $project = $this->loadModel('project')->getByID($this->session->project);
             if($project->model == 'waterfall')
             {
                 if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'execution') die(js::locate(helper::createLink('programplan', 'create', "projectID=$project->id")));
@@ -77,12 +77,10 @@ class executionModel extends model
 
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
-
         $this->session->set('execution', $executionID);
 
-        $products = $this->loadModel('product')->getPairs();
-
         /* Unset story, bug, build and testtask if type is ops. */
+        $execution = $this->getByID($executionID);
         if($execution and $execution->lifetime == 'ops')
         {
             unset($this->lang->execution->menu->story);
@@ -93,7 +91,7 @@ class executionModel extends model
         }
 
         /* Hide story and qa menu when execution is story or design type. */
-        if($execution and ($execution->attribute == 'story' || $execution->attribute == 'design'))
+        if($execution and ($execution->attribute == 'story' or $execution->attribute == 'design'))
         {
             unset($this->lang->execution->menu->story);
             unset($this->lang->execution->menu->qa);
@@ -278,6 +276,7 @@ class executionModel extends model
         if(empty($executionID) and isset($this->config->execution->lastExecution) and isset($executions[$this->config->execution->lastExecution]))
         {
             $this->session->set('execution', $this->config->execution->lastExecution);
+            $this->setProjectSession($this->session->execution);
             return $this->session->execution;
         }
 
@@ -295,9 +294,23 @@ class executionModel extends model
             $this->session->set('execution', key($executions));
             if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->execution},") === false) $this->accessDenied();
         }
+
+        $this->setProjectSession($this->session->execution);
         return $this->session->execution;
     }
 
+    /**
+     * Set project into session.
+     * 
+     * @param  int    $executionID 
+     * @access public
+     * @return void
+     */
+    public function setProjectSession($executionID)
+    {
+        $execution = $this->getByID($executionID);
+        $this->session->set('project', $execution->project);
+    }
     /**
      * Create a execution.
      *
@@ -821,7 +834,7 @@ class executionModel extends model
         if($type == 'create' or $oldExecution->grade == 1)
         {
             $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($this->post->products[0])
                 ->andWhere('t2.type')->eq('stage')
                 ->andWhere('t2.grade')->eq(1)
@@ -883,7 +896,7 @@ class executionModel extends model
         /* Order by status's content whether or not done */
         $executions = $this->dao->select('*, IF(INSTR("done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->beginIF(!$projectID && $type == 'all' && $this->config->systemMode == 'new')->andWhere('type')->in('stage,sprint')->fi()
+            ->beginIF($type == 'all' && $this->config->systemMode == 'new')->andWhere('type')->in('stage,sprint')->fi()
             ->beginIF($projectID && $this->config->systemMode == 'new')->andWhere('project')->eq($projectID)->fi()
             ->beginIF($type != 'all' && $this->config->systemMode == 'new')->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
@@ -941,7 +954,7 @@ class executionModel extends model
         if($productID != 0)
         {
             return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project= t2.id')
                 ->where('t1.product')->eq($productID)
                 ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
                 ->beginIF($type == 'all')->andWhere('t2.type')->in('sprint,stage,kanban')->fi()
@@ -987,7 +1000,7 @@ class executionModel extends model
         if($productID != 0)
         {
             return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project= t2.id')
                 ->leftJoin(TABLE_TEAM)->alias('t3')->on('t3.root=t2.id')
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
@@ -1067,7 +1080,7 @@ class executionModel extends model
         if(isset($project->model) and $project->model == 'waterfall')
         {
             $executionList = array();
-            $executionProducts = $this->dao->select('t1.execution,t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $executionProducts = $this->dao->select('t1.project,t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
                 ->where('project')->in(array_keys($executions))
                 ->andWhere('t2.deleted')->eq(0)
@@ -1219,7 +1232,7 @@ class executionModel extends model
         $products = array_keys($products);
         return $this->dao->select('t1.id, t1.name')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
-            ->on('t1.id = t2.execution')
+            ->on('t1.id = t2.project')
             ->where('t2.product')->in($products)
             ->andWhere('t1.id')->ne((int)$executionID)
             ->andWhere('t1.deleted')->eq(0)
@@ -1270,7 +1283,7 @@ class executionModel extends model
     public function getProductGroupList()
     {
         $list = $this->dao->select('t1.id, t1.name,t1.status, t2.product')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.execution')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->fetchGroup('product');
@@ -1433,7 +1446,7 @@ class executionModel extends model
     {
         $managers = $this->dao->select('PO,QD,RD')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-            ->where('t2.execution')->eq($executionID)
+            ->where('t2.project')->eq($executionID)
             ->fetch();
         if($managers) return $managers;
 
@@ -1554,7 +1567,7 @@ class executionModel extends model
         $this->config->product->search['fields']['title'] = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfExecution);
+        $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
         $this->config->product->search['params']['module']['values'] = $modules;
         unset($this->lang->story->statusList['draft']);
@@ -1608,9 +1621,9 @@ class executionModel extends model
     public function updateProducts($executionID, $products = '')
     {
         $this->loadModel('user');
-        $products           = isset($_POST['products']) ? $_POST['products'] : $products;
-        $oldExecutionProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('execution')->eq((int)$executionID)->fetchGroup('product', 'branch');
-        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('execution')->eq((int)$executionID)->exec();
+        $products = isset($_POST['products']) ? $_POST['products'] : $products;
+        $oldExecutionProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchGroup('product', 'branch');
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->exec();
         $members = array_keys($this->getTeamMembers($executionID));
         if(empty($products))
         {
@@ -1636,17 +1649,13 @@ class executionModel extends model
             }
 
             $data = new stdclass();
-            $data->execution = $executionID;
+            $data->project = $executionID;
             $data->product = $productID;
             $data->branch  = $branch;
             $data->plan    = isset($plans[$productID]) ? $plans[$productID] : $oldPlan;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID] = true;
         }
-
-        /* Delete the execution linked products that is not linked with the execution. */
-        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('execution')->eq((int)$executionID)->fetchPairs('id');
-        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('execution')->in($executions)->andWhere('product')->notin($products)->exec();
 
         $oldProductKeys = array_keys($oldExecutionProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
@@ -1667,10 +1676,10 @@ class executionModel extends model
         if(empty($products)) return array();
 
         $execution    = $this->getById($toExecution);
-        $executions = $this->dao->select('t1.product, t1.execution')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+        $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in(array_keys($products))
-            ->andWhere('t2.execution')->eq($execution->execution)
+            ->andWhere('t2.project')->eq($execution->execution)
             ->fetchGroup('execution');
         $branches = str_replace(',', "','", $branches);
 
@@ -1769,7 +1778,7 @@ class executionModel extends model
     {
         $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
-            ->where('t2.execution')->eq($executionID)
+            ->where('t2.project')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
             ->fetch('storyCount');
 
@@ -2318,7 +2327,7 @@ class executionModel extends model
         {
             $teamMember = $this->dao->select('t1.id, t2.account')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id = t2.root')
-                ->where('t1.execution')->eq($sprint->execution)
+                ->where('t1.project')->eq($sprint->project)
                 ->andWhere('t1.type')->eq($sprint->type)
                 ->andWhere('t2.account')->eq($account)
                 ->fetch();
@@ -2373,10 +2382,10 @@ class executionModel extends model
             ->orWhere('status')->eq('closed')
             ->groupBy('execution')
             ->fetchAll('execution');
-        $storyPoints = $this->dao->select('t1.execution, sum(t2.estimate) AS `storyPoint`')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $storyPoints = $this->dao->select('t1.project, sum(t2.estimate) AS `storyPoint`')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
-            ->where('t1.execution')->in(array_keys($executions))
+            ->where('t1.project')->in(array_keys($executions))
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.status')->ne('closed')
             ->andWhere('t2.stage')->in('wait,planned,executioned,developing')
@@ -2803,7 +2812,7 @@ class executionModel extends model
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
         unset($this->config->bug->search['fields']['execution']);
-        $this->config->bug->search['params']['product']['values']       = $productPairs + array('all' => $this->lang->product->allProductsOfExecution);
+        $this->config->bug->search['params']['product']['values']       = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts($products);
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['openedBuild']['values']   = $builds;
@@ -2837,7 +2846,7 @@ class executionModel extends model
     {
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
-        $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecution);
+        $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->config->execution->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
@@ -3152,7 +3161,7 @@ class executionModel extends model
         {
             $stories = $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->where('t1.execution')->eq((int)$executionID)
+                ->where('t1.project')->eq((int)$executionID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy('t1.`order`_desc')
                 ->fetchAll();
@@ -3435,7 +3444,7 @@ class executionModel extends model
             ->where('t1.type')->in('stage,sprint')
             ->andWhere('t2.account')->eq($this->app->user->account)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->executions)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.status')->ne('closed')
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy('execution_desc, id_desc')
@@ -3480,9 +3489,9 @@ class executionModel extends model
      */
     public function getStageLinkProductPairs($stageIdList = array())
     {
-        $productpairs = $this->dao->select('t1.execution, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $productpairs = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.execution')->in($stageIdList)
+            ->where('t1.project')->in($stageIdList)
             ->fetchPairs('execution', 'name');
         return $productpairs;
     }

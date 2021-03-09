@@ -148,7 +148,7 @@
                 <td class='text-left nobr'><?php echo zget($modulePairs, $story->module, '');?></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
-                  if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+                  if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
                   echo html::a($viewLink , $story->title);
                   ?>
                 </td>

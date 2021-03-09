@@ -47,8 +47,8 @@
           foreach($userIdPairs as $userID => $name)
           {
               if(!$userID) continue;
-              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $userID, '') . '"') : '';
-              echo html::a($this->createLink('execution', 'dynamic', "productID=$executionID&type=account&param=$userID"), $name);
+              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $name, '') . '"') : '';
+              echo html::a($this->createLink('execution', 'dynamic', "productID=$executionID&type=account&param=$userID"), $name, '', $searchKey);
           }
           ?>
         </div>

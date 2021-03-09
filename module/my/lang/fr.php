@@ -14,7 +14,7 @@ $lang->my->testCase        = 'Mes CasTests';
 $lang->my->story           = 'Mes Stories';
 $lang->my->createProgram   = 'Create Program';
 $lang->my->project         = "My Projects";
-$lang->my->execution       = "My {$lang->execution->common}s";
+$lang->my->execution       = "My {$lang->executionCommon}s";
 $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
 $lang->my->profile         = 'Mon Profil';
@@ -44,7 +44,7 @@ $lang->my->myExecutions = 'My Stage/Sprint/Iteration';
 $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';
-$lang->my->executions   = $lang->execution->common;
+$lang->my->executions   = $lang->executionCommon;
 
 $lang->my->executionMenu = new stdclass();
 $lang->my->executionMenu->undone = 'Undone';
