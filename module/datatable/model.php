@@ -153,7 +153,7 @@ class datatableModel extends model
             $title = (isset($col->name) and $col->name) ? "title='$col->name'" : $title;
             if($id == 'id' and (int)$width < 90) $width = '90px';
             $width = "data-width='$width' style='width:$width'";
-            $align = ($id == 'actions' || $id == 'progress') ? 'text-center' : '';
+            $align = $id == 'actions' ? 'text-center' : '';
 
             echo "<th data-flex='$fixed' $width class='c-$id $align' $title>";
             if($id == 'actions')

@@ -332,7 +332,7 @@ $lang->my->dividerMenu = ',myProject,team,';
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
-$lang->product->dividerMenu = ',plan,project,dynamic,';
+$lang->product->dividerMenu = ',requirement,set,';
 
 $lang->story = new stdclass();
 
