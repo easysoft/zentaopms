@@ -57,7 +57,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
                 }
             }
 
-            $icon        = $tabValue == 'product' ? "<i class='icon icon-cube'></i> " : "<i class='icon icon-stack'></i> ";
+            $icon        = $tabValue == 'product' ? "<i class='icon icon-product'></i> " : "<i class='icon icon-stack'></i> ";
             $activeClass = ($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $tabMenuID) ? 'active' : '';
             $activeClass = ($this->methodName == 'browse' && isset($currentLib->id) && $currentLib->id == $mainLibID) ? 'active' : $activeClass;
             ?>
@@ -94,10 +94,10 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
                 <li <?php echo $activeClass;?>>
                 <?php echo html::a($subLibLink, "<i class='icon {$icon}'></i> " . $subLibName, '', "class='text-ellipsis' title='{$subLibName}'");?>
                 <?php endif;?>
-                  <?php if(isset($allModules[$subLibID])):?> 
-                  <?php if($customLibCount > 0):?> 
-                  <ul> 
-                  <?php endif;?> 
+                  <?php if(isset($allModules[$subLibID])):?>
+                  <?php if($customLibCount > 0):?>
+                  <ul>
+                  <?php endif;?>
                   <?php foreach($allModules[$subLibID] as $module):?>
                   <?php if($module->parent != 0) continue;?>
                     <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
