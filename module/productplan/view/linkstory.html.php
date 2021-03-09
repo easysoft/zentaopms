@@ -50,7 +50,7 @@
           <td title='<?php echo $modules[$story->module]?>' class='text-left'><?php echo $modules[$story->module];?></td>
           <td class='text-left nobr' title='<?php echo $story->title?>'>
             <?php
-            if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+            if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
             echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");
             ?>
           </td>
