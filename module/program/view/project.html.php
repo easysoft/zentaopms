@@ -15,6 +15,9 @@
 js::set('programID', $programID);
 js::set('browseType', $browseType);
 ?>
+<style>
+.project-type-label.label-outline {width: 47px;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolBar pull-left">
     <?php foreach($lang->program->featureBar as $key => $label):?>
@@ -69,7 +72,7 @@ js::set('browseType', $browseType);
           <?php foreach($projectStats as $project):?>
           <tr data-id="<?php echo $project->id;?>">
             <?php $project->from = 'pgmproject';?>
-            <?php foreach($setting as $value) $this->program->printCell($value, $project, $users, $programID);?>
+            <?php foreach($setting as $value) $this->project->printCell($value, $project, $users, $programID);?>
           </tr>
           <?php endforeach;?>
         </tbody>
