@@ -863,7 +863,7 @@ class baseRouter
      */
     public function setProject()
     {
-        if(isset($_GET['project'])) $this->session->set('project', $_GET['project']); //Set project id into session.
+        if(isset($_GET['PRJ'])) $this->session->set('PRJ', $_GET['PRJ']); //Set project id into session.
     }
 
     /**
