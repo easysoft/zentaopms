@@ -54,14 +54,14 @@ $lang->block->finishedTasks       = 'Tasks Finished';
 $lang->block->createdBugs         = 'Bugs Created';
 $lang->block->resolvedBugs        = 'Bugs Resolved';
 $lang->block->createdCases        = 'Cases Created';
-$lang->block->createdRisks        = 'Risks Created'; 
+$lang->block->createdRisks        = 'Risks Created';
 $lang->block->resolvedRisks       = 'Risks Resolved';
 $lang->block->createdIssues       = 'Issues Created';
 $lang->block->resolvedIssues      = 'Issues Resolved';
 $lang->block->createdDocs         = 'Docs Created';
-$lang->block->allProject          = 'All ' . $lang->executionCommon;
-$lang->block->doingProject        = 'Doning ' . $lang->executionCommon;
-$lang->block->finishProject       = 'Finish ' . $lang->executionCommon;
+$lang->block->allExecutions       = 'All ' . $lang->executionCommon;
+$lang->block->doingExecution      = 'Doning ' . $lang->executionCommon;
+$lang->block->finishExecution     = 'Finish ' . $lang->executionCommon;
 $lang->block->estimatedHours      = 'Estimated Hours';
 $lang->block->consumedHours       = 'Consumed Hours';
 $lang->block->time                = 'No';
@@ -472,7 +472,7 @@ $lang->block->typeList->story['assignedTo'] = 'Giao cho bạn';
 $lang->block->typeList->story['openedBy']   = 'Tạo bởi bạn';
 $lang->block->typeList->story['reviewedBy'] = 'Duyệt bởi bạn';
 $lang->block->typeList->story['closedBy']   = 'ClosedByMe' ;
- 
+
 $lang->block->typeList->product['noclosed'] = 'Mở';
 $lang->block->typeList->product['closed']   = 'Đã đóng';
 $lang->block->typeList->product['all']      = 'Tất cả';

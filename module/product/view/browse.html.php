@@ -14,7 +14,7 @@
 <?php include '../../common/view/datatable.fix.html.php';?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
-<?php js::set('projectID', $this->session->project);?>
+<?php js::set('projectID', $this->session->PRJ);?>
 <?php js::set('branch', $branch);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php
@@ -136,14 +136,14 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
         if(commonModel::isTutorialMode())
         {
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
-            if($isProjectStory) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID={$this->session->project}");
+            if($isProjectStory) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID={$this->session->PRJ}");
             $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
             echo html::a($link, $lang->story->createCommon, '', "data-group='$openApp'");
         }
         else
         {
             $link     = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
-            if($isProjectStory) $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID={$this->session->project}");
+            if($isProjectStory) $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID={$this->session->PRJ}");
             $disabled = '';
             if(!common::hasPriv('story', 'create'))
             {
@@ -158,7 +158,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
         <li <?php echo $batchDisabled;?>>
         <?php
           $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=0&plan=0&type=$storyType");
-          if($isProjectStory) $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project={$this->session->project}");
+          if($isProjectStory) $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project={$this->session->PRJ}");
           echo html::a($batchLink, $lang->story->batchCreate, '', "data-group='$openApp'");
         ?>
         </li>
@@ -178,7 +178,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
         echo "<i class='icon-link'></i> {$lang->execution->linkStory} <span class='caret'></span>";
         echo '</button>';
         echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
-        if(common::hasPriv('projectstory', 'linkStory')) echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project={$this->session->project}"), $lang->execution->linkStory). "</li>";
+        if(common::hasPriv('projectstory', 'linkStory')) echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project={$this->session->PRJ}"), $lang->execution->linkStory). "</li>";
         if(common::hasPriv('project', 'importPlanStories')) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
         echo '</ul>';
     }
@@ -212,7 +212,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
       <p>
         <span class="text-muted"><?php echo $storyType == 'story' ? $lang->story->noStory : $lang->story->noRequirement;?></span>
         <?php if(common::canModify('product', $product) and common::hasPriv('story', 'create')):?>
-        <?php $projectID  = $isProjectStory ? $this->session->project : 0;?>
+        <?php $projectID  = $isProjectStory ? $this->session->PRJ : 0;?>
         <?php $openApp  = $isProjectStory ? 'project' : 'product';?>
         <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->createCommon, '', "class='btn btn-info' data-group='$openApp'");?>
         <?php endif;?>

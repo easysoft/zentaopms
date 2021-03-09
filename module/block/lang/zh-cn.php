@@ -59,7 +59,7 @@ $lang->block->resolvedRisks       = '解决的风险数';
 $lang->block->createdIssues       = '创建的问题数';
 $lang->block->resolvedIssues      = '解决的问题数';
 $lang->block->createdDocs         = '创建的文档数';
-$lang->block->allExecution        = '所有' . $lang->executionCommon;
+$lang->block->allExecutions       = '所有' . $lang->executionCommon;
 $lang->block->doingExecution      = '进行中的' . $lang->executionCommon;
 $lang->block->finishExecution     = '累积' . $lang->executionCommon;
 $lang->block->estimatedHours      = '预计';
@@ -435,6 +435,12 @@ $lang->block->orderByList->product['id_asc']      = 'ID 递增';
 $lang->block->orderByList->product['id_desc']     = 'ID 递减';
 $lang->block->orderByList->product['status_asc']  = '状态正序';
 $lang->block->orderByList->product['status_desc'] = '状态倒序';
+
+$lang->block->orderByList->project = array();
+$lang->block->orderByList->project['id_asc']      = 'ID 递增';
+$lang->block->orderByList->project['id_desc']     = 'ID 递减';
+$lang->block->orderByList->project['status_asc']  = '状态正序';
+$lang->block->orderByList->project['status_desc'] = '状态倒序';
 
 $lang->block->orderByList->execution = array();
 $lang->block->orderByList->execution['id_asc']      = 'ID 递增';

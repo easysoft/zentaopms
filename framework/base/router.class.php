@@ -863,7 +863,7 @@ class baseRouter
      */
     public function setProject()
     {
-        if(isset($_GET['project'])) $this->session->set('project', $_GET['project']); //Set project id into session.
+        if(isset($_GET['PRJ'])) $this->session->set('PRJ', $_GET['PRJ']); //Set project id into session.
     }
 
     /**
@@ -1830,7 +1830,7 @@ class baseRouter
         global $filter;
 
         /* Remove these three params. */
-        unset($passedParams['project']);
+        unset($passedParams['PRJ']);
         unset($passedParams['onlybody']);
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 

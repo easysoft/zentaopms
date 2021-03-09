@@ -264,7 +264,7 @@ class blockModel extends model
     public function getAvailableBlocks($module = '', $dashboard = '', $model = '')
     {
         $blocks = $this->lang->block->availableBlocks;
-        if($dashboard == 'program')
+        if($dashboard == 'project')
         {
             $blocks = $this->lang->block->modules[$model]['index']->availableBlocks;
         }
@@ -292,8 +292,9 @@ class blockModel extends model
      */
     public function getListParams($module = '')
     {
-        if($module == 'product') return $this->getProductParams($module);
-        if($module == 'project') return $this->getProjectParams($module);
+        if($module == 'product')   return $this->getProductParams();
+        if($module == 'project')   return $this->getProjectParams();
+        if($module == 'execution') return $this->getExecutionParams();
 
         $params = new stdclass();
         $params = $this->appendCountParams($params);
@@ -442,11 +443,11 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getProgramParams()
+    public function getProjectParams()
     {
-        $this->app->loadLang('program');
+        $this->app->loadLang('project');
         $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->program->featureBar;
+        $params->type['options'] = $this->lang->project->featureBar;
         $params->type['control'] = 'select';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
@@ -462,11 +463,11 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getProgramTeamParams()
+    public function getProjectTeamParams()
     {
-        $this->app->loadLang('program');
+        $this->app->loadLang('project');
         $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->program->featureBar;
+        $params->type['options'] = $this->lang->project->featureBar;
         $params->type['control'] = 'select';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
@@ -512,6 +513,7 @@ class blockModel extends model
     {
         if($module == 'product')   return $this->getProductStatisticParams($module);
         if($module == 'project')   return $this->getProjectStatisticParams($module);
+        if($module == 'execution') return $this->getExecutionStatisticParams($module);
         if($module == 'qa')        return $this->getQaStatisticParams($module);
 
         $params = new stdclass();
@@ -700,10 +702,10 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getProjectParams()
+    public function getExecutionParams()
     {
         $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->block->typeList->project;
+        $params->type['options'] = $this->lang->block->typeList->execution;
         $params->type['control'] = 'select';
 
         return json_encode($this->appendCountParams($params));
@@ -729,13 +731,16 @@ class blockModel extends model
         $params->bugNum['default'] = 20;
         $params->bugNum['control'] = 'input';
 
-        $params->riskNum['name']    = $this->lang->block->riskNum;
-        $params->riskNum['default'] = 20;
-        $params->riskNum['control'] = 'input';
+        if(isset($this->config->maxVersion))
+        {
+            $params->riskNum['name']    = $this->lang->block->riskNum;
+            $params->riskNum['default'] = 20;
+            $params->riskNum['control'] = 'input';
 
-        $params->issueNum['name']    = $this->lang->block->issueNum;
-        $params->issueNum['default'] = 20;
-        $params->issueNum['control'] = 'input';
+            $params->issueNum['name']    = $this->lang->block->issueNum;
+            $params->issueNum['default'] = 20;
+            $params->issueNum['control'] = 'input';
+        }
 
         $params->storyNum['name']    = $this->lang->block->storyNum;
         $params->storyNum['default'] = 20;

@@ -96,8 +96,8 @@ $lang->doc->removeMenu     = '从菜单栏移除';
 $lang->doc->search         = '搜索';
 
 /* 查询条件列表 */
-$lang->doc->allProduct   = '所有' . $lang->productCommon;
-$lang->doc->allExecution = '所有' . $lang->executionCommon;
+$lang->doc->allProduct    = '所有' . $lang->productCommon;
+$lang->doc->allExecutions = '所有' . $lang->executionCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . '文档库';

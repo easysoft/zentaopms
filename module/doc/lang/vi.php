@@ -96,8 +96,8 @@ $lang->doc->removeMenu = 'Remove from Menu';
 $lang->doc->search     = 'Tìm kiếm';
 
 /* Query condition list. */
-$lang->doc->allProduct = 'All' . $lang->productCommon;
-$lang->doc->allProject = 'All' . $lang->executionCommon;
+$lang->doc->allProduct    = 'All' . $lang->productCommon;
+$lang->doc->allExecutions = 'All' . $lang->executionCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' thư viện';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . ' thư viện';

@@ -247,7 +247,7 @@ class storyModel extends model
             if($executionID != 0 and $story->status != 'draft')
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
-                if($executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
+                if($executionID != $this->session->PRJ) $this->linkStory($this->session->PRJ, $this->post->product, $storyID);
             }
 
             if(is_array($this->post->URS))
@@ -2313,7 +2313,7 @@ class storyModel extends model
         $type = strtolower($type);
         if($type == 'bysearch')
         {
-            if($this->app->rawModule == 'projectstory') $this->session->projectStoryQuery = $this->session->storyQuery;
+            if($this->app->rawModule == 'projectstory') $this->session->PRJStoryQuery = $this->session->storyQuery;
             $queryID  = (int)$param;
             $products = $this->loadModel('execution')->getProducts($executionID);
 
@@ -3488,7 +3488,7 @@ class storyModel extends model
                     common::printIcon('story', 'edit',       $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
                     common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id", $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
-                    if($this->app->rawModule == 'projectstory') common::printIcon('projectstory', 'unlinkStory', "projectID={$this->session->project}&storyID=$story->id", '', 'list', 'unlink', 'hiddenwin');
+                    if($this->app->rawModule == 'projectstory') common::printIcon('projectstory', 'unlinkStory', "projectID={$this->session->PRJ}&storyID=$story->id", '', 'list', 'unlink', 'hiddenwin');
                 }
                 else
                 {

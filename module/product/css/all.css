@@ -43,3 +43,5 @@ th.table-nest-title .sort-down {padding-left: 5px;}
 #productTableList .icon-product:before {content: '\e98f'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
 
 .main-table thead>tr>th {padding: 0px 8px; line-height: 24px;}
+
+.icon-move {color: #16a8f8}

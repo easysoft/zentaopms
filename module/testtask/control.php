@@ -190,7 +190,7 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
-        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
+        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->PRJ;
         $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
@@ -226,8 +226,8 @@ class testtask extends control
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* When the session changes, you need to query the related products again. */
-        if($this->session->project != $task->project) $this->view->products = $this->products = $this->product->getProductPairsByProject($task->project);
-        $this->session->project = $task->project;
+        if($this->session->PRJ != $task->project) $this->view->products = $this->products = $this->product->getProductPairsByProject($task->project);
+        $this->session->PRJ = $task->project;
 
         $productID = $task->product;
         $buildID   = $task->build;
@@ -624,7 +624,7 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
-        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
+        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->PRJ;
         $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
@@ -1195,7 +1195,7 @@ class testtask extends control
         $this->app->loadLang('job');
 
         $productID  = $productID ? $productID : key($this->products);
-        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
+        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->PRJ;
         $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
 

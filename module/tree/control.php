@@ -98,7 +98,7 @@ class tree extends control
             if($from == 'project')
             {
                 $this->lang->navGroup->tree = 'project';
-                $productPairs = $this->product->getProductPairsByProject($this->session->project);
+                $productPairs = $this->product->getProductPairsByProject($this->session->PRJ);
             }
             elseif($from == 'qa')
             {
@@ -141,7 +141,7 @@ class tree extends control
             if($from == 'project')
             {
                 $this->lang->navGroup->tree = 'project';
-                $productPairs = $this->product->getProductPairsByProject($this->session->project);
+                $productPairs = $this->product->getProductPairsByProject($this->session->PRJ);
             }
             elseif($from == 'qa')
             {
@@ -210,7 +210,7 @@ class tree extends control
                 $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
 
                 /* The project parameter needs to be present when the tree module belongs to the project grouping. */
-                if($this->session->docList && $this->session->project && strpos($this->session->docList, 'project') === false) $this->session->set('docList', $this->session->docList . '?project=' . $this->session->project);
+                if($this->session->docList && $this->session->PRJ && strpos($this->session->docList, 'project') === false) $this->session->set('docList', $this->session->docList . '?project=' . $this->session->PRJ);
             }
 
             if($from == 'doc') $this->lang->navGroup->doc = 'doc';
@@ -226,7 +226,7 @@ class tree extends control
         }
         elseif($viewType == 'line')
         {
-            $products = $this->product->getPairs('', $this->session->project);
+            $products = $this->product->getPairs('', $this->session->PRJ);
 
             $this->lang->set('menugroup.tree', 'product');
             $this->product->setMenu($products, $rootID, $branch, 'line', '', 'line');
@@ -306,7 +306,7 @@ class tree extends control
         $products = $this->execution->getProducts($rootID);
         $this->view->products = $products;
 
-        $executions = $this->execution->getPairs($this->session->project);
+        $executions = $this->execution->getPairs($this->session->PRJ);
 
         /* Set menu. */
         $this->lang->set('menugroup.tree', 'execution');

@@ -96,8 +96,8 @@ $lang->doc->removeMenu     = 'Remove from Menu';
 $lang->doc->search         = 'Search';
 
 /* Query condition list. */
-$lang->doc->allProduct = 'All' . $lang->productCommon . 's';
-$lang->doc->allProject = 'All' . $lang->executionCommon . 's';
+$lang->doc->allProduct    = 'All' . $lang->productCommon . 's';
+$lang->doc->allExecutions = 'All' . $lang->executionCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . ' Library';

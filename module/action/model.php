@@ -667,7 +667,7 @@ class actionModel extends model
             $condition = "(product =',0,' AND project = '0')";
             if($projectCondition) $condition .= ' OR ' . $projectCondition;
             if($productCondition) $condition .= ' OR ' . $productCondition;
-            if($this->app->user->admin) $condition = 1; 
+            if($this->app->user->admin) $condition = 1;
         }
 
         /* If is project, select its related. */
@@ -763,9 +763,9 @@ class actionModel extends model
         }
         if($this->session->actionQuery == false) $this->session->set('actionQuery', ' 1 = 1');
 
-        $allProduct   = "`product`   = 'all'";
-        $allExecution = "`execution` = 'all'";
-        $actionQuery  = $this->session->actionQuery;
+        $allProduct    = "`product`   = 'all'";
+        $allExecutions = "`execution` = 'all'";
+        $actionQuery   = $this->session->actionQuery;
 
         $productID = 0;
         if(preg_match("/`product` = '(\d*)'/", $actionQuery, $out))
@@ -783,13 +783,13 @@ class actionModel extends model
         }
 
         /* If the sql not include 'execution', add check purview for execution. */
-        if(strpos($actionQuery, $allExecution) === false)
+        if(strpos($actionQuery, $allExecutions) === false)
         {
             $actionQuery = $actionQuery . ' AND `execution`' . helper::dbIN(array_keys($executions));
         }
         else
         {
-            $actionQuery = str_replace($allExecution, '1', $actionQuery);
+            $actionQuery = str_replace($allExecutions, '1', $actionQuery);
         }
 
         $actionQuery = str_replace("`product` = '$productID'", "`product` LIKE '%,$productID,%'", $actionQuery);

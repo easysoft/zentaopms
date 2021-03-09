@@ -39,7 +39,7 @@ class task extends control
      */
     public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
-        $executions  = $this->execution->getPairs($this->session->project);
+        $executions  = $this->execution->getPairs($this->session->PRJ);
         $executionID = $this->execution->saveState($executionID, $executions);
 
         $this->execution->getLimitedExecution();
@@ -206,7 +206,7 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->execution        = $execution;
-        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($this->session->project, 'all', 0, true);
+        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($this->session->PRJ, 'all', 0, true);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;
@@ -239,7 +239,7 @@ class task extends control
 
         if($this->config->systemMode == 'new')
         {
-            $project = $this->project->getByID($this->session->project);
+            $project = $this->project->getByID($this->session->PRJ);
             if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
         }
 
@@ -248,7 +248,7 @@ class task extends control
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs($this->session->project), $execution->id);
+        $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $execution->id);
 
         /* When common task are child tasks, query whether common task are consumed. */
         $taskConsumed = 0;
@@ -317,7 +317,7 @@ class task extends control
         $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs($this->session->project), $this->view->execution->id);
+        $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $this->view->execution->id);
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
     }
 
@@ -392,7 +392,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject($this->session->project, 'all', 0, true);
+        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject($this->session->PRJ, 'all', 0, true);
         $this->display();
     }
 
@@ -445,7 +445,7 @@ class task extends control
         if($executionID)
         {
             $execution = $this->execution->getById($executionID);
-            $this->execution->setMenu($this->execution->getPairs($this->session->project), $execution->id);
+            $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $execution->id);
 
             /* Set modules and members. */
             $showAllModule = isset($this->config->task->allModule) ? $this->config->task->allModule : '';
@@ -627,7 +627,7 @@ class task extends control
     {
         $task = $this->task->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->project = $task->project;
+        $this->session->PRJ = $task->project;
 
         if($task->fromBug != 0)
         {
@@ -655,7 +655,7 @@ class task extends control
 
         /* Set menu. */
         $execution = $this->execution->getById($task->execution);
-        $this->execution->setMenu($this->execution->getPairs($this->session->project), $execution->id);
+        $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $execution->id);
 
         $this->executeHooks($taskID);
 
@@ -1323,7 +1323,7 @@ class task extends control
             }
         }
 
-        $executions = $this->execution->getPairs($this->session->project);
+        $executions = $this->execution->getPairs($this->session->PRJ);
 
         $this->execution->setMenu($executions, $executionID);
         $this->executions          = $executions;

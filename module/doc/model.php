@@ -152,7 +152,7 @@ class docModel extends model
      */
     public function getLibs($type = '', $extra = '', $appendLibs = '')
     {
-        $projectID = $this->session->project;
+        $projectID = $this->session->PRJ;
         if($type == 'product' or $type == 'project')
         {
             $idList = array();
@@ -779,8 +779,8 @@ class docModel extends model
     {
         $this->config->doc->search['actionURL'] = $actionURL;
         $this->config->doc->search['queryID']   = $queryID;
-        $this->config->doc->search['params']['product']['values']   = array(''=>'') + $this->loadModel('product')->getPairs('nocode', $this->session->project) + array('all'=>$this->lang->doc->allProduct);
-        $this->config->doc->search['params']['execution']['values'] = array(''=>'') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all'=>$this->lang->doc->allExecution);
+        $this->config->doc->search['params']['product']['values']   = array(''=>'') + $this->loadModel('product')->getPairs('nocode', $this->session->PRJ) + array('all'=>$this->lang->doc->allProduct);
+        $this->config->doc->search['params']['execution']['values'] = array(''=>'') + $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'noclosed') + array('all'=>$this->lang->doc->allExecutions);
         $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
 
         /* Get the modules. */
@@ -999,7 +999,7 @@ class docModel extends model
             $orderBy = '`order` desc, id desc';
             if($type == 'execution')
             {
-                $project = $this->loadModel('project')->getByID($this->session->project);
+                $project = $this->loadModel('project')->getByID($this->session->PRJ);
                 $orderBy = (isset($project->model) and $project->model) == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
             }
 
@@ -1128,7 +1128,7 @@ class docModel extends model
             }
 
             $idList          = array();
-            $projectID       = $this->session->project;
+            $projectID       = $this->session->PRJ;
             $executionStatus = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'undone' : 'all';
 
             /* If it is a extension module, query the extension related products. */
@@ -1587,7 +1587,7 @@ class docModel extends model
     public function getStatisticInfo()
     {
         $libIdList = array();
-        $libIdList = $this->getLibIdListByProject($this->session->project);
+        $libIdList = $this->getLibIdListByProject($this->session->PRJ);
         $docIdList = $this->getPrivDocs($libIdList);
 
         $today  = date('Y-m-d');

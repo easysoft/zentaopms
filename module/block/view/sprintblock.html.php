@@ -19,7 +19,7 @@
 <div class="panel-body table-row">
   <div class="col-4 text-middle text-center">
     <div class="tile">
-      <div class="tile-title"><?php echo $lang->block->allExecution;?></div>
+      <div class="tile-title"><?php echo $lang->block->allExecutions;?></div>
       <?php $projectLink = $this->createLink('project', 'all', 'status=all')?>
       <div class="tile-amount"><?php echo $summary->total ? html::a($projectLink, $summary->total) : 0;?></div>
     </div>

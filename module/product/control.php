@@ -202,11 +202,11 @@ class product extends control
         if($this->app->rawModule == 'projectstory')
         {
             $this->session->set('currentProductType', $product->type);
-            $projectProducts = $this->product->getProducts($this->session->project);
+            $projectProducts = $this->product->getProducts($this->session->PRJ);
             $productPlans    = $this->execution->getPlans($projectProducts);
 
             if($browseType == 'bybranch') $param = $branch;
-            $stories = $this->story->getExecutionStories($this->session->project, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
+            $stories = $this->story->getExecutionStories($this->session->PRJ, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
@@ -903,7 +903,7 @@ class product extends control
 
         $moduleGroup = zget($this->lang->navGroup, $module);
         $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
-        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->project, 'all', 'program desc, line desc, ') : $this->product->getList(0, 'all', 0, 0, 'program desc, line desc, ');
+        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->PRJ, 'all', 'program desc, line desc, ') : $this->product->getList(0, 'all', 0, 0, 'program desc, line desc, ');
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
@@ -911,7 +911,7 @@ class product extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
         $this->view->products  = $products;
-        $this->view->projectID = $moduleGroup == 'project' ? $this->session->project : 0;
+        $this->view->projectID = $moduleGroup == 'project' ? $this->session->PRJ : 0;
         $this->view->programs  = $this->loadModel('program')->getPairs(true);
         $this->view->lines     = $this->product->getLinePairs();
         $this->view->openApp   = $moduleGroup;
@@ -962,7 +962,7 @@ class product extends control
             $moduleIndex = array_search('product', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
-            $this->view->project = $this->loadModel('project')->getById($this->session->project);
+            $this->view->project = $this->loadModel('project')->getById($this->session->PRJ);
         }
 
         $this->loadModel($fromModule)->setMenu($this->products, key($this->products));
@@ -1173,7 +1173,7 @@ class product extends control
         $this->session->set('productList', $this->app->getURI(true));
 
         /* Get all product list. Locate to the create product page if there is no product. */
-        $this->products = $this->product->getPairs('', $this->session->project);
+        $this->products = $this->product->getPairs('', $this->session->PRJ);
         if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
 
         /* Get current product. */

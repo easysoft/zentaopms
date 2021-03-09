@@ -121,14 +121,14 @@ class projectModel extends model
     {
         if($projectID > 0) $this->session->set('project', (int)$projectID);
         if($projectID == 0 and $this->cookie->lastProject) $this->session->set('project', (int)$this->cookie->lastProject);
-        if($projectID == 0 and $this->session->project == '') $this->session->set('project', key($projects));
-        if(!isset($projects[$this->session->project]))
+        if($projectID == 0 and $this->session->PRJ == '') $this->session->set('project', key($projects));
+        if(!isset($projects[$this->session->PRJ]))
         {
             $this->session->set('project', key($projects));
-            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false) $this->accessDenied();
+            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false) $this->accessDenied();
         }
 
-        return $this->session->project;
+        return $this->session->PRJ;
     }
 
     /*
@@ -1557,7 +1557,7 @@ class projectModel extends model
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
-        $project = $this->getByID($this->session->project);
+        $project = $this->getByID($this->session->PRJ);
         if($project and $project->model == 'waterfall')
         {
             foreach($parents as $id => $execution)

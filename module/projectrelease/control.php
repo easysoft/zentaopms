@@ -27,7 +27,7 @@ class projectrelease extends control
         $products = array();
         $this->loadModel('product');
         $this->loadModel('release');
-        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->project);
+        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
         if(empty($this->view->products)) $this->locate($this->createLink('product', 'create'));
     }
 
@@ -45,7 +45,7 @@ class projectrelease extends control
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         /* Get product and product list by project. */
-        $products = $this->product->getProductPairsByProject($this->session->project);
+        $products = $this->product->getProductPairsByProject($this->session->PRJ);
         if(!$productID) $productID = key($products);
         $product = $this->product->getById($productID);
 
@@ -53,7 +53,7 @@ class projectrelease extends control
         $this->view->product  = $product;
         $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->branch   = $branch;
-        $this->view->project  = $this->loadModel('project')->getByID($this->session->project);
+        $this->view->project  = $this->loadModel('project')->getByID($this->session->PRJ);
     }
 
     /**
@@ -66,13 +66,13 @@ class projectrelease extends control
     public function browse($type = 'all')
     {
         $this->session->set('releaseList', $this->app->getURI(true));
-        $execution = $this->loadModel('execution')->getById($this->session->project);
+        $execution = $this->loadModel('execution')->getById($this->session->PRJ);
 
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
         $this->view->execution  = $execution;
-        $this->view->products   = $this->loadModel('product')->getProducts($this->session->project);
-        $this->view->releases   = $this->projectrelease->getList($this->session->project, $type);
+        $this->view->products   = $this->loadModel('product')->getProducts($this->session->PRJ);
+        $this->view->releases   = $this->projectrelease->getList($this->session->PRJ, $type);
         $this->view->type       = $type;
         $this->display();
     }
@@ -99,10 +99,10 @@ class projectrelease extends control
         }
 
         /* Get the builds that can select. */
-        $productPairs  = $this->loadModel('product')->getProductPairsByProject($this->session->project);
+        $productPairs  = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $productIdList = array_keys($productPairs);
         $builds        = $this->loadModel('build')->getProductBuildPairs($productIdList, 0, 0, 'notrunk');
-        $releaseBuilds = $this->projectrelease->getReleaseBuilds($this->session->project);
+        $releaseBuilds = $this->projectrelease->getReleaseBuilds($this->session->PRJ);
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
@@ -110,7 +110,7 @@ class projectrelease extends control
         $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
         $this->view->position[]  = $this->lang->release->create;
         $this->view->builds      = $builds;
-        $this->view->lastRelease = $this->projectrelease->getLast($this->session->project);
+        $this->view->lastRelease = $this->projectrelease->getLast($this->session->PRJ);
         $this->display();
     }
 
@@ -154,7 +154,7 @@ class projectrelease extends control
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->build      = $build;
-        $this->view->builds     = $this->loadModel('build')->getProjectBuildPairs($this->session->project, $release->product, $release->branch, 'notrunk|withbranch');
+        $this->view->builds     = $this->loadModel('build')->getProjectBuildPairs($this->session->PRJ, $release->product, $release->branch, 'notrunk|withbranch');
         $this->display();
     }
 
@@ -547,7 +547,7 @@ class projectrelease extends control
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($release->product, $viewType = 'bug', $startModuleID = 0);
-        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, 0, 'id_desc', $this->session->project);
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, 0, 'id_desc', $this->session->PRJ);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($release->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         if($this->session->currentProductType == 'normal')

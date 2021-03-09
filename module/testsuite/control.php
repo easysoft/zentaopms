@@ -69,7 +69,7 @@ class testsuite extends control
         $this->session->set('testsuiteList', $this->app->getURI(true));
 
         /* Set menu. */
-        $projectID            = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->project;
+        $projectID            = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->PRJ;
         $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testsuite")));
         $productID = $this->product->saveState($productID, $this->products);
@@ -136,7 +136,7 @@ class testsuite extends control
         }
 
         /* Set menu. */
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->project);
+        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $productID  = $this->product->saveState($productID, $this->products);
         $this->testsuite->setMenu($this->products, $productID);
 
@@ -169,7 +169,7 @@ class testsuite extends control
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
         $productID = $suite->product;
 
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->project);
+        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $this->testsuite->setMenu($this->products, $productID);
 
         /* Save session. */
@@ -239,7 +239,7 @@ class testsuite extends control
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
         /* Get suite info. */
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->project);
+        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $productID = $this->product->saveState($suite->product, $this->products);
 
         /* Set menu. */
@@ -319,7 +319,7 @@ class testsuite extends control
         $this->session->set('caseList', $this->app->getURI(true));
 
         /* Get suite and product id. */
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->project);
+        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $suite      = $this->testsuite->getById($suiteID);
         $productID = $this->product->saveState($suite->product, $this->products);
 

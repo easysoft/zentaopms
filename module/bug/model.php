@@ -72,7 +72,7 @@ class bugModel extends model
             ->setDefault('execution,story,task', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('deadline', '0000-00-00')
-            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
+            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa', 'project', $this->session->PRJ)
             ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
@@ -234,7 +234,7 @@ class bugModel extends model
                 }
             }
 
-            if($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa') $bug->project = $this->session->project;
+            if($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa') $bug->project = $this->session->PRJ;
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
@@ -1232,7 +1232,7 @@ class bugModel extends model
      */
     public function buildSearchForm($productID, $products, $queryID, $actionURL)
     {
-        $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
+        $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->PRJ;
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['product']['values']       = array($productID => $products[$productID], 'all' => $this->lang->bug->allProduct);
@@ -1678,7 +1678,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('execution as name, count(execution) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('execution')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $executions = $this->loadModel('execution')->getPairs($this->session->project);
+        $executions = $this->loadModel('execution')->getPairs($this->session->PRJ);
 
         $maxLength = 12;
         if(common::checkNotCN()) $maxLength = 22;
