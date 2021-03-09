@@ -11,7 +11,7 @@
  */
 /* Fields. */
 $lang->project->common         = $lang->executionCommon;
-$lang->project->allProjects    = 'Alle';
+$lang->project->allExecutions  = 'Alle';
 $lang->project->id             = $lang->executionCommon . ' ID';
 $lang->project->type           = 'Typ';
 $lang->project->name           = 'Name';

@@ -23,7 +23,7 @@
         </div>
         <div class='col-sm-4'>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->execution->common;?></span>
+            <span class='input-group-addon'><?php echo $lang->executionCommon;?></span>
             <?php echo html::select('execution', $executions, $execution, "class='form-control chosen' onchange='changeParams(this)'");?>
           </div>
         </div>

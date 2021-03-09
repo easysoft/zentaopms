@@ -284,7 +284,7 @@ class testtaskModel extends model
         return $this->dao->select('t1.*, t2.name AS buildName')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
-            ->where('t1.execution')->eq((int)$execution)
+            ->where('t1.execution')->eq((int)$executionID)
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)

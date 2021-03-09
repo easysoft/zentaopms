@@ -11,7 +11,7 @@
  */
 /* Fields. */
 $lang->project->common         = $lang->executionCommon;
-$lang->project->allProjects    = 'Tất cả ' . $lang->executionCommon;
+$lang->project->allExecutions  = 'Tất cả ' . $lang->executionCommon;
 $lang->project->id             = 'ID '.$lang->executionCommon;
 $lang->project->type           = 'Loại';
 $lang->project->name           = "Tên {$lang->executionCommon}";

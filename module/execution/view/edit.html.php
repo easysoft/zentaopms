@@ -66,7 +66,7 @@
           <?php
           if($isSprint)
           {
-              echo html::select('lifetime', $lang->project->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'");
+              echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'");
           }
           else
           {

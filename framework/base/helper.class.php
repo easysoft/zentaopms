@@ -56,8 +56,8 @@ class baseHelper
      * @param string|array $vars           the params passed to the method, can be array('key' => 'value') or key1=value1&key2=value2) or key1=value1&key2=value2
      * @param string       $viewType       the view type
      * @param bool         $onlyBody       pass onlyBody=yes to the link thus the app can control the header and footer hide or show..
-     * @param bool         $projectID          set project id in to session.
-     * @param bool         $removeProject      if true, remove project param.
+     * @param bool         $projectID      set project id in to session.
+     * @param bool         $removeProject  if true, remove project param.
      * @static
      * @access public
      * @return string the link string.
@@ -173,8 +173,8 @@ class baseHelper
         global $config, $lang;
 
         if(!$projectID || $removeProject) return $link;
-        $isProject = (zget($lang->navGroup, $moduleName) == 'project');
-        if(!$isProject and $moduleName != 'program') return $link;
+        $app = zget($lang->navGroup, $moduleName);
+        if($app != 'project' and $app != 'execution') return $link;
 
         $link .= strpos($link, '?') === false ? "?project=$projectID" : "&project=$projectID";
         return $link;
