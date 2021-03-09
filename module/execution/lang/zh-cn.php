@@ -11,7 +11,8 @@
  */
 /* 字段列表。*/
 $lang->executionCommon           = $lang->executionCommon;
-$lang->execution->allExecutions  = '所有' . $lang->executionCommon;
+$lang->execution->common         = $lang->executionCommon . '视图';
+$lang->execution->allExecution   = '所有' . $lang->executionCommon;
 $lang->execution->id             = $lang->executionCommon . '编号';
 $lang->execution->type           = $lang->executionCommon . '类型';
 $lang->execution->name           = $lang->executionCommon . '名称';

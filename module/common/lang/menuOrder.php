@@ -30,8 +30,8 @@ $lang->waterfall->menuOrder[65] = 'other';
 $lang->waterfall->menuOrder[70] = 'projectsetting';
 
 /* Sort of main menu. */
-$lang->scrum->menuOrder[5]  = 'programindex';
-$lang->scrum->menuOrder[10] = 'project';
+$lang->scrum->menuOrder[5]  = 'index';
+$lang->scrum->menuOrder[10] = 'execution';
 $lang->scrum->menuOrder[15] = 'projectstory';
 $lang->scrum->menuOrder[20] = 'qa';
 $lang->scrum->menuOrder[25] = 'ci';
@@ -177,11 +177,11 @@ $lang->admin->subMenuOrder->dev[5]      = 'api';
 $lang->admin->subMenuOrder->dev[10]     = 'db';
 $lang->admin->subMenuOrder->dev[15]     = 'editor';
 $lang->admin->subMenuOrder->dev[20]     = 'entry';
-$lang->admin->subMenuOrder->data[5]     = 'backup';
-$lang->admin->subMenuOrder->data[10]    = 'trash';
-$lang->admin->subMenuOrder->system[5]   = 'cron';
-$lang->admin->subMenuOrder->system[10]  = 'timezone';
-$lang->admin->subMenuOrder->system[15]  = 'buildIndex';
+$lang->admin->subMenuOrder->system[5]   = 'data';
+$lang->admin->subMenuOrder->system[10]  = 'safe';
+$lang->admin->subMenuOrder->system[15]  = 'cron';
+$lang->admin->subMenuOrder->system[20]  = 'timezone';
+$lang->admin->subMenuOrder->system[25]  = 'buildIndex';
 
 $lang->convert->menuOrder   = $lang->admin->menuOrder;
 $lang->upgrade->menuOrder   = $lang->admin->menuOrder;

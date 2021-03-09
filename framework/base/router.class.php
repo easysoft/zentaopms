@@ -1830,7 +1830,7 @@ class baseRouter
         global $filter;
 
         /* Remove these three params. */
-        unset($passedParams['PRJ']);
+        unset($passedParams['project']);
         unset($passedParams['onlybody']);
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 

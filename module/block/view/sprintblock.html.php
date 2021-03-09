@@ -19,7 +19,7 @@
 <div class="panel-body table-row">
   <div class="col-4 text-middle text-center">
     <div class="tile">
-      <div class="tile-title"><?php echo $lang->block->allProject;?></div>
+      <div class="tile-title"><?php echo $lang->block->allExecution;?></div>
       <?php $projectLink = $this->createLink('project', 'all', 'status=all')?>
       <div class="tile-amount"><?php echo $summary->total ? html::a($projectLink, $summary->total) : 0;?></div>
     </div>
@@ -30,13 +30,13 @@
         <span class="bar" style="height: <?php echo $progress->doing * 100;?>%">
           <span class="value"><?php echo $summary->doing;?></span>
         </span>
-        <span class="title"><?php echo $lang->block->doingProject;?></span>
+        <span class="title"><?php echo $lang->block->doingExecution;?></span>
       </li>
       <li>
         <span class="bar" style="height: <?php echo $progress->closed * 100;?>%">
           <span class="value"><?php echo $summary->closed;?></span>
         </span>
-        <span class="title"><?php echo $lang->block->finishProject;?></span>
+        <span class="title"><?php echo $lang->block->finishExecution;?></span>
       </li>
     </ul>
   </div>

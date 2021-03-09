@@ -62,9 +62,9 @@ class executionModel extends model
      */
     public function setMenu($executions, $executionID, $buildID = 0, $extra = '')
     {
-        $project = $this->getByID($this->session->project);
         if(empty($executions))
         {
+            $project = $this->loadModel('project')->getByID($this->session->project);
             if($project->model == 'waterfall')
             {
                 if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'execution') die(js::locate(helper::createLink('programplan', 'create', "projectID=$project->id")));
@@ -77,10 +77,7 @@ class executionModel extends model
 
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
-
         $this->session->set('execution', $executionID);
-
-        $products = $this->loadModel('product')->getPairs();
 
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
@@ -94,7 +91,7 @@ class executionModel extends model
         }
 
         /* Hide story and qa menu when execution is story or design type. */
-        if($execution and ($execution->attribute == 'story' || $execution->attribute == 'design'))
+        if($execution and ($execution->attribute == 'story' or $execution->attribute == 'design'))
         {
             unset($this->lang->execution->menu->story);
             unset($this->lang->execution->menu->qa);
@@ -304,8 +301,8 @@ class executionModel extends model
 
     /**
      * Set project into session.
-     * 
-     * @param  int    $executionID 
+     *
+     * @param  int    $executionID
      * @access public
      * @return void
      */
@@ -2849,7 +2846,7 @@ class executionModel extends model
     {
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
-        $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+        $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecution);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->config->execution->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');

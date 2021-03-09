@@ -24,6 +24,7 @@ class todoModel extends model
         $objectType = $this->post->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
+        $idvalue = 0;
         if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
@@ -446,7 +447,7 @@ class todoModel extends model
             $begin = $end = $type;
         }
 
-        if($account == '')   $account = $this->app->user->account;
+        if(empty($account)) $account = $this->app->user->account;
 
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
             ->where('1')
@@ -476,10 +477,10 @@ class todoModel extends model
             if($todo->type == 'story')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
             if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
             if($todo->type == 'bug')      $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-            if($todo->type == 'issue')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
-            if($todo->type == 'risk')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
-            if($todo->type == 'review')   $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
             if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TESTTASK)->fetch('name');
+            if($todo->type == 'issue'  && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
+            if($todo->type == 'risk'   && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
+            if($todo->type == 'review' && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
             $todo->begin = date::formatTime($todo->begin);
             $todo->end   = date::formatTime($todo->end);
 

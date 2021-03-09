@@ -171,6 +171,8 @@ else
     $lang->project->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
 }
 
+$lang->project->dividerMenu = ',execution,programplan,doc,other,';
+
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => '产品|program|product|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "项目|program|project|program=%s");
@@ -365,7 +367,7 @@ $lang->execution->subMenu->more->whitelist = array('link' => '白名单|executio
 $lang->execution->subMenu->more->action    = array('link' => '动态|execution|dynamic|executionID=%s');
 $lang->execution->subMenu->more->view      = array('link' => '概况|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 
-$lang->execution->dividerMenu = ',execution,programplan,executionbuild,story,doc,other,';
+$lang->execution->dividerMenu = ',story,doc,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
@@ -526,9 +528,7 @@ $lang->admin->menu->index   = array('link' => '首页|admin|index', 'alias' => '
 $lang->admin->menu->company = array('link' => '人员|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom  = array('link' => '自定义|custom|index', 'subModule' => 'custom');
-$lang->admin->menu->data    = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
-$lang->admin->menu->safe    = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system  = array('link' => '系统|cron|index', 'subModule' => 'cron');
+$lang->admin->menu->system  = array('link' => '系统|backup|index', 'subModule' => 'cron,admin,backup,action');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
@@ -551,11 +551,9 @@ $lang->admin->subMenu->dev->db     = array('link' => '数据库|dev|db');
 $lang->admin->subMenu->dev->editor = array('link' => '编辑器|dev|editor');
 $lang->admin->subMenu->dev->entry  = array('link' => '应用|entry|browse', 'subModule' => 'entry');
 
-$lang->admin->subMenu->data = new stdclass();
-$lang->admin->subMenu->data->backup = array('link' => '备份|backup|index', 'subModule' => 'backup');
-$lang->admin->subMenu->data->trash  = '回收站|action|trash';
-
 $lang->admin->subMenu->system = new stdclass();
+$lang->admin->subMenu->system->data       = array('link' => '数据|backup|index', 'subModule' => 'action');
+$lang->admin->subMenu->system->safe       = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
 $lang->admin->subMenu->system->cron       = array('link' => '定时|cron|index', 'subModule' => 'cron');
 $lang->admin->subMenu->system->timezone   = array('link' => '时区|custom|timezone', 'subModule' => 'custom');
 $lang->admin->subMenu->system->buildIndex = array('link' => '重建索引|search|buildindex|');
@@ -651,7 +649,6 @@ $lang->navGroup->pssp           = 'project';
 $lang->navGroup->auditplan      = 'project';
 $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
-$lang->navGroup->build          = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->projectbuild   = 'project';
 $lang->navGroup->repo           = 'project';
@@ -663,6 +660,7 @@ $lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
+$lang->navGroup->build     = 'execution';
 
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
@@ -890,8 +888,8 @@ $lang->icons['score']              = 'tint';
 /* Scrum menu. */
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
-$lang->menu->scrum->index          = '仪表盘|program|index|project={PROJECT}';
-$lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
+$lang->menu->scrum->index          = '仪表盘|project|index|project={PROJECT}';
+$lang->menu->scrum->execution      = "$lang->executionCommon|execution|all|status=all&executionID=0&from=project";
 $lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = '文档|doc|index|';
 $lang->menu->scrum->qa             = '测试|qa|index';
@@ -966,6 +964,6 @@ $lang->stakeholder->menu->list  = array('link' => '干系人列表|stakeholder|b
 $lang->stakeholder->menu->issue = array('link' => '问题管理|stakeholder|issue|');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');

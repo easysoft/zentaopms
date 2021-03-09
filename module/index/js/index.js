@@ -98,6 +98,10 @@
         {
             return link.params.from == 'project' ? 'project' : 'qa';
         }
+        if(moduleName === 'execution' && methodLowerCase === 'all')
+        {
+            return link.params.from == 'project' ? 'project' : 'execution';
+        }
         if(['repo', 'jenkins', 'job', 'compile'].includes(moduleName))
         {
             return link.prj ? 'project' : 'repo';

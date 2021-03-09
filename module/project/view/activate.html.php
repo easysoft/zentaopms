@@ -1,11 +1,11 @@
 <?php
 /**
- * The suspend file of execution module of ZenTaoPMS.
+ * The suspend file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang<wwccss@gmail.com>
- * @package     execution 
+ * @package     project 
  * @version     $Id: suspend.html.php 935 2013-01-16 07:49:24Z wwccss@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -17,10 +17,10 @@
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
-      <span class='prefix label-id'><strong><?php echo $execution->id;?></strong></span>
-      <?php echo isonlybody() ? ("<span title='$execution->name'>" . $execution->name . '</span>') : html::a($this->createLink('execution', 'view', 'execution=' . $execution->id), $execution->name, '_blank');?>
+      <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
+      <?php echo isonlybody() ? ("<span title='$project->name'>" . $project->name . '</span>') : html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
       <?php if(!isonlybody()):?>
-      <small><?php echo $lang->arrow . $lang->execution->activate;?></small>
+      <small><?php echo $lang->arrow . $lang->project->activate;?></small>
       <?php endif;?>
     </h2>
   </div>
@@ -29,7 +29,7 @@
       <tr style='height:50px;'>
         <th class='w-70px'><?php echo $lang->execution->beginAndEnd;?></th>
         <td class='muted' colspan='2'>
-          <div id='sourceTimeBox'><?php echo $execution->begin . ' ~ ' . $execution->end;?></div>
+          <div id='sourceTimeBox'><?php echo $project->begin . ' ~ ' . $project->end;?></div>
           <div id='readjustTimeBox' class='hide'>
             <div class='input-group'>
               <?php echo html::input('begin', $newBegin, "class='form-control form-date'")?>
@@ -41,7 +41,7 @@
         <td colspan='3'>
           <div class='clearfix row'>
             <div class='col-md-6 pull-left'>
-              <div class="checkbox-primary"><input name="readjustTime" value="1" id="readjustTime" type="checkbox"><label for="readjustTime" class="no-margin"><?php echo $lang->execution->readjustTime;?></label></div>
+              <div class="checkbox-primary"><input name="readjustTime" value="1" id="readjustTime" type="checkbox"><label for="readjustTime" class="no-margin"><?php echo $lang->project->readjustTime;?></label></div>
             </div>
             <div class='col-md-6 pull-left'>
               <div id='readjustTaskBox' class='checkbox-primary hidden'><input name="readjustTask" value="1" id="readjustTask" type="checkbox"> <label for='readjustTask' class='no-margin'><?php echo $lang->execution->readjustTask?></label></div>
@@ -50,10 +50,10 @@
         </td>
       </tr>
       <tr class='hide'>
-        <th><?php echo $lang->execution->status;?></th>
+        <th><?php echo $lang->project->status;?></th>
         <td><?php echo html::hidden('status', 'doing');?></td>
       </tr>
-      <?php $this->printExtendFields($execution, 'table', 'columns=5');?>
+      <?php $this->printExtendFields($project, 'table', 'columns=5');?>
       <tr>
         <th><?php echo $lang->comment;?></th>
         <td colspan='5'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>

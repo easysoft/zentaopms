@@ -16,6 +16,9 @@ js::set('orderBy', $orderBy);
 js::set('programID', $programID);
 js::set('browseType', $browseType);
 ?>
+<style>
+.project-type-label.label-outline {width: 47px;}
+</style>
 <div id="mainMenu" class="clearfix">
   <?php if($this->config->systemMode == 'new'):?>
   <div id="sidebarHeader">

@@ -221,12 +221,11 @@ class projectModel extends model
             ->fetchAll('project');
 
         $this->app->loadClass('pager', $static = true);
-        $this->loadModel('execution');
         foreach($projects as $projectID => $project)
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
-            $project->executions = $this->execution->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
+            $project->executions = $this->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $this->getParentName($project->parent);
@@ -635,8 +634,8 @@ class projectModel extends model
      */
     public function createManageLink($project)
     {
-        $link = $project->type == 'project' ? helper::createLink('project', 'browse', "projectID={$project->id}&status=all") : helper::createLink('project', 'index', "projectID={$project->id}", '', '', $project->id);
-        $icon = $project->type == 'project' ? "<i class='icon icon-program'></i> " : "<i class='icon icon-project'></i> ";
+        $link = $project->type == 'program' ? helper::createLink('project', 'browse', "projectID={$project->id}&status=all") : helper::createLink('project', 'index', "projectID={$project->id}", '', '', $project->id);
+        $icon = $project->type == 'program' ? "<i class='icon icon-program'></i> " : "<i class='icon icon-project'></i> ";
         return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
@@ -1011,6 +1010,178 @@ class projectModel extends model
     }
 
     /**
+     * Start project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function start($projectID)
+    {
+        $oldProject = $this->getById($projectID);
+        $now        = helper::now();
+
+        $project = fixer::input('post')
+            ->add('realBegan', $now)
+            ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_PROJECT)->data($project)->autoCheck()->where('id')->eq((int)$projectID)->exec();
+
+        if(!dao::isError()) return common::createChanges($oldProject, $project);
+    }
+
+    /**
+     * Put project off.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function putoff($projectID)
+    {
+        $oldProject = $this->getById($projectID);
+        $now        = helper::now();
+        $project = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->where('id')->eq((int)$projectID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldProject, $project);
+    }
+
+    /**
+     * Suspend project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function suspend($projectID)
+    {
+        $oldProject = $this->getById($projectID);
+        $now        = helper::now();
+        $project = fixer::input('post')
+            ->setDefault('status', 'suspended')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->where('id')->eq((int)$projectID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldProject, $project);
+    }
+
+    /**
+     * Activate project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function activate($projectID)
+    {
+        $oldProject = $this->getById($projectID);
+        $now        = helper::now();
+        $project = fixer::input('post')
+            ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment,readjustTime,readjustTask')
+            ->get();
+
+        if(!$this->post->readjustTime)
+        {
+            unset($project->begin);
+            unset($project->end);
+        }
+
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->where('id')->eq((int)$projectID)
+            ->exec();
+
+        /* Readjust task. */
+        if($this->post->readjustTime and $this->post->readjustTask)
+        {
+            $beginTimeStamp = strtotime($project->begin);
+            $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
+                ->where('deadline')->ne('0000-00-00')
+                ->andWhere('status')->in('wait,doing')
+                ->andWhere('project')->eq($projectID)
+                ->fetchAll();
+            foreach($tasks as $task)
+            {
+                if($task->status == 'wait' and !helper::isZeroDate($task->estStarted))
+                {
+                    $taskDays   = helper::diffDate($task->deadline, $task->estStarted);
+                    $taskOffset = helper::diffDate($task->estStarted, $oldProject->begin);
+
+                    $estStartedTimeStamp = $beginTimeStamp + $taskOffset * 24 * 3600;
+                    $estStarted = date('Y-m-d', $estStartedTimeStamp);
+                    $deadline   = date('Y-m-d', $estStartedTimeStamp + $taskDays * 24 * 3600);
+
+                    if($estStarted > $project->end) $estStarted = $project->end;
+                    if($deadline > $project->end)   $deadline   = $project->end;
+                    $this->dao->update(TABLE_TASK)->set('estStarted')->eq($estStarted)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
+                }
+                else
+                {
+                    $taskOffset = helper::diffDate($task->deadline, $oldProject->begin);
+                    $deadline   = date('Y-m-d', $beginTimeStamp + $taskOffset * 24 * 3600);
+
+                    if($deadline > $project->end) $deadline = $project->end;
+                    $this->dao->update(TABLE_TASK)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
+                }
+            }
+        }
+
+        if(!dao::isError()) return common::createChanges($oldProject, $project);
+    }
+
+    /**
+     * Close project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function close($projectID)
+    {
+        $oldProject = $this->getById($projectID);
+        $now        = helper::now();
+        $project = fixer::input('post')
+            ->setDefault('status', 'closed')
+            ->setDefault('closedBy', $this->app->user->account)
+            ->setDefault('closedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->where('id')->eq((int)$projectID)
+            ->exec();
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('project', 'close', $oldProject);
+            return common::createChanges($oldProject, $project);
+        }
+    }
+
+    /**
      * Update the program of the product.
      *
      * @param  int    $oldProgram
@@ -1338,13 +1509,14 @@ class projectModel extends model
             ->orderBy('date desc')
             ->fetchGroup('execution', 'name');
 
+        $this->loadModel('execution');
         foreach($burns as $executionID => $executionBurns)
         {
             /* If executionBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
             $begin = $executions[$executionID]->begin;
             $end   = $executions[$executionID]->end;
             if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
-            $executionBurns = $this->loadModel('execution')->processBurnData($executionBurns, $itemCounts, $begin, $end);
+            $executionBurns = $this->execution->processBurnData($executionBurns, $itemCounts, $begin, $end);
 
             /* Shorter names. */
             foreach($executionBurns as $executionBurn)
@@ -1385,8 +1557,8 @@ class projectModel extends model
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
-        $execution = $this->loadModel('execution')->getById($this->session->project);
-        if($execution and $execution->model == 'waterfall')
+        $project = $this->getByID($this->session->project);
+        if($project and $project->model == 'waterfall')
         {
             foreach($parents as $id => $execution)
             {

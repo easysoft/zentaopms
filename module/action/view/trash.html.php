@@ -12,14 +12,24 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('data');?></div>
+  <div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('system');?></div>
   <div class='btn-toolbar pull-right'>
     <?php if($type == 'hidden') echo html::a(inLink('trash', "type=all"),    $lang->goback, '', "class='btn'");?>
     <?php if($type == 'all')    echo html::a(inLink('trash', "type=hidden"), "<i class='icon-eye-close'></i> " . $lang->action->dynamic->hidden, '', "class='btn btn-danger'");?>
   </div>
 </div>
 
-<div id='mainContent'>
+<div id='mainContent' class="main-row">
+  <div class='side-col' id='sidebar'>
+    <div class='cell'>
+      <div class='list-group'>
+        <?php
+        echo html::a($this->createLink('backup', 'index'), $lang->backup->common);
+        echo html::a($this->createLink('action', 'trash'), $lang->action->trash, '', "class='active'");
+        ?>
+      </div>
+    </div>
+  </div>
   <div class='main-table' data-ride='table'>
     <table class='table has-sort-head'>
       <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>

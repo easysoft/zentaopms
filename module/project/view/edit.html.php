@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
-<?php js::set('weekend', $config->project->weekend);?>
+<?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>
@@ -49,7 +49,7 @@
           <th><?php echo $lang->project->budget;?></th>
           <td>
             <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->project->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
               <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($project->budget == 0 ? 'disabled ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
@@ -84,11 +84,11 @@
         </tr>
         <?php if($project->model == 'scrum'):?>
         <tr>
-          <th><?php echo $lang->project->days;?></th>
+          <th><?php echo $lang->execution->days;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('days', $project->days, "class='form-control'");?>
-              <span class='input-group-addon'><?php echo $lang->project->day;?></span>
+              <span class='input-group-addon'><?php echo $lang->execution->day;?></span>
             </div>
           </td>
           <td></td>
@@ -122,7 +122,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->linkPlan;?></th>
+          <th><?php echo $lang->execution->linkPlan;?></th>
           <td id="plansBox" colspan="3">
             <div class='row'>
               <?php $i = 0;?>

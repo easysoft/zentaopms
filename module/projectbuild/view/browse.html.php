@@ -17,7 +17,7 @@
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <?php
-    $label  = "<span class='text'>{$lang->project->build}</span>";
+    $label  = "<span class='text'>{$lang->execution->build}</span>";
     $active = '';
     if($type == 'all')
     {
@@ -27,7 +27,7 @@
     echo html::a(inlink('browse', "projectID={$projectID}&type=all"), $label, '', "class='btn btn-link $active' id='all'")
     ?>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
-    <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->project->byQuery;?></a>
+    <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   </div>
 </div>
 <div id="mainContent">
@@ -78,9 +78,9 @@
             {
                 echo html::a($this->createLink('build', 'view', "buildID=$build->id&type=story&link=true"), "<i class='icon icon-link'></i>", '', "class='btn' title='{$lang->build->linkStory}'");
             }
-            common::printIcon('testtask', 'create', "product=$build->product&project={$build->executionID}&build=$build->id", $build, 'list', 'bullhorn');
-            $lang->project->bug = $lang->project->viewBug;
-            common::printIcon('project', 'bug',  "project={$build->executionID}&orderBy=status&build=$build->id", $build, 'list');
+            common::printIcon('testtask', 'create', "product=$build->product&project={$build->execution}&build=$build->id", $build, 'list', 'bullhorn');
+            $lang->project->bug = $lang->execution->viewBug;
+            common::printIcon('project', 'bug',  "project={$build->execution}&orderBy=status&build=$build->id", $build, 'list');
             common::printIcon('build',   'edit', "buildID=$build->id", $build, 'list');
             if(common::hasPriv('build',  'delete', $build))
             {

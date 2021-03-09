@@ -470,7 +470,7 @@ class customModel extends model
 
     /**
      * Get UR and SR pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -487,7 +487,7 @@ class customModel extends model
         foreach($langData as $id => $content)
         {
             $value = json_decode($content->value);
-            $URSRPairs[$content->key] = $value->URName . '/' . $value->SRName;
+            $URSRPairs[$content->key] = $this->config->URAndSR ? $value->URName . '/' . $value->SRName : $value->SRName;
         }
 
         return $URSRPairs;
@@ -495,7 +495,7 @@ class customModel extends model
 
     /**
      * Get UR pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -504,8 +504,8 @@ class customModel extends model
         $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
 
         $URPairs = array();
-        foreach($URSRList as $key => $value) 
-        {    
+        foreach($URSRList as $key => $value)
+        {
             $URSR = json_decode($value);
             $URPairs[$key] = $URSR->URName;
         }
@@ -515,7 +515,7 @@ class customModel extends model
 
     /**
      * Get SR pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -524,8 +524,8 @@ class customModel extends model
         $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
 
         $SRPairs = array();
-        foreach($URSRList as $key => $value) 
-        {    
+        foreach($URSRList as $key => $value)
+        {
             $URSR = json_decode($value);
             $SRPairs[$key] = $URSR->SRName;
         }
@@ -535,7 +535,7 @@ class customModel extends model
 
     /**
      * Get UR and SR list.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -656,12 +656,13 @@ class customModel extends model
         $maxKey = $maxKey ? $maxKey : 1;
 
         /* If has custom UR and SR name. */
-        foreach($data->URName as $key => $URName)
+        foreach($data->SRName as $key => $SRName)
         {
-            $SRName = zget($data->SRName, $key, '');
+            if(isset($data->URName))  $URName = zget($data->URName, $key, '');
+            if(!isset($data->URName)) $URName = $this->lang->URCommon;
             if(!$URName || !$SRName) continue;
 
-            $URSRList = new stdclass(); 
+            $URSRList = new stdclass();
             $URSRList->SRName = $SRName;
             $URSRList->URName = $URName;
 
@@ -677,7 +678,7 @@ class customModel extends model
     /**
      * Edit UR and SR concept.
      *
-     * @param  int $key 
+     * @param  int $key
      * @access public
      * @return bool
      */
@@ -688,7 +689,7 @@ class customModel extends model
 
         if(!$data->SRName || !$data->URName) return false;
 
-        $URSRList = new stdclass(); 
+        $URSRList = new stdclass();
         $URSRList->SRName = $data->SRName;
         $URSRList->URName = $data->URName;
 
@@ -699,7 +700,7 @@ class customModel extends model
             ->andWhere('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
             ->exec();
-        
+
         return true;
     }
 

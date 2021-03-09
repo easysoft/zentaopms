@@ -526,9 +526,7 @@ $lang->admin->menu->index   = array('link' => 'Home|admin|index', 'alias' => 're
 $lang->admin->menu->company = array('link' => 'Personnel|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message = array('link' => 'Notification|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom  = array('link' => 'Custom|custom|index', 'subModule' => 'custom');
-$lang->admin->menu->data    = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
-$lang->admin->menu->safe    = array('link' => 'Sicherheit|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system  = array('link' => 'System|cron|index', 'subModule' => 'cron');
+$lang->admin->menu->system  = array('link' => 'System|backup|index', 'subModule' => 'cron,admin,backup,action');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
@@ -551,11 +549,9 @@ $lang->admin->subMenu->dev->db     = array('link' => 'Database|dev|db');
 $lang->admin->subMenu->dev->editor = array('link' => 'Editor|dev|editor');
 $lang->admin->subMenu->dev->entry  = array('link' => 'Application|entry|browse', 'subModule' => 'entry');
 
-$lang->admin->subMenu->data = new stdclass();
-$lang->admin->subMenu->data->backup = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
-$lang->admin->subMenu->data->trash  = array('link' => 'Aufräumen|action|trash');
-
 $lang->admin->subMenu->system = new stdclass();
+$lang->admin->subMenu->system->data       = array('link' => 'Data|backup|index', 'subModule' => 'action');
+$lang->admin->subMenu->system->safe       = array('link' => 'Sicherheit|admin|safe', 'alias' => 'checkweak');
 $lang->admin->subMenu->system->cron       = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
 $lang->admin->subMenu->system->timezone   = array('link' => 'Timezone|custom|timezone', 'subModule' => 'custom');
 $lang->admin->subMenu->system->buildIndex = array('link' => 'Full Text Search|search|buildindex|');
@@ -652,7 +648,6 @@ $lang->navGroup->pssp           = 'project';
 $lang->navGroup->auditplan      = 'project';
 $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
-$lang->navGroup->build          = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->projectbuild   = 'project';
 $lang->navGroup->repo           = 'project';
@@ -663,7 +658,8 @@ $lang->navGroup->report         = 'project';
 $lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->execution = 'execution';
-$lang->navGroup->task      = 'project';
+$lang->navGroup->task      = 'execution';
+$lang->navGroup->build     = 'execution';
 
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
@@ -967,6 +963,6 @@ $lang->stakeholder->menu->list  = array('link' => 'Stakeholder List|stakeholder|
 $lang->stakeholder->menu->issue = array('link' => 'Issue|stakeholder|issue|');
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');

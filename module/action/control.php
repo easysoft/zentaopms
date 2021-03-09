@@ -24,6 +24,8 @@ class action extends control
      */
     public function trash($type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('backup');
+
         /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri);

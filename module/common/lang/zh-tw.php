@@ -531,9 +531,7 @@ $lang->admin->menu->index   = array('link' => '首頁|admin|index', 'alias' => '
 $lang->admin->menu->company = array('link' => '人員|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom  = array('link' => '自定義|custom|index', 'subModule' => 'custom');
-$lang->admin->menu->data    = array('link' => '數據|backup|index', 'subModule' => 'backup,action');
-$lang->admin->menu->safe    = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system  = array('link' => '系統|cron|index', 'subModule' => 'cron');
+$lang->admin->menu->system  = array('link' => '系統|backup|index', 'subModule' => 'cron,admin,backup,action');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
@@ -556,11 +554,9 @@ $lang->admin->subMenu->dev->db     = array('link' => '資料庫|dev|db');
 $lang->admin->subMenu->dev->editor = array('link' => '編輯器|dev|editor');
 $lang->admin->subMenu->dev->entry  = array('link' => '應用|entry|browse', 'subModule' => 'entry');
 
-$lang->admin->subMenu->data = new stdclass();
-$lang->admin->subMenu->data->backup = array('link' => '備份|backup|index', 'subModule' => 'backup');
-$lang->admin->subMenu->data->trash  = '資源回收筒|action|trash';
-
 $lang->admin->subMenu->system = new stdclass();
+$lang->admin->subMenu->system->data       = array('link' => '數據|backup|index', 'subModule' => 'action');
+$lang->admin->subMenu->system->safe       = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
 $lang->admin->subMenu->system->cron       = array('link' => '定時|cron|index', 'subModule' => 'cron');
 $lang->admin->subMenu->system->timezone   = array('link' => '時區|custom|timezone', 'subModule' => 'custom');
 $lang->admin->subMenu->system->buildIndex = array('link' => '重建索引|search|buildindex|');
