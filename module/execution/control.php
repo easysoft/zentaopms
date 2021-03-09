@@ -2353,12 +2353,12 @@ class execution extends control
     public function dynamic($executionID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
         /* Save session. */
-        $uri   = $this->app->getURI(true);
+        $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri);
         $this->session->set('productPlanList', $uri);
         $this->session->set('releaseList',     $uri);
         $this->session->set('storyList',       $uri);
-        $this->session->set('executionList',     $uri);
+        $this->session->set('executionList',   $uri);
         $this->session->set('taskList',        $uri);
         $this->session->set('buildList',       $uri);
         $this->session->set('bugList',         $uri);
