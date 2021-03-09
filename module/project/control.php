@@ -117,12 +117,11 @@ class project extends control
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('parent desc')->fetchAll();
 
-        $this->view->link      = helper::createLink('project', 'index', "projectID=%s");
         $this->view->projectID = $projectID;
         $this->view->projects  = $projects;
         $this->view->module    = $module;
         $this->view->method    = $method;
-        $this->view->programs  = $this->loadModel('program')->getpairs(true);
+        $this->view->programs  = $this->loadModel('program')->getPairs(true);
 
         $this->display();
     }

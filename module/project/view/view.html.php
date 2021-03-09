@@ -18,7 +18,7 @@
       <div class="col-sm-6">
         <div class="panel block-dynamic" style="height: 280px">
           <div class="panel-heading">
-            <div class="panel-title"><?php echo $lang->project->latestDynamic;?></div>
+            <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
             <nav class="panel-actions nav nav-default">
               <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
             </nav>
@@ -40,7 +40,7 @@
       <div class="col-sm-6">
         <div class="panel block-team" style="height: 280px">
           <div class="panel-heading">
-            <div class="panel-title"><?php echo $lang->project->relatedMember;?></div>
+            <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
             <nav class="panel-actions nav nav-default">
               <li><?php common::printLink('project', 'manageMembers', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
             </nav>
@@ -122,7 +122,7 @@
                 <?php if($project->deleted):?>
                 <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
                 <?php endif; ?>
-                <span class="label label-primary label-outline"><?php echo zget($lang->project->lifeTimeList, $project->lifetime);?></span>
+                <span class="label label-primary label-outline"><?php echo zget($lang->execution->lifeTimeList, $project->lifetime);?></span>
                 <?php if(isset($project->delay)):?>
                 <span class="label label-danger label-outline"><?php echo $lang->project->delayed;?></span>
                 <?php else:?>
@@ -148,7 +148,7 @@
             </div>
           </div>
           <div class="detail">
-            <div class="detail-title"><strong><?php echo $lang->project->linkPlan;?></strong></div>
+            <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
             <div class="detail-content">
               <div class="row row-grid">
                 <?php foreach($products as $productID => $product):?>
@@ -160,7 +160,7 @@
             </div>
           </div>
           <div class='detail'>
-            <div class='detail-title'><strong><?php echo $lang->project->lblStats;?></strong></div>
+            <div class='detail-title'><strong><?php echo $lang->execution->lblStats;?></strong></div>
             <div class="detail-content">
               <table class='table table-data data-stats'>
                 <tbody>
@@ -177,31 +177,31 @@
                   <tr>
                     <th><?php echo $lang->project->begin;?></th>
                     <td><?php echo $project->begin;?></td>
-                    <th><?php echo $lang->project->totalEstimate;?></th>
-                    <td><em><?php echo (float)$workhour->totalEstimate . $lang->project->workHour;?></em></td>
+                    <th><?php echo $lang->execution->totalEstimate;?></th>
+                    <td><em><?php echo (float)$workhour->totalEstimate . $lang->execution->workHour;?></em></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->project->end;?></th>
                     <td><?php echo $project->end;?></td>
-                    <th><?php echo $lang->project->totalConsumed;?></th>
-                    <td><em><?php echo (float)$workhour->totalConsumed . $lang->project->workHour;?></em></td>
+                    <th><?php echo $lang->execution->totalConsumed;?></th>
+                    <td><em><?php echo (float)$workhour->totalConsumed . $lang->execution->workHour;?></em></td>
                   </tr>
                   <tr>
-                    <th><?php echo $lang->project->totalDays;?></th>
+                    <th><?php echo $lang->execution->totalDays;?></th>
                     <td><?php echo $project->days;?></td>
-                    <th><?php echo $lang->project->totalLeft;?></th>
-                    <td><em><?php echo (float)$workhour->totalLeft . $lang->project->workHour;?></em></td>
+                    <th><?php echo $lang->execution->totalLeft;?></th>
+                    <td><em><?php echo (float)$workhour->totalLeft . $lang->execution->workHour;?></em></td>
                   </tr>
                   <tr>
-                    <th><?php echo $lang->project->totalHours;?></th>
-                    <td><em><?php echo (float)$workhour->totalHours . $lang->project->workHour;?></em></td>
+                    <th><?php echo $lang->execution->totalHours;?></th>
+                    <td><em><?php echo (float)$workhour->totalHours . $lang->execution->workHour;?></em></td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
           <div class="detail">
-            <div class="detail-title"><strong><?php echo $lang->project->basicInfo;?></strong></div>
+            <div class="detail-title"><strong><?php echo $lang->execution->basicInfo;?></strong></div>
             <div class="detail-content">
               <table class="table table-data data-basic">
                 <tbody>

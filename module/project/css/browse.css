@@ -1,4 +1,6 @@
-#mainMenu .pull-left .checkbox-primary {display: inline-block; margin-left: 10px;}
-#mainMenu .pull-right > .btn-group + .btn {margin-left: 10px;}
-#mainMenu .pull-right > .btn-group > .btn-icon {background: transparent;}
-#mainMenu .pull-right > .btn-group > .btn-icon:hover {background: #fff;}
+.side-col .detail-content{padding-left: 10px; margin-top: 0px}
+.side-col {padding-right: 20px; width: 18%}
+#sidebar>.cell {width: 100%;}
+
+td.c-actions{overflow: visible}
+.c-actions .btn{overflow: visible}
