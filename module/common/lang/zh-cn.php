@@ -162,7 +162,7 @@ $lang->dividerMenu = ',qa,report,admin,';
 /* Program set menu. */
 $lang->program = new stdclass();
 $lang->program->menu = new stdclass();
-//$lang->program->menu->index  = '主页|program|index|';
+//$lang->program->menu->index  = '仪表盘|program|index|';
 $lang->program->menu->browse = array('link' => '项目集|program|browse|');
 
 $lang->project = new stdclass();
@@ -191,10 +191,11 @@ $lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitel
 /* Scrum menu. */
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
-$lang->product->menu->home = '主页|product|index|';
+$lang->product->menu->home = '仪表盘|product|index|';
 $lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit,manageline');
 
 $lang->product->viewMenu = new stdclass();
+$lang->product->viewMenu->dashboard   = array('link' => '仪表盘|product|dashboard|productID=%s');
 if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->viewMenu->plan        = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
@@ -203,7 +204,6 @@ $lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s'
 $lang->product->viewMenu->project     = "项目|product|project|status=all&productID=%s";
 $lang->product->viewMenu->track       = array('link' => "矩阵|story|track|productID=%s");
 $lang->product->viewMenu->doc         = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->viewMenu->dashboard   = array('link' => '仪表盘|product|dashboard|productID=%s');
 $lang->product->viewMenu->dynamic     = '动态|product|dynamic|productID=%s';
 $lang->product->viewMenu->set         = array('link' => '设置|product|view|productID=%s', 'subModule' => 'tree,branch', 'alias' => 'edit');
 
@@ -332,7 +332,7 @@ $lang->my->dividerMenu = ',myProject,team,';
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
-$lang->product->dividerMenu = ',plan,project,dashboard,';
+$lang->product->dividerMenu = ',plan,project,dynamic,';
 
 $lang->story = new stdclass();
 
