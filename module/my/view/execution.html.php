@@ -70,8 +70,8 @@
         <td><?php echo $execution->hours;?></td>
         <td><?php echo $execution->assignedToMeTasks;?></td>
         <td>
-          <div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='<?php echo $execution->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-            <div class='progress-info'><?php echo $execution->progress;?>%</div>
+          <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo $execution->progress;?></div>
           </div>
         </td>
       </tr>
