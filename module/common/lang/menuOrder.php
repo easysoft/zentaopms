@@ -80,18 +80,19 @@ $lang->release->menuOrder     = $lang->product->menuOrder;
 $lang->branch->menuOrder      = $lang->product->menuOrder;
 
 /* project menu order. */
-$lang->execution->menuOrder[5]  = 'task';
-$lang->execution->menuOrder[10] = 'kanban';
-$lang->execution->menuOrder[15] = 'burn';
-$lang->execution->menuOrder[20] = 'view';
-$lang->execution->menuOrder[25] = 'story';
-$lang->execution->menuOrder[30] = 'bug';
-$lang->execution->menuOrder[35] = 'build';
-$lang->execution->menuOrder[40] = 'testtask';
-$lang->execution->menuOrder[45] = 'doc';
-$lang->execution->menuOrder[50] = 'product';
-$lang->execution->menuOrder[55] = 'team';
-$lang->execution->menuOrder[60] = 'more';
+$lang->execution->menuOrder[5]  = 'index';
+$lang->execution->menuOrder[10] = 'task';
+$lang->execution->menuOrder[15] = 'kanban';
+$lang->execution->menuOrder[20] = 'burn';
+$lang->execution->menuOrder[25] = 'view';
+$lang->execution->menuOrder[30] = 'story';
+$lang->execution->menuOrder[35] = 'bug';
+$lang->execution->menuOrder[40] = 'build';
+$lang->execution->menuOrder[45] = 'testtask';
+$lang->execution->menuOrder[50] = 'doc';
+$lang->execution->menuOrder[55] = 'product';
+$lang->execution->menuOrder[60] = 'team';
+$lang->execution->menuOrder[65] = 'more';
 
 $lang->task->menuOrder  = $lang->execution->menuOrder;
 $lang->build->menuOrder = $lang->execution->menuOrder;

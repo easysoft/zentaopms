@@ -12,12 +12,12 @@
 class blockModel extends model
 {
     /**
-     * Save params 
-     * 
-     * @param  int    $id 
-     * @param  string $type 
-     * @param  string $appName 
-     * @param  int    $blockID 
+     * Save params
+     *
+     * @param  int    $id
+     * @param  string $type
+     * @param  string $appName
+     * @param  int    $blockID
      * @access public
      * @return void
      */
@@ -66,8 +66,8 @@ class blockModel extends model
 
     /**
      * Get block by ID.
-     * 
-     * @param  int    $blockID 
+     *
+     * @param  int    $blockID
      * @access public
      * @return object
      */
@@ -86,8 +86,8 @@ class blockModel extends model
 
     /**
      * Get saved block config.
-     * 
-     * @param  int    $id 
+     *
+     * @param  int    $id
      * @access public
      * @return object
      */
@@ -106,8 +106,8 @@ class blockModel extends model
 
     /**
      * Get last key.
-     * 
-     * @param  string $appName 
+     *
+     * @param  string $appName
      * @access public
      * @return int
      */
@@ -124,8 +124,8 @@ class blockModel extends model
 
     /**
      * Get block list for account.
-     * 
-     * @param  string $appName 
+     *
+     * @param  string $appName
      * @access public
      * @return void
      */
@@ -143,7 +143,7 @@ class blockModel extends model
 
     /**
      * Get hidden blocks
-     * 
+     *
      * @access public
      * @return array
      */
@@ -158,7 +158,7 @@ class blockModel extends model
 
     /**
      * Get data of welcome block.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -210,9 +210,9 @@ class blockModel extends model
     }
 
     /**
-     * Init block when account use first. 
-     * 
-     * @param  string    $appName 
+     * Init block when account use first.
+     *
+     * @param  string    $appName
      * @access public
      * @return bool
      */
@@ -285,8 +285,8 @@ class blockModel extends model
 
     /**
      * Get list params for product|project|todo
-     * 
-     * @param  string $module 
+     *
+     * @param  string $module
      * @access public
      * @return string
      */
@@ -302,7 +302,7 @@ class blockModel extends model
 
     /**
      * Get todo params.
-     * 
+     *
      * @access public
      * @return json
      */
@@ -313,7 +313,7 @@ class blockModel extends model
 
     /**
      * Get task params.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -334,7 +334,7 @@ class blockModel extends model
 
     /**
      * Get Bug Params.
-     * 
+     *
      * @access public
      * @return json
      */
@@ -355,7 +355,7 @@ class blockModel extends model
 
     /**
      * Get case params.
-     * 
+     *
      * @access public
      * @return json
      */
@@ -376,8 +376,8 @@ class blockModel extends model
 
     /**
      * Get testtask params.
-     * 
-     * @param  string $module 
+     *
+     * @param  string $module
      * @access public
      * @return void
      */
@@ -393,7 +393,7 @@ class blockModel extends model
 
     /**
      * Get story params.
-     * 
+     *
      * @access public
      * @return json
      */
@@ -414,7 +414,7 @@ class blockModel extends model
 
     /**
      * Get plan params.
-     * 
+     *
      * @access public
      * @return json
      */
@@ -426,7 +426,7 @@ class blockModel extends model
 
     /**
      * Get Release params.
-     * 
+     *
      * @access public
      * @return json
      */
@@ -438,7 +438,7 @@ class blockModel extends model
 
     /**
      * Get project params.
-     * 
+     *
      * @access public
      * @return json
      */
@@ -477,7 +477,7 @@ class blockModel extends model
     }
     /**
      * Get Build params.
-     * 
+     *
      * @access public
      * @return json
      */
@@ -489,7 +489,7 @@ class blockModel extends model
 
     /**
      * Get product params.
-     * 
+     *
      * @access public
      * @return json
      */
@@ -521,7 +521,7 @@ class blockModel extends model
 
     /**
      * Get product statistic params.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -537,7 +537,7 @@ class blockModel extends model
 
     /**
      * Get project statistic params.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -553,7 +553,7 @@ class blockModel extends model
 
     /**
      * Get execution statistic params.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -649,7 +649,7 @@ class blockModel extends model
         return false;
     }
 
-    /** 
+    /**
      * Get waterfall issue params.
      *
      * @param  string $module
@@ -672,7 +672,7 @@ class blockModel extends model
         return json_encode($params);
     }
 
-    /** 
+    /**
      * Get waterfall risk params.
      *
      * @param  string $module▫
@@ -696,7 +696,7 @@ class blockModel extends model
 
     /**
      * Get execution params.
-     * 
+     *
      * @access public
      * @return json
      */
@@ -718,15 +718,15 @@ class blockModel extends model
     public function getAssignToMeParams()
     {
         $params->todoNum['name']    = $this->lang->block->todoNum;
-        $params->todoNum['default'] = 20; 
+        $params->todoNum['default'] = 20;
         $params->todoNum['control'] = 'input';
 
         $params->taskNum['name']    = $this->lang->block->taskNum;
-        $params->taskNum['default'] = 20; 
+        $params->taskNum['default'] = 20;
         $params->taskNum['control'] = 'input';
 
         $params->bugNum['name']    = $this->lang->block->bugNum;
-        $params->bugNum['default'] = 20; 
+        $params->bugNum['default'] = 20;
         $params->bugNum['control'] = 'input';
 
         $params->riskNum['name']    = $this->lang->block->riskNum;
@@ -745,9 +745,9 @@ class blockModel extends model
     }
 
     /**
-     * Get closed block pairs. 
-     * 
-     * @param  string $closedBlock 
+     * Get closed block pairs.
+     *
+     * @param  string $closedBlock
      * @access public
      * @return array
      */
@@ -788,8 +788,8 @@ class blockModel extends model
 
     /**
      * Append count params.
-     * 
-     * @param  object $params 
+     *
+     * @param  object $params
      * @access public
      * @return object
      */
@@ -799,7 +799,7 @@ class blockModel extends model
 
         $params->count = array();
         $params->count['name']    = $this->lang->block->count;
-        $params->count['default'] = 20; 
+        $params->count['default'] = 20;
         $params->count['control'] = 'input';
 
         return $params;
@@ -807,8 +807,8 @@ class blockModel extends model
 
     /**
      * Check whether long block.
-     * 
-     * @param  object    $block 
+     *
+     * @param  object    $block
      * @access public
      * @return book
      */
@@ -820,8 +820,8 @@ class blockModel extends model
 
     /**
      * Check API for ranzhi
-     * 
-     * @param  string    $hash 
+     *
+     * @param  string    $hash
      * @access public
      * @return bool
      */
@@ -838,7 +838,7 @@ class blockModel extends model
         return $key == $hash;
     }
 
-    /** 
+    /**
      * Get testtask params.
      *▫
      * @param  string $module

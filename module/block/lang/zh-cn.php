@@ -224,6 +224,40 @@ $lang->block->default['execution']['5']['grid']  = 8;
 $lang->block->default['execution']['5']['params']['count']   = 15;
 $lang->block->default['execution']['5']['params']['orderBy'] = 'id_desc';
 
+$lang->block->default['execution']['1']['title'] = '执行统计';
+$lang->block->default['execution']['1']['block'] = 'statistic';
+$lang->block->default['execution']['1']['grid']  = 8;
+
+$lang->block->default['execution']['1']['params']['type']  = 'all';
+$lang->block->default['execution']['1']['params']['count'] = '20';
+
+$lang->block->default['execution']['2']['title'] = '执行总览';
+$lang->block->default['execution']['2']['block'] = 'overview';
+$lang->block->default['execution']['2']['grid']  = 4;
+
+$lang->block->default['execution']['3']['title'] = '未关闭的执行';
+$lang->block->default['execution']['3']['block'] = 'list';
+$lang->block->default['execution']['3']['grid']  = 8;
+
+$lang->block->default['execution']['3']['params']['count']   = 15;
+$lang->block->default['execution']['3']['params']['orderBy'] = 'id_desc';
+$lang->block->default['execution']['3']['params']['type']    = 'undone';
+
+$lang->block->default['execution']['4']['title'] = '指派给我的任务';
+$lang->block->default['execution']['4']['block'] = 'task';
+$lang->block->default['execution']['4']['grid']  = 4;
+
+$lang->block->default['execution']['4']['params']['count']   = 15;
+$lang->block->default['execution']['4']['params']['orderBy'] = 'id_desc';
+$lang->block->default['execution']['4']['params']['type']    = 'assignedTo';
+
+$lang->block->default['execution']['5']['title'] = '版本列表';
+$lang->block->default['execution']['5']['block'] = 'build';
+$lang->block->default['execution']['5']['grid']  = 8;
+
+$lang->block->default['execution']['5']['params']['count']   = 15;
+$lang->block->default['execution']['5']['params']['orderBy'] = 'id_desc';
+
 $lang->block->default['qa']['1']['title'] = '测试统计';
 $lang->block->default['qa']['1']['block'] = 'statistic';
 $lang->block->default['qa']['1']['grid']  = 8;

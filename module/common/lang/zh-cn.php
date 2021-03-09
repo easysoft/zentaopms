@@ -335,10 +335,10 @@ $lang->story = new stdclass();
 
 $lang->story->menu = $lang->product->menu;
 
-/* 项目视图菜单设置。*/
+/* 执行视图菜单设置。*/
 $lang->execution = new stdclass();
 $lang->execution->menu = new stdclass();
-
+$lang->execution->menu->home     = '仪表盘|execution|index|';
 $lang->execution->menu->task     = array('link' => '任务|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
 $lang->execution->menu->kanban   = array('link' => '看板|execution|kanban|executionID=%s');
 $lang->execution->menu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
@@ -367,7 +367,7 @@ $lang->execution->subMenu->more->whitelist = array('link' => '白名单|executio
 $lang->execution->subMenu->more->action    = array('link' => '动态|execution|dynamic|executionID=%s');
 $lang->execution->subMenu->more->view      = array('link' => '概况|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 
-$lang->execution->dividerMenu = ',story,doc,';
+$lang->execution->dividerMenu = ',task,story,doc,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();

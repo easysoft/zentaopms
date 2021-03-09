@@ -97,7 +97,7 @@ $(function()
         <?php foreach($executions as $execution):?>
         <li <?php if($execution->id == $selected) echo "class='active' id='activeExecution'";?> executionID='<?php echo $execution->id;?>'>
           <a href="###" data-target="#tab3Content<?php echo $execution->id;?>" data-toggle="tab" title='<?php echo $execution->name;?>'><?php echo $execution->name;?></a>
-          <?php echo html::a(helper::createLink('project', 'task', "executionID=$execution->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->execution->task}");?>
+          <?php echo html::a(helper::createLink('execution', 'task', "executionID=$execution->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->execution->task}");?>
         </li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
@@ -144,11 +144,11 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->task->allTasks;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->totalTasks) ? 0 : html::a($this->createLink('project', 'task', "executionID={$execution->id}&status=all"), $execution->totalTasks);?></td>
+                      <td class='text-left'><?php echo empty($execution->totalTasks) ? 0 : html::a($this->createLink('execution', 'task', "executionID={$execution->id}&status=all"), $execution->totalTasks);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->task->noFinished;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->undoneTasks) ? 0 : html::a($this->createLink('project', 'task', "executionID={$execution->id}&status=undone"), $execution->undoneTasks);?></td>
+                      <td class='text-left'><?php echo empty($execution->undoneTasks) ? 0 : html::a($this->createLink('execution', 'task', "executionID={$execution->id}&status=undone"), $execution->undoneTasks);?></td>
                     </tr>
                   </table>
                 </div>
@@ -164,11 +164,11 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->story->total;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->totalStories) ? 0 : html::a($this->createLink('project', 'story', "executionID={$execution->id}&orderBy=order_desc&type=all"), $execution->totalStories);?></td>
+                      <td class='text-left'><?php echo empty($execution->totalStories) ? 0 : html::a($this->createLink('execution', 'story', "executionID={$execution->id}&orderBy=order_desc&type=all"), $execution->totalStories);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->story->unclosed;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->unclosedStories) ? 0 : html::a($this->createLink('project', 'story', "executionID={$execution->id}&orderBy=order_desc&type=unclosed"), $execution->unclosedStories);?></td>
+                      <td class='text-left'><?php echo empty($execution->unclosedStories) ? 0 : html::a($this->createLink('execution', 'story', "executionID={$execution->id}&orderBy=order_desc&type=unclosed"), $execution->unclosedStories);?></td>
                     </tr>
                   </table>
                 </div>
@@ -185,11 +185,11 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->bug->allBugs;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->totalBugs) ? 0 : html::a($this->createLink('project', 'bug', "executionID={$execution->id}&orderBy=status,id_desc&build=0&type=all"), $execution->totalBugs);?></td>
+                      <td class='text-left'><?php echo empty($execution->totalBugs) ? 0 : html::a($this->createLink('execution', 'bug', "executionID={$execution->id}&orderBy=status,id_desc&build=0&type=all"), $execution->totalBugs);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->bug->unResolved;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->activeBugs) ? 0 : html::a($this->createLink('project', 'bug', "executionID={$execution->id}&orderBy=status,id_desc&build=0&type=unresolved"), $execution->activeBugs);?></td>
+                      <td class='text-left'><?php echo empty($execution->activeBugs) ? 0 : html::a($this->createLink('execution', 'bug', "executionID={$execution->id}&orderBy=status,id_desc&build=0&type=unresolved"), $execution->activeBugs);?></td>
                     </tr>
                   </table>
                 </div>
