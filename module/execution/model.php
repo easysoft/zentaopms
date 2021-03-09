@@ -2846,7 +2846,7 @@ class executionModel extends model
     {
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
-        $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecution);
+        $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->config->execution->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
@@ -3462,7 +3462,7 @@ class executionModel extends model
         $productPairs = $this->getStageLinkProductPairs($stageIdList);
 
         $recentExecutions = isset($this->config->execution->recentExecutions) ? explode(',', $this->config->execution->recentExecutions) : array();
-        $allExecution     = array('recent' => array(), 'mine' => array());
+        $allExecutions    = array('recent' => array(), 'mine' => array());
         foreach($executions as $execution)
         {
             if($execution->type == 'stage')  $execution->name = zget($executionPairs, $execution->execution) . '/' . zget($productPairs, $execution->id) . '/' . $execution->name;
@@ -3470,14 +3470,14 @@ class executionModel extends model
             if(in_array($execution->id, $recentExecutions))
             {
                 $index = array_search($execution->id, $recentExecutions);
-                $allExecution['recent'][$index] = $execution;
+                $allExecutions['recent'][$index] = $execution;
                 continue;
             }
-            $allExecution['mine'][] = $execution;
+            $allExecutions['mine'][] = $execution;
         }
 
-        ksort($allExecution['recent']);
-        return $allExecution;
+        ksort($allExecutions['recent']);
+        return $allExecutions;
     }
 
     /**

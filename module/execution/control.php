@@ -2407,14 +2407,14 @@ class execution extends control
         $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         /* Assign. */
-        $this->view->executionID  = $executionID;
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->account    = $account;
-        $this->view->param      = $param;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction  = $direction;
+        $this->view->executionID = $executionID;
+        $this->view->type        = $type;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->account     = $account;
+        $this->view->param       = $param;
+        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction, $type);
+        $this->view->direction   = $direction;
         $this->display();
     }
 
@@ -2498,14 +2498,14 @@ class execution extends control
      */
     public function ajaxGetRecentExecutions()
     {
-        $allExecution = $this->execution->getRecentExecutions();
-        if(!empty($allExecution))
+        $allExecutions = $this->execution->getRecentExecutions();
+        if(!empty($allExecutions))
         {
-            foreach($allExecution as $type => $executionList)
+            foreach($allExecutions as $type => $executionList)
             {
                 echo '<div class="heading">'. $this->lang->execution->$type . '</div>';
                 $color          = $type == 'recent' ? 'text-brown' : '';
-                $executions     = $allExecution[$type];
+                $executions     = $allExecutions[$type];
                 $executionsName = array();
                 foreach($executions as $execution) $executionsName[] = $execution->name;
                 $executionsPinYin = common::convert2Pinyin($executionsName);
@@ -2602,8 +2602,8 @@ class execution extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->execution->allExecution;
-        $this->view->position[] = $this->lang->execution->allExecution;
+        $this->view->title      = $this->lang->execution->allExecutions;
+        $this->view->position[] = $this->lang->execution->allExecutions;
 
         $this->view->executionStats = $this->project->getStats($this->session->project, $status, $productID, 0, 30, $orderBy, $pager);
         $this->view->products       = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->project);

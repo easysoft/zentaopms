@@ -59,9 +59,9 @@ $lang->block->resolvedRisks       = 'Risks Resolved';
 $lang->block->createdIssues       = 'Issues Created';
 $lang->block->resolvedIssues      = 'Issues Resolved';
 $lang->block->createdDocs         = 'Docs Created';
-$lang->block->allProject          = 'All ' . $lang->executionCommon;
-$lang->block->doingProject        = 'Doning ' . $lang->executionCommon;
-$lang->block->finishProject       = 'Finish ' . $lang->executionCommon;
+$lang->block->allExecutions       = 'All ' . $lang->executionCommon;
+$lang->block->doingExecution      = 'Doning ' . $lang->executionCommon;
+$lang->block->finishExecution     = 'Finish ' . $lang->executionCommon;
 $lang->block->estimatedHours      = 'Estimated Hours';
 $lang->block->consumedHours       = 'Consumed Hours';
 $lang->block->time                = 'No';
@@ -472,7 +472,7 @@ $lang->block->typeList->story['assignedTo'] = 'AssignedToMe';
 $lang->block->typeList->story['openedBy']   = 'CreatedByMe';
 $lang->block->typeList->story['reviewedBy'] = 'ReviewedByMe';
 $lang->block->typeList->story['closedBy']   = 'ClosedByMe' ;
- 
+
 $lang->block->typeList->product['noclosed'] = 'Open';
 $lang->block->typeList->product['closed']   = 'Closed';
 $lang->block->typeList->product['all']      = 'All';

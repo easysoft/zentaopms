@@ -96,8 +96,8 @@ $lang->doc->removeMenu     = 'Décoller du Menu';
 $lang->doc->search         = 'Rechercher';
 
 /* 查询条件列表 */
-$lang->doc->allProduct = 'Tous les ' . $lang->productCommon . 's';
-$lang->doc->allProject = 'Tous les ' . $lang->executionCommon . 's';
+$lang->doc->allProduct    = 'Tous les' . $lang->productCommon . 's';
+$lang->doc->allExecutions = 'Tous les' . $lang->executionCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';
 $lang->doc->libTypeList['execution'] = 'Bibliothèque ' . $lang->executionCommon;
