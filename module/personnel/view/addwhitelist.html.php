@@ -16,8 +16,8 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class='input-group space w-200px'>
-      <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
-      <?php echo html::select('dept', $depts, $deptID, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
+      <span class='input-group-addon'><?php echo $lang->execution->selectDept?></span>
+      <?php echo html::select('dept', $depts, $deptID, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
     </div>
   </div>
 </div>

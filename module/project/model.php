@@ -1344,7 +1344,7 @@ class projectModel extends model
             $begin = $executions[$executionID]->begin;
             $end   = $executions[$executionID]->end;
             if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
-            $executionBurns = $this->processBurnData($executionBurns, $itemCounts, $begin, $end);
+            $executionBurns = $this->loadModel('execution')->processBurnData($executionBurns, $itemCounts, $begin, $end);
 
             /* Shorter names. */
             foreach($executionBurns as $executionBurn)

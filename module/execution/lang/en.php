@@ -10,8 +10,8 @@
  * @link        http://www.zentao.net
  */
 /* Fields. */
-$lang->execution->common         = $lang->executionCommon;
-$lang->execution->allProjects    = 'All ' . $lang->executionCommon . 's';
+$lang->executionCommon         = $lang->executionCommon;
+$lang->execution->allExecutions  = 'All ' . $lang->executionCommon . 's';
 $lang->execution->id             = $lang->executionCommon . ' ID';
 $lang->execution->type           = 'Type';
 $lang->execution->name           = "{$lang->executionCommon} Name";
