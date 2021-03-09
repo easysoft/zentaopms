@@ -31,7 +31,7 @@
           <th class="text-left"><?php echo $lang->story->title;?></th>
           <th class='c-user'>  <?php echo $lang->openedByAB;?></th>
           <th class='c-user'>  <?php echo $lang->assignedToAB;?></th>
-          <th class='w-60px'>  <?php echo $lang->story->estimateAB;?></th>
+          <th class='w-60px text-right'>  <?php echo $lang->story->estimateAB;?></th>
           <th class='c-status'><?php echo $lang->statusAB;?></th>
           <th class='w-80px'>  <?php echo $lang->story->stageAB;?></th>
         </tr>
@@ -52,7 +52,7 @@
           </td>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td><?php echo zget($users, $story->assignedTo);?></td>
-          <td><?php echo $story->estimate;?></td>
+          <td class='w-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
           <td>
             <span class='status-story status-<?php echo $story->status?>'>
               <?php echo $this->processStatus('story', $story);?>

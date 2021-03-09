@@ -76,7 +76,7 @@ $config->task->datatable->fieldList['status']['width']    = '80';
 $config->task->datatable->fieldList['status']['required'] = 'no';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
-$config->task->datatable->fieldList['estimate']['fixed']    = 'no';
+$config->task->datatable->fieldList['estimate']['fixed']    = 'right';
 $config->task->datatable->fieldList['estimate']['width']    = '60';
 $config->task->datatable->fieldList['estimate']['required'] = 'no';
 

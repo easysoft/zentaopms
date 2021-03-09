@@ -18,7 +18,7 @@
     </div>
     <table class='table tablesorter'>
       <thead>
-        <tr class='text-center'>
+        <tr>
           <th class='c-id text-left'>
             <?php if($allStories):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -33,12 +33,12 @@
           <th class='text-left'><?php echo $lang->story->title;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
           <th class='c-user'><?php echo $lang->assignedToAB;?></th>
-          <th class='w-80px'><?php echo $lang->story->estimateAB;?></th>
+          <th class='w-80px text-right'><?php echo $lang->story->estimateAB;?></th>
           <th class='w-80px'><?php echo $lang->statusAB;?></th>
           <th class='w-80px'><?php echo $lang->story->stageAB;?></th>
         </tr>
       </thead>
-      <tbody class='text-center'>
+      <tbody>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allStories as $story):?>
         <tr>
@@ -56,7 +56,7 @@
           </td>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td><?php echo zget($users, $story->assignedTo);?></td>
-          <td title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+          <td class='text-right'title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
           <td>
             <span class='status-story status-<?php echo $story->status?>'>
               <?php echo $this->processStatus('story', $story);?>
