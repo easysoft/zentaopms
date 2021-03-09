@@ -115,20 +115,14 @@ class project extends control
      */
     public function ajaxGetDropMenu($projectID = 0, $module, $method)
     {
-        $closedProjects = $this->program->getProjectList(0, 'closed', 0, 'id_desc');
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('parent desc')->fetchAll();
 
-        $closedProjectNames = array();
-        foreach($closedProjects as $project) $closedProjectNames = common::convert2Pinyin($closedProjectNames);
-
-        $closedProjectsHtml = '';
-        foreach($closedProjects as $project) $closedProjectsHtml .= html::a($this->createLink('project', 'index', '', '', '', $project->id), '<i class="icon icon-menu-doc"></i>' . $project->name);
-
+        $this->view->link      = helper::createLink('project', 'index', "projectID=%s");
         $this->view->projectID = $projectID;
+        $this->view->projects  = $projects;
         $this->view->module    = $module;
         $this->view->method    = $method;
-
-        $this->view->normalProjectsHtml = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'dropmenu');
-        $this->view->closedProjectsHtml = $closedProjectsHtml;
+        $this->view->programs  = $this->loadModel('program')->getpairs(true);
 
         $this->display();
     }
