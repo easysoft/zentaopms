@@ -912,8 +912,8 @@ $lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakehold
 $lang->scrum->setMenu = new stdclass();
 $lang->scrum->setMenu->view      = array('link' => '概况|project|view|project={PROJECT}', 'alias' => 'edit');
 $lang->scrum->setMenu->products  = array('link' => '产品|project|manageProducts|project={PROJECT}', 'alias' => 'manageproducts');
-$lang->scrum->setMenu->group     = array('link' => '权限|project|group|project={PROJECT}', 'alias' => 'group,manageview,managepriv');
 $lang->scrum->setMenu->members   = array('link' => '团队|project|manageMembers|project={PROJECT}', 'alias' => 'managemembers');
+$lang->scrum->setMenu->group     = array('link' => '权限|project|group|project={PROJECT}', 'alias' => 'group,manageview,managepriv');
 $lang->scrum->setMenu->whitelist = array('link' => '白名单|project|whitelist|project={PROJECT}', 'subModule' => 'personnel');
 
 /* Waterfall menu. */
