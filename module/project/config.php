@@ -1,22 +1,14 @@
 <?php
 $config->project = new stdclass();
-
 $config->project->editor = new stdclass();
-$config->project->editor->pgmcreate   = array('id' => 'desc',    'tools' => 'simpleTools');
-$config->project->editor->pgmedit     = array('id' => 'desc',    'tools' => 'simpleTools');
-$config->project->editor->pgmclose    = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->pgmstart    = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->pgmactivate = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->pgmfinish   = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->pgmsuspend  = array('id' => 'comment', 'tools' => 'simpleTools');
 
-$config->project->editor->prjcreate   = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->project->editor->prjedit     = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->project->editor->prjclose    = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->prjsuspend  = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->prjstart    = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->prjactivate = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->prjview     = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->project->editor->edit     = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->project->editor->close    = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->suspend  = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->start    = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->activate = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->view     = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->project->list = new stdclass();
 $config->project->list->exportFields = 'id,name,code,template,product,status,begin,end,budget,PM,end,desc';

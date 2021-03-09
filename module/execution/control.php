@@ -2602,8 +2602,8 @@ class execution extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->execution->allExecutions;
-        $this->view->position[] = $this->lang->execution->allExecutions;
+        $this->view->title      = $this->lang->execution->allExecution;
+        $this->view->position[] = $this->lang->execution->allExecution;
 
         $this->view->executionStats = $this->project->getStats($this->session->project, $status, $productID, 0, 30, $orderBy, $pager);
         $this->view->products       = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->project);

@@ -48,7 +48,7 @@
           <div class="overview-title"><i class="icon icon-cost"></i> <?php echo $lang->block->spent;?></div>
           <div class="tile-amount">￥0</div>
           <div class="tile-info">
-            <?php $budget = $totalData[$projectID]->budget != 0 ? zget($lang->project->currencySymbol, $totalData[$projectID]->budgetUnit) . number_format($totalData[$projectID]->budget, 2) : $lang->program->future;?>
+            <?php $budget = $totalData[$projectID]->budget != 0 ? zget($lang->project->currencySymbol, $totalData[$projectID]->budgetUnit) . number_format($totalData[$projectID]->budget, 2) : $lang->project->future;?>
             <span class="extra-tips"><?php echo $lang->block->budget . ' ' . $budget;?></span>
           </div>
         </div>

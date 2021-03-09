@@ -1010,6 +1010,178 @@ class projectModel extends model
     }
 
     /**
+     * Start project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function start($projectID)
+    {
+        $oldProject = $this->getById($projectID);
+        $now        = helper::now();
+
+        $project = fixer::input('post')
+            ->add('realBegan', $now)
+            ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_PROJECT)->data($project)->autoCheck()->where('id')->eq((int)$projectID)->exec();
+
+        if(!dao::isError()) return common::createChanges($oldProject, $project);
+    }
+
+    /**
+     * Put project off.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function putoff($projectID)
+    {
+        $oldProject = $this->getById($projectID);
+        $now        = helper::now();
+        $project = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->where('id')->eq((int)$projectID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldProject, $project);
+    }
+
+    /**
+     * Suspend project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function suspend($projectID)
+    {
+        $oldProject = $this->getById($projectID);
+        $now        = helper::now();
+        $project = fixer::input('post')
+            ->setDefault('status', 'suspended')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->where('id')->eq((int)$projectID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldProject, $project);
+    }
+
+    /**
+     * Activate project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function activate($projectID)
+    {
+        $oldProject = $this->getById($projectID);
+        $now        = helper::now();
+        $project = fixer::input('post')
+            ->setDefault('status', 'doing')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment,readjustTime,readjustTask')
+            ->get();
+
+        if(!$this->post->readjustTime)
+        {
+            unset($project->begin);
+            unset($project->end);
+        }
+
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->where('id')->eq((int)$projectID)
+            ->exec();
+
+        /* Readjust task. */
+        if($this->post->readjustTime and $this->post->readjustTask)
+        {
+            $beginTimeStamp = strtotime($project->begin);
+            $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
+                ->where('deadline')->ne('0000-00-00')
+                ->andWhere('status')->in('wait,doing')
+                ->andWhere('project')->eq($projectID)
+                ->fetchAll();
+            foreach($tasks as $task)
+            {
+                if($task->status == 'wait' and !helper::isZeroDate($task->estStarted))
+                {
+                    $taskDays   = helper::diffDate($task->deadline, $task->estStarted);
+                    $taskOffset = helper::diffDate($task->estStarted, $oldProject->begin);
+
+                    $estStartedTimeStamp = $beginTimeStamp + $taskOffset * 24 * 3600;
+                    $estStarted = date('Y-m-d', $estStartedTimeStamp);
+                    $deadline   = date('Y-m-d', $estStartedTimeStamp + $taskDays * 24 * 3600);
+
+                    if($estStarted > $project->end) $estStarted = $project->end;
+                    if($deadline > $project->end)   $deadline   = $project->end;
+                    $this->dao->update(TABLE_TASK)->set('estStarted')->eq($estStarted)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
+                }
+                else
+                {
+                    $taskOffset = helper::diffDate($task->deadline, $oldProject->begin);
+                    $deadline   = date('Y-m-d', $beginTimeStamp + $taskOffset * 24 * 3600);
+
+                    if($deadline > $project->end) $deadline = $project->end;
+                    $this->dao->update(TABLE_TASK)->set('deadline')->eq($deadline)->where('id')->eq($task->id)->exec();
+                }
+            }
+        }
+
+        if(!dao::isError()) return common::createChanges($oldProject, $project);
+    }
+
+    /**
+     * Close project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function close($projectID)
+    {
+        $oldProject = $this->getById($projectID);
+        $now        = helper::now();
+        $project = fixer::input('post')
+            ->setDefault('status', 'closed')
+            ->setDefault('closedBy', $this->app->user->account)
+            ->setDefault('closedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->where('id')->eq((int)$projectID)
+            ->exec();
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('project', 'close', $oldProject);
+            return common::createChanges($oldProject, $project);
+        }
+    }
+
+    /**
      * Update the program of the product.
      *
      * @param  int    $oldProgram

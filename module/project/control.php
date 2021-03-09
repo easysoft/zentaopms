@@ -939,7 +939,7 @@ class project extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('project', $projectID);
 
-        $this->display('project', 'close');
+        $this->display();
     }
 
     /**
