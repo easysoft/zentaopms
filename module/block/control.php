@@ -65,10 +65,11 @@ class block extends control
         elseif(isset($this->lang->block->moduleList[$module]))
         {
             $this->get->set('mode', 'getblocklist');
-            if($module == 'program') $this->get->set('dashboard', 'program');
+            if($module == 'project') $this->get->set('dashboard', 'project');
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
             $this->view->module = $module;
         }
+
         $this->view->title   = $title;
         $this->view->block   = $this->block->getByID($id);
         $this->view->blockID = $id;
@@ -217,14 +218,6 @@ class block extends control
         {
             $project     = $this->loadModel('project')->getByID($this->session->project);
             $commonField = $project->model . 'common';
-        }
-
-        /* Replace the block Title saved in the database. */
-        if($module == 'execution')
-        {
-            $projectBlock = array();
-            foreach($this->lang->block->default['execution'] as $block) $projectBlock[$block['block']] = $block['title'];
-            foreach($blocks as $block) $block->title = $projectBlock[$block->block];
         }
 
         $inited = empty($this->config->$module->$commonField->blockInited) ? '' : $this->config->$module->$commonField->blockInited;
@@ -1347,7 +1340,7 @@ class block extends control
         $releases = array();
         $count    = isset($this->params->count) ? (int)$this->params->count : 15;
 
-        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->project)->limit(15)->fetchPairs();
+        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
         $productIdList = array_keys($products);
         if(!empty($productIdList))
         {

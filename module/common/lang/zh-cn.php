@@ -528,7 +528,7 @@ $lang->admin->menu->index   = array('link' => '首页|admin|index', 'alias' => '
 $lang->admin->menu->company = array('link' => '人员|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom  = array('link' => '自定义|custom|index', 'subModule' => 'custom');
-$lang->admin->menu->system  = array('link' => '系统|backup|index', 'subModule' => 'cron,admin,backup,action');
+$lang->admin->menu->system  = array('link' => '系统|backup|index', 'subModule' => 'cron,backup,action');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
