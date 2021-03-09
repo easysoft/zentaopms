@@ -452,13 +452,13 @@ class commonModel extends model
     }
 
     /**
-     * Init submenu for program menu.
+     * Init submenu for project menu.
      *
      * @static
      * @access public
      * @return array
      */
-    public static function initProgramSubmenu()
+    public static function initProjectSubmenu()
     {
         global $lang, $app;
         $moduleName = $app->getModuleName();
@@ -2369,7 +2369,14 @@ EOD;
         }
         if($group == 'project')
         {
-            $lang->menu = $config->systemMode == 'new' ? self::getProgramMainMenu($moduleName) : $lang->project->menu;
+            if($config->systemMode == 'classic' or $methodName == 'browse')
+            {
+                $lang->menu = $lang->project->menu;
+            }
+            else
+            {
+                $lang->menu = self::getProjectMainMenu($moduleName);
+            }
         }
     }
 
@@ -2409,21 +2416,21 @@ EOD;
     }
 
     /**
-     * Get program main menu by model.
+     * Get project main menu by model.
      *
      * @param  string $moduleName
      * @static
      * @access public
      * @return string
      */
-    public static function getProgramMainMenu($moduleName)
+    public static function getProjectMainMenu($moduleName)
     {
         global $app, $lang, $dbh, $config;
-        $program = $dbh->query("SELECT * FROM " . TABLE_PROGRAM . " WHERE `id` = '{$app->session->project}'")->fetch();
-        if(empty($program)) return;
+        $project = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->project}'")->fetch();
+        if(empty($project)) return;
 
-        self::initProgramSubmenu();
-        if($program->model == 'scrum')
+        self::initProjectSubmenu();
+        if($project->model == 'scrum')
         {
             $lang->menuOrder = $lang->scrum->menuOrder;
 
@@ -2432,7 +2439,7 @@ EOD;
             return self::processMenuVars($lang->menu->scrum);
         }
 
-        if($program->model == 'waterfall')
+        if($project->model == 'waterfall')
         {
             $lang->project->dividerMenu = str_replace(',project,', ',', $lang->project->dividerMenu);
             $lang->release->menu        = new stdclass();
