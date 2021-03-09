@@ -440,6 +440,8 @@ class product extends control
             $methodName = $programID ? 'product' : 'view';
             $param      = $programID ? "programID=$programID" : "product=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
+
+            if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
