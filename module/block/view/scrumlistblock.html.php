@@ -17,8 +17,8 @@
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-projects tablesorter'>
     <thead>
       <tr class='text-center'>
-        <th class='c-name text-left'><?php echo $lang->project->name;?></th>
-        <th class="c-date"><?php echo $lang->project->end;?></th>
+        <th class='c-name text-left'><?php echo $lang->execution->name;?></th>
+        <th class="c-date"><?php echo $lang->execution->end;?></th>
         <?php if($longBlock):?>
         <?php $thClass = common::checkNotCN() ? 'w-85px' : 'c-hours';?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
