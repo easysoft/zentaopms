@@ -8,12 +8,13 @@ include 'chosen.html.php';
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
 <?php
-$rawModule = zget($lang->navGroup, $app->rawModule);
-$isProgram = $rawModule == 'program';
-$isProduct = $rawModule == 'product';
-$isProject = $rawModule == 'project';
-$isReport  = $rawModule == 'report';
-$isQa      = $rawModule == 'qa';
+$rawModule   = zget($lang->navGroup, $app->rawModule);
+$isProgram   = $rawModule == 'program';
+$isProduct   = $rawModule == 'product';
+$isProject   = $rawModule == 'project';
+$isExecution = $rawModule == 'execution';
+$isReport    = $rawModule == 'report';
+$isQa        = $rawModule == 'qa';
 ?>
 <header id='header'>
   <div id='mainHeader'>
@@ -30,11 +31,12 @@ $isQa      = $rawModule == 'qa';
       </div>
       <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>
       <div id='toolbar'>
-        <?php if($isProgram) echo isset($lang->program->mainMenuAction) ? $lang->program->mainMenuAction : '';?>
-        <?php if($isProject) echo $this->loadModel('project')->getMainAction($app->rawModule, $app->rawMethod);?>
-        <?php if($isProduct) echo isset($lang->product->mainMenuAction) ? $lang->product->mainMenuAction : '';?>
-        <?php if($isReport)  echo isset($lang->report->mainMenuAction) ? $lang->report->mainMenuAction : '';?>
-        <?php if($isQa)      echo isset($lang->qa->mainMenuAction) ? $lang->qa->mainMenuAction : '';?>
+        <?php if($isProgram)   echo isset($lang->program->mainMenuAction) ? $lang->program->mainMenuAction : '';?>
+        <?php if($isProject)   echo $this->loadModel('project')->getMainAction($app->rawModule, $app->rawMethod);?>
+        <?php if($isExecution) echo $this->execution->getMainAction($app->rawModule, $app->rawMethod);?>
+        <?php if($isProduct)   echo isset($lang->product->mainMenuAction) ? $lang->product->mainMenuAction : '';?>
+        <?php if($isReport)    echo isset($lang->report->mainMenuAction) ? $lang->report->mainMenuAction : '';?>
+        <?php if($isQa)        echo isset($lang->qa->mainMenuAction) ? $lang->qa->mainMenuAction : '';?>
       </div>
     </div>
   </div>

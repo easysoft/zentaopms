@@ -868,6 +868,21 @@ class executionModel extends model
     }
 
     /**
+     * Get execution main menu action.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return string
+     */
+    public function getMainAction($module, $method)
+    {
+        $link = html::a(helper::createLink('execution', 'all'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
+        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
+        return common::hasPriv('execution', 'all') ? $html : '';
+    }
+
+    /**
      * Get project pairs.
      *
      * @param  int    $projectID
