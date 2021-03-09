@@ -41,6 +41,8 @@ class backup extends control
      */
     public function index()
     {
+        $this->loadModel('action');
+
         $backups = array();
         if(empty($this->view->error))
         {

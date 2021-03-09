@@ -526,9 +526,7 @@ $lang->admin->menu->index   = array('link' => 'Accueil|admin|index', 'alias' => 
 $lang->admin->menu->company = array('link' => 'Personnel|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message = array('link' => 'Notification|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom  = array('link' => 'Custom|custom|index', 'subModule' => 'custom');
-$lang->admin->menu->data    = array('link' => 'Données|backup|index', 'subModule' => 'backup,action');
-$lang->admin->menu->safe    = array('link' => 'Sécurité|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system  = array('link' => 'Système|cron|index', 'subModule' => 'cron');
+$lang->admin->menu->system  = array('link' => 'Système|backup|index', 'subModule' => 'cron,admin,backup,action');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
@@ -551,11 +549,9 @@ $lang->admin->subMenu->dev->db     = array('link' => 'Database|dev|db');
 $lang->admin->subMenu->dev->editor = array('link' => 'Editor|dev|editor');
 $lang->admin->subMenu->dev->entry  = array('link' => 'Application|entry|browse', 'subModule' => 'entry');
 
-$lang->admin->subMenu->data = new stdclass();
-$lang->admin->subMenu->data->backup = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
-$lang->admin->subMenu->data->trash  = 'Corbeille|action|trash';
-
 $lang->admin->subMenu->system = new stdclass();
+$lang->admin->subMenu->system->data       = array('link' => 'Données|backup|index', 'subModule' => 'action');
+$lang->admin->subMenu->system->safe       = array('link' => 'Sécurité|admin|safe', 'alias' => 'checkweak');
 $lang->admin->subMenu->system->cron       = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
 $lang->admin->subMenu->system->timezone   = array('link' => 'Timezone|custom|timezone', 'subModule' => 'custom');
 $lang->admin->subMenu->system->buildIndex = array('link' => 'Full Text Search|search|buildindex|');
