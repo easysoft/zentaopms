@@ -898,7 +898,6 @@ $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse|project={PROJECT}');
 $lang->menu->scrum->dynamic        = array('link' => '动态|project|dynamic');
 $lang->menu->scrum->projectsetting = array('link' => '设置|project|view|project={PROJECT}', 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
->>>>>>> * Finish task #36444.
 
 $lang->scrum = new stdclass();
 $lang->scrum->setMenu = new stdclass();
