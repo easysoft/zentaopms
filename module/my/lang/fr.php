@@ -95,7 +95,6 @@ $lang->my->productLinkList['product-browse']    = 'By default, go to the list of
 global $config;
 $lang->my->projectLinkList = array();
 $lang->my->projectLinkList['project-browse']    = 'By default, you go to the project list, where you can view all the projects';
-$lang->my->projectLinkList['project-task']      = 'By default, you go to the task list for the most recent project iteration to see the task information for the current iteration';
 $lang->my->projectLinkList['project-execution'] = 'Go to Project-Exection by default. You can check all information in Execution';
 $lang->my->projectLinkList['project-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
 
