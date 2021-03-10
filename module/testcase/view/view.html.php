@@ -354,6 +354,7 @@ js::set('retrack', $lang->retrack);
 $(function()
 {
     $('#subNavbar [data-id=testcase]').addClass('active');
+    $('#navbar [data-id=testcase]').addClass('active');
 })
 </script>
 <?php endif;?>

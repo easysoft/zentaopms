@@ -155,6 +155,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
         }
         ?>
         </li>
+        <?php if(!empty($productID)): ?>
         <?php $batchDisabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
         <li <?php echo $batchDisabled;?>>
         <?php
@@ -163,6 +164,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
           echo html::a($batchLink, $lang->story->batchCreate, '', "data-group='$openApp'");
         ?>
         </li>
+        <?php endif;?>
       </ul>
     </div>
     <?php $isShow = $isProjectStory ? '' : "style='display: none;'";?>
@@ -180,7 +182,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
         echo '</button>';
         echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
         if(common::hasPriv('projectstory', 'linkStory')) echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project={$this->session->PRJ}"), $lang->execution->linkStory). "</li>";
-        if(common::hasPriv('project', 'importPlanStories')) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
+        if(common::hasPriv('project', 'importPlanStories') and !empty($productID)) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
         echo '</ul>';
     }
     ?>
