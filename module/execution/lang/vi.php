@@ -123,7 +123,7 @@ global $config;
 if($config->systemMode == 'new')
 {
     $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
+    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
 }
 else
 {
@@ -235,13 +235,13 @@ $lang->execution->groupFilter['assignedTo']['all']    = 'Tất cả';
 $lang->execution->byQuery = 'Tìm kiếm';
 
 /* Query condition list. */
-$lang->execution->allProject      = "Tất cả {$lang->executionCommon}";
+$lang->execution->allExecution      = "Tất cả {$lang->executionCommon}";
 $lang->execution->aboveAllProduct = "Tất cả {$lang->productCommon} trên";
-$lang->execution->aboveAllProject = "Tất cả {$lang->executionCommon} trên";
+$lang->execution->aboveAllExecution = "Tất cả {$lang->executionCommon} trên";
 
 /* Page prompt. */
 $lang->execution->linkStoryByPlanTips = "Hành động này sẽ liên kết tất cả câu chuyện trong kế hoạch này tới {$lang->executionCommon} này.";
-$lang->execution->selectProject       = "Chọn {$lang->executionCommon}";
+$lang->execution->selectExecution       = "Chọn {$lang->executionCommon}";
 $lang->execution->selectExecution     = "Select Execution";
 $lang->execution->beginAndEnd         = 'Thời gian';
 $lang->execution->begin               = 'Bắt đầu';
@@ -262,7 +262,7 @@ $lang->execution->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php
 $lang->execution->whyNoStories        = "Không có câu chuyện có thể liên kết. Vui lòng kiểm tra có câu chuyện trong {$lang->executionCommon} cái liên kết tới {$lang->productCommon} và chắc chắn nó đã được duyệt.";
 $lang->execution->productStories      = "Câu chuyện liên kết tới {$lang->executionCommon} là tập hợp con của câu chuyện liên kết tới {$lang->productCommon}. Các câu chuyện chỉ có thể liên kết sau khi chúng đã được duyệt. <a href='%s'> Liên kết câu chuyện</a> now.";
 $lang->execution->haveDraft           = "%s câu chuyện đang nháp, bởi vậy chúng không thể liên kết.";
-$lang->execution->doneProjects        = 'Kết thúc';
+$lang->execution->doneExecutions        = 'Kết thúc';
 $lang->execution->selectDept          = 'Chọn phòng/ban';
 $lang->execution->selectDeptTitle     = 'Chọn người dùng';
 $lang->execution->copyTeam            = 'Copy đội nhóm';
@@ -270,12 +270,12 @@ $lang->execution->copyFromTeam        = "Sao chép từ {$lang->executionCommon}
 $lang->execution->noMatched           = "Không có $lang->executionCommon bao gồm '%s' có thể được tìm thấy.";
 $lang->execution->copyTitle           = "Chọn một {$lang->executionCommon} để sao chép.";
 $lang->execution->copyTeamTitle       = "Chọn một {$lang->executionCommon} đội nhóm để sao chép.";
-$lang->execution->copyNoProject       = "Không có {$lang->executionCommon} có thể sao chép.";
-$lang->execution->copyFromProject     = "Sao chép từ {$lang->executionCommon} <strong>%s</strong>";
+$lang->execution->copyNoExecution       = "Không có {$lang->executionCommon} có thể sao chép.";
+$lang->execution->copyFromExecution     = "Sao chép từ {$lang->executionCommon} <strong>%s</strong>";
 $lang->execution->cancelCopy          = 'Hủy sao chép';
 $lang->execution->byPeriod            = 'Theo thời gian';
 $lang->execution->byUser              = 'Theo người dùng';
-$lang->execution->noProject           = "Không có {$lang->executionCommon} nào";
+$lang->execution->noExecution           = "Không có {$lang->executionCommon} nào";
 $lang->execution->noMembers           = 'Không có thành viên đội nhóm nào';
 $lang->execution->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 $lang->execution->linkPRJStoryTip     = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the project)";
@@ -285,7 +285,7 @@ $lang->execution->linkAllStoryTip     = "({$lang->SRCommon} has never been linke
 $lang->execution->confirmDelete             = "Bạn có muốn xóa {$lang->executionCommon}[%s] này?";
 $lang->execution->confirmUnlinkMember       = "Bạn có muốn hủy liên kết người dùng này từ {$lang->executionCommon}?";
 $lang->execution->confirmUnlinkStory        = "Bạn có muốn hủy liên kết câu chuyện này từ {$lang->executionCommon}?";
-$lang->execution->confirmUnlinkProjectStory = "Do you want to unlink this Story from the project?";
+$lang->execution->confirmUnlinkExecutionStory = "Do you want to unlink this Story from the project?";
 $lang->execution->notAllowedUnlinkStory     = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the project. Remove it from the {$lang->executionCommon}, then try again.";
 $lang->execution->notAllowRemoveProducts    = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
 $lang->execution->errorNoLinkedProducts     = "Không có {$lang->productCommon} liên kết tới {$lang->executionCommon}. Bạn sẽ được chuyển tới trang  {$lang->productCommon} để liên kết.";
@@ -301,7 +301,7 @@ $lang->execution->noweekend                 = 'Không gồm cuối tuần';
 $lang->execution->withweekend               = 'Bao gồm cuối tuần';
 $lang->execution->interval                  = 'Intervals ';
 $lang->execution->fixFirstWithLeft          = 'Cập nhật cả giờ còn lại';
-$lang->execution->unfinishedProject         = "This {$lang->executionCommon} has ";
+$lang->execution->unfinishedExecution         = "This {$lang->executionCommon} has ";
 $lang->execution->unfinishedTask            = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug             = "[%s] unresolved bugs. ";
 

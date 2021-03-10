@@ -555,16 +555,16 @@ class execution extends control
         $products = $this->dao->select('t1.product, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
-            ->where('t1.execution')->eq($executionID)
+            ->where('t1.project')->eq($executionID)
             ->fetchPairs('product');
         if(!empty($products))
         {
             unset($executions);
-            $executions = $this->dao->select('t1.execution, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $executions = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')
-                ->on('t1.execution = t2.id')
+                ->on('t1.project = t2.id')
                 ->where('t1.product')->in(array_keys($products))
-                ->fetchPairs('execution');
+                ->fetchPairs('project');
         }
         else
         {

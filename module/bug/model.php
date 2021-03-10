@@ -519,7 +519,7 @@ class bugModel extends model
             ->andWhere('t1.toStory')->eq(0)
             ->beginIF(!empty($products))->andWhere('t1.product')->in($products)->fi()
             ->beginIF(empty($products))->andWhere('t1.execution')->eq($executionID)->fi()
-            ->andWhere('t2.execution')->eq($executionID)
+            ->andWhere('t2.project')->eq($executionID)
             ->andWhere("(t2.branch = '0' OR t1.branch = '0' OR t2.branch = t1.branch)")
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id desc')
