@@ -643,6 +643,20 @@ class project extends control
     }
 
     /**
+     * Execution list.
+     *
+     * @access public
+     * @return void
+     */
+    public function execution()
+    {
+        $PRJ = $this->session->PRJ;
+        if(!$PRJ) $PRJ = current(explode(',', $this->app->user->view->projects));
+
+        $this->locate($this->createLink('execution', 'all', "status=all&executionID=0&from=project", '', false, $PRJ));
+    }
+
+    /**
      * Project manage view.
      *
      * @param  int    $groupID
