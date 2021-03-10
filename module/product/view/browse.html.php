@@ -54,7 +54,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
         echo "<li>" . html::a($this->createLink('projectstory', 'story', "productID=0"), $lang->product->all)  . "</li>";
         foreach($projectProducts as $product)
         {
-            echo "<li>" . html::a($this->createLink('projectstory', 'story', "productID=$product->id&branch=0&browseType=$browseType"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
+            echo "<li>" . html::a($this->createLink('projectstory', 'story', "productID=$product->id&branch=0"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
         }
         ?>
       </ul>

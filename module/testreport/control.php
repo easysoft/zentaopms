@@ -37,7 +37,7 @@ class testreport extends control
         $this->app->loadLang('report');
 
         /* Set testreport menu group. */
-        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
         if(!$this->projectID)
         {
             $this->app->loadConfig('qa');
