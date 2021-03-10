@@ -100,7 +100,7 @@
         }
         if(moduleName === 'execution' && methodLowerCase === 'all')
         {
-            return link.params.from == 'project' ? 'project' : 'execution';
+            return (link.params.from || link.params.$3) == 'project' ? 'project' : 'execution';
         }
         if(['repo', 'jenkins', 'job', 'compile'].includes(moduleName))
         {

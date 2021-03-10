@@ -76,7 +76,7 @@ $lang->my->form->lblContact = 'Contact Info';
 $lang->my->form->lblAccount = 'Account Info';
 
 $lang->my->programLink = 'Program Default Page';
-$lang->my->productLink = 'Product Default Page'; 
+$lang->my->productLink = 'Product Default Page';
 $lang->my->projectLink = 'Project Default Page';
 
 $lang->my->programLinkList = array();
@@ -94,6 +94,6 @@ $lang->my->productLinkList['product-browse']    = 'By default, go to the list of
 global $config;
 $lang->my->projectLinkList = array();
 //$lang->my->projectLinkList['project-home'] = 'The default access to the project home page, you can understand the overall project status of the company';
-$lang->my->projectLinkList['project-browse'] = 'By default, you go to the project list, where you can view all the projects';
-$lang->my->projectLinkList['project-task']   = 'By default, you go to the task list for the most recent project iteration to see the task information for the current iteration';
-if($config->systemMode == 'new') $lang->my->projectLinkList['program-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
+$lang->my->projectLinkList['project-browse']    = 'By default, you go to the project list, where you can view all the projects';
+$lang->my->projectLinkList['project-execution'] = 'Go to Project-Exection by default. You can check all information in Execution';
+if($config->systemMode == 'new') $lang->my->projectLinkList['project-index'] = 'By default, go to the most recent project dashboard to see the current project overview';
