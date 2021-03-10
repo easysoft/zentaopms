@@ -15,7 +15,7 @@
 <?php js::set('total', $pager->recTotal);?>
 <?php js::set('rawMethod', $app->rawMethod);?>
 <style>
-.w-230px{width:230px;}
+.w-230px {width: 230px;}
 </style>
 <?php js::set('confirmDelete', $lang->testcase->confirmDelete)?>
 <div id="mainMenu" class="clearfix">

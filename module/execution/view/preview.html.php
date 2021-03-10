@@ -27,27 +27,27 @@ $today = date('n/d');
 ?>
 <style type='text/css'>
 body {margin: 0pt}
-.pager{ border:1px solid #000; margin-bottom:<?php echo $bottom?>px; border-collapse:collapse; border-spacing:0px; width:21.6cm; height:<?php echo $pagerH?>cm}
-.pager td{ border:1px dotted #000;}
-.pager td{width:<?php echo $width?>cm; height:<?php echo $height?>cm;}
-.pager .stage{border:0px; width:100%; height:auto; margin:0px;}
-.pager .stage td{height:auto; border:0px; padding:0px; margin:0px;}
-.board   {width:<?php echo $width - 0.2?>cm; height:<?php echo $height - 0.2?>cm; font-size:12px; border: 1px solid #ccc; text-align:left}
-#record{margin-bottom:0px; margin-top:5px; border:1px solid #000; width:100%; border-collapse:collapse; border-spacing:0px}
-#record td{width:13%; height:14px; border:1px solid #000}
-#burn{margin-top:50px;}
+.pager {border:1px solid #000; margin-bottom: <?php echo $bottom?>px; border-collapse: collapse; border-spacing: 0; width: 21.6cm; height: <?php echo $pagerH?>cm;}
+.pager td{border:1px dotted #000;}
+.pager td{width: <?php echo $width?>cm; height: <?php echo $height?>cm;}
+.pager .stage {border:0; width: 100%; height: auto; margin: 0;}
+.pager .stage td {height: auto; border: 0; padding: 0; margin: 0;}
+.board {width: <?php echo $width - 0.2?>cm; height: <?php echo $height - 0.2?>cm; font-size: 12px; border: 1px solid #ccc; text-align: left;}
+#record {margin-bottom: 0; margin-top: 5px; border: 1px solid #000; width: 100%; border-collapse: collapse; border-spacing: 0;}
+#record td {width: 13%; height: 14px; border: 1px solid #000;}
+#burn {margin-top: 50px;}
 
-.board-header{overflow:hidden; padding:1px 3px 1px 3px;}
-.board-id{overflow:hidden; padding:1px 3px 1px 3px; width:84%; border-bottom:2px solid #000;}
-.board-pri{border:1px solid #000; position:absolute; right:0px; top:0px; font-size:20px; padding:2px;}
-.board-middle{overflow:hidden}
-.board-title{overflow:hidden; padding:1px 3px 1px 3px; width:95%; font-size:18px; font-weight:bold; line-height:1.15}
-.board-content{overflow:hidden; padding:1px 3px 1px 3px; width:95%; font-size:14px; line-height:1.2;letter-spacing:1px;}
-.board-content p{margin-bottom:0px;}
-.board-footer{border-top:1px dotted #000; padding-top:5px; position:absolute; left:0px; width:100%}
-.board-footer.story{bottom:0px;}
-.board-footer.task{bottom:0px;}
-.board-footer p{ height:14px;padding:0px 3px; margin-bottom:2px;}
+.board-header {overflow: hidden; padding: 1px 3px 1px 3px;}
+.board-id {overflow: hidden; padding: 1px 3px 1px 3px; width: 84%; border-bottom: 2px solid #000;}
+.board-pri {border: 1px solid #000; position: absolute; right: 0; top: 0; font-size: 20px; padding: 2px;}
+.board-middle {overflow: hidden}
+.board-title {overflow: hidden; padding: 1px 3px 1px 3px; width:95%; font-size:18px; font-weight: bold; line-height: 1.15;}
+.board-content {overflow: hidden; padding: 1px 3px 1px 3px; width:95%; font-size:14px; line-height: 1.2;letter-spacing: 1px;}
+.board-content p {margin-bottom: 0;}
+.board-footer {border-top: 1px dotted #000; padding-top: 5px; position: absolute; left: 0; width: 100%}
+.board-footer.story {bottom: 0;}
+.board-footer.task {bottom: 0;}
+.board-footer p{height: 14px; padding:0px 3px; margin-bottom:2px;}
 </style>
 <?php
 $i        = 0;

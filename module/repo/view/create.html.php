@@ -11,9 +11,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php if(common::checkNotCN()):?>
-<style>
-.user-addon{padding-right: 16px; padding-left: 16px;}
-</style>
+<style>.user-addon {padding-right: 16px; padding-left: 16px;}</style>
 <?php endif;?>
 <?php js::set('scm',  'Git')?>
 <div id='mainContent' class='main-row'>

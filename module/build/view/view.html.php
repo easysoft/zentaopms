@@ -17,9 +17,9 @@
 <?php js::set('flow', $config->global->flow)?>
 <?php if(isonlybody()):?>
 <style>
-#stories .action{display:none;}
-#bugs .action{display:none;}
-tbody tr td:first-child input{display:none;}
+#stories .action {display: none;}
+#bugs .action {display: none;}
+tbody tr td:first-child input {display: none;}
 </style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
