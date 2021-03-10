@@ -327,7 +327,7 @@ $lang->my->dividerMenu = ',myProject,team,';
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
-$lang->product->dividerMenu = ',requirement,set,';
+$lang->product->dividerMenu = $config->URAndSR ? ',requirement,set,' : ',track,set,';
 
 $lang->story = new stdclass();
 
