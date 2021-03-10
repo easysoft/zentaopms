@@ -2591,10 +2591,12 @@ class execution extends control
                 $executionID = $execution->id;
             }
             $this->session->set('executionList', $this->app->getURI(true));
+            $projectID = 0;
         }
         elseif($from == 'project')
         {
             $this->lang->navGroup->execution = 'project';
+            $projectID = $this->session->PRJ;
         }
 
         /* Load pager and get tasks. */
@@ -2604,7 +2606,7 @@ class execution extends control
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $this->view->executionStats = $this->project->getStats($this->session->PRJ, $status, $productID, 0, 30, $orderBy, $pager);
+        $this->view->executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager);
         $this->view->products       = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $this->view->productID      = $productID;
         $this->view->executionID    = $executionID;

@@ -896,6 +896,8 @@ class executionModel extends model
      */
     public function getSwitcher($executionID, $currentModule, $currentMethod)
     {
+        if($currentMethod == 'index' or $currentMethod == 'all') return;
+
         $this->session->set('moreExecutionLink', $this->app->getURI(true));
 
         $currentExecutionName = $this->lang->execution->common;
