@@ -2809,7 +2809,7 @@ class execution extends control
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
-        $execution     = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+        $execution   = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         $count = 0;
         if(!empty($planStory))
@@ -2831,9 +2831,9 @@ class execution extends control
 
         $moduleName = 'execution';
         $param      = "executionID=$executionID";
-        if($execution->type == 'execution')
+        if($execution->type == 'project')
         {
-            $moduleName = 'executionstory';
+            $moduleName = 'projectstory';
             $param      = "productID={$_SESSION['product']}";
         }
         if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, 'story', $param));
