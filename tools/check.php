@@ -6,10 +6,11 @@
 class control {}
 $config = new stdclass();
 $config->global = new stdclass();
-$config->global->flow = 'full';
-$config->programLink  = '-';
-$config->productLink  = '-';
-$config->projectLink  = '-';
+$config->global->flow  = 'full';
+$config->programLink   = '-';
+$config->productLink   = '-';
+$config->projectLink   = '-';
+$config->executionLink = '-';
 
 /* set module root path and included the resource of group module. */
 $moduleRoot = '../module/';

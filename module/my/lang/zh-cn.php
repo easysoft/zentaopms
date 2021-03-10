@@ -77,14 +77,13 @@ $lang->my->form->lblBasic   = '基本信息';
 $lang->my->form->lblContact = '联系信息';
 $lang->my->form->lblAccount = '帐号信息';
 
-$lang->my->programLink = '项目集默认着陆页';
-$lang->my->productLink = '产品默认着陆页';
-$lang->my->projectLink = '项目默认着陆页';
+$lang->my->programLink   = '项目集默认着陆页';
+$lang->my->productLink   = '产品默认着陆页';
+$lang->my->projectLink   = '项目默认着陆页';
+$lang->my->executionLink = '执行默认着陆页';
 
 $lang->my->programLinkList = array();
-//$lang->my->programLinkList['program-home']  = '默认进入项目集主页，可以了解公司整体的战略规划状况';
 $lang->my->programLinkList['program-browse']  = '默认进入项目集列表，可以查看所有的项目集';
-//$lang->my->programLinkList['program-index'] = '默认进入最近一个项目集仪表盘，可以查看当前项目集概况';
 $lang->my->programLinkList['program-project'] = '默认进入最近一个项目集的项目列表，可以查看当前项目集下所有项目';
 
 $lang->my->productLinkList = array();
@@ -95,7 +94,12 @@ $lang->my->productLinkList['product-browse']    = '默认进入最近一个产�
 
 global $config;
 $lang->my->projectLinkList = array();
-//$lang->my->projectLinkList['project-home'] = '默认进入项目主页，可以了解公司整体的项目状况';
 $lang->my->projectLinkList['project-browse']    = '默认进入项目列表，可以查看所有的项目';
+$lang->my->projectLinkList['project-task']      = '默认进入最近一个项目迭代的任务列表，可以查看当前迭代下的任务信息';
 $lang->my->projectLinkList['project-execution'] = '默认进入项目下所有执行列表，查看所有执行信息';
-if($config->systemMode == 'new') $lang->my->projectLinkList['project-index'] = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
+$lang->my->projectLinkList['project-index']     = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
+
+$lang->my->executionLinkList = array();
+$lang->my->executionLinkList['execution-index'] = '默认进入执行仪表盘，可以了解所有执行的统计数据和概况';
+$lang->my->executionLinkList['execution-all']   = '默认进入执行列表，可以查看所有的执行';
+$lang->my->executionLinkList['execution-task']  = '默认进入最近一个执行的任务列表，可以查看当前迭代下的任务信息';

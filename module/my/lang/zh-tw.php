@@ -1,4 +1,6 @@
 <?php
+global $config;
+
 $lang->my->common = '我的地盤';
 
 /* 方法列表。*/
@@ -28,7 +30,6 @@ $lang->my->manageContacts  = '維護聯繫人';
 $lang->my->deleteContacts  = '刪除聯繫人';
 $lang->my->shareContacts   = '共享聯繫人列表';
 $lang->my->limited         = '受限操作(只能編輯與自己相關的內容)';
-$lang->my->storyConcept    = '預設需求概念組合';
 $lang->my->score           = '我的積分';
 $lang->my->scoreRule       = '積分規則';
 $lang->my->noTodo          = '暫時沒有待辦。';
@@ -39,6 +40,7 @@ $lang->my->uploadAvatar    = '更換頭像';
 $lang->my->requirement     = "我的{$lang->URCommon}";
 $lang->my->testtask        = '我的測試單';
 $lang->my->testcase        = '我的用例';
+$lang->my->storyConcept    = $config->URAndSR ? '預設需求概念組合' : '預設需求概念';
 
 $lang->my->myExecutions = "我參與的階段/衝刺/迭代";
 $lang->my->name         = '名稱';
@@ -75,14 +77,13 @@ $lang->my->form->lblBasic   = '基本信息';
 $lang->my->form->lblContact = '聯繫信息';
 $lang->my->form->lblAccount = '帳號信息';
 
-$lang->my->programLink = '項目集預設着陸頁';
-$lang->my->productLink = '產品預設着陸頁';
-$lang->my->projectLink = '項目預設着陸頁';
+$lang->my->programLink   = '項目集預設着陸頁';
+$lang->my->productLink   = '產品預設着陸頁';
+$lang->my->projectLink   = '項目預設着陸頁';
+$lang->my->executionLink = '執行預設着陸頁';
 
 $lang->my->programLinkList = array();
-//$lang->my->programLinkList['program-home']  = '預設進入項目集主頁，可以瞭解公司整體的戰略規劃狀況';
 $lang->my->programLinkList['program-browse']  = '預設進入項目集列表，可以查看所有的項目集';
-//$lang->my->programLinkList['program-index'] = '預設進入最近一個項目集儀表盤，可以查看當前項目集概況';
 $lang->my->programLinkList['program-project'] = '預設進入最近一個項目集的項目列表，可以查看當前項目集下所有項目';
 
 $lang->my->productLinkList = array();
@@ -93,7 +94,11 @@ $lang->my->productLinkList['product-browse']    = '預設進入最近一個產�
 
 global $config;
 $lang->my->projectLinkList = array();
-//$lang->my->projectLinkList['project-home'] = '預設進入項目主頁，可以瞭解公司整體的項目狀況';
 $lang->my->projectLinkList['project-browse'] = '預設進入項目列表，可以查看所有的項目';
 $lang->my->projectLinkList['project-task']   = '預設進入最近一個項目迭代的任務列表，可以查看當前迭代下的任務信息';
-if($config->systemMode == 'new') $lang->my->projectLinkList['program-index'] = '預設進入最近一個項目儀表盤，可以查看當前項目概況';
+$lang->my->projectLinkList['project-index']  = '預設進入最近一個項目儀表盤，可以查看當前項目概況';
+
+$lang->my->executionLinkList = array();
+$lang->my->executionLinkList['execution-index'] = '預設進入執行儀表盤，可以瞭解所有執行的統計數據和概況';
+$lang->my->executionLinkList['execution-all']   = '預設進入執行列表，可以查看所有的執行';
+$lang->my->executionLinkList['execution-task']  = '預設進入最近一個執行的任務列表，可以查看當前迭代下的任務信息';
