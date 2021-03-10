@@ -38,7 +38,7 @@ class testtask extends control
         parent::__construct($moduleName, $methodName);
 
         /* Set testtask menu group. */
-        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
         if(!$this->projectID)
         {
             $this->app->loadConfig('qa');
