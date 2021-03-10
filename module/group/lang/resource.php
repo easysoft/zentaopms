@@ -269,17 +269,19 @@ if($config->systemMode == 'new')
 
     /* Project Story. */
     $lang->resource->projectstory = new stdclass();
-    $lang->resource->projectstory->story       = 'story';
-    $lang->resource->projectstory->track       = 'track';
-    $lang->resource->projectstory->view        = 'view';
-    $lang->resource->projectstory->linkStory   = 'linkStory';
-    $lang->resource->projectstory->unlinkStory = 'unlinkStory';
+    $lang->resource->projectstory->story             = 'story';
+    $lang->resource->projectstory->track             = 'track';
+    $lang->resource->projectstory->view              = 'view';
+    $lang->resource->projectstory->linkStory         = 'linkStory';
+    $lang->resource->projectstory->unlinkStory       = 'unlinkStory';
+    $lang->resource->projectstory->importplanstories = 'importplanstories';
 
     $lang->projectstory->methodOrder[5]  = 'story';
     $lang->projectstory->methodOrder[10] = 'track';
     $lang->projectstory->methodOrder[15] = 'view';
     $lang->projectstory->methodOrder[20] = 'linkStory';
     $lang->projectstory->methodOrder[25] = 'unlinkStory';
+    $lang->projectstory->methodOrder[23] = 'importplanstories';
 
     /* Release. */
     $lang->resource->projectbuild = new stdclass();
@@ -1217,15 +1219,15 @@ $lang->tree->methodOrder[30] = 'delete';
 
 /* Report. */
 $lang->resource->report = new stdclass();
-$lang->resource->report->index            = 'index';
-$lang->resource->report->projectDeviation = 'projectDeviation';
-$lang->resource->report->productSummary   = 'productSummary';
-$lang->resource->report->bugCreate        = 'bugCreate';
-$lang->resource->report->bugAssign        = 'bugAssign';
-$lang->resource->report->workload         = 'workload';
+$lang->resource->report->index              = 'index';
+$lang->resource->report->executionDeviation = 'executionDeviation';
+$lang->resource->report->productSummary     = 'productSummary';
+$lang->resource->report->bugCreate          = 'bugCreate';
+$lang->resource->report->bugAssign          = 'bugAssign';
+$lang->resource->report->workload           = 'workload';
 
 $lang->report->methodOrder[0]  = 'index';
-$lang->report->methodOrder[5]  = 'projectDeviation';
+$lang->report->methodOrder[5]  = 'executionDeviation';
 $lang->report->methodOrder[10] = 'productSummary';
 $lang->report->methodOrder[15] = 'bugCreate';
 $lang->report->methodOrder[20] = 'workload';

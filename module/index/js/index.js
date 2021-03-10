@@ -678,9 +678,8 @@ function changeSearchObject()
 
     if(searchObjectList.indexOf(',' + searchType + ',') == -1) var searchType = 'bug';
 
-    if(searchType == 'program')   var searchType = 'program-pgmproduct';
-    if(searchType == 'project')   var searchType = 'program-index';
-    if(searchType == 'execution') var searchType = 'project-view';
+    if(searchType == 'program')    var searchType = 'program-product';
+    if(searchType == 'deploystep') var searchType = 'deploy-viewstep';
 
     $("#searchType").val(searchType);
     return searchType;

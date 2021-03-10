@@ -140,7 +140,7 @@ class story extends control
             if($executionID != 0)
             {
                 if($executionID != $this->session->PRJ) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $executionID);
-                $this->loadModel('action')->create('story', $storyID, 'linked2prj', '', $this->session->PRJ);
+                $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $this->session->PRJ);
             }
 
             if($todoID > 0)
@@ -293,7 +293,7 @@ class story extends control
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->create;
-        $this->view->products         = $products;
+        $this->view->products         = array('' => '') + $products;
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $this->view->moduleOptionMenu = $moduleOptionMenu;

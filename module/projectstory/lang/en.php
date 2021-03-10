@@ -1,11 +1,12 @@
 <?php
-$lang->projectstory->common      = "Project {$lang->SRCommon}";
-$lang->projectstory->index       = "{$lang->SRCommon} Home";
-$lang->projectstory->view        = "{$lang->SRCommon} Detail";
-$lang->projectstory->story       = "{$lang->SRCommon} List";
-$lang->projectstory->track       = 'Tracking Matrix';
-$lang->projectstory->linkStory   = 'Linked' . $lang->SRCommon;
-$lang->projectstory->unlinkStory = 'Unlinked' . $lang->SRCommon;
+$lang->projectstory->common            = "Project {$lang->SRCommon}";
+$lang->projectstory->index             = "{$lang->SRCommon} Home";
+$lang->projectstory->view              = "{$lang->SRCommon} Detail";
+$lang->projectstory->story             = "{$lang->SRCommon} List";
+$lang->projectstory->track             = 'Tracking Matrix';
+$lang->projectstory->linkStory         = 'Linked' . $lang->SRCommon;
+$lang->projectstory->unlinkStory       = 'Unlinked' . $lang->SRCommon;
+$lang->projectstory->importplanstories = 'Linked by plan' . $lang->SRCommon;
 
 global $app;
 $app->loadLang('product');

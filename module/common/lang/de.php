@@ -149,7 +149,7 @@ $lang->mainNav->qa      = '<i class="icon icon-test"></i> Test|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> Code|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> Doc|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> Statistic|report|productsummary|";
-$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|my|team|';
+$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|company|browse|';
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> Program|$programModule|$programMethod|";
 
@@ -558,6 +558,8 @@ $lang->admin->subMenu->system->safe       = array('link' => 'Sicherheit|admin|sa
 $lang->admin->subMenu->system->cron       = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
 $lang->admin->subMenu->system->timezone   = array('link' => 'Timezone|custom|timezone', 'subModule' => 'custom');
 $lang->admin->subMenu->system->buildIndex = array('link' => 'Full Text Search|search|buildindex|');
+
+$lang->admin->dividerMenu = ',message,system,';
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();

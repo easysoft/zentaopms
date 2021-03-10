@@ -3188,8 +3188,8 @@ class storyModel extends model
             if($branch) $branch = "0,$branch";
         }
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
-            ->where('product')->in($productID)
-            ->andWhere('deleted')->eq(0)
+            ->Where('deleted')->eq(0)
+            ->beginIF($productID)->andWhere('product')->in($productID)->fi()
             ->fetchPairs('id', 'title');
 
         /* For requirement children. */

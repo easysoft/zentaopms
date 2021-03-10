@@ -127,7 +127,7 @@ global $config;
 if($config->systemMode == 'new')
 {
     $lang->execution->aclList['private'] = 'Private (for team members and execution stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current execution)';
+    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current execution)';
 }
 else
 {
@@ -239,13 +239,13 @@ $lang->execution->groupFilter['assignedTo']['all']    = 'All';
 $lang->execution->byQuery = 'Search';
 
 /* Query condition list. */
-$lang->execution->allProject      = "All {$lang->executionCommon}s";
+$lang->execution->allExecution      = "All {$lang->executionCommon}s";
 $lang->execution->aboveAllProduct = "All the above {$lang->productCommon}s";
-$lang->execution->aboveAllProject = "All the above {$lang->executionCommon}s";
+$lang->execution->aboveAllExecution = "All the above {$lang->executionCommon}s";
 
 /* Page prompt. */
 $lang->execution->linkStoryByPlanTips = "This action will link all stories in this plan to the {$lang->executionCommon}.";
-$lang->execution->selectProject       = "Select {$lang->executionCommon}";
+$lang->execution->selectExecution       = "Select {$lang->executionCommon}";
 $lang->execution->selectExecution     = "Select Stage/Sprint/Iteration";
 $lang->execution->beginAndEnd         = 'Duration';
 $lang->execution->lblStats            = 'Efforts';
@@ -264,7 +264,7 @@ $lang->execution->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php
 $lang->execution->whyNoStories        = "No story can be linked. Please check whether there is any story in {$lang->executionCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
 $lang->execution->productStories      = "Stories linked to {$lang->executionCommon} are the subeset of stories linked to {$lang->productCommon}. Stories can only be linked after they pass the review. <a href='%s'> Link Stories</a> now.";
 $lang->execution->haveDraft           = "%s stories in draft, so they can't be linked.";
-$lang->execution->doneProjects        = 'Finished';
+$lang->execution->doneExecutions        = 'Finished';
 $lang->execution->selectDept          = 'Select Department';
 $lang->execution->selectDeptTitle     = 'Select User';
 $lang->execution->copyTeam            = 'Copy Team';
@@ -272,12 +272,12 @@ $lang->execution->copyFromTeam        = "Copy from {$lang->executionCommon} Team
 $lang->execution->noMatched           = "No $lang->executionCommon including '%s'can be found.";
 $lang->execution->copyTitle           = "Choose a {$lang->executionCommon} to copy.";
 $lang->execution->copyTeamTitle       = "Choose a {$lang->executionCommon} Team to copy.";
-$lang->execution->copyNoProject       = "No {$lang->executionCommon} can be copied.";
-$lang->execution->copyFromProject     = "Copy from {$lang->executionCommon} <strong>%s</strong>";
+$lang->execution->copyNoExecution       = "No {$lang->executionCommon} can be copied.";
+$lang->execution->copyFromExecution     = "Copy from {$lang->executionCommon} <strong>%s</strong>";
 $lang->execution->cancelCopy          = 'Cancel Copy';
 $lang->execution->byPeriod            = 'By Time';
 $lang->execution->byUser              = 'By User';
-$lang->execution->noProject           = "No {$lang->executionCommon}. ";
+$lang->execution->noExecution           = "No {$lang->executionCommon}. ";
 $lang->execution->noMembers           = 'No team members yet. ';
 $lang->execution->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 $lang->execution->linkPRJStoryTip     = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
@@ -287,7 +287,7 @@ $lang->execution->linkAllStoryTip     = "({$lang->SRCommon} has never been linke
 $lang->execution->confirmDelete             = "Do you want to delete the {$lang->executionCommon}[%s]?";
 $lang->execution->confirmUnlinkMember       = "Do you want to unlink this User from {$lang->executionCommon}?";
 $lang->execution->confirmUnlinkStory        = "Do you want to unlink this Story from {$lang->executionCommon}?";
-$lang->execution->confirmUnlinkProjectStory = "Do you want to unlink this Story from the execution?";
+$lang->execution->confirmUnlinkExecutionStory = "Do you want to unlink this Story from the execution?";
 $lang->execution->notAllowedUnlinkStory     = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the execution. Remove it from the {$lang->executionCommon}, then try again.";
 $lang->execution->notAllowRemoveProducts    = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
 $lang->execution->errorNoLinkedProducts     = "No {$lang->productCommon} is linked to {$lang->executionCommon}. You will be directed to {$lang->productCommon} page to link one.";
@@ -303,7 +303,7 @@ $lang->execution->noweekend                 = 'Exclude Weekend';
 $lang->execution->withweekend               = 'Include Weekend';
 $lang->execution->interval                  = 'Intervals ';
 $lang->execution->fixFirstWithLeft          = 'Update hours left too';
-$lang->execution->unfinishedProject         = "This {$lang->executionCommon} has ";
+$lang->execution->unfinishedExecution         = "This {$lang->executionCommon} has ";
 $lang->execution->unfinishedTask            = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug             = "[%s] unresolved bugs. ";
 

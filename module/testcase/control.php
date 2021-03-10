@@ -522,8 +522,8 @@ class testcase extends control
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
         if($case->auto == 'unit')
         {
-            $this->lang->testcase->subMenu->testcase->feature['alias'] = '';
-            $this->lang->testcase->subMenu->testcase->unit['alias'] = 'view';
+            $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
+            $this->lang->testcase->subMenu->testcase->unit['alias']     = 'view';
             $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
         }
 
@@ -637,6 +637,14 @@ class testcase extends control
         }
 
         $case = $this->testcase->getById($caseID);
+        if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
+        if($case->auto == 'unit')
+        {
+            $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
+            $this->lang->testcase->subMenu->testcase->unit['alias']     = 'view';
+            $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
+        }
+
         if(empty($case->steps))
         {
             $step = new stdclass();

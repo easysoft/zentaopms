@@ -1439,7 +1439,8 @@ class projectModel extends model
         if(empty($productID))
         {
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-                ->where('project')->eq($projectID)
+                ->where('type')->in('sprint,stage')
+                ->beginIF($projectID != 0)->andWhere('project')->eq($projectID)->fi()
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->eq($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()

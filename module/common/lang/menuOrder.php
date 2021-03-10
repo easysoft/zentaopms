@@ -154,16 +154,12 @@ $lang->system->menuOrder[15] = 'calendar';
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
-$lang->admin->menuOrder[9]  = 'company';
-$lang->admin->menuOrder[10] = 'message';
+$lang->admin->menuOrder[10] = 'model';
 $lang->admin->menuOrder[15] = 'custom';
-$lang->admin->menuOrder[20] = 'sso';
+$lang->admin->menuOrder[20] = 'message';
 $lang->admin->menuOrder[25] = 'extension';
-$lang->admin->menuOrder[30] = 'dev';
-$lang->admin->menuOrder[35] = 'translate';
-$lang->admin->menuOrder[40] = 'data';
-$lang->admin->menuOrder[45] = 'safe';
-$lang->admin->menuOrder[50] = 'system';
+$lang->admin->menuOrder[35] = 'dev';
+$lang->admin->menuOrder[40] = 'system';
 
 $lang->admin->subMenuOrder = new stdclass();
 $lang->admin->subMenuOrder->message[5]  = 'mail';

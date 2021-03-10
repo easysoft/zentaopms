@@ -67,8 +67,8 @@
       <td class='text-center fail'><?php echo $task->failCount?></td>
       <td class='c-actions'>
         <?php
-        common::printIcon('testtask',  'unitCases', "taskID=$task->id", '', 'list', 'list-alt','','',true);
-        common::printIcon('testtask',  'edit', "taskID=$task->id", $task, 'list','','','',true);
+        common::printIcon('testtask',  'unitCases', "taskID=$task->id", '', 'list', 'list-alt', '', 'iframe', true, 'data-width="70%"');
+        common::printIcon('testtask',  'edit', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
         if(common::hasPriv('testtask', 'delete', $task))
         {
             $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");

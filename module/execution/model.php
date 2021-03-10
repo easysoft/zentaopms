@@ -896,6 +896,8 @@ class executionModel extends model
      */
     public function getSwitcher($executionID, $currentModule, $currentMethod)
     {
+        if($currentMethod == 'index' or $currentMethod == 'all') return;
+
         $this->session->set('moreExecutionLink', $this->app->getURI(true));
 
         $currentExecutionName = $this->lang->execution->common;
@@ -906,7 +908,7 @@ class executionModel extends model
         }
 
         $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "objectID=$executionID&module=$currentModule&method=$currentMethod&extra=");
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-project'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'>{$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
@@ -2041,7 +2043,7 @@ class executionModel extends model
             $data->order   = ++$lastOrder;
             $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
             $this->story->setStage($storyID);
-            $action = $executionID == $this->session->PRJ ? 'linked2prj' : 'linked2execution';
+            $action = $executionID == $this->session->PRJ ? 'linked2project' : 'linked2execution';
             $this->action->create('story', $storyID, $action, '', $executionID);
         }
     }
@@ -2117,7 +2119,8 @@ class executionModel extends model
         }
 
         $this->loadModel('story')->setStage($storyID);
-        $this->loadModel('action')->create('story', $storyID, 'unlinkedfromexecution', '', $executionID);
+        $objectType = $executionID == $this->session->PRJ ? unlinkedfromproject : unlinkedfromexecution;
+        $this->loadModel('action')->create('story', $storyID, $objectType, '', $executionID);
 
         $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->andWhere('status')->in('wait,doing')->fetchPairs('id');
         foreach($tasks as $taskID)
@@ -3540,7 +3543,7 @@ class executionModel extends model
         $productpairs = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.project')->in($stageIdList)
-            ->fetchPairs('execution', 'name');
+            ->fetchPairs('project', 'name');
         return $productpairs;
     }
 }

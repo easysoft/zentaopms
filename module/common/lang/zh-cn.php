@@ -149,7 +149,7 @@ $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
-$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|my|team|';
+$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|company|browse|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
 if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> 项目集|$programModule|$programMethod|";
 
@@ -563,6 +563,8 @@ $lang->admin->subMenu->system->cron       = array('link' => '定时|cron|index',
 $lang->admin->subMenu->system->timezone   = array('link' => '时区|custom|timezone', 'subModule' => 'custom');
 $lang->admin->subMenu->system->buildIndex = array('link' => '重建索引|search|buildindex|');
 
+$lang->admin->dividerMenu = ',message,system,';
+
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
 $lang->action    = new stdclass();
@@ -699,6 +701,7 @@ $lang->navGroup->cron      = 'admin';
 $lang->navGroup->backup    = 'admin';
 $lang->navGroup->mail      = 'admin';
 $lang->navGroup->dev       = 'admin';
+$lang->navGroup->entry     = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';
 $lang->navGroup->search    = 'admin';
@@ -967,6 +970,6 @@ $lang->projectstory->menu       = new stdclass();
 $lang->stakeholder->menu = $lang->scrum->setMenu;
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage', 'entry');
 
 include (dirname(__FILE__) . '/menuOrder.php');
