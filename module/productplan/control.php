@@ -27,7 +27,7 @@ class productplan extends control
         $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         $this->loadModel('product');
-        $this->app->loadConfig('project');
+        $this->app->loadConfig('execution');
         $product = $this->product->getById($productID);
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
         $this->view->product  = $product;
