@@ -9,22 +9,22 @@
 .board-item + .board-item {margin-top: 10px;}
 .board-item .task-left {float: right; font-size: 12px; color: #a6aab8;}
 .boards-wrapper {overflow: auto;}
-.board.can-drop-in {background-color: #fff!important; opacity: 1!important;}
+.board.can-drop-in {background-color: #fff !important; opacity: 1 !important;}
 .c-board.dragging {color: #006af1;}
-.board.drop-to {background-color: #fff0d5!important;}
+.board.drop-to {background-color: #fff0d5 !important;}
 .board-drag-holder {background: #ccc; background: rgba(0, 0, 0, .1); border-radius: 2px; border: 1px solid rgba(0,0,0,.05); display: none;}
 .board.drop-to .board-drag-holder {display: block;}
 .board-item + .board-drag-holder {margin-top: 10px;}
 .board-item.dragging {opacity: .35;}
 .board-item .btn {padding: 2px 10px 2px 23px; font-size: 12px; position: relative; left: -2px; height: 24px;}
-.board-item .btn-icon-left > .icon {width: 22px; height: 22px; line-height: 20px; font-size: 14px; opacity: 1; top: 1px}
+.board-item .btn-icon-left > .icon {width: 22px; height: 22px; line-height: 20px; font-size: 14px; opacity: 1; top: 1px;}
 .board-item .btn-icon-left > span {max-width: 80px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block;}
 .board-title {padding-right: 20px;}
 .board-actions {position: absolute; right: 3px; top: 3px;}
 .board-actions.nav > li > a {padding: 3px 3px;}
-#kanban {overflow-y: auto}
+#kanban {overflow-y: auto;}
 #kanban > .table {min-width: 1100px; table-layout: auto;}
-#kanban.dragging .boards.dragging .board {background: #eee; opacity: .35; border-color: #f1f1f1}
+#kanban.dragging .boards.dragging .board {background: #eee; opacity: .35; border-color: #f1f1f1;}
 #kanban thead > tr > th {padding-left: 0; padding-right: 0;}
 #kanban thead .c-side {padding: 5px; max-width: 15%; min-width: 200px;}
 #kanban .label-pri {width: 16px; height: 16px; line-height: 12px; min-width: 16px; font-size: 12px; padding: 0;}
@@ -40,13 +40,13 @@
 #kanban .c-boards, #kanban td.c-side {border-bottom: 1px solid #eee;}
 #kanban .group-info > span + span {display: inline-block; margin-left: 8px;}
 #kanban th.c-board {color: #3c4353; font-weight: bold;}
-#kanban .fix-table-copy-wrapper {overflow: visible!important;}
+#kanban .fix-table-copy-wrapper {overflow: visible !important;}
 #kanban .fix-table-copy-wrapper th.c-board {color: #eee;}
 #kanban .fix-table-copy-wrapper th.c-board .btn-link {color: #fff;}
 #kanban .group-title {word-break: break-all; line-height: 16px; padding: 3px 0; display: block;}
 
 .table-grouped > tbody > tr,
-.table-grouped > tbody > tr:hover {background: #fff!important;}
+.table-grouped > tbody > tr:hover {background: #fff !important;}
 
 .fixedSide {position: fixed; background-color: rgb(75, 75, 75, .85); color: #eee; z-index: 999;}
 .fixedSide .dropdown-menu {background-color: rgb(75, 75, 75, .85);}

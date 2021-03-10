@@ -14,8 +14,8 @@
 .col-shorts .chosen-container-single .chosen-single {border-radius: 0 2px 2px 0;}
 
 #modulesTree li {padding-left: 20px;}
-#modulesTree li > .list-toggle {top: 0}
+#modulesTree li > .list-toggle {top: 0;}
 
-#childrenForm table tr > td.text-middle span{display:block; float:left;}
+#childrenForm table tr > td.text-middle span {display: block; float: left;}
 
-.body-modal #mainMenu{display: none;}
+.body-modal #mainMenu {display: none;}

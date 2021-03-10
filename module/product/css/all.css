@@ -1,4 +1,4 @@
-.side-col .detail-content{padding-left: 10px; margin-top: 0px}
+.side-col .detail-content {padding-left: 10px; margin-top: 0px;}
 .tree li.has-list.open:before {border-left: none;}
 #programTree li {padding: 0 0 0 8px;}
 #programTree li.has-list {padding-left: 20px;}
@@ -7,12 +7,12 @@
 #programTree li > a > span + span {margin-left: 8px;}
 #programTree li.selected > a {background-color: #E8F3FC;}
 #programTree li.selected > a > span.title {color: #006AF1;}
-#programTree .label-id {border-color: #cbd0db; color: #7d8599}
-#programTree .label.label-type {background: #fff; border: 1px solid #7d8599; color:#7d8599}
+#programTree .label-id {border-color: #cbd0db; color: #7d8599;}
+#programTree .label.label-type {background: #fff; border: 1px solid #7d8599; color: #7d8599;}
 
 #programTree li > a > span.title {color: #3C4353; white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; vertical-align: middle;}
 #programTree li > a > span.user {color: #838a9d;}
-#programTree li > a > span.user > .icon-person {font-size: 14px; position: relative; top: -1px; color: #a6aab8}
+#programTree li > a > span.user > .icon-person {font-size: 14px; position: relative; top: -1px; color: #a6aab8;}
 
 #programTree li > .list-toggle {transform: rotate(0deg); width: 16px; height: 16px; border: 4px solid #a6aab8; border-radius: 2px; top: 7px;}
 #programTree li > .list-toggle:before {content: ' '; display: block; position: absolute; border: 1px solid #a6aab8; top: 2px; left: -3px; right: -3px; bottom: 2px; min-width: 0; transition: all .2s;}
@@ -30,8 +30,8 @@
 #programTree ul > li.has-list:first-child:before {top: -13px;}
 #programTree ul > li.tree-single-item:before {height: 23px;}
 #programTree ul > li.has-list:after {width: 14px;}
-#programTree ul > li.item-meas a.selected{color: #0c64eb;}
-.side-col {padding-right: 20px; width: 18%}
+#programTree ul > li.item-meas a.selected {color: #0c64eb;}
+.side-col {padding-right: 20px; width: 18%;}
 #sidebar>.cell {width: 100%;}
 
 .main-table thead>tr:first-of-type>th {border-left: 1px solid #ddd;}
@@ -40,8 +40,8 @@ th.table-nest-title .header {margin-left: 5px;}
 th.table-nest-title .sort-up {padding-left: 5px;}
 th.table-nest-title .sort-down {padding-left: 5px;}
 
-#productTableList .icon-product:before {content: '\e98f'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
+#productTableList .icon-product:before {content: '\e98f'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px;}
 
 .main-table thead>tr>th {padding: 0px 8px; line-height: 24px;}
 
-.icon-move {color: #16a8f8}
+.icon-move {color: #16a8f8;}

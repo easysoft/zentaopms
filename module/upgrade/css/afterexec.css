@@ -1,13 +1,13 @@
-.adbox{margin-bottom:0px; border:0px; box-shadow:none;}
-.adbox .panel-body{padding-bottom:0px; border:0px;}
+.adbox {margin-bottom: 0px; border: 0px; box-shadow: none;}
+.adbox .panel-body {padding-bottom: 0px; border: 0px;}
 
-.col-md-6{width:49% !important;}
-.row .divider{ display: block; width: 2px; height: 450px; background-color: rgba(0,0,0,.05); float: left;}
+.col-md-6 {width: 49% !important;}
+.row .divider {display: block; width: 2px; height: 450px; background-color: rgba(0,0,0,.05); float: left;}
 
-.row .col-md-6 .message{padding-left:50px; padding-top:50px;}
-.row .col-md-6 .message #tohome{margin-top:50px;}
-.row .col-md-6 .message p{font-size:16px;}
-.row .col-md-6 .message .icon-check-circle{font-size:40px; color:green;}
+.row .col-md-6 .message {padding-left: 50px; padding-top: 50px;}
+.row .col-md-6 .message #tohome {margin-top: 50px;}
+.row .col-md-6 .message p {font-size: 16px;}
+.row .col-md-6 .message .icon-check-circle {font-size: 40px; color: green;}
 
 .card {
   position: relative;
@@ -24,7 +24,7 @@
   -o-transition: all .5s cubic-bezier(.175,.885,.32,1);
   transition: all .5s cubic-bezier(.175,.885,.32,1);
 }
-.card + .card{ margin-top: 10px;}
+.card + .card {margin-top: 10px;}
 
 .card .card-heading {
   display: block;
@@ -54,18 +54,18 @@
   transition: all .8s cubic-bezier(.175,.885,.32,1);
 }
 
-.card>.card-reveal>.card-heading{padding:20px 10px}
-.card:hover>.card-reveal{top:0}
+.card>.card-reveal>.card-heading {padding: 20px 10px;}
+.card:hover>.card-reveal {top: 0;}
 
 .card.ad > .img-wrapper {
   height: 70px;
-  line-height:70px;
-  text-align:center;
-  font-size:25px;
+  line-height: 70px;
+  text-align: center;
+  font-size: 25px;
   width: 100%;
 }
 
 .card.ad > .card-heading {text-align: center;}
-.card.ad > .card-reveal > .card-heading { padding: 12px 10px 10px 15px;}
+.card.ad > .card-reveal > .card-heading {padding: 12px 10px 10px 15px;}
 .card.ad > .card-reveal {color: #333;}
-.card.ad > .card-reveal li{line-height:1.5; font-size:12px;}
+.card.ad > .card-reveal li {line-height: 1.5; font-size: 12px;}

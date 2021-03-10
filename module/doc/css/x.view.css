@@ -1,7 +1,7 @@
-.side-col.col-4{display:none;}
-#main{margin-bottom: 40px;}
-#mainMenu{margin-top:0px;}
-#mainMenu .btn{display:none;}
-#mainMenu .divider{display:none;}
-.main-actions{display:none;}
-#mainContent .cell{min-height: 420px}
+.side-col.col-4 {display: none;}
+#main {margin-bottom: 40px;}
+#mainMenu {margin-top: 0px;}
+#mainMenu .btn {display: none;}
+#mainMenu .divider {display: none;}
+.main-actions {display: none;}
+#mainContent .cell {min-height: 420px;}

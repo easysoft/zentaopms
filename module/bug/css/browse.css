@@ -1,26 +1,26 @@
-.closed, .closed a{color:gray; text-decoration:line-through;}
-.resolved, .resolved a{color:#8EC21F; text-decoration:none;}
-.tree .closed, .tree .closed a{color:#003366; text-decoration:none;}
-.confirm0 {color:gray;}
-.confirm1 {color:green;}
-td.delayed{color:#fff; background: #e84e0f!important;}
+.closed, .closed a {color: gray; text-decoration:line-through;}
+.resolved, .resolved a {color: #8EC21F; text-decoration: none;}
+.tree .closed, .tree .closed a {color: #003366; text-decoration: none;}
+.confirm0 {color: gray;}
+.confirm1 {color: green;}
+td.delayed {color: #fff; background: #e84e0f !important;}
 
-.datatable-wrapper .table-datatable .datatable-row td {height:37px;}
+.datatable-wrapper .table-datatable .datatable-row td {height: 37px;}
 
-#createActionMenu .dropdown-menu {width:100%;}
+#createActionMenu .dropdown-menu {width: 100%;}
 
 .dropdown-menu.with-search {padding: 0; min-width: 150px; overflow: hidden; max-height: 302px;}
-.dropdown-menu > .menu-search .input-group {width:100%;}
-.dropdown-menu > .menu-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666}
-.dropdown-menu > .menu-search .form-control {border: none!important; box-shadow: none!important; border-top: 1px solid #ddd!important;}
+.dropdown-menu > .menu-search .input-group {width: 100%;}
+.dropdown-menu > .menu-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666;}
+.dropdown-menu > .menu-search .form-control {border: none !important; box-shadow: none !important; border-top: 1px solid #ddd !important;}
 .dropdown-menu > li > a {text-align: left;}
 .dropdown-list {display: block; padding: 0; max-height: 270px; overflow-y: auto;}
 .dropdown-list > li > a {display: block; padding: 3px 20px; clear: both; font-weight: normal; line-height: 1.53846154; color: #141414; white-space: nowrap;}
 .dropdown-list > li > a:hover,
-.dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
+.dropdown-list > li > a:focus {color: #1a4f85; text-decoration: none; background-color: #ddd;}
 
 th.c-confirmed {text-align: center;}
 .c-severity {overflow: hidden; white-space: nowrap;}
-.c-id {text-overflow:ellipsis; white-space:nowrap;}
+.c-id {text-overflow: ellipsis; white-space: nowrap;}
 
 .body-modal #mainMenu>.btn-toolbar {width: auto;}

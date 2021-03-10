@@ -1,18 +1,18 @@
 tbody > tr > td > .btn-icon {margin-right: 3px;}
 tbody > tr > td   .icon-bug {margin-left: -8px;}
-tbody > tr > td   .icon-share{font-size: 9px;}
+tbody > tr > td   .icon-share {font-size: 9px;}
 
 .table-footer .table-actions .input-group {float: left;}
-.table-footer .table-actions #assignedTo_chosen a.chosen-default{height:28px;line-height:15px}
-.table-footer .table-actions .input-group-addon{padding:4px 12px;}
+.table-footer .table-actions #assignedTo_chosen a.chosen-default {height: 28px; line-height: 15px;}
+.table-footer .table-actions .input-group-addon {padding: 4px 12px;}
 .table-footer
 .table-footer.fixedTfootAction .chosen-results li.active-result {color: black;}
-.table-footer .table-actions .input-group #assignedTo_chosen .chosen-single{height:28px;padding:3px 6px}
-.table-footer .table-actions .input-group #assignedTo_chosen .chosen-single span{font-size:12px;}
-.table-footer .table-actions .input-group #assignedTo_chosen .chosen-single div{line-height:10px;}
-td.c-story{overflow: hidden; text-overflow:ellipsis; white-space: nowrap;}
-td .warning{color: red;}
-#modules .active{font-weight: bolder;}
+.table-footer .table-actions .input-group #assignedTo_chosen .chosen-single {height: 28px; padding: 3px 6px;}
+.table-footer .table-actions .input-group #assignedTo_chosen .chosen-single span {font-size: 12px;}
+.table-footer .table-actions .input-group #assignedTo_chosen .chosen-single div {line-height: 10px;}
+td.c-story {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+td .warning {color: red;}
+#modules .active {font-weight: bolder;}
 
-.fail .result-fail, .blocked .result-blocked{color:#f00;}
-.pass .result-pass{color:green;}
+.fail .result-fail, .blocked .result-blocked {color: #f00;}
+.pass .result-pass {color: green;}

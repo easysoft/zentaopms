@@ -1,5 +1,5 @@
-html[lang='en'] #moduleIdBox .input-group-addon{padding: 5px 23px}
-html[lang='en'] #deadlineTd .input-group-addon{padding: 5px 18px}
+html[lang='en'] #moduleIdBox .input-group-addon {padding: 5px 23px;}
+html[lang='en'] #deadlineTd .input-group-addon {padding: 5px 18px;}
 
 .ke-toolbar .ke-outline[data-name='savetemplate'] {display: block;}
 .ke-outline  .ke-icon-savetemplate {background-image: url(theme/default/images/kindeditor/save.gif); background-position: center; width: 56px; height: 20px;}
@@ -9,7 +9,7 @@ html[lang='en'] #deadlineTd .input-group-addon{padding: 5px 18px}
 .bootbox-prompt .modal-dialog {width: 500px; margin-top: 10%;}
 
 #buildBoxActions {padding-left: 15px;}
-#executionIdBox {display:block;}
+#executionIdBox {display: block;}
 
 #module + .chosen-container-single .chosen-single,
 #task + .chosen-container-single .chosen-single,
@@ -17,31 +17,31 @@ html[lang='en'] #deadlineTd .input-group-addon{padding: 5px 18px}
 #openedBuild + .chosen-container-multi .chosen-choices,
 #mailto + .chosen-container-multi .chosen-choices {border-top-right-radius: 0; border-bottom-right-radius: 0;}
 
-.dropdown-pris > .btn {background-color: #fff; text-shadow: none}
+.dropdown-pris > .btn {background-color: #fff; text-shadow: none;}
 
-#contactListGroup .input-group-btn > .btn {margin-left: -1px!important;}
+#contactListGroup .input-group-btn > .btn {margin-left: -1px !important;}
 #contactListGroup .chosen-container-single a {border-left-width: 0px;}
 
 .minw-80px {min-width: 80px;}
 
-.colorpicker.input-group-btn > .btn {border-right: none}
+.colorpicker.input-group-btn > .btn {border-right: none;}
 
-.input-group-addon.w-90px {min-width:90px;}
+.input-group-addon.w-90px {min-width: 90px;}
 .input-group .input-group-btn .btn {padding: 6px 12px;}
 .input-group .chosen-container {min-width: 80px;}
-#all {border-left:none}
+#all {border-left: none;}
 
-.pri-selector > .btn {padding: 5px 8px!important; width: 100%;}
+.pri-selector > .btn {padding: 5px 8px !important; width: 100%;}
 .pri-selector > .dropdown-menu {padding: 10px;}
 
 .title-group.required:after {display: none;}
 .title-group.required > .required:after {display: block; right: 29px; top: 5px;}
-.title-group .chosen-container {width: 1%!important; min-width: 70px;}
-.title-group #severity + .chosen-container > .chosen-single {border-radius: 0!important;}
-.title-group #pri + .chosen-container > .chosen-single {border-top-left-radius: 0!important; border-bottom-left-radius: 0!important;}
-#mainContent .center-block {padding-bottom:40px;}
+.title-group .chosen-container {width: 1% !important; min-width: 70px;}
+.title-group #severity + .chosen-container > .chosen-single {border-radius: 0 !important;}
+.title-group #pri + .chosen-container > .chosen-single {border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important;}
+#mainContent .center-block {padding-bottom: 40px;}
 
-#typeBox {width:180px;}
+#typeBox {width: 180px;}
 #typeBox .required:after {right: 1px;}
 #osBox .required:after {right: 1px;}
-#osBox {width:190px;}
+#osBox {width: 190px;}

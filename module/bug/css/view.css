@@ -1,5 +1,5 @@
-.content .stepTitle{display:block; color: green; margin:0px;}
-.table-fixed td{white-space: unset}
-.table-data tr > td{word-break: break-all; word-wrap: break-word;}
-.side-col .cell{padding:0px;}
+.content .stepTitle {display: block; color: green; margin: 0px;}
+.table-fixed td {white-space: unset;}
+.table-data tr > td {word-break: break-all; word-wrap: break-word;}
+.side-col .cell {padding: 0px;}
 .tab-pane table {border: 1px solid #ddd; border-top: none;}
