@@ -16,7 +16,7 @@
 <style>
 .block-stories .c-id {width: 55px;}
 .block-stories .c-pri {width: 45px;text-align: center;}
-.block-stories .c-estimate {width: 65px;}
+.block-stories .c-estimate {width: 65px; text-align: right;}
 .block-stories .c-status {width: 80px;}
 .block-stories .c-stage {width: 80px;}
 .block-stories.block-sm .estimate,

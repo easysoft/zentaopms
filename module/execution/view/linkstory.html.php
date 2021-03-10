@@ -33,7 +33,7 @@
     <div id='queryBox' data-module='story' class='show no-margin'></div>
   </div>
   <form class='main-table table-story' method='post' data-ride='table' id='linkStoryForm'>
-    <table class='table table-fixed tablesorter' id='linkStoryList'> 
+    <table class='table table-fixed tablesorter' id='linkStoryList'>
       <thead>
         <tr>
           <th class='c-id'>
@@ -54,7 +54,7 @@
           <th class='w-80px'><?php echo $lang->product->branchName[$productType];?></th>
           <?php endif;?>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
-          <th class='w-80px text-center'><?php echo $lang->story->estimateAB;?></th>
+          <th class='w-80px text-right'><?php echo $lang->story->estimateAB;?></th>
         </tr>
       </thead>
       <tbody>
@@ -81,7 +81,7 @@
         <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
         <?php endif;?>
         <td><?php echo zget($users, $story->openedBy);?></td>
-        <td class='text-center' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
+        <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
       </tr>
       <?php $storyCount++;?>
       <?php endforeach;?>

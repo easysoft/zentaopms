@@ -338,19 +338,22 @@ $lang->story->menu = $lang->product->menu;
 /* 执行视图菜单设置。*/
 $lang->execution = new stdclass();
 $lang->execution->menu = new stdclass();
-$lang->execution->menu->index    = '仪表盘|execution|index|';
-$lang->execution->menu->task     = array('link' => '任务|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
-$lang->execution->menu->kanban   = array('link' => '看板|execution|kanban|executionID=%s');
-$lang->execution->menu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
-$lang->execution->menu->view     = array('link' => '视图|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
-$lang->execution->menu->story    = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->execution->menu->bug      = array('link' => 'Bug|execution|bug|executionID=%s');
-$lang->execution->menu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->menu->testtask = array('link' => '测试单|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
-$lang->execution->menu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
-$lang->execution->menu->product  = $lang->productCommon . '|execution|manageproducts|executionID=%s';
-$lang->execution->menu->team     = array('link' => '团队|execution|team|executionID=%s', 'alias' => 'managemembers');
-$lang->execution->menu->more     = array('link' => '更多|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->execution->menu->index = '仪表盘|execution|index|';
+$lang->execution->menu->list  = '执行|execution|all|';
+
+$lang->execution->viewMenu = new stdclass();
+$lang->execution->viewMenu->task     = array('link' => '任务|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
+$lang->execution->viewMenu->kanban   = array('link' => '看板|execution|kanban|executionID=%s');
+$lang->execution->viewMenu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
+$lang->execution->viewMenu->view     = array('link' => '视图|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->execution->viewMenu->story    = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
+$lang->execution->viewMenu->bug      = array('link' => 'Bug|execution|bug|executionID=%s');
+$lang->execution->viewMenu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
+$lang->execution->viewMenu->testtask = array('link' => '测试单|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->viewMenu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
+$lang->execution->viewMenu->product  = $lang->productCommon . '|execution|manageproducts|executionID=%s';
+$lang->execution->viewMenu->team     = array('link' => '团队|execution|team|executionID=%s', 'alias' => 'managemembers');
+$lang->execution->viewMenu->more     = array('link' => '更多|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
 $lang->execution->subMenu = new stdclass();
 $lang->execution->subMenu->view = new stdclass();
@@ -367,7 +370,7 @@ $lang->execution->subMenu->more->whitelist = array('link' => '白名单|executio
 $lang->execution->subMenu->more->action    = array('link' => '动态|execution|dynamic|executionID=%s');
 $lang->execution->subMenu->more->view      = array('link' => '概况|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 
-$lang->execution->dividerMenu = ',task,story,doc,';
+$lang->execution->dividerMenu = ',story,doc,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
@@ -898,19 +901,16 @@ $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse|project={PROJECT}');
 $lang->menu->scrum->dynamic        = array('link' => '动态|project|dynamic|project={PROJECT}');
 $lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
-$lang->menu->scrum->projectsetting = array('link' => '设置|project|view|project={PROJECT}', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
+$lang->menu->scrum->projectsetting = array('link' => '设置|project|view|project={PROJECT}', 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
 $lang->scrum = new stdclass();
-$lang->scrum->subMenu = new stdclass();
-$lang->scrum->subMenu->other = new stdclass();
-$lang->scrum->subMenu->other->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
-
 $lang->scrum->setMenu = new stdclass();
-$lang->scrum->setMenu->view      = array('link' => '概况|project|view|project={PROJECT}', 'alias' => 'edit');
-$lang->scrum->setMenu->products  = array('link' => '产品|project|manageProducts|project={PROJECT}', 'alias' => 'manageproducts');
-$lang->scrum->setMenu->members   = array('link' => '团队|project|manageMembers|project={PROJECT}', 'alias' => 'managemembers');
-$lang->scrum->setMenu->group     = array('link' => '权限|project|group|project={PROJECT}', 'alias' => 'group,manageview,managepriv');
-$lang->scrum->setMenu->whitelist = array('link' => '白名单|project|whitelist|project={PROJECT}', 'subModule' => 'personnel');
+$lang->scrum->setMenu->view        = array('link' => '概况|project|view|project={PROJECT}', 'alias' => 'edit');
+$lang->scrum->setMenu->products    = array('link' => '产品|project|manageProducts|project={PROJECT}', 'alias' => 'manageproducts');
+$lang->scrum->setMenu->members     = array('link' => '团队|project|manageMembers|project={PROJECT}', 'alias' => 'managemembers');
+$lang->scrum->setMenu->whitelist   = array('link' => '白名单|project|whitelist|project={PROJECT}', 'subModule' => 'personnel');
+$lang->scrum->setMenu->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
+$lang->scrum->setMenu->group       = array('link' => '权限|project|group|project={PROJECT}', 'alias' => 'group,manageview,managepriv');
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
@@ -962,8 +962,7 @@ $lang->stakeholder->menu        = new stdclass();
 $lang->waterfallproduct->menu   = new stdclass();
 $lang->projectstory->menu       = new stdclass();
 
-$lang->stakeholder->menu->list  = array('link' => '干系人列表|stakeholder|browse|', 'alias' => 'create,edit,view,batchcreate');
-$lang->stakeholder->menu->issue = array('link' => '问题管理|stakeholder|issue|');
+$lang->stakeholder->menu = $lang->scrum->setMenu;
 
 $lang->nc->menu = $lang->auditplan->menu;
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');

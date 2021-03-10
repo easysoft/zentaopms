@@ -451,7 +451,7 @@ class projectrelease extends control
         }
         else
         {
-            $allStories = $this->story->getProjectStories($build->execution, 0, 0, 't1.`order`_desc', 'byProduct', $release->product, 'story', $release->stories, $pager);
+            $allStories = $this->story->getExecutionStories($build->execution, 0, 0, 't1.`order`_desc', 'byProduct', $release->product, 'story', $release->stories, $pager);
         }
 
         $this->view->allStories     = $allStories;

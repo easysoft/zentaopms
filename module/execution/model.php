@@ -62,6 +62,8 @@ class executionModel extends model
      */
     public function setMenu($executions, $executionID, $buildID = 0, $extra = '')
     {
+        if($this->app->rawMethod != 'index' and $this->app->rawMethod != 'all') $this->lang->execution->menu = $this->lang->execution->viewMenu;
+
         if(empty($executions))
         {
             $project = $this->loadModel('project')->getByID($this->session->PRJ);
@@ -863,6 +865,21 @@ class executionModel extends model
                 return false;
             }
         }
+    }
+
+    /**
+     * Get execution main menu action.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return string
+     */
+    public function getMainAction($module, $method)
+    {
+        $link = html::a(helper::createLink('execution', 'all'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
+        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
+        return common::hasPriv('execution', 'all') ? $html : '';
     }
 
     /**

@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('mode', $mode);?>
+<?php js::set('total', $pager->recTotal);?>
+<?php js::set('rawMethod', $app->rawMethod);?>
 <style>
 .w-230px{width:230px;}
 </style>

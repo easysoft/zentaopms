@@ -731,13 +731,16 @@ class blockModel extends model
         $params->bugNum['default'] = 20;
         $params->bugNum['control'] = 'input';
 
-        $params->riskNum['name']    = $this->lang->block->riskNum;
-        $params->riskNum['default'] = 20;
-        $params->riskNum['control'] = 'input';
+        if(isset($this->config->maxVersion))
+        {
+            $params->riskNum['name']    = $this->lang->block->riskNum;
+            $params->riskNum['default'] = 20;
+            $params->riskNum['control'] = 'input';
 
-        $params->issueNum['name']    = $this->lang->block->issueNum;
-        $params->issueNum['default'] = 20;
-        $params->issueNum['control'] = 'input';
+            $params->issueNum['name']    = $this->lang->block->issueNum;
+            $params->issueNum['default'] = 20;
+            $params->issueNum['control'] = 'input';
+        }
 
         $params->storyNum['name']    = $this->lang->block->storyNum;
         $params->storyNum['default'] = 20;

@@ -711,9 +711,6 @@ class commonModel extends model
                     $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
                 }
 
-                /* Disable links to more buttons. */
-                if($menuItem->name == 'other') $link = 'javascript:void(0);';
-
                 /* Avoid highlighting the same navigation method at the same time. */
                 if($currentModule == 'feedback' and $currentMethod == 'admin') $active = '';
                 if($currentModule == 'product' and $currentMethod == 'browse') $active = '';
@@ -1760,9 +1757,6 @@ EOD;
         global $app, $lang;
         $module = strtolower($module);
         $method = strtolower($method);
-
-        /* More menus do not require permission control. */
-        if($module == 'project' && $method == 'other') return true;
 
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;

@@ -3,8 +3,8 @@
 <?php else:?>
 <style>
 .block-issues .c-id {width: 55px;}
-.block-issues .c-pri {width: 45px;text-align: center;}
-.block-issues .c-estimate {width: 60px;}
+.block-issues .c-pri {width: 45px; text-align: center;}
+.block-issues .c-estimate {width: 60px; text-align: right;}
 .block-issues .c-deadline {width: 95px;}
 .block-issues .c-status {width: 80px;}
 .block-issues.block-sm .c-status {text-align: center;}

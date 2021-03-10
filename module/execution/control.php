@@ -110,8 +110,8 @@ class execution extends control
         $this->view->executions      = $this->executions;
         $this->view->execution       = $execution;
         $this->view->childExecutions = $childExecutions;
-        $this->view->products      = $products;
-        $this->view->teamMembers   = $teamMembers;
+        $this->view->products        = $products;
+        $this->view->teamMembers     = $teamMembers;
 
         return $execution;
     }

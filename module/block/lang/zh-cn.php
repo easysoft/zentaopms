@@ -190,40 +190,6 @@ $lang->block->default['product']['4']['params']['count']   = 15;
 $lang->block->default['product']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['product']['4']['params']['type']    = 'assignedTo';
 
-$lang->block->default['execution']['1']['title'] = $lang->executionCommon . '统计';
-$lang->block->default['execution']['1']['block'] = 'statistic';
-$lang->block->default['execution']['1']['grid']  = 8;
-
-$lang->block->default['execution']['1']['params']['type']  = 'all';
-$lang->block->default['execution']['1']['params']['count'] = '20';
-
-$lang->block->default['execution']['2']['title'] = $lang->executionCommon . '总览';
-$lang->block->default['execution']['2']['block'] = 'overview';
-$lang->block->default['execution']['2']['grid']  = 4;
-
-$lang->block->default['execution']['3']['title'] = '未关闭的' . $lang->executionCommon;
-$lang->block->default['execution']['3']['block'] = 'list';
-$lang->block->default['execution']['3']['grid']  = 8;
-
-$lang->block->default['execution']['3']['params']['count']   = 15;
-$lang->block->default['execution']['3']['params']['orderBy'] = 'id_desc';
-$lang->block->default['execution']['3']['params']['type']    = 'undone';
-
-$lang->block->default['execution']['4']['title'] = '指派给我的任务';
-$lang->block->default['execution']['4']['block'] = 'task';
-$lang->block->default['execution']['4']['grid']  = 4;
-
-$lang->block->default['execution']['4']['params']['count']   = 15;
-$lang->block->default['execution']['4']['params']['orderBy'] = 'id_desc';
-$lang->block->default['execution']['4']['params']['type']    = 'assignedTo';
-
-$lang->block->default['execution']['5']['title'] = '版本列表';
-$lang->block->default['execution']['5']['block'] = 'build';
-$lang->block->default['execution']['5']['grid']  = 8;
-
-$lang->block->default['execution']['5']['params']['count']   = 15;
-$lang->block->default['execution']['5']['params']['orderBy'] = 'id_desc';
-
 $lang->block->default['execution']['1']['title'] = '执行统计';
 $lang->block->default['execution']['1']['block'] = 'statistic';
 $lang->block->default['execution']['1']['grid']  = 8;
@@ -303,10 +269,10 @@ $lang->block->default['full']['my']['2']['block']  = 'dynamic';
 $lang->block->default['full']['my']['2']['grid']   = 4;
 $lang->block->default['full']['my']['2']['source'] = '';
 
-$lang->block->default['full']['my']['3']['title']  = '我的待办';
-$lang->block->default['full']['my']['3']['block']  = 'list';
-$lang->block->default['full']['my']['3']['grid']   = 4;
-$lang->block->default['full']['my']['3']['source'] = 'todo';
+$lang->block->default['full']['my']['3']['title']           = '我的待办';
+$lang->block->default['full']['my']['3']['block']           = 'list';
+$lang->block->default['full']['my']['3']['grid']            = 4;
+$lang->block->default['full']['my']['3']['source']          = 'todo';
 $lang->block->default['full']['my']['3']['params']['count'] = '20';
 
 $lang->block->default['full']['my']['4']['title']  = '项目统计';
@@ -353,7 +319,7 @@ $lang->block->count   = '数量';
 $lang->block->type    = '类型';
 $lang->block->orderBy = '排序';
 
-$lang->block->availableBlocks = new stdclass();
+$lang->block->availableBlocks            = new stdclass();
 $lang->block->availableBlocks->todo      = '我的待办';
 $lang->block->availableBlocks->task      = '我的任务';
 $lang->block->availableBlocks->bug       = '我的Bug';
@@ -435,6 +401,12 @@ $lang->block->orderByList->product['id_asc']      = 'ID 递增';
 $lang->block->orderByList->product['id_desc']     = 'ID 递减';
 $lang->block->orderByList->product['status_asc']  = '状态正序';
 $lang->block->orderByList->product['status_desc'] = '状态倒序';
+
+$lang->block->orderByList->project = array();
+$lang->block->orderByList->project['id_asc']      = 'ID 递增';
+$lang->block->orderByList->project['id_desc']     = 'ID 递减';
+$lang->block->orderByList->project['status_asc']  = '状态正序';
+$lang->block->orderByList->project['status_desc'] = '状态倒序';
 
 $lang->block->orderByList->execution = array();
 $lang->block->orderByList->execution['id_asc']      = 'ID 递增';

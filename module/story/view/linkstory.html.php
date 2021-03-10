@@ -42,7 +42,7 @@
         <th class='w-80px'><?php echo $lang->story->stage;?></th>
         <?php endif;?>
         <th class='w-user'><?php echo $lang->openedByAB;?></th>
-        <th class='w-80px'><?php echo $lang->story->estimateAB;?></th>
+        <th class='w-80px text-right'><?php echo $lang->story->estimateAB;?></th>
       </tr>
       </thead>
       <tbody>
@@ -52,7 +52,7 @@
       <tr>
         <td class='c-id'>
           <div class="checkbox-primary">
-            <input type='checkbox' name='stories[]'  value='<?php echo $story2Link->id;?>'/> 
+            <input type='checkbox' name='stories[]'  value='<?php echo $story2Link->id;?>'/>
             <label></label>
           </div>
           <?php echo html::a($storyLink, sprintf('%03d', $story2Link->id));?>
@@ -64,7 +64,7 @@
         <td><?php echo zget($lang->story->stageList, $story2Link->stage);?></td>
         <?php endif;?>
         <td><?php echo zget($users, $story2Link->openedBy);?></td>
-        <td><?php echo $story2Link->estimate;?></td>
+        <td class='text-right'><?php echo $story2Link->estimate;?></td>
       </tr>
       <?php $storyCount ++;?>
       <?php endforeach;?>

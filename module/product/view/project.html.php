@@ -39,8 +39,8 @@
           <th class='w-100px'><?php echo $lang->project->end;?></th>
           <th class='w-100px'><?php echo $lang->project->status;?></th>
           <th class='w-100px'><?php echo $lang->project->budget;?></th>
-          <th class='w-80px text-center'><?php echo $lang->project->estimate;?></th>
-          <th class='w-80px text-center'><?php echo $lang->project->consume;?></th>
+          <th class='w-80px text-right'><?php echo $lang->project->estimate;?></th>
+          <th class='w-80px text-right'><?php echo $lang->project->consume;?></th>
           <th class='w-60px'><?php echo $lang->project->progress;?></th>
         </tr>
       </thead>
@@ -62,8 +62,8 @@
             <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
           </td>
           <td><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $this->lang->project->future;?></td>
-          <td class="text-center" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHourUnit;?></td>
-          <td class="text-center" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHourUnit;?></td>
+          <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHourUnit;?></td>
+          <td class="text-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHourUnit;?></td>
           <td>
             <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $project->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
               <div class='progress-info'><?php echo $project->hours->progress;?></div>
