@@ -63,16 +63,16 @@ $lang->todo->menuOrder = $lang->my->menuOrder;
 $lang->product->menuOrder[5]  = 'dashboard';
 $lang->product->menuOrder[10] = 'story';
 $lang->product->menuOrder[15] = 'plan';
-$lang->product->menuOrder[30] = 'project';
-$lang->product->menuOrder[20] = 'release';
-$lang->product->menuOrder[25] = 'roadmap';
-$lang->product->menuOrder[30] = 'requirement';
-$lang->product->menuOrder[35] = 'track';
-$lang->product->menuOrder[40] = 'doc';
-$lang->product->menuOrder[45] = 'dynamic';
-$lang->product->menuOrder[50] = 'setting';
-$lang->product->menuOrder[55] = 'create';
-$lang->product->menuOrder[60] = 'all';
+$lang->product->menuOrder[20] = 'project';
+$lang->product->menuOrder[25] = 'release';
+$lang->product->menuOrder[30] = 'roadmap';
+$lang->product->menuOrder[35] = 'requirement';
+$lang->product->menuOrder[40] = 'track';
+$lang->product->menuOrder[45] = 'doc';
+$lang->product->menuOrder[50] = 'dynamic';
+$lang->product->menuOrder[55] = 'setting';
+$lang->product->menuOrder[60] = 'create';
+$lang->product->menuOrder[65] = 'all';
 
 $lang->story->menuOrder       = $lang->product->menuOrder;
 $lang->productplan->menuOrder = $lang->product->menuOrder;
@@ -148,10 +148,9 @@ $lang->group->menuOrder       = $lang->company->menuOrder;
 $lang->user->menuOrder        = $lang->company->menuOrder;
 
 /* system menu order. */
-$lang->system->menuOrder[5]  = 'team';
-$lang->system->menuOrder[10] = 'calendar';
-$lang->system->menuOrder[15] = 'dynamic';
-$lang->system->menuOrder[20] = 'view';
+$lang->system->menuOrder[5]  = 'company';
+$lang->system->menuOrder[10] = 'team';
+$lang->system->menuOrder[15] = 'calendar';
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';

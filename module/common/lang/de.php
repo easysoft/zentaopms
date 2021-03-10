@@ -219,10 +219,9 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->team     = array('link' => 'Team|my|team|', 'subModule' => 'user');
+$lang->system->menu->company  = array('link' => 'User|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
+$lang->system->menu->team     = array('link' => 'Team|my|team|');
 $lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
-$lang->system->menu->dynamic  = 'Dynamic|company|dynamic|';
-$lang->system->menu->view     = array('link' => 'Company|company|view');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -324,7 +323,7 @@ $lang->my->dividerMenu = ',myWork,score,';
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
-$lang->product->dividerMenu = ',requirement,set,';
+$lang->product->dividerMenu = $config->URAndSR ? ',requirement,set,' : ',track,set,';
 
 $lang->story = new stdclass();
 
@@ -513,15 +512,23 @@ $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => 'Benutzer|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept        = array('link' => 'Abteilung|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => 'Gruppen|group|browse', 'subModule' => 'group');
+$lang->company->menu->dynamic     = 'Dynamic|company|dynamic|';
+$lang->company->menu->view        = array('link' => 'Company|company|view');
 
 /* Admin menu settings. */
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index   = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->company = array('link' => 'Personnel|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
-$lang->admin->menu->message = array('link' => 'Notification|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->custom  = array('link' => 'Custom|custom|index', 'subModule' => 'custom');
-$lang->admin->menu->system  = array('link' => 'System|backup|index', 'subModule' => 'cron,admin,backup,action');
+$lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->model     = array('link' => 'Model|custom|browsestoryconcept|', 'subModule' => 'holiday');
+$lang->admin->menu->custom    = array('link' => 'Custom|custom|index', 'subModule' => 'custom');
+$lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
+$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
+$lang->admin->menu->message   = array('link' => 'Message|message|index', 'subModule' => 'message,mail,webhook');
+$lang->admin->menu->system    = array('link' => 'System|backup|index', 'subModule' => 'cron,backup,action');
+
+$lang->subject = new stdclass();
+$lang->subject->menu = new stdclass();
+$lang->subject->menu->storyConcept = array('link' => 'Story Concpet|custom|browsestoryconcept|');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;

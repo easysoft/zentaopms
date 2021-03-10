@@ -472,8 +472,8 @@ class execution extends control
 
         $execution   = $this->commonAction($toExecution);
         $toExecution = $execution->id;
-        $branches  = $this->execution->getBranches($toExecution);
-        $tasks     = $this->execution->getTasks2Imported($toExecution, $branches);
+        $branches    = $this->execution->getBranches($toExecution);
+        $tasks       = $this->execution->getTasks2Imported($toExecution, $branches);
         $executions  = $this->execution->getsToImport(array_keys($tasks), $execution->type);
         unset($executions[$toExecution]);
         unset($tasks[$toExecution]);
@@ -2178,9 +2178,10 @@ class execution extends control
         $this->loadModel('product');
 
         /* Get executions and products. */
-        $execution    = $this->execution->getById($executionID);
+        $execution  = $this->execution->getById($executionID);
         $products   = $this->execution->getProducts($executionID);
-        $browseLink = $this->createLink('execution', 'story', "executionID=$executionID");
+        $module     = $execution->type == 'execution' ? 'execution' : 'projectstory';
+        $browseLink = $this->createLink($module, 'story', "executionID=$executionID");
         if($execution->type == 'execution') $browseLink = $this->createLink('executionstory', 'story', "productID={$this->session->product}");
 
         $this->session->set('storyList', $this->app->getURI(true)); // Save session.
