@@ -127,22 +127,23 @@ $lang->common = new stdclass();
 $lang->common->common = 'Module chung';
 
 global $config;
-list($programModule, $programMethod) = explode('-', $config->programLink);
-list($productModule, $productMethod) = explode('-', $config->productLink);
-list($projectModule, $projectMethod) = explode('-', $config->projectLink);
+list($programModule, $programMethod)     = explode('-', $config->programLink);
+list($productModule, $productMethod)     = explode('-', $config->productLink);
+list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
+list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 
 /* Main menu. */
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
-$lang->mainNav->product = "<i class='icon icon-menu-project'></i> Product|$productModule|$productMethod|";
+$lang->mainNav->product = "<i class='icon icon-menu-product'></i> Product|$productModule|$productMethod|";
 if($config->systemMode == 'new')
 {
-    $lang->mainNav->project   = "<i class='icon icon-file'></i> Project|$projectModule|$projectMethod|";
-    $lang->mainNav->execution = "<i class='icon icon-run'></i> Execution|execution|task|";
+    $lang->mainNav->project   = "<i class='icon icon-project'></i> Project|$projectModule|$projectMethod|";
+    $lang->mainNav->execution = "<i class='icon icon-run'></i> Execution|$executionModule|$executionMethod|";
 }
 else
 {
-    $lang->mainNav->project = "<i class='icon icon-file'></i> $lang->executionCommon|$projectModule|$projectMethod|";
+    $lang->mainNav->execution = "<i class='icon icon-run'></i> $lang->executionCommon|$executionModule|$executionMethod|";
 }
 $lang->mainNav->qa      = '<i class="icon icon-test"></i> Test|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> Code|repo|browse|';

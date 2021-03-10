@@ -215,21 +215,23 @@ class router extends baseRouter
         $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]) ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey] : $this->config->hourPointCommonList['en'][(int)$hourKey];
 
         /* User preference init. */
-        $config->URSR        = $URSR;
-        $config->URAndSR     = $URAndSR;
-        $config->programLink = 'program-browse';
-        $config->productLink = 'product-all';
-        $config->projectLink = 'project-browse';
+        $config->URSR          = $URSR;
+        $config->URAndSR       = $URAndSR;
+        $config->programLink   = 'program-browse';
+        $config->productLink   = 'product-all';
+        $config->projectLink   = 'project-browse';
+        $config->executionLink = 'execution-task';
 
         /* Get user preference. */
         $account     = isset($this->session->user->account) ? $this->session->user->account : '';
-        if($this->dbh and !empty($this->config->db->name)) $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'URSR')")->fetchAll();
+        if($this->dbh and !empty($this->config->db->name)) $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
         foreach($userSetting as $setting)
         {
-             if($setting->key == 'URSR')        $config->URSR        = $setting->value;
-             if($setting->key == 'programLink') $config->programLink = $setting->value;
-             if($setting->key == 'productLink') $config->productLink = $setting->value;
-             if($setting->key == 'projectLink') $config->projectLink = $setting->value;
+             if($setting->key == 'URSR')          $config->URSR          = $setting->value;
+             if($setting->key == 'programLink')   $config->programLink   = $setting->value;
+             if($setting->key == 'productLink')   $config->productLink   = $setting->value;
+             if($setting->key == 'projectLink')   $config->projectLink   = $setting->value;
+             if($setting->key == 'executionLink') $config->executionLink = $setting->value;
         }
 
         $lang->URCommon = '';
