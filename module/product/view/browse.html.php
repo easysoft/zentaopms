@@ -182,7 +182,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
         echo '</button>';
         echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
         if(common::hasPriv('projectstory', 'linkStory')) echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project={$this->session->PRJ}"), $lang->execution->linkStory). "</li>";
-        if(common::hasPriv('project', 'importPlanStories') and !empty($productID)) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
+        if(common::hasPriv('projectstory', 'importPlanStories') and !empty($productID)) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
         echo '</ul>';
     }
     ?>
