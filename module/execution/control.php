@@ -472,8 +472,8 @@ class execution extends control
 
         $execution   = $this->commonAction($toExecution);
         $toExecution = $execution->id;
-        $branches  = $this->execution->getBranches($toExecution);
-        $tasks     = $this->execution->getTasks2Imported($toExecution, $branches);
+        $branches    = $this->execution->getBranches($toExecution);
+        $tasks       = $this->execution->getTasks2Imported($toExecution, $branches);
         $executions  = $this->execution->getsToImport(array_keys($tasks), $execution->type);
         unset($executions[$toExecution]);
         unset($tasks[$toExecution]);

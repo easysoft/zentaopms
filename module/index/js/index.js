@@ -75,10 +75,6 @@
             }
             return 'doc';
         }
-        if(moduleName === 'custom' && ['estimate', 'browsestoryconcept', 'configurescrum', 'setdefaultconcept'].includes(methodLowerCase))
-        {
-            return 'system';
-        }
         if(['caselib', 'testreport', 'testsuite', 'testtask', 'testcase', 'bug', 'qa'].includes(moduleName))
         {
             return link.prj ? 'project' : 'qa';
@@ -117,8 +113,7 @@
         {
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
         }
-        if(moduleName === 'my')      if(methodLowerCase === 'team' || methodLowerCase == 'calendar') return 'system';
-        if(moduleName === 'company') if(methodLowerCase === 'view' || methodLowerCase == 'dynamic') return 'system';
+        if(moduleName === 'my') if(methodLowerCase === 'team' || methodLowerCase == 'calendar') return 'system';
         if(moduleName === 'tree')
         {
             if(methodLowerCase === 'browse')

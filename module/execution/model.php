@@ -1226,7 +1226,7 @@ class executionModel extends model
     public function getBranches($executionID)
     {
         $productBranchPairs = $this->dao->select('product, branch')->from(TABLE_PROJECTPRODUCT)
-            ->where('execution')->eq($executionID)
+            ->where('project')->eq($executionID)
             ->fetchPairs();
         $branches = $this->loadModel('branch')->getByProducts(array_keys($productBranchPairs));
         foreach($productBranchPairs as $product => $branch)
@@ -1274,7 +1274,7 @@ class executionModel extends model
      */
     public function getRelatedExecutions($executionID)
     {
-        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('execution')->eq((int)$executionID)->fetchAll('product');
+        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchAll('product');
         // $products   = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->fetchAll('product');
         if(!$products) return array();
         $products = array_keys($products);
@@ -1802,7 +1802,7 @@ class executionModel extends model
 
         /* Link stories. */
         $executionStories = $this->loadModel('story')->getExecutionStoryPairs($executionID);
-        $lastOrder      = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('execution')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $lastOrder      = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
         foreach($stories as $storyID)
         {
             if(!isset($executionStories[$storyID]))
@@ -2025,7 +2025,7 @@ class executionModel extends model
 
         $this->loadModel('action');
         $versions      = $this->loadModel('story')->getVersions($stories);
-        $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('execution')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
+        $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder     = reset($linkedStories);
         $statusPairs   = $this->dao->select('id, status')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchPairs();
         foreach($stories as $key => $storyID)
@@ -2056,7 +2056,7 @@ class executionModel extends model
     public function linkStories($executionID)
     {
         $plans = $this->dao->select('plan,product')->from(TABLE_PROJECTPRODUCT)
-            ->where('execution')->eq($executionID)
+            ->where('project')->eq($executionID)
             ->fetchPairs('plan', 'product');
 
         $planStories  = array();
@@ -2106,13 +2106,13 @@ class executionModel extends model
             $executionStories = $this->dao->select('execution,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('execution')->in(array_keys($executions))->fetchAll();
             if(!empty($executionStories)) die(js::alert($this->lang->execution->notAllowedUnlinkStory));
         }
-        $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('execution')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
+        $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
 
         $order   = 1;
-        $stories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('execution')->eq($executionID)->orderBy('order')->fetchAll();
+        $stories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order')->fetchAll();
         foreach($stories as $executionstory)
         {
-            if($executionstory->order != $order) $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('execution')->eq($executionID)->andWhere('story')->eq($executionstory->story)->exec();
+            if($executionstory->order != $order) $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('project')->eq($executionID)->andWhere('story')->eq($executionstory->story)->exec();
             $order++;
         }
 
@@ -2305,7 +2305,7 @@ class executionModel extends model
 
         if($executionType == 'execution')
         {
-            $childSprints   = $this->dao->select('id')->from(TABLE_EXECUTION)->where('execution')->eq($execution->id)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
+            $childSprints   = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($execution->id)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
             $linkedProducts = $this->loadModel('product')->getProductPairsByExecution($execution->id);
 
             $this->loadModel('user')->updateUserView(array($executionID), 'execution', $changedAccounts);

@@ -350,8 +350,8 @@ class custom extends control
         /* Process menu.*/
         $this->app->loadLang('custom');
         $this->lang->custom->menu = $this->lang->subject->menu;
-        $this->lang->navGroup->custom = 'system';
-        $this->lang->system->menu->company['subModule'] .= ',custom';
+        $this->lang->navGroup->custom = 'admin';
+        $this->lang->admin->menu->model['subModule'] .= ',custom';
         $key = array_search('custom', $this->lang->noMenuModule);
         if($key !== false) unset($this->lang->noMenuModule[$key]);
 

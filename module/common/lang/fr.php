@@ -219,10 +219,9 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->team     = array('link' => 'Team|my|team|', 'subModule' => 'user');
+$lang->system->menu->company  = array('link' => 'User|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
+$lang->system->menu->team     = array('link' => 'Team|my|team|');
 $lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
-$lang->system->menu->dynamic  = 'Dynamic|company|dynamic|';
-$lang->system->menu->view     = array('link' => 'Company|company|view');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
