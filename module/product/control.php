@@ -212,7 +212,6 @@ class product extends control
         $product = $this->product->getById($productID);
 
         /* Get stories. */
-        $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         if($this->app->rawModule == 'projectstory')
         {
             if(!empty($product)) $this->session->set('currentProductType', $product->type);
@@ -221,6 +220,10 @@ class product extends control
 
             if($browseType == 'bybranch') $param = $branch;
             $stories = $this->story->getExecutionStories($this->session->PRJ, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
+        }
+        else
+        {
+            $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
