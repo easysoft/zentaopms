@@ -672,15 +672,10 @@ class actionModel extends model
 
         /* If is project, select its related. */
         $executions = array();
-        $products   = array();
         if(is_numeric($projectID))
         {
             $project = $this->loadModel('project')->getByID($projectID);
-            if(isset($project->type) and $project->type == 'project')
-            {
-                $executions = $this->loadModel('execution')->getPairs($projectID);
-                $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-            }
+            if(isset($project->type) and $project->type == 'project') $executions = $this->loadModel('execution')->getPairs($projectID);
         }
 
         $this->loadModel('doc');
@@ -697,9 +692,12 @@ class actionModel extends model
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
-            ->beginIF(is_numeric($projectID))->andWhere('execution')->eq($projectID)->fi()
-            ->beginIF(!empty($executions))->markLeft()->orWhere('execution')->in($executions)->fi()->markRight()
-            ->beginIF(!empty($products))->markLeft()->orWhere('product')->in($products)->fi()->markRight()
+            ->andWhere()
+            ->markLeft(1)
+            ->where(1)
+            ->beginIF(is_numeric($projectID))->orWhere('execution')->eq($projectID)->fi()
+            ->beginIF(!empty($executions))->orWhere('execution')->in(array_keys($executions))->fi()
+            ->markRight(1)
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('execution')->gt(0)->fi()
             ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
