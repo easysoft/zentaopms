@@ -587,7 +587,8 @@ class project extends control
      */
     public function dynamic($projectID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
-        @ini_set('memory_limit', '2048M');
+        $this->lang->noMenuModule[] = 'project';
+
         /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri);
@@ -630,14 +631,14 @@ class project extends control
         $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         /* Assign. */
-        $this->view->projectID = $projectID;
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->account     = $account;
-        $this->view->param       = $param;
-        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction   = $direction;
+        $this->view->projectID  = $projectID;
+        $this->view->type       = $type;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->account    = $account;
+        $this->view->param      = $param;
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
+        $this->view->direction  = $direction;
         $this->display();
     }
 
