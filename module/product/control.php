@@ -270,7 +270,7 @@ class product extends control
         $this->view->moduleID        = $moduleID;
         $this->view->stories         = $stories;
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
-        $this->view->productPlans    = isset($productPlans) ? $productPlans : array();
+        $this->view->productPlans    = isset($productPlans) ? array(0 => '') + $productPlans : array();
         $this->view->summary         = $this->product->summary($stories, $storyType);
         $this->view->moduleTree      = $moduleTree;
         $this->view->parentModules   = $this->tree->getParents($moduleID);
