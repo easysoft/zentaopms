@@ -20,13 +20,14 @@ $isQa        = $rawModule == 'qa';
   <div id='mainHeader'>
     <div class='container'>
       <div id='heading'>
-        <?php if($isProduct) echo isset($lang->product->switcherMenu) ? $lang->product->switcherMenu : '';?>
-        <?php if($isQa)      echo isset($lang->qa->switcherMenu) ? $lang->qa->switcherMenu : '';?>
+        <?php if($isProduct)   echo isset($lang->product->switcherMenu) ? $lang->product->switcherMenu : '';?>
+        <?php if($isQa)        echo isset($lang->qa->switcherMenu) ? $lang->qa->switcherMenu : '';?>
         <?php if($this->config->systemMode == 'new'):?>
-        <?php if($isProgram) echo isset($lang->program->switcherMenu) ? $lang->program->switcherMenu : '';?>
-        <?php if($isProject) echo $this->loadModel('project')->getSwitcher($this->session->PRJ, $app->rawModule, $app->rawMethod);?>
+        <?php if($isProgram)   echo isset($lang->program->switcherMenu) ? $lang->program->switcherMenu : '';?>
+        <?php if($isProject)   echo $this->loadModel('project')->getSwitcher($this->session->PRJ, $app->rawModule, $app->rawMethod);?>
+        <?php if($isExecution) echo $this->execution->getSwitcher($this->session->execution, $app->rawModule, $app->rawMethod);?>
         <?php elseif($this->config->systemMode == 'classic'):?>
-        <?php if($isProject) echo isset($lang->project->switcherMenu) ? $lang->project->switcherMenu : '';;?>
+        <?php if($isProject)   echo isset($lang->project->switcherMenu) ? $lang->project->switcherMenu : '';;?>
         <?php endif;?>
       </div>
       <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>
