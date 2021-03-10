@@ -51,6 +51,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $productName;?>'><?php echo $productName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
+        echo "<li>" . html::a($this->createLink('projectstory', 'story', "productID=0"), $lang->product->all)  . "</li>";
         foreach($projectProducts as $product)
         {
             echo "<li>" . html::a($this->createLink('projectstory', 'story', "productID=$product->id&branch=0&browseType=$browseType"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";

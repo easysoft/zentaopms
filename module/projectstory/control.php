@@ -44,8 +44,7 @@ class projectStory extends control
      */
     public function story($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->session->set('storyList',$this->app->getURI(true));
-        if(empty($productID)) $productID = key($this->products);
+        $this->session->set('storyList', $this->app->getURI(true));
 
         $this->lang->menugroup->product       = 'projectstory';
 
