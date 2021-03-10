@@ -2803,11 +2803,11 @@ class execution extends control
      *
      * @param int $executionID
      * @param int $planID
-     *
+     * @param int $productID
      * @access public
      * @return void
      */
-    public function importPlanStories($executionID, $planID)
+    public function importPlanStories($executionID, $planID, $productID = 0)
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
@@ -2836,7 +2836,7 @@ class execution extends control
         if($execution->type == 'project')
         {
             $moduleName = 'projectstory';
-            $param      = "productID={$_SESSION['product']}";
+            $param      = "productID=$productID";
         }
         if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, 'story', $param));
         die(js::locate(helper::createLink($moduleName, 'story', $param), 'parent'));
