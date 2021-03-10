@@ -574,6 +574,89 @@ class project extends control
     }
 
     /**
+     * Project dynamic.
+     *
+     * @param  int    $projectID
+     * @param  string $type
+     * @param  string $param
+     * @param  int    $recTotal
+     * @param  string $date
+     * @param  string $direction  next|pre
+     * @access public
+     * @return void
+     */
+    public function dynamic($projectID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
+    {
+        $this->lang->noMenuModule[] = 'project';
+
+        /* Save session. */
+        $uri = $this->app->getURI(true);
+        $this->session->set('productList',     $uri);
+        $this->session->set('productPlanList', $uri);
+        $this->session->set('releaseList',     $uri);
+        $this->session->set('storyList',       $uri);
+        $this->session->set('executionList',   $uri);
+        $this->session->set('taskList',        $uri);
+        $this->session->set('buildList',       $uri);
+        $this->session->set('bugList',         $uri);
+        $this->session->set('caseList',        $uri);
+        $this->session->set('testtaskList',    $uri);
+
+        /* Append id for secend sort. */
+        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
+        $sort    = $this->loadModel('common')->appendOrder($orderBy);
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
+
+        /* Set the user and type. */
+        $account = 'all';
+        if($type == 'account')
+        {
+            $user = $this->loadModel('user')->getById($param, 'account');
+            if($user) $account = $user->account;
+        }
+        $period  = $type == 'account' ? 'all'  : $type;
+        $date    = empty($date) ? '' : date('Y-m-d', $date);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', $projectID, $date, $direction);
+
+        /* The header and position. */
+        $project = $this->project->getByID($projectID);
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->dynamic;
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->project->dynamic;
+
+        $this->view->userIdPairs  = $this->project->getTeamMemberPairs($project->parent);
+        $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
+
+        /* Assign. */
+        $this->view->projectID  = $projectID;
+        $this->view->type       = $type;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->account    = $account;
+        $this->view->param      = $param;
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
+        $this->view->direction  = $direction;
+        $this->display();
+    }
+
+    /**
+     * Execution list.
+     *
+     * @access public
+     * @return void
+     */
+    public function execution()
+    {
+        $PRJ = $this->session->PRJ;
+        if(!$PRJ) $PRJ = current(explode(',', $this->app->user->view->projects));
+
+        $this->locate($this->createLink('execution', 'all', "status=all&executionID=0&from=project", '', false, $PRJ));
+    }
+
+    /**
      * Project manage view.
      *
      * @param  int    $groupID

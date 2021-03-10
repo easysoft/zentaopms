@@ -61,10 +61,10 @@ body.menu-hide {padding-left: 0;}
 #userNav .dropdown-submenu:focus > a, #userNav .dropdown-submenu:hover > a {background-color: rgba(0,0,0,.2);}
 #poweredBy{width: 40%; position: absolute; top: 4px; right: 0; padding: 0;}
 
-#globalSearchDiv{width:50%; float: right; margin-right: 4px;}
+#globalSearchDiv{width:52%; float: right; margin-right: 4px;}
 @media screen and (max-height: 768px)
 {
-  #globalSearchDiv{width: 60%;}
+  #globalSearchDiv{width: 62%;}
 }
 #globalSearchDiv .input-group{width: 82%; float: right; margin-top: 2px;}
 @media screen and (max-height: 768px)

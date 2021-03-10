@@ -1,0 +1,21 @@
+#mainMenu .btn-group ul.dropdown-menu{max-height: 300px; overflow: auto;}
+#dynamics {padding: 10px 0;}
+.dynamic {position: relative; padding-left: 170px;}
+.dynamic-date {position: absolute; left: 0; top: 0; width: 150px; border: 2px solid #eee; border-radius: 4px; padding: 14px 20px; height: 58px;}
+.dynamic-date:before {content: ' '; display: block; position: absolute; right: -22px; top: 26px; height: 2px; width: 20px; background-color: #eee;}
+.dynamic-date > .date-label,
+.dynamic-date > .date-text {font-size: 18px; display: block;}
+.dynamic-date > .date-label + .date-text {font-size: 14px; line-height: 14px;}
+.dynamic-date > .date-label {margin-top: -8px;}
+.dynamic-date > .btn {position: absolute; right: 10px; top: 15px;}
+.dynamic .timeline {border: 2px solid #eee; border-radius: 4px; margin-bottom: 20px; padding: 10px 20px 10px 100px; transition: max-height .2s; overflow: hidden;}
+.dynamic .timeline-tag {left: -75px; font-size: 14px; color: #838A9D;}
+.dynamic .timeline-text {color: #3C4353;}
+.dynamic .text-muted {color: #838A9D;}
+.dynamic .label-id {top: -1px;}
+.dynamic.active .timeline,
+.dynamic.active .dynamic-date {border-color: #00a9fc;}
+.dynamic.active .dynamic-date:before {background-color: #00a9fc;}
+.dynamic.collapsed .timeline {max-height: 58px;}
+.dynamic.collapsed .timeline > li + li {display: none;}
+.dynamic.collapsed .dynamic-btn > .icon:before {content: '\f0d8'; }

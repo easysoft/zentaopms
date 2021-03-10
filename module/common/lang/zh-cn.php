@@ -148,7 +148,7 @@ $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
-$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|custom|browsestoryconcept|';
+$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|my|team|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
 if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> 项目集|$programModule|$programMethod|";
 
@@ -221,11 +221,9 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => '全局设置|custom|browsestoryconcept|', 'subModule' => 'holiday');
-
-$lang->subject = new stdclass();
-$lang->subject->menu = new stdclass();
-$lang->subject->menu->storyConcept = array('link' => '需求概念|custom|browsestoryconcept|');
+$lang->system->menu->company  = array('link' => '人员|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
+$lang->system->menu->team     = array('link' => '团队|my|team|');
+$lang->system->menu->calendar = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -291,7 +289,6 @@ $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
 $lang->my->menu->index       = '仪表盘|my|index';
-$lang->my->menu->calendar    = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->myWork      = array('link' => '待处理|my|work|mode=task');
 if($config->systemMode == 'new')
 {
@@ -305,7 +302,6 @@ else
 $lang->my->menu->contribute  = array('link' => '贡献|my|contribute|mode=task');
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
 $lang->my->menu->score       = array('link' => '积分|my|score|', 'subModule' => 'score');
-$lang->my->menu->team        = array('link' => '团队|my|team|', 'subModule' => 'user');
 $lang->my->menu->contacts    = '联系人|my|managecontacts|';
 
 $lang->my->workMenu = new stdclass();
@@ -324,7 +320,7 @@ $lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
 $lang->my->contributeMenu->testcase    = '用例|my|contribute|mode=testcase&type=openedbyme';
 $lang->my->contributeMenu->testtask    = '测试单|my|contribute|mode=testtask&type=done';
 
-$lang->my->dividerMenu = ',myProject,team,';
+$lang->my->dividerMenu = ',myWork,score,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -527,13 +523,18 @@ $lang->company->menu->view        = array('link' => '公司|company|view');
 /* 后台管理菜单设置。*/
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index   = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->company = array('link' => '人员|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
-$lang->admin->menu->message = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->custom  = array('link' => '自定义|custom|index', 'subModule' => 'custom');
-$lang->admin->menu->system  = array('link' => '系统|backup|index', 'subModule' => 'cron,backup,action');
+$lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->model     = array('link' => '模型|custom|browsestoryconcept|', 'subModule' => 'holiday');
+$lang->admin->menu->custom    = array('link' => '自定义|custom|index', 'subModule' => 'custom');
+$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
+$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
+$lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
+$lang->admin->menu->system    = array('link' => '系统|backup|index', 'subModule' => 'cron,backup,action');
 
-$lang->company->menu = $lang->company->menu;
+$lang->subject = new stdclass();
+$lang->subject->menu = new stdclass();
+$lang->subject->menu->storyConcept = array('link' => '需求概念|custom|browsestoryconcept|');
+
 $lang->dept->menu    = $lang->company->menu;
 $lang->group->menu   = $lang->company->menu;
 $lang->user->menu    = $lang->company->menu;
@@ -665,9 +666,14 @@ $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
 
+$lang->navGroup->company       = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';
+$lang->navGroup->user          = 'system';
+$lang->navGroup->group         = 'system';
+$lang->navGroup->dept          = 'system';
+$lang->navGroup->ldap          = 'system';
 $lang->navGroup->process       = 'system';
 $lang->navGroup->activity      = 'system';
 $lang->navGroup->zoutput       = 'system';
@@ -684,14 +690,9 @@ $lang->navGroup->overtime = 'attend';
 $lang->navGroup->lieu     = 'attend';
 
 $lang->navGroup->admin     = 'admin';
-$lang->navGroup->company   = 'admin';
-$lang->navGroup->dept      = 'admin';
-$lang->navGroup->ldap      = 'admin';
-$lang->navGroup->group     = 'admin';
 $lang->navGroup->webhook   = 'admin';
 $lang->navGroup->sms       = 'admin';
 $lang->navGroup->message   = 'admin';
-$lang->navGroup->user      = 'admin';
 $lang->navGroup->custom    = 'admin';
 $lang->navGroup->cron      = 'admin';
 $lang->navGroup->backup    = 'admin';
@@ -899,7 +900,8 @@ $lang->menu->scrum->qa             = '测试|qa|index';
 $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse|project={PROJECT}');
-$lang->menu->scrum->dynamic        = array('link' => '动态|project|dynamic');
+$lang->menu->scrum->dynamic        = array('link' => '动态|project|dynamic|project={PROJECT}');
+$lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
 $lang->menu->scrum->projectsetting = array('link' => '设置|project|view|project={PROJECT}', 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
 $lang->scrum = new stdclass();

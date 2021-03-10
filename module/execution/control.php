@@ -472,8 +472,8 @@ class execution extends control
 
         $execution   = $this->commonAction($toExecution);
         $toExecution = $execution->id;
-        $branches  = $this->execution->getBranches($toExecution);
-        $tasks     = $this->execution->getTasks2Imported($toExecution, $branches);
+        $branches    = $this->execution->getBranches($toExecution);
+        $tasks       = $this->execution->getTasks2Imported($toExecution, $branches);
         $executions  = $this->execution->getsToImport(array_keys($tasks), $execution->type);
         unset($executions[$toExecution]);
         unset($tasks[$toExecution]);
@@ -803,7 +803,7 @@ class execution extends control
         $this->view->orderBy      = $orderBy;
         $this->view->type         = $this->session->executionStoryBrowseType;
         $this->view->param        = $param;
-        $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createExecutionStoryLink'));
+        $this->view->moduleTree   = $this->loadModel('tree')->getExecutionStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createExecutionStoryLink'));
         $this->view->tabID        = 'story';
         $this->view->storyTasks   = $storyTasks;
         $this->view->storyBugs    = $storyBugs;

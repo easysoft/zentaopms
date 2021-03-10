@@ -30,7 +30,7 @@ class qa extends control
         parent::__construct();
 
         /* Set report menu group. */
-        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
+        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
         if(!$this->projectID)
         {
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';

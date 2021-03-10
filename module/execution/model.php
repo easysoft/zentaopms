@@ -877,9 +877,40 @@ class executionModel extends model
      */
     public function getMainAction($module, $method)
     {
+        if($method == 'index' or $method == 'all') return;
+
         $link = html::a(helper::createLink('execution', 'all'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
         $html = "<p style='padding-top:5px;'>" . $link . "</p>";
+
         return common::hasPriv('execution', 'all') ? $html : '';
+    }
+
+    /*
+     * Get execution switcher.
+     *
+     * @param  int     $executionID
+     * @param  string  $currentModule
+     * @param  string  $currentMethod
+     * @access public
+     * @return string
+     */
+    public function getSwitcher($executionID, $currentModule, $currentMethod)
+    {
+        $this->session->set('moreExecutionLink', $this->app->getURI(true));
+
+        $currentExecutionName = $this->lang->execution->common;
+        if($executionID)
+        {
+            $currentExecution     = $this->getById($executionID);
+            $currentExecutionName = $currentExecution->name;
+        }
+
+        $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "objectID=$executionID&module=$currentModule&method=$currentMethod&extra=");
+        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-project'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
+
+        return $output;
     }
 
     /**
@@ -1195,7 +1226,7 @@ class executionModel extends model
     public function getBranches($executionID)
     {
         $productBranchPairs = $this->dao->select('product, branch')->from(TABLE_PROJECTPRODUCT)
-            ->where('execution')->eq($executionID)
+            ->where('project')->eq($executionID)
             ->fetchPairs();
         $branches = $this->loadModel('branch')->getByProducts(array_keys($productBranchPairs));
         foreach($productBranchPairs as $product => $branch)
@@ -1243,7 +1274,7 @@ class executionModel extends model
      */
     public function getRelatedExecutions($executionID)
     {
-        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('execution')->eq((int)$executionID)->fetchAll('product');
+        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchAll('product');
         // $products   = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->fetchAll('product');
         if(!$products) return array();
         $products = array_keys($products);
@@ -2274,7 +2305,7 @@ class executionModel extends model
 
         if($executionType == 'execution')
         {
-            $childSprints   = $this->dao->select('id')->from(TABLE_EXECUTION)->where('execution')->eq($execution->id)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
+            $childSprints   = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($execution->id)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
             $linkedProducts = $this->loadModel('product')->getProductPairsByExecution($execution->id);
 
             $this->loadModel('user')->updateUserView(array($executionID), 'execution', $changedAccounts);
