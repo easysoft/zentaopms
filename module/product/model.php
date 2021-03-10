@@ -823,9 +823,18 @@ class productModel extends model
     {
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productID);
-        $this->config->product->search['params']['product']['values'] = array($productID => $products[$productID], 'all' => $this->lang->product->allProduct);
-        $this->config->product->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
+
+        if($this->app->rawModule == 'projectstory' and empty($productID))
+        {
+            $this->config->product->search['params']['product']['values'] = array('all' => $this->lang->product->allProduct, 'all' => $this->lang->product->allProduct);
+        }
+        else
+        {
+            $this->config->product->search['params']['product']['values'] = array($productID => $products[$productID], 'all' => $this->lang->product->allProduct);
+        }
+
+        $this->config->product->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
         if($this->session->currentProductType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);

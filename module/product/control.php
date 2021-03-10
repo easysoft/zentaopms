@@ -132,7 +132,7 @@ class product extends control
         $this->loadModel('execution');
 
         /* Set product, module and query. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->app->rawModule != 'projectstory' ? $this->product->saveState($productID, $this->products) : $productID;
         $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
@@ -174,11 +174,25 @@ class product extends control
         {
             setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
             $browseType = 'unclosed';
-            $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch, "&param=$param&storyType=$storyType");
+            if($this->app->rawModule == 'projectstory' and empty($productID))
+            {
+                $moduleTree = $this->tree->getExecutionStoryTreeMenu($this->session->PRJ, 0, array('treeModel', 'createProjectStoryLink'));
+            }
+            else
+            {
+                $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch, "&param=$param&storyType=$storyType");
+            }
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', (int)$this->cookie->treeBranch, "&param=$param&storyType=$storyType");
+            if($this->app->rawModule == 'projectstory' and empty($productID))
+            {
+                $moduleTree = $this->tree->getExecutionStoryTreeMenu($this->session->PRJ, 0, array('treeModel', 'createProjectStoryLink'));
+            }
+            else
+            {
+                $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', (int)$this->cookie->treeBranch, "&param=$param&storyType=$storyType");
+            }
         }
 
         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
@@ -201,7 +215,7 @@ class product extends control
         $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         if($this->app->rawModule == 'projectstory')
         {
-            $this->session->set('currentProductType', $product->type);
+            if(!empty($product)) $this->session->set('currentProductType', $product->type);
             $projectProducts = $this->product->getProducts($this->session->PRJ);
             $productPlans    = $this->execution->getPlans($projectProducts);
 
@@ -244,13 +258,15 @@ class product extends control
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
 
+        $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
+
         /* Assign. */
-        $this->view->title           = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
-        $this->view->position[]      = $this->products[$productID];
+        $this->view->title           = $productName . $this->lang->colon . $this->lang->product->browse;
+        $this->view->position[]      = $productName;
         $this->view->position[]      = $this->lang->product->browse;
         $this->view->productID       = $productID;
         $this->view->product         = $product;
-        $this->view->productName     = $this->products[$productID];
+        $this->view->productName     = $productName;
         $this->view->moduleID        = $moduleID;
         $this->view->stories         = $stories;
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);

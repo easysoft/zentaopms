@@ -148,7 +148,7 @@ $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
-$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|custom|browsestoryconcept|';
+$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|my|team|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
 if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> 项目集|$programModule|$programMethod|";
 
@@ -221,11 +221,15 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => '全局设置|custom|browsestoryconcept|', 'subModule' => 'holiday');
+$lang->system->menu->team     = array('link' => '团队|my|team|', 'subModule' => 'user');
+$lang->system->menu->calendar = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->system->menu->dynamic  = '动态|company|dynamic|';
+$lang->system->menu->view     = array('link' => '公司|company|view');
+//$lang->system->menu->company  = array('link' => '全局设置|custom|browsestoryconcept|', 'subModule' => 'holiday');
 
-$lang->subject = new stdclass();
-$lang->subject->menu = new stdclass();
-$lang->subject->menu->storyConcept = array('link' => '需求概念|custom|browsestoryconcept|');
+//$lang->subject = new stdclass();
+//$lang->subject->menu = new stdclass();
+//$lang->subject->menu->storyConcept = array('link' => '需求概念|custom|browsestoryconcept|');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -291,7 +295,6 @@ $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
 $lang->my->menu->index       = '仪表盘|my|index';
-$lang->my->menu->calendar    = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->myWork      = array('link' => '待处理|my|work|mode=task');
 if($config->systemMode == 'new')
 {
@@ -305,7 +308,6 @@ else
 $lang->my->menu->contribute  = array('link' => '贡献|my|contribute|mode=task');
 $lang->my->menu->dynamic     = '动态|my|dynamic|';
 $lang->my->menu->score       = array('link' => '积分|my|score|', 'subModule' => 'score');
-$lang->my->menu->team        = array('link' => '团队|my|team|', 'subModule' => 'user');
 $lang->my->menu->contacts    = '联系人|my|managecontacts|';
 
 $lang->my->workMenu = new stdclass();
@@ -324,7 +326,7 @@ $lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
 $lang->my->contributeMenu->testcase    = '用例|my|contribute|mode=testcase&type=openedbyme';
 $lang->my->contributeMenu->testtask    = '测试单|my|contribute|mode=testtask&type=done';
 
-$lang->my->dividerMenu = ',myProject,team,';
+$lang->my->dividerMenu = ',myWork,score,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -521,8 +523,6 @@ $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => '用户|company|browse', 'subModule' => ',user,');
 $lang->company->menu->dept        = array('link' => '部门|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => '权限|group|browse', 'subModule' => 'group');
-$lang->company->menu->dynamic     = '动态|company|dynamic|';
-$lang->company->menu->view        = array('link' => '公司|company|view');
 
 /* 后台管理菜单设置。*/
 $lang->admin = new stdclass();

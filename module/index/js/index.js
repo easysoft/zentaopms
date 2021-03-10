@@ -117,6 +117,8 @@
         {
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
         }
+        if(moduleName === 'my')      if(methodLowerCase === 'team' || methodLowerCase == 'calendar') return 'system';
+        if(moduleName === 'company') if(methodLowerCase === 'view' || methodLowerCase == 'dynamic') return 'system';
         if(moduleName === 'tree')
         {
             if(methodLowerCase === 'browse')
@@ -531,7 +533,7 @@ $.extend(
     gotoObject:function()
     {
         objectType  = $('#searchType').attr('value');
-        objectValue = $('input#globalSearchInput').attr('value');
+        objectValue = $('#globalSearchInput').attr('value');
 
         if(objectType && objectValue)
         {
@@ -590,7 +592,7 @@ $(function()
                     var $this = $(this);
                     var isActiveType = $this.data('value') === searchType && searchType !== 'all';
                     $this.closest('li').toggleClass('selected active', isActiveType);
-                    $this.html($this.data('name') + ' <span>#' + (val.length > 4 ? (val.substr(0, 4) + '...') : val) + "</span>");
+                    $this.html($this.data('name') + ' <span>#' + (val.length > 7 ? (val.substr(0, 7) + '...') : val) + "</span>");
                     if(isActiveType) $dropmenu.addClass('with-active');
                 });
             }

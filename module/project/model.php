@@ -144,7 +144,6 @@ class projectModel extends model
     {
         $this->session->set('moreProjectLink', $this->app->getURI(true));
 
-        $this->loadModel('project');
         $currentProjectName = $this->lang->project->common;
         if($projectID)
         {

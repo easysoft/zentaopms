@@ -2467,8 +2467,7 @@ class userModel extends model
      */
     public function resetMenu()
     {
-        $this->lang->navGroup->user = 'my';
-        $this->lang->admin->menu    = $this->lang->my->menu;
+        $this->lang->navGroup->user = 'system';
         $this->lang->noMenuModule[] = 'user';
     }
 }

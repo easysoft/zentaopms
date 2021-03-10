@@ -2313,7 +2313,7 @@ class storyModel extends model
         $type = strtolower($type);
         if($type == 'bysearch')
         {
-            if($this->app->rawModule == 'projectstory') $this->session->PRJStoryQuery = $this->session->storyQuery;
+            if($this->app->rawModule == 'projectstory') $this->session->executionStoryQuery = $this->session->storyQuery;
             $queryID  = (int)$param;
             $products = $this->loadModel('execution')->getProducts($executionID);
 
@@ -2373,8 +2373,8 @@ class storyModel extends model
                 ->andWhere('t2.type')->eq($storyType)
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($execution->type == 'project')
-                ->andWhere('t1.product')->eq($productID)
-                ->beginIF(!empty($branch))->andWhere('t2.branch')->eq($branch)->fi()
+                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)
+                ->andWhere('t2.branch')->eq($branch)->fi()
                 ->beginIF(isset($statusFeatureList) and in_array($type, array_keys($statusFeatureList)))->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF(isset($otherFeatureList) and in_array($type, array_keys($otherFeatureList)))->andWhere('t2.' . substr($type, 0, -2))->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
