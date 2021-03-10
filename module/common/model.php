@@ -1768,6 +1768,13 @@ EOD;
         $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
         if($inProject && $app->session->PRJ && strpos(",{$app->user->rights['projects']},", ",{$app->session->PRJ},") !== false) return true;
 
+        /* If module is project and method is execution, check for all execution privilege. */
+        if($module == 'project' and $method == 'execution')
+        {
+            $module = 'execution';
+            $method = 'all';
+        }
+
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
         $acls   = $app->user->rights['acls'];
