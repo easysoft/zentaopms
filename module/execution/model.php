@@ -1771,12 +1771,12 @@ class executionModel extends model
 
         /* Link stories. */
         $executionStories = $this->loadModel('story')->getExecutionStoryPairs($executionID);
-        $lastOrder      = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('execution')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $lastOrder      = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
         foreach($stories as $storyID)
         {
             if(!isset($executionStories[$storyID]))
             {
-                $story = $this->dao->findById($storyID)->fields("$executionID as execution, id as story, product, version")->from(TABLE_STORY)->fetch();
+                $story = $this->dao->findById($storyID)->fields("$executionID as project, id as story, product, version")->from(TABLE_STORY)->fetch();
                 $story->order = ++$lastOrder;
                 $this->dao->insert(TABLE_PROJECTSTORY)->data($story)->exec();
                 $this->action->create('story', $storyID, 'linked2execution', '', $executionID);
@@ -1994,7 +1994,7 @@ class executionModel extends model
 
         $this->loadModel('action');
         $versions      = $this->loadModel('story')->getVersions($stories);
-        $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('execution')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
+        $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder     = reset($linkedStories);
         $statusPairs   = $this->dao->select('id, status')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchPairs();
         foreach($stories as $key => $storyID)
@@ -2003,7 +2003,7 @@ class executionModel extends model
             if(isset($linkedStories[$storyID])) continue;
 
             $data = new stdclass();
-            $data->execution = $executionID;
+            $data->project = $executionID;
             $data->product = (int)$products[$storyID];
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
@@ -2025,7 +2025,7 @@ class executionModel extends model
     public function linkStories($executionID)
     {
         $plans = $this->dao->select('plan,product')->from(TABLE_PROJECTPRODUCT)
-            ->where('execution')->eq($executionID)
+            ->where('project')->eq($executionID)
             ->fetchPairs('plan', 'product');
 
         $planStories  = array();
@@ -2072,16 +2072,16 @@ class executionModel extends model
         if($execution->type == 'execution')
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');
-            $executionStories = $this->dao->select('execution,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('execution')->in(array_keys($executions))->fetchAll();
+            $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
             if(!empty($executionStories)) die(js::alert($this->lang->execution->notAllowedUnlinkStory));
         }
-        $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('execution')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
+        $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
 
         $order   = 1;
-        $stories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('execution')->eq($executionID)->orderBy('order')->fetchAll();
+        $stories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order')->fetchAll();
         foreach($stories as $executionstory)
         {
-            if($executionstory->order != $order) $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('execution')->eq($executionID)->andWhere('story')->eq($executionstory->story)->exec();
+            if($executionstory->order != $order) $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('project')->eq($executionID)->andWhere('story')->eq($executionstory->story)->exec();
             $order++;
         }
 

@@ -152,16 +152,16 @@ class custom extends control
                     {
                         if(strlen($key) > 10) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['ten']));
                     }
-                    
+
                     /* The length of sourceList in story module and typeList in task module is less than 20, check it when saved. */
                     if($field == 'sourceList' or $module == 'task' and $field == 'typeList')
                     {
                         if(strlen($key) > 20) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twenty']));
                     }
-                    
+
                     /* The length of stageList in testcase module is less than 255, check it when saved. */
                     if($module == 'testcase' and $field == 'stageList' and strlen($key) > 255) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twoHundred']));
-                    
+
                     /* The length of field that in bug and testcase module and reasonList in story and task module is less than 30, check it when saved. */
                     if($module == 'bug' or $field == 'reasonList' or $module == 'testcase')
                     {
@@ -174,7 +174,7 @@ class custom extends control
                 foreach($data->keys as $index => $key)
                 {
                     //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
-                    
+
                     $value  = $data->values[$index];
                     $system = $data->systems[$index];
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
@@ -217,10 +217,10 @@ class custom extends control
 
     /**
      * Restore the default lang. Delete the related items.
-     * 
-     * @param  string $module 
-     * @param  string $field 
-     * @param  string $confirm 
+     *
+     * @param  string $module
+     * @param  string $field
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -241,7 +241,7 @@ class custom extends control
 
     /**
      * Set working mode function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -260,8 +260,8 @@ class custom extends control
 
     /**
      * Set Required.
-     * 
-     * @param  string $moduleName 
+     *
+     * @param  string $moduleName
      * @access public
      * @return void
      */
@@ -318,7 +318,7 @@ class custom extends control
 
     /**
      * Timezone.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -341,7 +341,7 @@ class custom extends control
 
     /**
      * Browse story concept.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -364,20 +364,20 @@ class custom extends control
 
     /**
      * Set story concept.
-     * 
+     *
      * @access public
      * @return void
      */
     public function setStoryConcept()
-    {   
+    {
         if($_POST)
-        {   
+        {
             $result = $this->custom->setURAndSR();
             if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }   
+        }
 
         $this->view->title      = $this->lang->custom->setStoryConcept;
         $this->view->position[] = $this->lang->custom->setStoryConcept;
@@ -388,20 +388,20 @@ class custom extends control
     /**
      * Edit story concept.
      * @param  int    $key
-     * 
+     *
      * @access public
      * @return void
      */
     public function editStoryConcept($key = 0)
     {
         if($_POST)
-        {   
+        {
             $result = $this->custom->updateURAndSR($key);
             if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }   
+        }
 
         $lang = $this->app->getClientLang();
         $URSR = $this->dao->select('`value`')->from(TABLE_LANG)
@@ -528,7 +528,7 @@ class custom extends control
 
     /**
      * Set Mode.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -561,10 +561,10 @@ class custom extends control
 
     /**
      * Ajax save custom fields.
-     * 
-     * @param  string $module 
-     * @param  string $section 
-     * @param  string $key 
+     *
+     * @param  string $module
+     * @param  string $section
+     * @param  string $key
      * @access public
      * @return void
      */
@@ -601,7 +601,7 @@ class custom extends control
 
     /**
      * Ajax set menu
-     * 
+     *
      * @param  string $module
      * @param  string $method
      * @param  string $menus
@@ -690,8 +690,8 @@ class custom extends control
 
     /**
      * Ajax restore menu.
-     * 
-     * @param  string $confirm 
+     *
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -707,7 +707,7 @@ class custom extends control
 
     /**
      * Ajax set doc setting.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -724,9 +724,9 @@ class custom extends control
 
     /**
      * Reset required.
-     * 
-     * @param  srting $module 
-     * @param  string $confirm 
+     *
+     * @param  srting $module
+     * @param  string $confirm
      * @access public
      * @return void
      */
