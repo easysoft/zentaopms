@@ -2180,9 +2180,8 @@ class execution extends control
         /* Get executions and products. */
         $execution  = $this->execution->getById($executionID);
         $products   = $this->execution->getProducts($executionID);
-        $module     = $execution->type == 'execution' ? 'execution' : 'projectstory';
-        $browseLink = $this->createLink($module, 'story', "executionID=$executionID");
-        if($execution->type == 'execution') $browseLink = $this->createLink('executionstory', 'story', "productID={$this->session->product}");
+        $browseLink = $this->createLink('execution', 'story', "executionID=$executionID");
+        if($execution->type == 'project') $browseLink = $this->createLink('projectstory', 'story');
 
         $this->session->set('storyList', $this->app->getURI(true)); // Save session.
         if($execution->type != 'execution') $this->execution->setMenu($this->executions, $execution->id);     // Set menu.
