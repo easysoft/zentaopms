@@ -49,16 +49,14 @@ $lang->index->menuOrder[10] = 'project';
 
 /* my menu order. */
 $lang->my->menuOrder[5]  = 'index';
-$lang->my->menuOrder[10] = 'calendar';
-$lang->my->menuOrder[15] = 'myWork';
-$lang->my->menuOrder[20] = 'myProject';
-$lang->my->menuOrder[25] = 'myExecution';
-$lang->my->menuOrder[30] = 'contribute';
-$lang->my->menuOrder[35] = 'score';
-$lang->my->menuOrder[40] = 'dynamic';
-$lang->my->menuOrder[45] = 'follow';
-$lang->my->menuOrder[50] = 'team';
-$lang->my->menuOrder[55] = 'contacts';
+$lang->my->menuOrder[10] = 'myWork';
+$lang->my->menuOrder[15] = 'myProject';
+$lang->my->menuOrder[20] = 'myExecution';
+$lang->my->menuOrder[25] = 'contribute';
+$lang->my->menuOrder[30] = 'score';
+$lang->my->menuOrder[35] = 'dynamic';
+$lang->my->menuOrder[40] = 'follow';
+$lang->my->menuOrder[45] = 'contacts';
 $lang->todo->menuOrder = $lang->my->menuOrder;
 
 /* product menu order. */
@@ -142,19 +140,18 @@ $lang->report->menuOrder[25] = 'staff';
 $lang->company->menuOrder[5]  = 'browseUser';
 $lang->company->menuOrder[10] = 'dept';
 $lang->company->menuOrder[15] = 'browseGroup';
-$lang->company->menuOrder[20] = 'dynamic';
-$lang->company->menuOrder[25] = 'view';
-$lang->company->menuOrder[30] = 'addGroup';
-$lang->company->menuOrder[35] = 'batchAddUser';
-$lang->company->menuOrder[40] = 'addUser';
+$lang->company->menuOrder[20] = 'addGroup';
+$lang->company->menuOrder[25] = 'batchAddUser';
+$lang->company->menuOrder[30] = 'addUser';
 $lang->dept->menuOrder        = $lang->company->menuOrder;
 $lang->group->menuOrder       = $lang->company->menuOrder;
 $lang->user->menuOrder        = $lang->company->menuOrder;
 
 /* system menu order. */
-$lang->system->menuOrder[5]  = 'company';
-$lang->system->menuOrder[10] = 'scrum';
-$lang->system->menuOrder[15] = 'waterfall';
+$lang->system->menuOrder[5]  = 'team';
+$lang->system->menuOrder[10] = 'calendar';
+$lang->system->menuOrder[15] = 'dynamic';
+$lang->system->menuOrder[20] = 'view';
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';

@@ -117,6 +117,8 @@
         {
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
         }
+        if(moduleName === 'my')      if(methodLowerCase === 'team' || methodLowerCase == 'calendar') return 'system';
+        if(moduleName === 'company') if(methodLowerCase === 'view' || methodLowerCase == 'dynamic') return 'system';
         if(moduleName === 'tree')
         {
             if(methodLowerCase === 'browse')

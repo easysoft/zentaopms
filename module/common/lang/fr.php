@@ -148,7 +148,7 @@ $lang->mainNav->qa      = '<i class="icon icon-test"></i> Test|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> Code|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> Doc|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> Statistic|report|productsummary|";
-$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|custom|estimate|';
+$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> System|my|team|';
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
 if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> Program|$programModule|$programMethod|";
 
@@ -219,11 +219,10 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company   = array('link' => 'Global Settings|custom|browsestoryconcept|', 'subModule' => 'holiday');
-
-$lang->subject = new stdclass();
-$lang->subject->menu = new stdclass();
-$lang->subject->menu->storyConcept = array('link' => 'Story Concept|custom|browsestoryconcept|');
+$lang->system->menu->team     = array('link' => 'Team|my|team|', 'subModule' => 'user');
+$lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->system->menu->dynamic  = 'Dynamic|company|dynamic|';
+$lang->system->menu->view     = array('link' => 'Company|company|view');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -289,7 +288,6 @@ $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
 $lang->my->menu->index       = 'Index|my|index';
-$lang->my->menu->calendar    = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->myWork      = array('link' => 'Work|my|work|mode=task');
 if($config->systemMode == 'new')
 {
@@ -303,7 +301,6 @@ else
 $lang->my->menu->contribute  = array('link' => 'Contribute|my|contribute|mode=task');
 $lang->my->menu->dynamic     = 'Dynamic|my|dynamic|';
 $lang->my->menu->score       = 'Score|my|score|';
-$lang->my->menu->team        = array('link' => 'Team|my|team|', 'subModule' => 'user');
 $lang->my->menu->contacts    = 'Contacts|my|managecontacts|';
 
 $lang->my->workMenu = new stdclass();
@@ -322,7 +319,7 @@ $lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
 $lang->my->contributeMenu->testcase    = 'Test Case|my|contribute|mode=testtask&type=openedbyme';
 $lang->my->contributeMenu->testtask    = 'Test Task|my|contribute|mode=testtask&type=done';
 
-$lang->my->dividerMenu = ',myProject,team,';
+$lang->my->dividerMenu = ',myWork,score,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -516,8 +513,6 @@ $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => 'Utilisateurs|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept        = array('link' => 'Compartiments|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => 'Privilèges|group|browse', 'subModule' => 'group');
-$lang->company->menu->dynamic     = 'Historique|company|dynamic|';
-$lang->company->menu->view        = array('link' => 'Entreprise|company|view');
 
 /* Admin menu settings. */
 $lang->admin = new stdclass();
