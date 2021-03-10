@@ -2374,7 +2374,7 @@ class storyModel extends model
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($execution->type == 'project')
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)
-                ->andWhere('t2.branch')->eq($branch)->fi()
+                ->andWhere('t2.branch')->eq($branch)
                 ->beginIF(isset($statusFeatureList) and in_array($type, array_keys($statusFeatureList)))->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF(isset($otherFeatureList) and in_array($type, array_keys($otherFeatureList)))->andWhere('t2.' . substr($type, 0, -2))->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
