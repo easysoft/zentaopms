@@ -1828,7 +1828,7 @@ class docModel extends model
         {
             $navCSS .= <<<EOF
 #subHeader {margin-top: -50px; background: rgba(0,0,0,0);}
-#pageActions .btn-link {color: #fff; font-size: 14px; line-height: 18px; border: #fff 1px solid;}
+#pageActions .btn-link {color: #fff; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
 .header-angle-btn {padding: 0;}
 .header-angle-btn .btn{padding: 6px 12px;}
 EOF;

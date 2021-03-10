@@ -95,7 +95,6 @@ $lang->my->productLinkList['product-browse']    = '默认进入最近一个产�
 global $config;
 $lang->my->projectLinkList = array();
 $lang->my->projectLinkList['project-browse']    = '默认进入项目列表，可以查看所有的项目';
-$lang->my->projectLinkList['project-task']      = '默认进入最近一个项目迭代的任务列表，可以查看当前迭代下的任务信息';
 $lang->my->projectLinkList['project-execution'] = '默认进入项目下所有执行列表，查看所有执行信息';
 $lang->my->projectLinkList['project-index']     = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
 
