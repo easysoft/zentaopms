@@ -127,9 +127,10 @@ $lang->common = new stdclass();
 $lang->common->common = '公有模块';
 
 global $config;
-list($programModule, $programMethod) = explode('-', $config->programLink);
-list($productModule, $productMethod) = explode('-', $config->productLink);
-list($projectModule, $projectMethod) = explode('-', $config->projectLink);
+list($programModule, $programMethod)     = explode('-', $config->programLink);
+list($productModule, $productMethod)     = explode('-', $config->productLink);
+list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
+list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
@@ -138,11 +139,11 @@ $lang->mainNav->product = "<i class='icon icon-product'></i> 产品|$productModu
 if($config->systemMode == 'new')
 {
     $lang->mainNav->project   = "<i class='icon icon-project'></i> 项目|$projectModule|$projectMethod|";
-    $lang->mainNav->execution = "<i class='icon icon-run'></i> 执行|execution|task|";
+    $lang->mainNav->execution = "<i class='icon icon-run'></i> 执行|$executionModule|$executionMethod|";
 }
 else
 {
-    $lang->mainNav->project = "<i class='icon icon-project'></i> $lang->executionCommon|$projectModule|$projectMethod|";
+    $lang->mainNav->execution = "<i class='icon icon-run'></i> $lang->executionCommon|$executionModule|$executionMethod|";
 }
 $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';

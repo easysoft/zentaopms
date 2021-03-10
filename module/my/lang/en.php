@@ -1,4 +1,6 @@
 <?php
+global $config;
+
 $lang->my->common = 'Dashboard';
 
 /* Method List。*/
@@ -28,7 +30,6 @@ $lang->my->manageContacts  = 'Manage Contact';
 $lang->my->deleteContacts  = 'Delete Contact';
 $lang->my->shareContacts   = 'Public';
 $lang->my->limited         = 'Limited Actions (Users can only edit what involves them.)';
-$lang->my->storyConcept    = 'Story Concept';
 $lang->my->score           = 'My Points';
 $lang->my->scoreRule       = 'Point Rules';
 $lang->my->noTodo          = 'No todos yet. ';
@@ -39,6 +40,7 @@ $lang->my->uploadAvatar    = 'Upload Avatar';
 $lang->my->requirement     = "My {$lang->URCommon}";
 $lang->my->testtask        = 'My Test Task';
 $lang->my->testcase        = 'My Case';
+$lang->my->storyConcept    = 'Story Concept';
 
 $lang->my->myExecutions = "My Stage/Sprint/Iteration";
 $lang->my->name         = 'Name';
@@ -75,14 +77,13 @@ $lang->my->form->lblBasic   = 'Basic Info';
 $lang->my->form->lblContact = 'Contact Info';
 $lang->my->form->lblAccount = 'Account Info';
 
-$lang->my->programLink = 'Program Default Page';
-$lang->my->productLink = 'Product Default Page';
-$lang->my->projectLink = 'Project Default Page';
+$lang->my->programLink   = 'Program Default Page';
+$lang->my->productLink   = 'Product Default Page';
+$lang->my->projectLink   = 'Project Default Page';
+$lang->my->executionLink = 'Execution Default Page';
 
 $lang->my->programLinkList = array();
-//$lang->my->programLinkList['program-home']  = 'The default access to the program home page, you can understand the company’s overall strategic planning status';
 $lang->my->programLinkList['program-browse']  = 'By default, you go to the program list, where you can view all of the programs';
-//$lang->my->programLinkList['program-index'] = 'By default, you go to the most recent program dashboard to see the current program overview';
 $lang->my->programLinkList['program-project'] = 'By default, you go to the list of items in the most recent program, and you can view all items under the current program';
 
 $lang->my->productLinkList = array();
@@ -93,7 +94,12 @@ $lang->my->productLinkList['product-browse']    = 'By default, go to the list of
 
 global $config;
 $lang->my->projectLinkList = array();
-//$lang->my->projectLinkList['project-home'] = 'The default access to the project home page, you can understand the overall project status of the company';
 $lang->my->projectLinkList['project-browse']    = 'By default, you go to the project list, where you can view all the projects';
+$lang->my->projectLinkList['project-task']      = 'By default, you go to the task list for the most recent project iteration to see the task information for the current iteration';
 $lang->my->projectLinkList['project-execution'] = 'Go to Project-Exection by default. You can check all information in Execution';
-if($config->systemMode == 'new') $lang->my->projectLinkList['project-index'] = 'By default, go to the most recent project dashboard to see the current project overview';
+$lang->my->projectLinkList['project-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
+
+$lang->my->executionLinkList = array();
+$lang->my->executionLinkList['execution-index'] = 'Enter the execution dashboard by default, you can understand all the execution statistics and overview';
+$lang->my->executionLinkList['execution-all']   = 'Enter the execution list by default, you can view all executions';
+$lang->my->executionLinkList['execution-task']  = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';

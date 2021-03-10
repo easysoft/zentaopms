@@ -35,9 +35,10 @@ $themeRoot  = $baseDir . '/www/theme/';
 
 /* Iinclude config and lang file to get langs and themes. */
 $config = new stdclass();
-$config->programLink  = '-';
-$config->productLink  = '-';
-$config->projectLink  = '-';
+$config->programLink   = '-';
+$config->productLink   = '-';
+$config->projectLink   = '-';
+$config->executionLink = '-';
 include $baseDir . '/config/config.php';
 
 $lang = new stdclass();

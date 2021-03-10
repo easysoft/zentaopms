@@ -1,67 +1,69 @@
 <?php
+global $config;
+
 $lang->my->common = 'Dashboard';
 
 /* Method List。*/
 $lang->my->index           = 'Home';
-$lang->my->todo            = 'Meine ToDos';
-$lang->my->calendar        = 'Kalender';
+$lang->my->todo            = 'My Todos';
+$lang->my->calendar        = 'Schedule';
 $lang->my->work            = 'Work';
 $lang->my->contribute      = 'Contribute';
-$lang->my->task            = 'Aufgaben';
-$lang->my->bug             = 'Bugs';
-$lang->my->testTask        = 'Builds';
-$lang->my->testCase        = 'Meine Fälle';
-$lang->my->story           = 'Meine Storys';
+$lang->my->task            = 'My Tasks';
+$lang->my->bug             = 'My Bugs';
+$lang->my->testTask        = 'My Builds';
+$lang->my->testCase        = 'My Cases';
+$lang->my->story           = 'My Stories';
 $lang->my->createProgram   = 'Create Program';
 $lang->my->project         = "My Projects";
 $lang->my->execution       = "My {$lang->executionCommon}s";
 $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
-$lang->my->profile         = 'Meine Profil';
-$lang->my->dynamic         = 'Meine Verlauf';
+$lang->my->profile         = 'My Profile';
+$lang->my->dynamic         = 'My Dynamics';
 $lang->my->team            = 'My Team';
-$lang->my->editProfile     = 'Profil bearbeiten';
-$lang->my->changePassword  = 'Passwort ändern';
+$lang->my->editProfile     = 'Edit';
+$lang->my->changePassword  = 'Edit Password';
 $lang->my->preference      = 'Preference';
-$lang->my->unbind          = 'Unbind Ranger';
-$lang->my->manageContacts  = 'Kontakt pflegen';
-$lang->my->deleteContacts  = 'Kontakt löschen';
-$lang->my->shareContacts   = 'Liste teilen';
-$lang->my->limited         = 'Eingeschränkte Möglichkeiten (Bearbeiten nur eigener Inhalte möglich)';
-$lang->my->storyConcept    = 'Story Concept';
-$lang->my->score           = 'Meine Wertung';
-$lang->my->scoreRule       = 'Wertungs regeln';
-$lang->my->noTodo          = 'Keine toDos. ';
+$lang->my->unbind          = 'Unbind from Zdoo';
+$lang->my->manageContacts  = 'Manage Contact';
+$lang->my->deleteContacts  = 'Delete Contact';
+$lang->my->shareContacts   = 'Public';
+$lang->my->limited         = 'Limited Actions (Users can only edit what involves them.)';
+$lang->my->score           = 'My Points';
+$lang->my->scoreRule       = 'Point Rules';
+$lang->my->noTodo          = 'No todos yet. ';
 $lang->my->noData          = 'No %s yet. ';
 $lang->my->storyChanged    = "Story Changed";
-$lang->my->hours           = 'Stunde/Tag';
+$lang->my->hours           = "Hours/day";
 $lang->my->uploadAvatar    = 'Upload Avatar';
 $lang->my->requirement     = "My {$lang->URCommon}";
 $lang->my->testtask        = 'My Test Task';
 $lang->my->testcase        = 'My Case';
+$lang->my->storyConcept    = 'Story Concept';
 
-$lang->my->myExecutions = 'My Stage/Sprint/Iteration';
+$lang->my->myExecutions = "My Stage/Sprint/Iteration";
 $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';
-$lang->my->executions   = "{$lang->executionCommon}";
+$lang->my->executions   = $lang->executionCommon;
 
 $lang->my->executionMenu = new stdclass();
 $lang->my->executionMenu->undone = 'Undone';
 $lang->my->executionMenu->done   = 'Done';
 
 $lang->my->taskMenu = new stdclass();
-$lang->my->taskMenu->assignedToMe = 'Mir zuweisen';
-$lang->my->taskMenu->openedByMe   = 'Von mir angelegt';
-$lang->my->taskMenu->finishedByMe = 'Von mir abgeschlossen';
-$lang->my->taskMenu->closedByMe   = 'Von mir geschlossen';
-$lang->my->taskMenu->canceledByMe = 'Von mir abgebrochen';
+$lang->my->taskMenu->assignedToMe = 'AssignedToMe';
+$lang->my->taskMenu->openedByMe   = 'CreatedByMe';
+$lang->my->taskMenu->finishedByMe = 'FinishedByMe';
+$lang->my->taskMenu->closedByMe   = 'ClosedByMe';
+$lang->my->taskMenu->canceledByMe = 'CancelledByMe';
 
 $lang->my->storyMenu = new stdclass();
-$lang->my->storyMenu->assignedToMe = 'Mir zugewiesen';
-$lang->my->storyMenu->openedByMe   = 'Von mir erstellt';
-$lang->my->storyMenu->reviewedByMe = 'Von mir überprüft';
-$lang->my->storyMenu->closedByMe   = 'Von mir geschlossen';
+$lang->my->storyMenu->assignedToMe = 'AssignedToMe';
+$lang->my->storyMenu->openedByMe   = 'CreatedByMe';
+$lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
+$lang->my->storyMenu->closedByMe   = 'ClosedByMe';
 
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = 'Doing';
@@ -71,18 +73,17 @@ $lang->my->projectMenu->closed     = 'Closed';
 $lang->my->projectMenu->openedbyme = 'CreatedByMe';
 
 $lang->my->form = new stdclass();
-$lang->my->form->lblBasic   = 'Basis Info';
-$lang->my->form->lblContact = 'Kontakt Info';
-$lang->my->form->lblAccount = 'Konto Info';
+$lang->my->form->lblBasic   = 'Basic Info';
+$lang->my->form->lblContact = 'Contact Info';
+$lang->my->form->lblAccount = 'Account Info';
 
-$lang->my->programLink = 'Program Default Page';
-$lang->my->productLink = 'Product Default Page';
-$lang->my->projectLink = 'Project Default Page';
+$lang->my->programLink   = 'Program Default Page';
+$lang->my->productLink   = 'Product Default Page';
+$lang->my->projectLink   = 'Project Default Page';
+$lang->my->executionLink = 'Execution Default Page';
 
 $lang->my->programLinkList = array();
-//$lang->my->programLinkList['program-home']  = 'The default access to the program home page, you can understand the company’s overall strategic planning status';
 $lang->my->programLinkList['program-browse']  = 'By default, you go to the program list, where you can view all of the programs';
-//$lang->my->programLinkList['program-index'] = 'By default, you go to the most recent program dashboard to see the current program overview';
 $lang->my->programLinkList['program-project'] = 'By default, you go to the list of items in the most recent program, and you can view all items under the current program';
 
 $lang->my->productLinkList = array();
@@ -93,7 +94,12 @@ $lang->my->productLinkList['product-browse']    = 'By default, go to the list of
 
 global $config;
 $lang->my->projectLinkList = array();
-//$lang->my->projectLinkList['project-home'] = 'The default access to the project home page, you can understand the overall project status of the company';
 $lang->my->projectLinkList['project-browse']    = 'By default, you go to the project list, where you can view all the projects';
+$lang->my->projectLinkList['project-task']      = 'By default, you go to the task list for the most recent project iteration to see the task information for the current iteration';
 $lang->my->projectLinkList['project-execution'] = 'Go to Project-Exection by default. You can check all information in Execution';
-if($config->systemMode == 'new') $lang->my->projectLinkList['project-index'] = 'By default, go to the most recent project dashboard to see the current project overview';
+$lang->my->projectLinkList['project-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
+
+$lang->my->executionLinkList = array();
+$lang->my->executionLinkList['execution-index'] = 'Enter the execution dashboard by default, you can understand all the execution statistics and overview';
+$lang->my->executionLinkList['execution-all']   = 'Enter the execution list by default, you can view all executions';
+$lang->my->executionLinkList['execution-task']  = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
