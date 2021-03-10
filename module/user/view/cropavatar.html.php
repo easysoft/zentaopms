@@ -48,9 +48,9 @@ $imgCutter.imgCutter(
     ready: function() {$.zui.ajustModalPosition(); $imgCutter.css('width', $imgCutter.closest('#mainContent').width());},
     done: function(response)
     {
-        $('#start .avatar, #startMenu .avatar').html('<img src="<?php echo $user->avatar?>?v=' + $.zui.uuid() + '" />');
-        if($('#start .avatar, #startMenu .avatar').hasClass('with-text')) $('#start .avatar, #startMenu .avatar').toggleClass('with-text').css('background', 'none');
-        location.href = parent.location.reload(true);
+        window.parent.$('#main-avatar, #menu-avatar').html('<img src="<?php echo $user->avatar?>"/>');
+        if(window.parent.$('#main-avatar, #menu-avatar').hasClass('with-text')) window.parent.$('#main-avatar, #menu-avatar').toggleClass('with-text').css('background', 'none');
+        location.href = createLink('my', 'profile');
     },
     onSizeError: function(size)
     {
