@@ -2195,7 +2195,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->execution->linkStory($executionID);
-            if($execution->execution != 0) $this->execution->linkStory($execution->execution);
+            if($execution->project != 0) $this->execution->linkStory($execution->project);
             die(js::locate($browseLink));
         }
 
