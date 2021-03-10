@@ -123,7 +123,7 @@ global $config;
 if($config->systemMode == 'new')
 {
     $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
+    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
 }
 else
 {
@@ -235,13 +235,13 @@ $lang->execution->groupFilter['assignedTo']['all']    = 'Toutes';
 $lang->execution->byQuery = 'Recherche';
 
 /* 查询条件列表。*/
-$lang->execution->allProject      = "Tous les {$lang->executionCommon}s";
+$lang->execution->allExecution      = "Tous les {$lang->executionCommon}s";
 $lang->execution->aboveAllProduct = "Tous les {$lang->productCommon}s dépendants";
-$lang->execution->aboveAllProject = "Tous les {$lang->executionCommon}s dépendants";
+$lang->execution->aboveAllExecution = "Tous les {$lang->executionCommon}s dépendants";
 
 /* 页面提示。*/
 $lang->execution->linkStoryByPlanTips = "Cette action va lier toutes les stories incluses dans le plan à ce {$lang->executionCommon}.";
-$lang->execution->selectProject       = "Sélectionner {$lang->executionCommon}";
+$lang->execution->selectExecution       = "Sélectionner {$lang->executionCommon}";
 $lang->execution->selectExecution     = "Select Execution";
 $lang->execution->beginAndEnd         = 'Durée';
 $lang->execution->begin               = 'Début';
@@ -262,7 +262,7 @@ $lang->execution->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php
 $lang->execution->whyNoStories        = "Aucune story ne peut être associée. Vérifiez s'il existe des stories dans {$lang->executionCommon} qui sont associées à {$lang->productCommon} et vérifiez qu'elles ont bien été validées.";
 $lang->execution->productStories      = "Les stories associées au {$lang->executionCommon} sont une portion des stories associées au {$lang->productCommon}. Les stories ne peuvent être associées à un {$lang->executionCommon} qu'après avoir été validées. <a href='%s'> Associer Stories</a> maintenant.";
 $lang->execution->haveDraft           = "%s stories sont encore en conception, elles ne peuvent pas être associées au {$lang->executionCommon} actuellement.";
-$lang->execution->doneProjects        = 'Terminé';
+$lang->execution->doneExecutions        = 'Terminé';
 $lang->execution->selectDept          = 'Sélection Compartiment';
 $lang->execution->selectDeptTitle     = 'Sélection Utilisateur';
 $lang->execution->copyTeam            = 'Copier Equipe';
@@ -270,12 +270,12 @@ $lang->execution->copyFromTeam        = "Copié de l'Equipe {$lang->executionCom
 $lang->execution->noMatched           = "Aucun $lang->executionCommon inclus '%s' ne peut être trouvé.";
 $lang->execution->copyTitle           = "Choisissez un {$lang->executionCommon} à copier.";
 $lang->execution->copyTeamTitle       = "Choisissez une Equipe {$lang->executionCommon} à copier.";
-$lang->execution->copyNoProject       = "Aucun {$lang->executionCommon} ne peut être copié.";
-$lang->execution->copyFromProject     = "Copié du {$lang->executionCommon} <strong>%s</strong>";
+$lang->execution->copyNoExecution       = "Aucun {$lang->executionCommon} ne peut être copié.";
+$lang->execution->copyFromExecution     = "Copié du {$lang->executionCommon} <strong>%s</strong>";
 $lang->execution->cancelCopy          = 'Annuler la copie';
 $lang->execution->byPeriod            = 'Par Temps';
 $lang->execution->byUser              = 'Par Utilisateur';
-$lang->execution->noProject           = "Aucun {$lang->executionCommon}. ";
+$lang->execution->noExecution           = "Aucun {$lang->executionCommon}. ";
 $lang->execution->noMembers           = "Actuellement il n'y a aucun membre dans l'équipe. On ne va pas aller loin... ";
 $lang->execution->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 $lang->execution->linkPRJStoryTip     = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the project)";
@@ -285,7 +285,7 @@ $lang->execution->linkAllStoryTip     = "({$lang->SRCommon} has never been linke
 $lang->execution->confirmDelete             = "Voulez-vous réellement supprimer le {$lang->executionCommon}[%s] ?";
 $lang->execution->confirmUnlinkMember       = "Voulez-vous retirer cet utilisateur du {$lang->executionCommon} ?";
 $lang->execution->confirmUnlinkStory        = "Voulez-vous retirer cette Story du {$lang->executionCommon} ?";
-$lang->execution->confirmUnlinkProjectStory = "Do you want to unlink this Story from the project?";
+$lang->execution->confirmUnlinkExecutionStory = "Do you want to unlink this Story from the project?";
 $lang->execution->notAllowedUnlinkStory     = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the project. Remove it from the {$lang->executionCommon}, then try again.";
 $lang->execution->notAllowRemoveProducts    = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
 $lang->execution->errorNoLinkedProducts     = "Aucun {$lang->productCommon} n'est associé à ce {$lang->executionCommon}. Vous allez être redirigé vers la page {$lang->productCommon} pour en associer un.";
@@ -301,7 +301,7 @@ $lang->execution->noweekend                 = 'Exclure les Weekends';
 $lang->execution->withweekend               = 'Inclure les Weekends';
 $lang->execution->interval                  = 'Intervalles';
 $lang->execution->fixFirstWithLeft          = 'Mettre à jour les heures également';
-$lang->execution->unfinishedProject         = "This {$lang->executionCommon} has ";
+$lang->execution->unfinishedExecution         = "This {$lang->executionCommon} has ";
 $lang->execution->unfinishedTask            = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug             = "[%s] unresolved bugs. ";
 
