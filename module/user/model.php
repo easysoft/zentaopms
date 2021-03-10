@@ -1200,6 +1200,7 @@ class userModel extends model
 
         $fileIdList = array_keys($uploadResult);
         $file = $this->file->getByID($fileIdList[0]);
+        $this->dao->update(TABLE_USER)->set('avatar')->eq($file->webPath)->where('account')->eq($this->app->user->account)->exec();
 
         return array('result' => 'success', 'message' => '', 'locate' => helper::createLink('user', 'cropavatar', "image={$file->id}"));
     }
