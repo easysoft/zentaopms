@@ -2043,7 +2043,7 @@ class executionModel extends model
             $data->order   = ++$lastOrder;
             $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
             $this->story->setStage($storyID);
-            $action = $executionID == $this->session->PRJ ? 'linked2prj' : 'linked2execution';
+            $action = $executionID == $this->session->PRJ ? 'linked2project' : 'linked2execution';
             $this->action->create('story', $storyID, $action, '', $executionID);
         }
     }
@@ -2119,7 +2119,8 @@ class executionModel extends model
         }
 
         $this->loadModel('story')->setStage($storyID);
-        $this->loadModel('action')->create('story', $storyID, 'unlinkedfromexecution', '', $executionID);
+        $objectType = $executionID == $this->session->PRJ ? unlinkedfromproject : unlinkedfromexecution;
+        $this->loadModel('action')->create('story', $storyID, $objectType, '', $executionID);
 
         $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->andWhere('status')->in('wait,doing')->fetchPairs('id');
         foreach($tasks as $taskID)

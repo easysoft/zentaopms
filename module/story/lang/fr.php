@@ -273,22 +273,22 @@ $lang->story->form->resource = 'Qui va allouer des resources ? Combien de temps 
 $lang->story->form->file     = 'Si certains fichiers sont associés à la story, cliquez ici pour les uploader.';
 
 $lang->story->action = new stdclass();
-$lang->story->action->reviewed            = array('main' => '$date, validée par <strong>$actor</strong>. Le résultat est <strong>$extra</strong>.', 'extra' => 'reviewResultList');
-$lang->story->action->closed              = array('main' => '$date, Fermée par <strong>$actor</strong>. La raison est <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
-$lang->story->action->linked2plan         = array('main' => '$date, planifiée par <strong>$actor</strong> au Plan <strong>$extra</strong>');
-$lang->story->action->unlinkedfromplan    = array('main' => '$date, déplanifiée par <strong>$actor</strong> du Plan <strong>$extra</strong>.');
-$lang->story->action->linked2project      = array('main' => '$date, associée au ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
-$lang->story->action->unlinkedfromproject = array('main' => '$date, dissociée du ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
-$lang->story->action->linked2prj          = array('main' => '$date, associée au project <strong>$extra</strong> par <strong>$actor</strong>.');
-$lang->story->action->unlinkedfromprj     = array('main' => '$date, dissociée d uproject <strong>$extra</strong> par <strong>$actor</strong>.');
-$lang->story->action->linked2build        = array('main' => '$date, intégrée par <strong>$actor</strong> au Build <strong>$extra</strong>');
-$lang->story->action->unlinkedfrombuild   = array('main' => '$date, retirée par <strong>$actor</strong> du Build <strong>$extra</strong>.');
-$lang->story->action->linked2release      = array('main' => '$date, ajoutée par <strong>$actor</strong> à la Release <strong>$extra</strong>');
-$lang->story->action->unlinkedfromrelease = array('main' => '$date, retirée par <strong>$actor</strong> de la Release <strong>$extra</strong>.');
-$lang->story->action->linkrelatedstory    = array('main' => '$date, associée par <strong>$actor</strong> à la Story <strong>$extra</strong>.');
-$lang->story->action->subdividestory      = array('main' => '$date, décomposée par <strong>$actor</strong> en Story <strong>$extra</strong>.');
-$lang->story->action->unlinkrelatedstory  = array('main' => '$date, dissociée par <strong>$actor</strong> de la Story <strong>$extra</strong>.');
-$lang->story->action->unlinkchildstory    = array('main' => '$date, dissociée par <strong>$actor</strong> de la sous-Story <strong>$extra</strong>.');
+$lang->story->action->reviewed              = array('main' => '$date, validée par <strong>$actor</strong>. Le résultat est <strong>$extra</strong>.', 'extra' => 'reviewResultList');
+$lang->story->action->closed                = array('main' => '$date, Fermée par <strong>$actor</strong>. La raison est <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
+$lang->story->action->linked2plan           = array('main' => '$date, planifiée par <strong>$actor</strong> au Plan <strong>$extra</strong>');
+$lang->story->action->unlinkedfromplan      = array('main' => '$date, déplanifiée par <strong>$actor</strong> du Plan <strong>$extra</strong>.');
+$lang->story->action->linked2execution      = array('main' => '$date, associée au ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
+$lang->story->action->unlinkedfromexecution = array('main' => '$date, dissociée du ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
+$lang->story->action->linked2project        = array('main' => '$date, associée au project <strong>$extra</strong> par <strong>$actor</strong>.');
+$lang->story->action->unlinkedfromproject   = array('main' => '$date, dissociée d uproject <strong>$extra</strong> par <strong>$actor</strong>.');
+$lang->story->action->linked2build          = array('main' => '$date, intégrée par <strong>$actor</strong> au Build <strong>$extra</strong>');
+$lang->story->action->unlinkedfrombuild     = array('main' => '$date, retirée par <strong>$actor</strong> du Build <strong>$extra</strong>.');
+$lang->story->action->linked2release        = array('main' => '$date, ajoutée par <strong>$actor</strong> à la Release <strong>$extra</strong>');
+$lang->story->action->unlinkedfromrelease   = array('main' => '$date, retirée par <strong>$actor</strong> de la Release <strong>$extra</strong>.');
+$lang->story->action->linkrelatedstory      = array('main' => '$date, associée par <strong>$actor</strong> à la Story <strong>$extra</strong>.');
+$lang->story->action->subdividestory        = array('main' => '$date, décomposée par <strong>$actor</strong> en Story <strong>$extra</strong>.');
+$lang->story->action->unlinkrelatedstory    = array('main' => '$date, dissociée par <strong>$actor</strong> de la Story <strong>$extra</strong>.');
+$lang->story->action->unlinkchildstory      = array('main' => '$date, dissociée par <strong>$actor</strong> de la sous-Story <strong>$extra</strong>.');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();

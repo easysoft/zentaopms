@@ -273,22 +273,22 @@ $lang->story->form->resource = 'Wer plant die Resourcen? Wie lange wird das daue
 $lang->story->form->file     = 'Wenn Dateien zu dieser Story gehören, laden Sie diese bIttr hoch.';
 
 $lang->story->action = new stdclass();
-$lang->story->action->reviewed            = array('main' => '$date, geprüft von <strong>$actor</strong>. Das Ergebnis ist <strong>$extra</strong>.', 'extra' => 'reviewResultList');
-$lang->story->action->closed              = array('main' => '$date, geschlossen von <strong>$actor</strong>. Der Grund ist <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
-$lang->story->action->linked2plan         = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Plan <strong>$extra</strong>');
-$lang->story->action->unlinkedfromplan    = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Plan <strong>$extra</strong>.');
-$lang->story->action->linked2project      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit ' . $lang->executionCommon . ' <strong>$extra</strong>.');
-$lang->story->action->unlinkedfromproject = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> mit ' . $lang->executionCommon . ' <strong>$extra</strong>.');
-$lang->story->action->linked2prj          = array('main' => '$date, verknüpft von <strong>$actor</strong> mit project <strong>$extra</strong>.');
-$lang->story->action->unlinkedfromprj     = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> mit project <strong>$extra</strong>.');
-$lang->story->action->linked2build        = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Build <strong>$extra</strong>');
-$lang->story->action->unlinkedfrombuild   = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Build <strong>$extra</strong>.');
-$lang->story->action->linked2release      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Release <strong>$extra</strong>');
-$lang->story->action->unlinkedfromrelease = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Release <strong>$extra</strong>.');
-$lang->story->action->linkrelatedstory    = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Story <strong>$extra</strong>.');
-$lang->story->action->subdividestory      = array('main' => '$date, aufgeteilt von <strong>$actor</strong> mit Story <strong>$extra</strong>.');
-$lang->story->action->unlinkrelatedstory  = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Story <strong>$extra</strong>.');
-$lang->story->action->unlinkchildstory    = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> Story <strong>$extra</strong>.');
+$lang->story->action->reviewed              = array('main' => '$date, geprüft von <strong>$actor</strong>. Das Ergebnis ist <strong>$extra</strong>.', 'extra' => 'reviewResultList');
+$lang->story->action->closed                = array('main' => '$date, geschlossen von <strong>$actor</strong>. Der Grund ist <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
+$lang->story->action->linked2plan           = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Plan <strong>$extra</strong>');
+$lang->story->action->unlinkedfromplan      = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Plan <strong>$extra</strong>.');
+$lang->story->action->linked2execution      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit ' . $lang->executionCommon . ' <strong>$extra</strong>.');
+$lang->story->action->unlinkedfromexecution = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> mit ' . $lang->executionCommon . ' <strong>$extra</strong>.');
+$lang->story->action->linked2project        = array('main' => '$date, verknüpft von <strong>$actor</strong> mit project <strong>$extra</strong>.');
+$lang->story->action->unlinkedfromproject   = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> mit project <strong>$extra</strong>.');
+$lang->story->action->linked2build          = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Build <strong>$extra</strong>');
+$lang->story->action->unlinkedfrombuild     = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Build <strong>$extra</strong>.');
+$lang->story->action->linked2release        = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Release <strong>$extra</strong>');
+$lang->story->action->unlinkedfromrelease   = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Release <strong>$extra</strong>.');
+$lang->story->action->linkrelatedstory      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Story <strong>$extra</strong>.');
+$lang->story->action->subdividestory        = array('main' => '$date, aufgeteilt von <strong>$actor</strong> mit Story <strong>$extra</strong>.');
+$lang->story->action->unlinkrelatedstory    = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> von Story <strong>$extra</strong>.');
+$lang->story->action->unlinkchildstory      = array('main' => '$date, Verknüpfung aufgelöst durch <strong>$actor</strong> Story <strong>$extra</strong>.');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();

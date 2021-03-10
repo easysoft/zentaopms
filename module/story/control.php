@@ -140,7 +140,7 @@ class story extends control
             if($executionID != 0)
             {
                 if($executionID != $this->session->PRJ) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $executionID);
-                $this->loadModel('action')->create('story', $storyID, 'linked2prj', '', $this->session->PRJ);
+                $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $this->session->PRJ);
             }
 
             if($todoID > 0)
