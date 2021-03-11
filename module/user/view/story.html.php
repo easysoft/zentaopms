@@ -37,15 +37,15 @@
     <table class='table has-sort-head tablesorter'>
       <thead>
         <tr class='colhead'>
-          <th class='w-id'>    <?php echo $lang->idAB;?></th>
-          <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-          <th class='w-200px'> <?php echo $lang->story->product;?></th>
-          <th>                 <?php echo $lang->story->title;?></th>
-          <th class='w-150px'> <?php echo $lang->story->plan;?></th>
-          <th class='w-90px'>  <?php echo $lang->openedByAB;?></th>
-          <th class='w-80px'>  <?php echo $lang->story->estimateAB;?></th>
+          <th class='w-id'><?php echo $lang->idAB;?></th>
+          <th class='w-pri'><?php echo $lang->priAB;?></th>
+          <th class='w-200px'><?php echo $lang->story->product;?></th>
+          <th><?php echo $lang->story->title;?></th>
+          <th class='w-150px'><?php echo $lang->story->plan;?></th>
+          <th class='w-90px'><?php echo $lang->openedByAB;?></th>
+          <th class='w-80px text-right'><?php echo $lang->story->estimateAB;?></th>
           <th class='w-status'><?php echo $lang->statusAB;?></th>
-          <th class='w-100px'> <?php echo $lang->story->stageAB;?></th>
+          <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
         </tr>
       </thead>
       <tbody>
@@ -58,7 +58,7 @@
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
           <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
           <td><?php echo zget($users, $story->openedBy);?></td>
-          <td><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+          <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
           <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
         </tr>

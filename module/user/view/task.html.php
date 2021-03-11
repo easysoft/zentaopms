@@ -44,9 +44,9 @@
           <th class='w-pri'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->task->execution;?></th>
           <th><?php echo $lang->task->name;?></th>
-          <th class='w-70px'><?php echo $lang->task->estimateAB;?></th>
-          <th class='w-70px'><?php echo $lang->task->consumedAB;?></th>
-          <th class='w-hour'><?php echo $lang->task->leftAB;?></th>
+          <th class='w-70px hours'><?php echo $lang->task->estimateAB;?></th>
+          <th class='w-70px hours'><?php echo $lang->task->consumedAB;?></th>
+          <th class='w-hour hours'><?php echo $lang->task->leftAB;?></th>
           <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
           <th class='w-70px'><?php echo $lang->statusAB;?></th>
         </tr>
