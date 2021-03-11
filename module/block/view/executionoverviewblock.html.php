@@ -16,7 +16,7 @@
 <div class="panel-body table-row">
   <div class="col-4 text-middle text-center">
     <div class="tile">
-      <div class="tile-title"><?php echo $lang->execution->allProject;?></div>
+      <div class="tile-title"><?php echo $lang->execution->allExecutions;?></div>
       <div class="tile-amount"><?php echo $total;?></div>
       <a class="btn btn-primary btn-circle btn-icon-right btn-sm" href="<?php echo $this->createLink('execution', 'all', 'type=all');?>"><?php echo $lang->execution->viewAll;?> <span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span></a>
     </div>
