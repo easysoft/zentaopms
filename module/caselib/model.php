@@ -101,7 +101,7 @@ class caselibModel extends model
         $this->lang->TRActions     = $pageActions;
         foreach($this->lang->caselib->menu as $key => $value)
         {
-            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('caselib', $key, $libID);
+            if($this->config->global->flow == 'full' and $this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('caselib', $key, $libID);
             $replace = $libID;
             common::setMenuVars($this->lang->caselib->menu, $key, $replace);
         }
@@ -109,7 +109,12 @@ class caselibModel extends model
         if($this->config->global->flow != 'full' && $this->app->getMethodName() != 'view') $this->lang->caselib->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->testcase->bySearch}</a>";
         if($this->lang->navGroup->caselib == 'qa')
         {
+            foreach($this->lang->qa->subMenu->testcase as $key => $menu)
+            {
+                common::setMenuVars($this->lang->qa->subMenu->testcase, $key, $libID);
+            }
             $this->lang->qa->menu           = $this->lang->caselib->menu;
+            $this->lang->caselib->menu      = $this->lang->qa->subMenu->testcase;
             $this->lang->qa->mainMenuAction = html::a(helper::createLink('caselib', 'create'), "<i class='icon-plus'></i>" . $this->lang->caselib->create, '', "class='btn btn-link'");
 
             if(!empty($libraries))

@@ -43,12 +43,12 @@ class testtask extends control
         {
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            $this->lang->noMenuModule[] = $this->app->rawModule;
+            //$this->lang->noMenuModule[] = $this->app->rawModule;
         }
 
         $this->loadModel('product');
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testtask")));
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=testtask&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=testtask')));
     }
 
     /**

@@ -44,15 +44,18 @@ class testcaseModel extends model
         $this->lang->TRActions     = $pageActions;
         foreach($this->lang->testcase->menu as $key => $menu)
         {
-            $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
-            $replace = $productID;
-            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->testcase->menu, $key, $replace);
+            if($this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
+            common::setMenuVars($this->lang->testcase->menu, $key, $productID);
         }
 
         if($this->lang->navGroup->testcase == 'qa')
         {
+            foreach($this->lang->qa->subMenu->testcase as $key => $menu)
+            {
+                common::setMenuVars($this->lang->qa->subMenu->testcase, $key, $productID);
+            }
             $this->lang->qa->menu         = $this->lang->testcase->menu;
+            $this->lang->testcase->menu   = $this->lang->qa->subMenu->testcase;
             $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
         }
     }
@@ -117,19 +120,21 @@ class testcaseModel extends model
             if(!empty($case->story))
             {
                 $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->Where('story')->eq($case->story)->fetchAll('project');
-                if(!empty($projects))
+                $projects = array_keys($projects);
+            }
+            if($this->lang->navGroup->testcase != 'qa' and empty($case->story)) $projects = array($this->session->PRJ);
+            if(!empty($projects))
+            {
+                foreach($projects as $projectID)
                 {
-                    foreach($projects as $projectID => $project)
-                    {
-                        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                        $data = new stdclass();
-                        $data->project = $projectID;
-                        $data->product = $case->product;
-                        $data->case    = $caseID;
-                        $data->version = 1;
-                        $data->order   = ++ $lastOrder;
-                        $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
-                    }
+                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                    $data = new stdclass();
+                    $data->project = $projectID;
+                    $data->product = $case->product;
+                    $data->case    = $caseID;
+                    $data->version = 1;
+                    $data->order   = ++ $lastOrder;
+                    $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
                 }
             }
 
@@ -239,6 +244,28 @@ class testcaseModel extends model
             }
 
             $caseID = $this->dao->lastInsertID();
+
+            /* If the story is linked project, make the case link the project. */
+            if(!empty($case->story))
+            {
+                $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->Where('story')->eq($case->story)->fetchAll('project');
+                $projects = array_keys($projects);
+            }
+            if($this->lang->navGroup->testcase != 'qa' and empty($case->story)) $projects = array($this->session->PRJ);
+            if(!empty($projects))
+            {
+                foreach($projects as $projectID)
+                {
+                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                    $data = new stdclass();
+                    $data->project = $projectID;
+                    $data->product = $case->product;
+                    $data->case    = $caseID;
+                    $data->version = 1;
+                    $data->order   = ++ $lastOrder;
+                    $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+                }
+            }
 
             $this->executeHooks($caseID);
 

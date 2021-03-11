@@ -103,7 +103,7 @@ $lang->doc->libTypeList['product']   = $lang->productCommon . ' thư viện';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . ' thư viện';
 $lang->doc->libTypeList['custom']    = 'Tùy biến thư viện';
 
-$lang->doc->libIconList['product']   = 'icon-cube';
+$lang->doc->libIconList['product']   = 'icon-product';
 $lang->doc->libIconList['execution'] = 'icon-stack';
 $lang->doc->libIconList['custom']    = 'icon-folder-o';
 

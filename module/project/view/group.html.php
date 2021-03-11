@@ -44,7 +44,7 @@
         <td class='c-actions'>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php $disabled = $group->role == 'limited' ? 'disabled' : '';?>
-          <?php common::printIcon('project', 'manageView', "groupID=$group->id&projectID=$projectID&projectID=$projectID", $group, 'list', 'eye', '', $disabled);?>
+          <?php common::printIcon('project', 'manageView', "groupID=$group->id&projectID=$projectID&programID=$project->parent", $group, 'list', 'eye', '', $disabled);?>
           <?php common::printIcon('project', 'managePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
           <?php common::printIcon('project', 'manageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
@@ -54,7 +54,7 @@
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {
               $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->group->delete}' class='btn'");
+              echo html::a("###", '<i class="icon icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)' title='{$lang->group->delete}' class='btn btn-icon'");
           }
           else
           {

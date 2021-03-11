@@ -44,7 +44,7 @@ class bugModel extends model
         $this->lang->TRActions     = $pageActions;
         foreach($this->lang->bug->menu as $key => $menu)
         {
-            $this->loadModel('qa')->setSubMenu('bug', $key, $productID);
+            if($this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('bug', $key, $productID);
             $replace = $productID;
             if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
             common::setMenuVars($this->lang->bug->menu, $key, $replace);

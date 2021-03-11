@@ -141,7 +141,7 @@
                 <th class='w-40px'> <?php echo $lang->priAB;?></th>
                 <th>                <?php echo $lang->story->title;?></th>
                 <th class='w-100px'><?php echo $lang->story->assignedTo;?></th>
-                <th class='w-80px'> <?php echo $lang->story->estimate;?></th>
+                <th class='w-90px'> <?php echo $lang->story->estimate;?></th>
                 <th class='w-80px'> <?php echo $lang->story->status;?></th>
                 <th class='w-200px'><?php echo $lang->actions;?></th>
               </tr>

@@ -171,7 +171,7 @@
 <div id='projectAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl == 'project' ? 'private' : 'open', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
-<div id='ProgramAcl' class='hidden'>
+<div id='programAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div class="modal fade" id="promptBox">

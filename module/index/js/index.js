@@ -107,7 +107,8 @@
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
             if(methodLowerCase === 'edit' && (link.params.programID || link.params.$4)) return 'program';
             if(methodLowerCase === 'batchedit') return 'program';
-            if(methodLowerCase === 'showerrornone' && (link.params.fromModule || link.params.$1) !== 'product') return 'project';
+            var moduleGroup = link.params.moduleGroup ? link.params.moduleGroup : link.params.$2;
+            if(methodLowerCase === 'showerrornone' && (moduleGroup || moduleGroup)) return moduleGroup;
         }
         if(moduleName === 'stakeholder')
         {
@@ -117,7 +118,10 @@
         {
             if(['todo', 'task', 'story', 'bug', 'testtask', 'testcase', 'execution', 'dynamic', 'profile'].includes(methodLowerCase)) return 'system';
         }
-        if(moduleName === 'my')      if(methodLowerCase === 'team'    || methodLowerCase == 'calendar') return 'system';
+        if(moduleName === 'my')    
+        {
+            if(['todo', 'team', 'calendar'].includes(methodLowerCase)) return 'system';
+        }
         if(moduleName === 'company') if(methodLowerCase === 'dynamic' || methodLowerCase == 'view') return 'system';
         if(moduleName === 'tree')
         {

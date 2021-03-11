@@ -148,9 +148,10 @@ $lang->group->menuOrder       = $lang->company->menuOrder;
 $lang->user->menuOrder        = $lang->company->menuOrder;
 
 /* system menu order. */
-$lang->system->menuOrder[5]  = 'company';
-$lang->system->menuOrder[10] = 'team';
-$lang->system->menuOrder[15] = 'calendar';
+$lang->system->menuOrder[5]  = 'team';
+$lang->system->menuOrder[10] = 'calendar';
+$lang->system->menuOrder[15] = 'dynamic';
+$lang->system->menuOrder[20] = 'view';
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';

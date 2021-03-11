@@ -56,7 +56,7 @@ class bug extends control
         }
 
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
-        if($this->projectID and empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=bug&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=bug')));
     }
 
     /**
