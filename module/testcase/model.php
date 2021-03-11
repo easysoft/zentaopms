@@ -46,6 +46,7 @@ class testcaseModel extends model
         {
             $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
             $replace = $productID;
+            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
             common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
 
