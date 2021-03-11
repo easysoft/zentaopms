@@ -35,7 +35,7 @@
     {
         echo html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$menuType"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='{$menuType}Tab'");
     }
-    elseif($hasBrowsePriv and $menuType == 'suite')
+    elseif($hasBrowsePriv and $menuType == 'suite' and $lang->navGroup->testcase == 'qa')
     {
         $currentSuiteID = isset($suiteID) ? (int)$suiteID : 0;
         $currentSuite   = zget($suiteList, $currentSuiteID, '');
