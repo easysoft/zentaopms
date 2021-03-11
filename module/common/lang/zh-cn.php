@@ -172,7 +172,7 @@ else
     $lang->project->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
 }
 
-$lang->project->dividerMenu = ',execution,programplan,doc,other,';
+$lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
 
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => '产品|program|product|program=%s', 'alias' => 'view');
@@ -905,7 +905,6 @@ $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse|project={PROJECT}');
 $lang->menu->scrum->dynamic        = array('link' => '动态|project|dynamic|project={PROJECT}');
-$lang->menu->scrum->other          = array('link' => '其他|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder');
 $lang->menu->scrum->projectsetting = array('link' => '设置|project|view|project={PROJECT}', 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
 $lang->scrum = new stdclass();
