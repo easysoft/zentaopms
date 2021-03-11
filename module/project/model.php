@@ -662,7 +662,7 @@ class projectModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->add('type', 'project')
             ->join('whitelist', ',')
-            ->stripTags($this->config->project->editor->prjcreate['id'], $this->config->allowedTags)
+            ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,newProduct,productName,future')
             ->get();
 
@@ -735,7 +735,7 @@ class projectModel extends model
             if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
         }
 
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->prjcreate['id'], $this->post->uid);
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
@@ -752,10 +752,10 @@ class projectModel extends model
             $member = new stdclass();
             $member->root    = $projectID;
             $member->account = $this->app->user->account;
-            $member->role    = $this->lang->user->roleList[$this->app->user->role];
+            $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
             $member->join    = helper::today();
             $member->type    = 'project';
-            $member->hours   = $this->config->project->defaultWorkhours;
+            $member->hours   = $this->config->execution->defaultWorkhours;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
             $whitelist = explode(',', $project->whitelist);
@@ -823,7 +823,7 @@ class projectModel extends model
                 $groupPriv->account = $this->app->user->account;
                 $groupPriv->group   = $projectAdminID;
                 $groupPriv->project = $projectID;
-                $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
+                $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
             return $projectID;

@@ -124,7 +124,7 @@ class project extends control
         {
             foreach($projects as $project)
             {
-                if($project->parent == $programID) 
+                if($project->parent == $programID)
                 {
                     $orderedProjects[] = $project;
                     unset($projects[$project->id]);
