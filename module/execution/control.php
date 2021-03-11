@@ -265,6 +265,9 @@ class execution extends control
      */
     public function grouptask($executionID = 0, $groupBy = 'story', $filter = '')
     {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -1758,6 +1761,9 @@ class execution extends control
      */
     public function tree($executionID, $type = 'task')
     {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         $this->execution->setMenu($this->executions, $executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
         $tree    = $this->execution->getTree($executionID);

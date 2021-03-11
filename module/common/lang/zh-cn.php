@@ -346,18 +346,16 @@ $lang->execution->viewMenu->burn     = array('link' => '燃尽图|execution|burn
 $lang->execution->viewMenu->view     = array('link' => '视图|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->execution->viewMenu->story    = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
 $lang->execution->viewMenu->qa       = array('link' => '测试|qa|index|');
-$lang->execution->viewMenu->ci       = array('link' => '代码|repo|browse|');
 $lang->execution->viewMenu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
 $lang->execution->viewMenu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->viewMenu->release  = array('link' => '发布|projectrelease|browse|project=%s');
 $lang->execution->viewMenu->action   = array('link' => '动态|execution|dynamic|executionID=%s');
 $lang->execution->viewMenu->setting  = array('link' => '设置|execution|view|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
-$lang->execution->subMenu = new stdclass();
-$lang->execution->subMenu->view = new stdclass();
-$lang->execution->subMenu->view->groupTask = '分组视图|execution|grouptask|executionID=%s';
-$lang->execution->subMenu->view->tree      = '树状图|execution|tree|executionID=%s';
+$lang->execution->groupMenu = new stdclass();
+$lang->execution->groupMenu->groupTask = '分组视图|execution|grouptask|executionID={EXECUTION}';
+$lang->execution->groupMenu->tree      = '树状图|execution|tree|executionID={EXECUTION}';
 
+$lang->execution->subMenu = new stdclass();
 $lang->execution->subMenu->setting = new stdclass();
 $lang->execution->subMenu->setting->vie       = array('link' => '概况|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->execution->subMenu->setting->product   = $lang->productCommon . '|execution|manageproducts|executionID=%s';

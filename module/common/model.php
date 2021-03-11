@@ -780,6 +780,10 @@ class commonModel extends model
             $lang->product->menu = $lang->product->setMenu;
             self::processMenuVars($lang->product->menu);
         }
+        if($group == 'execution')
+        {
+            if($methodName == 'grouptask' or $methodName == 'tree') $lang->execution->menu = self::processMenuVars($lang->execution->groupMenu);
+        }
         if(strpos('qa|bug|testcase|testreport|testtask', $moduleName) !== false and $group == 'project')
         {
             unset($lang->$moduleName->menu->testsuite);
