@@ -2500,7 +2500,8 @@ class execution extends control
         $this->view->module      = $module;
         $this->view->method      = $method;
         $this->view->extra       = $extra;
-        $this->view->executions  = $this->execution->getByProject($execution->project);
+        $this->view->projects    = $this->project->getPairsByModel();
+        $this->view->executions  = $this->execution->getList();
         $this->display();
     }
 
