@@ -535,6 +535,7 @@ class groupModel extends model
         if(empty($menu)) return true;
         if($menu == 'other' and (isset($this->lang->navGroup->$moduleName) or isset($this->lang->mainNav->$moduleName))) return false;
         if($menu != 'other' and !($moduleName == $menu or (isset($this->lang->navGroup->$moduleName) and $this->lang->navGroup->$moduleName == $menu))) return false;
+        if($menu == 'project' and strpos('caselib|testsuite', $moduleName) !== false) return false;
         return true;
     }
 
