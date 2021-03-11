@@ -357,7 +357,7 @@ class testsuiteModel extends model
         return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-            ->begin($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
             ->andWhere('product')->eq(0)
             ->andWhere('id')->notIN($importedCases)
             ->orderBy($orderBy)
