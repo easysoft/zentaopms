@@ -795,7 +795,7 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $this->project->manageMembers($projectID);
+            $this->execution->manageMembers($projectID);
             $link = $this->createLink('project', 'manageMembers', "projectID=$projectID");
             $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }

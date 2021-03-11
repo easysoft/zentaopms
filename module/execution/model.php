@@ -2276,9 +2276,9 @@ class executionModel extends model
 
         extract($data);
         $executionType = $execution->type;
-        $accounts    = array_unique($accounts);
-        $limited     = array_values($limited);
-        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq($executionType)->fetchPairs();
+        $accounts      = array_unique($accounts);
+        $limited       = array_values($limited);
+        $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq($executionType)->fetchPairs();
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq($executionType)->exec();
 
         $executionMember = array();
