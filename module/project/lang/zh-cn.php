@@ -93,6 +93,7 @@ $lang->project->teamCount          = '项目成员';
 $lang->project->longTime           = '长期';
 $lang->project->future             = '待定';
 $lang->project->moreProject        = '更多项目';
+$lang->project->days               = '可用工作日';
 
 $lang->project->productNotEmpty        = '请关联产品或创建产品。';
 $lang->project->existProductName       = '产品名称已存在。';
