@@ -618,7 +618,7 @@ class projectModel extends model
         }
 
         krsort($projectMenu);
-        $projectMenu = array_pop($projectMenu);
+        $projectMenu = implode('', $projectMenu);
         $lastMenu    = "<ul class='tree' data-ride='tree' id='projectTree' data-name='tree-project'>{$projectMenu}</ul>\n";
 
         return $lastMenu;
@@ -635,6 +635,9 @@ class projectModel extends model
     {
         $link = $project->type == 'program' ? helper::createLink('project', 'browse', "projectID={$project->id}&status=all") : helper::createLink('project', 'index', "projectID={$project->id}", '', '', $project->id);
         $icon = $project->type == 'program' ? "<i class='icon icon-program'></i> " : "<i class='icon icon-project'></i> ";
+
+        if($this->app->rawModule == 'execution') $link = helper::createLink('execution', 'all', "status=all&projectID={$project->id}");
+
         return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
