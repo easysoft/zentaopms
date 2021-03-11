@@ -345,30 +345,26 @@ $lang->execution->viewMenu->kanban   = array('link' => '看板|execution|kanban|
 $lang->execution->viewMenu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
 $lang->execution->viewMenu->view     = array('link' => '视图|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->execution->viewMenu->story    = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->execution->viewMenu->bug      = array('link' => 'Bug|execution|bug|executionID=%s');
-$lang->execution->viewMenu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->viewMenu->testtask = array('link' => '测试单|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->viewMenu->qa       = array('link' => '测试|qa|index|');
+$lang->execution->viewMenu->ci       = array('link' => '代码|repo|browse|');
 $lang->execution->viewMenu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
-$lang->execution->viewMenu->product  = $lang->productCommon . '|execution|manageproducts|executionID=%s';
-$lang->execution->viewMenu->team     = array('link' => '团队|execution|team|executionID=%s', 'alias' => 'managemembers');
-$lang->execution->viewMenu->more     = array('link' => '更多|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->execution->viewMenu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
+$lang->execution->viewMenu->release  = array('link' => '发布|projectrelease|browse|project={PROJECT}');
+$lang->execution->viewMenu->action   = array('link' => '动态|execution|dynamic|executionID=%s');
+$lang->execution->viewMenu->setting  = array('link' => '设置|execution|view|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
 $lang->execution->subMenu = new stdclass();
 $lang->execution->subMenu->view = new stdclass();
 $lang->execution->subMenu->view->groupTask = '分组视图|execution|grouptask|executionID=%s';
 $lang->execution->subMenu->view->tree      = '树状图|execution|tree|executionID=%s';
 
-$lang->execution->subMenu->qa = new stdclass();
-$lang->execution->subMenu->qa->bug      = 'Bug|execution|bug|executionID=%s';
-$lang->execution->subMenu->qa->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->subMenu->qa->testtask = array('link' => '测试单|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->subMenu->setting = new stdclass();
+$lang->execution->subMenu->setting->vie       = array('link' => '概况|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+$lang->execution->subMenu->setting->product   = $lang->productCommon . '|execution|manageproducts|executionID=%s';
+$lang->execution->subMenu->setting->team      = array('link' => '团队|execution|team|executionID=%s', 'alias' => 'managemembers');
+$lang->execution->subMenu->setting->whitelist = array('link' => '白名单|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
 
-$lang->execution->subMenu->more = new stdclass();
-$lang->execution->subMenu->more->whitelist = array('link' => '白名单|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
-$lang->execution->subMenu->more->action    = array('link' => '动态|execution|dynamic|executionID=%s');
-$lang->execution->subMenu->more->view      = array('link' => '概况|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
-
-$lang->execution->dividerMenu = ',story,doc,';
+$lang->execution->dividerMenu = ',story,build,setting,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
