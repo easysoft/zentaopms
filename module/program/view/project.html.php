@@ -26,7 +26,7 @@ js::set('browseType', $browseType);
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink('project', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('involved ', array('1' => $lang->project->mine), '', $this->cookie->PRJMine ? 'checked=checked' : '');?>
+    <?php echo html::checkbox('involved ', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(isset($this->config->maxVersion)):?>
@@ -98,10 +98,10 @@ js::set('browseType', $browseType);
   </div>
 </div>
 <script>
-$('#PRJMine1').click(function()
+$('input[name^="involved"]').click(function()
 {
-    var PRJMine = $(this).is(':checked') ? 1 : 0;
-    $.cookie('PRJMine', PRJMine, {expires:config.cookieLife, path:config.webRoot});
+    var involved = $(this).is(':checked') ? 1 : 0;
+    $.cookie('involved', involved, {expires:config.cookieLife, path:config.webRoot});
     window.location.reload();
 });
 </script>

@@ -349,7 +349,7 @@ $lang->execution->viewMenu->qa       = array('link' => '测试|qa|index|');
 $lang->execution->viewMenu->ci       = array('link' => '代码|repo|browse|');
 $lang->execution->viewMenu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
 $lang->execution->viewMenu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->viewMenu->release  = array('link' => '发布|projectrelease|browse|project={PROJECT}');
+$lang->execution->viewMenu->release  = array('link' => '发布|projectrelease|browse|project=%s');
 $lang->execution->viewMenu->action   = array('link' => '动态|execution|dynamic|executionID=%s');
 $lang->execution->viewMenu->setting  = array('link' => '设置|execution|view|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
 
