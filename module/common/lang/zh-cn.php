@@ -394,10 +394,10 @@ $lang->qa->subMenu->testtask->report   = array('link' => '报告|testreport|brow
 
 $lang->qa->subMenu->automation = new stdclass();
 $lang->qa->subMenu->automation->browse      = array('link' => '介绍|automation|browse|productID=%s', 'alias' => '');
-$lang->qa->subMenu->automation->framework   = array('link' => '框架|automation|framework|productID=%s', 'alias' => '');
-$lang->qa->subMenu->automation->data        = array('link' => '数据|automation|date|productID=%s', 'alias' => '');
-$lang->qa->subMenu->automation->interface   = array('link' => '接口|automation|interface|productID=%s', 'alias' => '');
-$lang->qa->subMenu->automation->environment = array('link' => '环境|automation|environment|productID=%s', 'alias' => '');
+//$lang->qa->subMenu->automation->framework   = array('link' => '框架|automation|framework|productID=%s', 'alias' => '');
+//$lang->qa->subMenu->automation->data        = array('link' => '数据|automation|date|productID=%s', 'alias' => '');
+//$lang->qa->subMenu->automation->interface   = array('link' => '接口|automation|interface|productID=%s', 'alias' => '');
+//$lang->qa->subMenu->automation->environment = array('link' => '环境|automation|environment|productID=%s', 'alias' => '');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
@@ -453,6 +453,15 @@ $lang->caselib->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s'
 $lang->caselib->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'subModule' => 'caselib', 'class' => 'dropdown dropdown-hover');
 $lang->caselib->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->caselib->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
+
+$lang->automation = new stdclass();
+$lang->automation->menu = new stdclass();
+$lang->automation->subMenu = $lang->qa->subMenu;
+$lang->automation->menu->index      = array('link' => '仪表盘|qa|index');
+$lang->automation->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->automation->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
+$lang->automation->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testreport', 'class' => 'dropdown dropdown-hover');
+$lang->automation->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();

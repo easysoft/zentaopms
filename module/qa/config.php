@@ -1,2 +1,2 @@
 <?php
-$config->qa->menuList = array('caselib', 'testreport', 'testsuite', 'testtask', 'testcase', 'bug', 'qa');
+$config->qa->menuList = array('caselib', 'testreport', 'testsuite', 'testtask', 'testcase', 'bug', 'qa', 'automation');
