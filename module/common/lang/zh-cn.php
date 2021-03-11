@@ -377,7 +377,7 @@ $lang->qa->menu = new stdclass();
 
 $lang->qa->menu->index      = array('link' => '仪表盘|qa|index');
 $lang->qa->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto');
-$lang->qa->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'class' => 'dropdown dropdown-hover');
+$lang->qa->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'subModule' => 'testsuite,caselib', 'class' => 'dropdown dropdown-hover');
 $lang->qa->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult', 'class' => 'dropdown dropdown-hover');
 $lang->qa->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
@@ -592,11 +592,7 @@ $lang->menugroup->upgrade     = 'admin';
 $lang->menugroup->user        = 'company';
 $lang->menugroup->group       = 'company';
 $lang->menugroup->bug         = 'qa';
-$lang->menugroup->testcase    = 'qa';
 $lang->menugroup->case        = 'qa';
-$lang->menugroup->testtask    = 'qa';
-$lang->menugroup->testsuite   = 'qa';
-$lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
 $lang->menugroup->people      = 'admin';
 $lang->menugroup->dept        = 'company';

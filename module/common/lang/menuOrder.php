@@ -106,11 +106,15 @@ $lang->qa->menuOrder[30]     = 'report';
 $lang->qa->menuOrder[35]     = 'testsuite';
 $lang->qa->menuOrder[40]     = 'caselib';
 $lang->bug->menuOrder        = $lang->qa->menuOrder;
-$lang->testcase->menuOrder   = $lang->bug->menuOrder;
-$lang->testtask->menuOrder   = $lang->testcase->menuOrder;
-$lang->testsuite->menuOrder  = $lang->testcase->menuOrder;
-$lang->caselib->menuOrder    = $lang->testcase->menuOrder;
-$lang->testreport->menuOrder = $lang->testcase->menuOrder;
+$lang->testtask->menuOrder   = $lang->qa->menuOrder;
+$lang->testreport->menuOrder = $lang->qa->menuOrder;
+
+$lang->testcase->menuOrder[5]  = 'feature';
+$lang->testcase->menuOrder[10] = 'unit';
+$lang->testcase->menuOrder[15] = 'testsuite';
+$lang->testcase->menuOrder[20] = 'caselib';
+$lang->caselib->menuOrder   = $lang->testcase->menuOrder;
+$lang->testsuite->menuOrder = $lang->testcase->menuOrder;
 
 $lang->ci->menuOrder[5]  = 'code';
 $lang->ci->menuOrder[10] = 'build';
