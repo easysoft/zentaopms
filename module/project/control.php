@@ -115,13 +115,29 @@ class project extends control
      */
     public function ajaxGetDropMenu($projectID = 0, $module, $method)
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('parent desc')->fetchAll();
+        $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchPairs();
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('openedDate_desc')->fetchAll('id');
+
+        /* Sort project by program. */
+        $orderedProjects = array();
+        foreach($programs as $programID => $programName)
+        {
+            foreach($projects as $project)
+            {
+                if($project->parent == $programID) 
+                {
+                    $orderedProjects[] = $project;
+                    unset($projects[$project->id]);
+                }
+            }
+        }
+        if(!empty($projects)) $orderedProjects += $projects;
 
         $this->view->projectID = $projectID;
-        $this->view->projects  = $projects;
+        $this->view->projects  = $orderedProjects;
         $this->view->module    = $module;
         $this->view->method    = $method;
-        $this->view->programs  = $this->loadModel('program')->getPairs(true);
+        $this->view->programs  = $programs;
 
         $this->display();
     }
@@ -355,10 +371,10 @@ class project extends control
         $this->loadModel('action');
 
         $project   = $this->project->getByID($projectID);
-        $projectID = $project->parent;
+        $programID = $project->parent;
 
-        /* Navigation stay in project when enter from project list. */
-        $this->adjustNavigation($from, $projectID);
+        /* Navigation stay in program when enter from program list. */
+        $this->adjustNavigation($from, $programID);
 
         if($_POST)
         {
@@ -409,7 +425,7 @@ class project extends control
         $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
         $this->view->users                = $this->user->getPairs('noclosed|nodeleted');
         $this->view->project              = $project;
-        $this->view->projectList          = $this->program->getParentPairs();
+        $this->view->programList          = $this->program->getParentPairs();
         $this->view->projectID            = $projectID;
         $this->view->allProducts          = array('0' => '') + $allProducts;
         $this->view->productPlans         = $productPlans;
