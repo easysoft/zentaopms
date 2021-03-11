@@ -782,7 +782,8 @@ class commonModel extends model
         }
         if($group == 'execution')
         {
-            if($methodName == 'grouptask' or $methodName == 'tree') $lang->execution->menu = self::processMenuVars($lang->execution->groupMenu);
+            if(in_array($methodName, array('grouptask', 'tree'))) $lang->execution->menu = self::processMenuVars($lang->execution->groupMenu);
+            if(in_array($methodName, array('view', 'manageproducts', 'team', 'whitelist'))) $lang->execution->menu = self::processMenuVars($lang->execution->settingMenu);
         }
         if(strpos('qa|bug|testcase|testreport|testtask', $moduleName) !== false and $group == 'project')
         {

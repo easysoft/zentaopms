@@ -1089,6 +1089,9 @@ class execution extends control
      */
     public function team($executionID = 0)
     {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -1648,6 +1651,9 @@ class execution extends control
      */
     public function view($executionID)
     {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         $execution = $this->execution->getById($executionID, true);
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -1993,6 +1999,9 @@ class execution extends control
      */
     public function manageProducts($executionID, $from = '')
     {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
@@ -2629,6 +2638,9 @@ class execution extends control
      */
     public function whitelist($executionID = 0, $module='execution', $objectType = 'sprint', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 

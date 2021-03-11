@@ -355,12 +355,12 @@ $lang->execution->groupMenu = new stdclass();
 $lang->execution->groupMenu->groupTask = '分组视图|execution|grouptask|executionID={EXECUTION}';
 $lang->execution->groupMenu->tree      = '树状图|execution|tree|executionID={EXECUTION}';
 
-$lang->execution->subMenu = new stdclass();
-$lang->execution->subMenu->setting = new stdclass();
-$lang->execution->subMenu->setting->vie       = array('link' => '概况|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
-$lang->execution->subMenu->setting->product   = $lang->productCommon . '|execution|manageproducts|executionID=%s';
-$lang->execution->subMenu->setting->team      = array('link' => '团队|execution|team|executionID=%s', 'alias' => 'managemembers');
-$lang->execution->subMenu->setting->whitelist = array('link' => '白名单|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
+$lang->execution->settingMenu = new stdclass();
+$lang->execution->settingMenu = new stdclass();
+$lang->execution->settingMenu->view      = array('link' => '概况|execution|view|executionID={EXECUTION}', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+$lang->execution->settingMenu->products  = $lang->productCommon . '|execution|manageproducts|executionID={EXECUTION}';
+$lang->execution->settingMenu->team      = array('link' => '团队|execution|team|executionID={EXECUTION}', 'alias' => 'managemembers');
+$lang->execution->settingMenu->whitelist = array('link' => '白名单|execution|whitelist|executionID={EXECUTION}', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
 
 $lang->execution->dividerMenu = ',story,build,setting,';
 
