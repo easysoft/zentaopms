@@ -562,15 +562,15 @@ class projectModel extends model
      * Get project pairs by model and project.
      *
      * @param  string $model all|scrum|waterfall
-     * @param  int    $projectID
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getPairsByModel($model = 'all', $projectID = 0)
+    public function getPairsByModel($model = 'all', $programID = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
-            ->beginIF($projectID)->andWhere('parent')->eq($projectID)->fi()
+            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()

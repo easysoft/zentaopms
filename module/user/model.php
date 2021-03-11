@@ -1015,7 +1015,7 @@ class userModel extends model
     }
 
     /**
-     * Get projects a user participated.
+     * Get execution a user participated.
      *
      * @param  string $account
      * @param  string $type project|execution
@@ -1023,7 +1023,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getProjects($account, $type = 'project', $status = 'all', $pager = null)
+    public function getExecutions($account, $type = 'execution', $status = 'all', $orderBy, $pager = null)
     {
         if($type == 'execution') $type = 'sprint,stage';
         $myProjectsList = $this->dao->select('t1. *,t2. *')->from(TABLE_TEAM)->alias('t1')
@@ -1035,7 +1035,7 @@ class userModel extends model
             ->beginIF($status == 'openedbyme')->andWhere('openedBy')->eq($account)->fi()
             ->andWhere('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
-            ->orderBy('t2.id_desc')
+            ->orderBy("t2.$orderBy")
             ->page($pager)
             ->fetchGroup('project');
 

@@ -15,17 +15,18 @@
 <?php include './featurebar.html.php';?>
 <div id='mainContent'>
   <div class='main-table'>
-    <table class='table has-sort-head table-fixed tablesorter'>
+    <table class='table has-sort-head table-fixed'>
+      <?php $vars = "userID={$user->id}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='colhead'>
-          <th class='w-id'><?php echo $lang->idAB;?></th>
-          <th class="text-left"><?php echo $lang->user->name;?></th>
-          <th class='w-status'><?php echo $lang->statusAB;?></th>
-          <th class='w-user'><?php echo $lang->team->role;?></th>
-          <th class='w-date'><?php echo $lang->execution->begin;?></th>
-          <th class='w-date'><?php echo $lang->execution->end;?></th>
-          <th class='w-date'><?php echo $lang->team->join;?></th>
-          <th class='w-110px'><?php echo $lang->team->hours;?></th>
+          <th class='w-id'>     <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th class="text-left"><?php common::printOrderLink('name', $orderBy, $vars, $lang->user->name);?></th>
+          <th class='w-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='w-user'>   <?php $lang->team->role;?></th>
+          <th class='w-date'>   <?php common::printOrderLink('begin', $orderBy, $vars, $lang->execution->begin);?></th>
+          <th class='w-date'>   <?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
+          <th class='w-date'>   <?php $lang->team->join;?></th>
+          <th class='w-110px'>  <?php $lang->team->hours;?></th>
         </tr>
       </thead>
       <tbody>

@@ -118,7 +118,10 @@
         {
             if(['todo', 'task', 'story', 'bug', 'testtask', 'testcase', 'execution', 'dynamic', 'profile'].includes(methodLowerCase)) return 'system';
         }
-        if(moduleName === 'my')      if(methodLowerCase === 'team'    || methodLowerCase == 'calendar') return 'system';
+        if(moduleName === 'my')    
+        {
+            if(['todo', 'team', 'calendar'].includes(methodLowerCase)) return 'system';
+        }
         if(moduleName === 'company') if(methodLowerCase === 'dynamic' || methodLowerCase == 'view') return 'system';
         if(moduleName === 'tree')
         {

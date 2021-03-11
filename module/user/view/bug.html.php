@@ -34,17 +34,18 @@
   </nav>
 
   <div class='main-table'>
-    <table class='table has-sort-head tablesorter'>
+    <table class='table has-sort-head'>
+      <?php $vars = "userID={$user->id}&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='text-center'>
-          <th class='w-id'><?php echo $lang->idAB;?></th>
-          <th class='w-severity'><?php echo $lang->bug->severityAB;?></th>
-          <th class='w-pri'><?php echo $lang->priAB;?></th>
-          <th class='w-type'><?php echo $lang->typeAB;?></th>
-          <th class='text-left'><?php echo $lang->bug->title;?></th>
-          <th class='w-90px'><?php echo $lang->openedByAB;?></th>
-          <th class='w-100px'><?php echo $lang->bug->resolvedBy;?></th>
-          <th class='w-100px'><?php echo $lang->bug->resolutionAB;?></th>
+          <th class='w-id'>      <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th class='w-severity'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+          <th class='w-pri'>     <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-type'>    <?php common::printOrderLink('type', $orderBy, $vars, $lang->typeAB);?></th>
+          <th class='text-left'> <?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
+          <th class='w-90px'>    <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='w-100px'>   <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
+          <th class='w-100px'>   <?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
         </tr>
       </thead>
       <tbody>

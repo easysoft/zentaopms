@@ -37,18 +37,19 @@
   </nav>
 
   <div class='main-table'>
-    <table class='table has-sort-head tablesorter' id='tasktable'>
+    <table class='table has-sort-head' id='tasktable'>
+      <?php $vars = "userID={$user->id}&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='colhead'>
-          <th class='w-id'><?php echo $lang->idAB;?></th>
-          <th class='w-pri'><?php echo $lang->priAB;?></th>
-          <th><?php echo $lang->task->execution;?></th>
-          <th><?php echo $lang->task->name;?></th>
-          <th class='w-70px'><?php echo $lang->task->estimateAB;?></th>
-          <th class='w-70px'><?php echo $lang->task->consumedAB;?></th>
-          <th class='w-hour'><?php echo $lang->task->leftAB;?></th>
-          <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
-          <th class='w-70px'><?php echo $lang->statusAB;?></th>
+          <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th class='w-pri'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th><?php common::printOrderLink('execution', $orderBy, $vars, $lang->task->execution);?></th>
+          <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->task->name);?></th>
+          <th class='w-70px'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
+          <th class='w-70px'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
+          <th class='w-hour'><?php common::printOrderLink('left', $orderBy, $vars, $lang->task->leftAB);?></th>
+          <th class='w-date'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
+          <th class='w-70px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
         </tr>
       </thead>
       <tbody>
