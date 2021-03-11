@@ -81,6 +81,9 @@ $lang->repo->group     = '分组';
 $lang->repo->user      = '用户';
 $lang->repo->info      = '版本信息';
 
+$lang->repo->gitlabHost  = 'Gitlab URL';
+$lang->repo->gitlabToken = '版本信息';
+
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';
 $lang->repo->openedBy   = '创建者';
@@ -118,7 +121,8 @@ $lang->repo->logStyles['D'] = '删除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Git']        = 'Git';
+$lang->repo->scmList['Git']        = '本地 Git';
+$lang->repo->scmList['Gitlab']     = 'Gitlab';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 
 $lang->repo->notice                 = new stdclass();
