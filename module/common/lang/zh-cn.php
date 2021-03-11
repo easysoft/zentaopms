@@ -664,6 +664,7 @@ $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
 
+$lang->navGroup->company       = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';
@@ -685,7 +686,6 @@ $lang->navGroup->overtime = 'attend';
 $lang->navGroup->lieu     = 'attend';
 
 $lang->navGroup->admin     = 'admin';
-$lang->navGroup->company   = 'admin';
 $lang->navGroup->dept      = 'admin';
 $lang->navGroup->user      = 'admin';
 $lang->navGroup->group     = 'admin';
