@@ -33,7 +33,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->parent;?></th>
-          <td><?php echo html::select('parent', $projectList, $project->parent, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen'");?></td>
           <td></td>
           <td></td>
         </tr>

@@ -21,7 +21,7 @@ $projectsPinYin = common::convert2Pinyin($projectNames);
 foreach($projects as $project)
 {
     $link = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
-    $projectName = $project->parent ? zget($programs, $project->parent, '') . '/' . $project->name : $project->name;
+    $projectName = zget($programs, $project->parent, '') ? zget($programs, $project->parent) . '/' . $project->name : $project->name;
     if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
     {
         $myProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='text-important' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
