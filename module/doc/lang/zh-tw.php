@@ -103,7 +103,7 @@ $lang->doc->libTypeList['product'] = $lang->productCommon . '文檔庫';
 $lang->doc->libTypeList['project'] = $lang->executionCommon . '文檔庫';
 $lang->doc->libTypeList['custom']  = '自定義文檔庫';
 
-$lang->doc->libIconList['product'] = 'icon-cube';
+$lang->doc->libIconList['product'] = 'icon-product';
 $lang->doc->libIconList['project'] = 'icon-stack';
 $lang->doc->libIconList['custom']  = 'icon-folder-o';
 
