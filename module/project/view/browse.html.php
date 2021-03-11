@@ -35,7 +35,7 @@ js::set('browseType', $browseType);
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink('browse', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('projectMine', array('1' => $lang->project->mine), '', $this->cookie->projectMine ? 'checked=checked' : '');?>
+    <?php echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(isset($this->config->maxVersion)):?>

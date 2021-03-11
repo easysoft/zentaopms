@@ -1,9 +1,9 @@
 $(function()
 {
-    $('#projectMine').click(function()
+    $('input[name^="involved"]').click(function()
     {
-        var mine = $(this).is(':checked') ? 1 : 0;
-        $.cookie('projectMine', mine, {expires:config.cookieLife, path:config.webRoot});
+        var involved = $(this).is(':checked') ? 1 : 0;
+        $.cookie('involved', involved, {expires:config.cookieLife, path:config.webRoot});
         window.location.reload();
     });
 });

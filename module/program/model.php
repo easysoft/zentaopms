@@ -128,11 +128,11 @@ class programModel extends model
      * @param  string    $orderBy
      * @param  object    $pager
      * @param  int       $programTitle
-     * @param  int       $projectMine
+     * @param  int       $involved
      * @access public
      * @return object
      */
-    public function getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $projectMine = 0)
+    public function getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0)
     {
         $path = '';
         if($programID)
@@ -148,7 +148,7 @@ class programModel extends model
             ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
             ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($this->cookie->projectMine or $projectMine)
+            ->beginIF($this->cookie->involved or $involved)
             ->andWhere('openedBy', true)->eq($this->app->user->account)
             ->orWhere('PM')->eq($this->app->user->account)
             ->markRight(1)
@@ -777,14 +777,14 @@ class programModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $programTitle
-     * @param  int    $projectMine
+     * @param  int    $involved
      * @access public
      * @return array
      */
-    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $projectMine = 0)
+    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0)
     {
         /* Init vars. */
-        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $projectMine);
+        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);

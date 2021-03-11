@@ -662,7 +662,7 @@ class program extends control
         foreach($projects as $id => $name)
         {
             $active = $data->cpoyProjectID == $id ? 'active' : '';
-            $html .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . "</a></div>"; 
+            $html .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . "</a></div>";
         }
         echo $html;
     }
@@ -691,7 +691,7 @@ class program extends control
     {
         $programs = $this->post->programs;
         foreach($programs as $id => $order)
-        {    
+        {
             $this->dao->update(TABLE_PROJECT)
                 ->set('`order`')->eq($order)
                 ->where('id')->eq($id)

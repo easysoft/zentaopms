@@ -84,7 +84,7 @@
         </tr>
         <?php if($project->model == 'scrum'):?>
         <tr>
-          <th><?php echo $lang->execution->days;?></th>
+          <th><?php echo $lang->project->days;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('days', $project->days, "class='form-control'");?>

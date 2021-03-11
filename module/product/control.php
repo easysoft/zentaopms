@@ -72,11 +72,11 @@ class product extends control
      * @param  string $status
      * @param  int    $productID
      * @param  int    $branch
-     * @param  int    $projectMine
+     * @param  int    $involved
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0, $branch = 0, $projectMine = 0)
+    public function project($status = 'all', $productID = 0, $branch = 0, $involved = 0)
     {
         $this->product->setMenu($this->products, $productID, $branch);
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
@@ -88,7 +88,7 @@ class product extends control
 
         /* Get PM id list. */
         $accounts     = array();
-        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $projectMine);
+        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved);
         foreach($projectStats as $project)
         {
             if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;

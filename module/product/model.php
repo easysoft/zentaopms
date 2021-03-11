@@ -875,11 +875,11 @@ class productModel extends model
      * @param  int       $productID
      * @param  string    $browseType
      * @param  int       $branch
-     * @param  int       $projectMine
+     * @param  int       $involved
      * @access public
      * @return array
      */
-    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $projectMine = 0)
+    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0)
     {
         $projectList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -887,7 +887,7 @@ class productModel extends model
             ->andWhere('t2.type')->eq('project')
             ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($this->cookie->projectMine or $projectMine)
+            ->beginIF($this->cookie->involved or $involved)
             ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t2.PM')->eq($this->app->user->account)
             ->markRight(1)
@@ -910,13 +910,13 @@ class productModel extends model
      * @param  int       $productID
      * @param  string    $browseType
      * @param  int       $branch
-     * @param  int       $projectMine
+     * @param  int       $involved
      * @access public
      * @return array
      */
-    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $projectMine = 0)
+    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0)
     {
-        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $projectMine);
+        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);

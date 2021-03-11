@@ -22,6 +22,7 @@
 .table td.has-child > .plan-toggle > .icon:before {text-align: left;}
 .table td.has-child > .plan-toggle.collapsed > .icon {-ms-transform:rotate(90deg); -moz-transform:rotate(90deg); -o-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform: rotate(90deg);}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
+.hours {text-align: right;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
 </style>
 <div id='mainMenu' class='clearfix'>
@@ -75,9 +76,9 @@
           <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->PM);?></th>
           <th class='w-90px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
           <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->execution->status);?></th>
-          <th class='w-70px'><?php echo $lang->execution->totalEstimate;?></th>
-          <th class='w-70px'><?php echo $lang->execution->totalConsumed;?></th>
-          <th class='w-70px'><?php echo $lang->execution->totalLeft;?></th>
+          <th class='w-70px hours'><?php echo $lang->execution->totalEstimate;?></th>
+          <th class='w-70px hours'><?php echo $lang->execution->totalConsumed;?></th>
+          <th class='w-70px hours'><?php echo $lang->execution->totalLeft;?></th>
           <th class='w-150px'><?php echo $lang->execution->progress;?></th>
           <th class='w-100px'><?php echo $lang->execution->burn;?></th>
           <?php if($canOrder):?>
@@ -113,9 +114,9 @@
           <td class='c-status' title='<?php echo $executionStatus;?>'>
             <span class="status-execution status-<?php echo $execution->status?>"><?php echo $executionStatus;?></span>
           </td>
-          <td><?php echo $execution->hours->totalEstimate . ' ' . $config->hourUnit;?></td>
-          <td><?php echo $execution->hours->totalConsumed . ' ' . $config->hourUnit;?></td>
-          <td><?php echo $execution->hours->totalLeft . ' ' . $config->hourUnit;?></td>
+          <td class='hours'><?php echo $execution->hours->totalEstimate . ' ' . $config->hourUnit;?></td>
+          <td class='hours'><?php echo $execution->hours->totalConsumed . ' ' . $config->hourUnit;?></td>
+          <td class='hours'><?php echo $execution->hours->totalLeft . ' ' . $config->hourUnit;?></td>
           <td class="c-progress">
             <div class="progress progress-text-left">
               <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
@@ -157,9 +158,9 @@
              <td class='c-status' title='<?php echo $executionStatus;?>'>
                <span class="status-execution status-<?php echo $child->status?>"><?php echo $executionStatus;?></span>
              </td>
-             <td><?php echo $child->hours->totalEstimate;?></td>
-             <td><?php echo $child->hours->totalConsumed;?></td>
-             <td><?php echo $child->hours->totalLeft;?></td>
+             <td class='hours'><?php echo $child->hours->totalEstimate;?></td>
+             <td class='hours'><?php echo $child->hours->totalConsumed;?></td>
+             <td class='hours'><?php echo $child->hours->totalLeft;?></td>
              <td class="c-progress">
                <div class="progress progress-text-left">
                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $child->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $child->hours->progress;?>%">

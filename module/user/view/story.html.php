@@ -38,13 +38,13 @@
       <?php $vars = "userID={$user->id}&storyType=$storyType&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='colhead'>
-          <th class='w-id'>    <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-          <th class='w-pri'>   <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-          <th class='w-200px'> <?php common::printOrderLink('product', $orderBy, $vars, $lang->story->product);?></th>
-          <th>                 <?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
-          <th class='w-150px'> <?php common::printOrderLink('plan', $orderBy, $vars, $lang->story->plan);?></th>
-          <th class='w-90px'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-80px'>  <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+          <th class='w-id'>   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th class='w-pri'>  <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-200px'><?php common::printOrderLink('product', $orderBy, $vars, $lang->story->product);?></th>
+          <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+          <th class='w-150px'><?php common::printOrderLink('plan', $orderBy, $vars, $lang->story->plan);?></th>
+          <th class='w-90px'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='w-80px text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='w-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
           <th class='w-100px'> <?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
         </tr>
@@ -59,7 +59,7 @@
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
           <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
           <td><?php echo zget($users, $story->openedBy);?></td>
-          <td><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+          <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
           <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
         </tr>

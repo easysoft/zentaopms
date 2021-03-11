@@ -92,6 +92,7 @@ $lang->project->teamCount          = 'Team';
 $lang->project->longTime           = 'Long-Term Project';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = 'More Project';
+$lang->project->days               = 'Available Days';
 
 $lang->project->productNotEmpty        = 'Please link products or create products.';
 $lang->project->existProductName       = 'Product name already exists.';

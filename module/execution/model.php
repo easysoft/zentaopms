@@ -412,7 +412,7 @@ class executionModel extends model
                 $member = new stdclass();
                 $member->root    = $executionID;
                 $member->account = $this->app->user->account;
-                $member->role    = $this->lang->user->roleList[$this->app->user->role];
+                $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
                 $member->join    = $today;
                 $member->type    = $sprintType;
                 $member->days    = $sprint->days;
