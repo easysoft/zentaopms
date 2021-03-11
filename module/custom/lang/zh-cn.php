@@ -19,7 +19,7 @@ $lang->custom->score                = '积分';
 $lang->custom->timezone             = '时区';
 $lang->custom->scoreReset           = '重置积分';
 $lang->custom->scoreTitle           = '积分功能';
-$lang->custom->execution            = $lang->sprintCommon;
+$lang->custom->execution            = '执行';
 $lang->custom->product              = $lang->productCommon;
 $lang->custom->convertFactor        = '换算系数';
 $lang->custom->region               = '区间';
@@ -71,12 +71,12 @@ $lang->custom->saveTips            = '点击保存后，则以当前%s为默认�
 
 $lang->custom->numberError = '区间必须大于零';
 
-$lang->custom->closedExecution = '已关闭' . $lang->sprintCommon;
+$lang->custom->closedExecution = '已关闭执行';
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
 
 $lang->custom->object['project']   = '项目';
 $lang->custom->object['product']   = $lang->productCommon;
-$lang->custom->object['execution'] = $lang->sprintCommon;
+$lang->custom->object['execution'] = '执行';
 $lang->custom->object['story']     = $lang->SRCommon;
 $lang->custom->object['task']      = '任务';
 $lang->custom->object['bug']       = 'Bug';
@@ -164,7 +164,7 @@ $lang->custom->notice->required                    = '页面提交时，选中�
 $lang->custom->notice->conceptResult               = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath                 = '您可以在：后台 -> 自定义 -> 流程页面修改。';
 $lang->custom->notice->readOnlyOfProduct           = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
-$lang->custom->notice->readOnlyOfExecution         = '禁止修改后，已关闭' . $lang->sprintCommon . '下的任务、版本、日志以及关联需求都禁止修改。';
+$lang->custom->notice->readOnlyOfExecution         = '禁止修改后，已关闭执行下的任务、版本、日志以及关联需求都禁止修改。';
 $lang->custom->notice->URSREmpty                   = '自定义需求名称不能为空！';
 $lang->custom->notice->confirmDelete               = '您确定要删除吗？';
 
@@ -221,7 +221,7 @@ $lang->custom->CRExecution[0] = '禁止修改';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
-$lang->custom->moduleName['execution']   = $lang->sprintCommon;
+$lang->custom->moduleName['execution']   = '执行';
 
 $lang->custom->conceptQuestions['overview'] = "1. 下述哪种组合方式更适合您公司的管理现状？";
 $lang->custom->conceptQuestions['URAndSR']  = "2. 是否启用{$lang->URCommon}和{$lang->SRCommon}概念？";
