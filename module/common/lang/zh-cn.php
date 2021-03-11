@@ -149,7 +149,7 @@ $lang->mainNav->qa      = '<i class="icon icon-test"></i> 测试|qa|index|';
 $lang->mainNav->repo    = '<i class="icon icon-code1"></i> 代码|repo|browse|';
 $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
-$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|company|browse|';
+$lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|my|team|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
 if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> 项目集|$programModule|$programMethod|";
 
@@ -222,9 +222,10 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company  = array('link' => '人员|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
-$lang->system->menu->team     = array('link' => '团队|my|team|');
+$lang->system->menu->team     = array('link' => '团队|my|team|', 'subModule' => 'user');
 $lang->system->menu->calendar = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->system->menu->dynamic  = '动态|company|dynamic|';
+$lang->system->menu->view     = array('link' => '公司|company|view');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -518,13 +519,12 @@ $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => '用户|company|browse', 'subModule' => ',user,');
 $lang->company->menu->dept        = array('link' => '部门|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => '权限|group|browse', 'subModule' => 'group');
-$lang->company->menu->dynamic     = '动态|company|dynamic|';
-$lang->company->menu->view        = array('link' => '公司|company|view');
 
 /* 后台管理菜单设置。*/
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->company   = array('link' => '人员|company|browse|', 'subModule' => ',user,dept,group,');
 $lang->admin->menu->model     = array('link' => '模型|custom|browsestoryconcept|', 'subModule' => 'holiday');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
@@ -536,9 +536,9 @@ $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
 $lang->subject->menu->storyConcept = array('link' => '需求概念|custom|browsestoryconcept|');
 
-$lang->dept->menu    = $lang->company->menu;
-$lang->group->menu   = $lang->company->menu;
-$lang->user->menu    = $lang->company->menu;
+$lang->dept->menu  = $lang->company->menu;
+$lang->group->menu = $lang->company->menu;
+$lang->user->menu  = $lang->company->menu;
 
 $lang->admin->subMenu = new stdclass();
 $lang->admin->subMenu->message = new stdclass();
@@ -621,7 +621,6 @@ $lang->menugroup->job     = 'ci';
 /* Nav group.*/
 $lang->navGroup = new stdclass();
 $lang->navGroup->my     = 'my';
-$lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
 $lang->navGroup->score  = 'my';
 
@@ -669,13 +668,10 @@ $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
 
-$lang->navGroup->company       = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';
-$lang->navGroup->user          = 'system';
-$lang->navGroup->group         = 'system';
-$lang->navGroup->dept          = 'system';
+$lang->navGroup->todo          = 'system';
 $lang->navGroup->ldap          = 'system';
 $lang->navGroup->process       = 'system';
 $lang->navGroup->activity      = 'system';
@@ -693,6 +689,11 @@ $lang->navGroup->overtime = 'attend';
 $lang->navGroup->lieu     = 'attend';
 
 $lang->navGroup->admin     = 'admin';
+$lang->navGroup->company   = 'admin';
+$lang->navGroup->dept      = 'admin';
+$lang->navGroup->user      = 'admin';
+$lang->navGroup->group     = 'admin';
+$lang->navGroup->dept      = 'admin';
 $lang->navGroup->webhook   = 'admin';
 $lang->navGroup->sms       = 'admin';
 $lang->navGroup->message   = 'admin';

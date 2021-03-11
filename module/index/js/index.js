@@ -113,7 +113,12 @@
         {
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
         }
-        if(moduleName === 'my') if(methodLowerCase === 'team' || methodLowerCase == 'calendar') return 'system';
+        if(moduleName === 'user')    
+        {
+            if(['todo', 'task', 'story', 'bug', 'testtask', 'testcase', 'execution', 'dynamic', 'profile'].includes(methodLowerCase)) return 'system';
+        }
+        if(moduleName === 'my')      if(methodLowerCase === 'team'    || methodLowerCase == 'calendar') return 'system';
+        if(moduleName === 'company') if(methodLowerCase === 'dynamic' || methodLowerCase == 'view') return 'system';
         if(moduleName === 'tree')
         {
             if(methodLowerCase === 'browse')
@@ -130,9 +135,6 @@
                 return 'project';
             }
         }
-
-        var myMethods = 'todocalendar|effortcalendar|todo|task|story|bug|testtask|testcase|execution|issue|risk|dynamic|profile';
-        if(moduleName === 'user' && myMethods.indexOf(methodLowerCase) != -1) return 'my';
 
         code = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return appsMap[code] ? code : '';
