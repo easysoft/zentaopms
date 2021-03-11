@@ -12,10 +12,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <style>
-#mainContent table{width: 95%;}
-.input-group .input-group-btn .popover{font-size:12px;}
-.input-group-btn .btn{border-left:0px}
-.input-group:last-child .input-group-addon{border-right:0px;}
+#mainContent table {width: 95%;}
+.input-group .input-group-btn .popover {font-size: 12px;}
+.input-group-btn .btn {border-left: 0px}
+.input-group:last-child .input-group-addon {border-right: 0px;}
 </style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>

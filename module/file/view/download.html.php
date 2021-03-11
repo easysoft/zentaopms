@@ -1,13 +1,13 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php js::set('fileID', $file->id);?>
 <style>
-#imageFile{text-align: center; padding: 0; margin: 0 -10px;}
-#imageFile img{max-width:100%;}
+#imageFile {text-align: center; padding: 0; margin: 0 -10px;}
+#imageFile img {max-width: 100%;}
 #txtFile {padding: 5px 0; margin: 0 -10px;}
 #txtFile pre {margin: 0;}
 #txtFile div {overflow-x: auto;}
-#titlebar span{float: right; padding-right: 25px;}
-.main-header .btn-toolbar{margin-left:8px;}
+#titlebar span {float: right; padding-right: 25px;}
+.main-header .btn-toolbar {margin-left: 8px;}
 </style>
 <main id="main">
   <div class="container">

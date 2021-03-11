@@ -1,2 +1,2 @@
-td.delayed{color:#fff; background: #e84e0f!important;}
-.hours {white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+td.delayed {color: #fff; background: #e84e0f !important;}
+.hours {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right;}

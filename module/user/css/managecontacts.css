@@ -1,7 +1,7 @@
-.group-item {display:block; width:100px; float:left}
-.panel.with-list {border: none}
-.panel.with-list .panel-heading {border: 1px solid #ddd; border-bottom: none}
-.panel.with-list .list-group {margin: 0}
-.list-group-item.active {color: #1A4F85}
-.input-group.clearfix .form-control, .input-group.clearfix .input-group-addon {display: block; float: left; max-width: 150px; width: auto}
-.input-group.clearfix .input-group-addon {padding: 5px 10px; line-height: 18px}
+.group-item {display: block; width: 100px; float: left;}
+.panel.with-list {border: none;}
+.panel.with-list .panel-heading {border: 1px solid #ddd; border-bottom: none;}
+.panel.with-list .list-group {margin: 0;}
+.list-group-item.active {color: #1A4F85;}
+.input-group.clearfix .form-control, .input-group.clearfix .input-group-addon {display: block; float: left; max-width: 150px; width: auto;}
+.input-group.clearfix .input-group-addon {padding: 5px 10px; line-height: 18px;}

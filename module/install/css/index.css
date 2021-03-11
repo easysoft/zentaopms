@@ -1,26 +1,26 @@
-h3{font-size:16px; margin-bottom: 20px;}
-blockquote{padding: 0; border-left: 0;}
-li{line-height: 2em}
-.modal-dialog{position: relative; line-height: 20px}
-.modal-header{position: absolute; right: 15px; top: 10px; border: none;z-index: 999}
-.modal-body{padding: 20px 50px;}
+h3 {font-size: 16px; margin-bottom: 20px;}
+blockquote {padding: 0; border-left: 0;}
+li {line-height: 2em;}
+.modal-dialog {position: relative; line-height: 20px;}
+.modal-header {position: absolute; right: 15px; top: 10px; border: none; z-index: 999;}
+.modal-body {padding: 20px 50px;}
 
 .dropdown-menu {min-width: 120px; margin-top: 0;}
 
-.col-md-4{width:20%;}
+.col-md-4 {width: 20%;}
 .card {position: relative; display: block; padding: 0; overflow: hidden; border: 1px solid #ddd; border-radius: 0; -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.075); box-shadow: 0 1px 2px rgba(0,0,0,.075); -webkit-transition: all .5s cubic-bezier(.175,.885,.32,1); -o-transition: all .5s cubic-bezier(.175,.885,.32,1); transition: all .5s cubic-bezier(.175,.885,.32,1);}
 
 .card .card-heading {display: block; padding: 10px; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 .card .card-content {padding: 0 10px 10px 10px; overflow: hidden; text-overflow: ellipsis;}
 
-.card > .card-reveal { position: absolute; top: 100%; left: 0; width: 100%; height: 100%; background-color: #f1f1f1; -webkit-transition: all .8s cubic-bezier(.175,.885,.32,1); -o-transition: all .8s cubic-bezier(.175,.885,.32,1); transition: all .8s cubic-bezier(.175,.885,.32,1);}
+.card > .card-reveal {position: absolute; top: 100%; left: 0; width: 100%; height: 100%; background-color: #f1f1f1; -webkit-transition: all .8s cubic-bezier(.175,.885,.32,1); -o-transition: all .8s cubic-bezier(.175,.885,.32,1); transition: all .8s cubic-bezier(.175,.885,.32,1);}
 
-.card>.card-reveal>.card-heading{padding:20px 10px}
-.card:hover>.card-reveal{top:0}
+.card>.card-reveal>.card-heading {padding: 20px 10px;}
+.card:hover>.card-reveal {top: 0;}
 
-.card.ad > .img-wrapper {height: 110px; line-height:110px; text-align:center; font-size:25px; width: 100%;}
+.card.ad > .img-wrapper {height: 110px; line-height: 110px; text-align: center; font-size: 25px; width: 100%;}
 .card.ad > .card-heading {text-align: center;}
-.card.ad > .card-reveal > .card-heading { padding: 12px 10px 10px 15px;}
+.card.ad > .card-reveal > .card-heading {padding: 12px 10px 10px 15px;}
 .card.ad > .card-reveal {color: #333;}
-.card.ad > .card-reveal li{line-height:1.5;font-size:12px;}
+.card.ad > .card-reveal li {line-height: 1.5; font-size: 12px;}

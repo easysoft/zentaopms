@@ -10,7 +10,7 @@
     <div class='cell'>
       <div class="table-row" id='conditions'>
         <div class='input-group w-400px input-group-sm'>
-          <span class='input-group-addon'><?php echo $lang->executionCommon . $lang->report->beginAndEnd;?></span>
+          <span class='input-group-addon'><?php echo $lang->report->executionCommon . $lang->report->beginAndEnd;?></span>
           <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
           <span class='input-group-addon'><?php echo $lang->report->to;?></span>
           <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>

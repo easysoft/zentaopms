@@ -29,7 +29,7 @@ class qa extends control
     {
         parent::__construct();
 
-        /* Set report menu group. */
+        /* Set qa menu group. */
         $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
         if(!$this->projectID)
         {
@@ -47,7 +47,7 @@ class qa extends control
     public function index($locate = 'auto', $productID = 0)
     {
         $this->products = $this->loadModel('product')->getProductPairsByProject($this->projectID, 'noclosed');
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=qa")));
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=qa&moduleGroup=' . $this->lang->navGroup->qa . '&activeMenu=index')));
         if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
 
         $productID = $this->product->saveState($productID, $this->products);

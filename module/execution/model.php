@@ -313,6 +313,7 @@ class executionModel extends model
         $execution = $this->getByID($executionID);
         $this->session->set('project', $execution->project);
     }
+
     /**
      * Create a execution.
      *
@@ -345,7 +346,7 @@ class executionModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('team', substr($this->post->name,0, 30))
-            ->setIF($this->config->systemMode == 'new', 'execution', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new', 'project', $this->session->PRJ)
             ->setIF($this->config->systemMode == 'new', 'parent', $this->session->PRJ)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
@@ -411,7 +412,7 @@ class executionModel extends model
                 $member = new stdclass();
                 $member->root    = $executionID;
                 $member->account = $this->app->user->account;
-                $member->role    = $this->lang->user->roleList[$this->app->user->role];
+                $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
                 $member->join    = $today;
                 $member->type    = $sprintType;
                 $member->days    = $sprint->days;
@@ -1136,7 +1137,7 @@ class executionModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetchPairs();
 
-            $products = $this->loadModel('product')->getProductPairsByExecution($projectID);
+            $products = $this->loadModel('product')->getProductPairsByProject($projectID);
 
             foreach($executions as $id => $execution)
             {
@@ -2275,9 +2276,9 @@ class executionModel extends model
 
         extract($data);
         $executionType = $execution->type;
-        $accounts    = array_unique($accounts);
-        $limited     = array_values($limited);
-        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq($executionType)->fetchPairs();
+        $accounts      = array_unique($accounts);
+        $limited       = array_values($limited);
+        $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq($executionType)->fetchPairs();
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq($executionType)->exec();
 
         $executionMember = array();
@@ -2309,7 +2310,7 @@ class executionModel extends model
         if($executionType == 'execution')
         {
             $childSprints   = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($execution->id)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
-            $linkedProducts = $this->loadModel('product')->getProductPairsByExecution($execution->id);
+            $linkedProducts = $this->loadModel('product')->getProductPairsByProject($execution->id);
 
             $this->loadModel('user')->updateUserView(array($executionID), 'execution', $changedAccounts);
             if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
@@ -2355,7 +2356,7 @@ class executionModel extends model
         $changedAccounts = array_unique($changedAccounts);
 
         $this->loadModel('user')->updateUserView($executionID, $executionType, $changedAccounts);
-        $linkedProducts = $this->loadModel('product')->getProductPairsByExecution($executionID);
+        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($executionID);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
     }
 
@@ -2386,7 +2387,7 @@ class executionModel extends model
             {
                 $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($sprint->execution)->andWhere('type')->eq('execution')->andWhere('account')->eq($account)->exec();
                 $this->loadModel('user')->updateUserView($sprint->execution, 'execution', array($account));
-                $linkedProducts = $this->loadModel('product')->getProductPairsByExecution($sprint->execution);
+                $linkedProducts = $this->loadModel('product')->getProductPairsByProject($sprint->execution);
                 if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
             }
         }

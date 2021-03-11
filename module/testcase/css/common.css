@@ -1,38 +1,38 @@
-.table-form > tbody > tr > td .btn-group-vertical > .btn {margin-left: 0!important; padding: 2px 8px}
+.table-form > tbody > tr > td .btn-group-vertical > .btn {margin-left: 0 !important; padding: 2px 8px;}
 
-#steps .step-id {text-align: center;vertical-align: middle}
-#steps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px}
-#steps .checkbox-inline input[type="checkbox"] {top: -2px}
+#steps .step-id {text-align: center; vertical-align: middle;}
+#steps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px;}
+#steps .checkbox-inline input[type="checkbox"] {top: -2px;}
 #steps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px; height: 32px;}
 .step-actions {width: 105px;}
 #steps .active td {transition: background-color .5s;}
 #steps .step-group .step-expects {display: none;}
 #steps .step-item .step-item-id {display: table-cell; min-width: 40px;}
-#steps .step-item .step-id {color: transparent}
-#steps .step-group .step-id {font-weight: bold}
+#steps .step-item .step-id {color: transparent;}
+#steps .step-group .step-id {font-weight: bold;}
 #steps .step-actions {width: 105px; text-align: center;}
 
-#steps .btn-step-move {cursor: move}
-#steps.sortable > tr.drag-shadow {display: none}
+#steps .btn-step-move {cursor: move;}
+#steps.sortable > tr.drag-shadow {display: none;}
 #steps.sortable-sorting > tr {transition: all .2s; position: relative; z-index: 5; opacity: .3;}
 #steps.sortable-sorting {cursor: move;}
-#steps.sortable-sorting > tr.drag-row {opacity: 1; z-index: 10; box-shadow: 0 2px 4px red}
-#steps.sortable-sorting > tr.drag-row + tr > td {box-shadow: inset 0 4px 2px rgba(0,0,0,.2)}
-#steps.sortable-sorting > tr.drag-row > td {background-color: #edf3fe!important}
+#steps.sortable-sorting > tr.drag-row {opacity: 1; z-index: 10; box-shadow: 0 2px 4px red;}
+#steps.sortable-sorting > tr.drag-row + tr > td {box-shadow: inset 0 4px 2px rgba(0,0,0,.2);}
+#steps.sortable-sorting > tr.drag-row > td {background-color: #edf3fe !important;}
 #steps.sortable > tr.drop-success > td {background-color: #cfe0ff; transition: background-color 2s;}
 #steps .step-type-toggle {padding: 5px 11px 5px 7px;}
-#steps .step textarea.autosize{resize:none;}
-#steps .step .form-control {border-radius: 0}
+#steps .step textarea.autosize {resize: none;}
+#steps .step .form-control {border-radius: 0;}
 
 
 .table-bordered .step-actions {width: 100px;}
-.table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd!important;}
-.table-bordered > #steps > tr > td.step-id { padding-right: 8px;}
-.table-bordered > #steps > tr > td .btn {border-color: transparent; background-color: transparent}
+.table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd !important;}
+.table-bordered > #steps > tr > td.step-id {padding-right: 8px;}
+.table-bordered > #steps > tr > td .btn {border-color: transparent; background-color: transparent;}
 .table-bordered > #steps > tr > td .btn:hover,
-.table-bordered > #steps > tr > td .btn:focus {background-color: #ddd}
-.table-bordered > #steps .input-group-addon {border: none; background-color: transparent; border-left: 1px dotted #e5e5e5}
-.table-bordered > #steps > tr > td textarea {border-color: #fff; box-shadow: none}
+.table-bordered > #steps > tr > td .btn:focus {background-color: #ddd;}
+.table-bordered > #steps .input-group-addon {border: none; background-color: transparent; border-left: 1px dotted #e5e5e5;}
+.table-bordered > #steps > tr > td textarea {border-color: #fff; box-shadow: none;}
 .table-bordered > #steps > tr > td textarea:hover {border-color: #808080;}
 .table-bordered > #steps > tr > td textarea:focus {border-color: #4d90fe;}
-.table-bordered > #steps .step-child .step-child-id {border-right: 1px dotted #ddd; border-left: none}
+.table-bordered > #steps .step-child .step-child-id {border-right: 1px dotted #ddd; border-left: none;}

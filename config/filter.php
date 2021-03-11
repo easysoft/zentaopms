@@ -159,21 +159,20 @@ $filter->product->default->cookie['lastProduct']      = 'int';
 $filter->product->default->cookie['preProductID']     = 'int';
 $filter->product->index->cookie['preBranch']          = 'int';
 $filter->product->export->cookie['checkedItem']       = 'reg::checked';
-$filter->product->project->cookie['PRJMine']          = 'code';
+$filter->product->project->cookie['involved']         = 'code';
 
 $filter->program->default->cookie['lastPGM']               = 'int';
 $filter->program->default->cookie['lastPRJ']               = 'int';
 $filter->program->prjbrowse->cookie['programType']         = 'code';
-$filter->program->prjbrowse->cookie['PRJMine']             = 'code';
-$filter->program->pgmproject->cookie['PRJMine']            = 'code';
-$filter->program->prjbrowse->cookie['mine']                = 'code';
-$filter->program->pgmbrowse->cookie['showClosed']          = 'code';
+$filter->program->project->cookie['involved']              = 'code';
+$filter->program->browse->cookie['showClosed']             = 'code';
 $filter->program->export->cookie['checkedItem']            = 'reg::checked';
 $filter->program->ajaxgetpgmdropmenu->cookie['showClosed'] = 'code';
 
 $filter->project->default->cookie['lastProject']      = 'int';
 $filter->project->default->cookie['lastPRJ']          = 'int';
 $filter->project->default->cookie['projectMode']      = 'code';
+$filter->project->browse->cookie['involved']          = 'code';
 $filter->project->story->cookie['storyModuleParam']   = 'int';
 $filter->project->story->cookie['storyPreProjectID']  = 'int';
 $filter->project->story->cookie['storyProductParam']  = 'int';

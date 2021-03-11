@@ -92,6 +92,7 @@ $lang->project->teamCount          = 'Team';
 $lang->project->longTime           = 'Long-Term Project';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = 'More Project';
+$lang->project->days               = 'Available Days';
 
 $lang->project->productNotEmpty        = 'Please link products or create products.';
 $lang->project->existProductName       = 'Product name already exists.';
@@ -203,7 +204,7 @@ $lang->project->confirmDelete     = 'Do you want to delete this project?';
 $lang->project->cannotChangeToCat = "The project has contents, so you cannot it to a parent project.";
 $lang->project->cannotCancelCat   = "There are child projects of this project. You cannot cancel the parent project mark.";
 $lang->project->parentBeginEnd    = "The begin and end date of the parent project: %s ~ %s";
-$lang->project->parentBudget      = "The budget of the parent project: %s";
+$lang->project->parentBudget      = "The budget of the parent project: ";
 $lang->project->beginLetterParent = "The begin date of the parent project: %s. It cannot be < the begin date of its parent project.";
 $lang->project->endGreaterParent  = "The end date of the parent project: %s. It cannot be > the end date of its parent project.";
 $lang->project->beginGreateChild  = "The minimum start date of the project set: %s. The start date of the project cannot be less than the minimum start date of the project set.";

@@ -103,7 +103,7 @@ $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . ' Library';
 $lang->doc->libTypeList['custom']    = 'Custom Library';
 
-$lang->doc->libIconList['product']   = 'icon-cube';
+$lang->doc->libIconList['product']   = 'icon-product';
 $lang->doc->libIconList['execution'] = 'icon-stack';
 $lang->doc->libIconList['custom']    = 'icon-folder-o';
 

@@ -1,5 +1,5 @@
-.block-burn .panel-body{margin-top: 20px;}
-.data-stats .statsTr td{padding:0px;}
+.block-burn .panel-body {margin-top: 20px;}
+.data-stats .statsTr td {padding: 0px;}
 
 #burnWrapper {max-width: 400px; margin: 0 auto; padding: 8px; position: relative;}
 #burnYUnit {position: absolute; color: #CBD0DB; top: -10px; left: 10px;}
@@ -9,4 +9,4 @@
 #burnLegend > div.line-real:before {background: #006AF1;}
 
 .block-dynamic .panel-body {height: 230px; overflow: auto; position: relative;}
-.block-team div.col-xs-6{white-space: nowrap; overflow: hidden;}
+.block-team div.col-xs-6 {white-space: nowrap; overflow: hidden;}

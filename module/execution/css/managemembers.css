@@ -3,19 +3,19 @@
 
 .modal-dialog {margin-top: 10%;}
 
-.table-form thead > tr > th {background: none; border: none}
+.table-form thead > tr > th {background: none; border: none;}
 
-#titlebar {min-height: 46px}
-#titlebar > .heading {float: left; padding-right: 10px!important}
+#titlebar {min-height: 46px;}
+#titlebar > .heading {float: left; padding-right: 10px !important;}
 #titlebar > .heading > .icon {display: inline;}
 
-#importTeams {float: left; position: relative; top: -7px}
+#importTeams {float: left; position: relative; top: -7px;}
 #importTeams .input-group {width: 250px; float: left;}
 #importTeams .input-group +.input-group {margin-left: 5px;}
 
-#dept_chosen    .chosen-single{width: 220px;}
-#project_chosen .chosen-single{width: 220px;}
-.radio-inline {line-height:normal;}
+#dept_chosen    .chosen-single {width: 220px;}
+#project_chosen .chosen-single {width: 220px;}
+.radio-inline {line-height: normal;}
 
 #teamForm .table tr > td:first-child {padding-left: 10px;}
 #teamForm .table tr > td:last-child {padding-right: 10px;}

@@ -33,7 +33,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->parent;?></th>
-          <td><?php echo html::select('parent', $projectList, $project->parent, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen'");?></td>
           <td></td>
           <td></td>
         </tr>
@@ -84,7 +84,7 @@
         </tr>
         <?php if($project->model == 'scrum'):?>
         <tr>
-          <th><?php echo $lang->execution->days;?></th>
+          <th><?php echo $lang->project->days;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('days', $project->days, "class='form-control'");?>
@@ -171,7 +171,7 @@
 <div id='projectAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl == 'project' ? 'private' : 'open', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
-<div id='ProgramAcl' class='hidden'>
+<div id='programAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div class="modal fade" id="promptBox">

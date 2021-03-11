@@ -141,7 +141,7 @@
                 <th class='w-40px'> <?php echo $lang->priAB;?></th>
                 <th>                <?php echo $lang->story->title;?></th>
                 <th class='w-100px'><?php echo $lang->story->assignedTo;?></th>
-                <th class='w-80px'> <?php echo $lang->story->estimate;?></th>
+                <th class='w-90px'> <?php echo $lang->story->estimate;?></th>
                 <th class='w-80px'> <?php echo $lang->story->status;?></th>
                 <th class='w-200px'><?php echo $lang->actions;?></th>
               </tr>
@@ -163,7 +163,7 @@
                 <td><?php echo $this->processStatus('story', $child);?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('story', 'change', "storyID=$child->id", $child, 'list');
+                  common::printIcon('story', 'change', "storyID=$child->id", $child, 'list', 'alter');
                   common::printIcon('story', 'review', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'assignTo', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'close',  "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
@@ -188,7 +188,7 @@
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$story->deleted):?>
         <?php
-        common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
+        common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', 'alter', '', 'showinonlybody');
         common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
         if($story->status == 'active' and $story->stage == 'wait' and $story->parent <= 0 and !isonlybody())
         {

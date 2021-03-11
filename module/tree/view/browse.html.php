@@ -17,8 +17,8 @@
 
 <?php if($viewType != 'story'):?>
 <style>
-li.tree-item-story > .tree-actions .tree-action[data-type=sort]{display:none;}
-li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
+li.tree-item-story > .tree-actions .tree-action[data-type=sort] {display: none;}
+li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none;}
 </style>
 <?php endif;?>
 <?php js::set('viewType', $viewType);?>

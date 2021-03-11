@@ -1,5 +1,5 @@
 body {background: #1183fb linear-gradient(-90deg, #0a48d1 0%, #1183fb 100%); background-color: #1183fb;}
-#login {max-width: 600px!important; margin: 0 auto; margin-top: 5%;}
+#login {max-width: 600px !important; margin: 0 auto; margin-top: 5%;}
 #loginPanel {background: #fff; overflow: hidden; box-shadow: 0 0 20px 0 rgba(0,0,0,.1); border-radius: 3px;}
 #loginPanel > header {padding: 20px; border-bottom: 1px #eee solid; position: relative;}
 #loginPanel > header > h2 {font-size: 16px; margin: 0; line-height: 32px; max-width: 83%;}
@@ -8,15 +8,15 @@ body {background: #1183fb linear-gradient(-90deg, #0a48d1 0%, #1183fb 100%); bac
 #loginPanel .table-form > tbody > tr > th {width: 60px;}
 html[lang='en'] #loginPanel .table-form > tbody > tr > th {width: 80px;}
 #loginPanel form {margin-right: 40px;}
-#loginPanel > footer {background: #eee; padding: 20px; color: #838a9d}
+#loginPanel > footer {background: #eee; padding: 20px; color: #838a9d;}
 #loginPanel > footer a {display: inline-block; margin-left: 5px;}
 #info {margin-top: 10px; color: #fff;}
 #info .btn + .btn {margin-left: 5px;}
 #langs > .btn,
 #langs > .dropdown-menu {min-width: 0; width: 85px;}
 
-#logo-box img{margin-left:40px; width: 100px;}
-.captchaBox .input-group .input-group-addon{width:110px; padding:0px;}
+#logo-box img {margin-left: 40px; width: 100px;}
+.captchaBox .input-group .input-group-addon {width: 110px; padding: 0px;}
 
-.showNotice{color:yellow;}
-.showNotice:hover{color:yellow;}
+.showNotice {color: yellow;}
+.showNotice:hover {color: yellow;}

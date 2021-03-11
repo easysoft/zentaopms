@@ -85,13 +85,13 @@ $lang->execution->menuOrder[10] = 'kanban';
 $lang->execution->menuOrder[15] = 'burn';
 $lang->execution->menuOrder[20] = 'view';
 $lang->execution->menuOrder[25] = 'story';
-$lang->execution->menuOrder[30] = 'bug';
-$lang->execution->menuOrder[35] = 'build';
-$lang->execution->menuOrder[40] = 'testtask';
-$lang->execution->menuOrder[45] = 'doc';
-$lang->execution->menuOrder[50] = 'product';
-$lang->execution->menuOrder[55] = 'team';
-$lang->execution->menuOrder[60] = 'more';
+$lang->execution->menuOrder[30] = 'qa';
+$lang->execution->menuOrder[35] = 'ci';
+$lang->execution->menuOrder[40] = 'doc';
+$lang->execution->menuOrder[45] = 'build';
+$lang->execution->menuOrder[50] = 'release';
+$lang->execution->menuOrder[55] = 'action';
+$lang->execution->menuOrder[60] = 'setting';
 
 $lang->task->menuOrder  = $lang->execution->menuOrder;
 $lang->build->menuOrder = $lang->execution->menuOrder;
@@ -148,16 +148,18 @@ $lang->group->menuOrder       = $lang->company->menuOrder;
 $lang->user->menuOrder        = $lang->company->menuOrder;
 
 /* system menu order. */
-$lang->system->menuOrder[5]  = 'company';
-$lang->system->menuOrder[10] = 'team';
-$lang->system->menuOrder[15] = 'calendar';
+$lang->system->menuOrder[5]  = 'team';
+$lang->system->menuOrder[10] = 'calendar';
+$lang->system->menuOrder[15] = 'dynamic';
+$lang->system->menuOrder[20] = 'view';
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
-$lang->admin->menuOrder[10] = 'model';
-$lang->admin->menuOrder[15] = 'custom';
-$lang->admin->menuOrder[20] = 'message';
-$lang->admin->menuOrder[25] = 'extension';
+$lang->admin->menuOrder[10] = 'company';
+$lang->admin->menuOrder[15] = 'model';
+$lang->admin->menuOrder[20] = 'custom';
+$lang->admin->menuOrder[25] = 'message';
+$lang->admin->menuOrder[30] = 'extension';
 $lang->admin->menuOrder[35] = 'dev';
 $lang->admin->menuOrder[40] = 'system';
 

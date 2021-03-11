@@ -62,14 +62,20 @@ class testtaskModel extends model
         $this->lang->TRActions     = $pageActions;
         foreach($this->lang->testtask->menu as $key => $value)
         {
-            $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
+            if($this->lang->navGroup->testtask != 'qa') $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
             $replace = ($key == 'product') ? $selectHtml : $productID;
+            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
 
         if($this->lang->navGroup->testtask == 'qa')
         {
+            foreach($this->lang->qa->subMenu->testtask as $key => $menu)
+            {
+                common::setMenuVars($this->lang->qa->subMenu->testtask, $key, $productID);
+            }
             $this->lang->qa->menu         = $this->lang->testtask->menu;
+            $this->lang->testtask->menu   = $this->lang->qa->subMenu->testtask;
             $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
         }
     }
@@ -131,15 +137,21 @@ class testtaskModel extends model
         if($this->config->global->flow != 'full') $this->lang->testtask->menu = new stdclass();
         foreach($this->lang->testtask->menu as $key => $value)
         {
-            $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
+            if($this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
             $replace = ($key == 'product') ? $selectHtml : $productID;
+            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
 
         $this->lang->testtask->menu->testcase['subModule'] = 'testtask';
         if($this->lang->navGroup->testtask == 'qa')
         {
-            $this->lang->qa->menu         = $this->lang->testtask->menu;
+            foreach($this->lang->qa->subMenu->testcase as $key => $menu)
+            {
+                common::setMenuVars($this->lang->qa->subMenu->testcase, $key, $productID);
+            }
+            $this->lang->qa->menu         = $this->lang->testcase->menu;
+            $this->lang->testtask->menu   = $this->lang->qa->subMenu->testcase;
             $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
         }
     }
@@ -455,7 +467,6 @@ class testtaskModel extends model
     {
         return $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('id')->notIN($linkedCases)
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
                 ->andWhere('status')->ne('wait')
                 ->andWhere('type')->ne('unit')
                 ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
@@ -965,8 +976,20 @@ class testtaskModel extends model
             $row->assignedTo = '';
             $row->status     = 'wait';
             if($type == 'bybuild') $row->assignedTo = zget($assignedToPairs, $caseID, '');
-
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
+
+            /* When the cases linked the testtask, the cases link to the project. */
+            if($this->lang->navGroup->testtask != 'qa')
+            {
+                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                $data = new stdclass();
+                $data->project = $this->session->PRJ;
+                $data->product = $this->session->product;
+                $data->case    = $caseID;
+                $data->version = 1;
+                $data->order   = ++ $lastOrder;
+                $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
+            }
         }
     }
 

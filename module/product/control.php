@@ -72,11 +72,11 @@ class product extends control
      * @param  string $status
      * @param  int    $productID
      * @param  int    $branch
-     * @param  int    $projectMine
+     * @param  int    $involved
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0, $branch = 0, $projectMine = 0)
+    public function project($status = 'all', $productID = 0, $branch = 0, $involved = 0)
     {
         $this->product->setMenu($this->products, $productID, $branch);
         $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
@@ -88,7 +88,7 @@ class product extends control
 
         /* Get PM id list. */
         $accounts     = array();
-        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $projectMine);
+        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved);
         foreach($projectStats as $project)
         {
             if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
@@ -973,24 +973,49 @@ class product extends control
      * @access public
      * @return void
      */
-    public function showErrorNone($fromModule = 'bug')
+    public function showErrorNone($fromModule = 'bug', $moduleGroup = 'product', $activeMenu = '')
     {
-        if($fromModule != 'product')
+        /* The module in the test menu shows the created product. */
+        if($moduleGroup == 'qa')
         {
-            $this->lang->navGroup->product = 'project';
-            $moduleIndex = array_search('product', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+            $this->loadModel('qa')->setMenu(array(), 0);
 
-            $this->view->project = $this->loadModel('project')->getById($this->session->PRJ);
+            $this->app->loadLang($fromModule);
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+
+            $this->lang->set('menugroup.product', $activeMenu);
+            $this->lang->product->menu      = $this->lang->qa->menu;
+            $this->lang->product->menuOrder = $this->lang->qa->menuOrder;
         }
 
-        $this->loadModel($fromModule)->setMenu($this->products, key($this->products));
-        $this->lang->set('menugroup.product', 'qa');
-        $this->lang->product->menu      = $this->lang->$fromModule->menu;
-        $this->lang->product->menuOrder = $this->lang->$fromModule->menuOrder;
+        /* The module in the project menu displays related products. */
+        if($moduleGroup == 'project')
+        {
+            $this->app->loadLang($fromModule);
 
-        $this->view->title      = $this->lang->$fromModule->common;
-        $this->view->fromModule = $fromModule;
+            $this->lang->set('menugroup.product', $activeMenu);
+            $projectModel = $this->loadModel('project')->getByID($this->session->PRJ);
+            $this->lang->product->menu      = $this->lang->menu->{$projectModel->model};
+            $this->lang->product->menuOrder = $this->lang->{$projectModel->model}->menuOrder;
+
+            /* The secondary test menu processing in the project. */
+            if(in_array($fromModule, array('qa', 'bug', 'testtask', 'testreport')))
+            {
+                $this->lang->set('menugroup.product', 'qa');
+                $moduleIndex = array_search('product', $this->lang->noMenuModule);
+                if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
+                $menu = $this->lang->qa->menu->$activeMenu;
+                $menu['subModule'] = 'product';
+                $this->lang->qa->menu->$activeMenu = $menu;
+                $this->app->rawModule = 'qa';
+                $this->loadModel('qa')->setMenu(array(), 0);
+            }
+        }
+
+        $this->view->title       = $this->lang->$fromModule->common;
+        $this->view->fromModule  = $fromModule;
+        $this->view->moduleGroup = $moduleGroup;
         $this->display();
     }
 

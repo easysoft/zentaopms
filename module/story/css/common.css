@@ -1,13 +1,13 @@
-.linkbox{height:180px; overflow-y:auto}
+.linkbox {height: 180px; overflow-y: auto;}
 .tab-pane h6 {margin: 0px; padding: 10px;}
 .tab-pane h6, .tab-pane table {border: 1px solid #ddd; border-top: none;}
-.tab-pane .table-data.table-borderless {border: none!important}
+.tab-pane .table-data.table-borderless {border: none !important;}
 
 .input-group .control-product + .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px; border-right-width: 0; padding-right: 1px;}
 .input-group .control-product + .chosen-container-active .chosen-single {border-right-width: 1px; padding-right: 0;}
 .input-group .control-branch + .chosen-container-single .chosen-single {border-radius: 0 2px 2px 0;}
 
 #batchCreateForm .input-group, #batchEditForm .input-group,
-#batchCreateForm .input-group .form-control, #batchEditForm .input-group .form-control{position: static;}
-#batchCreateForm .input-group .colorpicker, #batchEditForm .input-group .colorpicker{z-index: 2;}
-#batchCreateForm .input-group .colorpicker.open, #batchEditForm .input-group .colorpicker.open{z-index: 5;}
+#batchCreateForm .input-group .form-control, #batchEditForm .input-group .form-control {position: static;}
+#batchCreateForm .input-group .colorpicker, #batchEditForm .input-group .colorpicker {z-index: 2;}
+#batchCreateForm .input-group .colorpicker.open, #batchEditForm .input-group .colorpicker.open {z-index: 5;}

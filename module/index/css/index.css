@@ -1,34 +1,34 @@
-body {padding-left: 96px}
+body {padding-left: 96px;}
 
 #menu {position: fixed; left: 0; top: 0; bottom: 0; background-color: #3C495C; width: 96px; z-index: 1015;}
 #menuNav {position: absolute; top: 5px; bottom: 80px; width: 100%;}
 #menu .nav > li {float: none; padding: 2px 8px;}
 #menu .nav > li > a {color: #fff; line-height: 20px; padding: 8px 6px; border-radius: 2px; white-space: nowrap;}
 #menu .nav > li > a > .icon {display: inline-block; font-size: 16px;}
-#menu .nav > li > a > .icon + .text {margin-left: 4px}
-#menu .nav > li.active > a, #menu .nav > li > a:hover, #menu .nav > li > a:focus {background-color: #0c64eb}
-#menu .nav > li.divider {margin: 8px; background-color: #fff; opacity: 0.24; height: 1px; padding: 0!important;}
+#menu .nav > li > a > .icon + .text {margin-left: 4px;}
+#menu .nav > li.active > a, #menu .nav > li > a:hover, #menu .nav > li > a:focus {background-color: #0c64eb;}
+#menu .nav > li.divider {margin: 8px; background-color: #fff; opacity: 0.24; height: 1px; padding: 0 !important;}
 #menuFooter {position: absolute; bottom: 0; left: 0; right: 0; background-color: #3C495C;}
 #menu .nav > li.has-avatar {padding: 1px 6px;}
 #menu .nav > li.has-avatar > a {padding: 4px 0; text-align: center;}
 body.menu-hide {padding-left: 0;}
 .menu-hide #menu {width: 40px;}
-.menu-hide .menu-toggle .icon-menu-collapse:before {content: '\e981'}
-.menu-toggle .is-unfold, .menu-hide .menu-toggle .is-collapse {display: none}
-.menu-hide .menu-toggle .is-unfold {display: inline}
+.menu-hide .menu-toggle .icon-menu-collapse:before {content: '\e981';}
+.menu-toggle .is-unfold, .menu-hide .menu-toggle .is-collapse {display: none;}
+.menu-hide .menu-toggle .is-unfold {display: inline;}
 #menuToggleItem,
-.menu-hide #menuToggleMenu {display: none}
-.menu-hide #menuToggleItem {display: list-item}
-.menu-hide #menu .nav > li {padding: 4px}
+.menu-hide #menuToggleMenu {display: none;}
+.menu-hide #menuToggleItem {display: list-item;}
+.menu-hide #menu .nav > li {padding: 4px;}
 .menu-hide #menu .nav > li > a {padding: 6px 4px; text-align: center;}
-.menu-hide #menu .nav > li > a > .text {display: none}
+.menu-hide #menu .nav > li > a > .text {display: none;}
 .menu-hide #menu .nav > li.has-avatar > a {padding: 2px 0;}
 
-#moreExecution {display:none; max-height: 520px; min-height: 520px; max-width:360px; min-width: 150px; position: fixed; bottom: 40px; z-index: 999; background: white; padding: 20px 10px; border: 1px solid #efefef}
+#moreExecution {display: none; max-height: 520px; min-height: 520px; max-width: 360px; min-width: 150px; position: fixed; bottom: 40px; z-index: 999; background: white; padding: 20px 10px; border: 1px solid #efefef;}
 .more-execution-show {left: 96px;}
 .more-execution-hide {left: 40px;}
 #moreExecution .icon-search {opacity: 0.5;}
-#executionList {max-height: 450px; min-height: 450px; max-width:360px; min-width: 150px; margin-top: 5px;}
+#executionList {max-height: 450px; min-height: 450px; max-width: 360px; min-width: 150px; margin-top: 5px;}
 
 @media screen and (max-height: 768px)
 {
@@ -38,62 +38,62 @@ body.menu-hide {padding-left: 0;}
 
 #apps {position: fixed; left: 96px; bottom: 0; right: 0; top: 0;}
 .app-container {position: absolute; left: 0; bottom: 40px; right: 0; top: 0; background-color: #efefef;}
-.menu-hide #apps {left: 40px}
+.menu-hide #apps {left: 40px;}
 
 #appsBar {position: fixed; left: 96px; bottom: 0; right: 0; height: 40px; z-index: 1012; background: #fff; border-top: 1px solid #eff1f7;}
-.menu-hide #appsBar {left: 40px}
-#bars {position: absolute; left: 0; top: 0; bottom: 0; padding: 0 5px}
+.menu-hide #appsBar {left: 40px;}
+#bars {position: absolute; left: 0; top: 0; bottom: 0; padding: 0 5px;}
 #bars > li {padding: 8px 5px;}
 #bars > li > a {height: 24px; color: #fff; background: #3c4353; padding: 2px 8px; line-height: 20px; border-radius: 2px;}
-#bars > li > a:hover, #bars > li > a:active, #bars > li > a:focus {background: #3c495c}
-#bars > li.active > a, #bars > li.active > a:active, #bars > li.active > a:focus {background: #0c64eb}
+#bars > li > a:hover, #bars > li > a:active, #bars > li > a:focus {background: #3c495c;}
+#bars > li.active > a, #bars > li.active > a:active, #bars > li.active > a:focus {background: #0c64eb;}
 #bars > li.active:after {content: ' '; display: block; position: absolute; background: #a0cafa; height: 3px; left: 5px; right: 5px; bottom: 0; border-radius: 2px;}
 
-#userNav{float: none; margin: 0;}
-#userNav>li{text-align: center}
-#userNav>li>.dropdown-menu{left: 100%; bottom: 0; top: auto; width: 140px; text-align: left; background: #3c495c;}
-#userNav>li>.dropdown-menu a{color: #fff}
-#userNav>li>.dropdown-menu .dropdown-menu{left: 100%; text-align: left; background: #3c495c}
-#userNav>li .top .dropdown-menu{top: -60px}
+#userNav {float: none; margin: 0;}
+#userNav>li {text-align: center;}
+#userNav>li>.dropdown-menu {left: 100%; bottom: 0; top: auto; width: 140px; text-align: left; background: #3c495c;}
+#userNav>li>.dropdown-menu a {color: #fff;}
+#userNav>li>.dropdown-menu .dropdown-menu {left: 100%; text-align: left; background: #3c495c;}
+#userNav>li .top .dropdown-menu {top: -60px;}
 #userNav .dropdown-menu>li>a>.icon {position: relative; top: 0; display: inline;}
-#userNav li.open>a{background:#0c64eb}
-#userNav li.divider{opacity: .24; border-top: 1px solid; height: 2px;}
+#userNav li.open>a {background: #0c64eb;}
+#userNav li.divider {opacity: .24; border-top: 1px solid; height: 2px;}
 #userNav .dropdown-submenu:focus > a, #userNav .dropdown-submenu:hover > a {background-color: rgba(0,0,0,.2);}
-#poweredBy{width: 40%; position: absolute; top: 4px; right: 0; padding: 0;}
+#poweredBy {width: 40%; position: absolute; top: 4px; right: 0; padding: 0;}
 
-#globalSearchDiv{width:52%; float: right; margin-right: 4px;}
+#globalSearchDiv {width: 52%; float: right; margin-right: 4px;}
 @media screen and (max-height: 768px)
 {
-  #globalSearchDiv{width: 62%;}
+  #globalSearchDiv {width: 62%;}
 }
-#globalSearchDiv .input-group{width: 82%; float: right; margin-top: 2px;}
+#globalSearchDiv .input-group {width: 82%; float: right; margin-top: 2px;}
 @media screen and (max-height: 768px)
 {
-  #globalSearchDiv .input-group{width: 100%;}
+  #globalSearchDiv .input-group {width: 100%;}
 }
-#globalSearchInput{height: 28px; padding-left: 10px;}
-#globalSearchButton{height: 28px;}
+#globalSearchInput {height: 28px; padding-left: 10px;}
+#globalSearchButton {height: 28px;}
 
-#globalBarLogo{width: 100%; float: right;}
-#globalBarLogo a:first-child{margin-right: 10px;}
-#globalBarLogo a{float: right; margin: 0px 2px;}
-#globalBarLogo a .icon{font-size: 24px; color: #16a8f8;}
+#globalBarLogo {width: 100%; float: right;}
+#globalBarLogo a:first-child {margin-right: 10px;}
+#globalBarLogo a {float: right; margin: 0px 2px;}
+#globalBarLogo a .icon {font-size: 24px; color: #16a8f8;}
 
 #searchbox a {float: left; width: 100%;}
-#searchbox a:hover {color:white}
+#searchbox a:hover {color: white;}
 #searchbox {width: 100%;}
 #searchbox .dropdown-menu {margin-top: 0px; left: 1px; position: absolute; top: -50px;}
-#searchbox .dropdown-menu > li > a {padding: 5px 8px}
-#searchbox .dropdown-menu > li {display: none}
+#searchbox .dropdown-menu > li > a {padding: 5px 8px;}
+#searchbox .dropdown-menu > li {display: none;}
 #searchbox .dropdown-menu > li.search-type-all {width: 100%; display: block;}
 #searchbox .dropdown-menu > li:hover {position: relative;}
 #searchbox .dropdown-menu.show-quick-go.with-active {position: absolute; top: -365px; max-height: 362px; padding-top: 30px;}
 #searchbox .dropdown-menu.show-quick-go > li {display: block;}
 #searchbox .dropdown-menu.show-quick-go > li.active {width: 100%; position: absolute; top: 0; left: 0; right: 0;}
-#searchbox .dropdown-menu>li.active>a, #searchbox .dropdown-menu>li.selected>a { position: relative; color: #fff; background-color: #16a8f8;}
+#searchbox .dropdown-menu>li.active>a, #searchbox .dropdown-menu>li.selected>a {position: relative; color: #fff; background-color: #16a8f8;}
 #searchbox .dropdown-menu>li.selected>a:after {position: absolute; top: 2px; right: 4px; display: block; font-family: ZentaoIcon; font-size: 18px; font-size: 14px; font-style: normal; font-weight: 400; font-variant: normal; line-height: 1; line-height: 20px; text-transform: none; content: "\e5ca"; speak: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
 
-#upgradeContent {display:none; position: absolute; right: 10px; top: -290px; height:282px; background-color: #fff; left: 0px; padding: 5px 0; border: 1px solid rgba(0,0,0,.15); border-color: rgba(0,0,0,.1); opacity: 1; border-radius: 4px; box-shadow: 0 6px 12px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.1);}
+#upgradeContent {display: none; position: absolute; right: 10px; top: -290px; height: 282px; background-color: #fff; left: 0px; padding: 5px 0; border: 1px solid rgba(0,0,0,.15); border-color: rgba(0,0,0,.1); opacity: 1; border-radius: 4px; box-shadow: 0 6px 12px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.1);}
 #latestVersionList {height: 190px; overflow: auto;}
 
 .version-name {width: 20%;}
@@ -103,8 +103,8 @@ body.menu-hide {padding-left: 0;}
 
 @media screen and (max-height: 768px)
 {
-  .version-name {width: 25%; text-overflow:ellipsis; white-space: nowrap;}
+  .version-name {width: 25%; text-overflow: ellipsis; white-space: nowrap;}
   .version-date {width: 20%; color: #8a8a8a;}
-  .version-explain {width: 25%; color: #8a8a8a; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;}
+  .version-explain {width: 25%; color: #8a8a8a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
   .version-actions {width: 30%;}
 }

@@ -104,7 +104,7 @@ class projectModel extends model
     public function getBudgetUnitList()
     {
         $budgetUnitList = array();
-        foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        foreach(explode(',', $this->config->program->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
 
         return $budgetUnitList;
     }
@@ -562,15 +562,15 @@ class projectModel extends model
      * Get project pairs by model and project.
      *
      * @param  string $model all|scrum|waterfall
-     * @param  int    $projectID
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getPairsByModel($model = 'all', $projectID = 0)
+    public function getPairsByModel($model = 'all', $programID = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
-            ->beginIF($projectID)->andWhere('parent')->eq($projectID)->fi()
+            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
@@ -618,7 +618,7 @@ class projectModel extends model
         }
 
         krsort($projectMenu);
-        $projectMenu = array_pop($projectMenu);
+        $projectMenu = implode('', $projectMenu);
         $lastMenu    = "<ul class='tree' data-ride='tree' id='projectTree' data-name='tree-project'>{$projectMenu}</ul>\n";
 
         return $lastMenu;
@@ -635,6 +635,9 @@ class projectModel extends model
     {
         $link = $project->type == 'program' ? helper::createLink('project', 'browse', "projectID={$project->id}&status=all") : helper::createLink('project', 'index', "projectID={$project->id}", '', '', $project->id);
         $icon = $project->type == 'program' ? "<i class='icon icon-program'></i> " : "<i class='icon icon-project'></i> ";
+
+        if($this->app->rawModule == 'execution') $link = helper::createLink('execution', 'all', "status=all&projectID={$project->id}");
+
         return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
@@ -659,7 +662,7 @@ class projectModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->add('type', 'project')
             ->join('whitelist', ',')
-            ->stripTags($this->config->project->editor->prjcreate['id'], $this->config->allowedTags)
+            ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,newProduct,productName,future')
             ->get();
 
@@ -732,7 +735,7 @@ class projectModel extends model
             if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
         }
 
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->prjcreate['id'], $this->post->uid);
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
@@ -749,10 +752,10 @@ class projectModel extends model
             $member = new stdclass();
             $member->root    = $projectID;
             $member->account = $this->app->user->account;
-            $member->role    = $this->lang->user->roleList[$this->app->user->role];
+            $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
             $member->join    = helper::today();
             $member->type    = 'project';
-            $member->hours   = $this->config->project->defaultWorkhours;
+            $member->hours   = $this->config->execution->defaultWorkhours;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
             $whitelist = explode(',', $project->whitelist);
@@ -820,7 +823,7 @@ class projectModel extends model
                 $groupPriv->account = $this->app->user->account;
                 $groupPriv->group   = $projectAdminID;
                 $groupPriv->project = $projectID;
-                $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
+                $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
             return $projectID;
@@ -852,7 +855,7 @@ class projectModel extends model
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->join('whitelist', ',')
-            ->stripTags($this->config->project->editor->prjedit['id'], $this->config->allowedTags)
+            ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,future')
             ->get();
 
@@ -892,7 +895,7 @@ class projectModel extends model
             return false;
         }
 
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->prjedit['id'], $this->post->uid);
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
 
         $requiredFields = $this->config->project->edit->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
@@ -909,7 +912,7 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->check('name', 'unique', "id!=$projectID and deleted='0'")
+            ->check('name', 'unique', "id != $projectID and deleted='0'")
             ->where('id')->eq($projectID)
             ->exec();
 
@@ -1192,6 +1195,7 @@ class projectModel extends model
     public function updateProductProgram($oldProgram, $newProgram, $products)
     {
         $this->loadModel('action');
+        $this->loadModel('program');
         /* Product belonging project set processing. */
         $oldTopProgram = $this->program->getTopByID($oldProgram);
         $newTopProgram = $this->program->getTopByID($newProgram);

@@ -90,7 +90,7 @@
     </p>
   </div>
   <?php else:?>
-  <table class="table table-grouped text-center">
+  <table class="table table-grouped">
     <thead>
       <tr class="<?php if($allCount) echo 'divider';?>">
         <th class="c-side text-left has-btn group-menu">
@@ -117,9 +117,9 @@
         <th class="c-status"><?php echo $lang->task->status;?></th>
         <th class="text-left w-60px"><?php echo $lang->task->assignedTo;?></th>
         <th class="w-90px"><?php echo $lang->task->finishedBy;?></th>
-        <th class="w-60px text-right"><?php echo $lang->task->estimateAB;?></th>
-        <th class="w-50px"><?php echo $lang->task->consumedAB;?></th>
-        <th class="w-50px"><?php echo $lang->task->leftAB;?></th>
+        <th class="w-60px c-hours"><?php echo $lang->task->estimateAB;?></th>
+        <th class="w-50px c-hours"><?php echo $lang->task->consumedAB;?></th>
+        <th class="w-50px c-hours"><?php echo $lang->task->leftAB;?></th>
         <th class="w-50px" title='<?php echo $lang->task->progress;?>'><?php echo $lang->task->progressAB;?></th>
         <th class="c-type"><?php echo $lang->typeAB;?></th>
         <th class="c-date"><?php echo $lang->task->deadlineAB;?></th>
@@ -202,7 +202,7 @@
         <td class="c-status"><span class='status-task status-<?php echo $task->status;?>'> <?php echo $this->processStatus('task', $task);?></span></td>
         <td class="c-assign text-left"><?php echo "<span class='$assignedToClass'>" . $task->assignedToRealName . "</span>";?></td>
         <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
-        <td class="c-hours em text-right" title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . ' ' . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours em" title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . ' ' . $lang->execution->workHourUnit;?></td>
         <td class="c-hours em" title="<?php echo $task->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $task->consumed . ' ' . $lang->execution->workHourUnit;?></td>
         <td class="c-hours em" title="<?php echo $task->left     . ' ' . $lang->execution->workHour;?>"><?php echo $task->left     . ' ' . $lang->execution->workHourUnit;?></td>
         <td class="c-num em"><?php echo $task->progress . '%';?></td>

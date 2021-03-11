@@ -1,7 +1,7 @@
-.w-300px{width:300px}
-.w-180px{width:180px}
-.half-left {text-align:right}
-.half-right{text-align:left}
+.w-300px {width: 300px;}
+.w-180px {width: 180px;}
+.half-left {text-align: right;}
+.half-right {text-align: left;}
 
 #batchCreateForm .input-group,
 #batchCreateForm .input-group .form-control {position: static;}

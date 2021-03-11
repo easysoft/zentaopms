@@ -14,15 +14,15 @@
 <div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
 <style>
-#totalInvestment{padding-bottom: 5px;}
-.overview-title{font-size: 14px; color: #838a9d;}
-.extra-tips{font-size: 12px; color: #a1a7b7;}
-.progress{margin-bottom: 8px;}
-.total-block{padding: 0px 25px;}
-.hours-statistics{position: relative; padding: 0px 5px 5px; display: table-cell;text-align: center;}
+#totalInvestment {padding-bottom: 5px;}
+.overview-title {font-size: 14px; color: #838a9d;}
+.extra-tips {font-size: 12px; color: #a1a7b7;}
+.progress {margin-bottom: 8px;}
+.total-block {padding: 0px 25px;}
+.hours-statistics {position: relative; padding: 0px 5px 5px; display: table-cell;text-align: center;}
 .hours-statistics > small {display: block; color: #A6AAB8;}
 .hours-statistics > span {display: block; color: #3c4353; font-weight: bold;}
-.tile-amount{font-size: 20px;}
+.tile-amount {font-size: 20px;}
 </style>
 <div class="panel-body conatiner-fluid">
   <div class="table-row">

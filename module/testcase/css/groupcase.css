@@ -1,2 +1,2 @@
-.title{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .group-header > a {line-height: 20px; display: block; max-height: 40px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;}

@@ -115,13 +115,26 @@ class project extends control
      */
     public function ajaxGetDropMenu($projectID = 0, $module, $method)
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('parent desc')->fetchAll();
+        $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchPairs();
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchAll('id');
+
+        /* Sort project by program. */
+        $orderedProjects = array();
+        foreach($programs as $programID => $programName)
+        {
+            foreach($projects as $project)
+            {
+                if($project->parent and $project->parent != $programID) continue;
+                $orderedProjects[] = $project;
+                unset($projects[$project->id]);
+            }
+        }
 
         $this->view->projectID = $projectID;
-        $this->view->projects  = $projects;
+        $this->view->projects  = $orderedProjects;
         $this->view->module    = $module;
         $this->view->method    = $method;
-        $this->view->programs  = $this->loadModel('program')->getPairs(true);
+        $this->view->programs  = $programs;
 
         $this->display();
     }
@@ -355,10 +368,10 @@ class project extends control
         $this->loadModel('action');
 
         $project   = $this->project->getByID($projectID);
-        $projectID = $project->parent;
+        $programID = $project->parent;
 
-        /* Navigation stay in project when enter from project list. */
-        $this->adjustNavigation($from, $projectID);
+        /* Navigation stay in program when enter from program list. */
+        $this->adjustNavigation($from, $programID);
 
         if($_POST)
         {
@@ -409,7 +422,7 @@ class project extends control
         $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
         $this->view->users                = $this->user->getPairs('noclosed|nodeleted');
         $this->view->project              = $project;
-        $this->view->projectList          = $this->program->getParentPairs();
+        $this->view->programList          = $this->program->getParentPairs();
         $this->view->projectID            = $projectID;
         $this->view->allProducts          = array('0' => '') + $allProducts;
         $this->view->productPlans         = $productPlans;
@@ -543,6 +556,7 @@ class project extends control
         $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->groups     = $groups;
+        $this->view->project    = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $this->view->projectID  = $projectID;
         $this->view->programID  = $programID;
         $this->view->groupUsers = $groupUsers;
@@ -687,7 +701,7 @@ class project extends control
         $this->view->position[] = $this->lang->group->manageView;
 
         $this->view->group    = $group;
-        $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('program')->eq($group->project)->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->products = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('id')->eq($group->project)->orderBy('order_desc')->fetchPairs('id', 'name');
 
         $this->display();
@@ -758,7 +772,7 @@ class project extends control
             $project = $this->project->getByID($group->project);
             foreach($this->lang->resource as $method => $label)
             {
-                if(!in_array($method, $this->config->projectPriv->{$project->model})) unset($this->lang->resource->$method);
+                if(!in_array($method, $this->config->programPriv->{$project->model})) unset($this->lang->resource->$method);
             }
         }
 
@@ -782,7 +796,7 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $this->project->manageMembers($projectID);
+            $this->execution->manageMembers($projectID);
             $link = $this->createLink('project', 'manageMembers', "projectID=$projectID");
             $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
@@ -979,7 +993,7 @@ class project extends control
         $this->view->position[] = $this->lang->project->suspend;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('project', $projectID);
-        $this->view->project    = $this->project->getPGMByID($projectID);
+        $this->view->project    = $this->project->getByID($projectID);
 
         $this->display('project', 'suspend');
     }
@@ -1271,7 +1285,7 @@ class project extends control
 
         $response  = array();
         $response['result']  = true;
-        $response['message'] = $this->lang->project->changeProjectTip;
+        $response['message'] = $this->lang->project->changeProgramTip;
 
         $multiLinkedProducts = $this->project->getMultiLinkedProducts($projectID);
         if($multiLinkedProducts)

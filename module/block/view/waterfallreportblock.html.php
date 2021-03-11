@@ -1,15 +1,15 @@
 <style>
-.block-waterfallreport .col-left {width: 25%; text-align: center}
-.block-waterfallreport .col-right{width: 75%;}
-.block-waterfallreport .panel-body{padding-top: 0px;}
-.block-waterfallreport .table-row{margin-bottom: 20px;}
-.block-waterfallreport .stage{position: absolute; top: 14px; left: 90px;}
-.block-waterfallreport .col-right .tiles { padding: 10px 0 0 16px; }
-.block-waterfallreport .col-right .tile { width: 20%;}
-.block-waterfallreport .col-right .tile .tile-title{font-weight: 700;}
+.block-waterfallreport .col-left {width: 25%; text-align: center;}
+.block-waterfallreport .col-right {width: 75%;}
+.block-waterfallreport .panel-body {padding-top: 0;}
+.block-waterfallreport .table-row {margin-bottom: 20px;}
+.block-waterfallreport .stage {position: absolute; top: 14px; left: 90px;}
+.block-waterfallreport .col-right .tiles {padding: 10px 0 0 16px;}
+.block-waterfallreport .col-right .tile {width: 20%;}
+.block-waterfallreport .col-right .tile .tile-title {font-weight: 700;}
 .block-waterfallreport .progress {position: absolute; left: 45px; top: 90px; right: 40px;}
-.block-waterfallreport .progress-num{font-size: 20px; font-weight: 700}
-.block-waterfallreport .col-right .tile-amount{font-size: 20px}
+.block-waterfallreport .progress-num {font-size: 20px; font-weight: 700;}
+.block-waterfallreport .col-right .tile-amount {font-size: 20px;}
 </style>
 
 <div class="panel-move-handler"><span class='stage text-muted'><?php echo $current;?></span></div>
