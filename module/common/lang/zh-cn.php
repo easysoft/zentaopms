@@ -554,7 +554,7 @@ $lang->admin->subMenu->system->cron       = array('link' => '定时|cron|index',
 $lang->admin->subMenu->system->timezone   = array('link' => '时区|custom|timezone', 'subModule' => 'custom');
 $lang->admin->subMenu->system->buildIndex = array('link' => '重建索引|search|buildindex|');
 
-$lang->admin->dividerMenu = ',message,system,';
+$lang->admin->dividerMenu = ',company,message,system,';
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();

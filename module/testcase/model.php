@@ -120,19 +120,21 @@ class testcaseModel extends model
             if(!empty($case->story))
             {
                 $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->Where('story')->eq($case->story)->fetchAll('project');
-                if(!empty($projects))
+                $projects = array_keys($projects);
+            }
+            if($this->lang->navGroup->testcase != 'qa' and empty($case->story)) $projects = array($this->session->PRJ);
+            if(!empty($projects))
+            {
+                foreach($projects as $projectID)
                 {
-                    foreach($projects as $projectID => $project)
-                    {
-                        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                        $data = new stdclass();
-                        $data->project = $projectID;
-                        $data->product = $case->product;
-                        $data->case    = $caseID;
-                        $data->version = 1;
-                        $data->order   = ++ $lastOrder;
-                        $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
-                    }
+                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                    $data = new stdclass();
+                    $data->project = $projectID;
+                    $data->product = $case->product;
+                    $data->case    = $caseID;
+                    $data->version = 1;
+                    $data->order   = ++ $lastOrder;
+                    $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
                 }
             }
 
@@ -242,6 +244,28 @@ class testcaseModel extends model
             }
 
             $caseID = $this->dao->lastInsertID();
+
+            /* If the story is linked project, make the case link the project. */
+            if(!empty($case->story))
+            {
+                $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->Where('story')->eq($case->story)->fetchAll('project');
+                $projects = array_keys($projects);
+            }
+            if($this->lang->navGroup->testcase != 'qa' and empty($case->story)) $projects = array($this->session->PRJ);
+            if(!empty($projects))
+            {
+                foreach($projects as $projectID)
+                {
+                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                    $data = new stdclass();
+                    $data->project = $projectID;
+                    $data->product = $case->product;
+                    $data->case    = $caseID;
+                    $data->version = 1;
+                    $data->order   = ++ $lastOrder;
+                    $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+                }
+            }
 
             $this->executeHooks($caseID);
 

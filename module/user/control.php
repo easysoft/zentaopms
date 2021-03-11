@@ -55,7 +55,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function todo($userID, $type = 'today', $status = 'all', $orderBy='date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo($userID, $type = 'today', $status = 'all', $orderBy = 'date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $user = $this->user->getById($userID, 'id');
         if(empty($user)) die(js::error($this->lang->notFound) . js::locate('back'));
@@ -112,7 +112,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function story($userID, $storyType = 'story', $type = 'assignedTo', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($userID, $storyType = 'story', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('storyList', $this->app->getURI(true));
@@ -138,9 +138,10 @@ class user extends control
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
         $this->view->position[] = $this->lang->user->story;
-        $this->view->stories    = $this->story->getUserStories($account, $type, 'id_desc', $pager, $storyType);
+        $this->view->stories    = $this->story->getUserStories($account, $type, $orderBy, $pager, $storyType);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->storyType  = $storyType;
+        $this->view->orderBy    = $orderBy;
         $this->view->type       = $type;
         $this->view->user       = $user;
         $this->view->pager      = $pager;
@@ -160,7 +161,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function task($userID, $type = 'assignedTo', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
         $this->session->set('taskList', $this->app->getURI(true));
@@ -184,8 +185,9 @@ class user extends control
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
         $this->view->position[] = $this->lang->user->task;
         $this->view->tabID      = 'task';
-        $this->view->tasks      = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager);
+        $this->view->tasks      = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager, $orderBy);
         $this->view->type       = $type;
+        $this->view->orderBy    = $orderBy;
         $this->view->user       = $user;
         $this->view->pager      = $pager;
 
@@ -233,6 +235,7 @@ class user extends control
         $this->view->bugs       = $this->loadModel('bug')->getUserBugs($account, $type, $orderBy, 0, $pager);
         $this->view->type       = $type;
         $this->view->user       = $user;
+        $this->view->orderBy    = $orderBy;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->pager      = $pager;
 
@@ -362,7 +365,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function execution($userID, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function execution($userID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
         $this->session->set('projectList',  $uri);
@@ -386,8 +389,9 @@ class user extends control
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
         $this->view->position[] = $this->lang->user->execution;
         $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getProjects($account, 'execution', 'all', $pager);
+        $this->view->executions = $this->user->getExecutions($account, 'execution', 'all', $orderBy, $pager);
         $this->view->user       = $user;
+        $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
 
         $this->display();

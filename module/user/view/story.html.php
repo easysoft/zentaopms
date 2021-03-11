@@ -34,7 +34,8 @@
   </nav>
 
   <div class='main-table'>
-    <table class='table has-sort-head tablesorter'>
+    <table class='table has-sort-head'>
+      <?php $vars = "userID={$user->id}&storyType=$storyType&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->idAB;?></th>

@@ -37,13 +37,14 @@
   </nav>
 
   <div class='main-table'>
-    <table class='table has-sort-head tablesorter' id='tasktable'>
+    <table class='table has-sort-head' id='tasktable'>
+      <?php $vars = "userID={$user->id}&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
-          <th><?php echo $lang->task->execution;?></th>
-          <th><?php echo $lang->task->name;?></th>
+          <th><?php common::printOrderLink('execution', $orderBy, $vars, $lang->task->execution);?></th>
+          <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->task->name);?></th>
           <th class='w-70px hours'><?php echo $lang->task->estimateAB;?></th>
           <th class='w-70px hours'><?php echo $lang->task->consumedAB;?></th>
           <th class='w-hour hours'><?php echo $lang->task->leftAB;?></th>
