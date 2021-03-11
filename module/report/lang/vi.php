@@ -9,15 +9,16 @@
  * @version  $Id: vi.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->report->common     = 'Báo cáo';
-$lang->report->index      = 'Trang báo cáo';
-$lang->report->list       = 'Báo cáo';
-$lang->report->item       = 'Hạng mục';
-$lang->report->value      = 'Giá trị';
-$lang->report->percent    = '%';
-$lang->report->undefined  = 'Chưa định nghĩa';
-$lang->report->query      = 'Truy vấn';
-$lang->report->annual     = 'Tóm tắt theo năm';
+$lang->report->common          = 'Báo cáo';
+$lang->report->index           = 'Trang báo cáo';
+$lang->report->list            = 'Báo cáo';
+$lang->report->item            = 'Hạng mục';
+$lang->report->value           = 'Giá trị';
+$lang->report->percent         = '%';
+$lang->report->undefined       = 'Chưa định nghĩa';
+$lang->report->query           = 'Truy vấn';
+$lang->report->annual          = 'Tóm tắt theo năm';
+$lang->report->executionCommon = 'Execution';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';

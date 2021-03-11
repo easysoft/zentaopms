@@ -9,15 +9,16 @@
  * @version     $Id: zh-cn.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->report->common    = '统计视图';
-$lang->report->index     = '统计首页';
-$lang->report->list      = '统计报表';
-$lang->report->item      = '条目';
-$lang->report->value     = '值';
-$lang->report->percent   = '百分比';
-$lang->report->undefined = '未设定';
-$lang->report->query     = '查询';
-$lang->report->annual    = '年度总结';
+$lang->report->common          = '统计视图';
+$lang->report->index           = '统计首页';
+$lang->report->list            = '统计报表';
+$lang->report->item            = '条目';
+$lang->report->value           = '值';
+$lang->report->percent         = '百分比';
+$lang->report->undefined       = '未设定';
+$lang->report->query           = '查询';
+$lang->report->annual          = '年度总结';
+$lang->report->executionCommon = '执行';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';

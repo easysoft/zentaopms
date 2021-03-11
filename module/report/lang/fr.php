@@ -9,15 +9,16 @@
  * @version     $Id: en.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        https://www.zentao.pm
  */
-$lang->report->common     = 'Rapports';
-$lang->report->index      = 'Accueil Rapports';
-$lang->report->list       = 'Rapports';
-$lang->report->item       = 'Item';
-$lang->report->value      = 'Valeur';
-$lang->report->percent    = '%';
-$lang->report->undefined  = 'N/D';
-$lang->report->query      = 'Requête';
-$lang->report->annual     = 'Résumé Annuel';
+$lang->report->common          = 'Rapports';
+$lang->report->index           = 'Accueil Rapports';
+$lang->report->list            = 'Rapports';
+$lang->report->item            = 'Item';
+$lang->report->value           = 'Valeur';
+$lang->report->percent         = '%';
+$lang->report->undefined       = 'N/D';
+$lang->report->query           = 'Requête';
+$lang->report->annual          = 'Résumé Annuel';
+$lang->report->executionCommon = 'Execution';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
