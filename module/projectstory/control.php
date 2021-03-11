@@ -24,7 +24,7 @@ class projectStory extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=projectstory")));
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=projectstory&moduleGroup=' . $this->lang->navGroup->projectstory . '&activeMenu=projectstory')));
     }
 
     /**

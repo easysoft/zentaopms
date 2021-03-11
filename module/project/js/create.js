@@ -45,7 +45,7 @@ function setParentProgram()
  */
 function setCopyProject(copyProjectID)
 {
-    location.href = createLink('project', 'create', 'model=' + model + '&projectID=' + projectID + '&from=' + from + '&copyProjectID=' + copyProjectID);
+    location.href = createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&from=' + from + '&copyProjectID=' + copyProjectID);
 }
 
 /**

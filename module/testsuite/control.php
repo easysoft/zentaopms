@@ -37,7 +37,6 @@ class testsuite extends control
        {
            $this->app->loadConfig('qa');
            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-           $this->lang->noMenuModule[] = $this->app->rawModule;
        }
     }
 
@@ -71,7 +70,7 @@ class testsuite extends control
         /* Set menu. */
         $projectID            = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->PRJ;
         $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testsuite")));
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=testsuite&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=testsuite')));
         $productID = $this->product->saveState($productID, $this->products);
         $this->testsuite->setMenu($this->products, $productID);
 

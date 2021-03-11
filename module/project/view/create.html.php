@@ -14,10 +14,10 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('model', $model);?>
-<?php js::set('projectID', $projectID);?>
+<?php js::set('programID', $programID);?>
 <?php js::set('copyProjectID', $copyProjectID);?>
 <?php js::set('from', $from);?>
-<?php js::set('weekend', $config->project->weekend);?>
+<?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('longTime', $lang->project->longTime);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
@@ -51,7 +51,7 @@
           <th><?php echo $lang->project->budget;?></th>
           <td>
             <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft : '';?>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
               <?php echo html::input('budget', '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
@@ -81,11 +81,11 @@
         </tr>
         <?php if($model == 'scrum'):?>
         <tr>
-          <th><?php echo $lang->project->days;?></th>
+          <th><?php echo $lang->execution->days;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('days', '', "class='form-control'");?>
-              <span class='input-group-addon'><?php echo $lang->project->day;?></span>
+              <span class='input-group-addon'><?php echo $lang->execution->day;?></span>
             </div>
           </td><td></td><td></td>
         </tr>
@@ -106,7 +106,7 @@
               </div>
               <?php $i++;?>
               <?php endforeach;?>
-              <div class='col-sm-4 <?php if($projectID) echo 'required';?>' style="padding-right: 6px;">
+              <div class='col-sm-4 <?php if($programID) echo 'required';?>' style="padding-right: 6px;">
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon'><?php echo html::checkBox('newProduct', $lang->project->addProduct, '', "onchange=addNewProduct(this);");?></span>
@@ -120,7 +120,7 @@
           <td><?php echo html::input('productName', '', "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->linkPlan;?></th>
+          <th><?php echo $lang->execution->linkPlan;?></th>
           <td colspan="3" id="plansBox">
             <div class='row'>
               <?php if($copyProjectID):?>

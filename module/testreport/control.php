@@ -42,7 +42,6 @@ class testreport extends control
         {
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            $this->lang->noMenuModule[] = $this->app->rawModule;
         }
     }
 
@@ -537,7 +536,7 @@ class testreport extends control
         {
             $projectID      = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->PRJ;
             $this->products = $this->product->getProductPairsByProject($projectID);
-            if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testreport")));
+            if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=testreport&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=report')));
             $productID      = $this->product->saveState($objectID, $this->products);
             $this->testreport->setMenu($this->products, $productID);
             return $productID;

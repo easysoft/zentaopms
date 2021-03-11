@@ -41,14 +41,20 @@ class testsuiteModel extends model
         $this->lang->TRActions     = $pageActions;
         foreach($this->lang->testsuite->menu as $key => $value)
         {
-            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('testsuite', $key, $productID);
+            if($this->config->global->flow == 'full' and $this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testsuite', $key, $productID);
             $replace = $productID;
             common::setMenuVars($this->lang->testsuite->menu, $key, $replace);
         }
 
         if($this->lang->navGroup->testsuite == 'qa')
         {
+            foreach($this->lang->qa->subMenu->testcase as $key => $menu)
+            {
+                common::setMenuVars($this->lang->qa->subMenu->testcase, $key, $productID);
+            }
+
             $this->lang->qa->menu         = $this->lang->testsuite->menu;
+            $this->lang->testsuite->menu  = $this->lang->qa->subMenu->testcase;
             $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', 0);
         }
     }
@@ -357,7 +363,7 @@ class testsuiteModel extends model
         return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-            ->begin($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
             ->andWhere('product')->eq(0)
             ->andWhere('id')->notIN($importedCases)
             ->orderBy($orderBy)

@@ -56,7 +56,7 @@ class bug extends control
         }
 
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
-        if($this->projectID and empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=bug&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=bug')));
     }
 
     /**
@@ -92,7 +92,7 @@ class bug extends control
         $browseType = strtolower($browseType);
 
         /* Set productID, moduleID, queryID and branch. */
-        $productID = $this->product->saveState($productID, $this->products);
+        if(!$this->projectID) $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($branch == '') ? (int)$this->cookie->preBranch  : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
@@ -124,11 +124,15 @@ class bug extends control
         {
             setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
             $browseType = 'unclosed';
-            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
+        }
+
+        if($this->projectID and !$productID)
+        {
+            $moduleTree = $this->tree->getBugTreeMenu($this->projectID, $productID, 0, array('treeModel', 'createBugLink'));
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', (int)$this->cookie->treeBranch);
+            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), '', $browseType == '' ? $branch : (int)$this->cookie->treeBranch);
         }
 
         if(($browseType != 'bymodule' && $browseType != 'bybranch')) $this->session->set('bugBrowseType', $browseType);
@@ -149,8 +153,11 @@ class bug extends control
         /* Get executios. */
         $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete');
 
+        /* Get product id list. */
+        $productIDList = $productID ? $productID : array_keys($this->products);
+
         /* Get bugs. */
-        $bugs = $this->bug->getBugs($productID, $executions, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
+        $bugs = $this->bug->getBugs($productIDList, $executions, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
@@ -180,33 +187,37 @@ class bug extends control
         $showModule = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
 
+        $productName = $productID ? $this->products[$productID] : $this->lang->product->allProduct;
+
         /* Set view. */
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
-        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID],'','title=' . $this->products[$productID]);
-        $this->view->position[]    = $this->lang->bug->common;
-        $this->view->productID     = $productID;
-        $this->view->product       = $this->product->getById($productID);
-        $this->view->productName   = $this->products[$productID];
-        $this->view->builds        = $this->loadModel('build')->getProductBuildPairs($productID);
-        $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
-        $this->view->moduleTree    = $moduleTree;
-        $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
-        $this->view->summary       = $this->bug->summary($bugs);
-        $this->view->browseType    = $browseType;
-        $this->view->bugs          = $bugs;
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->pager         = $pager;
-        $this->view->param         = $param;
-        $this->view->orderBy       = $orderBy;
-        $this->view->moduleID      = $moduleID;
-        $this->view->memberPairs   = $this->user->getPairs('noletter|nodeleted');
-        $this->view->branch        = $branch;
-        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
-        $this->view->executions    = $executions;
-        $this->view->plans         = $this->loadModel('productplan')->getPairs($productID);
-        $this->view->stories       = $storyList;
-        $this->view->tasks         = $taskList;
-        $this->view->setModule     = true;
+        $this->view->title           = $productName . $this->lang->colon . $this->lang->bug->common;
+        $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName,'','title=' . $productName);
+        $this->view->position[]      = $this->lang->bug->common;
+        $this->view->productID       = $productID;
+        $this->view->product         = $this->product->getById($productID);
+        $this->view->projectProducts = $this->product->getProducts($this->projectID);
+        $this->view->productName     = $productName;
+        $this->view->builds          = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
+        $this->view->moduleTree      = $moduleTree;
+        $this->view->moduleName      = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->summary         = $this->bug->summary($bugs);
+        $this->view->browseType      = $browseType;
+        $this->view->bugs            = $bugs;
+        $this->view->users           = $this->user->getPairs('noletter');
+        $this->view->pager           = $pager;
+        $this->view->param           = $param;
+        $this->view->orderBy         = $orderBy;
+        $this->view->moduleID        = $moduleID;
+        $this->view->memberPairs     = $this->user->getPairs('noletter|nodeleted');
+        $this->view->branch          = $branch;
+        $this->view->branches        = $this->loadModel('branch')->getPairs($productID);
+        $this->view->executions      = $executions;
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->stories         = $storyList;
+        $this->view->tasks           = $taskList;
+        $this->view->setModule       = true;
+        $this->view->isProjectBug    = ($productID and !$this->projectID) ? false : true;
 
         $this->display();
     }

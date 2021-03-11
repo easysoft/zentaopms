@@ -752,10 +752,10 @@ class projectModel extends model
             $member = new stdclass();
             $member->root    = $projectID;
             $member->account = $this->app->user->account;
-            $member->role    = $this->lang->user->roleList[$this->app->user->role];
+            $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
             $member->join    = helper::today();
             $member->type    = 'project';
-            $member->hours   = $this->config->project->defaultWorkhours;
+            $member->hours   = $this->config->execution->defaultWorkhours;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
             $whitelist = explode(',', $project->whitelist);
@@ -823,7 +823,7 @@ class projectModel extends model
                 $groupPriv->account = $this->app->user->account;
                 $groupPriv->group   = $projectAdminID;
                 $groupPriv->project = $projectID;
-                $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
+                $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
             return $projectID;
