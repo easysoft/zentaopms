@@ -37,7 +37,7 @@ $lang->report->assign['assign']   = 'Đã giao';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->executionDeviation = 'Độ lệch '.$lang->executionCommon;
+$lang->report->executionDeviation = 'Độ lệch thực hiện';
 $lang->report->productSummary     = 'Tóm tắt '.$lang->productCommon;
 $lang->report->bugCreate          = 'Báo cáo Bug';
 $lang->report->bugAssign          = 'Bàn giao Bug';
@@ -46,7 +46,7 @@ $lang->report->workloadAB         = 'Lượng công việc';
 $lang->report->bugOpenedDate      = 'Bug được báo cáo từ';
 $lang->report->beginAndEnd        = ' từ';
 $lang->report->dept               = 'Phòng/Ban';
-$lang->report->deviationChart     = 'Biểu đồ chênh lệch '.$lang->executionCommon;
+$lang->report->deviationChart     = 'Biểu đồ chênh lệcthực hiệnh';
 
 $lang->reportList = new stdclass();
 $lang->reportList->execution = new stdclass();
@@ -54,7 +54,7 @@ $lang->reportList->product   = new stdclass();
 $lang->reportList->test      = new stdclass();
 $lang->reportList->staff     = new stdclass();
 
-$lang->reportList->execution->lists[10] = 'Chênh lệch '.$lang->executionCommon . '|report|executiondeviation';
+$lang->reportList->execution->lists[10] = 'Chênh lệchthực hiện|report|executiondeviation';
 $lang->reportList->product->lists[10]   = 'Tóm tắt '.$lang->productCommon . '|report|productsummary';
 $lang->reportList->test->lists[10]      = 'Báo cáo Bug|report|bugcreate';
 $lang->reportList->test->lists[13]      = 'Bàn giao Bug|report|bugassign';

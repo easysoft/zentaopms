@@ -37,7 +37,7 @@ $lang->report->assign['assign']   = 'Affecté';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->executionDeviation = 'Dérive ' . $lang->executionCommon;
+$lang->report->executionDeviation = 'Dérive Effectué';
 $lang->report->productSummary     = 'Résumé ' . $lang->productCommon;
 $lang->report->bugCreate          = 'Résumé remontée Bugs';
 $lang->report->bugAssign          = 'Résumé affectation Bugs';
@@ -46,7 +46,7 @@ $lang->report->workloadAB         = 'Charge Travail';
 $lang->report->bugOpenedDate      = 'Bugs signalés de';
 $lang->report->beginAndEnd        = ' de';
 $lang->report->dept               = 'Compartiment';
-$lang->report->deviationChart     = 'Graphique de Dérive du ' . $lang->executionCommon;
+$lang->report->deviationChart     = 'Graphique de Dérive d uEffectué' ;
 
 $lang->reportList = new stdclass();
 $lang->reportList->execution = new stdclass();
@@ -54,7 +54,7 @@ $lang->reportList->product   = new stdclass();
 $lang->reportList->test      = new stdclass();
 $lang->reportList->staff     = new stdclass();
 
-$lang->reportList->execution->lists[10] = 'Dérive ' . $lang->executionCommon . '|report|executiondeviation';
+$lang->reportList->execution->lists[10] = 'Dériv Effectué|report|executiondeviation';
 $lang->reportList->product->lists[10]   = 'Résumé ' . $lang->productCommon . '|report|productsummary';
 $lang->reportList->test->lists[10]      = 'Résumé remontée Bugs|report|bugcreate';
 $lang->reportList->test->lists[13]      = 'Résumé affectation Bugs|report|bugassign';
