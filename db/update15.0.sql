@@ -115,6 +115,16 @@ CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   UNIQUE KEY `project` (`project`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_projectcase`;
+CREATE TABLE `zt_projectcase` (
+  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `version` smallint(6) NOT NULL DEFAULT '1',
+  `order` smallint(6) unsigned NOT NULL,
+  UNIQUE KEY `project` (`project`,`case`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 ALTER TABLE `zt_task` ADD `design` mediumint(8) unsigned NOT NULL AFTER `module`;
 ALTER TABLE `zt_task` ADD `version` smallint(6) NOT NULL AFTER `desc`;
 ALTER TABLE `zt_task` ADD `activatedDate` date NOT NULL AFTER `lastEditedDate`;
