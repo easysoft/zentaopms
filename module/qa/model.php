@@ -42,7 +42,7 @@ class qaModel extends model
         $this->lang->modulePageNav = $productIndex;
         foreach($this->lang->qa->menu as $key => $menu)
         {
-            if($this->config->global->flow == 'full') $this->setSubMenu('qa', $key, $productID);
+            if($this->config->global->flow == 'full' && $this->lang->navGroup->qa != 'qa') $this->setSubMenu('qa', $key, $productID);
             $replace = $productID;
             if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
             common::setMenuVars($this->lang->qa->menu, $key, $replace);
