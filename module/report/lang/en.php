@@ -9,15 +9,16 @@
  * @version     $Id: en.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->report->common    = 'Report';
-$lang->report->index     = 'Report Home';
-$lang->report->list      = 'Report';
-$lang->report->item      = 'Item';
-$lang->report->value     = 'Value';
-$lang->report->percent   = '%';
-$lang->report->undefined = 'Undefined';
-$lang->report->query     = 'Query';
-$lang->report->annual    = 'Annual Summary';
+$lang->report->common          = 'Report';
+$lang->report->index           = 'Report Home';
+$lang->report->list            = 'Report';
+$lang->report->item            = 'Item';
+$lang->report->value           = 'Value';
+$lang->report->percent         = '%';
+$lang->report->undefined       = 'Undefined';
+$lang->report->query           = 'Query';
+$lang->report->annual          = 'Annual Summary';
+$lang->report->executionCommon = 'Execution';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -37,7 +38,7 @@ $lang->report->assign['assign']   = 'Assigned';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->executionDeviation = $lang->executionCommon . ' Deviation';
+$lang->report->executionDeviation = 'Execution Deviation';
 $lang->report->productSummary     = $lang->productCommon . ' Summary';
 $lang->report->bugCreate          = 'Bug Reported Summary';
 $lang->report->bugAssign          = 'Bug Assigned Summary';
@@ -46,7 +47,7 @@ $lang->report->workloadAB         = 'Workload';
 $lang->report->bugOpenedDate      = 'Bug reported from';
 $lang->report->beginAndEnd        = ' From';
 $lang->report->dept               = 'Department';
-$lang->report->deviationChart     = $lang->executionCommon . ' Deviation Chart';
+$lang->report->deviationChart     = 'Execution Deviation Chart';
 
 $lang->reportList = new stdclass();
 $lang->reportList->execution = new stdclass();
@@ -54,7 +55,7 @@ $lang->reportList->product   = new stdclass();
 $lang->reportList->test      = new stdclass();
 $lang->reportList->staff     = new stdclass();
 
-$lang->reportList->execution->lists[10] = $lang->executionCommon . ' Deviation|report|executiondeviation';
+$lang->reportList->execution->lists[10] = 'Execution Deviation|report|executiondeviation';
 $lang->reportList->product->lists[10]   = $lang->productCommon . ' Summary|report|productsummary';
 $lang->reportList->test->lists[10]      = 'Bug Reported Summary|report|bugcreate';
 $lang->reportList->test->lists[13]      = 'Bug Assigned Summary|report|bugassign';

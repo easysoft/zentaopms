@@ -9,15 +9,16 @@
  * @version     $Id: zh-cn.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->report->common    = '统计视图';
-$lang->report->index     = '统计首页';
-$lang->report->list      = '统计报表';
-$lang->report->item      = '条目';
-$lang->report->value     = '值';
-$lang->report->percent   = '百分比';
-$lang->report->undefined = '未设定';
-$lang->report->query     = '查询';
-$lang->report->annual    = '年度总结';
+$lang->report->common          = '统计视图';
+$lang->report->index           = '统计首页';
+$lang->report->list            = '统计报表';
+$lang->report->item            = '条目';
+$lang->report->value           = '值';
+$lang->report->percent         = '百分比';
+$lang->report->undefined       = '未设定';
+$lang->report->query           = '查询';
+$lang->report->annual          = '年度总结';
+$lang->report->executionCommon = '执行';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -37,7 +38,7 @@ $lang->report->assign['assign']   = '已指派';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->executionDeviation = $lang->executionCommon . '偏差报表';
+$lang->report->executionDeviation = '执行偏差报表';
 $lang->report->productSummary     = $lang->productCommon . '汇总表';
 $lang->report->bugCreate          = 'Bug创建表';
 $lang->report->bugAssign          = 'Bug指派表';
@@ -46,7 +47,7 @@ $lang->report->workloadAB         = '工作负载';
 $lang->report->bugOpenedDate      = 'Bug创建时间';
 $lang->report->beginAndEnd        = '起止时间';
 $lang->report->dept               = '部门';
-$lang->report->deviationChart     = $lang->executionCommon . '偏差曲线';
+$lang->report->deviationChart     = '执行偏差曲线';
 
 $lang->reportList = new stdclass();
 $lang->reportList->execution = new stdclass();
@@ -54,7 +55,7 @@ $lang->reportList->product   = new stdclass();
 $lang->reportList->test      = new stdclass();
 $lang->reportList->staff     = new stdclass();
 
-$lang->reportList->execution->lists[10] = $lang->executionCommon . '偏差报表|report|executiondeviation';
+$lang->reportList->execution->lists[10] = '执行偏差报表|report|executiondeviation';
 $lang->reportList->product->lists[10]   = $lang->productCommon . '汇总表|report|productsummary';
 $lang->reportList->test->lists[10]      = 'Bug创建表|report|bugcreate';
 $lang->reportList->test->lists[13]      = 'Bug指派表|report|bugassign';

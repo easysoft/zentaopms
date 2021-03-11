@@ -47,7 +47,6 @@ ALTER TABLE `zt_testreport` ADD `project` mediumint(8) unsigned NOT NULL AFTER `
 ALTER TABLE `zt_testsuite` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_build` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_release` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_expect` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 
 ALTER TABLE `zt_product` ADD `bind` enum('0','1') NOT NULL DEFAULT '0' AFTER `code`;
 ALTER TABLE `zt_product` ADD `program` mediumint(8) unsigned NOT NULL AFTER `id`;
@@ -113,6 +112,16 @@ CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   `begin` date NOT NULL,
   `end` date NOT NULL,
   UNIQUE KEY `project` (`project`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_projectcase`;
+CREATE TABLE `zt_projectcase` (
+  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `version` smallint(6) NOT NULL DEFAULT '1',
+  `order` smallint(6) unsigned NOT NULL,
+  UNIQUE KEY `project` (`project`,`case`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_task` ADD `design` mediumint(8) unsigned NOT NULL AFTER `module`;

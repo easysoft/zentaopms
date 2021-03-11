@@ -618,8 +618,8 @@ class bug extends control
         /* Judge bug exits or not. */
         $bug = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->PRJ = $bug->project;
-        $this->view->products   = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
+        if($bug->project) $this->session->PRJ = $bug->project;
+        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
 
         $this->bug->checkBugExecutionPriv($bug);
 

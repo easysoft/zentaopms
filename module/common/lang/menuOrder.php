@@ -154,10 +154,11 @@ $lang->system->menuOrder[15] = 'calendar';
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
-$lang->admin->menuOrder[10] = 'model';
-$lang->admin->menuOrder[15] = 'custom';
-$lang->admin->menuOrder[20] = 'message';
-$lang->admin->menuOrder[25] = 'extension';
+$lang->admin->menuOrder[10] = 'company';
+$lang->admin->menuOrder[15] = 'model';
+$lang->admin->menuOrder[20] = 'custom';
+$lang->admin->menuOrder[25] = 'message';
+$lang->admin->menuOrder[30] = 'extension';
 $lang->admin->menuOrder[35] = 'dev';
 $lang->admin->menuOrder[40] = 'system';
 
