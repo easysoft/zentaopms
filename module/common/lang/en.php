@@ -222,9 +222,10 @@ $lang->productplan->menu = $lang->product->menu;
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
-$lang->system->menu->company  = array('link' => 'User|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
-$lang->system->menu->team     = array('link' => 'Team|my|team|');
+$lang->system->menu->team     = array('link' => 'Team|my|team|', 'subModule' => 'user');
 $lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->system->menu->dynamic  = 'Dynamic|company|dynamic|';
+$lang->system->menu->view     = array('link' => 'Company|company|view');
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
@@ -520,6 +521,7 @@ $lang->company->menu->browseGroup = array('link' => 'Group|group|browse', 'subMo
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->company   = array('link' => 'User|company|browse|', 'subModule' => ',user,dept,group,');
 $lang->admin->menu->model     = array('link' => 'Model|custom|browsestoryconcept|', 'subModule' => 'holiday');
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
@@ -530,6 +532,10 @@ $lang->admin->menu->system    = array('link' => 'System|backup|index', 'subModul
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
 $lang->subject->menu->storyConcept = array('link' => 'Story Concpet|custom|browsestoryconcept|');
+
+$lang->dept->menu  = $lang->company->menu;
+$lang->group->menu = $lang->company->menu;
+$lang->user->menu  = $lang->company->menu;
 
 $lang->admin->subMenu = new stdclass();
 $lang->admin->subMenu->message = new stdclass();
@@ -612,7 +618,6 @@ $lang->menugroup->job     = 'ci';
 /* Nav group.*/
 $lang->navGroup = new stdclass();
 $lang->navGroup->my     = 'my';
-$lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
 $lang->navGroup->score  = 'my';
 
@@ -663,6 +668,8 @@ $lang->navGroup->build     = 'execution';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';
+$lang->navGroup->todo          = 'system';
+$lang->navGroup->ldap          = 'system';
 $lang->navGroup->process       = 'system';
 $lang->navGroup->activity      = 'system';
 $lang->navGroup->zoutput       = 'system';
@@ -681,17 +688,18 @@ $lang->navGroup->lieu     = 'attend';
 $lang->navGroup->admin     = 'admin';
 $lang->navGroup->company   = 'admin';
 $lang->navGroup->dept      = 'admin';
-$lang->navGroup->ldap      = 'admin';
+$lang->navGroup->user      = 'admin';
 $lang->navGroup->group     = 'admin';
+$lang->navGroup->dept      = 'admin';
 $lang->navGroup->webhook   = 'admin';
 $lang->navGroup->sms       = 'admin';
 $lang->navGroup->message   = 'admin';
-$lang->navGroup->user      = 'admin';
 $lang->navGroup->custom    = 'admin';
 $lang->navGroup->cron      = 'admin';
 $lang->navGroup->backup    = 'admin';
 $lang->navGroup->mail      = 'admin';
 $lang->navGroup->dev       = 'admin';
+$lang->navGroup->entry     = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';
 $lang->navGroup->search    = 'admin';

@@ -701,6 +701,15 @@ CREATE TABLE IF NOT EXISTS `zt_projectstory` (
   `order` smallint(6) unsigned NOT NULL,
   UNIQUE KEY `project` (`project`,`story`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_projectcase`;
+CREATE TABLE `zt_projectcase` (
+  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `version` smallint(6) NOT NULL DEFAULT '1',
+  `order` smallint(6) unsigned NOT NULL,
+  UNIQUE KEY `project` (`project`,`case`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,

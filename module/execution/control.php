@@ -1914,7 +1914,7 @@ class execution extends control
 
         /* Get execution's product. */
         $productID = 0;
-        $productPairs = $this->loadModel('product')->getProductPairsByExecution($executionID);
+        $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
         if($productPairs) $productID = key($productPairs);
 
         $this->view->title        = $this->lang->execution->storyKanban;
@@ -2569,7 +2569,7 @@ class execution extends control
      * All execution.
      *
      * @param  string $status
-     * @param  int    $executionID
+     * @param  int    $projectID
      * @param  string $orderBy
      * @param  int    $productID
      * @param  int    $recTotal
@@ -2578,26 +2578,14 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'all', $executionID = 0, $from = 'execution', $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $projectID = 0, $from = 'execution', $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('product');
         $this->app->loadLang('programplan');
-        if($from == 'execution')
-        {
-            if($this->executions)
-            {
-                $execution   = $this->commonAction($executionID);
-                $executionID = $execution->id;
-            }
-            $this->session->set('executionList', $this->app->getURI(true));
-            $projectID = 0;
-        }
-        elseif($from == 'project')
-        {
-            $this->lang->navGroup->execution = 'project';
-            $projectID = $this->session->PRJ;
-        }
+
+        if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true));
+        if($from == 'project') $this->lang->navGroup->execution = 'project';
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -2607,13 +2595,15 @@ class execution extends control
         $this->view->position[] = $this->lang->execution->allExecutions;
 
         $this->view->executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager);
-        $this->view->products       = array(0 => $this->lang->product->select) + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $this->view->productID      = $productID;
-        $this->view->executionID    = $executionID;
+        $this->view->projectID      = $projectID;
+        $this->view->projects       = $this->project->getPairsByModel();
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
+        $this->view->from           = $from;
+        $this->view->projectTree    = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
 
         $this->display();
     }

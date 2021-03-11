@@ -25,25 +25,41 @@
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
 </style>
 <div id='mainMenu' class='clearfix'>
+  <?php if($from == 'execution'):?>
+  <div id="sidebarHeader">
+    <div class="title">
+      <?php echo empty($projectID) ? $lang->project->common : zget($projects, $projectID);?>
+      <?php if($projectID) echo html::a(inLink('all'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
+    </div>
+  </div>
+  <?php endif;?>
   <div class='btn-toolbar pull-left'>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
-    <?php echo html::a(inlink("all", "status=$key&executionID=$executionID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
+    <?php echo html::a(inlink("all", "status=$key&projectID=$projectID&from=$from&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
-    <div class='input-control space w-180px'>
-      <?php echo html::select('product', $products, $productID, "class='chosen form-control' onchange='byProduct(this.value, $executionID, \"$status\")'");?>
-    </div>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
     <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<div id='mainContent'>
+<div id='mainContent' class="main-row">
+  <?php if($from == 'execution'):?>
+  <div id="sidebar" class="side-col">
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
+    <div class="cell">
+      <?php echo $projectTree;?>
+      <div class="text-center">
+        <?php common::printLink('project', 'projectTitle', '', $lang->project->moduleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
+      </div>
+    </div>
+  </div>
+  <?php endif;?>
   <?php $canOrder = (common::hasPriv('execution', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
-  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit', "executionID=$executionID");?>' data-ride='table'>
+  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table'>
     <table class='table has-sort-head table-fixed' id='executionList'>
-      <?php $vars = "status=$status&executionID=$executionID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <?php $vars = "status=$status&projectID=$projectID&from=$from&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='c-id'>
@@ -168,7 +184,7 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->execution->batchEdit, '', 'btn');?></div>
       <?php endif;?>
-      <?php if(!$canOrder and common::hasPriv('execution', 'updateOrder')) echo html::a(inlink('all', "status=$status&executionID=$executionID&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->execution->updateOrder, '', "class='btn'");?>
+      <?php if(!$canOrder and common::hasPriv('execution', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&from=$from&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->execution->updateOrder, '', "class='btn'");?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

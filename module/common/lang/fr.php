@@ -172,6 +172,8 @@ else
     $lang->project->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
 }
 
+$lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
+
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => 'Product|program|product|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "Project|program|project|program=%s");
