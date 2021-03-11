@@ -64,6 +64,7 @@ class testtaskModel extends model
         {
             $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
             $replace = ($key == 'product') ? $selectHtml : $productID;
+            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
 
@@ -133,6 +134,7 @@ class testtaskModel extends model
         {
             $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
             $replace = ($key == 'product') ? $selectHtml : $productID;
+            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
 

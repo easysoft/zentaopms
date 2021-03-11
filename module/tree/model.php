@@ -603,6 +603,103 @@ class treeModel extends model
     }
 
     /**
+     * Get the tree menu of bug in html.
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @param  int    $startModule
+     * @param  int    $userFunc
+     * @param  string $extra
+     * @access public
+     * @return void
+     */
+    public function getBugTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc, $extra = '')
+    {
+        $extra = array('executionID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
+
+        /* If createdVersion <= 4.1, go to getTreeMenu(). */
+        $products      = $this->loadModel('product')->getProductPairsByProject($rootID);
+        $branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
+
+        /* createdVersion > 4.1. */
+        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-bug'>";
+
+        /* Set the start module. */
+        $startModulePath = '';
+        if($startModule > 0)
+        {
+            $startModule = $this->getById($startModule);
+            if($startModule) $startModulePath = $startModule->path . '%';
+        }
+
+        $manage = $userFunc[1] == 'createBugLink' ? true : false;
+
+        /* if not manage, only get linked modules and ignore others. */
+        if(!$manage) $executionModules = $this->getBugTreeModules($rootID, true);
+
+        /* Get module according to product. */
+        $productNum = count($products);
+        foreach($products as $id => $product)
+        {
+            $extra['productID'] = $id;
+            if($manage)
+            {
+                $link  = helper::createLink('bug', 'browse', "productID=$id");
+                $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
+            }
+            else
+            {
+                $link = helper::createLink('bug', 'browse', "productID=$productID");
+                if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
+            }
+
+            /* tree menu. */
+            $tree = '';
+            if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
+            foreach($branchGroups[$id] as $branch => $branchName)
+            {
+                $treeMenu = array();
+                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'bug' and parent != 0) OR (root = $id and type = 'story' and branch ='$branch'))")
+                    ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                    ->andWhere('deleted')->eq(0)
+                    ->orderBy('grade desc, `order`, type')
+                    ->get();
+                $stmt = $this->dbh->query($query);
+                while($module = $stmt->fetch())
+                {
+                    if(!$manage and !isset($executionModules[$module->id]) and strpos($extra['extra'], 'allModule') === false) continue;
+                    $this->buildTree($treeMenu, $module, 'bug', $userFunc, $extra);
+                }
+                if(isset($treeMenu[0]) and $branch) $treeMenu[0] = "<li><a>$branchName</a><ul>{$treeMenu[0]}</ul></li>";
+                $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
+            }
+
+            if($tree && ($productNum > 1 or $manage)) $tree = "<ul>" . $tree . "</ul>\n</li>";
+            $menu .= $tree;
+        }
+
+        /* Get execution module. */
+        if($startModule == 0)
+        {
+            /* tree menu. */
+            $treeMenu = array();
+            $query = $this->dao->select('*')->from(TABLE_MODULE)
+                ->where('root')->eq((int)$rootID)
+                ->andWhere('type')->eq('bug')
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('grade desc, `order`, type')
+                ->get();
+            $stmt  = $this->dbh->query($query);
+            while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, 'bug', $userFunc, $extra);
+
+            $tree  = isset($treeMenu[0]) ? $treeMenu[0] : '';
+            $menu .= $tree . '</li>';
+        }
+        $menu .= '</ul>';
+        return $menu;
+    }
+
+    /**
      * Get execution story tree menu.
      *
      * @param  int    $rootID
