@@ -104,7 +104,7 @@ class projectModel extends model
     public function getBudgetUnitList()
     {
         $budgetUnitList = array();
-        foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        foreach(explode(',', $this->config->program->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
 
         return $budgetUnitList;
     }
@@ -662,7 +662,7 @@ class projectModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->add('type', 'project')
             ->join('whitelist', ',')
-            ->stripTags($this->config->project->editor->prjcreate['id'], $this->config->allowedTags)
+            ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,newProduct,productName,future')
             ->get();
 
@@ -735,7 +735,7 @@ class projectModel extends model
             if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
         }
 
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->prjcreate['id'], $this->post->uid);
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
