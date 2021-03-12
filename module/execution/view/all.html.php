@@ -41,7 +41,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
-    <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . ($from == 'execution' ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class="main-row">
@@ -79,7 +79,7 @@
           <th class='w-70px hours'><?php echo $lang->execution->totalEstimate;?></th>
           <th class='w-70px hours'><?php echo $lang->execution->totalConsumed;?></th>
           <th class='w-70px hours'><?php echo $lang->execution->totalLeft;?></th>
-          <th class='w-150px'><?php echo $lang->execution->progress;?></th>
+          <th class='w-80px'><?php echo $lang->execution->progress;?></th>
           <th class='w-100px'><?php echo $lang->execution->burn;?></th>
           <?php if($canOrder):?>
           <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->execution->orderAB);?></th>
@@ -118,10 +118,8 @@
           <td class='hours'><?php echo $execution->hours->totalConsumed . ' ' . $config->hourUnit;?></td>
           <td class='hours'><?php echo $execution->hours->totalLeft . ' ' . $config->hourUnit;?></td>
           <td class="c-progress">
-            <div class="progress progress-text-left">
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
-              <span class="progress-text"><?php echo $execution->hours->progress;?>%</span>
-              </div>
+            <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+              <div class='progress-info'><?php echo $execution->hours->progress;?></div>
             </div>
           </td>
           <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
@@ -162,10 +160,8 @@
              <td class='hours'><?php echo $child->hours->totalConsumed;?></td>
              <td class='hours'><?php echo $child->hours->totalLeft;?></td>
              <td class="c-progress">
-               <div class="progress progress-text-left">
-                 <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $child->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $child->hours->progress;?>%">
-                 <span class="progress-text"><?php echo $child->hours->progress;?>%</span>
-                 </div>
+               <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $child->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                 <div class='progress-info'><?php echo $child->hours->progress;?></div>
                </div>
              </td>
              <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>

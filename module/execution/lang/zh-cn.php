@@ -184,6 +184,7 @@ $lang->execution->treeAction        = "{$lang->executionCommon}树状图";
 $lang->execution->exportAction      = "导出{$lang->executionCommon}";
 $lang->execution->computeBurnAction = "计算燃尽图";
 $lang->execution->create            = "添加{$lang->executionCommon}";
+$lang->execution->createExec        = "添加执行";
 $lang->execution->copy              = "复制{$lang->executionCommon}";
 $lang->execution->delete            = "删除{$lang->executionCommon}";
 $lang->execution->browse            = "浏览{$lang->executionCommon}";

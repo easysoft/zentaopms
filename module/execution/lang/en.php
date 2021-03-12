@@ -180,6 +180,7 @@ $lang->execution->treeAction        = "{$lang->executionCommon} Tree View";
 $lang->execution->exportAction      = "Export {$lang->executionCommon}";
 $lang->execution->computeBurnAction = "Update Burndown";
 $lang->execution->create            = "Create {$lang->executionCommon}";
+$lang->execution->createExec        = "Create execution";
 $lang->execution->copy              = "Copy {$lang->executionCommon}";
 $lang->execution->delete            = "Delete {$lang->executionCommon}";
 $lang->execution->browse            = "{$lang->executionCommon} List";
