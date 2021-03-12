@@ -2678,9 +2678,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function unbindWhielist($id = 0, $confirm = 'no')
+    public function unbindWhitelist($id = 0, $confirm = 'no')
     {
-        echo $this->fetch('personnel', 'unbindWhielist', "id=$id&confirm=$confirm");
+        echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
     }
 
     /**

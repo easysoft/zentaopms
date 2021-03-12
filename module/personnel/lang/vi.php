@@ -1,7 +1,7 @@
 <?php
 $lang->personnel->common     = 'Program Personnel';
 $lang->personnel->accessible = 'Acess List';
-$lang->personnel->putInto    = 'Input Resource';
+$lang->personnel->invest    = 'Input Resource';
 $lang->personnel->department = 'Department';
 $lang->personnel->realName   = 'Name';
 $lang->personnel->userName   = 'Account';
@@ -21,7 +21,7 @@ $lang->personnel->bug           = 'Bug';
 $lang->personnel->createStories = 'Story';
 $lang->personnel->risk          = 'Risk';
 $lang->personnel->issue         = 'Issue';
-$lang->personnel->putInto       = 'Input';
+$lang->personnel->invest       = 'Input';
 $lang->personnel->left          = 'Remained';
 $lang->personnel->created       = 'Created';
 $lang->personnel->finished      = 'Finished';
@@ -32,7 +32,7 @@ $lang->personnel->SR            = $lang->SRCommon;
 
 $lang->personnel->whitelist      = 'Whitelist';
 $lang->personnel->addWhitelist   = 'Add Whitelist';
-$lang->personnel->unbindWhielist = 'Remove Whitelist';
+$lang->personnel->unbindWhitelist = 'Remove Whitelist';
 $lang->personnel->confirmDelete  = 'Confirm removal of the user from the whitelist?';
 
 $lang->personnel->openedPGMTip = 'The program is public and can be accessed by users with Program privileges.';

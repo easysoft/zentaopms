@@ -70,12 +70,12 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function putInto($programID = 0)
+    public function invest($programID = 0)
     {
         $this->setProgramNavMenu($programID);
 
-        $this->view->title          = $this->lang->personnel->putInto;
-        $this->view->position[]     = $this->lang->personnel->putInto;
+        $this->view->title          = $this->lang->personnel->invest;
+        $this->view->position[]     = $this->lang->personnel->invest;
         $this->view->inputPersonnel = $this->personnel->getInputPersonnel($programID);
 
         $this->display();
@@ -190,11 +190,11 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function unbindWhielist($id = 0, $confirm = 'no')
+    public function unbindWhitelist($id = 0, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->personnel->confirmDelete, inLink('unbindWhielist',"id=$id&confirm=yes")));
+            die(js::confirm($this->lang->personnel->confirmDelete, inLink('unbindWhitelist',"id=$id&confirm=yes")));
         }
         else
         {

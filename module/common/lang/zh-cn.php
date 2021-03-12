@@ -177,12 +177,12 @@ $lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => '产品|program|product|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "项目|program|project|program=%s");
-$lang->program->viewMenu->personnel   = array('link' => "人员|personnel|putinto|program=%s");
+$lang->program->viewMenu->personnel   = array('link' => "人员|personnel|invest|program=%s");
 $lang->program->viewMenu->stakeholder = array('link' => "干系人|program|stakeholder|program=%s", 'alias' => 'createstakeholder');
 
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
-$lang->personnel->menu->putinto    = array('link' => "投入人员|personnel|putinto|program=%s");
+$lang->personnel->menu->invest    = array('link' => "投入人员|personnel|invest|program=%s");
 $lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|program=%s");
 $lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|program=%s", 'alias' => 'addwhitelist');
 

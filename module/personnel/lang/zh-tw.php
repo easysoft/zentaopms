@@ -1,7 +1,7 @@
 <?php
 $lang->personnel->common     = '項目集人員';
 $lang->personnel->accessible = '可訪問人員列表';
-$lang->personnel->putInto    = '投入人員列表';
+$lang->personnel->invest    = '投入人員列表';
 $lang->personnel->department = '部門';
 $lang->personnel->realName   = '真實姓名';
 $lang->personnel->userName   = '用戶名';
@@ -21,7 +21,7 @@ $lang->personnel->bug           = 'Bug';
 $lang->personnel->createStories = '創建需求數';
 $lang->personnel->risk          = '風險';
 $lang->personnel->issue         = '問題';
-$lang->personnel->putInto       = '已投入';
+$lang->personnel->invest       = '已投入';
 $lang->personnel->left          = '剩餘';
 $lang->personnel->created       = '創建';
 $lang->personnel->finished      = '完成';
@@ -32,7 +32,7 @@ $lang->personnel->SR            = $lang->SRCommon;
 
 $lang->personnel->whitelist      = '白名單列表';
 $lang->personnel->addWhitelist   = '添加白名單';
-$lang->personnel->unbindWhielist = '刪除白名單';
+$lang->personnel->unbindWhitelist = '刪除白名單';
 $lang->personnel->confirmDelete  = '確認將該用戶移除白名單？';
 
 $lang->personnel->openedPGMTip = '該項目集是公開狀態，有項目集視圖權限的人員即可訪問。';

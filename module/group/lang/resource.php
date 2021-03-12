@@ -221,7 +221,7 @@ if($config->systemMode == 'new')
     $lang->resource->project->view              = 'view';
     $lang->resource->project->whitelist         = 'whitelist';
     $lang->resource->project->addWhitelist      = 'addWhitelist';
-    $lang->resource->project->unbindWhielist    = 'unbindWhielist';
+    $lang->resource->project->unbindWhitelist    = 'unbindWhitelist';
     $lang->resource->project->manageProducts    = 'manageProducts';
     $lang->resource->project->view              = 'view';
     $lang->resource->project->dynamic           = 'dynamic';
@@ -249,24 +249,24 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[100] = 'view';
     $lang->project->methodOrder[105] = 'whitelist';
     $lang->project->methodOrder[110] = 'addWhitelist';
-    $lang->project->methodOrder[115] = 'unbindWhielist';
+    $lang->project->methodOrder[115] = 'unbindWhitelist';
     $lang->project->methodOrder[120] = 'manageProducts';
     $lang->project->methodOrder[125] = 'view';
     $lang->project->methodOrder[130] = 'dynamic';
 
     /* Personnel . */
     $lang->resource->personnel = new stdclass();
-    $lang->resource->personnel->accessible     = 'accessible';
-    $lang->resource->personnel->putInto        = 'putInto';
-    $lang->resource->personnel->whitelist      = 'whitelist';
-    $lang->resource->personnel->addWhitelist   = 'addWhitelist';
-    $lang->resource->personnel->unbindWhielist = 'unbindWhielist';
+    $lang->resource->personnel->accessible      = 'accessible';
+    $lang->resource->personnel->invest          = 'invest';
+    $lang->resource->personnel->whitelist       = 'whitelist';
+    $lang->resource->personnel->addWhitelist    = 'addWhitelist';
+    $lang->resource->personnel->unbindWhitelist = 'unbindWhitelist';
 
     $lang->personnel->methodOrder[5]  = 'accessible';
-    $lang->personnel->methodOrder[10] = 'putInto';
+    $lang->personnel->methodOrder[10] = 'invest';
     $lang->personnel->methodOrder[15] = 'whitelist';
     $lang->personnel->methodOrder[20] = 'addWhitelist';
-    $lang->personnel->methodOrder[25] = 'unbindWhielist';
+    $lang->personnel->methodOrder[25] = 'unbindWhitelist';
 
     /* Project Story. */
     $lang->resource->projectstory = new stdclass();
@@ -340,7 +340,7 @@ $lang->resource->product->build          = 'build';
 $lang->resource->product->export         = 'exportAction';
 $lang->resource->product->whitelist      = 'whitelist';
 $lang->resource->product->addWhitelist   = 'addWhitelist';
-$lang->resource->product->unbindWhielist = 'unbindWhielist';
+$lang->resource->product->unbindWhitelist = 'unbindWhitelist';
 
 $lang->product->methodOrder[0]   = 'index';
 $lang->product->methodOrder[5]   = 'browse';
@@ -361,7 +361,7 @@ $lang->product->methodOrder[80]  = 'build';
 $lang->product->methodOrder[85]  = 'export';
 $lang->product->methodOrder[90]  = 'whitelist';
 $lang->product->methodOrder[95]  = 'addWhitelist';
-$lang->product->methodOrder[100] = 'unbindWhielist';
+$lang->product->methodOrder[100] = 'unbindWhitelist';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();
@@ -577,7 +577,7 @@ $lang->resource->execution->storyKanban       = 'storyKanban';
 $lang->resource->execution->storySort         = 'storySort';
 $lang->resource->execution->whitelist         = 'whitelist';
 $lang->resource->execution->addWhitelist      = 'addWhitelist';
-$lang->resource->execution->unbindWhielist    = 'unbindWhielist';
+$lang->resource->execution->unbindWhitelist    = 'unbindWhitelist';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 $lang->execution->methodOrder[0]   = 'index';
@@ -629,7 +629,7 @@ $lang->execution->methodOrder[220] = 'storyKanban';
 $lang->execution->methodOrder[225] = 'storySort';
 $lang->execution->methodOrder[230] = 'whitelist';
 $lang->execution->methodOrder[235] = 'addWhitelist';
-$lang->execution->methodOrder[240] = 'unbindWhielist';
+$lang->execution->methodOrder[240] = 'unbindWhitelist';
 
 /* Task. */
 $lang->resource->task = new stdclass();

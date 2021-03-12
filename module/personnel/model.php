@@ -125,22 +125,22 @@ class personnelModel extends model
             ->fetchAll('id');
 
         /* Initialization personnel risks. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdRisk']  = 0;
-            $putInto[$account]['resolvedRisk'] = 0;
-            $putInto[$account]['pendingRisk']  = 0;
+            $invest[$account]['createdRisk']  = 0;
+            $invest[$account]['resolvedRisk'] = 0;
+            $invest[$account]['pendingRisk']  = 0;
         }
 
         foreach($risks as $risk)
         {
-            if($risk->createdBy && isset($putInto[$risk->createdBy])) $putInto[$risk->createdBy]['createdRisk'] += 1;
-            if($risk->resolvedBy && isset($putInto[$risk->resolvedBy])) $putInto[$risk->resolvedBy]['resolvedRisk'] += 1;
-            if($risk->assignedTo && $risk->status == 'active' && isset($putInto[$risk->assignedTo])) $putInto[$risk->assignedTo]['pendingRisk'] += 1;
+            if($risk->createdBy && isset($invest[$risk->createdBy])) $invest[$risk->createdBy]['createdRisk'] += 1;
+            if($risk->resolvedBy && isset($invest[$risk->resolvedBy])) $invest[$risk->resolvedBy]['resolvedRisk'] += 1;
+            if($risk->assignedTo && $risk->status == 'active' && isset($invest[$risk->assignedTo])) $invest[$risk->assignedTo]['pendingRisk'] += 1;
         }
 
-        return $putInto;
+        return $invest;
     }
 
     /**
@@ -159,22 +159,22 @@ class personnelModel extends model
             ->fetchAll('id');
 
         /* Initialization personnel issues. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdIssue']  = 0;
-            $putInto[$account]['resolvedIssue'] = 0;
-            $putInto[$account]['pendingIssue']  = 0;
+            $invest[$account]['createdIssue']  = 0;
+            $invest[$account]['resolvedIssue'] = 0;
+            $invest[$account]['pendingIssue']  = 0;
         }
 
         foreach($issues as $issue)
         {
-            if($issue->createdBy && isset($putInto[$issue->createdBy])) $putInto[$issue->createdBy]['createdIssue'] += 1;
-            if($issue->resolvedBy && isset($putInto[$issue->resolvedBy])) $putInto[$issue->resolvedBy]['resolvedIssue'] += 1;
-            if($issue->assignedTo && in_array($issue->status, array('unconfirmed', 'confirmed', 'active')) && isset($putInto[$issue->assignedTo])) $putInto[$issue->assignedTo]['pendingIssue'] += 1;
+            if($issue->createdBy && isset($invest[$issue->createdBy])) $invest[$issue->createdBy]['createdIssue'] += 1;
+            if($issue->resolvedBy && isset($invest[$issue->resolvedBy])) $invest[$issue->resolvedBy]['resolvedIssue'] += 1;
+            if($issue->assignedTo && in_array($issue->status, array('unconfirmed', 'confirmed', 'active')) && isset($invest[$issue->assignedTo])) $invest[$issue->assignedTo]['pendingIssue'] += 1;
         }
 
-        return $putInto;
+        return $invest;
     }
 
     /**
@@ -212,26 +212,26 @@ class personnelModel extends model
             ->fetchPairs('openedBy');
 
         /* Initialize bugs and requirements related to personnel. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdBug']  = 0;
-            $putInto[$account]['resolvedBug'] = 0;
-            $putInto[$account]['pendingBug']  = 0;
-            $putInto[$account]['UR']          = 0;
-            $putInto[$account]['SR']          = 0;
+            $invest[$account]['createdBug']  = 0;
+            $invest[$account]['resolvedBug'] = 0;
+            $invest[$account]['pendingBug']  = 0;
+            $invest[$account]['UR']          = 0;
+            $invest[$account]['SR']          = 0;
         }
 
-        foreach($requirement as $account => $number) $putInto[$account]['UR'] = $number;
-        foreach($story as $account => $number)       $putInto[$account]['SR'] = $number;
+        foreach($requirement as $account => $number) $invest[$account]['UR'] = $number;
+        foreach($story as $account => $number)       $invest[$account]['SR'] = $number;
 
         foreach($bugs as $bug)
         {
-            if($bug->openedBy && isset($putInto[$bug->openedBy])) $putInto[$bug->openedBy]['createdBug'] += 1;
-            if($bug->resolvedBy && isset($putInto[$bug->resolvedBy])) $putInto[$bug->resolvedBy]['resolvedBug'] += 1;
-            if($bug->assignedTo && $bug->status == 'active' && isset($putInto[$bug->assignedTo])) $putInto[$bug->assignedTo]['pendingBug'] += 1;
+            if($bug->openedBy && isset($invest[$bug->openedBy])) $invest[$bug->openedBy]['createdBug'] += 1;
+            if($bug->resolvedBy && isset($invest[$bug->resolvedBy])) $invest[$bug->resolvedBy]['resolvedBug'] += 1;
+            if($bug->assignedTo && $bug->status == 'active' && isset($invest[$bug->assignedTo])) $invest[$bug->assignedTo]['pendingBug'] += 1;
         }
-        return $putInto;
+        return $invest;
     }
 
     /**
@@ -288,35 +288,35 @@ class personnelModel extends model
           ->fetchAll('id');
 
         /* Initialize personnel related tasks. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdTask']  = 0;
-            $putInto[$account]['finishedTask'] = 0;
-            $putInto[$account]['pendingTask']  = 0;
-            $putInto[$account]['consumedTask'] = 0;
-            $putInto[$account]['leftTask']     = 0;
+            $invest[$account]['createdTask']  = 0;
+            $invest[$account]['finishedTask'] = 0;
+            $invest[$account]['pendingTask']  = 0;
+            $invest[$account]['consumedTask'] = 0;
+            $invest[$account]['leftTask']     = 0;
         }
 
         /* Number of tasks per person. */
         $userTasks = array();
         foreach($tasks as $task)
         {
-            if($task->openedBy && isset($putInto[$task->openedBy]))
+            if($task->openedBy && isset($invest[$task->openedBy]))
             {
-                $putInto[$task->openedBy]['createdTask'] += 1;
+                $invest[$task->openedBy]['createdTask'] += 1;
                 $userTasks[$task->openedBy][$task->id]    = $task->id;
             }
 
-            if($task->finishedBy && isset($putInto[$task->finishedBy]))
+            if($task->finishedBy && isset($invest[$task->finishedBy]))
             {
-                $putInto[$task->finishedBy]['finishedTask'] += 1;
+                $invest[$task->finishedBy]['finishedTask'] += 1;
                 $userTasks[$task->finishedBy][$task->id]     = $task->id;
             }
 
-            if($task->assignedTo && $task->status == 'wait' && isset($putInto[$task->assignedTo]))
+            if($task->assignedTo && $task->status == 'wait' && isset($invest[$task->assignedTo]))
             {
-                $putInto[$task->assignedTo]['pendingTask'] += 1;
+                $invest[$task->assignedTo]['pendingTask'] += 1;
                 $userTasks[$task->assignedTo][$task->id]    = $task->id;
             }
         }
@@ -334,11 +334,11 @@ class personnelModel extends model
 
         foreach($userHours as $account => $hours)
         {
-            $putInto[$account]['leftTask']     = $hours->left;
-            $putInto[$account]['consumedTask'] = $hours->consumed;
+            $invest[$account]['leftTask']     = $hours->left;
+            $invest[$account]['consumedTask'] = $hours->consumed;
         }
 
-        return $putInto;
+        return $invest;
     }
 
     /**
