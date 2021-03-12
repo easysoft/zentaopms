@@ -837,28 +837,29 @@ class product extends control
     }
 
     /**
-     * AJAX: get projects of a product in html select.
+     * AJAX: get executions of a product in html select.
      *
      * @param  int    $productID
-     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  int    $branch
      * @param  string $number
      * @access public
      * @return void
      */
-    public function ajaxGetProjects($productID, $projectID = 0, $branch = 0, $number = '')
+    public function ajaxGetExecutions($productID, $executionID = 0, $branch = 0, $number = '')
     {
-        $projects = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch, 'id_desc', $projectID);
-        if($this->app->getViewType() == 'json') die(json_encode($projects));
+        $executions = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch, 'id_desc', $executionID);
+        if($this->app->getViewType() == 'json') die(json_encode($executions));
 
         if($number === '')
         {
-            die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProjectRelated(this.value)'"));
+            die(html::select('execution', $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
         }
         else
         {
-            $projectName = "projects[$number]";
-            $projects    = empty($projects) ? array('' => '') : $projects;
-            die(html::select($projectName, $projects, '', "class='form-control' onchange='loadProjectBuilds($productID, this.value, $number)'"));
+            $executionsName = "executions[$number]";
+            $executions     = empty($executions) ? array('' => '') : $executions;
+            die(html::select($executionsName, $executions, '', "class='form-control' onchange='loadProjectBuilds($productID, this.value, $number)'"));
         }
     }
 
