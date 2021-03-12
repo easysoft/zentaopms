@@ -135,6 +135,8 @@ class testtask extends control
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
+        $this->loadModel('testcase');
+        $this->app->loadLang('tree');
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
@@ -162,6 +164,7 @@ class testtask extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
         $this->view->product     = $this->product->getByID($productID);
+        $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
 
         $this->display();
     }

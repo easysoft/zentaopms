@@ -206,7 +206,7 @@ class testcase extends control
             }
         }
 
-        $this->app->loadLang('project');
+        $this->app->loadLang('execution');
         $this->app->loadLang('task');
 
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
