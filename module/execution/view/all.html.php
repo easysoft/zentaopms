@@ -71,11 +71,11 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->execution->name);?></th>
-          <th class='w-150px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->execution->code);?></th>
-          <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->PM);?></th>
+          <th><?php common::printOrderLink('name', $orderBy, $vars, $from == 'execution' ? $lang->execution->execName : $lang->execution->name);?></th>
+          <th class='w-150px'><?php common::printOrderLink('code', $orderBy, $vars, $from == 'execution' ? $lang->execution->execCode : $lang->execution->code);?></th>
+          <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
           <th class='w-90px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
-          <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->execution->status);?></th>
+          <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
           <th class='w-70px hours'><?php echo $lang->execution->totalEstimate;?></th>
           <th class='w-70px hours'><?php echo $lang->execution->totalConsumed;?></th>
           <th class='w-70px hours'><?php echo $lang->execution->totalLeft;?></th>

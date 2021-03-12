@@ -636,6 +636,10 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_0');
             $this->execSQL($this->getUpgradeFile('15.0'));
             $this->appendExec('15_0');
+        case '15_0_beta1':
+            $this->saveLogs('Execute 15_0_beta1');
+            $this->adjustBugOfProject();
+            $this->appendExec('15_0_beta1');
         }
 
         $this->deletePatch();
@@ -4575,6 +4579,28 @@ class upgradeModel extends model
             if($budget->budgetUnit == 'dollar')  $data['budgetUnit'] = 'USD';
 
             if($data) $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Adjust the project field of the zt_bug table.
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustBugOfProject()
+    {
+        $bugs       = $this->dao->select('id,execution')->from(TABLE_BUG)->fetchAll('id');
+        $executions = $this->dao->select('id,project')->from(TABLE_EXECUTION)->fetchAll('id');
+
+        foreach($bugs as $id => $bug)
+        {
+            if($bug->execution == 0) continue;
+            $data = array();
+            $data['project'] = $executions[$bug->execution]->project;
+            if($data) $this->dao->update(TABLE_BUG)->data($data)->where('id')->eq($id)->exec();
         }
 
         return true;
