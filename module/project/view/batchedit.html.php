@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('weekend', $config->project->weekend);?>
+<?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
 <?php js::set('changeProgram', $lang->project->changeProgram);?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
@@ -29,15 +29,15 @@
           <th class="w-150px <?php echo strpos($requiredFields, 'PM') !== false ?  'required' : '';?>"> <?php echo $lang->project->PM;?></th>
           <th class='w-120px required'><?php echo $lang->project->begin;?></th>
           <th class='w-120px required'><?php echo $lang->project->end;?></th>
-          <th class='w-250px'><?php echo $lang->project->acl;?></th>
+          <th class='w-260px'><?php echo $lang->project->acl;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($projects as $projectID => $project):?>
-        <?php $aclList = $project->parent ? $lang->program->aclList : $lang->project->aclList;?>
+        <?php $aclList = $project->parent ? $lang->program->subAcls : $lang->project->acls;?>
         <tr>
           <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIdList[$projectID]", $projectID);?></td>
-          <td><?php echo html::select("parents[$projectID]", $projectList, $project->parent, "class='form-control chosen' data-id='$projectID' data-name='{$project->name}' data-parent='{$project->parent}'");?></td>
+          <td><?php echo html::select("parents[$projectID]", $programList, $project->parent, "class='form-control chosen' data-id='$projectID' data-name='{$project->name}' data-parent='{$project->parent}'");?></td>
           <td title='<?php echo $project->name;?>'><?php echo html::input("names[$projectID]", $project->name, "class='form-control'");?></td>
           <td><?php echo html::select("PMs[$projectID]", $PMUsers, $project->PM, "class='form-control chosen'");?></td>
           <td>

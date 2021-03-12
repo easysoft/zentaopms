@@ -1023,7 +1023,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getExecutions($account, $type = 'execution', $status = 'all', $orderBy, $pager = null)
+    public function getExecutions($account, $type = 'execution', $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         if($type == 'execution') $type = 'sprint,stage';
         $myProjectsList = $this->dao->select('t1. *,t2. *')->from(TABLE_TEAM)->alias('t1')

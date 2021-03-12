@@ -54,6 +54,11 @@ class bug extends control
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
             $this->lang->noMenuModule[] = $this->app->rawModule;
         }
+        else
+        {
+            $this->lang->bug->menu    = $this->lang->projectQa->menu;
+            $this->lang->bug->subMenu = $this->lang->projectQa->subMenu;
+        }
 
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=bug&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=bug')));
@@ -157,7 +162,7 @@ class bug extends control
         $productIDList = $productID ? $productID : array_keys($this->products);
 
         /* Get bugs. */
-        $bugs = $this->bug->getBugs($productIDList, $executions, $branch, $browseType, $moduleID, $queryID, $sort, $pager, $this->session->PRJ);
+        $bugs = $this->bug->getBugs($productIDList, $executions, $branch, $browseType, $moduleID, $queryID, $sort, $pager, $this->projectID);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
@@ -211,7 +216,7 @@ class bug extends control
         $this->view->moduleID        = $moduleID;
         $this->view->memberPairs     = $this->user->getPairs('noletter|nodeleted');
         $this->view->branch          = $branch;
-        $this->view->branches        = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches        = $this->loadModel('branch')->getPairs($productID, 'noempty');
         $this->view->executions      = $executions;
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
         $this->view->stories         = $storyList;
@@ -1772,5 +1777,37 @@ class bug extends control
         $severity = $this->lang->bug->severityList;
 
         die(json_encode(array('modules' => $modules, 'categories' => $type, 'versions' => $builds, 'severities' => $severity, 'priorities' => $pri)));
+    }
+
+    /**
+     * Drop menu page.
+     *
+     * @param  int    $productID
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu($productID, $module, $method, $extra = '', $from = '')
+    {
+        if($from == 'qa')
+        {
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
+        }
+
+        $products = $this->product->getProducts($this->session->PRJ, $this->config->CRProduct ? 'all' : 'noclosed', 'program desc, line desc, ');
+
+        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
+        $this->view->productID = $productID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+        $this->view->products  = $products;
+        $this->view->projectID = $this->session->PRJ;
+        $this->view->programs  = $this->loadModel('program')->getPairs(true);
+        $this->view->lines     = $this->product->getLinePairs();
+        $this->display();
     }
 }

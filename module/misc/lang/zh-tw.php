@@ -12,9 +12,6 @@
 $lang->misc = new stdclass();
 $lang->misc->common  = '雜項';
 $lang->misc->ping    = '防超時';
-$lang->misc->api     = 'https://api.zentao.net';
-$lang->misc->enApi   = 'https://api.zentao.pm';
-$lang->misc->qucheng = 'https://www.qucheng.com';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';

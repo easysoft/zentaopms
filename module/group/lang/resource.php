@@ -34,33 +34,34 @@ $lang->moduleOrder[80]  = 'testcase';
 $lang->moduleOrder[85]  = 'testtask';
 $lang->moduleOrder[90]  = 'testsuite';
 $lang->moduleOrder[95]  = 'testreport';
-$lang->moduleOrder[100]  = 'caselib';
+$lang->moduleOrder[100] = 'caselib';
+$lang->moduleOrder[105] = 'automation';
 
-$lang->moduleOrder[105]  = 'doc';
-$lang->moduleOrder[110]  = 'report';
+$lang->moduleOrder[110] = 'doc';
+$lang->moduleOrder[115] = 'report';
 
-$lang->moduleOrder[115] = 'company';
-$lang->moduleOrder[120] = 'dept';
-$lang->moduleOrder[125] = 'group';
-$lang->moduleOrder[130] = 'user';
+$lang->moduleOrder[120] = 'company';
+$lang->moduleOrder[125] = 'dept';
+$lang->moduleOrder[130] = 'group';
+$lang->moduleOrder[135] = 'user';
 
-$lang->moduleOrder[135] = 'admin';
-$lang->moduleOrder[140] = 'extension';
-$lang->moduleOrder[145] = 'custom';
-$lang->moduleOrder[150] = 'action';
+$lang->moduleOrder[140] = 'admin';
+$lang->moduleOrder[145] = 'extension';
+$lang->moduleOrder[150] = 'custom';
+$lang->moduleOrder[155] = 'action';
 
-$lang->moduleOrder[155] = 'mail';
-$lang->moduleOrder[160] = 'svn';
-$lang->moduleOrder[165] = 'git';
-$lang->moduleOrder[170] = 'search';
-$lang->moduleOrder[175] = 'tree';
-$lang->moduleOrder[180] = 'api';
-$lang->moduleOrder[185] = 'file';
-$lang->moduleOrder[190] = 'misc';
-$lang->moduleOrder[195] = 'backup';
-$lang->moduleOrder[200] = 'cron';
-$lang->moduleOrder[205] = 'dev';
-$lang->moduleOrder[210] = 'message';
+$lang->moduleOrder[160] = 'mail';
+$lang->moduleOrder[165] = 'svn';
+$lang->moduleOrder[170] = 'git';
+$lang->moduleOrder[175] = 'search';
+$lang->moduleOrder[180] = 'tree';
+$lang->moduleOrder[185] = 'api';
+$lang->moduleOrder[190] = 'file';
+$lang->moduleOrder[195] = 'misc';
+$lang->moduleOrder[200] = 'backup';
+$lang->moduleOrder[205] = 'cron';
+$lang->moduleOrder[210] = 'dev';
+$lang->moduleOrder[215] = 'message';
 
 $lang->resource = new stdclass();
 
@@ -220,7 +221,7 @@ if($config->systemMode == 'new')
     $lang->resource->project->view              = 'view';
     $lang->resource->project->whitelist         = 'whitelist';
     $lang->resource->project->addWhitelist      = 'addWhitelist';
-    $lang->resource->project->unbindWhielist    = 'unbindWhielist';
+    $lang->resource->project->unbindWhitelist    = 'unbindWhitelist';
     $lang->resource->project->manageProducts    = 'manageProducts';
     $lang->resource->project->view              = 'view';
     $lang->resource->project->dynamic           = 'dynamic';
@@ -248,24 +249,24 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[100] = 'view';
     $lang->project->methodOrder[105] = 'whitelist';
     $lang->project->methodOrder[110] = 'addWhitelist';
-    $lang->project->methodOrder[115] = 'unbindWhielist';
+    $lang->project->methodOrder[115] = 'unbindWhitelist';
     $lang->project->methodOrder[120] = 'manageProducts';
     $lang->project->methodOrder[125] = 'view';
     $lang->project->methodOrder[130] = 'dynamic';
 
     /* Personnel . */
     $lang->resource->personnel = new stdclass();
-    $lang->resource->personnel->accessible     = 'accessible';
-    $lang->resource->personnel->putInto        = 'putInto';
-    $lang->resource->personnel->whitelist      = 'whitelist';
-    $lang->resource->personnel->addWhitelist   = 'addWhitelist';
-    $lang->resource->personnel->unbindWhielist = 'unbindWhielist';
+    $lang->resource->personnel->accessible      = 'accessible';
+    $lang->resource->personnel->invest          = 'invest';
+    $lang->resource->personnel->whitelist       = 'whitelist';
+    $lang->resource->personnel->addWhitelist    = 'addWhitelist';
+    $lang->resource->personnel->unbindWhitelist = 'unbindWhitelist';
 
     $lang->personnel->methodOrder[5]  = 'accessible';
-    $lang->personnel->methodOrder[10] = 'putInto';
+    $lang->personnel->methodOrder[10] = 'invest';
     $lang->personnel->methodOrder[15] = 'whitelist';
     $lang->personnel->methodOrder[20] = 'addWhitelist';
-    $lang->personnel->methodOrder[25] = 'unbindWhielist';
+    $lang->personnel->methodOrder[25] = 'unbindWhitelist';
 
     /* Project Story. */
     $lang->resource->projectstory = new stdclass();
@@ -339,7 +340,7 @@ $lang->resource->product->build          = 'build';
 $lang->resource->product->export         = 'exportAction';
 $lang->resource->product->whitelist      = 'whitelist';
 $lang->resource->product->addWhitelist   = 'addWhitelist';
-$lang->resource->product->unbindWhielist = 'unbindWhielist';
+$lang->resource->product->unbindWhitelist = 'unbindWhitelist';
 
 $lang->product->methodOrder[0]   = 'index';
 $lang->product->methodOrder[5]   = 'browse';
@@ -360,7 +361,7 @@ $lang->product->methodOrder[80]  = 'build';
 $lang->product->methodOrder[85]  = 'export';
 $lang->product->methodOrder[90]  = 'whitelist';
 $lang->product->methodOrder[95]  = 'addWhitelist';
-$lang->product->methodOrder[100] = 'unbindWhielist';
+$lang->product->methodOrder[100] = 'unbindWhitelist';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();
@@ -576,7 +577,7 @@ $lang->resource->execution->storyKanban       = 'storyKanban';
 $lang->resource->execution->storySort         = 'storySort';
 $lang->resource->execution->whitelist         = 'whitelist';
 $lang->resource->execution->addWhitelist      = 'addWhitelist';
-$lang->resource->execution->unbindWhielist    = 'unbindWhielist';
+$lang->resource->execution->unbindWhitelist    = 'unbindWhitelist';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 $lang->execution->methodOrder[0]   = 'index';
@@ -628,7 +629,7 @@ $lang->execution->methodOrder[220] = 'storyKanban';
 $lang->execution->methodOrder[225] = 'storySort';
 $lang->execution->methodOrder[230] = 'whitelist';
 $lang->execution->methodOrder[235] = 'addWhitelist';
-$lang->execution->methodOrder[240] = 'unbindWhielist';
+$lang->execution->methodOrder[240] = 'unbindWhitelist';
 
 /* Task. */
 $lang->resource->task = new stdclass();
@@ -925,6 +926,11 @@ $lang->caselib->methodOrder[35] = 'batchCreateCase';
 $lang->caselib->methodOrder[40] = 'exportTemplet';
 $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
+
+$lang->resource->automation = new stdclass();
+$lang->resource->automation->browse = 'browse';
+
+$lang->automation->methodOrder[0] = 'browse';
 
 $lang->resource->repo                 = new stdclass();
 $lang->resource->repo->browse         = 'browse';

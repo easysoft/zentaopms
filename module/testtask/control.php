@@ -44,6 +44,11 @@ class testtask extends control
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
+        else 
+        {    
+            $this->lang->testtask->menu    = $this->lang->projectQa->menu;
+            $this->lang->testtask->subMenu = $this->lang->projectQa->subMenu;
+        }
 
         $this->loadModel('product');
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
@@ -135,12 +140,11 @@ class testtask extends control
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
+        $this->loadModel('testcase');
+        $this->app->loadLang('tree');
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
-        $this->lang->testtask->menu      = $this->lang->testcase->menu;
-        $this->lang->testtask->menuOrder = $this->lang->testcase->menuOrder;
-        $this->lang->testtask->subMenu->testcase->unit['subModule'] = 'testtask';
         $this->loadModel('testtask')->setUnitMenu($this->products, $productID);
 
         /* Load pager. */
@@ -162,6 +166,7 @@ class testtask extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
         $this->view->product     = $this->product->getByID($productID);
+        $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
 
         $this->display();
     }

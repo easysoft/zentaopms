@@ -12,7 +12,7 @@
 class personnelModel extends model
 {
     /**
-     * Access to program set input staff.
+     * Access to program set invest staff.
      *
      * @param  int       $programID
      * @param  int       $deptID
@@ -56,13 +56,13 @@ class personnelModel extends model
     }
 
     /**
-     * Access to program set input staff.
+     * Get invest person list.
      *
-     * @param  int       $programID
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getInputPersonnel($programID = 0)
+    public function getInvest($programID = 0)
     {
         $personnelList = array();
 
@@ -79,14 +79,14 @@ class personnelModel extends model
         if(empty($accountPairs)) return $personnelList;
 
         $executionPairs   = $this->getInvolvedExecutions($projects);
-        $taskInput        = $this->getProjectTaskInput($projects, $accountPairs);
-        $bugAndStoryInput = $this->getBugAndStoryInput($accountPairs, $programID);
+        $taskInvest        = $this->getProjectTaskInvest($projects, $accountPairs);
+        $bugAndStoryInvest = $this->getBugAndStoryInvest($accountPairs, $programID);
         if(isset($this->config->maxVersion))
         {
-            $issueInput       = $this->getIssueInput($accountPairs, $projects);
-            $riskInput        = $this->getRiskInput($accountPairs, $projects);
+            $issueInvest = $this->getIssueInvest($accountPairs, $projects);
+            $riskInvest  = $this->getRiskInvest($accountPairs, $projects);
         }
-        $userPairs        = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
+        $userPairs = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
         foreach($userPairs as $user) $user->role = zget($this->lang->user->roleList, $user->role, $user->role);
 
         foreach($accountPairs as $account => $projects)
@@ -97,12 +97,12 @@ class personnelModel extends model
             $personnelList[$account]['projects']   = $projects;
             $personnelList[$account]['executions'] = zget($executionPairs, $account, 0);
 
-            $personnelList[$account] += $taskInput[$account];
-            $personnelList[$account] += $bugAndStoryInput[$account];
+            $personnelList[$account] += $taskInvest[$account];
+            $personnelList[$account] += $bugAndStoryInvest[$account];
             if(isset($this->config->maxVersion))
             {
-                $personnelList[$account] += $issueInput[$account];
-                $personnelList[$account] += $riskInput[$account];
+                $personnelList[$account] += $issueInvest[$account];
+                $personnelList[$account] += $riskInvest[$account];
             }
         }
 
@@ -110,14 +110,14 @@ class personnelModel extends model
     }
 
     /**
-     * Get user project risk input.
+     * Get user project risk invest.
      *
      * @param  array     $accounts
      * @param  object    $projects
      * @access public
      * @return array
      */
-    public function getRiskInput($accounts, $projects)
+    public function getRiskInvest($accounts, $projects)
     {
         $risks = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_RISK)
             ->where('project')->in(array_keys($projects))
@@ -125,33 +125,33 @@ class personnelModel extends model
             ->fetchAll('id');
 
         /* Initialization personnel risks. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdRisk']  = 0;
-            $putInto[$account]['resolvedRisk'] = 0;
-            $putInto[$account]['pendingRisk']  = 0;
+            $invest[$account]['createdRisk']  = 0;
+            $invest[$account]['resolvedRisk'] = 0;
+            $invest[$account]['pendingRisk']  = 0;
         }
 
         foreach($risks as $risk)
         {
-            if($risk->createdBy && isset($putInto[$risk->createdBy])) $putInto[$risk->createdBy]['createdRisk'] += 1;
-            if($risk->resolvedBy && isset($putInto[$risk->resolvedBy])) $putInto[$risk->resolvedBy]['resolvedRisk'] += 1;
-            if($risk->assignedTo && $risk->status == 'active' && isset($putInto[$risk->assignedTo])) $putInto[$risk->assignedTo]['pendingRisk'] += 1;
+            if($risk->createdBy && isset($invest[$risk->createdBy])) $invest[$risk->createdBy]['createdRisk'] += 1;
+            if($risk->resolvedBy && isset($invest[$risk->resolvedBy])) $invest[$risk->resolvedBy]['resolvedRisk'] += 1;
+            if($risk->assignedTo && $risk->status == 'active' && isset($invest[$risk->assignedTo])) $invest[$risk->assignedTo]['pendingRisk'] += 1;
         }
 
-        return $putInto;
+        return $invest;
     }
 
     /**
-     * Get user project issue input.
+     * Get user project issue invest.
      *
      * @param  array     $accounts
      * @param  object    $projects
      * @access public
      * @return array
      */
-    public function getIssueInput($accounts, $projects)
+    public function getIssueInvest($accounts, $projects)
     {
         $issues = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_ISSUE)
             ->where('project')->in(array_keys($projects))
@@ -159,33 +159,33 @@ class personnelModel extends model
             ->fetchAll('id');
 
         /* Initialization personnel issues. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdIssue']  = 0;
-            $putInto[$account]['resolvedIssue'] = 0;
-            $putInto[$account]['pendingIssue']  = 0;
+            $invest[$account]['createdIssue']  = 0;
+            $invest[$account]['resolvedIssue'] = 0;
+            $invest[$account]['pendingIssue']  = 0;
         }
 
         foreach($issues as $issue)
         {
-            if($issue->createdBy && isset($putInto[$issue->createdBy])) $putInto[$issue->createdBy]['createdIssue'] += 1;
-            if($issue->resolvedBy && isset($putInto[$issue->resolvedBy])) $putInto[$issue->resolvedBy]['resolvedIssue'] += 1;
-            if($issue->assignedTo && in_array($issue->status, array('unconfirmed', 'confirmed', 'active')) && isset($putInto[$issue->assignedTo])) $putInto[$issue->assignedTo]['pendingIssue'] += 1;
+            if($issue->createdBy && isset($invest[$issue->createdBy])) $invest[$issue->createdBy]['createdIssue'] += 1;
+            if($issue->resolvedBy && isset($invest[$issue->resolvedBy])) $invest[$issue->resolvedBy]['resolvedIssue'] += 1;
+            if($issue->assignedTo && in_array($issue->status, array('unconfirmed', 'confirmed', 'active')) && isset($invest[$issue->assignedTo])) $invest[$issue->assignedTo]['pendingIssue'] += 1;
         }
 
-        return $putInto;
+        return $invest;
     }
 
     /**
-     * Get user bug and story input.
+     * Get user bug and story invest.
      *
      * @param  array     $accounts
      * @param  int       $programID
      * @access public
      * @return array
      */
-    public function getBugAndStoryInput($accounts, $programID)
+    public function getBugAndStoryInvest($accounts, $programID)
     {
         $productPairs = $this->loadModel('product')->getPairs('', $programID);
         $productKeys  = array_keys($productPairs);
@@ -212,26 +212,26 @@ class personnelModel extends model
             ->fetchPairs('openedBy');
 
         /* Initialize bugs and requirements related to personnel. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdBug']  = 0;
-            $putInto[$account]['resolvedBug'] = 0;
-            $putInto[$account]['pendingBug']  = 0;
-            $putInto[$account]['UR']          = 0;
-            $putInto[$account]['SR']          = 0;
+            $invest[$account]['createdBug']  = 0;
+            $invest[$account]['resolvedBug'] = 0;
+            $invest[$account]['pendingBug']  = 0;
+            $invest[$account]['UR']          = 0;
+            $invest[$account]['SR']          = 0;
         }
 
-        foreach($requirement as $account => $number) $putInto[$account]['UR'] = $number;
-        foreach($story as $account => $number)       $putInto[$account]['SR'] = $number;
+        foreach($requirement as $account => $number) $invest[$account]['UR'] = $number;
+        foreach($story as $account => $number)       $invest[$account]['SR'] = $number;
 
         foreach($bugs as $bug)
         {
-            if($bug->openedBy && isset($putInto[$bug->openedBy])) $putInto[$bug->openedBy]['createdBug'] += 1;
-            if($bug->resolvedBy && isset($putInto[$bug->resolvedBy])) $putInto[$bug->resolvedBy]['resolvedBug'] += 1;
-            if($bug->assignedTo && $bug->status == 'active' && isset($putInto[$bug->assignedTo])) $putInto[$bug->assignedTo]['pendingBug'] += 1;
+            if($bug->openedBy && isset($invest[$bug->openedBy])) $invest[$bug->openedBy]['createdBug'] += 1;
+            if($bug->resolvedBy && isset($invest[$bug->resolvedBy])) $invest[$bug->resolvedBy]['resolvedBug'] += 1;
+            if($bug->assignedTo && $bug->status == 'active' && isset($invest[$bug->assignedTo])) $invest[$bug->assignedTo]['pendingBug'] += 1;
         }
-        return $putInto;
+        return $invest;
     }
 
     /**
@@ -273,14 +273,14 @@ class personnelModel extends model
     }
 
     /**
-     * Get project task inputs.
+     * Get project task invest.
      *
      * @param  object    $projects
      * @param  array     $accounts
      * @access public
      * @return array
      */
-    public function getProjectTaskInput($projects, $accounts)
+    public function getProjectTaskInvest($projects, $accounts)
     {
         $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,project')->from(TABLE_TASK)
           ->where('project')->in(array_keys($projects))
@@ -288,35 +288,35 @@ class personnelModel extends model
           ->fetchAll('id');
 
         /* Initialize personnel related tasks. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdTask']  = 0;
-            $putInto[$account]['finishedTask'] = 0;
-            $putInto[$account]['pendingTask']  = 0;
-            $putInto[$account]['consumedTask'] = 0;
-            $putInto[$account]['leftTask']     = 0;
+            $invest[$account]['createdTask']  = 0;
+            $invest[$account]['finishedTask'] = 0;
+            $invest[$account]['pendingTask']  = 0;
+            $invest[$account]['consumedTask'] = 0;
+            $invest[$account]['leftTask']     = 0;
         }
 
         /* Number of tasks per person. */
         $userTasks = array();
         foreach($tasks as $task)
         {
-            if($task->openedBy && isset($putInto[$task->openedBy]))
+            if($task->openedBy && isset($invest[$task->openedBy]))
             {
-                $putInto[$task->openedBy]['createdTask'] += 1;
+                $invest[$task->openedBy]['createdTask'] += 1;
                 $userTasks[$task->openedBy][$task->id]    = $task->id;
             }
 
-            if($task->finishedBy && isset($putInto[$task->finishedBy]))
+            if($task->finishedBy && isset($invest[$task->finishedBy]))
             {
-                $putInto[$task->finishedBy]['finishedTask'] += 1;
+                $invest[$task->finishedBy]['finishedTask'] += 1;
                 $userTasks[$task->finishedBy][$task->id]     = $task->id;
             }
 
-            if($task->assignedTo && $task->status == 'wait' && isset($putInto[$task->assignedTo]))
+            if($task->assignedTo && $task->status == 'wait' && isset($invest[$task->assignedTo]))
             {
-                $putInto[$task->assignedTo]['pendingTask'] += 1;
+                $invest[$task->assignedTo]['pendingTask'] += 1;
                 $userTasks[$task->assignedTo][$task->id]    = $task->id;
             }
         }
@@ -334,11 +334,11 @@ class personnelModel extends model
 
         foreach($userHours as $account => $hours)
         {
-            $putInto[$account]['leftTask']     = $hours->left;
-            $putInto[$account]['consumedTask'] = $hours->consumed;
+            $invest[$account]['leftTask']     = $hours->left;
+            $invest[$account]['consumedTask'] = $hours->consumed;
         }
 
-        return $putInto;
+        return $invest;
     }
 
     /**
@@ -409,7 +409,7 @@ class personnelModel extends model
     }
 
     /**
-     * Access to program set input staff.
+     * Access to program set invest staff.
      *
      * @param  int       $objectID
      * @param  string    $objectType  program|project|product|sprint

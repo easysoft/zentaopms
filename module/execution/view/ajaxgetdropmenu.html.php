@@ -21,15 +21,16 @@ $executionsPinYin = common::convert2Pinyin($executionNames);
 
 foreach($executions as $execution)
 {
+    $executionName = zget($projects, $execution->project) . '/' . $execution->name;
     if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
     {
-        $myProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $execution->name, '', "class='text-important' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
+        $myProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='text-important' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
     }
     else if($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account))
     {
-        $normalProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $execution->name, '', "title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
+        $normalProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
     }
-    else if($execution->status == 'done' or $execution->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $execution->name, '', "title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
+    else if($execution->status == 'done' or $execution->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
 }
 ?>
 <div class="table-row">
