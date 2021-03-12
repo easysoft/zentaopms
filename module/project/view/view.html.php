@@ -141,7 +141,7 @@
                 <?php foreach($products as $productID => $product):?>
                 <?php $branchName = isset($branchGroups[$productID][$product->branch]) ? '/' . $branchGroups[$productID][$product->branch] : '';?>
                 <div class="col-xs-6">
-                  <?php echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), "<i class='icon icon-cube text-muted'></i> " . $product->name . $branchName);?>
+                  <?php echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), "<i class='icon icon-product text-muted'></i> " . $product->name . $branchName);?>
                 </div>
                 <?php endforeach;?>
               </div>

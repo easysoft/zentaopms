@@ -48,6 +48,8 @@ class company extends control
      */
     public function browse($browseType = 'inside', $param = 0, $type = 'bydept', $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->lang->navGroup->company = 'admin';
+
         $this->loadModel('search');
         $this->lang->set('menugroup.company', 'company');
 
@@ -147,8 +149,7 @@ class company extends control
      */
     public function view()
     {
-        $this->lang->navGroup->company = 'system';
-        $this->lang->noMenuModule[]    = 'company';
+        $this->lang->noMenuModule[] = 'company';
 
         $this->company->setMenu();
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->view;
@@ -170,8 +171,7 @@ class company extends control
      */
     public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
-        $this->lang->navGroup->company = 'system';
-        $this->lang->noMenuModule[]    = 'company';
+        $this->lang->noMenuModule[] = 'company';
 
         $this->company->setMenu();
         $this->app->loadLang('user');

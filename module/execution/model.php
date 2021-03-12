@@ -115,8 +115,8 @@ class executionModel extends model
         if($methodName == 'all') $label = $this->lang->execution->allExecutions;
         if($methodName == 'create' and $moduleName == 'execution') $label = $this->lang->execution->create;
 
-        $executionIndex = $this->select($executions, $executionID, null, $moduleName, $methodName, $extra);
-        if($this->config->systemMode == 'new') $this->lang->modulePageNav = $executionIndex;
+        //$executionIndex = $this->select($executions, $executionID, null, $moduleName, $methodName, $extra);
+        //if($this->config->systemMode == 'new') $this->lang->modulePageNav = $executionIndex;
 
         foreach($this->lang->execution->menu as $key => $menu)
         {
