@@ -381,9 +381,9 @@ $lang->qa->menu->automation = array('link' => '自动化|automation|browse|produ
 
 $lang->qa->subMenu = new stdclass();
 $lang->qa->subMenu->testcase = new stdclass();
-$lang->qa->subMenu->testcase->feature   = array('link' => '功能测试|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
+$lang->qa->subMenu->testcase->feature   = array('link' => '功能测试|testcase|browse|productID=%s', 'subModule' => 'testcase,tree,story');
 $lang->qa->subMenu->testcase->unit      = array('link' => '单元测试|testtask|browseUnits|productID=%s', 'alias' => 'browseunits');
-$lang->qa->subMenu->testcase->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
+$lang->qa->subMenu->testcase->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'subModule' => 'testsuite');
 $lang->qa->subMenu->testcase->caselib   = array('link' => '用例库|caselib|browse|libID=0');
 
 $lang->qa->subMenu->testtask = new stdclass();
