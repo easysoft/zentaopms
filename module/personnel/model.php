@@ -12,7 +12,7 @@
 class personnelModel extends model
 {
     /**
-     * Access to program set input staff.
+     * Access to program set invest staff.
      *
      * @param  int       $programID
      * @param  int       $deptID
@@ -56,13 +56,13 @@ class personnelModel extends model
     }
 
     /**
-     * Access to program set input staff.
+     * Get invest person list.
      *
-     * @param  int       $programID
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getInputPersonnel($programID = 0)
+    public function getInvest($programID = 0)
     {
         $personnelList = array();
 
@@ -79,14 +79,14 @@ class personnelModel extends model
         if(empty($accountPairs)) return $personnelList;
 
         $executionPairs   = $this->getInvolvedExecutions($projects);
-        $taskInput        = $this->getProjectTaskInput($projects, $accountPairs);
-        $bugAndStoryInput = $this->getBugAndStoryInput($accountPairs, $programID);
+        $taskInvest        = $this->getProjectTaskInvest($projects, $accountPairs);
+        $bugAndStoryInvest = $this->getBugAndStoryInvest($accountPairs, $programID);
         if(isset($this->config->maxVersion))
         {
-            $issueInput       = $this->getIssueInput($accountPairs, $projects);
-            $riskInput        = $this->getRiskInput($accountPairs, $projects);
+            $issueInvest = $this->getIssueInvest($accountPairs, $projects);
+            $riskInvest  = $this->getRiskInvest($accountPairs, $projects);
         }
-        $userPairs        = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
+        $userPairs = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
         foreach($userPairs as $user) $user->role = zget($this->lang->user->roleList, $user->role, $user->role);
 
         foreach($accountPairs as $account => $projects)
@@ -97,12 +97,12 @@ class personnelModel extends model
             $personnelList[$account]['projects']   = $projects;
             $personnelList[$account]['executions'] = zget($executionPairs, $account, 0);
 
-            $personnelList[$account] += $taskInput[$account];
-            $personnelList[$account] += $bugAndStoryInput[$account];
+            $personnelList[$account] += $taskInvest[$account];
+            $personnelList[$account] += $bugAndStoryInvest[$account];
             if(isset($this->config->maxVersion))
             {
-                $personnelList[$account] += $issueInput[$account];
-                $personnelList[$account] += $riskInput[$account];
+                $personnelList[$account] += $issueInvest[$account];
+                $personnelList[$account] += $riskInvest[$account];
             }
         }
 
@@ -110,14 +110,14 @@ class personnelModel extends model
     }
 
     /**
-     * Get user project risk input.
+     * Get user project risk invest.
      *
      * @param  array     $accounts
      * @param  object    $projects
      * @access public
      * @return array
      */
-    public function getRiskInput($accounts, $projects)
+    public function getRiskInvest($accounts, $projects)
     {
         $risks = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_RISK)
             ->where('project')->in(array_keys($projects))
@@ -144,14 +144,14 @@ class personnelModel extends model
     }
 
     /**
-     * Get user project issue input.
+     * Get user project issue invest.
      *
      * @param  array     $accounts
      * @param  object    $projects
      * @access public
      * @return array
      */
-    public function getIssueInput($accounts, $projects)
+    public function getIssueInvest($accounts, $projects)
     {
         $issues = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_ISSUE)
             ->where('project')->in(array_keys($projects))
@@ -178,14 +178,14 @@ class personnelModel extends model
     }
 
     /**
-     * Get user bug and story input.
+     * Get user bug and story invest.
      *
      * @param  array     $accounts
      * @param  int       $programID
      * @access public
      * @return array
      */
-    public function getBugAndStoryInput($accounts, $programID)
+    public function getBugAndStoryInvest($accounts, $programID)
     {
         $productPairs = $this->loadModel('product')->getPairs('', $programID);
         $productKeys  = array_keys($productPairs);
@@ -273,14 +273,14 @@ class personnelModel extends model
     }
 
     /**
-     * Get project task inputs.
+     * Get project task invest.
      *
      * @param  object    $projects
      * @param  array     $accounts
      * @access public
      * @return array
      */
-    public function getProjectTaskInput($projects, $accounts)
+    public function getProjectTaskInvest($projects, $accounts)
     {
         $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,project')->from(TABLE_TASK)
           ->where('project')->in(array_keys($projects))
@@ -409,7 +409,7 @@ class personnelModel extends model
     }
 
     /**
-     * Access to program set input staff.
+     * Access to program set invest staff.
      *
      * @param  int       $objectID
      * @param  string    $objectType  program|project|product|sprint
