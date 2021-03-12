@@ -177,12 +177,12 @@ $lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
 $lang->program->viewMenu = new stdclass();
 $lang->program->viewMenu->product     = array('link' => '产品|program|product|program=%s', 'alias' => 'view');
 $lang->program->viewMenu->project     = array('link' => "项目|program|project|program=%s");
-$lang->program->viewMenu->personnel   = array('link' => "人员|personnel|putinto|program=%s");
+$lang->program->viewMenu->personnel   = array('link' => "人员|personnel|invest|program=%s");
 $lang->program->viewMenu->stakeholder = array('link' => "干系人|program|stakeholder|program=%s", 'alias' => 'createstakeholder');
 
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
-$lang->personnel->menu->putinto    = array('link' => "投入人员|personnel|putinto|program=%s");
+$lang->personnel->menu->invest    = array('link' => "投入人员|personnel|invest|program=%s");
 $lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|program=%s");
 $lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|program=%s", 'alias' => 'addwhitelist');
 
@@ -381,9 +381,9 @@ $lang->qa->menu->automation = array('link' => '自动化|automation|browse|produ
 
 $lang->qa->subMenu = new stdclass();
 $lang->qa->subMenu->testcase = new stdclass();
-$lang->qa->subMenu->testcase->feature   = array('link' => '功能测试|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
+$lang->qa->subMenu->testcase->feature   = array('link' => '功能测试|testcase|browse|productID=%s', 'subModule' => 'testcase,tree,story');
 $lang->qa->subMenu->testcase->unit      = array('link' => '单元测试|testtask|browseUnits|productID=%s', 'alias' => 'browseunits');
-$lang->qa->subMenu->testcase->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
+$lang->qa->subMenu->testcase->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'subModule' => 'testsuite');
 $lang->qa->subMenu->testcase->caselib   = array('link' => '用例库|caselib|browse|libID=0');
 
 $lang->qa->subMenu->testtask = new stdclass();

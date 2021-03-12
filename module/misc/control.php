@@ -67,10 +67,10 @@ class misc extends control
     {
         session_write_close();
 
-        $website = $this->lang->misc->api;
+        $website = $this->config->misc->api;
 
-        if(isset($this->config->qcVersion)) $website = $this->lang->misc->qucheng;
-        if(isset($this->config->isINT))     $website = $this->lang->misc->enApi;
+        if(isset($this->config->qcVersion)) $website = $this->config->misc->qucheng;
+        if(isset($this->config->isINT))     $website = $this->config->misc->enApi;
 
         $source = isset($this->config->qcVersion) ? 'qucheng' : 'zentao';
         $lang   = str_replace('-', '_', $this->app->getClientLang());

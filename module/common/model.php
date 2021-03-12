@@ -774,7 +774,7 @@ class commonModel extends model
         if($moduleName == 'admin') return;
         if($group == 'repo' || $group == 'ops' || $group == 'feedback') return;
         if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
-        if($group == 'project') self::getProgramModuleMenu($moduleName, $methodName);
+        if($group == 'project') self::getProjectModuleMenu($moduleName, $methodName);
         if($group == 'product')
         {
             $lang->product->menu = $lang->product->setMenu;
@@ -2455,7 +2455,7 @@ EOD;
     }
 
     /**
-     * Get program module menu by model.
+     * Get project module menu by model.
      *
      * @param  varchar $moduleName
      * @param  varchar $methodName
@@ -2463,7 +2463,7 @@ EOD;
      * @access public
      * @return string
      */
-    public static function getProgramModuleMenu($moduleName, $methodName)
+    public static function getProjectModuleMenu($moduleName, $methodName)
     {
         global $app, $lang, $dbh;
         $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();

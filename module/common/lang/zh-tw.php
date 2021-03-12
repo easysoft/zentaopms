@@ -186,7 +186,7 @@ $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
 $lang->personnel->menu->accessible = array('link' => "可訪問人員|personnel|accessible|program=%s");
 $lang->personnel->menu->whitelist  = array('link' => "白名單|personnel|whitelist|program=%s", 'alias' => 'addwhitelist');
-$lang->personnel->menu->putinto    = array('link' => "投入人員|personnel|putinto|program=%s");
+$lang->personnel->menu->invest    = array('link' => "投入人員|personnel|invest|program=%s");
 
 /* Scrum menu. */
 $lang->product = new stdclass();

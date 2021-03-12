@@ -203,11 +203,11 @@
       <div id='copyProjects' class='row'>
       <?php foreach ($executions as $id => $name):?>
       <?php if(empty($id)):?>
-      <?php if($copyProjectID != 0):?>
+      <?php if($copyExecutionID != 0):?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->execution->cancelCopy;?></a></div>
       <?php endif;?>
       <?php else: ?>
-      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyProjectID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons[$iconObject], 'text-muted') . ' ' . $name;?></a></div>
+      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyExecutionID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons[$iconObject], 'text-muted') . ' ' . $name;?></a></div>
       <?php endif; ?>
       <?php endforeach;?>
       </div>

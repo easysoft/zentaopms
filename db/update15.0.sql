@@ -132,7 +132,7 @@ ALTER TABLE `zt_task` ADD `realDuration` int(11) NOT NULL AFTER `closedDate`;
 ALTER TABLE `zt_task` ADD `designVersion` smallint(6) unsigned NOT NULL AFTER `storyVersion`;
 
 ALTER TABLE `zt_burn` ADD `storyPoint` float NOT NULL AFTER `consumed`;
-ALTER TABLE `zt_burn` ADD `product` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `project`;
+ALTER TABLE `zt_burn` ADD `product` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `execution`;
 
 -- DROP TABLE IF EXISTS `zt_taskspec`;
 CREATE TABLE IF NOT EXISTS `zt_taskspec` (

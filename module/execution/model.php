@@ -3488,10 +3488,10 @@ class executionModel extends model
      */
     public function getRecentExecutions()
     {
-        $isView = (empty($this->app->user->view->sprints) || empty($this->app->user->view->executions)) ? false : true;
+        $isView = (empty($this->app->user->view->sprints) || empty($this->app->user->view->projects)) ? false : true;
         if(!$this->app->user->admin && $isView === false) return array();
 
-        $executions = $this->dao->select('t1.id,t1.execution,t1.code,t1.name,t1.type')->from(TABLE_EXECUTION)->alias('t1')
+        $executions = $this->dao->select('t1.id,t1.project,t1.code,t1.name,t1.type')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
             ->where('t1.type')->in('stage,sprint')
             ->andWhere('t2.account')->eq($this->app->user->account)
@@ -3499,37 +3499,37 @@ class executionModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.status')->ne('closed')
             ->andWhere('t1.deleted')->eq('0')
-            ->orderBy('execution_desc, id_desc')
+            ->orderBy('project_desc, id_desc')
             ->fetchAll();
 
-        /* Get the execution or product to which the execution belongs. */
-        $executionIdList = array();
+        /* Get the project or product to which the execution belongs. */
+        $projectIdList = array();
         $stageIdList   = array();
         foreach($executions as $execution)
         {
             if($execution->type == 'stage') $stageIdList[$execution->id] = $execution->id;
-            $executionIdList[$execution->execution] = $execution->execution;
+            $projectIdList[$execution->project] = $execution->project;
         }
-        $executionPairs = $this->loadModel('execution')->getPairsByIdList($executionIdList);
+        $projectPairs = $this->loadModel('project')->getPairsByIdList($projectIdList);
         $productPairs = $this->getStageLinkProductPairs($stageIdList);
 
         $recentExecutions = isset($this->config->execution->recentExecutions) ? explode(',', $this->config->execution->recentExecutions) : array();
-        $allExecutions    = array('recent' => array(), 'mine' => array());
+        $allExecution     = array('recent' => array(), 'mine' => array());
         foreach($executions as $execution)
         {
-            if($execution->type == 'stage')  $execution->name = zget($executionPairs, $execution->execution) . '/' . zget($productPairs, $execution->id) . '/' . $execution->name;
-            if($execution->type == 'sprint') $execution->name = zget($executionPairs, $execution->execution) . '/' . $execution->name;
+            if($execution->type == 'stage')  $execution->name = zget($projectPairs, $execution->project) . '/' . zget($productPairs, $execution->id) . '/' . $execution->name;
+            if($execution->type == 'sprint') $execution->name = zget($projectPairs, $execution->project) . '/' . $execution->name;
             if(in_array($execution->id, $recentExecutions))
             {
                 $index = array_search($execution->id, $recentExecutions);
-                $allExecutions['recent'][$index] = $execution;
+                $allExecution['recent'][$index] = $execution;
                 continue;
             }
-            $allExecutions['mine'][] = $execution;
+            $allExecution['mine'][] = $execution;
         }
 
-        ksort($allExecutions['recent']);
-        return $allExecutions;
+        ksort($allExecution['recent']);
+        return $allExecution;
     }
 
     /**

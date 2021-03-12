@@ -518,7 +518,7 @@ function getExecutions()
 
         $.ajax(
         {
-            url: createLink('project', 'ajaxGetRecentExecutions'),
+            url: createLink('execution', 'ajaxGetRecentExecutions'),
             dataType: 'html',
             type: 'post',
             success: function(data)

@@ -199,6 +199,7 @@ class upgrade extends control
         $this->app->loadLang('program');
         $this->app->loadLang('project');
         $this->app->loadLang('product');
+        $this->app->loadConfig('execution');
 
         if($_POST)
         {
