@@ -922,6 +922,12 @@ class execution extends control
         $this->showModuleMenu();
         $this->commonAction($executionID);
 
+        $products  = $this->execution->getProducts($executionID, false);
+        if(empty($products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
+
+        $productID = $this->loadModel('product')->saveState($productID, $products);
+        $this->product->setMenu($products, $productID);
+
         $this->view->title       = $this->lang->execution->testcase;
         $this->view->executionID = $executionID;
         $this->view->productID   = $productID;
