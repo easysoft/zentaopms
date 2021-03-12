@@ -2526,7 +2526,7 @@ class execution extends control
                 $executionsPinYin = common::convert2Pinyin($executionsName);
                 foreach($executions as $execution)
                 {
-                    $link = helper::createLink('execution', 'task', 'executionID=' . $execution->id, '', false, $execution->execution);
+                    $link = helper::createLink('execution', 'task', 'executionID=' . $execution->id, '', false, $execution->project);
                     $execution->code = empty($execution->code) ? $execution->name : $execution->code;
                     $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
                     $class   = "class='search-list-item $color' title='$execution->name' $dataKey";
