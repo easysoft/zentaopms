@@ -102,8 +102,10 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0, $module = 0, $moduleType = '')
     {
+        $isProjectBug = isset($products[0]) ? true : false;
+
         $this->app->loadLang('product');
-        if(!$productID)
+        if(!$isProjectBug and !$productID)
         {
             unset($this->lang->product->setMenu->branch);
             return;
@@ -111,13 +113,19 @@ class productModel extends model
         $isMobile = $this->app->viewType == 'mhtml';
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        $currentProduct = $this->getById($productID);
+        if($productID) $currentProduct = $this->getById($productID);
+        if($isProjectBug and !$productID)
+        {
+            $currentProduct = new stdclass();
+            $currentProduct->name = $products[$productID];
+            $currentProduct->type = 'normal';
+        }
         $this->session->set('currentProductType', $currentProduct->type);
 
         $output = '';
         if(!empty($products))
         {
-            $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+            $dropMenuLink = helper::createLink($isProjectBug ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
             $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";

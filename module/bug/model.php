@@ -28,6 +28,7 @@ class bugModel extends model
     public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $browseType = 'unclosed', $orderBy = '')
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'bug');
+        if($this->lang->navGroup->testcase == 'project' and $this->app->methodName == 'browse') $products = array(0 => $this->lang->bug->allProduct) + $products;
         $selectHtml = $this->product->select($products, $productID, 'bug', 'browse', '', $branch, $moduleID, 'bug');
 
         $pageNav     = '';

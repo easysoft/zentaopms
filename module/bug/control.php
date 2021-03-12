@@ -1768,4 +1768,36 @@ class bug extends control
 
         die(json_encode(array('modules' => $modules, 'categories' => $type, 'versions' => $builds, 'severities' => $severity, 'priorities' => $pri)));
     }
+
+    /**
+     * Drop menu page.
+     *
+     * @param  int    $productID
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu($productID, $module, $method, $extra = '', $from = '')
+    {
+        if($from == 'qa')
+        {
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
+        }
+
+        $products = $this->product->getProducts($this->session->PRJ, $this->config->CRProduct ? 'all' : 'noclosed', 'program desc, line desc, ');
+
+        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
+        $this->view->productID = $productID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+        $this->view->products  = $products;
+        $this->view->projectID = $this->session->PRJ;
+        $this->view->programs  = $this->loadModel('program')->getPairs(true);
+        $this->view->lines     = $this->product->getLinePairs();
+        $this->display();
+    }
 }
