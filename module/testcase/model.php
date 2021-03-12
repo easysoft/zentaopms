@@ -659,6 +659,40 @@ class testcaseModel extends model
             $titleChanged = ($case->title != $oldCase->title);
             if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
 
+            /* The case is linked the project. */
+            if($oldCase->project != 0)
+            {
+                $productChanged = ($oldCase->product != $case->product);
+                $storyChanged   = ($oldCase->story != $case->story);
+
+                if($productChanged)
+                {
+                    $this->dao->update(TABLE_PROJECTCASE)
+                        ->set('product')->eq($case->product)
+                        ->set('version')->eq($case->version)
+                        ->where('project')->eq($oldCase->project)
+                        ->andWhere('`case`')->eq($oldCase->id)
+                        ->exec();
+                }
+
+                /* If the related story is changed and the new related story isn't linked the project, unlink the case. */
+                if($storyChanged)
+                {
+                    $projectStory = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
+                        ->where('project')->eq($oldCase->project)
+                        ->andWhere('story')->eq($case->story)
+                        ->fetchAll();
+                    if(!$projectStory)
+                    {
+                        $this->dao->delete()->from(TABLE_PROJECTCASE)
+                            ->where('project')->eq($oldCase->project)
+                            ->andWhere('`case`')->eq($oldCase->id)
+                            ->exec();
+                    }
+
+                }
+            }
+
             if($stepChanged)
             {
                 $parentStepID = 0;
@@ -1305,7 +1339,7 @@ class testcaseModel extends model
         {
             $case->fromCaseID      = $case->id;
             $case->fromCaseVersion = $case->version;
-            $case->product    = $productID;
+            $case->product         = $productID;
             if(isset($data->module[$case->id])) $case->module = $data->module[$case->id];
             if(isset($data->branch[$case->id])) $case->branch = $data->branch[$case->id];
             unset($case->id);
@@ -1323,6 +1357,20 @@ class testcaseModel extends model
                         unset($step->id);
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
                     }
+                }
+
+                /* If under the project module, the cases is imported need linking to the project. */
+                if($this->lang->navGroup->testcase != 'qa')
+                {
+                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($this->session->PRJ)->orderBy('order_desc')->limit(1)->fetch('order');
+
+                    $this->dao->insert(TABLE_PROJECTCASE)
+                        ->set('project')->eq($case->project)
+                        ->set('product')->eq($case->product)
+                        ->set('case')->eq($caseID)
+                        ->set('version')->eq($case->version)
+                        ->set('order')->eq(++ $lastOrder)
+                        ->exec();
                 }
 
                 /* Fix bug #1518. */
