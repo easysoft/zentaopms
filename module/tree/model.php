@@ -193,8 +193,12 @@ class treeModel extends model
         {
             /* When case with libIdList then append lib modules. */
             $modules = array();
-            if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
-            $modules += $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('deleted')->eq(0)->fetchAll('id');
+            if($this->isMergeModule($rootID, $viewType) or !$rootID) $viewType .= ',story';
+            $modules += $this->dao->select('id,name,path,short')->from(TABLE_MODULE)
+                ->where('type')->in($viewType)
+                ->beginIF($rootID)->andWhere('root')->eq($rootID)->fi()
+                ->andWhere('deleted')->eq(0)
+                ->fetchAll('id');
         }
 
         $modulePairs = array();
@@ -659,7 +663,7 @@ class treeModel extends model
             foreach($branchGroups[$id] as $branch => $branchName)
             {
                 $treeMenu = array();
-                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'bug' and parent != 0) OR (root = $id and type = 'story' and branch ='$branch'))")
+                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $id and type = 'bug') OR (root = $id and type = 'story' and branch ='$branch'))")
                     ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, `order`, type')
