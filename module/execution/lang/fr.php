@@ -42,7 +42,6 @@ $lang->execution->PO             = "Propriétaire {$lang->executionCommon}";
 $lang->execution->PM             = "Directeur {$lang->executionCommon}";
 $lang->execution->QD             = 'Quality Manager';
 $lang->execution->RD             = 'Release Manager';
-$lang->execution->qa             = 'QA';
 $lang->execution->release        = 'Release';
 $lang->execution->acl            = "Contrôle d'accès";
 $lang->execution->teamname       = "Nom de l'équipe";

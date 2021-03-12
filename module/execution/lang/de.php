@@ -43,7 +43,6 @@ $lang->execution->PO             = 'PO';
 $lang->execution->PM             = 'PM';
 $lang->execution->QD             = 'QS Manager';
 $lang->execution->RD             = 'Release Manager';
-$lang->execution->qa             = 'Test';
 $lang->execution->release        = 'Release';
 $lang->execution->acl            = 'Zugriffskontrolle';
 $lang->execution->teamname       = 'Team Name';

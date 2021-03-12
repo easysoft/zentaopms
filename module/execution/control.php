@@ -59,6 +59,7 @@ class execution extends control
      */
     public function index($locate = 'auto', $executionID = 0)
     {
+        $this->lang->execution->menu = $this->lang->execution->homeMenu;
         if($locate == 'yes') $this->locate($this->createLink('execution', 'task'));
 
         $this->commonAction($executionID);
@@ -265,9 +266,7 @@ class execution extends control
      */
     public function grouptask($executionID = 0, $groupBy = 'story', $filter = '')
     {
-        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
+        $this->showModuleMenu();
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -820,6 +819,21 @@ class execution extends control
     }
 
     /**
+     * Exectuion qa dashboard. 
+     * 
+     * @param  int $executionID
+     * @access public
+     * @return void
+     */
+    public function qa($executionID = 0)
+    {
+        $this->showModuleMenu();
+        $this->commonAction($executionID);
+        $this->view->title = $this->lang->execution->qa;
+        $this->display();
+    }
+
+    /**
      * Browse bugs of a execution.
      *
      * @param  int    $executionID
@@ -835,6 +849,8 @@ class execution extends control
      */
     public function bug($executionID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->showModuleMenu();
+
         /* Load these two models. */
         $this->loadModel('bug');
         $this->loadModel('user');
@@ -890,6 +906,27 @@ class execution extends control
         $this->view->type        = $type;
         $this->view->param       = $param;
 
+        $this->display();
+    }
+
+    /**
+     * Execution case list. 
+     * 
+     * @param  int    $executionID 
+     * @access public
+     * @return void
+     */
+    public function testcase($executionID = 0, $type = 'all', $param = 0, $productID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('testcase');
+        $this->showModuleMenu();
+        $this->commonAction($executionID);
+
+        $this->view->title       = $this->lang->execution->testcase;
+        $this->view->executionID = $executionID;
+        $this->view->productID   = $productID;
+        $this->view->execution   = $this->execution->getByID($executionID);
+        
         $this->display();
     }
 
@@ -967,6 +1004,8 @@ class execution extends control
      */
     public function testtask($executionID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->showModuleMenu();
+
         $this->loadModel('testtask');
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
@@ -1260,6 +1299,8 @@ class execution extends control
      */
     public function edit($executionID, $action = 'edit', $extra = '')
     {
+        $this->showModuleMenu();
+
         /* Load language files and get browseExecutionLink. */
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
@@ -1652,8 +1693,7 @@ class execution extends control
      */
     public function view($executionID)
     {
-        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        $this->showModuleMenu();
 
         $execution = $this->execution->getById($executionID, true);
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
@@ -1768,8 +1808,7 @@ class execution extends control
      */
     public function tree($executionID, $type = 'task')
     {
-        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        $this->showModuleMenu();
 
         $this->execution->setMenu($this->executions, $executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
@@ -2088,6 +2127,8 @@ class execution extends control
      */
     public function manageMembers($executionID = 0, $team2Import = 0, $dept = 0)
     {
+        $this->showModuleMenu();
+
         if(!empty($_POST))
         {
             $this->execution->manageMembers($executionID);
@@ -2597,6 +2638,8 @@ class execution extends control
      */
     public function all($status = 'all', $projectID = 0, $from = 'execution', $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
+        $this->lang->execution->menu = $this->lang->execution->homeMenu;
+
         $this->app->loadLang('my');
         $this->app->loadLang('product');
         $this->app->loadLang('programplan');
@@ -2662,6 +2705,8 @@ class execution extends control
      */
     public function addWhitelist($executionID = 0, $deptID = 0)
     {
+        $this->showModuleMenu();
+
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
@@ -2934,5 +2979,17 @@ class execution extends control
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
+    }
+
+    /**
+     * Show module menu for some module. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function showModuleMenu()
+    {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
     }
 }

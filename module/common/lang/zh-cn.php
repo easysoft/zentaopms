@@ -335,25 +335,32 @@ $lang->story->menu = $lang->product->menu;
 
 /* 执行视图菜单设置。*/
 $lang->execution = new stdclass();
+$lang->execution->homeMenu = new stdclass();
+$lang->execution->homeMenu->index = '仪表盘|execution|index|';
+$lang->execution->homeMenu->list  = '执行|execution|all|';
+
 $lang->execution->menu = new stdclass();
-$lang->execution->menu->index = '仪表盘|execution|index|';
-$lang->execution->menu->list  = '执行|execution|all|';
+$lang->execution->menu->task     = array('link' => '任务|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
+$lang->execution->menu->kanban   = array('link' => '看板|execution|kanban|executionID=%s');
+$lang->execution->menu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
+$lang->execution->menu->view     = array('link' => '视图|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
+$lang->execution->menu->story    = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
+$lang->execution->menu->qa       = array('link' => '测试|execution|qa|', 'alias' => 'qa,bug,testcase,testtask,testreport');
+$lang->execution->menu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
+$lang->execution->menu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
+$lang->execution->menu->action   = array('link' => '动态|execution|dynamic|executionID=%s');
+$lang->execution->menu->setting  = array('link' => '设置|execution|view|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
 
 $lang->execution->viewMenu = new stdclass();
-$lang->execution->viewMenu->task     = array('link' => '任务|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
-$lang->execution->viewMenu->kanban   = array('link' => '看板|execution|kanban|executionID=%s');
-$lang->execution->viewMenu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
-$lang->execution->viewMenu->view     = array('link' => '视图|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
-$lang->execution->viewMenu->story    = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->execution->viewMenu->qa       = array('link' => '测试|qa|index|');
-$lang->execution->viewMenu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
-$lang->execution->viewMenu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->viewMenu->action   = array('link' => '动态|execution|dynamic|executionID=%s');
-$lang->execution->viewMenu->setting  = array('link' => '设置|execution|view|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->execution->viewMenu->groupTask = '分组视图|execution|grouptask|executionID=%s';
+$lang->execution->viewMenu->tree      = '树状图|execution|tree|executionID=%s';
 
-$lang->execution->groupMenu = new stdclass();
-$lang->execution->groupMenu->groupTask = '分组视图|execution|grouptask|executionID={EXECUTION}';
-$lang->execution->groupMenu->tree      = '树状图|execution|tree|executionID={EXECUTION}';
+$lang->execution->qaMenu = new stdclass();
+$lang->execution->qaMenu->qa         = array('link' => '仪表盘|execution|qa|executionID=%s');
+$lang->execution->qaMenu->bug        = array('link' => 'Bug|execution|bug|executionID=%s');
+$lang->execution->qaMenu->testcase   = array('link' => '用例|execution|testcase|executionID=%s');
+$lang->execution->qaMenu->testtask   = array('link' => '测试单|execution|testtask|executionID=%s');
+$lang->execution->qaMenu->testreport = array('link' => '报告|execution|testreport|exeutionID=%s');
 
 $lang->execution->settingMenu = new stdclass();
 $lang->execution->settingMenu = new stdclass();
@@ -895,12 +902,24 @@ $lang->menu->scrum->index          = '仪表盘|project|index|project={PROJECT}'
 $lang->menu->scrum->execution      = "$lang->executionCommon|execution|all|status=all&projectID={PROJECT}&from=project";
 $lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = '文档|doc|index|';
-$lang->menu->scrum->qa             = '测试|qa|index';
+$lang->menu->scrum->qa             = array('link' => '测试|qa|index', 'subModule' => 'testcase,testtask');
 $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => '发布|projectrelease|browse|project={PROJECT}');
 $lang->menu->scrum->dynamic        = array('link' => '动态|project|dynamic|project={PROJECT}');
 $lang->menu->scrum->projectsetting = array('link' => '设置|project|view|project={PROJECT}', 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
+
+$lang->projectQa = new stdclass();
+$lang->projectQa->menu = new stdclass();
+$lang->projectQa->menu->index      = array('link' => '仪表盘|qa|index');
+$lang->projectQa->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s', 'subModule' => 'bug');
+$lang->projectQa->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'subModule' => 'testsuite,testcase,caselib');
+$lang->projectQa->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testtask', 'class' => 'dropdown dropdown-hover');
+
+$lang->projectQa->subMenu = new stdclass();
+$lang->projectQa->subMenu->testtask = new stdclass();
+$lang->projectQa->subMenu->testtask->testtask = array('link' => '测试单|testtask|browse|productID=%s');
+$lang->projectQa->subMenu->testtask->report   = array('link' => '报告|testreport|browse|productID=%s');
 
 $lang->scrum = new stdclass();
 $lang->scrum->setMenu = new stdclass();

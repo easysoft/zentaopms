@@ -43,7 +43,6 @@ $lang->execution->PO             = "{$lang->executionCommon} Owner";
 $lang->execution->PM             = "{$lang->executionCommon} Manager";
 $lang->execution->QD             = 'Test Manager';
 $lang->execution->RD             = 'Release Manager';
-$lang->execution->qa             = 'Test';
 $lang->execution->release        = 'Release';
 $lang->execution->acl            = 'Access Control';
 $lang->execution->teamname       = 'Team Name';
