@@ -472,8 +472,13 @@ class bug extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
-        $productList = $this->product->getOrderedProducts('all', 40, $this->projectID);
-        foreach($productList as $product) $products[$product->id] = $product->name;
+        $products = $this->products;
+        if($projectID)
+        {
+            $products    = array();
+            $productList = $this->product->getOrderedProducts('all', 40, $projectID);
+            foreach($productList as $product) $products[$product->id] = $product->name;
+        }
 
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
