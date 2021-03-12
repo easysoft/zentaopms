@@ -468,10 +468,10 @@ class project extends control
                     $this->action->logHistory($actionID, $changes);
                 }
             }
-            die(js::locate($this->session->PRJList, 'parent'));
+            die(js::locate($this->session->projectList, 'parent'));
         }
 
-        $projectIdList = $this->post->projectIdList ? $this->post->projectIdList : die(js::locate($this->session->PRJList, 'parent'));
+        $projectIdList = $this->post->projectIdList ? $this->post->projectIdList : die(js::locate($this->session->projectList, 'parent'));
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
         foreach($projects as $project) $appendPMUsers[$project->PM] = $project->PM;
@@ -480,7 +480,7 @@ class project extends control
         $this->view->position[] = $this->lang->project->batchEdit;
 
         $this->view->projects      = $projects;
-        $this->view->projectList   = $this->project->getParentPairs();
+        $this->view->programList   = $this->program->getParentPairs();
         $this->view->PMUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $appendPMUsers);
 
         $this->display();

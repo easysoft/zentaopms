@@ -948,9 +948,9 @@ class projectModel extends model
 
         foreach($data->projectIdList as $projectID)
         {
-            $projectName   = $data->names[$projectID];
+            $projectID   = (int)$projectID;
+            $projectName = $data->names[$projectID];
 
-            $projectID = (int)$projectID;
             $projects[$projectID] = new stdClass();
             $projects[$projectID]->name           = $projectName;
             $projects[$projectID]->parent         = $data->parents[$projectID];
