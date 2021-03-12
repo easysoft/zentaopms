@@ -103,6 +103,7 @@ class caselibModel extends model
         {
             if($this->config->global->flow == 'full' and $this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('caselib', $key, $libID);
             $replace = $libID;
+            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
             common::setMenuVars($this->lang->caselib->menu, $key, $replace);
         }
 

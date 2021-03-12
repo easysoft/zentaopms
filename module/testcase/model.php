@@ -45,7 +45,10 @@ class testcaseModel extends model
         foreach($this->lang->testcase->menu as $key => $menu)
         {
             if($this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
-            common::setMenuVars($this->lang->testcase->menu, $key, $productID);
+
+            $replace = $productID;
+            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
+            common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
 
         if($this->lang->navGroup->testcase == 'qa')
