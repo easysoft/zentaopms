@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->automation->common = '自动化测试';
-$lang->automation->index  = '首页';
+$lang->automation->browse = '首页';
 
 $lang->automation->description = '自动化测试解决方案';
 $lang->automation->ztf         = 'ZTF自动化测试管理框架';

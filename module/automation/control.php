@@ -64,7 +64,7 @@ class automation extends control
         $this->automation->setMenu($this->products, $productID, $branch);
 
         $this->view->title      = $this->lang->automation->common;
-        $this->view->position[] = $this->lang->automation->index;
+        $this->view->position[] = $this->lang->automation->browse;
         $this->display();
     }
 }

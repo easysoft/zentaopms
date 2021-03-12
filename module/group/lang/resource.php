@@ -34,33 +34,34 @@ $lang->moduleOrder[80]  = 'testcase';
 $lang->moduleOrder[85]  = 'testtask';
 $lang->moduleOrder[90]  = 'testsuite';
 $lang->moduleOrder[95]  = 'testreport';
-$lang->moduleOrder[100]  = 'caselib';
+$lang->moduleOrder[100] = 'caselib';
+$lang->moduleOrder[105] = 'automation';
 
-$lang->moduleOrder[105]  = 'doc';
-$lang->moduleOrder[110]  = 'report';
+$lang->moduleOrder[110] = 'doc';
+$lang->moduleOrder[115] = 'report';
 
-$lang->moduleOrder[115] = 'company';
-$lang->moduleOrder[120] = 'dept';
-$lang->moduleOrder[125] = 'group';
-$lang->moduleOrder[130] = 'user';
+$lang->moduleOrder[120] = 'company';
+$lang->moduleOrder[125] = 'dept';
+$lang->moduleOrder[130] = 'group';
+$lang->moduleOrder[135] = 'user';
 
-$lang->moduleOrder[135] = 'admin';
-$lang->moduleOrder[140] = 'extension';
-$lang->moduleOrder[145] = 'custom';
-$lang->moduleOrder[150] = 'action';
+$lang->moduleOrder[140] = 'admin';
+$lang->moduleOrder[145] = 'extension';
+$lang->moduleOrder[150] = 'custom';
+$lang->moduleOrder[155] = 'action';
 
-$lang->moduleOrder[155] = 'mail';
-$lang->moduleOrder[160] = 'svn';
-$lang->moduleOrder[165] = 'git';
-$lang->moduleOrder[170] = 'search';
-$lang->moduleOrder[175] = 'tree';
-$lang->moduleOrder[180] = 'api';
-$lang->moduleOrder[185] = 'file';
-$lang->moduleOrder[190] = 'misc';
-$lang->moduleOrder[195] = 'backup';
-$lang->moduleOrder[200] = 'cron';
-$lang->moduleOrder[205] = 'dev';
-$lang->moduleOrder[210] = 'message';
+$lang->moduleOrder[160] = 'mail';
+$lang->moduleOrder[165] = 'svn';
+$lang->moduleOrder[170] = 'git';
+$lang->moduleOrder[175] = 'search';
+$lang->moduleOrder[180] = 'tree';
+$lang->moduleOrder[185] = 'api';
+$lang->moduleOrder[190] = 'file';
+$lang->moduleOrder[195] = 'misc';
+$lang->moduleOrder[200] = 'backup';
+$lang->moduleOrder[205] = 'cron';
+$lang->moduleOrder[210] = 'dev';
+$lang->moduleOrder[215] = 'message';
 
 $lang->resource = new stdclass();
 
@@ -925,6 +926,11 @@ $lang->caselib->methodOrder[35] = 'batchCreateCase';
 $lang->caselib->methodOrder[40] = 'exportTemplet';
 $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
+
+$lang->resource->automation = new stdclass();
+$lang->resource->automation->browse = 'browse';
+
+$lang->automation->methodOrder[0] = 'browse';
 
 $lang->resource->repo                 = new stdclass();
 $lang->resource->repo->browse         = 'browse';
