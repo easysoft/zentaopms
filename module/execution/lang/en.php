@@ -195,6 +195,7 @@ $lang->execution->importTask        = 'Transfer Task';
 $lang->execution->importPlanStories = 'Link Stories By Plan';
 $lang->execution->importBug         = 'Import Bug';
 $lang->execution->updateOrder       = "Rank {$lang->executionCommon}";
+$lang->execution->execUpdateOrder   = "Rank execution";
 $lang->execution->tree              = 'Tree';
 $lang->execution->treeTask          = 'Show Task Only';
 $lang->execution->treeStory         = 'Show Story Only';

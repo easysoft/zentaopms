@@ -181,7 +181,7 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->execution->batchEdit, '', 'btn');?></div>
       <?php endif;?>
-      <?php if(!$canOrder and common::hasPriv('execution', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&from=$from&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->execution->updateOrder, '', "class='btn'");?>
+      <?php if(!$canOrder and common::hasPriv('execution', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&from=$from&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $from == 'execution' ? $lang->execution->execUpdateOrder : $lang->execution->updateOrder, '', "class='btn'");?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

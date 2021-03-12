@@ -200,6 +200,7 @@ $lang->execution->importTask        = '转入任务';
 $lang->execution->importPlanStories = "按计划关联{$lang->SRCommon}";
 $lang->execution->importBug         = '导入Bug';
 $lang->execution->updateOrder       = "{$lang->executionCommon}排序";
+$lang->execution->execUpdateOrder   = "执行排序";
 $lang->execution->tree              = '树状图';
 $lang->execution->treeTask          = '只看任务';
 $lang->execution->treeStory         = "只看{$lang->SRCommon}";
