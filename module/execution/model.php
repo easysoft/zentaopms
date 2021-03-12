@@ -326,9 +326,15 @@ class executionModel extends model
     {
         $this->lang->execution->team = $this->lang->execution->teamname;
 
+        if(empty($_POST['project']))
+        {
+            dao::$errors['message'][] = $this->lang->execution->projectNotEmpty;
+            return false;
+        }
+
         /* Determine whether to add a sprint or a stage according to the model of the execution. */
-        $execution  = $this->getByID($this->session->PRJ);
-        $sprintType = $this->config->systemMode == 'new' ? zget($this->config->execution->modelList, $execution->model, '') : 'sprint';
+        $project    = $this->getByID($_POST['project']);
+        $sprintType = $this->config->systemMode == 'new' ? zget($this->config->execution->modelList, $project->model, '') : 'sprint';
 
         /* If the execution model is a stage, determine whether the product is linked. */
         if($sprintType == 'stage' and empty($this->post->products[0]))
@@ -346,8 +352,7 @@ class executionModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('team', substr($this->post->name,0, 30))
-            ->setIF($this->config->systemMode == 'new', 'project', $this->session->PRJ)
-            ->setIF($this->config->systemMode == 'new', 'parent', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new', 'parent', $this->post->project)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->add('type', $sprintType)
@@ -387,7 +392,7 @@ class executionModel extends model
             $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
 
             /* Update the path. */
-            if(isset($this->config->maxVersion)) $this->loadModel('programplan')->setTreePath($executionID);
+            $this->setTreePath($executionID);
 
             /* Copy team of execution. */
             if($copyExecutionID != '')
@@ -419,7 +424,7 @@ class executionModel extends model
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
-                $this->addExecutionMembers($this->session->PRJ, array($member));
+                $this->addExecutionMembers($sprint->project, array($member));
             }
 
             /* Create doc lib. */
@@ -3546,5 +3551,30 @@ class executionModel extends model
             ->where('t1.project')->in($stageIdList)
             ->fetchPairs('project', 'name');
         return $productpairs;
+    }
+
+    /**
+     ** Set stage tree path.
+     **
+     ** @param  int    $executionID
+     ** @access public
+     ** @return bool
+     **/
+    public function setTreePath($executionID)
+    {
+        $execution = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+        $parent    = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($execution->parent)->fetch();
+
+        if($parent->type == 'project')
+        {
+            $path['path']  =  ",{$parent->id},{$execution->id},";
+            $path['grade'] = 1;
+        }
+        elseif($parent->type == 'stage')
+        {
+            $path['path']  = $parent->path . "{$execution->id},";
+            $path['grade'] = $parent->grade + 1;
+        }
+        $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($execution->id)->exec();
     }
 }

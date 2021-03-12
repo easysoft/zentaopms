@@ -16,6 +16,7 @@ $lang->execution->id             = $lang->executionCommon . ' ID';
 $lang->execution->type           = 'Typ';
 $lang->execution->name           = 'Name';
 $lang->execution->code           = 'Alias';
+$lang->execution->project        = 'Project';
 $lang->execution->statge         = 'Stage';
 $lang->execution->pri            = 'Priorität';
 $lang->execution->openedBy       = 'OpenedBy';

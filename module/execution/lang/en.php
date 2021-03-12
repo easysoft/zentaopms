@@ -16,6 +16,7 @@ $lang->execution->id             = $lang->executionCommon . ' ID';
 $lang->execution->type           = 'Type';
 $lang->execution->name           = "{$lang->executionCommon} Name";
 $lang->execution->code           = 'Code';
+$lang->execution->project        = 'Project';
 $lang->execution->statge         = 'Stage';
 $lang->execution->pri            = 'Priority';
 $lang->execution->openedBy       = 'OpenedBy';
@@ -306,12 +307,7 @@ $lang->execution->fixFirstWithLeft          = 'Update hours left too';
 $lang->execution->unfinishedExecution         = "This {$lang->executionCommon} has ";
 $lang->execution->unfinishedTask            = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug             = "[%s] unresolved bugs. ";
-
-$lang->execution->action = new stdclass();
-$lang->execution->action->opened  = '$date, created by <strong>$actor</strong> . $extra' . "\n";
-$lang->execution->action->managed = '$date, managed by <strong>$actor</strong> . $extra' . "\n";
-$lang->execution->action->edited  = '$date, edited by <strong>$actor</strong> . $extra' . "\n";
-$lang->execution->action->extra   = "The linked {$lang->productCommon}s are %s.";
+$lang->execution->projectNotEmpty           = 'Project cannot be empty.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();

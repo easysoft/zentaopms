@@ -17,6 +17,7 @@ $lang->execution->id             = $lang->executionCommon . '编号';
 $lang->execution->type           = $lang->executionCommon . '类型';
 $lang->execution->name           = $lang->executionCommon . '名称';
 $lang->execution->code           = $lang->executionCommon . '代号';
+$lang->execution->project        = '所属项目';
 $lang->execution->execName       = '执行名称';
 $lang->execution->execCode       = '执行代号';
 $lang->execution->statge         = '阶段';
@@ -310,12 +311,7 @@ $lang->execution->fixFirstWithLeft          = '修改剩余工时';
 $lang->execution->unfinishedExecution         = "该{$lang->executionCommon}下还有";
 $lang->execution->unfinishedTask            = "[%s]个未完成的任务，";
 $lang->execution->unresolvedBug             = "[%s]个未解决的bug，";
-
-$lang->execution->action = new stdclass();
-$lang->execution->action->opened  = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
-$lang->execution->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
-$lang->execution->action->edited  = '$date, 由 <strong>$actor</strong> 编辑。$extra' . "\n";
-$lang->execution->action->extra   = '相关产品为 %s。';
+$lang->execution->projectNotEmpty           = '所属项目不能为空。';
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();

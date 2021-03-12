@@ -1136,8 +1136,8 @@ class execution extends control
                     die(js::confirm($this->lang->execution->importPlanStory, inlink('create', "productID=&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "productID=&executionID=$executionID"), 'parent', 'parent'));
                 }
             }
-            $this->view->title     = $this->lang->execution->tips;
-            $this->view->tips      = $this->fetch('execution', 'tips', "executionID=$executionID");
+            $this->view->title       = $this->lang->execution->tips;
+            $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
             $this->view->executionID = $executionID;
             $this->display();
             exit;
@@ -1180,7 +1180,7 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $executionID = $copyExecutionID == '' ? $this->execution->create() : $this->execution->create($copyExecutionID);
+            $executionID = $this->execution->create($copyExecutionID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->execution->updateProducts($executionID);
@@ -1226,7 +1226,7 @@ class execution extends control
 
         $this->view->title           = $this->lang->execution->create;
         $this->view->position[]      = $this->view->title;
-        $this->view->executions      = array('' => '') + $this->executions;
+        $this->view->executions      = array('' => '') + $this->execution->getList();
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $this->view->acl             = $acl;
@@ -1234,6 +1234,7 @@ class execution extends control
         $this->view->name            = $name;
         $this->view->code            = $code;
         $this->view->team            = $team;
+        $this->view->allProjects     = array('' => '') + $this->project->getPairsByModel();
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
         $this->view->products        = $products;
