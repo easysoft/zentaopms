@@ -44,7 +44,7 @@
     <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . ($from == 'execution' ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary'");?>
   </div>
 </div>
-<div id='mainContent' class="main-row">
+<div id='mainContent' class="main-row fade">
   <?php if($from == 'execution'):?>
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
