@@ -46,6 +46,8 @@ $lang->report->workload           = '员工负载表';
 $lang->report->workloadAB         = '工作负载';
 $lang->report->bugOpenedDate      = 'Bug创建时间';
 $lang->report->beginAndEnd        = '起止时间';
+$lang->report->begin              = '起始时间';
+$lang->report->end                = '结束时间';
 $lang->report->dept               = '部门';
 $lang->report->deviationChart     = '执行偏差曲线';
 

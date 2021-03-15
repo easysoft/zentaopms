@@ -46,6 +46,8 @@ $lang->report->workload           = 'Résumé charge travail';
 $lang->report->workloadAB         = 'Charge Travail';
 $lang->report->bugOpenedDate      = 'Bugs signalés de';
 $lang->report->beginAndEnd        = ' de';
+$lang->report->begin              = 'Begin';
+$lang->report->end                = 'End';
 $lang->report->dept               = 'Compartiment';
 $lang->report->deviationChart     = 'Graphique de Dérive d uEffectué' ;
 

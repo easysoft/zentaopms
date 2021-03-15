@@ -46,6 +46,8 @@ $lang->report->workload           = 'Lượng công việc đội nhóm';
 $lang->report->workloadAB         = 'Lượng công việc';
 $lang->report->bugOpenedDate      = 'Bug được báo cáo từ';
 $lang->report->beginAndEnd        = ' từ';
+$lang->report->begin              = 'Begin';
+$lang->report->end                = 'End';
 $lang->report->dept               = 'Phòng/Ban';
 $lang->report->deviationChart     = 'Biểu đồ chênh lệcthực hiệnh';
 

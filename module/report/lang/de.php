@@ -46,6 +46,8 @@ $lang->report->workload           = 'Team Arbeitslast ';
 $lang->report->workloadAB         = 'Arbeitslast';
 $lang->report->bugOpenedDate      = 'Bug gemeldet am';
 $lang->report->beginAndEnd        = ' : von';
+$lang->report->begin              = 'Begin';
+$lang->report->end                = 'End';
 $lang->report->dept               = 'Abteilung';
 $lang->report->deviationChart     = 'Durchgeführt Abweichnungs Chart';
 
