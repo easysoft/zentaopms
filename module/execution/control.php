@@ -2300,7 +2300,7 @@ class execution extends control
     {
         if($confirm == 'no')
         {
-            $tip = $this->app->rawModule == 'executionstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
+            $tip = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
             die(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes")));
         }
         else
