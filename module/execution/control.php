@@ -910,14 +910,14 @@ class execution extends control
     }
 
     /**
-     * Execution case list. 
-     * 
-     * @param  int    $executionID 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Execution case list.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -2758,10 +2758,11 @@ class execution extends control
      * @param  string $status
      * @param  int    $productID
      * @param  string $orderBy
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function export($status, $productID, $orderBy)
+    public function export($status, $productID, $orderBy, $from)
     {
         if($_POST)
         {
@@ -2777,7 +2778,8 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $executionStats = $this->project->getStats($this->session->PRJ, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
+            $projectID = $from == 'project' ? $this->session->PRJ : 0;
+            $executionStats = $this->project->getStats($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
             $users        = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)
             {

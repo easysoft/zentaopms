@@ -40,7 +40,7 @@
     <?php endforeach;?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
+    <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
     <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . ($from == 'execution' ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary'");?>
   </div>
 </div>
