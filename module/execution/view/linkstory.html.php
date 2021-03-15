@@ -75,7 +75,7 @@
           echo html::a($storyLink, $story->title);
           ?>
         </td>
-        <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
+        <td class='text-ellipsis' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
         <?php if($productType != 'normal'):?>
         <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>

@@ -22,7 +22,7 @@
 <?php js::set('unmodifiableProducts', $unmodifiableProducts)?>
 <?php js::set('tip', $lang->project->notAllowRemoveProducts);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
-<?php $aclList = $project->parent ? $lang->program->aclList : $lang->project->aclList;?>
+<?php $aclList = $project->parent ? $lang->program->subAclList : $lang->project->aclList;?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>

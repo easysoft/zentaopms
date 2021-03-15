@@ -25,7 +25,7 @@ $(function()
 });
 
 /**
- * Set parent project.
+ * Set parent program.
  *
  * @access public
  * @return void
@@ -33,7 +33,7 @@ $(function()
 function setParentProgram()
 {
     var parentProgram = $("#parent").val();
-    location.href = createLink('project', 'create', 'model=' + model + '&projectID=' + parentProgram + '&from=' + from);
+    location.href = createLink('project', 'create', 'model=' + model + '&programID=' + parentProgram);
 }
 
 /**
@@ -45,7 +45,7 @@ function setParentProgram()
  */
 function setCopyProject(copyProjectID)
 {
-    location.href = createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&from=' + from + '&copyProjectID=' + copyProjectID);
+    location.href = createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + copyProjectID);
 }
 
 /**

@@ -36,6 +36,11 @@ class qa extends control
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
             $this->lang->noMenuModule[] = $this->app->rawModule;
         }
+        else 
+        {    
+            $this->lang->qa->menu    = $this->lang->projectQa->menu;
+            $this->lang->qa->subMenu = $this->lang->projectQa->subMenu;
+        }
     }
 
     /**

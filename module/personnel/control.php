@@ -26,7 +26,7 @@ class personnel extends control
      */
     public function accessible($programID = 0, $deptID = 0, $browseType='browse', $param = 0, $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->setProgramNavMenu($programID);
+        $this->setProgramMenu($programID);
         $this->app->loadLang('user');
 
         $program = $this->loadModel('program')->getByID($programID);
@@ -70,13 +70,13 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function putInto($programID = 0)
+    public function invest($programID = 0)
     {
-        $this->setProgramNavMenu($programID);
+        $this->setProgramMenu($programID);
 
-        $this->view->title          = $this->lang->personnel->putInto;
-        $this->view->position[]     = $this->lang->personnel->putInto;
-        $this->view->inputPersonnel = $this->personnel->getInputPersonnel($programID);
+        $this->view->title      = $this->lang->personnel->invest;
+        $this->view->position[] = $this->lang->personnel->invest;
+        $this->view->invest     = $this->personnel->getInvest($programID);
 
         $this->display();
     }
@@ -98,7 +98,7 @@ class personnel extends control
      */
     public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0, $from = '')
     {
-        if($module == 'personnel') $this->setProgramNavMenu($objectID);
+        if($module == 'personnel') $this->setProgramMenu($objectID);
 
         if($module == 'product')
         {
@@ -148,8 +148,8 @@ class personnel extends control
      */
     public function addWhitelist($objectID = 0, $deptID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
     {
-        if($module == 'personnel') $this->setProgramNavMenu($objectID);
-        $this->app->loadLang('project');
+        if($module == 'personnel') $this->setProgramMenu($objectID);
+        $this->app->loadLang('execution');
 
         if($_POST)
         {
@@ -190,11 +190,11 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function unbindWhielist($id = 0, $confirm = 'no')
+    public function unbindWhitelist($id = 0, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->personnel->confirmDelete, inLink('unbindWhielist',"id=$id&confirm=yes")));
+            die(js::confirm($this->lang->personnel->confirmDelete, inLink('unbindWhitelist',"id=$id&confirm=yes")));
         }
         else
         {
@@ -215,13 +215,13 @@ class personnel extends control
     }
 
     /*
-     * Setting up the program's navigation menu.
+     * Setting up the program menu.
      *
      * @param  int    $programID
      * @access public
      * @return void
      */
-    public function setProgramNavMenu($programID = 0)
+    public function setProgramMenu($programID = 0)
     {
         $this->loadModel('program');
         $this->lang->navGroup->program       = 'program';

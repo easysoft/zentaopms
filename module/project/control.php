@@ -262,12 +262,11 @@ class project extends control
      *
      * @param  string $model
      * @param  int    $programID
-     * @param  string $from project|program
      * @param  int    $copyProjectID
      * @access public
      * @return void
      */
-    public function create($model = 'waterfall', $programID = 0, $from = 'project', $copyProjectID = '')
+    public function create($model = 'waterfall', $programID = 0, $copyProjectID = 0)
     {
         if($_POST)
         {
@@ -276,7 +275,7 @@ class project extends control
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
-            if($from == 'program')
+            if($this->app->openApp == 'program')
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
             }
@@ -292,6 +291,8 @@ class project extends control
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'create', '', '', '', $projectID)));
             }
         }
+
+        $this->lang->noMenuModule[] = 'project';
 
         $name      = '';
         $code      = '';
@@ -342,7 +343,6 @@ class project extends control
         $this->view->auth            = $auth;
         $this->view->whitelist       = $whitelist;
         $this->view->copyProjectID   = $copyProjectID;
-        $this->view->from            = $from;
         $this->view->programList     = $this->program->getParentPairs();
         $this->view->parentProgram   = $parentProgram;
         $this->view->URSRPairs       = $this->loadModel('custom')->getURSRPairs();
@@ -468,10 +468,10 @@ class project extends control
                     $this->action->logHistory($actionID, $changes);
                 }
             }
-            die(js::locate($this->session->PRJList, 'parent'));
+            die(js::locate($this->session->projectList, 'parent'));
         }
 
-        $projectIdList = $this->post->projectIdList ? $this->post->projectIdList : die(js::locate($this->session->PRJList, 'parent'));
+        $projectIdList = $this->post->projectIdList ? $this->post->projectIdList : die(js::locate($this->session->projectList, 'parent'));
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
         foreach($projects as $project) $appendPMUsers[$project->PM] = $project->PM;
@@ -480,7 +480,7 @@ class project extends control
         $this->view->position[] = $this->lang->project->batchEdit;
 
         $this->view->projects      = $projects;
-        $this->view->projectList   = $this->project->getParentPairs();
+        $this->view->programList   = $this->program->getParentPairs();
         $this->view->PMUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $appendPMUsers);
 
         $this->display();
@@ -503,7 +503,7 @@ class project extends control
 
         $this->app->session->set('projectBrowse', $this->app->getURI(true));
 
-        $products = $this->loadModel('product')->getProducts($projectID);;
+        $products = $this->loadModel('product')->getProducts($projectID);
         $linkedBranches = array();
         foreach($products as $product)
         {
@@ -1189,9 +1189,9 @@ class project extends control
      * @access public
      * @return void
      */
-    public function unbindWhielist($id = 0, $confirm = 'no')
+    public function unbindWhitelist($id = 0, $confirm = 'no')
     {
-        echo $this->fetch('personnel', 'unbindWhielist', "id=$id&confirm=$confirm");
+        echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
     }
 
     /**

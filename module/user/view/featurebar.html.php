@@ -16,9 +16,12 @@
     $active = $methodName == 'task' ? ' btn-active-text' : '';
     common::printLink('user', 'task', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
-    $label  = "<span class='text'>{$lang->URCommon}</span>";
-    $active = ($methodName == 'story' and $storyType == 'requirement') ? ' btn-active-text' : '';
-    common::printLink('user', 'story', "userID={$user->id}&storyType=requirement", $label, '', "class='btn btn-link $active'");
+    if($config->URAndSR)
+    {
+        $label  = "<span class='text'>{$lang->URCommon}</span>";
+        $active = ($methodName == 'story' and $storyType == 'requirement') ? ' btn-active-text' : '';
+        common::printLink('user', 'story', "userID={$user->id}&storyType=requirement", $label, '', "class='btn btn-link $active'");
+    }
 
     $label  = "<span class='text'>{$lang->SRCommon}</span>";
     $active = ($methodName == 'story' and $storyType == 'story')  ? ' btn-active-text' : '';

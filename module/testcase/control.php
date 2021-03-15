@@ -48,6 +48,11 @@ class testcase extends control
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
             //$this->lang->noMenuModule[] = $this->app->rawModule;
         }
+        else 
+        {    
+            $this->lang->testcase->menu    = $this->lang->projectQa->menu;
+            $this->lang->testcase->subMenu = $this->lang->projectQa->subMenu;
+        }
 
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
@@ -206,7 +211,7 @@ class testcase extends control
             }
         }
 
-        $this->app->loadLang('project');
+        $this->app->loadLang('execution');
         $this->app->loadLang('task');
 
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;

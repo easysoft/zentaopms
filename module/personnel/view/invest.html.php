@@ -1,6 +1,6 @@
 <?php
 /**
- * The html template file of putInto method of personnel module of ZenTaoPMS.
+ * The html template file of invest method of personnel module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -22,20 +22,20 @@
         <thead>
           <tr>
             <th rowspan='2' class="w-80px"> <?php echo $lang->personnel->name;?></th>
-            <th rowspan='2'>                <?php echo $lang->personnel->role;?></th>
-            <th rowspan='2'>                <?php echo $lang->personnel->projects;?></th>
-            <th rowspan='2'>                <?php echo $lang->personnel->executions;?></th>
-            <th colspan="2">                <?php echo $lang->personnel->workingHours;?></th>
-            <th colspan="3">                <?php echo $lang->personnel->task;?></th>
-            <th colspan="3">                <?php echo $lang->personnel->bug;?></th>
+            <th rowspan='2'><?php echo $lang->personnel->role;?></th>
+            <th rowspan='2'><?php echo $lang->personnel->projects;?></th>
+            <th rowspan='2'><?php echo $lang->personnel->executions;?></th>
+            <th colspan="2"><?php echo $lang->personnel->workingHours;?></th>
+            <th colspan="3"><?php echo $lang->personnel->task;?></th>
+            <th colspan="3"><?php echo $lang->personnel->bug;?></th>
             <th colspan="2" class="w-150px"><?php echo $lang->personnel->createStories;?></th>
             <?php if(isset($this->config->maxVersion)): ?>
-            <th colspan="3">                <?php echo $lang->personnel->issue;?></th>
-            <th colspan="3">                <?php echo $lang->personnel->risk;?></th>
+            <th colspan="3"><?php echo $lang->personnel->issue;?></th>
+            <th colspan="3"><?php echo $lang->personnel->risk;?></th>
             <?php endif;?>
           </tr>
           <tr>
-            <th><?php echo $lang->personnel->putInto;?></th>
+            <th><?php echo $lang->personnel->invest;?></th>
             <th><?php echo $lang->personnel->left;?></th>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->finished;?></th>
@@ -56,7 +56,7 @@
           </tr>
         </thead>
         <tbody class="sortable">
-          <?php foreach($inputPersonnel as $personnel):?>
+          <?php foreach($invest as $personnel):?>
           <tr>
             <td title='<?php echo $personnel['realname'];?>'><?php echo $personnel['realname'];?></td>
             <td title='<?php echo $personnel['role'];?>'><?php echo $personnel['role'];?></td>

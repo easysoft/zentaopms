@@ -72,6 +72,10 @@ $lang->program->subAclList['private'] = "私有（本项目集负责人和干系
 $lang->program->subAclList['open']    = "全部公开（有项目集视图权限，即可访问）";
 $lang->program->subAclList['program'] = "项目集内公开 (所有上级项目集负责人和干系人、本项目集负责人和干系人可访问）";
 
+$lang->program->subAcls['private'] = '私有';
+$lang->program->subAcls['open']    = '全部公开';
+$lang->program->subAcls['program'] = '项目集内公开';
+
 $lang->program->authList['extend'] = '继承(取项目权限与组织权限的并集)';
 $lang->program->authList['reset']  = '重新定义(只取项目权限)';
 

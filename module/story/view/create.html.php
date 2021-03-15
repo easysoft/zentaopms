@@ -39,7 +39,7 @@
               <?php if($product->type != 'normal'):?>
               <div class='input-group'>
               <?php endif;?>
-              <?php echo html::select('product', $products, empty($productID) ? '' : $productID, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
+              <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
               <?php if($product->type != 'normal'):?>
               <span class='input-group-addon fix-border fix-padding'></span>
               <?php echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>

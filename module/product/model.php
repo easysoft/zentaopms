@@ -102,8 +102,10 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0, $module = 0, $moduleType = '')
     {
+        $isProjectBug = isset($products[0]) ? true : false;
+
         $this->app->loadLang('product');
-        if(!$productID)
+        if(!$isProjectBug and !$productID)
         {
             unset($this->lang->product->setMenu->branch);
             return;
@@ -111,13 +113,19 @@ class productModel extends model
         $isMobile = $this->app->viewType == 'mhtml';
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        $currentProduct = $this->getById($productID);
+        if($productID) $currentProduct = $this->getById($productID);
+        if($isProjectBug and !$productID)
+        {
+            $currentProduct = new stdclass();
+            $currentProduct->name = $products[$productID];
+            $currentProduct->type = 'normal';
+        }
         $this->session->set('currentProductType', $currentProduct->type);
 
         $output = '';
         if(!empty($products))
         {
-            $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+            $dropMenuLink = helper::createLink($isProjectBug ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
             $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
@@ -825,16 +833,18 @@ class productModel extends model
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
 
-        if($this->app->rawModule == 'projectstory' and empty($productID))
-        {
-            $this->config->product->search['params']['product']['values'] = array('all' => $this->lang->product->allProduct, 'all' => $this->lang->product->allProduct);
-        }
-        else
-        {
-            $this->config->product->search['params']['product']['values'] = array($productID => $products[$productID], 'all' => $this->lang->product->allProduct);
-        }
+        $product = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $products : array($productID => $products[$productID]);
+        $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
-        $this->config->product->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
+        /* Get module of all products.*/
+        $module = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
+        if(!$productID)
+        {
+            $module = array();
+            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, $viewType = 'story', $startModuleID = 0);
+        }
+        $this->config->product->search['params']['module']['values'] = $module;
+
         if($this->session->currentProductType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);

@@ -15,7 +15,7 @@
         </div>
         <div class='panel-body'>
           <ul>
-            <?php $api = ($this->app->getClientLang() == 'en') ? $lang->misc->enApi : $lang->misc->api;?>
+            <?php $api = ($this->app->getClientLang() == 'en') ? $config->misc->enApi : $config->misc->api;?>
             <?php foreach($groupItems as $item => $label):?>
             <li><?php echo html::a($api . "/goto.php?item=$item&from=about", $label, '_blank', "id='$item'");;?></li>
             <?php endforeach;?>

@@ -122,7 +122,7 @@
         {
             if(['todo', 'team', 'calendar'].includes(methodLowerCase)) return 'system';
         }
-        if(moduleName === 'company') if(methodLowerCase === 'dynamic' || methodLowerCase == 'view') return 'system';
+        if(moduleName === 'company') if(methodLowerCase == 'browse') return 'admin';
         if(moduleName === 'tree')
         {
             if(methodLowerCase === 'browse')
@@ -518,7 +518,7 @@ function getExecutions()
 
         $.ajax(
         {
-            url: createLink('project', 'ajaxGetRecentExecutions'),
+            url: createLink('execution', 'ajaxGetRecentExecutions'),
             dataType: 'html',
             type: 'post',
             success: function(data)

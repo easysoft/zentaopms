@@ -636,6 +636,10 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_0');
             $this->execSQL($this->getUpgradeFile('15.0'));
             $this->appendExec('15_0');
+        case '15_0_beta1':
+            $this->saveLogs('Execute 15_0_beta1');
+            $this->adjustBugOfProject();
+            $this->appendExec('15_0_beta1');
         }
 
         $this->deletePatch();
@@ -4179,6 +4183,22 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_PROJECTSTORY)->data($projectStory)->exec();
         }
 
+        /* Put sprint cases into project case table. */
+        $sprintCases = $this->dao->select('t2.case,t2.version,t1.product,t1.execution as project')
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.task')
+            ->where('t1.execution')->in($sprintIdList)
+            ->fetchAll();
+
+        foreach($sprintCases as $projectCase)
+        {
+            $projectCase->order = $projectCase * 5;
+            $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
+
+            $projectCase->project = $projectID;
+            $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
+        }
+
         /* Compute sprint path and grade. */
         $sprints = $this->dao->select('id, type, acl')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll();
         foreach($sprints as $sprint)
@@ -4285,7 +4305,7 @@ class upgradeModel extends model
 
         /* Get all actor in sprint and product. */
         foreach($productIdList as $productID) $productIdList[$productID] = ",{$productID},";
-        $whiteList = $this->dao->select('actor')->from(TABLE_ACTION)->where('project')->in($sprintIdList)->orWhere('product')->in($productIdList)->fetchPairs('actor', 'actor');
+        $whiteList = $this->dao->select('actor')->from(TABLE_ACTION)->where('execution')->in($sprintIdList)->orWhere('product')->in($productIdList)->fetchPairs('actor', 'actor');
         $whiteList = array_diff($whiteList, $teams);
 
         /* Get all white list in sprint and product. */
@@ -4559,6 +4579,28 @@ class upgradeModel extends model
             if($budget->budgetUnit == 'dollar')  $data['budgetUnit'] = 'USD';
 
             if($data) $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Adjust the project field of the zt_bug table.
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustBugOfProject()
+    {
+        $bugs       = $this->dao->select('id,execution')->from(TABLE_BUG)->fetchAll('id');
+        $executions = $this->dao->select('id,project')->from(TABLE_EXECUTION)->fetchAll('id');
+
+        foreach($bugs as $id => $bug)
+        {
+            if($bug->execution == 0) continue;
+            $data = array();
+            $data['project'] = $executions[$bug->execution]->project;
+            if($data) $this->dao->update(TABLE_BUG)->data($data)->where('id')->eq($id)->exec();
         }
 
         return true;

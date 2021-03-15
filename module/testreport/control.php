@@ -43,6 +43,11 @@ class testreport extends control
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
+        else 
+        {    
+            $this->lang->testreport->menu    = $this->lang->projectQa->menu;
+            $this->lang->testreport->subMenu = $this->lang->projectQa->subMenu;
+        }
     }
 
     /**

@@ -1,12 +1,12 @@
 <?php
 /**
- * The prjcreate view file of project module of ZenTaoPMS.
+ * The create view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: prjcreate.html.php 4769 2013-05-05 07:24:21Z wwccss $
+ * @version     $Id: create.html.php 4769 2013-05-05 07:24:21Z wwccss $
  * @link        http://www.zentao.net
  */
 ?>
@@ -16,7 +16,6 @@
 <?php js::set('model', $model);?>
 <?php js::set('programID', $programID);?>
 <?php js::set('copyProjectID', $copyProjectID);?>
-<?php js::set('from', $from);?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('longTime', $lang->project->longTime);?>
@@ -24,7 +23,8 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->project->create . ' - ' . zget($lang->project->modelList, $model, '');?></h2>
+      <?php $createTitle = isset($this->config->maxVersion) ? $lang->project->create . ' - ' . zget($lang->project->modelList, $model, '') : $lang->project->create;?>
+      <h2><?php echo $createTitle;?></h2>
       <div class="pull-right btn-toolbar">
         <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       </div>

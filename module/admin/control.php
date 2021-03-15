@@ -32,7 +32,7 @@ class admin extends control
             $this->view->ignore  = false;
         }
 
-        $this->app->loadLang('misc');
+        $this->loadModel('misc');
 
         $this->view->title      = $this->lang->admin->common;
         $this->view->position[] = $this->lang->admin->index;

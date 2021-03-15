@@ -59,6 +59,7 @@ class execution extends control
      */
     public function index($locate = 'auto', $executionID = 0)
     {
+        $this->lang->execution->menu = $this->lang->execution->homeMenu;
         if($locate == 'yes') $this->locate($this->createLink('execution', 'task'));
 
         $this->commonAction($executionID);
@@ -265,6 +266,7 @@ class execution extends control
      */
     public function grouptask($executionID = 0, $groupBy = 'story', $filter = '')
     {
+        $this->showModuleMenu();
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -817,6 +819,21 @@ class execution extends control
     }
 
     /**
+     * Exectuion qa dashboard.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return void
+     */
+    public function qa($executionID = 0)
+    {
+        $this->showModuleMenu();
+        $this->commonAction($executionID);
+        $this->view->title = $this->lang->execution->qa;
+        $this->display();
+    }
+
+    /**
      * Browse bugs of a execution.
      *
      * @param  int    $executionID
@@ -832,6 +849,8 @@ class execution extends control
      */
     public function bug($executionID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->showModuleMenu();
+
         /* Load these two models. */
         $this->loadModel('bug');
         $this->loadModel('user');
@@ -886,6 +905,48 @@ class execution extends control
         $this->view->memberPairs = $memberPairs;
         $this->view->type        = $type;
         $this->view->param       = $param;
+
+        $this->display();
+    }
+
+    /**
+     * Execution case list.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function testcase($executionID = 0, $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('testcase');
+        $this->loadModel('testtask');
+        $this->showModuleMenu();
+        $this->commonAction($executionID);
+
+        $products  = $this->execution->getProducts($executionID);
+        $productID = key($products);    // Get the first product for creating testcase.
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $orderBy, $pager, $type);
+        $cases = $this->testcase->appendData($cases, 'run');
+
+        $this->view->title       = $this->lang->execution->testcase;
+        $this->view->executionID = $executionID;
+        $this->view->productID   = $productID;
+        $this->view->cases       = $cases;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->type        = $type;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->execution   = $this->execution->getByID($executionID);
 
         $this->display();
     }
@@ -964,6 +1025,8 @@ class execution extends control
      */
     public function testtask($executionID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->showModuleMenu();
+
         $this->loadModel('testtask');
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
@@ -1086,6 +1149,9 @@ class execution extends control
      */
     public function team($executionID = 0)
     {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -1130,8 +1196,8 @@ class execution extends control
                     die(js::confirm($this->lang->execution->importPlanStory, inlink('create', "productID=&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "productID=&executionID=$executionID"), 'parent', 'parent'));
                 }
             }
-            $this->view->title     = $this->lang->execution->tips;
-            $this->view->tips      = $this->fetch('execution', 'tips', "executionID=$executionID");
+            $this->view->title       = $this->lang->execution->tips;
+            $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
             $this->view->executionID = $executionID;
             $this->display();
             exit;
@@ -1174,7 +1240,7 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $executionID = $copyExecutionID == '' ? $this->execution->create() : $this->execution->create($copyExecutionID);
+            $executionID = $this->execution->create($copyExecutionID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->execution->updateProducts($executionID);
@@ -1220,7 +1286,7 @@ class execution extends control
 
         $this->view->title           = $this->lang->execution->create;
         $this->view->position[]      = $this->view->title;
-        $this->view->executions      = array('' => '') + $this->executions;
+        $this->view->executions      = array('' => '') + $this->execution->getList();
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $this->view->acl             = $acl;
@@ -1228,6 +1294,7 @@ class execution extends control
         $this->view->name            = $name;
         $this->view->code            = $code;
         $this->view->team            = $team;
+        $this->view->allProjects     = array('' => '') + $this->project->getPairsByModel();
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
         $this->view->products        = $products;
@@ -1253,6 +1320,8 @@ class execution extends control
      */
     public function edit($executionID, $action = 'edit', $extra = '')
     {
+        $this->showModuleMenu();
+
         /* Load language files and get browseExecutionLink. */
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
@@ -1390,6 +1459,8 @@ class execution extends control
      */
     public function batchEdit($executionID = 0)
     {
+        $this->lang->execution->menu = $this->lang->execution->homeMenu;
+
         $this->app->loadLang('stage');
 
         if($this->post->names)
@@ -1645,6 +1716,8 @@ class execution extends control
      */
     public function view($executionID)
     {
+        $this->showModuleMenu();
+
         $execution = $this->execution->getById($executionID, true);
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -1758,6 +1831,8 @@ class execution extends control
      */
     public function tree($executionID, $type = 'task')
     {
+        $this->showModuleMenu();
+
         $this->execution->setMenu($this->executions, $executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
         $tree    = $this->execution->getTree($executionID);
@@ -1987,6 +2062,9 @@ class execution extends control
      */
     public function manageProducts($executionID, $from = '')
     {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
@@ -2072,6 +2150,8 @@ class execution extends control
      */
     public function manageMembers($executionID = 0, $team2Import = 0, $dept = 0)
     {
+        $this->showModuleMenu();
+
         if(!empty($_POST))
         {
             $this->execution->manageMembers($executionID);
@@ -2285,7 +2365,7 @@ class execution extends control
     {
         if($confirm == 'no')
         {
-            $tip = $this->app->rawModule == 'executionstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
+            $tip = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
             die(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes")));
         }
         else
@@ -2485,7 +2565,8 @@ class execution extends control
         $this->view->module      = $module;
         $this->view->method      = $method;
         $this->view->extra       = $extra;
-        $this->view->executions  = $this->execution->getByProject($execution->project);
+        $this->view->projects    = $this->project->getPairsByModel();
+        $this->view->executions  = $this->execution->getList();
         $this->display();
     }
 
@@ -2510,7 +2591,7 @@ class execution extends control
                 $executionsPinYin = common::convert2Pinyin($executionsName);
                 foreach($executions as $execution)
                 {
-                    $link = helper::createLink('execution', 'task', 'executionID=' . $execution->id, '', false, $execution->execution);
+                    $link = helper::createLink('execution', 'task', 'executionID=' . $execution->id, '', false, $execution->project);
                     $execution->code = empty($execution->code) ? $execution->name : $execution->code;
                     $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
                     $class   = "class='search-list-item $color' title='$execution->name' $dataKey";
@@ -2580,6 +2661,8 @@ class execution extends control
      */
     public function all($status = 'all', $projectID = 0, $from = 'execution', $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
+        $this->lang->execution->menu = $this->lang->execution->homeMenu;
+
         $this->app->loadLang('my');
         $this->app->loadLang('product');
         $this->app->loadLang('programplan');
@@ -2623,6 +2706,9 @@ class execution extends control
      */
     public function whitelist($executionID = 0, $module='execution', $objectType = 'sprint', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
@@ -2642,6 +2728,8 @@ class execution extends control
      */
     public function addWhitelist($executionID = 0, $deptID = 0)
     {
+        $this->showModuleMenu();
+
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
@@ -2659,9 +2747,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function unbindWhielist($id = 0, $confirm = 'no')
+    public function unbindWhitelist($id = 0, $confirm = 'no')
     {
-        echo $this->fetch('personnel', 'unbindWhielist', "id=$id&confirm=$confirm");
+        echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
     }
 
     /**
@@ -2670,10 +2758,11 @@ class execution extends control
      * @param  string $status
      * @param  int    $productID
      * @param  string $orderBy
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function export($status, $productID, $orderBy)
+    public function export($status, $productID, $orderBy, $from)
     {
         if($_POST)
         {
@@ -2689,7 +2778,8 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $executionStats = $this->execution->getStats($this->session->PRJ, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
+            $projectID = $from == 'project' ? $this->session->PRJ : 0;
+            $executionStats = $this->project->getStats($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
             $users        = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)
             {
@@ -2914,5 +3004,17 @@ class execution extends control
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
+    }
+
+    /**
+     * Show module menu for some module.
+     *
+     * @access public
+     * @return void
+     */
+    public function showModuleMenu()
+    {
+        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
     }
 }

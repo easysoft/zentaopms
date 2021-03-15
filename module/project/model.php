@@ -104,7 +104,7 @@ class projectModel extends model
     public function getBudgetUnitList()
     {
         $budgetUnitList = array();
-        foreach(explode(',', $this->config->program->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
 
         return $budgetUnitList;
     }
@@ -948,9 +948,9 @@ class projectModel extends model
 
         foreach($data->projectIdList as $projectID)
         {
-            $projectName   = $data->names[$projectID];
+            $projectID   = (int)$projectID;
+            $projectName = $data->names[$projectID];
 
-            $projectID = (int)$projectID;
             $projects[$projectID] = new stdClass();
             $projects[$projectID]->name           = $projectName;
             $projects[$projectID]->parent         = $data->parents[$projectID];

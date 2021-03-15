@@ -23,7 +23,7 @@
         <?php endif;?>
         <th class='text-left'><?php echo $lang->testtask->name;?></th>
         <?php if($longBlock):?>
-        <th class='text-left'><?php echo $lang->testtask->project . '/' . $lang->testtask->build;?></th>
+        <th class='text-left'><?php echo $lang->testtask->execution . '/' . $lang->testtask->build;?></th>
         <?php endif;?>
         <th class='w-date'><?php echo $lang->testtask->begin;?></th>
         <th class='w-date'><?php echo $lang->testtask->end;?></th>

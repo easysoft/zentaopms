@@ -6,14 +6,20 @@
   <div class='side-col col-lg' id='sidebar'>
     <?php include 'blockreportlist.html.php';?>
   </div>
-  <div class='main-col'>
+  <div class='main-col w-800px'>
     <div class='cell'>
-      <div class="table-row" id='conditions'>
-        <div class='input-group w-400px input-group-sm'>
-          <span class='input-group-addon'><?php echo $lang->report->executionCommon . $lang->report->beginAndEnd;?></span>
-          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
-          <span class='input-group-addon'><?php echo $lang->report->to;?></span>
-          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
+      <div class="row" id='conditions'>
+        <div class='w-220px col-md-3 col-sm-6'>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->report->executionCommon . $lang->report->begin;?></span>
+            <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
+          </div>
+        </div>
+        <div class='w-220px col-md-3 col-sm-6'>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->report->executionCommon . $lang->report->end;?></span>
+            <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
+          </div>
         </div>
       </div>
     </div>
