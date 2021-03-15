@@ -82,7 +82,7 @@
               }
               else
               {
-                  echo html::select("lifetimes[$executionID]",    $lang->program->PRJLifeTimeList,   $executions[$executionID]->lifetime,   'class=form-control');
+                  echo html::select("lifetimes[$executionID]",    $lang->execution->lifeTimeList,   $executions[$executionID]->lifetime,   'class=form-control');
               }
               ?>
             </td>
