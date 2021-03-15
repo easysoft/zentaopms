@@ -150,6 +150,7 @@ $lang->execution->index             = "{$lang->executionCommon}主页";
 $lang->execution->task              = '任务列表';
 $lang->execution->groupTask         = '分组浏览任务';
 $lang->execution->story             = "{$lang->SRCommon}列表";
+$lang->execution->qa                = '测试仪表盘';
 $lang->execution->bug               = 'Bug列表';
 $lang->execution->testcase          = '用例列表';
 $lang->execution->dynamic           = '动态';

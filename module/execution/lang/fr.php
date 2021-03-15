@@ -141,6 +141,7 @@ $lang->execution->index             = "Accueil {$lang->executionCommon}";
 $lang->execution->task              = 'Liste Tâches';
 $lang->execution->groupTask         = 'Vision Groupée';
 $lang->execution->story             = 'Liste Stories';
+$lang->execution->qa                = 'QA';
 $lang->execution->bug               = 'Liste Bugs';
 $lang->execution->dynamic           = 'Historique';
 $lang->execution->latestDynamic     = 'Historique';
