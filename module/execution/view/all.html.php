@@ -41,7 +41,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
-    <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . ($from == 'execution' ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class="main-row">
@@ -72,14 +72,13 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $from == 'execution' ? $lang->execution->execName : $lang->execution->name);?></th>
-          <th class='w-150px'><?php common::printOrderLink('code', $orderBy, $vars, $from == 'execution' ? $lang->execution->execCode : $lang->execution->code);?></th>
           <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
           <th class='w-90px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
           <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
-          <th class='w-70px hours'><?php echo $lang->execution->totalEstimate;?></th>
-          <th class='w-70px hours'><?php echo $lang->execution->totalConsumed;?></th>
-          <th class='w-70px hours'><?php echo $lang->execution->totalLeft;?></th>
-          <th class='w-150px'><?php echo $lang->execution->progress;?></th>
+          <th class='w-40px'><?php echo $lang->execution->totalEstimate;?></th>
+          <th class='w-40px'><?php echo $lang->execution->totalConsumed;?></th>
+          <th class='w-40px'><?php echo $lang->execution->totalLeft;?></th>
+          <th class='w-60px'><?php echo $lang->execution->progress;?></th>
           <th class='w-100px'><?php echo $lang->execution->burn;?></th>
           <?php if($canOrder):?>
           <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->execution->orderAB);?></th>
@@ -107,21 +106,18 @@
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
             <?php endif;?>
           </td>
-          <td class='text-left' title="<?php echo $execution->code;?>"><?php echo $execution->code;?></td>
           <td><?php echo zget($users, $execution->PM);?></td>
           <td><?php echo $execution->end;?></td>
           <?php $executionStatus = $this->processStatus('execution', $execution);?>
           <td class='c-status' title='<?php echo $executionStatus;?>'>
             <span class="status-execution status-<?php echo $execution->status?>"><?php echo $executionStatus;?></span>
           </td>
-          <td class='hours'><?php echo $execution->hours->totalEstimate . ' ' . $config->hourUnit;?></td>
-          <td class='hours'><?php echo $execution->hours->totalConsumed . ' ' . $config->hourUnit;?></td>
-          <td class='hours'><?php echo $execution->hours->totalLeft . ' ' . $config->hourUnit;?></td>
+          <td class='hours' title='<?php echo $execution->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalEstimate . ' ' . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $execution->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalConsumed . ' ' . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $execution->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;?></td>
           <td class="c-progress">
-            <div class="progress progress-text-left">
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
-              <span class="progress-text"><?php echo $execution->hours->progress;?>%</span>
-              </div>
+            <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+              <div class='progress-info'><?php echo $execution->hours->progress;?></div>
             </div>
           </td>
           <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
@@ -151,21 +147,18 @@
                echo html::a($this->createLink('execution', 'view', 'execution=' . $child->id), $child->name);
                ?>
              </td>
-             <td class='text-left' title="<?php echo $child->code;?>"><?php echo $child->code;?></td>
              <td><?php echo zget($users, $child->PM);?></td>
              <td><?php echo $child->end;?></td>
              <?php $executionStatus = $this->processStatus('execution', $child);?>
              <td class='c-status' title='<?php echo $executionStatus;?>'>
                <span class="status-execution status-<?php echo $child->status?>"><?php echo $executionStatus;?></span>
              </td>
-             <td class='hours'><?php echo $child->hours->totalEstimate;?></td>
-             <td class='hours'><?php echo $child->hours->totalConsumed;?></td>
-             <td class='hours'><?php echo $child->hours->totalLeft;?></td>
+             <td class='hours' title='<?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHourUnit;?></td>
+             <td class='hours' title='<?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHourUnit;?></td>
+             <td class='hours' title='<?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class="c-progress">
-               <div class="progress progress-text-left">
-                 <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $child->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $child->hours->progress;?>%">
-                 <span class="progress-text"><?php echo $child->hours->progress;?>%</span>
-                 </div>
+               <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $child->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                 <div class='progress-info'><?php echo $child->hours->progress;?></div>
                </div>
              </td>
              <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
@@ -185,7 +178,7 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->execution->batchEdit, '', 'btn');?></div>
       <?php endif;?>
-      <?php if(!$canOrder and common::hasPriv('execution', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&from=$from&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->execution->updateOrder, '', "class='btn'");?>
+      <?php if(!$canOrder and common::hasPriv('execution', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&from=$from&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $from == 'execution' ? $lang->execution->execUpdateOrder : $lang->execution->updateOrder, '', "class='btn'");?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

@@ -62,8 +62,6 @@ class executionModel extends model
      */
     public function setMenu($executions, $executionID, $buildID = 0, $extra = '')
     {
-        if($this->app->rawMethod != 'index' and $this->app->rawMethod != 'all') $this->lang->execution->menu = $this->lang->execution->viewMenu;
-
         if(empty($executions))
         {
             $project = $this->loadModel('project')->getByID($this->session->PRJ);
@@ -115,8 +113,8 @@ class executionModel extends model
         if($methodName == 'all') $label = $this->lang->execution->allExecutions;
         if($methodName == 'create' and $moduleName == 'execution') $label = $this->lang->execution->create;
 
-        //$executionIndex = $this->select($executions, $executionID, null, $moduleName, $methodName, $extra);
-        //if($this->config->systemMode == 'new') $this->lang->modulePageNav = $executionIndex;
+        foreach($this->lang->execution->viewMenu as $key => $menu) common::setMenuVars($this->lang->execution->viewMenu, $key, $executionID); 
+        foreach($this->lang->execution->qaMenu as $key => $menu) common::setMenuVars($this->lang->execution->qaMenu, $key, $executionID); 
 
         foreach($this->lang->execution->menu as $key => $menu)
         {

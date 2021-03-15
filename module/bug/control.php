@@ -54,6 +54,11 @@ class bug extends control
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
             $this->lang->noMenuModule[] = $this->app->rawModule;
         }
+        else
+        {
+            $this->lang->bug->menu    = $this->lang->projectQa->menu;
+            $this->lang->bug->subMenu = $this->lang->projectQa->subMenu;
+        }
 
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=bug&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=bug')));

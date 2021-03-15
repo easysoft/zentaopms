@@ -120,26 +120,7 @@ class testcaseModel extends model
             }
 
             /* If the story is linked project, make the case link the project. */
-            if(!empty($case->story))
-            {
-                $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->Where('story')->eq($case->story)->fetchAll('project');
-                $projects = array_keys($projects);
-            }
-            if($this->lang->navGroup->testcase != 'qa' and empty($case->story)) $projects = array($this->session->PRJ);
-            if(!empty($projects))
-            {
-                foreach($projects as $projectID)
-                {
-                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                    $data = new stdclass();
-                    $data->project = $projectID;
-                    $data->product = $case->product;
-                    $data->case    = $caseID;
-                    $data->version = 1;
-                    $data->order   = ++ $lastOrder;
-                    $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
-                }
-            }
+            $this->syncCase2Project($case);
 
             return array('status' => 'created', 'id' => $caseID);
         }
@@ -249,27 +230,7 @@ class testcaseModel extends model
             $caseID = $this->dao->lastInsertID();
 
             /* If the story is linked project, make the case link the project. */
-            if(!empty($case->story))
-            {
-                $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->Where('story')->eq($case->story)->fetchAll('project');
-                $projects = array_keys($projects);
-            }
-            if($this->lang->navGroup->testcase != 'qa' and empty($case->story)) $projects = array($this->session->PRJ);
-            if(!empty($projects))
-            {
-                foreach($projects as $projectID)
-                {
-                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                    $data = new stdclass();
-                    $data->project = $projectID;
-                    $data->product = $case->product;
-                    $data->case    = $caseID;
-                    $data->version = 1;
-                    $data->order   = ++ $lastOrder;
-                    $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
-                }
-            }
-
+            $this->syncCase2Project($case);
             $this->executeHooks($caseID);
 
             $this->loadModel('score')->create('testcase', 'create', $caseID);
@@ -1687,6 +1648,41 @@ class testcaseModel extends model
         }
 
         return sprintf($this->lang->testcase->summary, count($cases), $executed);
+    }
+
+    /**
+     * Sync case to project.
+     * 
+     * @param  object $case 
+     * @access public
+     * @return void
+     */
+    public function syncCase2Project($case)
+    {
+        if(!empty($case->story))
+        {
+            $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
+            $projects = array_keys($projects);
+        }
+        elseif($this->lang->navGroup->testcase == 'project' and empty($case->story)) 
+        {
+            $projects = array($this->session->PRJ);
+        }
+
+        if(!empty($projects))
+        {
+            foreach($projects as $projectID)
+            {
+                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->product = $case->product;
+                $data->case    = $caseID;
+                $data->version = 1;
+                $data->order   = ++ $lastOrder;
+                $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+            }
+        }
     }
 
     /**
