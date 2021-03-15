@@ -95,6 +95,7 @@ body.menu-hide {padding-left: 0;}
 
 #upgradeContent {display: none; position: absolute; right: 10px; top: -290px; height: 282px; background-color: #fff; left: 0px; padding: 5px 0; border: 1px solid rgba(0,0,0,.15); border-color: rgba(0,0,0,.1); opacity: 1; border-radius: 4px; box-shadow: 0 6px 12px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.1);}
 #latestVersionList {height: 190px; overflow: auto;}
+#empty-tip {top: 1px; position: relative;}
 
 .version-name {width: 20%;}
 .version-date {width: 15%; color: #8a8a8a;}
