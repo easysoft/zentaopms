@@ -2389,7 +2389,7 @@ class executionModel extends model
         /* Add iteration or phase team members to the execution team. */
         if($executionType == 'stage' || $executionType == 'sprint')
         {
-            $this->addExecutionMembers($execution->execution, $executionMember);
+            $this->addExecutionMembers($execution->project, $executionMember);
             if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
         }
     }
@@ -2415,7 +2415,7 @@ class executionModel extends model
             $accounts[]   = $member->account;
             $member->root = $executionID;
             $member->type = $executionType;
-            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+            $this->dao->replace(TABLE_TEAM)->data($member)->exec();
         }
 
         /* Only changed account update userview. */

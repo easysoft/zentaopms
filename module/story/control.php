@@ -185,15 +185,16 @@ class story extends control
         /* Set products, users and module. */
         if($executionID != 0)
         {
-            $products = $this->product->getProductPairsByProject($executionID);
-            $product  = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
+            $products  = $this->product->getProductPairsByProject($executionID);
+            $productID = empty($productID) ? key($products) : $productID;
+            $product   = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
         }
         else
         {
             $products = array();
             $productList = $this->product->getOrderedProducts('noclosed');
             foreach($productList as $product) $products[$product->id] = $product->name;
-            $product  = $this->product->getById($productID ? $productID : key($products));
+            $product = $this->product->getById($productID ? $productID : key($products));
             if(!isset($products[$product->id])) $products[$product->id] = $product->name;
         }
 
@@ -293,7 +294,7 @@ class story extends control
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->create;
-        $this->view->products         = array('' => '') + $products;
+        $this->view->products         = $products;
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
