@@ -142,6 +142,7 @@ $lang->execution->index             = "{$lang->executionCommon} Home";
 $lang->execution->task              = 'Danh sách nhiệm vụ';
 $lang->execution->groupTask         = 'Xem kiểu nhóm';
 $lang->execution->story             = 'Danh sách câu chuyện';
+$lang->execution->qa                = 'QA';
 $lang->execution->bug               = 'Danh sách Bug';
 $lang->execution->dynamic           = 'Lịch sử';
 $lang->execution->latestDynamic     = 'Lịch sử';

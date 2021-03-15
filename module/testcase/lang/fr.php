@@ -215,8 +215,12 @@ $lang->testcase->searchStories = 'Rechercher des stories';
 $lang->testcase->selectLib     = 'Sélectionner Library';
 
 $lang->testcase->action = new stdclass();
-$lang->testcase->action->fromlib  = array('main' => '$date, importé par <strong>$actor</strong> depuis <strong>$extra</strong>.');
-$lang->testcase->action->reviewed = array('main' => '$date, enregistré par <strong>$actor</strong> et le résultat de validation est <strong>$extra</strong>.', 'extra' => 'reviewResultList');
+$lang->testcase->action->fromlib               = array('main' => '$date, importé par <strong>$actor</strong> depuis <strong>$extra</strong>.');
+$lang->testcase->action->reviewed              = array('main' => '$date, enregistré par <strong>$actor</strong> et le résultat de validation est <strong>$extra</strong>.', 'extra' => 'reviewResultList');
+$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。');
+$lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = 'En Attente';

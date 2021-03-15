@@ -1247,11 +1247,20 @@ class bugModel extends model
         $productParams = $productID ? array($productID => $products[$productID]) : $products;
         $productParams = $productParams + array('all' => $this->lang->bug->allProduct);
 
+        /* Get all modules. */
+        $modules = array();
+        $this->loadModel('tree');
+        if($productID) $modules = $this->tree->getOptionMenu($productID, 'bug', 0);
+        if(!$productID)
+        {
+            foreach($products as $id => $productName) $modules += $this->tree->getOptionMenu($id, 'bug');
+        }
+
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['product']['values']       = $productParams;
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
-        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
+        $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 0, $params = '');

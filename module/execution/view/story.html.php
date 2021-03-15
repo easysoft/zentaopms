@@ -16,6 +16,7 @@
 <?php js::set('moduleID', $this->cookie->storyModuleParam);?>
 <?php js::set('productID', $this->cookie->storyProductParam);?>
 <?php js::set('branchID', str_replace(',', '_', $this->cookie->storyBranchParam));?>
+<?php js::set('executionID', $execution->id);?>
 <?php js::set('confirmUnlinkStory', $lang->execution->confirmUnlinkStory)?>
 <?php js::set('typeError', sprintf($this->lang->error->notempty, $this->lang->task->type))?>
 <?php js::set('workingHourError', sprintf($this->lang->error->notempty, $this->lang->workingHour))?>
