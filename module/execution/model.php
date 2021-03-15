@@ -2061,11 +2061,10 @@ class executionModel extends model
      * @param  int    $executionID
      * @param  int    $productID
      * @param  int    $storyID
-     * @param  string $type
      * @access public
      * @return void
      */
-    public function linkCases($executionID, $productID, $storyID, $type = '')
+    public function linkCases($executionID, $productID, $storyID)
     {
         $this->loadModel('action');
         $linkedCases   = $this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('case', 'order');
@@ -2085,7 +2084,6 @@ class executionModel extends model
             $this->dao->insert(TABLE_PROJECTCASE)->data($object)->exec();
 
             $action = $executionID == $this->session->PRJ ? 'linked2project' : 'linked2execution';
-            if($type) $action = $type == 'project' ? 'linked2project' : 'linked2execution';
 
             $this->action->create('case', $caseID, $action, '', $executionID);
         }
