@@ -1250,7 +1250,7 @@ class bugModel extends model
         /* Get all modules. */
         $modules = array();
         $this->loadModel('tree');
-        if($productID) $modules = $this->tree->getOptionMenu($productID, 'bug', 0, $branch);
+        if($productID) $modules = $this->tree->getOptionMenu($productID, 'bug', 0);
         if(!$productID)
         {
             foreach($products as $id => $productName) $modules += $this->tree->getOptionMenu($id, 'bug');
