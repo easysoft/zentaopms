@@ -74,6 +74,8 @@ $lang->testcase->ignore           = 'Ignore';
 $lang->testcase->fromTesttask     = 'From Test Request';
 $lang->testcase->fromCaselib      = 'From Case Library';
 $lang->testcase->deleted          = 'Deleted';
+$lang->testcase->browseUnits      = 'Unit Test';
+
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID      = 'ID';
@@ -223,7 +225,8 @@ $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <st
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = 'Waiting';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
-$lang->testcase->featureBar['browse']['group']       = '';
+$lang->testcase->featureBar['browse']['group']       = 'Group View';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';
-$lang->testcase->featureBar['browse']['zerocase']    = '';
+$lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
+$lang->testcase->featureBar['browse']['browseunits'] = 'Unit Test';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

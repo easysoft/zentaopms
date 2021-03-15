@@ -62,8 +62,6 @@ class executionModel extends model
      */
     public function setMenu($executions, $executionID, $buildID = 0, $extra = '')
     {
-        if($this->app->rawMethod != 'index' and $this->app->rawMethod != 'all') $this->lang->execution->menu = $this->lang->execution->viewMenu;
-
         if(empty($executions))
         {
             $project = $this->loadModel('project')->getByID($this->session->PRJ);
@@ -115,8 +113,8 @@ class executionModel extends model
         if($methodName == 'all') $label = $this->lang->execution->allExecutions;
         if($methodName == 'create' and $moduleName == 'execution') $label = $this->lang->execution->create;
 
-        //$executionIndex = $this->select($executions, $executionID, null, $moduleName, $methodName, $extra);
-        //if($this->config->systemMode == 'new') $this->lang->modulePageNav = $executionIndex;
+        foreach($this->lang->execution->viewMenu as $key => $menu) common::setMenuVars($this->lang->execution->viewMenu, $key, $executionID);
+        foreach($this->lang->execution->qaMenu as $key => $menu) common::setMenuVars($this->lang->execution->qaMenu, $key, $executionID);
 
         foreach($this->lang->execution->menu as $key => $menu)
         {
@@ -326,9 +324,15 @@ class executionModel extends model
     {
         $this->lang->execution->team = $this->lang->execution->teamname;
 
+        if(empty($_POST['project']))
+        {
+            dao::$errors['message'][] = $this->lang->execution->projectNotEmpty;
+            return false;
+        }
+
         /* Determine whether to add a sprint or a stage according to the model of the execution. */
-        $execution  = $this->getByID($this->session->PRJ);
-        $sprintType = $this->config->systemMode == 'new' ? zget($this->config->execution->modelList, $execution->model, '') : 'sprint';
+        $project    = $this->getByID($_POST['project']);
+        $sprintType = $this->config->systemMode == 'new' ? zget($this->config->execution->modelList, $project->model, '') : 'sprint';
 
         /* If the execution model is a stage, determine whether the product is linked. */
         if($sprintType == 'stage' and empty($this->post->products[0]))
@@ -346,8 +350,7 @@ class executionModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('team', substr($this->post->name,0, 30))
-            ->setIF($this->config->systemMode == 'new', 'project', $this->session->PRJ)
-            ->setIF($this->config->systemMode == 'new', 'parent', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new', 'parent', $this->post->project)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->add('type', $sprintType)
@@ -387,7 +390,7 @@ class executionModel extends model
             $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
 
             /* Update the path. */
-            if(isset($this->config->maxVersion)) $this->loadModel('programplan')->setTreePath($executionID);
+            $this->setTreePath($executionID);
 
             /* Copy team of execution. */
             if($copyExecutionID != '')
@@ -419,7 +422,7 @@ class executionModel extends model
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
-                $this->addExecutionMembers($this->session->PRJ, array($member));
+                $this->addExecutionMembers($sprint->project, array($member));
             }
 
             /* Create doc lib. */
@@ -878,7 +881,7 @@ class executionModel extends model
      */
     public function getMainAction($module, $method)
     {
-        if($method == 'index' or $method == 'all') return;
+        if(in_array($method, array('index', 'all', 'batchedit'))) return;
 
         $link = html::a(helper::createLink('execution', 'all'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
         $html = "<p style='padding-top:5px;'>" . $link . "</p>";
@@ -897,7 +900,7 @@ class executionModel extends model
      */
     public function getSwitcher($executionID, $currentModule, $currentMethod)
     {
-        if($currentMethod == 'index' or $currentMethod == 'all') return;
+        if(in_array($currentMethod,  array('index', 'all', 'batchedit'))) return;
 
         $this->session->set('moreExecutionLink', $this->app->getURI(true));
 
@@ -3556,10 +3559,10 @@ class executionModel extends model
      */
     public function getRecentExecutions()
     {
-        $isView = (empty($this->app->user->view->sprints) || empty($this->app->user->view->executions)) ? false : true;
+        $isView = (empty($this->app->user->view->sprints) || empty($this->app->user->view->projects)) ? false : true;
         if(!$this->app->user->admin && $isView === false) return array();
 
-        $executions = $this->dao->select('t1.id,t1.execution,t1.code,t1.name,t1.type')->from(TABLE_EXECUTION)->alias('t1')
+        $executions = $this->dao->select('t1.id,t1.project,t1.code,t1.name,t1.type')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
             ->where('t1.type')->in('stage,sprint')
             ->andWhere('t2.account')->eq($this->app->user->account)
@@ -3567,37 +3570,37 @@ class executionModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.status')->ne('closed')
             ->andWhere('t1.deleted')->eq('0')
-            ->orderBy('execution_desc, id_desc')
+            ->orderBy('project_desc, id_desc')
             ->fetchAll();
 
-        /* Get the execution or product to which the execution belongs. */
-        $executionIdList = array();
+        /* Get the project or product to which the execution belongs. */
+        $projectIdList = array();
         $stageIdList   = array();
         foreach($executions as $execution)
         {
             if($execution->type == 'stage') $stageIdList[$execution->id] = $execution->id;
-            $executionIdList[$execution->execution] = $execution->execution;
+            $projectIdList[$execution->project] = $execution->project;
         }
-        $executionPairs = $this->loadModel('execution')->getPairsByIdList($executionIdList);
+        $projectPairs = $this->loadModel('project')->getPairsByIdList($projectIdList);
         $productPairs = $this->getStageLinkProductPairs($stageIdList);
 
         $recentExecutions = isset($this->config->execution->recentExecutions) ? explode(',', $this->config->execution->recentExecutions) : array();
-        $allExecutions    = array('recent' => array(), 'mine' => array());
+        $allExecution     = array('recent' => array(), 'mine' => array());
         foreach($executions as $execution)
         {
-            if($execution->type == 'stage')  $execution->name = zget($executionPairs, $execution->execution) . '/' . zget($productPairs, $execution->id) . '/' . $execution->name;
-            if($execution->type == 'sprint') $execution->name = zget($executionPairs, $execution->execution) . '/' . $execution->name;
+            if($execution->type == 'stage')  $execution->name = zget($projectPairs, $execution->project) . '/' . zget($productPairs, $execution->id) . '/' . $execution->name;
+            if($execution->type == 'sprint') $execution->name = zget($projectPairs, $execution->project) . '/' . $execution->name;
             if(in_array($execution->id, $recentExecutions))
             {
                 $index = array_search($execution->id, $recentExecutions);
-                $allExecutions['recent'][$index] = $execution;
+                $allExecution['recent'][$index] = $execution;
                 continue;
             }
-            $allExecutions['mine'][] = $execution;
+            $allExecution['mine'][] = $execution;
         }
 
-        ksort($allExecutions['recent']);
-        return $allExecutions;
+        ksort($allExecution['recent']);
+        return $allExecution;
     }
 
     /**
@@ -3614,5 +3617,30 @@ class executionModel extends model
             ->where('t1.project')->in($stageIdList)
             ->fetchPairs('project', 'name');
         return $productpairs;
+    }
+
+    /**
+     ** Set stage tree path.
+     **
+     ** @param  int    $executionID
+     ** @access public
+     ** @return bool
+     **/
+    public function setTreePath($executionID)
+    {
+        $execution = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+        $parent    = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($execution->parent)->fetch();
+
+        if($parent->type == 'project')
+        {
+            $path['path']  =  ",{$parent->id},{$execution->id},";
+            $path['grade'] = 1;
+        }
+        elseif($parent->type == 'stage')
+        {
+            $path['path']  = $parent->path . "{$execution->id},";
+            $path['grade'] = $parent->grade + 1;
+        }
+        $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($execution->id)->exec();
     }
 }

@@ -47,6 +47,11 @@
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
+          <th class='w-120px'><?php echo $lang->execution->project;?></th>
+          <td class="col-main"><?php echo html::select("project", $allProjects, '', "class='form-control chosen' required onchange='loadBranches(this)'");?></td>
+          <td></td><td></td>
+        </tr>
+        <tr>
           <th class='w-120px'><?php echo $lang->execution->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td></td><td></td>
@@ -201,13 +206,13 @@
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
-      <?php foreach ($executions as $id => $name):?>
+      <?php foreach ($executions as $id => $execution):?>
       <?php if(empty($id)):?>
       <?php if($copyExecutionID != 0):?>
       <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->execution->cancelCopy;?></a></div>
       <?php endif;?>
       <?php else: ?>
-      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyExecutionID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons[$iconObject], 'text-muted') . ' ' . $name;?></a></div>
+      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyExecutionID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons[$execution->type], 'text-muted') . ' ' . $execution->name;?></a></div>
       <?php endif; ?>
       <?php endforeach;?>
       </div>

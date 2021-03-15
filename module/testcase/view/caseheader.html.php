@@ -5,11 +5,18 @@
   <div id="sidebarHeader">
     <div class="title">
       <?php
-      echo !empty($moduleID) ? $moduleName : $this->lang->tree->all;
-      if(!empty($moduleID))
+      if($this->app->rawMethod == 'browseunits')
       {
-          $removeLink = $browseType == 'bymodule' ? $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
-          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
+          echo $lang->testtask->unitTag[$browseType];
+      }
+      else
+      {
+          echo !empty($moduleID) ? $moduleName : $this->lang->tree->all;
+          if(!empty($moduleID))
+          {
+              $removeLink = $browseType == 'bymodule' ? $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
+              echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
+          }
       }
       ?>
     </div>
@@ -19,6 +26,7 @@
     $hasBrowsePriv = common::hasPriv('testcase', 'browse');
     $hasGroupPriv  = common::hasPriv('testcase', 'groupcase');
     $hasZeroPriv   = common::hasPriv('story', 'zerocase');
+    $hasUnitPriv   = common::hasPriv('testtask', 'browseunits');
     ?>
     <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
     <?php
@@ -78,6 +86,10 @@
     {
         echo html::a($this->createLink('story', 'zeroCase', "productID=$productID&orderBy=id_desc&from={$this->lang->navGroup->testcase}"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab'");
     }
+    elseif($hasUnitPriv and $menuType == 'browseunits')
+    {
+        echo html::a($this->createLink('testtask', 'browseUnits', "productID=$productID"), "<span class='text'>{$lang->testcase->browseUnits}</span>", '', "class='btn btn-link' id='browseunitsTab'");
+    }
     ?>
     <?php endforeach;?>
     <?php
@@ -136,6 +148,9 @@
         echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary'");
     }
     ?>
+    <?php if($this->app->rawMethod == 'browseunits' and common::canModify('product', $product)):?>
+      <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary'");?>
+    <?php endif;?>
     <?php else:?>
     <div class='btn-group dropdown-hover'>
       <?php

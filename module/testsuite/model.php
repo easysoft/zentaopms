@@ -43,6 +43,7 @@ class testsuiteModel extends model
         {
             if($this->config->global->flow == 'full' and $this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testsuite', $key, $productID);
             $replace = $productID;
+            if($this->lang->navGroup->testsuite == 'project' and $key == 'bug') $replace = 0;
             common::setMenuVars($this->lang->testsuite->menu, $key, $replace);
         }
 

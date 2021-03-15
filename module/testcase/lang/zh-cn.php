@@ -74,6 +74,8 @@ $lang->testcase->ignore           = '忽略';
 $lang->testcase->fromTesttask     = '来自测试单用例';
 $lang->testcase->fromCaselib      = '来自用例库用例';
 $lang->testcase->deleted          = '是否删除';
+$lang->testcase->browseUnits      = '单元测试';
+
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID      = '编号';
@@ -226,4 +228,5 @@ $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConf
 $lang->testcase->featureBar['browse']['group']       = '分组查看';
 $lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
+$lang->testcase->featureBar['browse']['browseunits'] = '单元测试';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

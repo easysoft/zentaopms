@@ -23,7 +23,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
 ?>
 <?php if($config->global->flow == 'full'):?>
 <div id="mainMenu" class="clearfix">
-  <?php if(!$isProjectBug):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php
@@ -36,32 +35,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       ?>
     </div>
   </div>
-  <?php endif;?>
   <div class="btn-toolbar pull-left">
-    <?php if($isProjectBug):?>
-    <div class='btn-group'>
-      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $productName;?>'><?php echo $productName;?></span> <span class='caret'></span></a>
-      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-        <?php
-        echo "<li>" . html::a($this->createLink('bug', 'browse', "productID=0"), $lang->product->all)  . "</li>";
-        foreach($projectProducts as $product)
-        {
-            echo "<li>" . html::a($this->createLink('bug', 'browse', "productID=$product->id&branch=0"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
-        }
-        ?>
-      </ul>
-    </div>
-    <div class="btn-group">
-      <a href="javascript:;" class="btn btn-link" style="padding-right: 0;"> <?php echo $moduleName;?> </a>
-      <?php
-      if($moduleID)
-      {
-          $removeLink = $browseType == 'bymodule' ? $this->createLink($this->app->rawModule, $this->app->rawMethod, "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
-          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted btn btn-link' style='padding-left: 0;'");
-      }
-      ?>
-    </div>
-    <?php endif;?>
     <?php
     $menus = customModel::getFeatureMenu($this->moduleName, $this->methodName);
     foreach($menus as $menuItem)
@@ -195,7 +169,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class="text-center">
-        <?php common::printLink('tree', 'browse', "productID=$productID&view=bug&currentModuleID=0&branch=0&from={$this->lang->navGroup->bug}", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
+        <?php if($productID) common::printLink('tree', 'browse', "productID=$productID&view=bug&currentModuleID=0&branch=0&from={$this->lang->navGroup->bug}", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>

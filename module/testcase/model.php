@@ -45,7 +45,10 @@ class testcaseModel extends model
         foreach($this->lang->testcase->menu as $key => $menu)
         {
             if($this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
-            common::setMenuVars($this->lang->testcase->menu, $key, $productID);
+
+            $replace = $productID;
+            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
+            common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
 
         if($this->lang->navGroup->testcase == 'qa')
@@ -117,26 +120,7 @@ class testcaseModel extends model
             }
 
             /* If the story is linked project, make the case link the project. */
-            if(!empty($case->story))
-            {
-                $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->Where('story')->eq($case->story)->fetchAll('project');
-                $projects = array_keys($projects);
-            }
-            if($this->lang->navGroup->testcase != 'qa' and empty($case->story)) $projects = array($this->session->PRJ);
-            if(!empty($projects))
-            {
-                foreach($projects as $projectID)
-                {
-                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                    $data = new stdclass();
-                    $data->project = $projectID;
-                    $data->product = $case->product;
-                    $data->case    = $caseID;
-                    $data->version = 1;
-                    $data->order   = ++ $lastOrder;
-                    $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
-                }
-            }
+            $this->syncCase2Project($case);
 
             return array('status' => 'created', 'id' => $caseID);
         }
@@ -246,27 +230,7 @@ class testcaseModel extends model
             $caseID = $this->dao->lastInsertID();
 
             /* If the story is linked project, make the case link the project. */
-            if(!empty($case->story))
-            {
-                $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->Where('story')->eq($case->story)->fetchAll('project');
-                $projects = array_keys($projects);
-            }
-            if($this->lang->navGroup->testcase != 'qa' and empty($case->story)) $projects = array($this->session->PRJ);
-            if(!empty($projects))
-            {
-                foreach($projects as $projectID)
-                {
-                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                    $data = new stdclass();
-                    $data->project = $projectID;
-                    $data->product = $case->product;
-                    $data->case    = $caseID;
-                    $data->version = 1;
-                    $data->order   = ++ $lastOrder;
-                    $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
-                }
-            }
-
+            $this->syncCase2Project($case);
             $this->executeHooks($caseID);
 
             $this->loadModel('score')->create('testcase', 'create', $caseID);
@@ -658,6 +622,40 @@ class testcaseModel extends model
             $isLibCase    = ($oldCase->lib and empty($oldCase->product));
             $titleChanged = ($case->title != $oldCase->title);
             if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
+
+            /* The case is linked the project. */
+            if($oldCase->project != 0)
+            {
+                $productChanged = ($oldCase->product != $case->product);
+                $storyChanged   = ($oldCase->story != $case->story);
+
+                if($productChanged)
+                {
+                    $this->dao->update(TABLE_PROJECTCASE)
+                        ->set('product')->eq($case->product)
+                        ->set('version')->eq($case->version)
+                        ->where('project')->eq($oldCase->project)
+                        ->andWhere('`case`')->eq($oldCase->id)
+                        ->exec();
+                }
+
+                /* If the related story is changed and the new related story isn't linked the project, unlink the case. */
+                if($storyChanged)
+                {
+                    $projectStory = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
+                        ->where('project')->eq($oldCase->project)
+                        ->andWhere('story')->eq($case->story)
+                        ->fetchAll();
+                    if(!$projectStory)
+                    {
+                        $this->dao->delete()->from(TABLE_PROJECTCASE)
+                            ->where('project')->eq($oldCase->project)
+                            ->andWhere('`case`')->eq($oldCase->id)
+                            ->exec();
+                    }
+
+                }
+            }
 
             if($stepChanged)
             {
@@ -1336,7 +1334,7 @@ class testcaseModel extends model
         {
             $case->fromCaseID      = $case->id;
             $case->fromCaseVersion = $case->version;
-            $case->product    = $productID;
+            $case->product         = $productID;
             if(isset($data->module[$case->id])) $case->module = $data->module[$case->id];
             if(isset($data->branch[$case->id])) $case->branch = $data->branch[$case->id];
             unset($case->id);
@@ -1354,6 +1352,20 @@ class testcaseModel extends model
                         unset($step->id);
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
                     }
+                }
+
+                /* If under the project module, the cases is imported need linking to the project. */
+                if($this->lang->navGroup->testcase != 'qa')
+                {
+                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($this->session->PRJ)->orderBy('order_desc')->limit(1)->fetch('order');
+
+                    $this->dao->insert(TABLE_PROJECTCASE)
+                        ->set('project')->eq($case->project)
+                        ->set('product')->eq($case->product)
+                        ->set('case')->eq($caseID)
+                        ->set('version')->eq($case->version)
+                        ->set('order')->eq(++ $lastOrder)
+                        ->exec();
                 }
 
                 /* Fix bug #1518. */
@@ -1667,6 +1679,41 @@ class testcaseModel extends model
         }
 
         return sprintf($this->lang->testcase->summary, count($cases), $executed);
+    }
+
+    /**
+     * Sync case to project.
+     * 
+     * @param  object $case 
+     * @access public
+     * @return void
+     */
+    public function syncCase2Project($case)
+    {
+        if(!empty($case->story))
+        {
+            $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
+            $projects = array_keys($projects);
+        }
+        elseif($this->lang->navGroup->testcase == 'project' and empty($case->story)) 
+        {
+            $projects = array($this->session->PRJ);
+        }
+
+        if(!empty($projects))
+        {
+            foreach($projects as $projectID)
+            {
+                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->product = $case->product;
+                $data->case    = $caseID;
+                $data->version = 1;
+                $data->order   = ++ $lastOrder;
+                $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+            }
+        }
     }
 
     /**
