@@ -760,7 +760,8 @@ class treeModel extends model
                 while($module = $stmt->fetch())
                 {
                     /* If not manage, ignore unused modules. */
-                    if(isset($executionModules[$module->id])) $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
+                    if(isset($executionModules[$module->id]) and $this->app->rawModule == 'execution') $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
+                    if($this->app->rawModule == 'projectstory') $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
                 }
                 if((isset($treeMenu[0]) and $branch) or isset($executionBranches[$branch]))
                 {
