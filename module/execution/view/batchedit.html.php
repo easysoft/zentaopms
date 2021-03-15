@@ -82,7 +82,7 @@
               }
               else
               {
-                  echo html::select("lifetimes[$executionID]",    $lang->program->PRJLifeTimeList,   $executions[$executionID]->lifetime,   'class=form-control');
+                  echo html::select("lifetimes[$executionID]",    $lang->execution->lifeTimeList,   $executions[$executionID]->lifetime,   'class=form-control');
               }
               ?>
             </td>
@@ -108,7 +108,12 @@
           <?php endforeach;?>
         </tbody>
         <tfoot>
-          <tr><td colspan='<?php echo count($visibleFields) + 6?>' class='text-center form-actions'><?php echo html::submitButton();?></td></tr>
+          <tr>
+            <td colspan='<?php echo count($visibleFields) + 6?>' class='text-center form-actions'>
+              <?php echo html::submitButton();?>
+              <?php echo html::backButton();?>
+            </td>
+          </tr>
         </tfoot>
       </table>
     </div>

@@ -90,10 +90,12 @@ js::set('defaultOpen', $open);
       <div id="latestVersionList">
         <?php if(empty($latestVersionList)):?>
         <div class="table-empty-tip" style='padding: 66px 10px;'>
-            <div style='display: inline-block'><?php echo $lang->noData;?></div>
+          <div style='display: inline-block'>
+            <span id='empty-tip'><?php echo $lang->noData;?></span>
             <a href='<?php echo $lang->website;?>' target='_blank'>
               <span class="label label-badge label-info label-outline"><?php echo $lang->index->website . ': '. $lang->website;?></span>
             </a>
+          </div>
         </div>
         <?php else:?>
         <table class='table has-sort-head'>

@@ -819,8 +819,8 @@ class execution extends control
     }
 
     /**
-     * Exectuion qa dashboard. 
-     * 
+     * Exectuion qa dashboard.
+     *
      * @param  int $executionID
      * @access public
      * @return void
@@ -910,9 +910,9 @@ class execution extends control
     }
 
     /**
-     * Execution case list. 
-     * 
-     * @param  int    $executionID 
+     * Execution case list.
+     *
+     * @param  int    $executionID
      * @access public
      * @return void
      */
@@ -932,7 +932,7 @@ class execution extends control
         $this->view->executionID = $executionID;
         $this->view->productID   = $productID;
         $this->view->execution   = $this->execution->getByID($executionID);
-        
+
         $this->display();
     }
 
@@ -1444,6 +1444,8 @@ class execution extends control
      */
     public function batchEdit($executionID = 0)
     {
+        $this->lang->execution->menu = $this->lang->execution->homeMenu;
+
         $this->app->loadLang('stage');
 
         if($this->post->names)
@@ -2348,7 +2350,7 @@ class execution extends control
     {
         if($confirm == 'no')
         {
-            $tip = $this->app->rawModule == 'executionstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
+            $tip = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
             die(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes")));
         }
         else
@@ -2988,8 +2990,8 @@ class execution extends control
     }
 
     /**
-     * Show module menu for some module. 
-     * 
+     * Show module menu for some module.
+     *
      * @access public
      * @return void
      */

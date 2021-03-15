@@ -113,8 +113,8 @@ class executionModel extends model
         if($methodName == 'all') $label = $this->lang->execution->allExecutions;
         if($methodName == 'create' and $moduleName == 'execution') $label = $this->lang->execution->create;
 
-        foreach($this->lang->execution->viewMenu as $key => $menu) common::setMenuVars($this->lang->execution->viewMenu, $key, $executionID); 
-        foreach($this->lang->execution->qaMenu as $key => $menu) common::setMenuVars($this->lang->execution->qaMenu, $key, $executionID); 
+        foreach($this->lang->execution->viewMenu as $key => $menu) common::setMenuVars($this->lang->execution->viewMenu, $key, $executionID);
+        foreach($this->lang->execution->qaMenu as $key => $menu) common::setMenuVars($this->lang->execution->qaMenu, $key, $executionID);
 
         foreach($this->lang->execution->menu as $key => $menu)
         {
@@ -881,7 +881,7 @@ class executionModel extends model
      */
     public function getMainAction($module, $method)
     {
-        if($method == 'index' or $method == 'all') return;
+        if(in_array($method, array('index', 'all', 'batchedit'))) return;
 
         $link = html::a(helper::createLink('execution', 'all'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
         $html = "<p style='padding-top:5px;'>" . $link . "</p>";
@@ -900,7 +900,7 @@ class executionModel extends model
      */
     public function getSwitcher($executionID, $currentModule, $currentMethod)
     {
-        if($currentMethod == 'index' or $currentMethod == 'all') return;
+        if(in_array($currentMethod,  array('index', 'all', 'batchedit'))) return;
 
         $this->session->set('moreExecutionLink', $this->app->getURI(true));
 
@@ -2046,9 +2046,48 @@ class executionModel extends model
             $data->version = $versions[$storyID];
             $data->order   = ++$lastOrder;
             $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
+
             $this->story->setStage($storyID);
+            $this->linkCases($executionID, (int)$products[$storyID], $storyID);
+
             $action = $executionID == $this->session->PRJ ? 'linked2project' : 'linked2execution';
             $this->action->create('story', $storyID, $action, '', $executionID);
+        }
+    }
+
+    /**
+     * Link cases.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $storyID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function linkCases($executionID, $productID, $storyID, $type = '')
+    {
+        $this->loadModel('action');
+        $linkedCases   = $this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('case', 'order');
+        $lastCaseOrder = empty($linkedCases) ? 0 : reset($linkedCases);
+        $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchParis('id');
+        foreach($cases as $caseID => $case)
+        {
+            if(isset($linkedCases[$caseID])) continue;
+
+            $object = new stdclass();
+            $object->project = $executionID;
+            $object->product = $productID;
+            $object->case    = $caseID;
+            $object->version = $case->version;
+            $object->order   = ++$lastCaseOrder;
+
+            $this->dao->insert(TABLE_PROJECTCASE)->data($object)->exec();
+
+            $action = $executionID == $this->session->PRJ ? 'linked2project' : 'linked2execution';
+            if($type) $action = $type == 'project' ? 'linked2project' : 'linked2execution';
+
+            $this->action->create('case', $caseID, $action, '', $executionID);
         }
     }
 
@@ -2106,7 +2145,7 @@ class executionModel extends model
     public function unlinkStory($executionID, $storyID)
     {
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-        if($execution->type == 'execution')
+        if($execution->type == 'project')
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');
             $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
@@ -2123,6 +2162,7 @@ class executionModel extends model
         }
 
         $this->loadModel('story')->setStage($storyID);
+        $this->unlinkCases($executionID, $storyID);
         $objectType = $executionID == $this->session->PRJ ? unlinkedfromproject : unlinkedfromexecution;
         $this->loadModel('action')->create('story', $storyID, $objectType, '', $executionID);
 
@@ -2133,6 +2173,34 @@ class executionModel extends model
             $changes  = $this->loadModel('task')->cancel($taskID);
             $actionID = $this->action->create('task', $taskID, 'Canceled');
             $this->action->logHistory($actionID, $changes);
+        }
+    }
+
+    /**
+     * Unlink cases.
+     *
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function unlinkCases($executionID, $storyID)
+    {
+        $this->loadModel('action');
+        $cases = $this->dao->select('id')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchAll('id');
+        foreach($cases as $caseID => $case)
+        {
+            $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->andWhere('`case`')->eq($caseID)->limit(1)->exec();
+            $action = $executionID == $this->session->PRJ ? 'unlinkedfromproject' : 'unlinkedfromexecution';
+            $this->action->create('case', $caseID, $action, '', $executionID);
+        }
+
+        $order = 1;
+        $cases = $this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->orderBy('order')->fetchAll();
+        foreach($cases as $case)
+        {
+            if($case->order != $order) $this->dao->update(TABLE_PROJECTCASE)->set('`order`')->eq($order)->where('project')->eq($executionID)->andWhere('`case`')->eq($case->case)->exec();
+            $order++;
         }
     }
 

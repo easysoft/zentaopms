@@ -142,6 +142,7 @@ $lang->execution->index             = "Home";
 $lang->execution->task              = 'Aufgaben';
 $lang->execution->groupTask         = 'Nach Gruppen';
 $lang->execution->story             = 'Storys';
+$lang->execution->qa                = 'QA';
 $lang->execution->bug               = 'Bugs';
 $lang->execution->dynamic           = 'Verlauf';
 $lang->execution->latestDynamic     = 'Letzter Verlauf';

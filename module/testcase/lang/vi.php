@@ -215,8 +215,12 @@ $lang->testcase->searchStories = 'Nhập nội dung cần tìm cho câu chuyện
 $lang->testcase->selectLib     = 'Chọn thư viện';
 
 $lang->testcase->action = new stdclass();
-$lang->testcase->action->fromlib  = array('main' => '$date, nhập bởi <strong>$actor</strong> từ <strong>$extra</strong>.');
-$lang->testcase->action->reviewed = array('main' => '$date, ghi nhận bởi <strong>$actor</strong> và kết quả xét duyệt này là <strong>$extra</strong>.', 'extra' => 'reviewResultList');
+$lang->testcase->action->fromlib               = array('main' => '$date, nhập bởi <strong>$actor</strong> từ <strong>$extra</strong>.');
+$lang->testcase->action->reviewed              = array('main' => '$date, ghi nhận bởi <strong>$actor</strong> và kết quả xét duyệt này là <strong>$extra</strong>.', 'extra' => 'reviewResultList');
+$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。');
+$lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = 'Đang đợi';

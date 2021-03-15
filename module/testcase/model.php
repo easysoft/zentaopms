@@ -697,6 +697,37 @@ class testcaseModel extends model
                 }
             }
 
+            /* Process the project and execute the use case. */
+            if($case->story != $oldCase->story)
+            {
+                $this->loadModel('action');
+                $oldProjects = $this->dao->select('t1.project,t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.story')->eq($oldCase->story)
+                    ->fetchPairs();
+
+                foreach($oldProjects as $id => $type)
+                {
+                    $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($id)->andWhere('`case`')->eq($caseID)->exec();
+                    $action = $type == 'project' ? 'unlinkedfromproject' : 'unlinkedfromexecution';
+                    $this->action->create('case', $caseID, $action, '', $executionID);
+                }
+
+                if($case->story != 0)
+                {
+                    $this->loadModel('execution');
+                    $projects = $this->dao->select('t1.project,t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
+                        ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                        ->where('t1.story')->eq($case->story)
+                        ->fetchPairs();
+
+                    foreach($projects as $id => $type)
+                    {
+                        $this->execution->linkCases($id, $case->product, $case->story, $type);
+                    }
+                }
+            }
+
             /* Join the steps to diff. */
             if($stepChanged and $this->post->steps)
             {
