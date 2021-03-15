@@ -113,8 +113,8 @@ class executionModel extends model
         if($methodName == 'all') $label = $this->lang->execution->allExecutions;
         if($methodName == 'create' and $moduleName == 'execution') $label = $this->lang->execution->create;
 
-        foreach($this->lang->execution->viewMenu as $key => $menu) common::setMenuVars($this->lang->execution->viewMenu, $key, $executionID); 
-        foreach($this->lang->execution->qaMenu as $key => $menu) common::setMenuVars($this->lang->execution->qaMenu, $key, $executionID); 
+        foreach($this->lang->execution->viewMenu as $key => $menu) common::setMenuVars($this->lang->execution->viewMenu, $key, $executionID);
+        foreach($this->lang->execution->qaMenu as $key => $menu) common::setMenuVars($this->lang->execution->qaMenu, $key, $executionID);
 
         foreach($this->lang->execution->menu as $key => $menu)
         {
@@ -881,7 +881,7 @@ class executionModel extends model
      */
     public function getMainAction($module, $method)
     {
-        if($method == 'index' or $method == 'all') return;
+        if(in_array($method, array('index', 'all', 'batchedit'))) return;
 
         $link = html::a(helper::createLink('execution', 'all'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
         $html = "<p style='padding-top:5px;'>" . $link . "</p>";
@@ -900,7 +900,7 @@ class executionModel extends model
      */
     public function getSwitcher($executionID, $currentModule, $currentMethod)
     {
-        if($currentMethod == 'index' or $currentMethod == 'all') return;
+        if(in_array($currentMethod,  array('index', 'all', 'batchedit'))) return;
 
         $this->session->set('moreExecutionLink', $this->app->getURI(true));
 
