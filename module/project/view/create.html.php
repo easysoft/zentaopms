@@ -24,7 +24,8 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->project->create . ' - ' . zget($lang->project->modelList, $model, '');?></h2>
+      <?php $createTitle = isset($this->config->maxVersion) ? $lang->project->create . ' - ' . zget($lang->project->modelList, $model, '') : $lang->project->create;?>
+      <h2><?php echo $createTitle;?></h2>
       <div class="pull-right btn-toolbar">
         <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       </div>
