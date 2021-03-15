@@ -1707,6 +1707,7 @@ class testcaseModel extends model
      * Sync case to project.
      * 
      * @param  object $case 
+     * @param  int    $caseID
      * @access public
      * @return void
      */
