@@ -910,27 +910,42 @@ class execution extends control
     }
 
     /**
-     * Execution case list.
-     *
-     * @param  int    $executionID
+     * Execution case list. 
+     * 
+     * @param  int    $executionID 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function testcase($executionID = 0, $type = 'all', $param = 0, $productID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($executionID = 0, $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('testcase');
+        $this->loadModel('testtask');
         $this->showModuleMenu();
         $this->commonAction($executionID);
 
-        $products  = $this->execution->getProducts($executionID, false);
-        if(empty($products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
+        $products  = $this->execution->getProducts($executionID);
+        $productID = key($products);    // Get the first product for creating testcase.
 
-        $productID = $this->loadModel('product')->saveState($productID, $products);
-        $this->product->setMenu($products, $productID);
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $orderBy, $pager, $type);
+        $cases = $this->testcase->appendData($cases, 'run');
 
         $this->view->title       = $this->lang->execution->testcase;
         $this->view->executionID = $executionID;
         $this->view->productID   = $productID;
+        $this->view->cases       = $cases;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->type        = $type;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->execution   = $this->execution->getByID($executionID);
 
         $this->display();

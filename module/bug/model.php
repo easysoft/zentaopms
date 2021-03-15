@@ -37,7 +37,7 @@ class bugModel extends model
         if($isMobile)
         {
             $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
+            $pageNav = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
         }
         $pageNav .= $selectHtml;
 

@@ -120,7 +120,7 @@ class testcaseModel extends model
             }
 
             /* If the story is linked project, make the case link the project. */
-            $this->syncCase2Project($case);
+            $this->syncCase2Project($case, $caseID);
 
             return array('status' => 'created', 'id' => $caseID);
         }
@@ -230,7 +230,7 @@ class testcaseModel extends model
             $caseID = $this->dao->lastInsertID();
 
             /* If the story is linked project, make the case link the project. */
-            $this->syncCase2Project($case);
+            $this->syncCase2Project($case, $caseID);
             $this->executeHooks($caseID);
 
             $this->loadModel('score')->create('testcase', 'create', $caseID);
@@ -294,6 +294,28 @@ class testcaseModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager, 't1.case')
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get execution cases.
+     *
+     * @param  int    $executionID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getExecutionCases($executionID, $orderBy = 'id_desc', $pager = null, $browseType = '')
+    {
+        return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('t1.project')->eq((int)$executionID)
+            ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
     }
 
@@ -653,7 +675,6 @@ class testcaseModel extends model
                             ->andWhere('`case`')->eq($oldCase->id)
                             ->exec();
                     }
-
                 }
             }
 
@@ -697,36 +718,6 @@ class testcaseModel extends model
                 }
             }
 
-            /* Process the project and execute the use case. */
-            if($case->story != $oldCase->story)
-            {
-                $this->loadModel('action');
-                $oldProjects = $this->dao->select('t1.project,t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
-                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                    ->where('t1.story')->eq($oldCase->story)
-                    ->fetchPairs();
-
-                foreach($oldProjects as $id => $type)
-                {
-                    $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($id)->andWhere('`case`')->eq($caseID)->exec();
-                    $action = $type == 'project' ? 'unlinkedfromproject' : 'unlinkedfromexecution';
-                    $this->action->create('case', $caseID, $action, '', $executionID);
-                }
-
-                if($case->story != 0)
-                {
-                    $this->loadModel('execution');
-                    $projects = $this->dao->select('t1.project,t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
-                        ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                        ->where('t1.story')->eq($case->story)
-                        ->fetchPairs();
-
-                    foreach($projects as $id => $type)
-                    {
-                        $this->execution->linkCases($id, $case->product, $case->story, $type);
-                    }
-                }
-            }
 
             /* Join the steps to diff. */
             if($stepChanged and $this->post->steps)
@@ -1683,19 +1674,20 @@ class testcaseModel extends model
 
     /**
      * Sync case to project.
-     * 
-     * @param  object $case 
+     *
+     * @param  object $case
+     * @param  int    $caseID
      * @access public
      * @return void
      */
-    public function syncCase2Project($case)
+    public function syncCase2Project($case, $caseID)
     {
         if(!empty($case->story))
         {
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
             $projects = array_keys($projects);
         }
-        elseif($this->lang->navGroup->testcase == 'project' and empty($case->story)) 
+        elseif($this->lang->navGroup->testcase == 'project' and empty($case->story))
         {
             $projects = array($this->session->PRJ);
         }
