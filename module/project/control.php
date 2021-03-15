@@ -293,6 +293,8 @@ class project extends control
             }
         }
 
+        $this->lang->noMenuModule[] = 'project';
+
         $name      = '';
         $code      = '';
         $team      = '';

@@ -2369,7 +2369,7 @@ class executionModel extends model
             $member->type    = $executionType;
 
             $executionMember[$account] = $member;
-            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+            $this->dao->replace(TABLE_TEAM)->data($member)->exec();
         }
 
         /* Only changed account update userview. */
