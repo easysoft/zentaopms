@@ -1,12 +1,12 @@
 <?php
 /**
- * The prjcreate view file of project module of ZenTaoPMS.
+ * The create view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: prjcreate.html.php 4769 2013-05-05 07:24:21Z wwccss $
+ * @version     $Id: create.html.php 4769 2013-05-05 07:24:21Z wwccss $
  * @link        http://www.zentao.net
  */
 ?>
@@ -16,7 +16,6 @@
 <?php js::set('model', $model);?>
 <?php js::set('programID', $programID);?>
 <?php js::set('copyProjectID', $copyProjectID);?>
-<?php js::set('from', $from);?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('longTime', $lang->project->longTime);?>
