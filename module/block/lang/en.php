@@ -320,7 +320,7 @@ $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Order by';
 
 $lang->block->availableBlocks            = new stdclass();
-$lang->block->availableBlocks->todo      = 'My Todos';
+$lang->block->availableBlocks->todo      = 'My schedule';
 $lang->block->availableBlocks->task      = 'My Tasks';
 $lang->block->availableBlocks->bug       = 'My Bugs';
 $lang->block->availableBlocks->case      = 'My Cases';

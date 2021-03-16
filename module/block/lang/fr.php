@@ -320,7 +320,7 @@ $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Trié par';
 
 $lang->block->availableBlocks            = new stdclass();
-$lang->block->availableBlocks->todo      = 'Ma Todo List';
+$lang->block->availableBlocks->todo      = 'Mon emploi du temps';
 $lang->block->availableBlocks->task      = 'Mes Tâches';
 $lang->block->availableBlocks->bug       = 'Mes Bugs';
 $lang->block->availableBlocks->case      = 'Mes CasTests';

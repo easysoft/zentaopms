@@ -320,7 +320,7 @@ $lang->block->type    = 'Loại';
 $lang->block->orderBy = 'Order by';
 
 $lang->block->availableBlocks            = new stdclass();
-$lang->block->availableBlocks->todo      = 'Việc của bạn';
+$lang->block->availableBlocks->todo      = 'Lịch của tôi';
 $lang->block->availableBlocks->task      = 'Nhiệm vụ';
 $lang->block->availableBlocks->bug       = 'Bugs của bạn';
 $lang->block->availableBlocks->case      = 'Tình huống của bạn';

@@ -320,7 +320,7 @@ $lang->block->type    = '類型';
 $lang->block->orderBy = '排序';
 
 $lang->block->availableBlocks            = new stdclass();
-$lang->block->availableBlocks->todo      = '我的待辦';
+$lang->block->availableBlocks->todo      = '我的日程';
 $lang->block->availableBlocks->task      = '我的任務';
 $lang->block->availableBlocks->bug       = '我的Bug';
 $lang->block->availableBlocks->case      = '我的用例';
