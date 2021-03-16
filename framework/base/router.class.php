@@ -980,7 +980,7 @@ class baseRouter
         if($this->cookie->device == 'mobile')  $this->clientDevice = 'mobile';
         if($this->cookie->device == 'desktop') $this->clientDevice = 'desktop';
 
-        if(strpos('mobile,desktop', $this->cookie->device) === false)
+        if(empty($this->cookie->device) || strpos('mobile,desktop', $this->cookie->device) === false)
         {
             $mobile = new mobile();
             $this->clientDevice = ($mobile->isMobile() and !$mobile->isTablet()) ? 'mobile' : 'desktop';
