@@ -1699,8 +1699,7 @@ class testcaseModel extends model
             $this->dao->update(TABLE_PROJECTCASE)
                 ->set('product')->eq($case->product)
                 ->set('version')->eq($case->version)
-                ->where('project')->eq($oldCase->project)
-                ->andWhere('`case`')->eq($oldCase->id)
+                ->where('`case`')->eq($oldCase->id)
                 ->exec();
         }
 
@@ -1736,7 +1735,7 @@ class testcaseModel extends model
                             $data->case    = $caseID;
                             $data->version = $oldCase->version;
                             $data->order   = ++ $lastOrder;
-                            $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+                            $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
                         }
                     }
                 }
