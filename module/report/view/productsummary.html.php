@@ -6,7 +6,7 @@
   <div class='side-col col-lg' id='sidebar'>
     <?php include 'blockreportlist.html.php';?>
   </div>
-  <div class='main-col'>
+  <div class='main-col  w-800px'>
     <?php if(empty($products)):?>
     <div class="cell">
       <div class="table-empty-tip">
@@ -97,7 +97,7 @@
               </tr>
               <?php endforeach;?>
             </tbody>
-          </table> 
+          </table>
         </div>
       </div>
     </div>
