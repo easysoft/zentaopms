@@ -460,9 +460,10 @@ class task extends control
         /* The tasks of my. */
         else
         {
-            $this->lang->task->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.task', 'my');
+            $this->lang->navGroup->task  = 'my';
+            $this->lang->task->menu      = $this->lang->my->menu;
             $this->lang->task->menuOrder = $this->lang->my->menuOrder;
+            $this->lang->set('menugroup.task', 'my');
             $this->loadModel('my')->setMenu();
             $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
             $this->view->title      = $this->lang->task->batchEdit;
