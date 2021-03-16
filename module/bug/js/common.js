@@ -55,7 +55,7 @@ function loadAll(productID)
         $('#task').chosen();
         loadProductBranches(productID)
         loadProductModules(productID);
-        loadProductExecutions(productID);
+        loadProductProjects(productID);
         loadProductBuilds(productID);
         loadProductplans(productID);
         loadProductStories(productID);
@@ -75,7 +75,7 @@ function loadBranch()
     $('#task').chosen();
     productID = $('#product').val();
     loadProductModules(productID);
-    loadProductExecutions(productID);
+    loadProductProjects(productID);
     loadProductBuilds(productID);
     loadProductplans(productID);
     loadProductStories(productID);
@@ -232,19 +232,42 @@ function loadProductStories(productID)
 }
 
 /**
- * Load executions of product.
+ * Load projects of product.
  *
  * @param  int    $productID
  * @access public
  * @return void
  */
-function loadProductExecutions(productID)
+function loadProductProjects(productID)
 {
+    branch = $('#branch').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + oldProjectID);
+    $('#projectBox').load(link, function()
+    {
+        $(this).find('select').chosen();
+        var projectID = $('#project').find("option:selected").val();
+        loadProductExecutions(productID, projectID);
+    });
+}
+
+/**
+ * Load executions of product.
+ *
+ * @param  int    $productID
+ * @param  int    $projectID
+ * @access public
+ * @return void
+ */
+function loadProductExecutions(productID, projectID = 0)
+{
+    if(!projectID) projectID = $('#project').find("option:selected").val();
     required = $('#execution_chosen').hasClass('required');
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&executionID=' + oldExecutionID + '&branch=' + branch);
+    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch);
     $('#executionIdBox').load(link, function()
     {
         $(this).find('select').chosen();

@@ -17,6 +17,7 @@ $lang->bug->branch           = 'Branche/Plateforme';
 $lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
+$lang->bug->project          = 'Project';
 $lang->bug->execution        = $lang->executionCommon;
 $lang->bug->story            = 'Story';
 $lang->bug->storyVersion     = 'Version Story';

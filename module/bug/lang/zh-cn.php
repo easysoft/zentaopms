@@ -17,6 +17,7 @@ $lang->bug->branch           = '分支/平台';
 $lang->bug->productplan      = '所属' . '计划';
 $lang->bug->module           = '所属模块';
 $lang->bug->moduleAB         = '模块';
+$lang->bug->project          = '所属项目';
 $lang->bug->execution        = '所属' . $lang->executionCommon;
 $lang->bug->story            = "相关{$lang->SRCommon}";
 $lang->bug->storyVersion     = "{$lang->SRCommon}版本";
