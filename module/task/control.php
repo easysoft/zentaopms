@@ -460,9 +460,10 @@ class task extends control
         /* The tasks of my. */
         else
         {
-            $this->lang->task->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.task', 'my');
+            $this->lang->navGroup->task  = 'my';
+            $this->lang->task->menu      = $this->lang->my->menu;
             $this->lang->task->menuOrder = $this->lang->my->menuOrder;
+            $this->lang->set('menugroup.task', 'my');
             $this->loadModel('my')->setMenu();
             $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
             $this->view->title      = $this->lang->task->batchEdit;
@@ -476,7 +477,7 @@ class task extends control
         /* Get execution teams. */
         $executionIDList = array();
         foreach($tasks as $task) if(!in_array($task->execution, $executionIDList)) $executionIDList[] = $task->execution;
-        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIDList)->andWhere('type')->in('sprint,stage')->fetchGroup('root', 'account');
+        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIDList)->andWhere('type')->eq('execution')->fetchGroup('root', 'account');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);

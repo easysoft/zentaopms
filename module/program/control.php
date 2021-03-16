@@ -101,8 +101,7 @@ class program extends control
         $program = $this->program->getByID($programID);
         if(empty($program) || $program->type != 'program') die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
+        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
         $this->program->setViewMenu($programID);
 
         /* Load pager and get tasks. */
@@ -396,8 +395,7 @@ class program extends control
         $this->app->session->set('programProject', $this->app->getURI(true));
         $this->app->session->set('projectList', $this->app->getURI(true));
 
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
+        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
         $this->program->setViewMenu($programID);
 
         $this->loadModel('datatable');
@@ -438,8 +436,7 @@ class program extends control
      */
     public function stakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
+        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
         $this->program->setViewMenu($programID);
 
         /* Load pager and get tasks. */
@@ -475,8 +472,7 @@ class program extends control
         }
 
         $this->loadModel('user');
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
+        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
         $this->program->setViewMenu($programID);
 
         $this->loadModel('dept');
