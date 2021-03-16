@@ -221,7 +221,7 @@ $lang->custom->CRExecution[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
-$lang->custom->moduleName['execution']   = $lang->sprintCommon;
+$lang->custom->moduleName['execution']   = 'Execution';
 
 $lang->custom->conceptQuestions['overview'] = "1. Which combination of management fits your company?";
 $lang->custom->conceptQuestions['URAndSR']  = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";

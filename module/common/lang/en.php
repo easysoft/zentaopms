@@ -114,8 +114,6 @@ $lang->future      = 'Waiting';
 $lang->year        = 'Year';
 $lang->workingHour = 'Hours';
 
-$lang->sprintCommon = $lang->iterationCommon . '/Phase';
-
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = 'Status';

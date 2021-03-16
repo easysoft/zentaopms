@@ -114,8 +114,6 @@ $lang->future      = 'Đang đợi';
 $lang->year        = 'Năm';
 $lang->workingHour = 'giờ';
 
-$lang->sprintCommon = $lang->iterationCommon . '/Phase';
-
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = 'Tình trạng';
