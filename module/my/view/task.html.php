@@ -34,7 +34,7 @@
   </div>
   <?php else:?>
   <form id='myTaskForm' class="main-table table-task" method="post">
-    <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
+    <?php $canBatchEdit  = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
     <table class="table has-sort-head table-fixed" id='taskTable'>
       <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>

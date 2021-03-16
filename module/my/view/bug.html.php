@@ -35,7 +35,7 @@
   <?php else:?>
   <form id='myBugForm' class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
     <?php
-    $canBatchEdit     = common::hasPriv('bug', 'batchEdit');
+    $canBatchEdit     = (common::hasPriv('bug', 'batchEdit') and $type == 'assignedTo');
     $canBatchConfirm  = common::hasPriv('bug', 'batchConfirm');
     $canBatchClose    = (common::hasPriv('bug', 'batchClose') and strtolower($type) != 'closedby');
     $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
