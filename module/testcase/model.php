@@ -1198,6 +1198,9 @@ class testcaseModel extends model
                     $oldCase->steps  = $this->joinStep($oldStep);
                     $caseData->steps = $this->joinStep($steps);
                     $changes  = common::createChanges($oldCase, $caseData);
+
+                    $this->updateCase2Project($oldCase, $caseData, $caseID);
+
                     $actionID = $this->action->create('case', $caseID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
@@ -1235,6 +1238,9 @@ class testcaseModel extends model
                             if($stepData->type == 'step')  $parentStepID = 0;
                         }
                     }
+
+                    $this->syncCase2Project($caseData, $caseID);
+
                     $this->action->create('case', $caseID, 'Opened');
                 }
             }
