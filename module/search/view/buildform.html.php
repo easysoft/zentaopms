@@ -41,6 +41,7 @@ $formId = 'searchForm-' . uniqid('');
 #queryBox .chosen-container-single .chosen-single > span {margin-right:5px;}
 
 #queryBox .form-actions .btn {margin-right: 5px;}
+@media screen and (max-width: 1366px) { #userQueries {width: 130px!important;} }
 #userQueries {border-left: 1px solid #eee; vertical-align: top;}
 #userQueries > h4 {margin: 0 0 6px;}
 #userQueries ul {list-style: none; padding-left: 0; margin: 0; max-height:75px; overflow:auto;}
