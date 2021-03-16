@@ -1706,37 +1706,29 @@ class testcaseModel extends model
         /* The related story is changed. */
         if($storyChanged)
         {
-            $projectStory = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
+            /* If the new related story isn't linked the project, unlink the case. */
+            $this->dao->delete()->from(TABLE_PROJECTCASE)
                 ->where('project')->eq($oldCase->project)
-                ->andWhere('story')->eq($case->story)
-                ->fetchAll();
+                ->andWhere('`case`')->eq($oldCase->id)
+                ->exec();
 
-            if(!$projectStory)
+            /* If the new related story is not null, make the case link the project which link the new related story. */
+            if(!empty($case->story))
             {
-                /* If the new related story isn't linked the project, unlink the case. */
-                $this->dao->delete()->from(TABLE_PROJECTCASE)
-                    ->where('project')->eq($oldCase->project)
-                    ->andWhere('`case`')->eq($oldCase->id)
-                    ->exec();
-
-                /* If the new related story is not null, make the case link the project which link the new related story. */
-                if(!empty($case->story))
+                $projects = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
+                if($projects)
                 {
-                    $projects = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
-                    if($projects)
+                    $projects = array_keys($projects);
+                    foreach($projects as $projectID)
                     {
-                        $projects = array_keys($projects);
-                        foreach($projects as $projectID)
-                        {
-                            $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                            $data = new stdclass();
-                            $data->project = $projectID;
-                            $data->product = $case->product;
-                            $data->case    = $caseID;
-                            $data->version = $oldCase->version;
-                            $data->order   = ++ $lastOrder;
-                            $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
-                        }
+                        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                        $data = new stdclass();
+                        $data->project = $projectID;
+                        $data->product = $case->product;
+                        $data->case    = $caseID;
+                        $data->version = $oldCase->version;
+                        $data->order   = ++ $lastOrder;
+                        $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
                     }
                 }
             }
