@@ -1707,8 +1707,9 @@ class testcaseModel extends model
         if($storyChanged)
         {
             /* If the new related story isn't linked the project, unlink the case. */
+            $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($oldCase->story)->fetchAll('project');
             $this->dao->delete()->from(TABLE_PROJECTCASE)
-                ->where('project')->eq($oldCase->project)
+                ->where('project')->in(array_keys($projects))
                 ->andWhere('`case`')->eq($oldCase->id)
                 ->exec();
 
