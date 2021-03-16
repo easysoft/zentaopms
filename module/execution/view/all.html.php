@@ -100,7 +100,7 @@
           <td class='text-left <?php if(!empty($execution->children)) echo 'has-child';?>' title='<?php echo $execution->name?>'>
             <?php
             if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
-            echo !empty($execution->children) ? $execution->name : html::a($this->createLink('execution', 'view', 'execution=' . $execution->id), $execution->name);
+            echo !empty($execution->children) ? $execution->name : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $execution->name);
             ?>
             <?php if(!empty($execution->children)):?>
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
@@ -144,7 +144,7 @@
                <?php
                if(isset($child->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
                echo "<span class='label label-badge label-light' title='{$lang->programplan->children}'>{$lang->programplan->childrenAB}</span>";
-               echo html::a($this->createLink('execution', 'view', 'execution=' . $child->id), $child->name);
+               echo html::a($this->createLink('execution', 'task', 'execution=' . $child->id), $child->name);
                ?>
              </td>
              <td><?php echo zget($users, $child->PM);?></td>
