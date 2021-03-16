@@ -3,7 +3,7 @@
   <div class='side-col col-lg' id='sidebar'>
     <?php include 'blockreportlist.html.php';?>
   </div>
-  <div class='main-col'>
+  <div class='main-col w-800px'>
     <?php if(empty($assigns)):?>
     <div class="cell">
       <div class="table-empty-tip">

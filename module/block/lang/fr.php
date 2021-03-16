@@ -31,7 +31,7 @@ $lang->block->lblBlock     = 'Bloc';
 $lang->block->lblNum       = 'Numéro';
 $lang->block->lblHtml      = 'HTML';
 $lang->block->dynamic      = 'Historique';
-$lang->block->assignToMe   = 'Assigné à moi';
+$lang->block->assignToMe   = 'Todo';
 $lang->block->done         = 'Done';
 $lang->block->lblFlowchart = 'Organigramme';
 $lang->block->welcome      = 'Bienvenue';
@@ -290,7 +290,7 @@ $lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'project';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
-$lang->block->default['full']['my']['7']['title']  = 'AssignedToMe';
+$lang->block->default['full']['my']['7']['title']  = 'Todo';
 $lang->block->default['full']['my']['7']['block']  = 'assigntome';
 $lang->block->default['full']['my']['7']['source'] = '';
 $lang->block->default['full']['my']['7']['grid']   = 8;
@@ -320,7 +320,7 @@ $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Trié par';
 
 $lang->block->availableBlocks            = new stdclass();
-$lang->block->availableBlocks->todo      = 'Ma Todo List';
+$lang->block->availableBlocks->todo      = 'Mon emploi du temps';
 $lang->block->availableBlocks->task      = 'Mes Tâches';
 $lang->block->availableBlocks->bug       = 'Mes Bugs';
 $lang->block->availableBlocks->case      = 'Mes CasTests';

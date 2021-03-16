@@ -31,7 +31,7 @@ $lang->block->lblBlock     = 'Block';
 $lang->block->lblNum       = 'Số';
 $lang->block->lblHtml      = 'HTML';
 $lang->block->dynamic      = 'Lịch sử';
-$lang->block->assignToMe   = 'Giao cho bạn';
+$lang->block->assignToMe   = 'Todo';
 $lang->block->done         = 'Done';
 $lang->block->lblFlowchart = 'Biểu đồ';
 $lang->block->welcome      = 'Welcome';
@@ -290,7 +290,7 @@ $lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'project';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
-$lang->block->default['full']['my']['7']['title']  = 'AssignedToMe';
+$lang->block->default['full']['my']['7']['title']  = 'Todo';
 $lang->block->default['full']['my']['7']['block']  = 'assigntome';
 $lang->block->default['full']['my']['7']['source'] = '';
 $lang->block->default['full']['my']['7']['grid']   = 8;
@@ -320,7 +320,7 @@ $lang->block->type    = 'Loại';
 $lang->block->orderBy = 'Order by';
 
 $lang->block->availableBlocks            = new stdclass();
-$lang->block->availableBlocks->todo      = 'Việc của bạn';
+$lang->block->availableBlocks->todo      = 'Lịch của tôi';
 $lang->block->availableBlocks->task      = 'Nhiệm vụ';
 $lang->block->availableBlocks->bug       = 'Bugs của bạn';
 $lang->block->availableBlocks->case      = 'Tình huống của bạn';

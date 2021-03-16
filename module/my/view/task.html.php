@@ -34,7 +34,7 @@
   </div>
   <?php else:?>
   <form id='myTaskForm' class="main-table table-task" method="post">
-    <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
+    <?php $canBatchEdit  = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
     <table class="table has-sort-head table-fixed" id='taskTable'>
       <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
@@ -199,11 +199,18 @@
       </tbody>
     </table>
     <div class="table-footer">
-      <?php if($canBatchClose):?>
+      <?php if($canBatchClose or $canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <?php endif;?>
       <div class="table-actions btn-toolbar">
       <?php
+      if($canBatchEdit)
+      {
+          $actionLink = $this->createLink('task', 'batchEdit');
+          $misc       = "data-form-action='$actionLink'";
+          echo html::commonButton($lang->edit, $misc);
+      }
+
       if($canBatchClose)
       {
           $actionLink = $this->createLink('task', 'batchClose', null, '', '', $task->project);

@@ -51,7 +51,7 @@ $lang->product->build       = 'Danh sách bản dựng';
 $lang->product->moreProduct = "More Product";
 $lang->product->projectInfo = "Projects đã liên kết tới {$lang->productCommon} này được liệt kê bên dưới.";
 
-$lang->product->currentExecution      = "Hiện {$lang->sprintCommon}";
+$lang->product->currentExecution      = "Hiện Execution";
 $lang->product->activeStories         = 'Kích hoạt [S]';
 $lang->product->activeStoriesTitle    = 'Kích hoạt câu chuyện';
 $lang->product->changedStories        = 'Đã thay đổi [S]';

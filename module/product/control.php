@@ -838,6 +838,23 @@ class product extends control
     }
 
     /**
+     * AJAX: get projects of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjects($productID, $branch = 0, $projectID = 0)
+    {
+        $projects = $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : $branch);
+        if($this->app->getViewType() == 'json') die(json_encode($peojects));
+
+        die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID})'"));
+    }
+
+    /**
      * AJAX: get executions of a product in html select.
      *
      * @param  int    $productID

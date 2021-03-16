@@ -51,7 +51,7 @@ $lang->product->build       = 'Liste Builds';
 $lang->product->moreProduct = "More Product";
 $lang->product->projectInfo = "Les Projects qui sont associés à ce {$lang->productCommon} sont listés ci-dessous.";
 
-$lang->product->currentExecution      = "Current {$lang->sprintCommon}";
+$lang->product->currentExecution      = "Current Execution";
 $lang->product->activeStories         = 'Actives [S]';
 $lang->product->activeStoriesTitle    = 'Stories Actives';
 $lang->product->changedStories        = 'Changées [S]';
