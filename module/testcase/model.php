@@ -630,7 +630,7 @@ class testcaseModel extends model
             ->get();
 
         $requiredFields = $this->config->testcase->edit->requiredFields;
-        if($case->lib != 0)
+        if($oldCase->lib != 0)
         {
             /* Remove the require field named story when the case is a lib case.*/
             $requiredFieldsArr = explode(',', $requiredFields);
@@ -645,38 +645,7 @@ class testcaseModel extends model
             $titleChanged = ($case->title != $oldCase->title);
             if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
 
-            /* The case is linked the project. */
-            if($oldCase->project != 0)
-            {
-                $productChanged = ($oldCase->product != $case->product);
-                $storyChanged   = ($oldCase->story != $case->story);
-
-                if($productChanged)
-                {
-                    $this->dao->update(TABLE_PROJECTCASE)
-                        ->set('product')->eq($case->product)
-                        ->set('version')->eq($case->version)
-                        ->where('project')->eq($oldCase->project)
-                        ->andWhere('`case`')->eq($oldCase->id)
-                        ->exec();
-                }
-
-                /* If the related story is changed and the new related story isn't linked the project, unlink the case. */
-                if($storyChanged)
-                {
-                    $projectStory = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
-                        ->where('project')->eq($oldCase->project)
-                        ->andWhere('story')->eq($case->story)
-                        ->fetchAll();
-                    if(!$projectStory)
-                    {
-                        $this->dao->delete()->from(TABLE_PROJECTCASE)
-                            ->where('project')->eq($oldCase->project)
-                            ->andWhere('`case`')->eq($oldCase->id)
-                            ->exec();
-                    }
-                }
-            }
+            $this->updateCase2Project($oldCase, $case, $caseID);
 
             if($stepChanged)
             {
@@ -900,6 +869,8 @@ class testcaseModel extends model
                 $isLibCase    = ($oldCase->lib and empty($oldCase->product));
                 $titleChanged = ($case->title != $oldCase->title);
                 if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
+
+                $this->updateCase2Project($oldCase, $case, $caseID);
 
                 $this->executeHooks($caseID);
 
@@ -1704,6 +1675,71 @@ class testcaseModel extends model
                 $data->version = 1;
                 $data->order   = ++ $lastOrder;
                 $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+            }
+        }
+    }
+
+
+    /**
+     * Deal with the relationship between the case and project when edit the case.
+     *
+     * @param  object  $oldCase
+     * @param  object  $case
+     * @param  int     $caseID
+     * @access public
+     * @return void
+     */
+    public function updateCase2Project($oldCase, $case, $caseID)
+    {
+        $productChanged = ($oldCase->product != $case->product);
+        $storyChanged   = ($oldCase->story   != $case->story);
+
+        if($productChanged)
+        {
+            $this->dao->update(TABLE_PROJECTCASE)
+                ->set('product')->eq($case->product)
+                ->set('version')->eq($case->version)
+                ->where('project')->eq($oldCase->project)
+                ->andWhere('`case`')->eq($oldCase->id)
+                ->exec();
+        }
+
+        /* The related story is changed. */
+        if($storyChanged)
+        {
+            $projectStory = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
+                ->where('project')->eq($oldCase->project)
+                ->andWhere('story')->eq($case->story)
+                ->fetchAll();
+
+            if(!$projectStory)
+            {
+                /* If the new related story isn't linked the project, unlink the case. */
+                $this->dao->delete()->from(TABLE_PROJECTCASE)
+                    ->where('project')->eq($oldCase->project)
+                    ->andWhere('`case`')->eq($oldCase->id)
+                    ->exec();
+
+                /* If the new related story is not null, make the case link the project which link the new related story. */
+                if(!empty($case->story))
+                {
+                    $projects = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
+                    if($projects)
+                    {
+                        $projects = array_keys($projects);
+                        foreach($projects as $projectID)
+                        {
+                            $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                            $data = new stdclass();
+                            $data->project = $projectID;
+                            $data->product = $case->product;
+                            $data->case    = $caseID;
+                            $data->version = $oldCase->version;
+                            $data->order   = ++ $lastOrder;
+                            $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+                        }
+                    }
+                }
             }
         }
     }
