@@ -114,8 +114,6 @@ $lang->future      = '未来';
 $lang->year        = '年';
 $lang->workingHour = '工时';
 
-$lang->sprintCommon = $lang->iterationCommon . '/阶段';
-
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = '状态';

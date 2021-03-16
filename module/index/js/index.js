@@ -116,7 +116,7 @@
         }
         if(moduleName === 'user')    
         {
-            if(['todo', 'task', 'story', 'bug', 'testtask', 'testcase', 'execution', 'dynamic', 'profile'].includes(methodLowerCase)) return 'system';
+            if(['todo', 'task', 'story', 'bug', 'testtask', 'testcase', 'execution', 'dynamic', 'profile', 'view'].includes(methodLowerCase)) return 'system';
         }
         if(moduleName === 'my')    
         {

@@ -17,6 +17,7 @@ $lang->bug->branch           = 'Branch/Platform';
 $lang->bug->productplan      = 'Kế hoạch';
 $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
+$lang->bug->project          = 'Project';
 $lang->bug->execution        = $lang->executionCommon;
 $lang->bug->story            = 'Câu chuyện';
 $lang->bug->storyVersion     = 'Phiên bản câu chuyện';

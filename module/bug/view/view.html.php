@@ -76,7 +76,7 @@
         <?php if(!$bug->deleted):?>
         <div class='divider'></div>
         <?php
-        common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'search', '', 'iframe', true);
+        common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'ok', '', 'iframe', true);
         common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
         common::printIcon('bug', 'resolve',    $params, $bug, 'button', 'checked', '', 'iframe showinonlybody', true);
         common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);

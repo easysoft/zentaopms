@@ -23,6 +23,7 @@ js::set('flow', $config->global->flow);
 js::set('stepsRequired', $stepsRequired);
 js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
 js::set('isStepsTemplate', $isStepsTemplate);
+js::set('oldProjectID', $projectID);
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
@@ -91,7 +92,15 @@ js::set('isStepsTemplate', $isStepsTemplate);
             </td>
             <?php endif;?>
             <?php if($showExecution):?>
-            <td><span id='executionIdBox'><?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></span></td>
+            <td>
+              <div class='table-row'>
+                <div class='table-col' id='projectBox'>
+                  <?php echo html::select('project', $projects, $projectID, "class='form-control chosen'");?>
+                </div>
+                <div class='table-col' id='executionIdBox'>
+                  <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
+                </div>
+            </td>
             <?php endif;?>
             <td>
               <div class='input-group' id='buildBox'>
