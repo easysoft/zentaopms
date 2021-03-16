@@ -31,7 +31,7 @@ $lang->block->lblBlock     = '區塊';
 $lang->block->lblNum       = '條數';
 $lang->block->lblHtml      = 'HTML內容';
 $lang->block->dynamic      = '最新動態';
-$lang->block->assignToMe   = '指派給我';
+$lang->block->assignToMe   = '待處理';
 $lang->block->done         = '已完成';
 $lang->block->lblFlowchart = '流程圖';
 $lang->block->welcome      = '歡迎總覽';
@@ -290,7 +290,7 @@ $lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'project';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
-$lang->block->default['full']['my']['7']['title']  = '指派給我';
+$lang->block->default['full']['my']['7']['title']  = '待處理';
 $lang->block->default['full']['my']['7']['block']  = 'assigntome';
 $lang->block->default['full']['my']['7']['source'] = '';
 $lang->block->default['full']['my']['7']['grid']   = 8;
@@ -320,7 +320,7 @@ $lang->block->type    = '類型';
 $lang->block->orderBy = '排序';
 
 $lang->block->availableBlocks            = new stdclass();
-$lang->block->availableBlocks->todo      = '我的待辦';
+$lang->block->availableBlocks->todo      = '我的日程';
 $lang->block->availableBlocks->task      = '我的任務';
 $lang->block->availableBlocks->bug       = '我的Bug';
 $lang->block->availableBlocks->case      = '我的用例';
