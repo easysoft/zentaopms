@@ -476,7 +476,7 @@ class task extends control
         /* Get execution teams. */
         $executionIDList = array();
         foreach($tasks as $task) if(!in_array($task->execution, $executionIDList)) $executionIDList[] = $task->execution;
-        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIDList)->andWhere('type')->in('sprint,stage')->fetchGroup('root', 'account');
+        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIDList)->andWhere('type')->eq('execution')->fetchGroup('root', 'account');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);

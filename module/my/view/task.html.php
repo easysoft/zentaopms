@@ -199,11 +199,18 @@
       </tbody>
     </table>
     <div class="table-footer">
-      <?php if($canBatchClose):?>
+      <?php if($canBatchClose or $canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <?php endif;?>
       <div class="table-actions btn-toolbar">
       <?php
+      if($canBatchEdit)
+      {
+          $actionLink = $this->createLink('task', 'batchEdit');
+          $misc       = "data-form-action='$actionLink'";
+          echo html::commonButton($lang->edit, $misc);
+      }
+
       if($canBatchClose)
       {
           $actionLink = $this->createLink('task', 'batchClose', null, '', '', $task->project);
