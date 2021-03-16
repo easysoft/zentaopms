@@ -121,8 +121,8 @@
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
 #programList .c-actions {overflow: visible;}
 #programTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
-#programTableList .icon-project:before, #programTableList .no-nest .icon-program:before, #programTableList .is-nest-child .icon-program:before {content: '\e99c'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
-#programTableList .no-nest .icon-program:before, #programTableList .is-nest-child .icon-program:before {content: '\e944'; color: #ffe066; font-size: 16px;}
+#programTableList .icon-project:before {content: '\e99c'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
+#programTableList .no-nest .icon-program:before, #programTableList .is-nest-child .icon-program:before {width: 10px; min-width: 10px; height: 10px; top: 1px}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>
