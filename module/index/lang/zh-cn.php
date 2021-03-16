@@ -8,13 +8,8 @@ $lang->index->app->open   = '打开';
 $lang->index->app->reload = '刷新';
 $lang->index->app->close  = '关闭';
 
-$lang->index->upgradeVersion = '禅道新版本';
-$lang->index->currentVersion = '当前版本';
-$lang->index->versionName    = '版本名称';
-$lang->index->releaseDate    = '发布日期';
-$lang->index->explain        = '更新说明';
-$lang->index->actions        = '操作';
-$lang->index->upgrade        = '升级';
-$lang->index->log            = '日志';
+$lang->index->upgradeVersion = '可升级版本';
+$lang->index->upgrade        = '现在升级';
+$lang->index->log            = '查看版本更新日志 >';
 $lang->index->detailed       = '详情';
 $lang->index->website        = '请访问官网';
