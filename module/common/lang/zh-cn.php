@@ -358,11 +358,10 @@ $lang->execution->viewMenu->tree      = '树状图|execution|tree|executionID=%s
 $lang->execution->qaMenu = new stdclass();
 $lang->execution->qaMenu->qa         = array('link' => '仪表盘|execution|qa|executionID=%s');
 $lang->execution->qaMenu->bug        = array('link' => 'Bug|execution|bug|executionID=%s');
-$lang->execution->qaMenu->testcase   = array('link' => '用例|execution|testcase|executionID=%s');
+$lang->execution->qaMenu->testcase   = array('link' => '用例|execution|testcase|executionID=%s', 'alias' => 'create');
 $lang->execution->qaMenu->testtask   = array('link' => '测试单|execution|testtask|executionID=%s');
 //$lang->execution->qaMenu->testreport = array('link' => '报告|testreport|browse|exeutionID=%s&type=execution');
 
-$lang->execution->settingMenu = new stdclass();
 $lang->execution->settingMenu = new stdclass();
 $lang->execution->settingMenu->view      = array('link' => '概况|execution|view|executionID={EXECUTION}', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->execution->settingMenu->products  = $lang->productCommon . '|execution|manageproducts|executionID={EXECUTION}';
