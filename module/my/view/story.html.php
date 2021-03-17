@@ -97,7 +97,7 @@
             {
                 $vars = "story={$story->id}";
                 common::printIcon('story', 'change',     $vars, $story, 'list', 'alter');
-                common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
+                common::printIcon('story', 'review',     $vars, $story, 'list', 'search');
                 common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $story, 'list');
                 common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
@@ -137,7 +137,7 @@
             {
                 $vars = "story={$child->id}";
                 common::printIcon('story', 'change',     $vars, $child, 'list', 'fork');
-                common::printIcon('story', 'review',     $vars, $child, 'list', 'glasses');
+                common::printIcon('story', 'review',     $vars, $child, 'list', 'search');
                 common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $child, 'list');
                 common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
