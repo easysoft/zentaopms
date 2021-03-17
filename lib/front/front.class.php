@@ -12,6 +12,7 @@
  */
 
 helper::import(dirname(dirname(__FILE__)) . '/base/front/front.class.php');
+
 /**
  * html类，生成html标签。
  * The html class, to build html tags.

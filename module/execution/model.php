@@ -2213,14 +2213,10 @@ class executionModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembers();
 
-        $execution = $this->getByID($executionID);
-        $type    = $this->config->systemMode == 'new' ? $execution->type : 'execution';
-        if(empty($execution)) return array();
-
         return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$executionID)
-            ->andWhere('t1.type')->eq($type)
+            ->andWhere('t1.type')->eq('execution')
             ->andWhere('t2.deleted')->eq('0')
             ->fetchAll('account');
     }
@@ -2239,14 +2235,11 @@ class executionModel extends model
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
         $this->app->loadConfig('user');
 
-        $execution = $this->getByID($executionID);
-        if(empty($execution)) return array();
-
         $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$executionID)
-            ->andWhere('t1.type')->eq($execution->type)
+            ->andWhere('t1.type')->eq('execution')
             ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
@@ -2344,7 +2337,7 @@ class executionModel extends model
         $data    = (array)fixer::input('post')->get();
 
         extract($data);
-        $executionType = $execution->type;
+        $executionType = strpos('sprint|stage', $execution->type) !== false ? 'execution' : $execution->type;
         $accounts      = array_unique($accounts);
         $limited       = array_values($limited);
         $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq($executionType)->fetchPairs();

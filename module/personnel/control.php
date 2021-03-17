@@ -224,9 +224,8 @@ class personnel extends control
     public function setProgramMenu($programID = 0)
     {
         $this->loadModel('program');
-        $this->lang->navGroup->program       = 'program';
         $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        $this->program->setViewMenu($programID);
+        commonModel::setAppObjectID('program', $programID);
     }
 }

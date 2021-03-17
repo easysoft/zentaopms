@@ -72,7 +72,6 @@ class stakeholder extends control
             $this->app->rawMethod = 'stakeholder';
             $this->lang->navGroup->program = 'program';
             $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
-            $this->program->setViewMenu($programID);
 
             $this->view->members = $this->loadModel('project')->getTeamMemberPairs($programID);
         }

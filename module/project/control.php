@@ -1158,7 +1158,6 @@ class project extends control
             $this->app->rawMethod = 'programproject';
             $this->lang->navGroup->project     = 'project';
             $this->lang->project->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
-            $this->program->setViewMenu($programID);
         }
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
