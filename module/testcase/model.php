@@ -1198,6 +1198,9 @@ class testcaseModel extends model
                     $oldCase->steps  = $this->joinStep($oldStep);
                     $caseData->steps = $this->joinStep($steps);
                     $changes  = common::createChanges($oldCase, $caseData);
+
+                    $this->updateCase2Project($oldCase, $caseData, $caseID);
+
                     $actionID = $this->action->create('case', $caseID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
@@ -1235,6 +1238,9 @@ class testcaseModel extends model
                             if($stepData->type == 'step')  $parentStepID = 0;
                         }
                     }
+
+                    $this->syncCase2Project($caseData, $caseID);
+
                     $this->action->create('case', $caseID, 'Opened');
                 }
             }
@@ -1707,8 +1713,9 @@ class testcaseModel extends model
         if($storyChanged)
         {
             /* If the new related story isn't linked the project, unlink the case. */
+            $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($oldCase->story)->fetchAll('project');
             $this->dao->delete()->from(TABLE_PROJECTCASE)
-                ->where('project')->eq($oldCase->project)
+                ->where('project')->in(array_keys($projects))
                 ->andWhere('`case`')->eq($oldCase->id)
                 ->exec();
 

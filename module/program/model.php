@@ -24,19 +24,6 @@ class programModel extends model
     }
 
     /**
-     * Get program main menu action.
-     *
-     * @access public
-     * @return string
-     */
-    public function getMainAction()
-    {
-        $link = html::a(helper::createLink('program', 'browse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
-        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
-        return common::hasPriv('program', 'pgmbrowse') ? $html : '';
-    }
-
-    /**
      * Get program pairs.
      *
      * @param  bool   $isQueryAll
@@ -406,7 +393,8 @@ class programModel extends model
         }
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'><i class='icon icon-program'></i> {$currentProgramName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group'>" . html::a(helper::createLink('program', 'browse'), "<i class='icon icon-program'></i> {$this->lang->program->common}", '', "class='btn btn-link'") . '</div>';
+        $output .= "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><i class='icon icon-chevron-right'></i><span class='text'>{$currentProgramName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
 
         return $output;
