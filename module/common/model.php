@@ -751,19 +751,18 @@ class commonModel extends model
      * Print the module menu.
      *
      * @param  string $moduleName
+     * @param  string $methodName
      * @static
      * @access public
      * @return void
      */
-    public static function printModuleMenu($moduleName)
+    public static function printModuleMenu($moduleName, $methodName)
     {
         global $config, $lang, $app;
-        $moduleName = $app->rawModule;
-        $methodName = $app->rawMethod;
 
         /* Set main menu by openApp. */
         $openApp = $app->openApp ? $app->openApp : $lang->navGroup->$moduleName;
-        if(in_array($openApp, array('admin', 'repo', 'ops', 'feedback'))) return;
+        if(in_array($moduleName, array('admin', 'repo', 'ops', 'feedback'))) return;
 
         if($openApp == 'my') self::getMyModuleMenu($moduleName, $methodName);
         if($openApp == 'project') self::getProjectModuleMenu($moduleName, $methodName);
@@ -812,8 +811,6 @@ class commonModel extends model
 
         /* The beginning of the menu. */
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
-
-        if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
 
         /* Cycling to print every sub menu. */
         foreach($menu as $menuItem)

@@ -36,7 +36,7 @@ $isQa        = $app->openApp == 'qa';
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>
-      <nav id='subNavbar'><?php common::printModuleMenu($app->rawModule);?></nav>
+      <nav id='subNavbar'><?php common::printModuleMenu($app->rawModule, $app->rawMethod);?></nav>
       <div id="pageActions"><div class='btn-toolbar'><?php if(isset($lang->TRActions)) echo $lang->TRActions;?></div></div>
     </div>
   </div>
