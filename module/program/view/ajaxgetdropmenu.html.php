@@ -9,12 +9,12 @@ $programsPinYin = common::convert2Pinyin($programNames);
   <div class="table-col col-left">
     <div class='list-group'>
     <?php
-    echo $this->program->getPGMTreeMenu();
+    echo $this->program->getTreeMenu();
     ?>
     </div>
     <div class="col-footer">
       <div class='pull-right'>
-        <?php echo html::checkbox('showClosed', array('1' => $lang->program->PGMShowClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
+        <?php echo html::checkbox('showClosed', array('1' => $lang->program->showClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
       </div>
     </div>
   </div>
