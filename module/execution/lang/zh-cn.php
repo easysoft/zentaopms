@@ -70,6 +70,7 @@ $lang->execution->undone         = '未完成';
 $lang->execution->unclosed       = '未关闭';
 $lang->execution->typeDesc       = "运维{$lang->executionCommon}没有{$lang->SRCommon}、bug、版本、测试功能。";
 $lang->execution->mine           = '我负责：';
+$lang->execution->involved       = '我参与：';
 $lang->execution->other          = '其他：';
 $lang->execution->deleted        = '已删除';
 $lang->execution->delayed        = '已延期';

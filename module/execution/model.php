@@ -3559,7 +3559,7 @@ class executionModel extends model
         $productPairs = $this->getStageLinkProductPairs($stageIdList);
 
         $recentExecutions = isset($this->config->execution->recentExecutions) ? explode(',', $this->config->execution->recentExecutions) : array();
-        $allExecution     = array('recent' => array(), 'mine' => array());
+        $allExecution     = array('recent' => array(), 'involved' => array());
         foreach($executions as $execution)
         {
             if($execution->type == 'stage')  $execution->name = zget($projectPairs, $execution->project) . '/' . zget($productPairs, $execution->id) . '/' . $execution->name;
@@ -3570,7 +3570,7 @@ class executionModel extends model
                 $allExecution['recent'][$index] = $execution;
                 continue;
             }
-            $allExecution['mine'][] = $execution;
+            $allExecution['involved'][] = $execution;
         }
 
         ksort($allExecution['recent']);
