@@ -80,7 +80,7 @@ class testcaseModel extends model
             ->add('fromBug', $bugID)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->testcase == 'project', 'project', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' && $this->app->openApp == 'project', 'project', $this->session->PRJ)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
