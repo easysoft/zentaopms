@@ -343,13 +343,13 @@ $lang->execution->menu->kanban   = array('link' => 'Kanban|execution|kanban|exec
 $lang->execution->menu->burn     = array('link' => 'Burndown|execution|burn|executionID=%s');
 $lang->execution->menu->view     = array('link' => 'View|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->execution->menu->story    = array('link' => 'Story|execution|story|executionID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->execution->menu->bug      = array('link' => 'Bug|execution|bug|executionID=%s');
-$lang->execution->menu->build    = array('link' => 'Build|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->menu->testtask = array('link' => 'Request|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->menu->qa       = array('link' => 'Bug|execution|qa|executionID=%s', 'subModule' => 'bug', 'alias' => 'qa,bug,testcase,testtask,testreport');
+$lang->execution->menu->repo     = array('link' => 'Repo|repo|browse|projectID=%s');
 $lang->execution->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
-$lang->execution->menu->product  = $lang->productCommon . '|execution|manageproducts|executionID=%s';
-$lang->execution->menu->team     = array('link' => 'Team|execution|team|executionID=%s', 'alias' => 'managemembers');
-$lang->execution->menu->more     = array('link' => 'More|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->execution->menu->build    = array('link' => 'Build|execution|build|executionID=%s', 'subModule' => 'build');
+$lang->execution->menu->release  = array('link' => 'Release|projectrelease|browse|project=%s');
+$lang->execution->menu->action   = array('link' => 'Dynamics|execution|dynamic|executionID=%s');
+$lang->execution->menu->setting  = array('link' => 'Settings|execution|view|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
 
 $lang->execution->subMenu = new stdclass();
 $lang->execution->subMenu->view = new stdclass();
