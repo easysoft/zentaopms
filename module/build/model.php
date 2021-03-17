@@ -144,21 +144,21 @@ class buildModel extends model
                 $this->session->set('projectBuildForm', $query->form);
             }
         }
-        if($this->session->PRJBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
+        if($this->session->projectBuildQuery == false) $this->session->set('projectBuildQuery', ' 1 = 1');
 
-        $buildQuery = $this->session->PRJBuildQuery;
+        $buildQuery = $this->session->projectBuildQuery;
 
         /* Distinguish between repeated fields. */
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`', 'project' => '`project`');
         foreach($fields as $field)
         {
-            if(strpos($this->session->PRJBuildQuery, $field) !== false)
+            if(strpos($this->session->projectBuildQuery, $field) !== false)
             {
                 $buildQuery = str_replace($field, "t1." . $field, $buildQuery);
             }
         }
 
-        return $this->getExecutionBuilds($executionID, 'bysearch', $buildQuery);
+        return $this->getProjectBuilds($projectID, 'bysearch', $buildQuery);
     }
 
     /**

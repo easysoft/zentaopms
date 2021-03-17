@@ -190,7 +190,6 @@ $lang->execution->batchUnlinkStory  = 'Mehere Storys entfernen';
 $lang->execution->importTask        = 'Importiere Aufgaben';
 $lang->execution->importPlanStories = 'Verknüpfe Story aus Plan';
 $lang->execution->importBug         = 'Importiere Bugs';
-$lang->execution->updateOrder       = 'Sortierung';
 $lang->execution->tree              = 'Baum';
 $lang->execution->treeTask          = 'Aufgabe anzeigen';
 $lang->execution->treeStory         = 'Story anzeigen';

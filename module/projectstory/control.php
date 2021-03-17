@@ -46,8 +46,6 @@ class projectStory extends control
     {
         $this->session->set('storyList', $this->app->getURI(true));
 
-        $this->lang->menugroup->product       = 'projectstory';
-
         $this->lang->story->title             = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
         $this->lang->story->createRequirement = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->createRequirement);
         $this->lang->story->createStory       = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->createStory);

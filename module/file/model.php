@@ -759,7 +759,8 @@ class fileModel extends model
      * @access public
      * @return resource
      */
-    public function imagecreatefrombmp($filename) {
+    public function imagecreatefrombmp($filename)
+    {
         $f = fopen($filename, "rb");
 
         //read header
@@ -782,7 +783,8 @@ class fileModel extends model
         $img = imagecreatetruecolor($header['width'], $header['height']);
 
         //read pixels
-        for ($y = $hei - 1; $y >= 0; $y--) {
+        for($y = $hei - 1; $y >= 0; $y--)
+        {
             $row = fread($f, $wid2);
             $pixels = str_split($row, 3);
 

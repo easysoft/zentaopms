@@ -125,6 +125,7 @@ class project extends control
             foreach($projects as $project)
             {
                 if($project->parent and $project->parent != $programID) continue;
+                $project->parent = $this->program->getTopByID($project->parent);
                 $orderedProjects[] = $project;
                 unset($projects[$project->id]);
             }
@@ -290,6 +291,12 @@ class project extends control
 
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'create', '', '', '', $projectID)));
             }
+        }
+
+        if($programID)
+        {
+            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
+            commonModel::setAppObjectID('program', $programID);
         }
 
         $this->lang->noMenuModule[] = 'project';
@@ -1157,7 +1164,6 @@ class project extends control
             $this->app->rawMethod = 'programproject';
             $this->lang->navGroup->project     = 'project';
             $this->lang->project->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
-            $this->program->setViewMenu($programID);
         }
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");

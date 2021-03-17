@@ -30,7 +30,6 @@ class doc extends control
         $this->productID = $this->cookie->product ? $this->cookie->product : '0';
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if($this->from == 'doc') $this->session->set('project', '');
-        if(!$this->projectID) $this->lang->navGroup->doc = 'doc';
     }
 
     /**
@@ -114,17 +113,14 @@ class doc extends control
         /* According the from, set menus. */
         if($from == 'product')
         {
-            $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $productID);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
         {
-            $this->lang->navGroup->doc  = 'project';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
@@ -149,7 +145,7 @@ class doc extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('doc', 'browse', "lib=$libID&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&from=$from");
+        $actionURL = $this->createLink('doc', 'browse', "lib=$libID&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy");
         $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL, $type);
 
         $title   = '';
@@ -199,7 +195,7 @@ class doc extends control
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->type       = $type;
-        $this->view->from       = $this->lang->navGroup->doc == 'project' ? 'project' : $from;
+        $this->view->from       = $from;
         $this->view->pager      = $pager;
         $this->view->libs       = $libs;
         $this->view->currentLib = $libID ? $lib : '';
@@ -351,8 +347,7 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $lib->product);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($lib->product);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($lib->product);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
 
@@ -439,8 +434,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
@@ -505,8 +499,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
@@ -836,8 +829,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
@@ -917,13 +909,12 @@ class doc extends control
      *
      * @param  string $type
      * @param  int    $objectID
-     * @param  string $from
      * @access public
      * @return void
      */
-    public function objectLibs($type, $objectID, $from = 'doc')
+    public function objectLibs($type, $objectID)
     {
-        $this->from = $from;
+        $from = $this->app->openApp;
         setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $this->session->set('docList', $this->app->getURI(true));
 
@@ -933,22 +924,19 @@ class doc extends control
 
         if($from == 'product')
         {
-            $this->lang->navGroup->doc  = 'product';
-            $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
         {
-            $this->lang->navGroup->doc  = 'project';
-            $this->lang->doc->menu      = $this->lang->project->menu;
-            $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getPairs($this->session->PRJ, 'all', 0, true), $objectID);
             $this->lang->set('menugroup.doc', 'project');
+        }
+        elseif($from == 'execution')
+        {
+            $this->lang->set('menugroup.doc', 'execution');
         }
         else
         {
@@ -974,7 +962,7 @@ class doc extends control
 
         $this->view->type         = $type;
         $this->view->object       = $object;
-        $this->view->from         = $this->lang->navGroup->doc == 'project' ? 'project' : $from;
+        $this->view->from         = $$from;
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
         $this->display();

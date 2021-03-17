@@ -15,7 +15,8 @@ function scmChanged(scm) {
 
         $('.tips-git').removeClass('hidden');
         $('.tips-svn').addClass('hidden');
-    } else
+    }
+    else
     {
         $('.account-fields').removeClass('hidden');
 

@@ -200,29 +200,6 @@ class programModel extends model
     }
 
     /**
-     * Set view menu.
-     *
-     * @param  int    $programID
-     * @access private
-     * @return void
-     */
-    public function setViewMenu($programID = 0)
-    {
-        foreach($this->lang->program->viewMenu as $label => $menu)
-        {
-            $this->lang->program->viewMenu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
-        }
-
-        foreach($this->lang->personnel->menu as $label => $menu)
-        {
-            $menu['link'] = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
-            $this->lang->personnel->menu->$label = $menu;
-        }
-
-        $this->lang->program->menu = $this->lang->program->viewMenu;
-    }
-
-    /**
      * Create a program.
      *
      * @access private
@@ -416,8 +393,8 @@ class programModel extends model
         }
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group'>" . html::a(helper::createLink('program', 'browse'), "<i class='icon icon-program'></i> {$this->lang->program->common}", '', "class='btn btn-link'") . '</div>';
-        $output .= "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><i class='icon icon-chevron-right'></i><span class='text'>{$currentProgramName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-btn'>" . html::a(helper::createLink('program', 'browse'), "<i class='icon icon-program'></i> {$this->lang->program->common}", '', "class='btn'") . '</div>';
+        $output .= "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'>{$currentProgramName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
 
         return $output;
@@ -452,7 +429,7 @@ class programModel extends model
 
         while($program = $stmt->fetch())
         {
-            $link = $from == 'program' ? helper::createLink('program', 'pgmproduct', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
+            $link = $from == 'program' ? helper::createLink('program', 'product', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
             $linkHtml = html::a($link, html::icon($this->lang->icons[$program->type], 'icon icon-sm text-muted') . ' ' . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))

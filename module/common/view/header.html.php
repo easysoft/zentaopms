@@ -8,13 +8,12 @@ include 'chosen.html.php';
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
 <?php
-$rawModule   = zget($lang->navGroup, $app->rawModule);
-$isProgram   = $rawModule == 'program';
-$isProduct   = $rawModule == 'product';
-$isProject   = $rawModule == 'project';
-$isExecution = $rawModule == 'execution';
-$isReport    = $rawModule == 'report';
-$isQa        = $rawModule == 'qa';
+$isProgram   = $app->openApp == 'program';
+$isProduct   = $app->openApp == 'product';
+$isProject   = $app->openApp == 'project';
+$isExecution = $app->openApp == 'execution';
+$isReport    = $app->openApp == 'report';
+$isQa        = $app->openApp == 'qa';
 ?>
 <header id='header'>
   <div id='mainHeader'>

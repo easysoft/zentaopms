@@ -807,7 +807,6 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `project` mediumint(8) unsigned NOT NULL,
   `parent` mediumint(9) NOT NULL default '0',
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
@@ -1550,7 +1549,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'program','whitelist'),
 (1,'program','unbindWhielist'),
 (1,'program','unlinkStakeholder'),
-(1,'program','view'),
 (1,'project','activate'),
 (1,'project','all'),
 (1,'project','batchedit'),
@@ -2358,7 +2356,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (4,'program','whitelist'),
 (4,'program','unbindWhielist'),
 (4,'program','unlinkStakeholder'),
-(4,'program','view'),
 (4,'project','activate'),
 (4,'project','all'),
 (4,'project','batchedit'),
@@ -4147,5 +4144,3 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'URSR', '6');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'project', '', 'unitList', 'CNY,USD');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'project', '', 'defaultCurrency', 'CNY');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct', '1');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRExecution', '1');

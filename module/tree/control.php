@@ -69,9 +69,7 @@ class tree extends control
             /* Set menu.*/
             $moduleIndex = array_search('tree', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-            $this->lang->product->menu  = $this->lang->product->viewMenu;
-            $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($rootID, 'story');
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($rootID, 'story');
 
             $products = $this->product->getPairs();
 
@@ -193,11 +191,9 @@ class tree extends control
             {
                 $productID = $lib->product;
                 $this->lang->noMenuModule[] = 'tree';
-                unset($this->lang->product->viewMenu->set['subModule']);
+                unset($this->lang->product->menu->set['subModule']);
                 $this->lang->navGroup->tree = 'product';
-                $this->lang->product->menu  = $this->lang->product->viewMenu;
-                $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID, 'story');
-                $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+                $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, 'story');
 
                 $products = $this->product->getPairs();
                 $this->product->saveState($productID, $products);

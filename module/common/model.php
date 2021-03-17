@@ -625,53 +625,46 @@ class commonModel extends model
     /**
      * Print the main menu.
      *
-     * @param  string $moduleName
-     * @param  string $methodName
+     * @param  string $currentModule
+     * @param  string $currentMethod
      *
      * @static
      * @access public
      * @return void
      */
-    public static function printMainmenu($moduleName, $methodName = '')
+    public static function printMainMenu($currentModule, $currentMethod)
     {
         global $app, $lang, $config;
 
-        if($moduleName == 'product' and $methodName == 'create') return;
-
-        /* Set the main main menu. */
-        $mainMenu      = $moduleName;
-        $currentModule = $app->rawModule;
-        $currentMethod = $app->rawMethod;
-
-        /* Set main menu by group. */
-        $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : $moduleName;
-        self::setMainMenuByGroup($group, $moduleName, $methodName);
+        /* Set main menu by openApp and module. */
+        $openApp = $app->openApp ? $app->openApp : $lang->navGroup->$currentModule;
+        self::setMainMenuByOpenApp($openApp, $currentModule, $currentMethod);
 
         /* Print all main menus. */
         $menu       = customModel::getMainMenu();
         $activeName = 'active';
         $lastMenu   = end($menu);
-        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
 
         echo "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
             if(empty($menuItem->link)) continue;
-            if(isset($lang->$group->dividerMenu) and strpos($lang->$group->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
+            if(isset($lang->$openApp->dividerMenu) and strpos($lang->$openApp->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
 
             /* Init the these vars. */
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
             $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
             $class     = isset($menuItem->class) ? $menuItem->class : '';
-            $active    = $menuItem->name == $mainMenu ? "active" : '';
-            if($subModule and in_array($currentModule, $subModule)) $active = 'active';
+            $active    = $menuItem->name == $currentModule ? "active" : '';
+            if($subModule) $active = in_array($currentModule, $subModule) ? 'active' : '';
+
             if($menuItem->link)
             {
                 $target = '';
                 $module = '';
                 $method = '';
-                $link   = commonModel::createMenuLink($menuItem, $group);
+                $link   = commonModel::createMenuLink($menuItem, $openApp);
                 if(is_array($menuItem->link))
                 {
                     if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
@@ -716,7 +709,8 @@ class commonModel extends model
                 if($currentModule == 'product' and $currentMethod == 'browse') $active = '';
                 if($currentModule == 'story') $active = '';
 
-                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
+                $misc = $openApp != $lang->navGroup->$module ? "data-app='$openApp'" : '';
+                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $subMenu . "</li>\n";
 
                 echo $menuItemHtml;
             }
@@ -766,27 +760,25 @@ class commonModel extends model
         global $config, $lang, $app;
         $moduleName = $app->rawModule;
         $methodName = $app->rawMethod;
-        $mainMenu   = $moduleName;
-        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
 
-        /* Set main menu by group. */
-        $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
-        if($moduleName == 'admin') return;
-        if($group == 'repo' || $group == 'ops' || $group == 'feedback') return;
-        if($group == 'my') self::getMyModuleMenu($moduleName, $methodName);
-        if($group == 'project') self::getProjectModuleMenu($moduleName, $methodName);
-        if($group == 'product')
+        /* Set main menu by openApp. */
+        $openApp = $app->openApp ? $app->openApp : $lang->navGroup->$moduleName;
+        if(in_array($openApp, array('admin', 'repo', 'ops', 'feedback'))) return;
+
+        if($openApp == 'my') self::getMyModuleMenu($moduleName, $methodName);
+        if($openApp == 'project') self::getProjectModuleMenu($moduleName, $methodName);
+        if($openApp == 'product')
         {
             $lang->product->menu = $lang->product->setMenu;
             self::processMenuVars($lang->product->menu);
         }
-        if($group == 'execution')
+        if($openApp == 'execution')
         {
             if(in_array($methodName, array('grouptask', 'tree'))) $lang->execution->menu = $lang->execution->viewMenu;
             if(in_array($methodName, array('qa', 'bug', 'testtask', 'testcase', 'testreport'))) $lang->execution->menu = $lang->execution->qaMenu;
             if(in_array($methodName, array('view', 'manageproducts', 'team', 'whitelist', 'edit', 'managemembers', 'addwhitelist'))) $lang->execution->menu = self::processMenuVars($lang->execution->settingMenu);
         }
-        if(strpos('qa|bug|testcase|testreport|testtask', $moduleName) !== false and $group == 'project')
+        if(strpos('qa|bug|testcase|testreport|testtask', $moduleName) !== false and $openApp == 'project')
         {
             unset($lang->$moduleName->menu->testsuite);
             unset($lang->$moduleName->menu->caselib);
@@ -842,7 +834,7 @@ class commonModel extends model
                 $target = '';
                 $module = '';
                 $method = '';
-                $link   = commonModel::createMenuLink($menuItem, $group);
+                $link   = commonModel::createMenuLink($menuItem, $openApp);
                 if(is_array($menuItem->link))
                 {
                     if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
@@ -2300,80 +2292,20 @@ EOD;
     }
 
     /**
-     * Set main menu by nav group.
+     * Set main menu by openApp.
      *
-     * @param  string  $group
+     * @param  string  $openApp
      * @param  string  $moduleName
      * @param  string  $methodName
      * @static
      * @access public
      * @return string
      */
-    public static function setMainMenuByGroup($group, $moduleName, $methodName)
+    public static function setMainMenuByOpenApp($openApp, $moduleName, $methodName)
     {
         global $lang, $config;
-        if($group == 'my')
-        {
-            $lang->menu      = $lang->my->menu;
-            $lang->menuOrder = $lang->my->menuOrder;
-        }
-        if($group == 'system')
-        {
-            $lang->menu         = $lang->system->menu;
-            $lang->menuOrder    = $lang->system->menuOrder;
-            $lang->report->menu = $lang->measurement->menu;
-        }
-        if($group == 'doclib') return;
-        if($group == 'report')
-        {
-            $lang->menu      = $lang->report->menu;
-            $lang->menuOrder = $lang->report->menuOrder;
-        }
-        if($group == 'qa')
-        {
-            $lang->menu      = $lang->qa->menu;
-            $lang->menuOrder = $lang->qa->menuOrder;
-        }
-        if($group == 'attend')
-        {
-            $lang->menu      = $lang->attend->menu;
-            $lang->menuOrder = $lang->attend->menuOrder;
-        }
-        if($group == 'admin')
-        {
-            $lang->menu      = $lang->admin->menu;
-            $lang->menuOrder = $lang->admin->menuOrder;
-        }
-        if($group == 'program')
-        {
-            $lang->menu = $lang->program->menu;
-        }
-        if($group == 'product')
-        {
-            $lang->menu      = $lang->product->menu;
-            $lang->menuOrder = $lang->product->menuOrder;
-        }
-        if($group == 'repo')
-        {
-            $lang->menu      = $lang->repo->menu;
-            $lang->menuOrder = $lang->repo->menuOrder;
-        }
-        if($group == 'ops')
-        {
-            $lang->menu      = $lang->ops->menu;
-            $lang->menuOrder = $lang->ops->menuOrder;
-        }
-        if($group == 'feedback')
-        {
-            $lang->menu      = $lang->feedback->menu;
-            $lang->menuOrder = $lang->feedback->menuOrder;
-        }
-        if($group == 'execution')
-        {
-            $lang->menu      = $lang->execution->menu;
-            $lang->menuOrder = $lang->execution->menuOrder;
-        }
-        if($group == 'project')
+
+        if($openApp == 'project')
         {
             if($config->systemMode == 'classic' or ($moduleName == 'project' and $methodName == 'browse'))
             {
@@ -2383,7 +2315,36 @@ EOD;
             {
                 $lang->menu = self::getProjectMainMenu($moduleName);
             }
+            return;
         }
+
+        if(!isset($lang->$openApp->homeMenu))
+        {
+            $lang->menu      = $lang->$openApp->menu;
+            $lang->menuOrder = $lang->$openApp->menuOrder;
+            return;
+        }
+
+        if($methodName == 'create')
+        {
+            $lang->menu = $lang->$openApp->homeMenu;
+            return;
+        }
+
+        foreach($lang->$openApp->homeMenu as $menu)
+        {
+            $link = is_array($menu) ? $menu['link'] : $menu;
+            $method = explode('|', $link)[2];
+
+            if($method == $methodName)
+            {
+              $lang->menu = $lang->$openApp->homeMenu;
+              return;
+            }
+        }
+
+        $lang->menu      = $lang->$openApp->menu;
+        $lang->menuOrder = $lang->$openApp->menuOrder;
     }
 
     /**
@@ -2519,6 +2480,27 @@ EOD;
             ->fetchAll();
     }
 
+    /**
+     * Set objectID in current App.
+     *
+     * @param  string  $openApp
+     * @param  int     $objectID
+     *
+     * @access public
+     * @return string
+     */
+    static public function setAppObjectID($openApp, $objectID)
+    {
+        global $lang;
+
+        foreach($lang->$openApp->menu as $label => $menu)
+        {
+            $lang->$openApp->menu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
+        }
+
+        /* If objectID is set, cannot use homeMenu. */
+        unset($lang->$openApp->homeMenu);
+    }
 }
 
 class common extends commonModel

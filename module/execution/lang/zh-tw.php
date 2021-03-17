@@ -179,7 +179,6 @@ $lang->project->batchUnlinkStory  = "批量移除{$lang->SRCommon}";
 $lang->project->importTask        = '轉入任務';
 $lang->project->importPlanStories = "按計劃關聯{$lang->SRCommon}";
 $lang->project->importBug         = '導入Bug';
-$lang->project->updateOrder       = "{$lang->executionCommon}排序";
 $lang->project->tree              = '樹狀圖';
 $lang->project->treeTask          = '只看任務';
 $lang->project->treeStory         = "只看{$lang->SRCommon}";

@@ -102,7 +102,7 @@ class program extends control
         if(empty($program) || $program->type != 'program') die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
-        $this->program->setViewMenu($programID);
+        commonModel::setAppObjectID('program', $programID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -396,7 +396,7 @@ class program extends control
         $this->app->session->set('projectList', $this->app->getURI(true));
 
         $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
-        $this->program->setViewMenu($programID);
+        commonModel::setAppObjectID('program', $programID);
 
         $this->loadModel('datatable');
 
@@ -437,7 +437,7 @@ class program extends control
     public function stakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
-        $this->program->setViewMenu($programID);
+        commonModel::setAppObjectID('program', $programID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -473,7 +473,6 @@ class program extends control
 
         $this->loadModel('user');
         $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
-        $this->program->setViewMenu($programID);
 
         $this->loadModel('dept');
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);

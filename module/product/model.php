@@ -29,7 +29,6 @@ class productModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $module = 0, $moduleType = '', $extra = '')
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
         $product = $this->getByID($productID);
         if($product)
         {
@@ -258,7 +257,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $orderBy = '')
+    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0)
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
@@ -274,7 +273,7 @@ class productModel extends model
             ->orWhere('createdBy')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->orderBy($orderBy . '`order` desc')
+            ->orderBy('program_asc, line_desc, order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }
@@ -472,8 +471,8 @@ class productModel extends model
         $fromModule   = $this->lang->navGroup->qa == 'qa' ? 'qa' : '';
         $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra&from=$fromModule");
 
-        $output  = "<div class='btn-group'>" . html::a(helper::createLink('product', 'all'), "<i class='icon icon-product'></i> {$this->lang->productCommon}", '', "class='btn btn-link'") . '</div>';
-        $output .= "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><i class='icon icon-chevron-right'></i><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = $this->app->openApp == 'product' ? "<div class='btn-group header-btn'>" . html::a(helper::createLink('product', 'all'), "<i class='icon icon-product'></i> {$this->lang->productCommon}", '', "class='btn'") . '</div>' : '';
+        $output .= "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
@@ -484,7 +483,7 @@ class productModel extends model
             $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
             $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
 
-            $output .= "<div class='btn-group header-angle-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'><span class='text'>{$branchName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output .= "<div class='btn-group header-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'><span class='text'>{$branchName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
         }
@@ -1330,7 +1329,7 @@ class productModel extends model
         $productKeys = array_keys($products);
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in($productKeys)
-            ->orderBy($orderBy)
+            ->orderBy('program_asc, line_desc, ' . $orderBy)
             ->page($pager)
             ->fetchAll('id');
 
