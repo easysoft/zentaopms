@@ -2549,24 +2549,43 @@ class execution extends control
     /**
      * Drop menu page.
      *
-     * @param  int    $executionID
      * @param  int    $module
      * @param  int    $method
      * @param  int    $extra
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($executionID, $module, $method, $extra)
+    public function ajaxGetDropMenu($module, $method, $extra)
     {
-        $execution = $this->execution->getByID($executionID);
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('order_desc')->fetchAll('id');
+
+        /* Sort execution by project. */
+        $orderedExecutions = array();
+        foreach($projects as $projectID => $project)
+        {
+            $type       = $project->model == 'scrum' ? 'sprint' : 'stage';
+            $orderBy    = $project->model == 'scrum' ? 'id_desc' : 'id_asc';
+            $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('id')->in($this->app->user->view->sprints)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('project')->eq($project->id)
+                ->andWhere('type')->eq($type)
+                ->orderBy($orderBy)
+                ->fetchAll('id');
+
+            foreach($executions as $execution)
+            {
+                if(isset($orderedExecutions[$execution->parent])) unset($orderedExecutions[$execution->parent]);
+                $orderedExecutions[$execution->id] = $execution;
+            }
+        }
 
         $this->view->link        = $this->execution->getLink($module, $method, $extra);
-        $this->view->executionID = $executionID;
         $this->view->module      = $module;
         $this->view->method      = $method;
         $this->view->extra       = $extra;
         $this->view->projects    = $this->project->getPairsByModel();
-        $this->view->executions  = $this->execution->getList();
+        $this->view->executions  = $orderedExecutions;
         $this->display();
     }
 
@@ -2803,6 +2822,8 @@ class execution extends control
             $this->post->set('kind', 'execution');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
+
+        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->execution->common;
 
         $this->display();
     }

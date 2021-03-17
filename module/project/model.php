@@ -330,7 +330,8 @@ class projectModel extends model
             ->where('t1.project')->eq($projectID)
             ->andWhere('t2.type')->eq($type)
             ->andWhere('t2.product')->in($productIdList)
-            ->beginIF($status != 'all')->andWhere('t2.status')->eq($status)->fi()
+            ->beginIF($status == 'active')->andWhere('t2.status')->in('active,changed')->fi()
+            ->beginIF($status == 'closed')->andWhere('t2.status')->eq('closed')->fi()
             ->beginIF($status == 'closed')->andWhere('t2.closedReason')->eq('done')->fi()
             ->andWhere('deleted')->eq('0')
             ->fetch('stories');

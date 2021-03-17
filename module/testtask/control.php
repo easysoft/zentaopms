@@ -1090,7 +1090,6 @@ class testtask extends control
         else
         {
             $this->lang->testtask->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.testtask', 'my');
             $this->lang->testtask->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
             $this->view->title = $this->lang->testtask->batchRun;

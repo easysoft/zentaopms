@@ -885,7 +885,6 @@ class commonModel extends model
     {
         global $lang;
         $mainMenu = $moduleName;
-        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
         echo "<ul class='breadcrumb'>";
         echo '<li>' . html::a(helper::createLink('my', 'index'), $lang->zentaoPMS) . '</li>';
         if($moduleName != 'index')
@@ -1769,7 +1768,6 @@ EOD;
             if(!commonModel::hasDBPriv($object, $module, $method)) return false;
 
             if(empty($acls['views'])) return true;
-            $menu = isset($lang->menugroup->$module) ? $lang->menugroup->$module : $module;
             $menu = strtolower($menu);
             if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
             if($menu == 'my' or $menu == 'index' or $module == 'tree') return true;
@@ -2396,7 +2394,6 @@ EOD;
         {
             $lang->project->dividerMenu = str_replace(',project,', ',', $lang->project->dividerMenu);
             $lang->release->menu        = new stdclass();
-            $lang->menugroup->release   = '';
             $lang->menuOrder            = $lang->waterfall->menuOrder;
             return self::processMenuVars($lang->menu->waterfall);
         }

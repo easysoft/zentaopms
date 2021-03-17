@@ -1,7 +1,7 @@
 <div class="sidebar-toggle">
   <i class="icon icon-angle-left"></i>
 </div>
-<div class="cell w-200px">
+<div class="cell">
   <div class='panel'>
     <div class='panel-heading'>
       <div class='panel-title'><?php echo $lang->report->list;?></div>

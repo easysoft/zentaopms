@@ -388,7 +388,6 @@ class todo extends control
             $this->lang->todo->menu      = $this->lang->user->menu;
             $this->lang->todo->menuOrder = $this->lang->user->menuOrder;
             $this->lang->company->menu->browseUser['subModule'] = 'todo';
-            $this->lang->set('menugroup.todo', $from);
         }
         elseif($from == 'my')
         {
@@ -396,7 +395,6 @@ class todo extends control
             $this->lang->todo->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
             $this->lang->my->menu->todo['subModule'] = 'todo';
-            $this->lang->set('menugroup.todo', $from);
         }
 
         $projects = $this->loadModel('project')->getPairsByModel('all');

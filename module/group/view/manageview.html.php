@@ -93,7 +93,6 @@
             <?php foreach($lang->mainNav as $module => $title):?>
             <?php if(!is_string($title)) continue;?>
             <?php if($module == 'admin') continue;?>
-            <?php if(!isset($lang->action->dynamicAction->$module) and !isset($menugroup[$module])) continue;?>
             <tr id='<?php echo "{$module}ActionBox";?>'>
               <th class='w-100px text-left text-top'>
                 <div class='action-item'>
@@ -116,8 +115,6 @@
                   <?php endforeach;?>
                 </div>
                 <?php endif;?>
-                <?php if(isset($menugroup[$module])):?>
-                <?php foreach($menugroup[$module] as $subModule):?>
                 <?php if(isset($lang->action->dynamicAction->$subModule)):?>
                 <div class='clearfix'>
                   <?php foreach($lang->action->dynamicAction->$subModule as $action => $actionTitle):?>

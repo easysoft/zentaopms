@@ -158,7 +158,6 @@ class search extends control
         }
 
         $this->lang->search->menu = $this->lang->admin->menu;
-        $this->lang->menugroup->search = 'system';
 
         $this->view->title = $this->lang->search->buildIndex;
         $this->display();

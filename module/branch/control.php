@@ -20,7 +20,6 @@ class branch extends control
      */
     public function manage($productID)
     {
-        $this->lang->product->menu = $this->lang->product->setMenu;
         $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID);
 
         $moduleIndex = array_search('branch', $this->lang->noMenuModule);
