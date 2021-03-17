@@ -10,8 +10,8 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if($lang->navGroup->doc == 'doc'):?>
-<?php $pageCSS .= $this->doc->appendNavCSS();?>
+<?php if($app->openApp == 'doc'):?>
+<?php $pageCSS .= $this->loadModel('doc')->appendNavCSS();?>
 <?php endif;?>
 <?php include '../../common/view/header.html.php';?>
 

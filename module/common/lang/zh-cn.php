@@ -360,7 +360,7 @@ $lang->execution->qaMenu->qa         = array('link' => '仪表盘|execution|qa|e
 $lang->execution->qaMenu->bug        = array('link' => 'Bug|execution|bug|executionID=%s');
 $lang->execution->qaMenu->testcase   = array('link' => '用例|execution|testcase|executionID=%s');
 $lang->execution->qaMenu->testtask   = array('link' => '测试单|execution|testtask|executionID=%s');
-$lang->execution->qaMenu->testreport = array('link' => '报告|execution|testreport|exeutionID=%s');
+//$lang->execution->qaMenu->testreport = array('link' => '报告|testreport|browse|exeutionID=%s&type=execution');
 
 $lang->execution->settingMenu = new stdclass();
 $lang->execution->settingMenu = new stdclass();

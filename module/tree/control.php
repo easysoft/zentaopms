@@ -110,7 +110,6 @@ class tree extends control
             $this->loadModel('bug')->setMenu($productPairs, $rootID);
             $this->lang->tree->menu      = $this->lang->bug->menu;
             $this->lang->tree->menuOrder = $this->lang->bug->menuOrder;
-            $this->lang->set('menugroup.tree', 'qa');
 
             $title      = $this->lang->tree->manageBug;
             $position[] = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
@@ -121,7 +120,6 @@ class tree extends control
             $this->lang->navGroup->tree = 'feedback';
             $this->lang->noMenuModule[] = 'tree';
 
-            $this->lang->set('menugroup.tree', 'feedback');
             $this->app->loadLang('feedback');
             $this->lang->tree->menu = $this->lang->feedback->menu;
             $root = new stdclass();
@@ -153,7 +151,6 @@ class tree extends control
             $this->loadModel('testcase')->setMenu($productPairs, $rootID);
             $this->lang->tree->menu      = $this->lang->testcase->menu;
             $this->lang->tree->menuOrder = $this->lang->testcase->menuOrder;
-            $this->lang->set('menugroup.tree', 'qa');
 
             $title      = $this->lang->tree->manageCase;
             $position[] = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
@@ -177,7 +174,6 @@ class tree extends control
             $this->caselib->setLibMenu($this->caselib->getLibraries(), $rootID);
             $this->lang->tree->menu      = $this->lang->caselib->menu;
             $this->lang->tree->menuOrder = $this->lang->caselib->menuOrder;
-            $this->lang->set('menugroup.tree', 'qa');
 
             $title      = $this->lang->tree->manageCaseLib;
             $position[] = html::a($this->createLink('caselib', 'browse', "libID=$rootID"), $lib->name);
@@ -214,7 +210,6 @@ class tree extends control
             $this->doc->setMenu($type, $rootID, $currentModuleID);
             $this->lang->tree->menu      = $this->lang->doc->menu;
             $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
-            $this->lang->set('menugroup.tree', 'doc');
 
             $title      = $this->lang->tree->manageCustomDoc;
             $position[] = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
@@ -224,7 +219,6 @@ class tree extends control
         {
             $products = $this->product->getPairs('', $this->session->PRJ);
 
-            $this->lang->set('menugroup.tree', 'product');
             $this->product->setMenu($products, $rootID, $branch, 'line', '', 'line');
             $this->lang->tree->menu      = $this->lang->product->menu;
             $this->lang->tree->menuOrder = $this->lang->product->menuOrder;
@@ -241,7 +235,6 @@ class tree extends control
         }
         elseif($viewType == 'trainskill')
         {
-            $this->lang->set('menugroup.tree', 'train');
             $this->lang->tree->menu = $this->lang->trainskill->menu;
 
             $title      = $this->lang->tree->manageTrainskill;
@@ -252,12 +245,10 @@ class tree extends control
             $postBrowseType = $this->session->postBrowseType ? $this->session->postBrowseType : 'train';
             if($postBrowseType == 'train')
             {
-                $this->lang->set('menugroup.tree', 'train');
                 $this->lang->tree->menu = $this->lang->train->menu;
             }
             else
             {
-                $this->lang->set('menugroup.tree', 'company');
                 $this->lang->tree->menu = $this->lang->company->menu;
             }
 
@@ -305,7 +296,6 @@ class tree extends control
         $executions = $this->execution->getPairs($this->session->PRJ);
 
         /* Set menu. */
-        $this->lang->set('menugroup.tree', 'execution');
         $this->execution->setMenu($executions, $rootID);
         $this->lang->tree->menu      = $this->lang->execution->menu;
         $this->lang->tree->menuOrder = $this->lang->execution->menuOrder;
