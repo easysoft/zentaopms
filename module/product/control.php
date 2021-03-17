@@ -914,7 +914,7 @@ class product extends control
 
         $moduleGroup = zget($this->lang->navGroup, $module);
         $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
-        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->PRJ, 'all', 'program desc, line desc, ') : $this->product->getList(0, 'all', 0, 0, 'program desc, line desc, ');
+        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->PRJ) : $this->product->getList();
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
