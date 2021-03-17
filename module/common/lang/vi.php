@@ -355,7 +355,7 @@ $lang->execution->subMenu->view->tree      = 'Xem theo cây|execution|tree|execu
 $lang->execution->subMenu->qa = new stdclass();
 $lang->execution->subMenu->qa->bug      = 'Bug|execution|bug|executionID=%s';
 $lang->execution->subMenu->qa->build    = array('link' => 'Bản dựng|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->subMenu->qa->testtask = array('link' => 'Yêu cầu|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->subMenu->qa->testtask = array('link' => 'Yêu cầu|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask', 'alias' => 'create');
 
 $lang->execution->subMenu->more = new stdclass();
 $lang->execution->subMenu->more->whitelist = array('link' => 'Whitelist|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
