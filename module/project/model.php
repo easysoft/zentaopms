@@ -142,6 +142,7 @@ class projectModel extends model
      */
     public function getSwitcher($projectID, $currentModule, $currentMethod)
     {
+        if($currentModule == 'project' and $currentMethod == 'browse') return;
         $this->session->set('moreProjectLink', $this->app->getURI(true));
 
         $currentProjectName = $this->lang->project->common;
