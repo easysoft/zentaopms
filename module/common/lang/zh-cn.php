@@ -625,6 +625,7 @@ $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';
 $lang->navGroup->report         = 'project';
 $lang->navGroup->measrecord     = 'project';
+$lang->navGroup->qa             = 'project';
 
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
