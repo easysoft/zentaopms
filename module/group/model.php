@@ -354,13 +354,7 @@ class groupModel extends model
             $dynamic = array();
             foreach($actions['actions'] as $moduleName => $moduleActions)
             {
-                {
-                    if($groupModule != 'my' and !isset($actions['views'][$groupModule])) continue;
-                }
-                else
-                {
-                    if($moduleName != 'my' and !isset($actions['views'][$moduleName])) continue;
-                }
+                if($moduleName != 'my' and !isset($actions['views'][$moduleName])) continue;
 
                 $dynamic[$moduleName] = $moduleActions;
             }
