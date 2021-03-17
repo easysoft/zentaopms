@@ -343,7 +343,7 @@ $lang->execution->menu->kanban   = array('link' => '看板|execution|kanban|exec
 $lang->execution->menu->burn     = array('link' => '燃尽图|execution|burn|executionID=%s');
 $lang->execution->menu->view     = array('link' => '视图|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->execution->menu->story    = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->execution->menu->qa       = array('link' => '测试|execution|qa|', 'alias' => 'qa,bug,testcase,testtask,testreport');
+$lang->execution->menu->qa       = array('link' => '测试|execution|qa|executionID=%s', 'subModule' => 'bug', 'alias' => 'qa,bug,testcase,testtask,testreport');
 $lang->execution->menu->repo     = array('link' => '代码|repo|browse|projectID=%s');
 $lang->execution->menu->doc      = array('link' => '文档|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
 $lang->execution->menu->build    = array('link' => '版本|execution|build|executionID=%s', 'subModule' => 'build');
