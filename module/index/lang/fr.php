@@ -1,6 +1,6 @@
 <?php
-$lang->index->common = 'Accueil';
-$lang->index->index  = 'Accueil';
+$lang->index->common = 'Home';
+$lang->index->index  = 'Home';
 $lang->index->search = 'Please input';
 
 $lang->index->app = new stdClass();
@@ -8,12 +8,8 @@ $lang->index->app->open   = 'Open';
 $lang->index->app->reload = 'Reload';
 $lang->index->app->close  = 'Close';
 
-$lang->index->upgradeVersion = 'New version of Zen Tao';
-$lang->index->currentVersion = 'Current Version';
-$lang->index->versionName    = 'Version Name';
-$lang->index->releaseDate    = 'Release Date';
-$lang->index->explain        = 'Release Notes';
-$lang->index->actions        = 'Operating';
+$lang->index->upgradeVersion = 'Upgradable version';
+$lang->index->upgradeNow     = 'Upgrade now';
 $lang->index->upgrade        = 'Upgrade';
 $lang->index->log            = 'Log';
 $lang->index->detailed       = 'Details';
