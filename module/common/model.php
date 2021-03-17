@@ -2325,6 +2325,12 @@ EOD;
             return;
         }
 
+        if($methodName == 'create')
+        {
+            $lang->menu = $lang->$openApp->homeMenu;
+            return;
+        }
+
         foreach($lang->$openApp->homeMenu as $menu)
         {
             $link = is_array($menu) ? $menu['link'] : $menu;

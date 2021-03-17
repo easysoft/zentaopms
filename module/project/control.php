@@ -293,6 +293,12 @@ class project extends control
             }
         }
 
+        if($programID)
+        {
+            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
+            commonModel::setAppObjectID('program', $programID);
+        }
+
         $this->lang->noMenuModule[] = 'project';
 
         $name      = '';
