@@ -146,9 +146,6 @@ class group extends control
         $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
 
-        $menugroup = array();
-        foreach($this->lang->menugroup as $moduleName => $groupName) $menugroup[$groupName][$moduleName] = $moduleName;
-        $this->view->menugroup = $menugroup;
 
         $this->display();
     }

@@ -751,19 +751,18 @@ class commonModel extends model
      * Print the module menu.
      *
      * @param  string $moduleName
+     * @param  string $methodName
      * @static
      * @access public
      * @return void
      */
-    public static function printModuleMenu($moduleName)
+    public static function printModuleMenu($moduleName, $methodName)
     {
         global $config, $lang, $app;
-        $moduleName = $app->rawModule;
-        $methodName = $app->rawMethod;
 
         /* Set main menu by openApp. */
         $openApp = $app->openApp ? $app->openApp : $lang->navGroup->$moduleName;
-        if(in_array($openApp, array('admin', 'repo', 'ops', 'feedback'))) return;
+        if(in_array($moduleName, array('admin', 'repo', 'ops', 'feedback'))) return;
 
         if($openApp == 'my') self::getMyModuleMenu($moduleName, $methodName);
         if($openApp == 'project') self::getProjectModuleMenu($moduleName, $methodName);
@@ -812,8 +811,6 @@ class commonModel extends model
 
         /* The beginning of the menu. */
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
-
-        if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
 
         /* Cycling to print every sub menu. */
         foreach($menu as $menuItem)
@@ -899,7 +896,6 @@ class commonModel extends model
     {
         global $lang;
         $mainMenu = $moduleName;
-        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
         echo "<ul class='breadcrumb'>";
         echo '<li>' . html::a(helper::createLink('my', 'index'), $lang->zentaoPMS) . '</li>';
         if($moduleName != 'index')
@@ -1783,7 +1779,6 @@ EOD;
             if(!commonModel::hasDBPriv($object, $module, $method)) return false;
 
             if(empty($acls['views'])) return true;
-            $menu = isset($lang->menugroup->$module) ? $lang->menugroup->$module : $module;
             $menu = strtolower($menu);
             if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
             if($menu == 'my' or $menu == 'index' or $module == 'tree') return true;
@@ -2325,6 +2320,12 @@ EOD;
             return;
         }
 
+        if($methodName == 'create')
+        {
+            $lang->menu = $lang->$openApp->homeMenu;
+            return;
+        }
+
         foreach($lang->$openApp->homeMenu as $menu)
         {
             $link = is_array($menu) ? $menu['link'] : $menu;
@@ -2404,7 +2405,6 @@ EOD;
         {
             $lang->project->dividerMenu = str_replace(',project,', ',', $lang->project->dividerMenu);
             $lang->release->menu        = new stdclass();
-            $lang->menugroup->release   = '';
             $lang->menuOrder            = $lang->waterfall->menuOrder;
             return self::processMenuVars($lang->menu->waterfall);
         }

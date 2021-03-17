@@ -263,6 +263,7 @@ function loadProductProjects(productID)
 function loadProductExecutions(productID, projectID = 0)
 {
     if(!projectID) projectID = $('#project').find("option:selected").val();
+    if(!projectID) productID = 0;
     required = $('#execution_chosen').hasClass('required');
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;

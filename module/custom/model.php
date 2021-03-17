@@ -319,7 +319,6 @@ class customModel extends model
         global $app, $lang, $config;
         $allMenu = $module == 'main' ? $lang->menu : (isset($lang->$module->menu) ? $lang->$module->menu : $lang->my->menu);
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
-        if($module != 'main' and isset($lang->menugroup->$module)) $module = $lang->menugroup->$module;
         $flowModule = $config->global->flow . '_' . $module;
         $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
         if(commonModel::isTutorialMode() && $module === 'main') $customMenu = 'my,product,project,qa,company';

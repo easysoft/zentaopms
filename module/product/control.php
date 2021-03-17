@@ -323,6 +323,7 @@ class product extends control
         if($programID)
         {
             $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
+            commonModel::setAppObjectID('program', $programID);
         }
         else
         {
@@ -821,7 +822,8 @@ class product extends control
      */
     public function ajaxGetProjects($productID, $branch = 0, $projectID = 0)
     {
-        $projects = $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : $branch);
+        $projects  = array('' => '');
+        $projects += $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : $branch);
         if($this->app->getViewType() == 'json') die(json_encode($peojects));
 
         die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID})'"));
@@ -844,7 +846,7 @@ class product extends control
 
         if($number === '')
         {
-            die(html::select('execution', $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
+            die(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
         }
         else
         {
@@ -975,7 +977,6 @@ class product extends control
             $this->app->loadLang($fromModule);
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
 
-            $this->lang->set('menugroup.product', $activeMenu);
             $this->lang->product->menu      = $this->lang->qa->menu;
             $this->lang->product->menuOrder = $this->lang->qa->menuOrder;
         }
@@ -985,7 +986,6 @@ class product extends control
         {
             $this->app->loadLang($fromModule);
 
-            $this->lang->set('menugroup.product', $activeMenu);
             $projectModel = $this->loadModel('project')->getByID($this->session->PRJ);
             $this->lang->product->menu      = $this->lang->menu->{$projectModel->model};
             $this->lang->product->menuOrder = $this->lang->{$projectModel->model}->menuOrder;
@@ -993,7 +993,6 @@ class product extends control
             /* The secondary test menu processing in the project. */
             if(in_array($fromModule, array('qa', 'bug', 'testtask', 'testreport')))
             {
-                $this->lang->set('menugroup.product', 'qa');
                 $moduleIndex = array_search('product', $this->lang->noMenuModule);
                 if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 

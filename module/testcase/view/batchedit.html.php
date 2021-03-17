@@ -67,7 +67,7 @@
           <?php foreach($caseIDList as $caseID):?>
           <?php
           if(!isset($cases[$caseID])) continue;
-          if(!$productID and $branchProduct)
+          if(!$productID)
           {
               $product = $this->product->getByID($cases[$caseID]->product);
 
@@ -79,7 +79,6 @@
               }
 
               $modules = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', 0, $cases[$caseID]->branch);
-              $modules = array('ditto' => $this->lang->story->ditto) + $modules;
           }
           ?>
           <tr class='text-center'>

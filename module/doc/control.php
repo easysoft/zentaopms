@@ -117,7 +117,6 @@ class doc extends control
             $this->product->setMenu($this->product->getPairs(), $productID);
             $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
             $this->lang->noMenuModule[] = 'doc';
-            $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
         {
@@ -349,7 +348,6 @@ class doc extends control
             $this->product->setMenu($this->product->getPairs(), $lib->product);
             $this->lang->product->switcherMenu = $this->product->getSwitcher($lib->product);
             $this->lang->noMenuModule[] = 'doc';
-            $this->lang->set('menugroup.doc', 'product');
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         }
@@ -360,7 +358,6 @@ class doc extends control
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($this->project->getPairs($this->session->PRJ, 'all', 0, true), $lib->project);
-            $this->lang->set('menugroup.doc', 'project');
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         }
@@ -436,7 +433,6 @@ class doc extends control
             $this->product->setMenu($this->product->getPairs(), $objectID);
             $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
-            $this->lang->set('menugroup.doc', 'product');
         }
         elseif($this->from == 'project')
         {
@@ -446,7 +442,6 @@ class doc extends control
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
-            $this->lang->set('menugroup.doc', 'project');
         }
         else
         {
@@ -501,7 +496,6 @@ class doc extends control
             $this->product->setMenu($this->product->getPairs(), $objectID);
             $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
-            $this->lang->set('menugroup.doc', 'product');
         }
         elseif($this->from == 'project')
         {
@@ -511,7 +505,6 @@ class doc extends control
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($this->project->getPairs($this->session->PRJ, 'all', 0, true), $objectID);
-            $this->lang->set('menugroup.doc', 'project');
         }
         else
         {
@@ -831,7 +824,6 @@ class doc extends control
             $this->product->setMenu($this->product->getPairs(), $objectID);
             $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
-            $this->lang->set('menugroup.doc', 'product');
         }
         elseif($this->from == 'project')
         {
@@ -840,7 +832,6 @@ class doc extends control
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($this->project->getPairs($this->session->PRJ, 'all', 0, true), $objectID);
-            $this->lang->set('menugroup.doc', 'project');
         }
         else
         {
@@ -927,16 +918,10 @@ class doc extends control
             $this->product->setMenu($this->product->getPairs(), $objectID);
             $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
-            $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
         {
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->lang->set('menugroup.doc', 'project');
-        }
-        elseif($from == 'execution')
-        {
-            $this->lang->set('menugroup.doc', 'execution');
         }
         else
         {

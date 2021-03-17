@@ -44,8 +44,8 @@ class testtask extends control
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
-        else 
-        {    
+        else
+        {
             $this->lang->testtask->menu    = $this->lang->projectQa->menu;
             $this->lang->testtask->subMenu = $this->lang->projectQa->subMenu;
         }
@@ -448,24 +448,24 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->cases;
 
-        $this->view->productID     = $productID;
-        $this->view->productName   = $this->products[$productID];
-        $this->view->task          = $task;
-        $this->view->runs          = $runs;
-        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
-        $this->view->assignedToList= $assignedToList;
-        $this->view->moduleTree    = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
-        $this->view->browseType    = $browseType;
-        $this->view->param         = $param;
-        $this->view->orderBy       = $orderBy;
-        $this->view->taskID        = $taskID;
-        $this->view->moduleID      = $moduleID;
-        $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
-        $this->view->treeClass     = $browseType == 'bymodule' ? '' : 'hidden';
-        $this->view->pager         = $pager;
-        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
-        $this->view->setModule     = false;
-        $this->view->canBeChanged  = $canBeChanged;
+        $this->view->productID      = $productID;
+        $this->view->productName    = $this->products[$productID];
+        $this->view->task           = $task;
+        $this->view->runs           = $runs;
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
+        $this->view->assignedToList = $assignedToList;
+        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->orderBy        = $orderBy;
+        $this->view->taskID         = $taskID;
+        $this->view->moduleID       = $moduleID;
+        $this->view->moduleName     = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->treeClass      = $browseType == 'bymodule' ? '' : 'hidden';
+        $this->view->pager          = $pager;
+        $this->view->branches       = $this->loadModel('branch')->getPairs($productID);
+        $this->view->setModule      = false;
+        $this->view->canBeChanged   = $canBeChanged;
 
         $this->display();
     }
@@ -1077,23 +1077,31 @@ class testtask extends control
 
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($url, 'parent'));
         $caseIDList = array_unique($caseIDList);
+
         /* The case of tasks of qa. */
         if($productID)
         {
             $this->testtask->setMenu($this->products, $productID, $taskID);
-            $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
+            $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case');
+
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
         }
         /* The case of my. */
         else
         {
             $this->lang->testtask->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.testtask', 'my');
             $this->lang->testtask->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
             $this->view->title = $this->lang->testtask->batchRun;
-        }
 
-        $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
+            $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                ->where('t2.id')->in($caseIDList)
+                ->fetchAll('runID');
+
+            $caseIDList = array();
+            foreach($cases as $case) $caseIDList[] = $case->id;
+        }
 
         /* If case has changed and not confirmed, remove it. */
         if($from == 'testtask')
@@ -1111,7 +1119,7 @@ class testtask extends control
         $this->view->cases = $cases;
         $this->view->steps = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('t2.id')->in(array_keys($cases))
+            ->where('t2.id')->in($caseIDList)
             ->andWhere('t1.version=t2.version')
             ->andWhere('t2.status')->ne('wait')
             ->fetchGroup('case', 'id');
