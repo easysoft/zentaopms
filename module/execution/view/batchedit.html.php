@@ -76,7 +76,7 @@
             <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$executionID]", $rdUsers, $executions[$executionID]->RD, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'type',   'hidden')?>'>
               <?php
-              if($isStage)
+              if($executions[$executionID]->type == 'stage')
               {
                   echo html::select("attributes[$executionID]",    $lang->stage->typeList,   $executions[$executionID]->attribute,   'class=form-control');
               }

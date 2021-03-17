@@ -2561,7 +2561,10 @@ class super
         }
         elseif($this->scope == 'session')
         {
+            $openApp = $this->openApp;
+            if(!empty($openApp) and isset($_SESSION['app-' . $openApp][$key])) return $_SESSION['app-' . $openApp][$key];
             if(isset($_SESSION[$key])) return $_SESSION[$key];
+
             return false;
         }
         elseif($this->scope == 'env')
