@@ -822,7 +822,8 @@ class product extends control
      */
     public function ajaxGetProjects($productID, $branch = 0, $projectID = 0)
     {
-        $projects = $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : $branch);
+        $projects  = array('' => '');
+        $projects += $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : $branch);
         if($this->app->getViewType() == 'json') die(json_encode($peojects));
 
         die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID})'"));
@@ -845,7 +846,7 @@ class product extends control
 
         if($number === '')
         {
-            die(html::select('execution', $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
+            die(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
         }
         else
         {

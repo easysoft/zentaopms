@@ -95,7 +95,7 @@ js::set('oldProjectID', $projectID);
             <td>
               <div class='table-row'>
                 <div class='table-col' id='projectBox'>
-                  <?php echo html::select('project', $projects, $projectID, "class='form-control chosen'");?>
+                  <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?>
                 </div>
                 <div class='table-col' id='executionIdBox'>
                   <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
