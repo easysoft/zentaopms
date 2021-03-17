@@ -119,12 +119,12 @@ class projectModel extends model
      */
     public function saveState($projectID = 0, $projects = array())
     {
-        if($projectID > 0) $this->session->set('project', (int)$projectID);
-        if($projectID == 0 and $this->cookie->lastProject) $this->session->set('project', (int)$this->cookie->lastProject);
-        if($projectID == 0 and $this->session->PRJ == '') $this->session->set('project', key($projects));
+        if($projectID > 0) $this->session->set('PRJ', (int)$projectID);
+        if($projectID == 0 and $this->cookie->lastProject) $this->session->set('PRJ', (int)$this->cookie->lastProject);
+        if($projectID == 0 and $this->session->PRJ == '') $this->session->set('PRJ', key($projects));
         if(!isset($projects[$this->session->PRJ]))
         {
-            $this->session->set('project', key($projects));
+            $this->session->set('PRJ', key($projects));
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false) $this->accessDenied();
         }
 
@@ -553,11 +553,11 @@ class projectModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  string $type execution|execution
+     * @param  string $type project|execution
      * @access public
      * @return void
      */
-    public function buildProjectBuildSearchForm($products, $queryID, $actionURL, $type = 'execution')
+    public function buildProjectBuildSearchForm($products, $queryID, $actionURL, $type = 'project')
     {
         $this->loadModel('build');
 
