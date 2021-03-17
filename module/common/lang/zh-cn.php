@@ -934,7 +934,7 @@ $lang->scrum->setMenu->group       = array('link' => '权限|project|group|proje
 $lang->menu->waterfall = new stdclass();
 $lang->menu->waterfall->index          = array('link' => '仪表盘|project|index|project={PROJECT}');
 $lang->menu->waterfall->programplan    = array('link' => '计划|programplan|browse|project={PROJECT}', 'subModule' => 'programplan');
-$lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
+$lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|execution|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => '文档|doc|index|project={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story');
