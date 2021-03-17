@@ -160,14 +160,14 @@ $lang->program->homeMenu = new stdclass();
 $lang->program->homeMenu->browse = array('link' => '项目集|program|browse|');
 
 $lang->project = new stdclass();
-$lang->project->menu = new stdclass();
+$lang->project->homeMenu = new stdclass();
 if($config->systemMode == 'new')
 {
-    $lang->project->menu->browse = array('link' => '项目|project|browse|');
+    $lang->project->homeMenu->browse = array('link' => '项目|project|browse|');
 }
 else
 {
-    $lang->project->menu->browse = array('link' => "$lang->executionCommon|project|browse|");
+    $lang->project->homeMenu->browse = array('link' => "$lang->executionCommon|project|browse|");
 }
 
 $lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
