@@ -664,7 +664,7 @@ class commonModel extends model
                 $target = '';
                 $module = '';
                 $method = '';
-                $link   = commonModel::createMenuLink($menuItem, $group);
+                $link   = commonModel::createMenuLink($menuItem, $openApp);
                 if(is_array($menuItem->link))
                 {
                     if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
@@ -834,7 +834,7 @@ class commonModel extends model
                 $target = '';
                 $module = '';
                 $method = '';
-                $link   = commonModel::createMenuLink($menuItem, $group);
+                $link   = commonModel::createMenuLink($menuItem, $openApp);
                 if(is_array($menuItem->link))
                 {
                     if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];

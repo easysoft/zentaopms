@@ -143,7 +143,11 @@ class testtaskModel extends model
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
 
-        $this->lang->testtask->menu->testcase['subModule'] = 'testtask';
+        if($this->lang->navGroup->testcase == 'project' && $this->app->rawMethod == 'browseunits')
+        {
+            $lang->projectQa->menu->testcase['subModule'] = 'testtask';
+        }
+
         if($this->lang->navGroup->testtask == 'qa')
         {
             foreach($this->lang->qa->subMenu->testcase as $key => $menu)

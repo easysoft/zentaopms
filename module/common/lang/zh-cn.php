@@ -192,7 +192,7 @@ $lang->product->homeMenu->list = array('link' => $lang->productCommon . '|produc
 
 $lang->product->menu = new stdclass();
 $lang->product->menu->dashboard   = array('link' => '仪表盘|product|dashboard|productID=%s');
-if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+if($config->URAndSR) $lang->product->menu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->plan        = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->menu->release     = array('link' => '发布|release|browse|productID=%s', 'subModule' => 'release');
@@ -213,7 +213,7 @@ $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
 $lang->productplan = new stdclass();
 
-$lang->release->menu     = $lang->product->viewMenu;
+$lang->release->menu     = $lang->product->menu;
 $lang->branch->menu      = $lang->product->menu;
 $lang->productplan->menu = $lang->product->menu;
 
