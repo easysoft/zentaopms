@@ -189,7 +189,6 @@ $lang->execution->batchUnlinkStory  = 'Dissocier Stories par lot';
 $lang->execution->importTask        = 'Transfert Tâche';
 $lang->execution->importPlanStories = 'Lier Stories Par Plan';
 $lang->execution->importBug         = 'Importer Bug';
-$lang->execution->updateOrder       = "Rang {$lang->executionCommon}";
 $lang->execution->tree              = 'Arboressence';
 $lang->execution->treeTask          = 'Seulement les Tâches';
 $lang->execution->treeStory         = 'Seulement les Stories';

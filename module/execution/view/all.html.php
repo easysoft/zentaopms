@@ -56,7 +56,6 @@
     </div>
   </div>
   <?php endif;?>
-  <?php $canOrder = (common::hasPriv('execution', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
   <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table'>
     <table class='table has-sort-head table-fixed' id='executionList'>
@@ -80,9 +79,6 @@
           <th class='w-40px'><?php echo $lang->execution->totalLeft;?></th>
           <th class='w-60px'><?php echo $lang->execution->progress;?></th>
           <th class='w-100px'><?php echo $lang->execution->burn;?></th>
-          <?php if($canOrder):?>
-          <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->execution->orderAB);?></th>
-          <?php endif;?>
         </tr>
       </thead>
       <tbody class='sortable' id='executionTableList'>
@@ -121,9 +117,6 @@
             </div>
           </td>
           <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
-          <?php if($canOrder):?>
-          <td class='sort-handler'><i class="icon icon-move"></i></td>
-          <?php endif;?>
         </tr>
         <?php if(!empty($execution->children)):?>
          <?php $i = 0;?>
@@ -162,9 +155,6 @@
                </div>
              </td>
              <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
-             <?php if($canOrder):?>
-             <td class='sort-handler'><i class="icon icon-move"></i></td>
-             <?php endif;?>
            </tr>
            <?php $i ++;?>
            <?php endforeach;?>
@@ -178,7 +168,6 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->execution->batchEdit, '', 'btn');?></div>
       <?php endif;?>
-      <?php if(!$canOrder and common::hasPriv('execution', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&from=$from&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $from == 'execution' ? $lang->execution->execUpdateOrder : $lang->execution->updateOrder, '', "class='btn'");?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
