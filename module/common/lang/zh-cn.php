@@ -601,8 +601,6 @@ $lang->navGroup->story       = 'product';
 $lang->navGroup->tree        = 'product';
 
 $lang->navGroup->project     = 'project';
-$lang->navGroup->qa          = 'project';
-$lang->navGroup->bug         = 'project';
 $lang->navGroup->testcase    = 'project';
 $lang->navGroup->testtask    = 'project';
 $lang->navGroup->testreport  = 'project';
@@ -622,7 +620,6 @@ $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->projectbuild   = 'project';
-$lang->navGroup->repo           = 'project';
 $lang->navGroup->job            = 'project';
 $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';

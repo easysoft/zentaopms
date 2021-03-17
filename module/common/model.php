@@ -390,18 +390,7 @@ class commonModel extends model
             }
             else
             {
-                if($group == 'program')
-                {
-                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->PRJ);
-                }
-                elseif($group == 'product' && $menuItem->name == 'doc')
-                {
-                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', 0, true);
-                }
-                else
-                {
-                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars);
-                }
+                $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars);
             }
         }
         return $link;
@@ -2493,6 +2482,15 @@ EOD;
         foreach($lang->$openApp->menu as $label => $menu)
         {
             $lang->$openApp->menu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
+        }
+
+        if($openApp == 'program')
+        {
+            foreach($lang->personnel->menu as $label => $menu)
+            {
+                $menu['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
+                $lang->personnel->menu->$label = $menu;
+            }
         }
 
         /* If objectID is set, cannot use homeMenu. */

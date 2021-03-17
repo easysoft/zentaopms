@@ -73,6 +73,7 @@ class personnel extends control
     public function invest($programID = 0)
     {
         $this->setProgramMenu($programID);
+        commonModel::setAppObjectID('program', $programID);
 
         $this->view->title      = $this->lang->personnel->invest;
         $this->view->position[] = $this->lang->personnel->invest;
