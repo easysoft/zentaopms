@@ -2489,7 +2489,7 @@ EOD;
      * @access public
      * @return string
      */
-    public function setAppObjectID($openApp, $objectID)
+    static public function setAppObjectID($openApp, $objectID)
     {
         global $lang;
 
