@@ -1664,11 +1664,11 @@ class testcaseModel extends model
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
             $projects = array_keys($projects);
         }
-        elseif($this->lang->navGroup->testcase == 'project' and empty($case->story))
+        elseif($this->app->openApp == 'project' and empty($case->story))
         {
             $projects = array($this->session->PRJ);
         }
-        elseif($this->lang->navGroup->testcase == 'execution' and empty($case->story))
+        elseif($this->app->openApp == 'execution' and empty($case->story))
         {
             $projects = array($this->session->execution);
         }
