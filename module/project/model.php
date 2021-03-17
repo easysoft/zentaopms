@@ -550,7 +550,7 @@ class projectModel extends model
 
         /* Set search param. */
         if($type == 'execution') $this->config->build->search['module'] = 'executionBuild';
-        if($type == 'execution')   $this->config->build->search['module'] = 'executionBuild';
+        if($type == 'project') $this->config->build->search['module'] = 'projectBuild';
         $this->config->build->search['actionURL'] = $actionURL;
         $this->config->build->search['queryID']   = $queryID;
         $this->config->build->search['params']['product']['values'] = $products;

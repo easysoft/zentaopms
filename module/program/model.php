@@ -33,7 +33,7 @@ class programModel extends model
     {
         $link = html::a(helper::createLink('program', 'browse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
         $html = "<p style='padding-top:5px;'>" . $link . "</p>";
-        return common::hasPriv('program', 'pgmbrowse') ? $html : '';
+        return common::hasPriv('program', 'browse') ? $html : '';
     }
 
     /**
@@ -464,7 +464,7 @@ class programModel extends model
 
         while($program = $stmt->fetch())
         {
-            $link = $from == 'program' ? helper::createLink('program', 'pgmproduct', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
+            $link = $from == 'program' ? helper::createLink('program', 'product', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
             $linkHtml = html::a($link, html::icon($this->lang->icons[$program->type], 'icon icon-sm text-muted') . ' ' . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
