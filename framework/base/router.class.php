@@ -376,13 +376,13 @@ class baseRouter
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);
 
+        $this->setOpenApp();
         $this->setSuperVars();
         $this->setDebug();
         $this->setErrorHandler();
         $this->setTimezone();
         $this->startSession();
         $this->setProject();
-        $this->setOpenApp();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
@@ -600,7 +600,7 @@ class baseRouter
         $this->get     = new super('get');
         $this->server  = new super('server');
         $this->cookie  = new super('cookie');
-        $this->session = new super('session');
+        $this->session = new super('session', $this->openApp);
 
         unset($GLOBALS);
         unset($_REQUEST);
@@ -2477,9 +2477,10 @@ class super
      * @access  public
      * @return  void
      */
-    public function __construct($scope)
+    public function __construct($scope, $openApp = '')
     {
-        $this->scope = $scope;
+        $this->scope   = $scope;
+        $this->openApp = $openApp;
     }
 
     /**
@@ -2511,6 +2512,8 @@ class super
         }
         elseif($this->scope == 'session')
         {
+            $openApp = $this->openApp;
+            empty($openApp) ? $_SESSION[$key] = $value : $_SESSION['app-' . $openApp][$key] = $value;
             $_SESSION[$key] = $value;
         }
         elseif($this->scope == 'env')
