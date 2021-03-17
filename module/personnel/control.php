@@ -225,7 +225,6 @@ class personnel extends control
     {
         $this->loadModel('program');
         $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
         commonModel::setAppObjectID('program', $programID);
     }
 }

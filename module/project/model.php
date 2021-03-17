@@ -161,21 +161,6 @@ class projectModel extends model
     }
 
     /**
-     * Get project main menu action.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return string
-     */
-    public function getMainAction($module, $method)
-    {
-        $link = html::a(helper::createLink('project', 'browse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
-        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
-        return common::hasPriv('project', 'browse') ? $html : '';
-    }
-
-    /**
      * Get a project by id.
      *
      * @param  int    $projectID
