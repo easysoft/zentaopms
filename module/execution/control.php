@@ -1511,8 +1511,6 @@ class execution extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
-        $project = $this->project->getById($this->session->PRJ);
-
         $this->view->title           = $this->lang->execution->batchEdit;
         $this->view->position[]      = $this->lang->execution->batchEdit;
         $this->view->executionIDList = $executionIDList;
@@ -1521,7 +1519,6 @@ class execution extends control
         $this->view->poUsers         = $poUsers;
         $this->view->qdUsers         = $qdUsers;
         $this->view->rdUsers         = $rdUsers;
-        $this->view->isStage         = $project->model == 'waterfall' ? true : false;
         $this->display();
     }
 
