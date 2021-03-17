@@ -21,8 +21,8 @@ class release extends control
      */
     public function commonAction($productID, $branch = 0)
     {
-        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID, '', $branch);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->menu = $this->lang->product->viewMenu;
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', $branch);
 
         $this->loadModel('product');
         $product = $this->product->getById($productID);

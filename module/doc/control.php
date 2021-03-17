@@ -115,8 +115,7 @@ class doc extends control
         {
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $productID);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
@@ -348,8 +347,7 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $lib->product);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($lib->product);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($lib->product);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
 
@@ -436,8 +434,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
@@ -502,8 +499,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
@@ -833,8 +829,7 @@ class doc extends control
             $this->lang->navGroup->doc  = 'product';
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
@@ -930,8 +925,7 @@ class doc extends control
         if($from == 'product')
         {
             $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($objectID);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
             $this->lang->set('menugroup.doc', 'product');
         }
