@@ -59,6 +59,12 @@ $lang->my->menuOrder[40] = 'follow';
 $lang->my->menuOrder[45] = 'contacts';
 $lang->todo->menuOrder = $lang->my->menuOrder;
 
+/* program menu order. */
+$lang->program->menuOrder[5]  = 'product';
+$lang->program->menuOrder[10] = 'project';
+$lang->program->menuOrder[15] = 'personnel';
+$lang->program->menuOrder[20] = 'stakeholder';
+
 /* product menu order. */
 $lang->product->menuOrder[5]  = 'dashboard';
 $lang->product->menuOrder[10] = 'story';
