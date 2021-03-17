@@ -38,13 +38,13 @@ class productplan extends control
     /**
      * Create a plan.
      *
-     * @param string $product
-     * @param int    $branch
+     * @param string $productID
+     * @param int    $branchID
      *
      * @access public
      * @return void
      */
-    public function create($product = '', $branch = 0, $parent = 0)
+    public function create($productID = '', $branchID = 0, $parent = 0)
     {
         if(!empty($_POST))
         {
@@ -55,11 +55,14 @@ class productplan extends control
             $this->executeHooks($planID);
 
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.refreshPlan()'));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('productplan', 'browse', "productID=$product&branch=$branch")));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('productplan', 'browse', "productID=$productID&branch=$branchID")));
         }
 
-        $this->commonAction($product, $branch);
-        $lastPlan = $this->productplan->getLast($product, $branch, $parent);
+        $this->commonAction($productID, $branchID);
+        $lastPlan = $this->productplan->getLast($productID, $branchID, $parent);
+
+        if($productID) commonModel::setAppObjectID('product', $productID);
+
         if($lastPlan)
         {
             $timestamp = strtotime($lastPlan->end);
@@ -77,7 +80,7 @@ class productplan extends control
         $this->view->position[] = $this->lang->productplan->create;
 
         $this->view->lastPlan = $lastPlan;
-        $this->view->branch   = $branch;
+        $this->view->branch   = $branchID;
         $this->view->parent   = $parent;
         $this->display();
     }

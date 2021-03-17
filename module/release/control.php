@@ -81,6 +81,8 @@ class release extends control
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
+        commonModel::setAppObjectID('product', $productID);
+
         $this->commonAction($productID, $branch);
         $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
         $this->view->position[]  = $this->lang->release->create;
