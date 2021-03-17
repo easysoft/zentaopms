@@ -71,6 +71,8 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
     </div>
     <?php endif;?>
     <?php
+    $this->moduleName = $this->app->rawModule;
+    $this->methodName = $this->app->rawMethod;
     foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
     {
         if(isset($menuItem->hidden)) continue;
