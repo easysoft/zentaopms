@@ -48,8 +48,8 @@ class testcase extends control
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
             //$this->lang->noMenuModule[] = $this->app->rawModule;
         }
-        else 
-        {    
+        else
+        {
             $this->lang->testcase->menu    = $this->lang->projectQa->menu;
             $this->lang->testcase->subMenu = $this->lang->projectQa->subMenu;
         }
@@ -746,14 +746,14 @@ class testcase extends control
 
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
         $caseIDList = array_unique($caseIDList);
-
-        /* Get the edited cases. */
-        $cases = $this->testcase->getByList($caseIDList);
         $branchProduct = false;
 
         /* The cases of a product. */
         if($productID)
         {
+            /* Get the edited cases. */
+            $cases = $this->testcase->getByList($caseIDList);
+
             if($type == 'lib')
             {
                 $libID     = $productID;
@@ -789,6 +789,13 @@ class testcase extends control
         /* The cases of my. */
         else
         {
+            /* Get the edited cases. */
+            $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                ->where('t2.id')->in($caseIDList)
+                ->fetchAll('id');
+            $caseIDList = array_keys($cases);
+
             $this->lang->testcase->menu = $this->lang->my->menu;
             $this->lang->set('menugroup.testcase', 'my');
             $this->lang->testcase->menuOrder = $this->lang->my->menuOrder;
