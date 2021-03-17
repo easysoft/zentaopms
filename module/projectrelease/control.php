@@ -41,7 +41,6 @@ class projectrelease extends control
      */
     public function commonAction($productID = 0, $branch = 0)
     {
-        $this->lang->product->menu         = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         /* Get product and product list by project. */

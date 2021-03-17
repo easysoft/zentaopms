@@ -305,8 +305,6 @@ class product extends control
      */
     public function create($programID = 0)
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher();
-
         if(!empty($_POST))
         {
             $productID = $this->product->create();
@@ -324,8 +322,11 @@ class product extends control
 
         if($programID)
         {
-            $this->loadModel('program')->setViewMenu($programID);
-            $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
+            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
+        }
+        else
+        {
+            $this->lang->product->switcherMenu = $this->product->getSwitcher();
         }
 
         $this->loadModel('user');
@@ -462,11 +463,7 @@ class product extends control
 
         if($programID)
         {
-            $this->app->rawModule = 'program';
-            $this->app->rawMethod = 'product';
-            $this->lang->navGroup->program = 'program';
-            $this->loadModel('program')->setViewMenu($programID);
-            $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
+            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
         }
 
         /* Get the relevant person in charge. */
@@ -553,11 +550,7 @@ class product extends control
         }
 
         /* Navigation remains under the program. */
-        $this->app->rawModule = 'program';
-        $this->app->rawMethod = 'product';
-        $this->lang->navGroup->program = 'program';
-        $this->loadModel('program')->setViewMenu($programID);
-        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
+        $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst', $appendPoUsers);
