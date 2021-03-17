@@ -273,7 +273,7 @@ class productModel extends model
             ->orWhere('createdBy')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->orderBy('program_asc,line_desc,order_asc')
+            ->orderBy('program_asc, line_desc, order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }
@@ -1329,7 +1329,7 @@ class productModel extends model
         $productKeys = array_keys($products);
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in($productKeys)
-            ->orderBy('program_asc,line_desc,' . $orderBy)
+            ->orderBy('program_asc, line_desc, ' . $orderBy)
             ->page($pager)
             ->fetchAll('id');
 
