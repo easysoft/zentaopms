@@ -1,4 +1,3 @@
-<?php js::set('executionID', $executionID);?>
 <?php js::set('module', $module);?>
 <?php js::set('method', $method);?>
 <?php js::set('extra', $extra);?>

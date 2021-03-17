@@ -203,7 +203,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function browse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function browse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->lang->noMenuModule[] = 'project';
         if($this->session->moreProjectLink) $this->lang->project->mainMenuAction = html::a($this->session->moreProjectLink, '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
@@ -217,9 +217,7 @@ class project extends control
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $projectTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=projectTitle');
-        $order        = explode('_', $orderBy);
-        $sortField    = zget($this->config->project->sortFields, $order[0], 'id') . '_' . $order[1];
-        $projectStats = $this->program->getProjectStats($programID, $browseType, $queryID, $sortField, $pager, $projectTitle);
+        $projectStats = $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $projectTitle);
 
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;
