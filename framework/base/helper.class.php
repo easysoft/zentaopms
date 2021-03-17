@@ -110,8 +110,7 @@ class baseHelper
             foreach($vars as $value) $link .= "{$config->requestFix}$value";
             $link .= '.' . $viewType;
 
-            $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $onlyBody, $moduleName);
+            return self::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -122,8 +121,7 @@ class baseHelper
         if($moduleName == $config->default->module)
         {
             $link .= $config->default->method . '.' . $viewType;
-            $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $onlyBody, $moduleName);
+            return self::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -134,8 +132,7 @@ class baseHelper
         if($viewType == $app->getViewType())
         {
             $link .= $moduleName . '/';
-            $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $onlyBody, $moduleName);
+            return self::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
