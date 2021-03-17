@@ -1824,13 +1824,12 @@ class docModel extends model
     public function appendNavCSS()
     {
         $navCSS = '';
-        if($this->lang->navGroup->doc == 'doc')
+        if($this->app->openApp == 'doc')
         {
             $navCSS .= <<<EOF
 #subHeader {margin-top: -50px; background: rgba(0,0,0,0);}
 #pageActions .btn-link {color: #fff; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
 .header-btn {padding: 0;}
-.header-btn .btn{padding: 6px 12px;}
 EOF;
             if($this->app->rawMethod != 'index') $navCSS .= '.header-btn+.header-btn::after, .header-btn+.header-btn::before {top: -50px;}';
         }
