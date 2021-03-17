@@ -282,12 +282,14 @@ class projectModel extends model
             ->groupBy('project')
             ->fetchPairs();
 
+        $this->loadModel('product');
         foreach($projectIdList as $projectID)
         {
-            $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-            $allStories[$projectID]  = $this->product->getTotalStoriesByProduct($productIdList, 'story');
-            $doneStories[$projectID] = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'closed');
-            $leftStories[$projectID] = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'active');
+            $productIdList = $this->product->getProductIDByProject($projectID, false);
+
+            $allStories[$projectID]  = $this->getTotalStoriesByProject($projectID, $productIdList, 'story');
+            $doneStories[$projectID] = $this->getTotalStoriesByProject($projectID, $productIdList, 'story', 'closed');
+            $leftStories[$projectID] = $this->getTotalStoriesByProject($projectID, $productIdList, 'story', 'active');
         }
 
         $leftBugs = $this->getTotalBugByProject($projectIdList, 'active');
@@ -309,6 +311,29 @@ class projectModel extends model
         }
 
         return $projects;
+    }
+
+    /**
+     * Get the number of stories associated with the project.
+     *
+     * @param  int     $projectID
+     * @param  array   $productIdList
+     * @param  string  $type          story|requirement
+     * @param  string  $status        all|closed|active
+     * @access public
+     * @return int
+     */
+    public function getTotalStoriesByProject($projectID = 0, $productIdList, $type = 'story', $status = 'all')
+    {
+        return $this->dao->select('count(t2.id) as stories')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t2.type')->eq($type)
+            ->andWhere('t2.product')->in($productIdList)
+            ->beginIF($status != 'all')->andWhere('t2.status')->eq($status)->fi()
+            ->beginIF($status == 'closed')->andWhere('t2.closedReason')->eq('done')->fi()
+            ->andWhere('deleted')->eq('0')
+            ->fetch('stories');
     }
 
     /**
