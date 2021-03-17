@@ -184,7 +184,9 @@ class devModel extends model
                 {
                     $b++;
                     $blocks[] = array();
-                } else if($b == -1) {
+                }
+                else if($b == -1)
+                {
                     $b = 0;
                     $blocks[] = array();
                 }
