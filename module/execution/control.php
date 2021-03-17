@@ -476,7 +476,7 @@ class execution extends control
         $toExecution = $execution->id;
         $branches    = $this->execution->getBranches($toExecution);
         $tasks       = $this->execution->getTasks2Imported($toExecution, $branches);
-        $executions  = $this->execution->getsToImport(array_keys($tasks), $execution->type);
+        $executions  = $this->execution->getToImport(array_keys($tasks), $execution->type);
         unset($executions[$toExecution]);
         unset($tasks[$toExecution]);
 
@@ -1984,7 +1984,7 @@ class execution extends control
 
         $this->execution->setMenu($this->executions, $executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
-        $stories = $this->loadModel('story')->getStories($executionID);
+        $stories = $this->loadModel('story')->getExecutionStories($executionID);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         /* Get execution's product. */

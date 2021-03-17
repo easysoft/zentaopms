@@ -185,6 +185,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `project` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL default '0',
+  `execution` mediumint(8) unsigned NOT NULL,
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `lib` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
