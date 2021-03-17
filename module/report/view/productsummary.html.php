@@ -6,7 +6,7 @@
   <div class='side-col col-lg' id='sidebar'>
     <?php include 'blockreportlist.html.php';?>
   </div>
-  <div class='main-col  w-800px'>
+  <div class='main-col'>
     <?php if(empty($products)):?>
     <div class="cell">
       <div class="table-empty-tip">
