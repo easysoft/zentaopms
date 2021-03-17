@@ -68,7 +68,6 @@ class projectStory extends control
     public function track($productID = 0, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(empty($productID)) $productID = key($this->products);
-        $this->lang->menugroup->projectstory = 'track';
 
         $this->lang->story->requirement = str_replace($this->lang->URCommon, $this->lang->URCommon, $this->lang->story->requirement);
         $this->lang->story->story       = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->story);

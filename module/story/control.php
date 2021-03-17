@@ -652,7 +652,6 @@ class story extends control
             $this->lang->story->menu = $this->lang->execution->menu;
 
             $this->execution->setMenu($this->execution->getPairs($this->session->PRJ, 'all', 'nodeleted'), $executionID);
-            $this->lang->set('menugroup.story', 'execution');
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
 
             $execution = $this->execution->getByID($executionID);
@@ -676,7 +675,6 @@ class story extends control
         else
         {
             $this->lang->story->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.story', 'my');
             $this->lang->story->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
 
@@ -1147,7 +1145,6 @@ class story extends control
             $this->lang->story->menu      = $this->lang->execution->menu;
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
             $this->execution->setMenu($this->execution->getPairs($this->session->PRJ, 'all', 'nodeleted'), $executionID);
-            $this->lang->set('menugroup.story', 'execution');
             $execution = $this->execution->getByID($executionID);
             $this->view->position[] = html::a($this->createLink('execution', 'story', "executionID=$execution->id"), $execution->name);
             $this->view->title      = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
@@ -1156,7 +1153,6 @@ class story extends control
         else
         {
             $this->lang->story->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.story', 'my');
             $this->lang->story->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
             $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
@@ -1475,7 +1471,6 @@ class story extends control
         $this->session->set('productList', $this->app->getURI(true));
         $products = $this->product->getPairs();
 
-        $this->lang->set('menugroup.story', 'qa');
 
         $this->lang->navGroup->story = $from;
         if($from == 'project')

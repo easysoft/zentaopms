@@ -797,7 +797,6 @@ class testcase extends control
             $caseIDList = array_keys($cases);
 
             $this->lang->testcase->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.testcase', 'my');
             $this->lang->testcase->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
 

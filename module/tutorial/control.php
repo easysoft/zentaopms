@@ -109,7 +109,6 @@ class tutorial extends control
         {
             $taskModule = strtolower($taskName['nav']['module']);
             if($taskModule == strtolower($module)) $hasPriv = true;
-            if(isset($this->lang->menugroup->$taskModule) and $this->lang->menugroup->$taskModule == strtolower($module)) $hasPriv = true;
             if($hasPriv) break;
         }
         if(!$hasPriv and $module == 'my' and $method == 'index') $hasPriv = true;

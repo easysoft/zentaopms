@@ -552,7 +552,6 @@ class testreport extends control
             $executionID      = $this->execution->saveState($objectID, $this->executions);
             $this->execution->setMenu($this->executions, $executionID);
             $this->lang->testreport->menu = $this->lang->execution->menu;
-            $this->lang->menugroup->testreport = 'execution';
             return $executionID;
         }
     }

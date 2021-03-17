@@ -658,7 +658,6 @@ class bug extends control
         elseif($from == 'repo')
         {
             session_write_close();
-            $this->lang->set('menugroup.bug', 'repo');
             $repos = $this->loadModel('repo')->getRepoPairs($this->session->PRJ);
             $this->repo->setMenu($repos);
             $this->lang->bug->menu = $this->lang->repo->menu;

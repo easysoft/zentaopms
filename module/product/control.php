@@ -977,7 +977,6 @@ class product extends control
             $this->app->loadLang($fromModule);
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
 
-            $this->lang->set('menugroup.product', $activeMenu);
             $this->lang->product->menu      = $this->lang->qa->menu;
             $this->lang->product->menuOrder = $this->lang->qa->menuOrder;
         }
@@ -987,7 +986,6 @@ class product extends control
         {
             $this->app->loadLang($fromModule);
 
-            $this->lang->set('menugroup.product', $activeMenu);
             $projectModel = $this->loadModel('project')->getByID($this->session->PRJ);
             $this->lang->product->menu      = $this->lang->menu->{$projectModel->model};
             $this->lang->product->menuOrder = $this->lang->{$projectModel->model}->menuOrder;
@@ -995,7 +993,6 @@ class product extends control
             /* The secondary test menu processing in the project. */
             if(in_array($fromModule, array('qa', 'bug', 'testtask', 'testreport')))
             {
-                $this->lang->set('menugroup.product', 'qa');
                 $moduleIndex = array_search('product', $this->lang->noMenuModule);
                 if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
