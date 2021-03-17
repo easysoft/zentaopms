@@ -103,7 +103,7 @@ class program extends control
 
         $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        $this->program->setViewMenu($programID);
+        commonModel::setAppObjectID('program', $program->id);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -398,7 +398,7 @@ class program extends control
 
         $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        $this->program->setViewMenu($programID);
+        commonModel::setAppObjectID('program', $programID);
 
         $this->loadModel('datatable');
 
@@ -440,7 +440,7 @@ class program extends control
     {
         $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        $this->program->setViewMenu($programID);
+        commonModel::setAppObjectID('program', $programID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -477,7 +477,6 @@ class program extends control
         $this->loadModel('user');
         $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
         $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        $this->program->setViewMenu($programID);
 
         $this->loadModel('dept');
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);

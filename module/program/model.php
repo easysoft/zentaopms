@@ -213,29 +213,6 @@ class programModel extends model
     }
 
     /**
-     * Set view menu.
-     *
-     * @param  int    $programID
-     * @access private
-     * @return void
-     */
-    public function setViewMenu($programID = 0)
-    {
-        foreach($this->lang->program->viewMenu as $label => $menu)
-        {
-            $this->lang->program->viewMenu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
-        }
-
-        foreach($this->lang->personnel->menu as $label => $menu)
-        {
-            $menu['link'] = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
-            $this->lang->personnel->menu->$label = $menu;
-        }
-
-        $this->lang->program->menu = $this->lang->program->viewMenu;
-    }
-
-    /**
      * Create a program.
      *
      * @access private

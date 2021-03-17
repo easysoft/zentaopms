@@ -155,9 +155,9 @@ $lang->dividerMenu = ',qa,report,admin,';
 
 /* Program set menu. */
 $lang->program = new stdclass();
-$lang->program->menu = new stdclass();
-//$lang->program->menu->index  = '仪表盘|program|index|';
-$lang->program->menu->browse = array('link' => '项目集|program|browse|');
+$lang->program->homeMenu = new stdclass();
+//$lang->program->homeMenu->index  = '仪表盘|program|index|';
+$lang->program->homeMenu->browse = array('link' => '项目集|program|browse|');
 
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
@@ -172,36 +172,36 @@ else
 
 $lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
 
-$lang->program->viewMenu = new stdclass();
-$lang->program->viewMenu->product     = array('link' => '产品|program|product|program=%s', 'alias' => 'view');
-$lang->program->viewMenu->project     = array('link' => "项目|program|project|program=%s");
-$lang->program->viewMenu->personnel   = array('link' => "人员|personnel|invest|program=%s");
-$lang->program->viewMenu->stakeholder = array('link' => "干系人|program|stakeholder|program=%s", 'alias' => 'createstakeholder');
+$lang->program->menu = new stdclass();
+$lang->program->menu->product     = array('link' => '产品|program|product|programID=%s', 'alias' => 'view');
+$lang->program->menu->project     = array('link' => "项目|program|project|programID=%s");
+$lang->program->menu->personnel   = array('link' => "人员|personnel|invest|programID=%s");
+$lang->program->menu->stakeholder = array('link' => "干系人|program|stakeholder|programID=%s", 'alias' => 'createstakeholder');
 
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
-$lang->personnel->menu->invest    = array('link' => "投入人员|personnel|invest|program=%s");
-$lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|program=%s");
-$lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|program=%s", 'alias' => 'addwhitelist');
+$lang->personnel->menu->invest     = array('link' => "投入人员|personnel|invest|programID=%s");
+$lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|programID=%s");
+$lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|objectID=%s", 'alias' => 'addwhitelist');
 
 /* Scrum menu. */
 $lang->product = new stdclass();
-$lang->product->menu = new stdclass();
-$lang->product->menu->home = '仪表盘|product|index|';
-$lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit,manageline');
+$lang->product->homeMenu = new stdclass();
+$lang->product->homeMenu->home = '仪表盘|product|index|';
+$lang->product->homeMenu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit,manageline');
 
-$lang->product->viewMenu = new stdclass();
-$lang->product->viewMenu->dashboard   = array('link' => '仪表盘|product|dashboard|productID=%s');
+$lang->product->menu = new stdclass();
+$lang->product->menu->dashboard   = array('link' => '仪表盘|product|dashboard|productID=%s');
 if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->viewMenu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->viewMenu->plan        = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
-$lang->product->viewMenu->release     = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->viewMenu->roadmap     = '路线图|product|roadmap|productID=%s';
-$lang->product->viewMenu->project     = "项目|product|project|status=all&productID=%s";
-$lang->product->viewMenu->track       = array('link' => "矩阵|story|track|productID=%s");
-$lang->product->viewMenu->doc         = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->viewMenu->dynamic     = '动态|product|dynamic|productID=%s';
-$lang->product->viewMenu->set         = array('link' => '设置|product|view|productID=%s', 'subModule' => 'tree,branch', 'alias' => 'edit');
+$lang->product->menu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->menu->plan        = array('link' => "计划|productplan|browse|productID=%s", 'subModule' => 'productplan');
+$lang->product->menu->release     = array('link' => '发布|release|browse|productID=%s', 'subModule' => 'release');
+$lang->product->menu->roadmap     = '路线图|product|roadmap|productID=%s';
+$lang->product->menu->project     = "项目|product|project|status=all&productID=%s";
+$lang->product->menu->track       = array('link' => "矩阵|story|track|productID=%s");
+$lang->product->menu->doc         = array('link' => '文档|doc|objectLibs|type=product&objectID=%s', 'subModule' => 'doc');
+$lang->product->menu->dynamic     = '动态|product|dynamic|productID=%s';
+$lang->product->menu->set         = array('link' => '设置|product|view|productID=%s', 'subModule' => 'tree,branch', 'alias' => 'edit');
 
 $lang->product->setMenu = new stdclass();
 $lang->product->setMenu->view      = array('link' => '概况|product|view|productID={PRODUCT}', 'alias' => 'edit');
@@ -584,41 +584,6 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
-/* 菜单分组。*/
-$lang->menugroup = new stdclass();
-$lang->menugroup->release     = 'product';
-$lang->menugroup->story       = 'product';
-$lang->menugroup->branch      = 'product';
-$lang->menugroup->productplan = 'product';
-$lang->menugroup->task        = 'project';
-$lang->menugroup->build       = 'project';
-$lang->menugroup->convert     = 'admin';
-$lang->menugroup->upgrade     = 'admin';
-$lang->menugroup->user        = 'company';
-$lang->menugroup->group       = 'company';
-$lang->menugroup->bug         = 'qa';
-$lang->menugroup->case        = 'qa';
-$lang->menugroup->testreport  = 'qa';
-$lang->menugroup->people      = 'admin';
-$lang->menugroup->dept        = 'company';
-$lang->menugroup->todo        = 'my';
-$lang->menugroup->score       = 'my';
-$lang->menugroup->action      = 'admin';
-$lang->menugroup->backup      = 'admin';
-$lang->menugroup->cron        = 'admin';
-$lang->menugroup->extension   = 'admin';
-$lang->menugroup->custom      = 'admin';
-$lang->menugroup->mail        = 'admin';
-$lang->menugroup->dev         = 'admin';
-$lang->menugroup->entry       = 'admin';
-$lang->menugroup->webhook     = 'admin';
-$lang->menugroup->message     = 'admin';
-
-$lang->menugroup->repo    = 'ci';
-$lang->menugroup->jenkins = 'ci';
-$lang->menugroup->compile = 'ci';
-$lang->menugroup->job     = 'ci';
-
 /* Nav group.*/
 $lang->navGroup = new stdclass();
 $lang->navGroup->my     = 'my';
@@ -638,7 +603,6 @@ $lang->navGroup->tree        = 'product';
 $lang->navGroup->project     = 'project';
 $lang->navGroup->qa          = 'project';
 $lang->navGroup->bug         = 'project';
-$lang->navGroup->doc         = 'project';
 $lang->navGroup->testcase    = 'project';
 $lang->navGroup->testtask    = 'project';
 $lang->navGroup->testreport  = 'project';
@@ -668,6 +632,8 @@ $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
+
+$lang->navGroup->doc = 'doc';
 
 $lang->navGroup->company       = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
@@ -901,7 +867,7 @@ $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->index          = '仪表盘|project|index|project={PROJECT}';
 $lang->menu->scrum->execution      = "$lang->executionCommon|execution|all|status=all&projectID={PROJECT}&from=project";
 $lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story', 'alias' => 'story,track');
-$lang->menu->scrum->doc            = '文档|doc|index|';
+$lang->menu->scrum->doc            = array('link' => '文档|doc|objectLibs|type=project&objectID={PROJECT}', 'subModule' => 'doc');
 $lang->menu->scrum->qa             = array('link' => '测试|qa|index', 'subModule' => 'testcase,testtask');
 $lang->menu->scrum->ci             = '代码|repo|browse';
 $lang->menu->scrum->projectbuild   = array('link' => '版本|projectbuild|browse|project={PROJECT}');

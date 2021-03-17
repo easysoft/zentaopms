@@ -155,9 +155,9 @@ $lang->dividerMenu = ',qa,report,admin,';
 
 /* Program set menu. */
 $lang->program = new stdclass();
-$lang->program->menu = new stdclass();
-//$lang->program->menu->index  = 'Dashboard|program|index|';
-$lang->program->menu->browse = array('link' => 'Program|program|browse|');
+$lang->program->homeMenu = new stdclass();
+//$lang->program->homeMenu->index  = 'Dashboard|program|index|';
+$lang->program->homeMenu->browse = array('link' => 'Program|program|browse|');
 
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
@@ -172,36 +172,36 @@ else
 
 $lang->project->dividerMenu = ',execution,programplan,doc,other,';
 
-$lang->program->viewMenu = new stdclass();
-$lang->program->viewMenu->product     = array('link' => 'Product|program|product|program=%s', 'alias' => 'view');
-$lang->program->viewMenu->project     = array('link' => "Project|program|project|program=%s");
-$lang->program->viewMenu->personnel   = array('link' => "Member|personnel|invest|program=%s");
-$lang->program->viewMenu->stakeholder = array('link' => "Stakeholder|program|stakeholder|program=%s", 'alias' => 'createstakeholder');
+$lang->program->menu = new stdclass();
+$lang->program->menu->product     = array('link' => 'Product|program|product|programID=%s', 'alias' => 'view');
+$lang->program->menu->project     = array('link' => "Project|program|project|programID=%s");
+$lang->program->menu->personnel   = array('link' => "Member|personnel|invest|programID=%s");
+$lang->program->menu->stakeholder = array('link' => "Stakeholder|program|stakeholder|programID=%s", 'alias' => 'createstakeholder');
 
 $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
-$lang->personnel->menu->invest     = array('link' => "Investment|personnel|invest|program=%s");
-$lang->personnel->menu->accessible = array('link' => "Accessible|personnel|accessible|program=%s");
-$lang->personnel->menu->whitelist  = array('link' => "Whitelist|personnel|whitelist|program=%s", 'alias' => 'addwhitelist');
+$lang->personnel->menu->invest     = array('link' => "Investment|personnel|invest|programID=%s");
+$lang->personnel->menu->accessible = array('link' => "Accessible|personnel|accessible|programID=%s");
+$lang->personnel->menu->whitelist  = array('link' => "Whitelist|personnel|whitelist|program=ID%s", 'alias' => 'addwhitelist');
 
 /* Scrum menu. */
 $lang->product = new stdclass();
-$lang->product->menu = new stdclass();
-$lang->product->menu->home = 'Dashboard|product|index|';
-$lang->product->menu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
+$lang->product->homeMenu = new stdclass();
+$lang->product->homeMenu->home = 'Dashboard|product|index|';
+$lang->product->homeMenu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit');
 
-$lang->product->viewMenu = new stdclass();
-$lang->product->viewMenu->dashboard   = array('link' => 'Dashboard|product|dashboard|productID=%s');
+$lang->product->menu = new stdclass();
+$lang->product->menu->dashboard   = array('link' => 'Dashboard|product|dashboard|productID=%s');
 if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->viewMenu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->viewMenu->plan        = array('link' => "Plan|productplan|browse|productID=%s", 'subModule' => 'productplan');
-$lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s",     'subModule' => 'release');
-$lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
-$lang->product->viewMenu->project     = "Project|product|project|status=all&productID=%s";
-$lang->product->viewMenu->track       = array('link' => "Track|story|track|productID=%s");
-$lang->product->viewMenu->doc         = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->viewMenu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
-$lang->product->viewMenu->set         = array('link' => 'Setting|product|view|productID=%s', 'subModule' => 'tree,branch', 'alias' => 'edit');
+$lang->product->menu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->menu->plan        = array('link' => "Plan|productplan|browse|productID=%s", 'subModule' => 'productplan');
+$lang->product->menu->release     = array('link' => "Release|release|browse|productID=%s", 'subModule' => 'release');
+$lang->product->menu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
+$lang->product->menu->project     = "Project|product|project|status=all&productID=%s";
+$lang->product->menu->track       = array('link' => "Track|story|track|productID=%s");
+$lang->product->menu->doc         = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
+$lang->product->menu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
+$lang->product->menu->set         = array('link' => 'Setting|product|view|productID=%s', 'subModule' => 'tree,branch', 'alias' => 'edit');
 
 $lang->product->setMenu = new stdclass();
 $lang->product->setMenu->view      = array('link' => 'View|product|view|productID={PRODUCT}', 'alias' => 'edit');
@@ -333,8 +333,11 @@ $lang->story->menu = $lang->product->menu;
 
 /* Project menu settings. */
 $lang->execution = new stdclass();
-$lang->execution->menu = new stdclass();
+$lang->execution->homeMenu = new stdclass();
+$lang->execution->homeMenu->index = 'Index|execution|index|';
+$lang->execution->homeMenu->list  = array('link' => 'Execution|execution|all|', 'alias' => 'batchedit');
 
+$lang->execution->menu = new stdclass();
 $lang->execution->menu->task     = array('link' => 'Task|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
 $lang->execution->menu->kanban   = array('link' => 'Kanban|execution|kanban|executionID=%s');
 $lang->execution->menu->burn     = array('link' => 'Burndown|execution|burn|executionID=%s');
@@ -632,7 +635,6 @@ $lang->navGroup->tree        = 'product';
 $lang->navGroup->project     = 'project';
 $lang->navGroup->qa          = 'project';
 $lang->navGroup->bug         = 'project';
-$lang->navGroup->doc         = 'project';
 $lang->navGroup->testcase    = 'project';
 $lang->navGroup->testtask    = 'project';
 $lang->navGroup->testreport  = 'project';
@@ -662,6 +664,8 @@ $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
+
+$lang->navGroup->doc = 'doc';
 
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';

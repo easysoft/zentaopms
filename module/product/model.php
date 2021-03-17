@@ -29,7 +29,6 @@ class productModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $module = 0, $moduleType = '', $extra = '')
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
         $product = $this->getByID($productID);
         if($product)
         {
