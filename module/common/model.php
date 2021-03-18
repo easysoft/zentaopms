@@ -696,7 +696,6 @@ class commonModel extends model
                 /* Avoid highlighting the same navigation method at the same time. */
                 if($currentModule == 'feedback' and $currentMethod == 'admin') $active = '';
                 if($currentModule == 'product' and $currentMethod == 'browse') $active = '';
-                if($currentModule == 'product' and $currentMethod == 'create') $active = '';
                 if($currentModule == 'story') $active = '';
 
                 $misc = $openApp != $lang->navGroup->$module ? "data-app='$openApp'" : '';
