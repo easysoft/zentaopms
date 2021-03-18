@@ -462,7 +462,6 @@ class task extends control
         /* The tasks of my. */
         else
         {
-            $this->lang->navGroup->task  = 'my';
             $this->lang->task->menu      = $this->lang->my->menu;
             $this->lang->task->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
