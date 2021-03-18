@@ -59,7 +59,6 @@ class execution extends control
      */
     public function index($locate = 'auto', $executionID = 0)
     {
-        $this->lang->execution->menu = $this->lang->execution->homeMenu;
         if($locate == 'yes') $this->locate($this->createLink('execution', 'task'));
 
         $this->commonAction($executionID);
@@ -1181,6 +1180,11 @@ class execution extends control
      */
     public function create($productID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $projectID = 0)
     {
+        if($this->app->openApp == 'project')
+        {
+            commonModel::setAppobjectID('project', $projectID);
+        }
+
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
@@ -2664,14 +2668,13 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'all', $projectID = 0, $from = 'execution', $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $projectID = 0, $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        $this->lang->execution->menu = $this->lang->execution->homeMenu;
-
         $this->app->loadLang('my');
         $this->app->loadLang('product');
         $this->app->loadLang('programplan');
 
+        $from = $this->app->openApp;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true));
         if($from == 'project') $this->lang->navGroup->execution = 'project';
 

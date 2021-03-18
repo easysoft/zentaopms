@@ -662,15 +662,13 @@ class project extends control
     /**
      * Execution list.
      *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function execution()
+    public function execution($projectID = 0)
     {
-        $PRJ = $this->session->PRJ;
-        if(!$PRJ) $PRJ = current(explode(',', $this->app->user->view->projects));
-
-        $this->locate($this->createLink('execution', 'all', "status=all&executionID=0&from=project", '', false, $PRJ));
+        $this->locate($this->createLink('execution', 'all', "status=all&projectID=$projectID", '', false));
     }
 
     /**

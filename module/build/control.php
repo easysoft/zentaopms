@@ -21,10 +21,14 @@ class build extends control
      */
     public function create($executionID = 0, $productID = 0, $projectID = 0)
     {
+        /* Load these models. */
+        $this->loadModel('execution');
+        $this->loadModel('user');
+
         if($this->app->openApp == 'project')
         {
             commonModel::setAppObjectID('project', $projectID);
-            $executions  = $this->loadModel('execution')->getPairs($projectID);
+            $executions  = $this->execution->getPairs($projectID);
             $executionID = key($executions);
         }
 
@@ -41,18 +45,18 @@ class build extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
-        /* Load these models. */
-        $this->loadModel('execution');
-        $this->loadModel('user');
-
-        /* Set session and get execution by id. */
-        $this->session->set('buildCreate', $this->app->getURI(true));
         $execution = $this->execution->getByID($executionID);
+        if($this->app->openApp == 'execution')
+        {
+            /* Set session and get execution by id. */
+            $this->session->set('buildCreate', $this->app->getURI(true));
 
-        /* Set menu. */
-        $executions = $this->execution->getPairs($execution->project);
-        $this->execution->setMenu($executions, $executionID);
-        commonModel::setAppObjectID('execution', $executionID);
+            /* Set menu. */
+            $executions = $this->execution->getPairs($execution->project);
+            $this->execution->setMenu($executions, $executionID);
+            commonModel::setAppObjectID('execution', $executionID);
+        }
+
 
         $productGroups = $this->execution->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);

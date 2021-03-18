@@ -313,9 +313,10 @@ class product extends control
 
             $this->executeHooks($productID);
 
-            $moduleName = $programID ? 'program'    : $this->moduleName;
-            $methodName = $programID ? 'product' : 'browse';
-            $param      = $programID ? "programID=$programID" : "productID=$productID";
+            $openApp    = $this->app->openApp;
+            $moduleName = $openApp == 'program'? 'program' : $this->moduleName;
+            $methodName = $openApp == 'program'? 'product' : 'browse';
+            $param      = $openApp == 'program' ? "programID=$programID" : "productID=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
