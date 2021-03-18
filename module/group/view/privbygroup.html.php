@@ -48,7 +48,7 @@
 <?php else:?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-  <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?> <i class="icon icon-chevron-right"></i></span>
+    <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?> <i class="icon icon-chevron-right"></i></span>
     <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
     <?php $active = empty($menu) ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, '')), "<span class='text'>{$lang->group->all}</span>", '', "class='btn btn-link $active'")?>
@@ -160,7 +160,7 @@ $(document).ready(function()
     })
 
     /**
-     * 勾选浏览列表标签时，自动勾选下面的所有标签。 
+     * 勾选浏览列表标签时，自动勾选下面的所有标签。
      * Check all tabs when the Browse list tab is selected.
      */
     $('.menus input[value=browse]').change(function()

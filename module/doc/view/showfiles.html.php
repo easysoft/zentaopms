@@ -74,11 +74,11 @@
                   <?php
                   if($type == 'execution' && in_array($file->objectType, array('task', 'build')))
                   {
-                      $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
+                      $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->project);
                   }
                   if($type == 'product' && in_array($file->objectType, array('bug', 'release', 'testcase', 'testreport')))
                   {
-                      $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
+                      $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->project);
                   }
                   else
                   {
@@ -151,7 +151,7 @@
                 <?php
                 if($type == 'execution' && in_array($file->objectType, array('task', 'build')))
                 {
-                    $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->PRJ);
+                    $objectLink = $this->createLink($file->objectType, 'view', "objectID=$file->objectID", '', '', $file->project);
                 }
                 else
                 {

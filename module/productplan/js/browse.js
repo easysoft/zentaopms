@@ -22,9 +22,9 @@ $(function()
 
     $('#createExecutionButton').on('click', function()
     {
-        var projectID  = $('#project').val();
-        var planID = $('#planID').val();
-        parent.location.href = createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID);
+        var projectID = $('#project').val();
+        var planID    = $('#planID').val();
+        parent.location.href = createLink('execution', 'create', 'productID=' + productID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&projectID=' + projectID);
     });
 });
 $(document).on('click', 'td.content .more', function(e)

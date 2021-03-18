@@ -1555,6 +1555,10 @@ class productModel extends model
             {
                 $link = helper::createLink($module, $method, "productID=%s&type=$extra");
             }
+            elseif($module == 'product' && $method == 'create')
+            {
+                $link = helper::createLink($module, 'browse', "productID=%s&type=$extra");
+            }
             elseif($module == 'qa' && $method == 'index')
             {
                 $link = helper::createLink('bug', 'browse', "productID=%s" . ($branch ? "&branch=%s" : ''));

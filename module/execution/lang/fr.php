@@ -10,12 +10,17 @@
  * @link        https://www.zentao.pm
  */
 /* Fields. */
+$lang->executionCommon           = $lang->executionCommon;
 $lang->execution->common         = $lang->executionCommon;
 $lang->execution->allExecutions  = 'Tous les ' . $lang->executionCommon . 's';
 $lang->execution->id             = $lang->executionCommon . ' ID';
 $lang->execution->type           = 'Type';
 $lang->execution->name           = "Nom du {$lang->executionCommon}";
 $lang->execution->code           = 'Code';
+$lang->execution->project        = 'Project';
+$lang->execution->execName       = 'Execution Name';
+$lang->execution->execCode       = 'Execution Code';
+$lang->execution->execType       = 'Execution Type';
 $lang->execution->statge         = 'Etape';
 $lang->execution->pri            = 'Priorité';
 $lang->execution->openedBy       = 'Ouvert par';
@@ -35,12 +40,14 @@ $lang->execution->workHourUnit   = 'H';
 $lang->execution->totalHours     = 'Budget (Heure)';
 $lang->execution->totalDays      = 'Budget (Jour)';
 $lang->execution->status         = 'Statut';
-$lang->execution->subStatus      = 'Sous-statut';
+$lang->execution->execStatus     = 'Status';
+$lang->execution->subStatus      = 'Sub Status';
 $lang->execution->desc           = 'Description';
+$lang->execution->execDesc       = 'Description';
 $lang->execution->owner          = 'Propriétaire';
 $lang->execution->PO             = "Propriétaire {$lang->executionCommon}";
 $lang->execution->PM             = "Directeur {$lang->executionCommon}";
-$lang->execution->QD             = 'Quality Manager';
+$lang->execution->QD             = 'Test Manager';
 $lang->execution->RD             = 'Release Manager';
 $lang->execution->release        = 'Release';
 $lang->execution->acl            = "Contrôle d'accès";
@@ -65,9 +72,10 @@ $lang->execution->undone         = 'Non Terminé';
 $lang->execution->unclosed       = 'Non Fermées';
 $lang->execution->typeDesc       = "Aucune {$lang->SRCommon}, bug, build, test, ou graphe d'atterrissage n'est disponible";
 $lang->execution->mine           = 'A Moi: ';
+$lang->execution->involved       = 'Mine: ';
 $lang->execution->other          = 'Autres:';
 $lang->execution->deleted        = 'Supprimé';
-$lang->execution->delayed        = 'Ajourné';
+$lang->execution->delayed        = 'Delayed';
 $lang->execution->product        = $lang->execution->products;
 $lang->execution->readjustTime   = "Ajuster Début et Fin du {$lang->executionCommon}";
 $lang->execution->readjustTask   = 'Ajuster Début et Fin de la Tâche';
@@ -96,6 +104,10 @@ $lang->execution->endList[62]  = '2 Mois';
 $lang->execution->endList[93]  = '3 Mois';
 $lang->execution->endList[186] = '6 Mois';
 $lang->execution->endList[365] = '1 Année';
+
+$lang->execution->lifeTimeList['short'] = "Short-Term";
+$lang->execution->lifeTimeList['long']  = "Long-Term";
+$lang->execution->lifeTimeList['ops']   = "DevOps";
 
 $lang->team = new stdclass();
 $lang->team->account    = 'Utilisateur';
@@ -143,6 +155,7 @@ $lang->execution->groupTask         = 'Vision Groupée';
 $lang->execution->story             = 'Liste Stories';
 $lang->execution->qa                = 'QA';
 $lang->execution->bug               = 'Liste Bugs';
+$lang->execution->testcase          = 'Testcase List';
 $lang->execution->dynamic           = 'Historique';
 $lang->execution->latestDynamic     = 'Historique';
 $lang->execution->build             = 'Liste Builds';
@@ -175,6 +188,8 @@ $lang->execution->treeAction        = "Arborescence {$lang->executionCommon}";
 $lang->execution->exportAction      = "Exporter {$lang->executionCommon}";
 $lang->execution->computeBurnAction = "Calculer Atterrissage";
 $lang->execution->create            = "Créer {$lang->executionCommon}";
+$lang->execution->createExec        = "Create Execution";
+$lang->execution->copyExec          = "Copy Execution";
 $lang->execution->copy              = "Copier {$lang->executionCommon}";
 $lang->execution->delete            = "Supprimer {$lang->executionCommon}";
 $lang->execution->browse            = "Liste du {$lang->executionCommon}";
@@ -243,8 +258,6 @@ $lang->execution->linkStoryByPlanTips = "Cette action va lier toutes les stories
 $lang->execution->selectExecution       = "Sélectionner {$lang->executionCommon}";
 $lang->execution->selectExecution     = "Select Execution";
 $lang->execution->beginAndEnd         = 'Durée';
-$lang->execution->begin               = 'Début';
-$lang->execution->end                 = 'Fin';
 $lang->execution->lblStats            = 'Efforts';
 $lang->execution->stats               = 'Disponible: <strong>%s</strong>(h). Estimé: <strong>%s</strong>(h). Coût: <strong>%s</strong>(h). Reste: <strong>%s</strong>(h).';
 $lang->execution->taskSummary         = "Total des tâches de cette page :<strong>%s</strong>. A Faire: <strong>%s</strong>. En cours: <strong>%s</strong>. &nbsp;&nbsp;&nbsp; Estimé: <strong>%s</strong>(h). Coût: <strong>%s</strong>(h). Reste: <strong>%s</strong>(h).";
@@ -303,12 +316,7 @@ $lang->execution->fixFirstWithLeft          = 'Mettre à jour les heures égalem
 $lang->execution->unfinishedExecution         = "This {$lang->executionCommon} has ";
 $lang->execution->unfinishedTask            = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug             = "[%s] unresolved bugs. ";
-
-$lang->execution->action = new stdclass();
-$lang->execution->action->opened  = '$date, créée par <strong>$actor</strong> .' . "\n";
-$lang->execution->action->managed = '$date, gérée par <strong>$actor</strong> .' . "\n";
-$lang->execution->action->edited  = '$date, edited by <strong>$actor</strong> . $extra' . "\n";
-$lang->execution->action->extra   = "Les {$lang->productCommon}s associés sont %s.";
+$lang->execution->projectNotEmpty           = 'Project cannot be empty.';
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();

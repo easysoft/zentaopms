@@ -1716,7 +1716,7 @@ class executionModel extends model
         $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in(array_keys($products))
-            ->andWhere('t2.project')->eq($execution->execution)
+            ->andWhere('t2.project')->eq($execution->project)
             ->fetchGroup('execution');
         $branches = str_replace(',', "','", $branches);
 

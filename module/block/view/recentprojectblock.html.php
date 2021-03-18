@@ -49,14 +49,14 @@
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='context-dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right cards-menu'>
-                <li><?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'button', 'group', '', '', '', '', '', $project->id);?></li>
-                <li><?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'button', 'persons', '', '', '', '', '', $project->id);?></li>
-                <li><?php common::printicon('program', 'PRJActivate', "projectid=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'PRJEdit',    "projectID=$project->id", $project, 'button', ' icon-edit', '', '', '', '', '', $project->id);?></li>
-                <li><?php common::printIcon('program', 'PRJStart',   "projectID=$project->id", $project, 'button', ' icon-play', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'button', ' icon-pause', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'PRJClose',   "projectID=$project->id", $project, 'button', ' icon-off', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'PRJDelete',  "projectID=$project->id", $project, 'button', ' icon-trash', 'hiddenwin');?></li>
+                <li><?php common::printIcon('project', 'group', "projectID=$project->id", $project, 'button', 'group', '', '', '', '', '', $project->id);?></li>
+                <li><?php common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'button', 'persons', '', '', '', '', '', $project->id);?></li>
+                <li><?php common::printicon('project', 'activate', "projectid=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
+                <li><?php common::printIcon('project', 'edit',    "projectID=$project->id", $project, 'button', ' icon-edit', '', '', '', '', '', $project->id);?></li>
+                <li><?php common::printIcon('project', 'start',   "projectID=$project->id", $project, 'button', ' icon-play', '', 'iframe', true);?></li>
+                <li><?php common::printIcon('project', 'suspend', "projectID=$project->id", $project, 'button', ' icon-pause', '', 'iframe', true);?></li>
+                <li><?php common::printIcon('project', 'close',   "projectID=$project->id", $project, 'button', ' icon-off', '', 'iframe', true);?></li>
+                <li><?php common::printIcon('project', 'delete',  "projectID=$project->id", $project, 'button', ' icon-trash', 'hiddenwin');?></li>
               </ul>
             </li>
           </nav>

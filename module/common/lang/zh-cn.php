@@ -133,6 +133,7 @@ list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
+if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> 项目集|$programModule|$programMethod|";
 $lang->mainNav->product = "<i class='icon icon-product'></i> 产品|$productModule|$productMethod|";
 if($config->systemMode == 'new')
 {
@@ -149,7 +150,6 @@ $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
 $lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|my|team|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
-if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> 项目集|$programModule|$programMethod|";
 
 $lang->dividerMenu = ',qa,report,admin,';
 
@@ -901,7 +901,7 @@ $lang->scrum->setMenu->group       = array('link' => '权限|project|group|proje
 $lang->menu->waterfall = new stdclass();
 $lang->menu->waterfall->index          = array('link' => '仪表盘|project|index|project={PROJECT}');
 $lang->menu->waterfall->programplan    = array('link' => '计划|programplan|browse|project={PROJECT}', 'subModule' => 'programplan');
-$lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
+$lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|execution|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => '文档|doc|index|project={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => '报告|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
 $lang->menu->waterfall->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|project={PROJECT}');

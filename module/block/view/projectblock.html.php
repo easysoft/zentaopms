@@ -24,9 +24,7 @@
     </thead>
     <tbody>
       <?php foreach($projects as $project):?>
-      <?php
-      $viewLink = $this->createLink('program', 'index', "programID={$project->id}");
-      ?>
+      <?php $viewLink = $this->createLink('project', 'index', "programID={$project->id}");?>
       <tr>
         <td title='<?php echo $project->name?>'><?php echo html::a($viewLink, $project->name);?></td>
         <td><?php echo zget($users, $project->PM, $project->PM)?></td>

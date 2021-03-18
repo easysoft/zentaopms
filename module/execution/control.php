@@ -1182,7 +1182,10 @@ class execution extends control
     {
         if($this->app->openApp == 'project')
         {
-            commonModel::setAppObjectID('project', $projectID);
+            $project = $this->project->getByID($projectID);
+            $model   = $project->model;
+            $this->lang->project->menu = $this->lang->menu->$model;
+            commonModel::setAppobjectID('project', $projectID);
         }
 
         $this->app->loadLang('program');
@@ -1299,6 +1302,7 @@ class execution extends control
         $this->view->copyExecutionID = $copyExecutionID;
         $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->users           = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->from            = $this->app->openApp;
         $this->display();
     }
 
@@ -1975,7 +1979,7 @@ class execution extends control
 
         $this->execution->setMenu($this->executions, $executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
-        $stories = $this->loadModel('story')->getStories($executionID);
+        $stories = $this->loadModel('story')->getExecutionStories($executionID);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         /* Get execution's product. */

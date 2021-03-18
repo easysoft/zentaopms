@@ -30,6 +30,7 @@ ALTER TABLE `zt_burn` CHANGE `project` `execution` mediumint(8) unsigned NOT NUL
 ALTER TABLE `zt_doc` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_relation` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_relation` CHANGE `program` `project` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_case` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_doclib` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_task` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_testreport` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
@@ -39,6 +40,7 @@ ALTER TABLE `zt_webhook` CHANGE `projects` `executions` mediumint(8) unsigned NO
 ALTER TABLE `zt_task` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_doclib` ADD `project` mediumint(8) unsigned NOT NULL AFTER `product`;
 ALTER TABLE `zt_doc` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_story` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_bug` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_case` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_testtask` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
@@ -344,3 +346,5 @@ update zt_block set source='execution' where block='statistic' and source='proje
 update zt_block set source='project' where block='statistic' and source='program';
 update zt_config set `value`='project-browse' where `key`='projectLink';
 update zt_config set `value`='program-browse' where `key`='programLink';
+update zt_block set source='project', block='projectteam' where block='programteam' and source='program';
+update zt_block set source='project', block='project' where block='program' and source='program';
