@@ -27,7 +27,10 @@ class build extends control
 
         if($this->app->openApp == 'project')
         {
+            $model = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
+            $this->lang->project->menu = $this->lang->menu->$model;
             commonModel::setAppObjectID('project', $projectID);
+
             $executions  = $this->execution->getPairs($projectID);
             $executionID = key($executions);
         }
