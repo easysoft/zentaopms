@@ -1616,7 +1616,7 @@ class testtaskModel extends model
                 if(common::hasPriv('testtask', 'unlinkCase', $run))
                 {
                     $unlinkURL = helper::createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"casesForm\", confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn'");
+                    echo html::a("javascript:void(0)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn' onclick='ajaxDelete(\"$unlinkURL\", \"casesForm\", confirmUnlink)'");
                 }
 
                 break;
