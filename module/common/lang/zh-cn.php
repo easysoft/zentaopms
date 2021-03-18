@@ -313,12 +313,13 @@ $lang->my->workMenu->testcase    = '用例|my|work|mode=testcase&type=assigntome
 $lang->my->workMenu->testtask    = '测试单|my|work|mode=testtask&type=wait';
 
 $lang->my->contributeMenu = new stdclass();
-$lang->my->contributeMenu->task        = '任务|my|contribute|mode=task';
+$lang->my->contributeMenu->task     = '任务|my|contribute|mode=task';
 if($config->URAndSR) $lang->my->contributeMenu->requirement = "$lang->URCommon|my|contribute|mode=requirement";
-$lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=story";
-$lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
-$lang->my->contributeMenu->testcase    = '用例|my|contribute|mode=testcase&type=openedbyme';
-$lang->my->contributeMenu->testtask    = '测试单|my|contribute|mode=testtask&type=done';
+$lang->my->contributeMenu->story    = "$lang->SRCommon|my|contribute|mode=story";
+$lang->my->contributeMenu->bug      = 'Bug|my|contribute|mode=bug';
+$lang->my->contributeMenu->testcase = '用例|my|contribute|mode=testcase&type=openedbyme';
+$lang->my->contributeMenu->testtask = '测试单|my|contribute|mode=testtask&type=done';
+$lang->my->contributeMenu->doc      = '文档|my|contribute|mode=doc&type=openedbyme';
 
 $lang->my->dividerMenu = ',myWork,score,';
 
@@ -628,7 +629,6 @@ $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
-$lang->navGroup->repo      = 'execution';
 
 $lang->navGroup->doc = 'doc';
 
@@ -948,6 +948,6 @@ $lang->projectstory->menu       = new stdclass();
 $lang->stakeholder->menu = $lang->scrum->setMenu;
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage', 'entry');
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'qa', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage', 'entry');
 
 include (dirname(__FILE__) . '/menuOrder.php');

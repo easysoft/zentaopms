@@ -313,12 +313,13 @@ $lang->my->workMenu->testcase    = 'Test Case|my|work|mode=testcase&type=assignt
 $lang->my->workMenu->testtask    = 'Test Task|my|work|mode=testtask&type=wait';
 
 $lang->my->contributeMenu = new stdclass();
-$lang->my->contributeMenu->task        = 'Task|my|contribute|mode=task';
+$lang->my->contributeMenu->task     = 'Task|my|contribute|mode=task';
 if($config->URAndSR) $lang->my->contributeMenu->requirement = "$lang->URCommon|my|contribute|mode=requirement";
-$lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=story";
-$lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
-$lang->my->contributeMenu->testcase    = 'Test Case|my|contribute|mode=testtask&type=openedbyme';
-$lang->my->contributeMenu->testtask    = 'Test Task|my|contribute|mode=testtask&type=done';
+$lang->my->contributeMenu->story    = "$lang->SRCommon|my|contribute|mode=story";
+$lang->my->contributeMenu->bug      = 'Bug|my|contribute|mode=bug';
+$lang->my->contributeMenu->testcase = 'Test Case|my|contribute|mode=testtask&type=openedbyme';
+$lang->my->contributeMenu->testtask = 'Test Task|my|contribute|mode=testtask&type=done';
+$lang->my->contributeMenu->doc      = 'Doc|my|contribute|mode=doc&type=openedbyme';
 
 $lang->my->dividerMenu = ',myWork,score,';
 
@@ -622,7 +623,6 @@ $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
-$lang->navGroup->repo      = 'execution';
 
 $lang->navGroup->doc = 'doc';
 

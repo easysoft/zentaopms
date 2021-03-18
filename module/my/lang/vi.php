@@ -14,6 +14,7 @@ $lang->my->bug             = 'My Bugs';
 $lang->my->testTask        = 'My Builds';
 $lang->my->testCase        = 'My Cases';
 $lang->my->story           = 'My Stories';
+$lang->my->doc             = "My Docs";
 $lang->my->createProgram   = 'Create Program';
 $lang->my->project         = "My Projects";
 $lang->my->execution       = "My {$lang->executionCommon}s";

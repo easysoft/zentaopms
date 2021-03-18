@@ -2289,10 +2289,12 @@ EOD;
     {
         global $lang, $config;
 
+        /* If homeMenu is not exists or unset, display menu. */
         if(!isset($lang->$openApp->homeMenu))
         {
-            $lang->menu      = $lang->$openApp->menu;
+            $lang->menu      = $openApp == 'project' ? self::getProjectMainMenu($moduleName) : $lang->$openApp->menu;
             $lang->menuOrder = $lang->$openApp->menuOrder;
+
             return;
         }
 
@@ -2302,6 +2304,7 @@ EOD;
             return;
         }
 
+        /* If the method is in homeMenu, display homeMenu. */
         foreach($lang->$openApp->homeMenu as $menu)
         {
             $link = is_array($menu) ? $menu['link'] : $menu;
@@ -2314,22 +2317,9 @@ EOD;
             }
         }
 
-        if($openApp == 'project')
-        {
-            if($config->systemMode == 'classic' or ($moduleName == 'project' and $methodName == 'browse'))
-            {
-                $lang->menu = $lang->project->homeMenu;
-            }
-            else
-            {
-                $lang->menu = self::getProjectMainMenu($moduleName);
-            }
-        }
-        else
-        {
-            $lang->menu      = $lang->$openApp->menu;
-            $lang->menuOrder = $lang->$openApp->menuOrder;
-        }
+        /* Default, display menu. */
+        $lang->menu      = $openApp == 'project' ? self::getProjectMainMenu($moduleName) : $lang->$openApp->menu;
+        $lang->menuOrder = $lang->$openApp->menuOrder;
     }
 
     /**
