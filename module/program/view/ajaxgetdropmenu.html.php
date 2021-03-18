@@ -9,7 +9,7 @@ $programsPinYin = common::convert2Pinyin($programNames);
   <div class="table-col col-left">
     <div class='list-group'>
     <?php
-    echo $this->program->getTreeMenu();
+    echo $this->program->getTreeMenu(0, 'program', '', $module, $method);
     ?>
     </div>
     <div class="col-footer">
