@@ -864,7 +864,7 @@ $lang->icons['score']              = 'tint';
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->index          = '仪表盘|project|index|project={PROJECT}';
-$lang->menu->scrum->execution      = "$lang->executionCommon|execution|all|status=all&projectID={PROJECT}";
+$lang->menu->scrum->execution      = "$lang->executionCommon|project|execution|projectID={PROJECT}";
 $lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|projectID={PROJECT}', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = array('link' => '文档|doc|objectLibs|type=project&objectID={PROJECT}', 'subModule' => 'doc');
 $lang->menu->scrum->qa             = array('link' => '测试|qa|index', 'subModule' => 'testcase,testtask');
