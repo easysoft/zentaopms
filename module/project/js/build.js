@@ -5,7 +5,7 @@ $(function()
         if(executions.length == 0)
         {
             alert(createExecution);
-            location.href = createLink('execution', 'create');
+            location.href = createLink('execution', 'create', 'productID=&executionID=&copyExecutionID=&planID=&confirm=&projectID=' + projectID);
             return false;
         }
     });
