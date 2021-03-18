@@ -1169,20 +1169,20 @@ class execution extends control
      * Create a execution.
      *
      * @param string $projectID
-     * @param string $productID
      * @param string $executionID
      * @param string $copyExecutionID
      * @param int    $planID
      * @param string $confirm
+     * @param string $productID
      *
      * @access public
      * @return void
      */
-    public function create($productID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $projectID = 0)
+    public function create($projectID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0)
     {
         if($this->app->openApp == 'project')
         {
-            commonModel::setAppobjectID('project', $projectID);
+            commonModel::setAppObjectID('project', $projectID);
         }
 
         $this->app->loadLang('program');
@@ -1264,6 +1264,7 @@ class execution extends control
                     if(!empty($planID)) break;
                 }
             }
+
             if(!empty($planID))
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "productID=&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));

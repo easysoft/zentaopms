@@ -285,7 +285,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t3.story=t2.story')
             ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story=t4.id')
             ->where('t2.product')->eq((int)$productID)
-            ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.project')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->app->openApp == 'project')->andWhere('t1.project')->eq($this->session->PRJ)->fi()
             ->beginIF($branch)->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()

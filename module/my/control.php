@@ -273,8 +273,7 @@ class my extends control
         /* Save session. */
         if($this->app->viewType != 'json')
         {
-            $this->session->set('taskList',  $this->app->getURI(true));
-            $this->session->set('storyList', $this->app->getURI(true));
+            $this->session->set('taskList', $this->app->getURI(true), 'execution');
         }
 
         /* Load pager. */

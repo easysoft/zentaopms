@@ -2492,7 +2492,7 @@ class super
      * @access  public
      * @return  void
      */
-    public function set($key, $value)
+    public function set($key, $value, $openApp = '')
     {
         if($this->scope == 'post')
         {
@@ -2512,9 +2512,8 @@ class super
         }
         elseif($this->scope == 'session')
         {
-            $openApp = $this->openApp;
-            empty($openApp) ? $_SESSION[$key] = $value : $_SESSION['app-' . $openApp][$key] = $value;
-            $_SESSION[$key] = $value;
+            $openApp = $openApp ? $openApp : $this->openApp;
+            $openApp ? $_SESSION["app-$openApp"][$key] = $value : $_SESSION[$key] = $value;
         }
         elseif($this->scope == 'env')
         {
@@ -2562,9 +2561,8 @@ class super
         elseif($this->scope == 'session')
         {
             $openApp = $this->openApp;
-            if(!empty($openApp) and isset($_SESSION['app-' . $openApp][$key])) return $_SESSION['app-' . $openApp][$key];
+            if($openApp and isset($_SESSION["app-$openApp"][$key])) return $_SESSION["app-$openApp"][$key];
             if(isset($_SESSION[$key])) return $_SESSION[$key];
-
             return false;
         }
         elseif($this->scope == 'env')

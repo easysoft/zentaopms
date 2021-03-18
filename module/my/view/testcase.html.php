@@ -85,7 +85,7 @@
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <?php $params = "testcaseID=$caseID&version=$case->version";?>
           <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
-          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', $params, '', '', $case->project), $case->title, null, "style='color: $case->color' data-group='project'");?></td>
+          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', $params), $case->title, null, "style='color: $case->color'");?></td>
           <?php if($type == 'assigntome'):?>
           <td><?php echo $case->taskName;?></td>
           <?php endif;?>
@@ -99,8 +99,8 @@
             <?php
             if($canBeChanged)
             {
-                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', '', '', '', '', $case->project);
-                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy', '', '', '', '', '', $case->project);
+                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
+                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy');
                 common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', true, "data-width='95%'", '', $case->project);
                 common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->project);
                 common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', '', '', '', '', $case->project);
