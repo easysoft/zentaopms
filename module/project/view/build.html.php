@@ -77,7 +77,7 @@
             {
                 echo html::a($this->createLink('build', 'view', "buildID=$build->id&type=story&link=true"), "<i class='icon icon-link'></i>", '', "class='btn' title='{$lang->build->linkStory}' data-app='project'");
             }
-            common::printIcon('testtask', 'create', "product=$build->product&project={$build->execution}&build=$build->id", $build, 'list', 'bullhorn', '', '', '', "data-app='execution'");
+            common::printIcon('testtask', 'create', "product=$build->product&executionID={$build->execution}&build=$build->id&projectID=$projectID", $build, 'list', 'bullhorn', '', '', '', "data-app='execution'");
             $lang->project->bug = $lang->execution->viewBug;
             common::printIcon('execution', 'bug',  "project={$build->execution}&orderBy=status&build=$build->id", $build, 'list', '', '', '', '', "data-app='execution'");
             common::printIcon('build',   'edit', "buildID=$build->id", $build, 'list');
