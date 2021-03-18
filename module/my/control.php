@@ -476,6 +476,37 @@ class my extends control
         $this->display();
     }
 
+    public function doc($type = 'openedbyme', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Save session, load lang. */
+        if($this->app->viewType != 'json') $this->session->set('docList', $this->app->getURI(true));
+        $this->loadModel('doc');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
+        $docs = $this->doc->getDocsByBrowseType(0, $type, 0, 0, $sort, $pager);
+
+        /* Assign. */
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->doc;
+        $this->view->position[] = $this->lang->my->doc;
+        $this->view->docs       = $docs;
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->type       = $type;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+
+        $this->display();
+
+    }
+
     /**
      * My projects.
      *

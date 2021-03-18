@@ -567,10 +567,10 @@ class doc extends control
 
     /**
      * Delete file for doc.
-     * 
-     * @param  int    $docID 
-     * @param  int    $fileID 
-     * @param  string $confirm 
+     *
+     * @param  int    $docID
+     * @param  int    $fileID
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -728,7 +728,7 @@ class doc extends control
     }
 
     /**
-     * Ajax get all child module. 
+     * Ajax get all child module.
      *
      * @access public
      * @return void

@@ -356,6 +356,22 @@ class docModel extends model
                 ->page($pager)
                 ->fetchAll('id');
         }
+        elseif($browseType == 'editedbyme')
+        {
+            $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
+                ->where('objectType')->eq('doc')
+                ->andWhere('actor')->eq($this->app->user->account)
+                ->fetchAll('objectID');
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in(array_keys($docIDList))
+                ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
+                ->andWhere('lib')->in($allLibs)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll('id');
+        }
         elseif($browseType == 'byediteddate')
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
