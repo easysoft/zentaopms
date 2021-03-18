@@ -336,7 +336,7 @@ $lang->story->menu = $lang->product->menu;
 $lang->execution = new stdclass();
 $lang->execution->homeMenu = new stdclass();
 $lang->execution->homeMenu->index = '仪表盘|execution|index|';
-$lang->execution->homeMenu->list  = array('link' => '执行|execution|all|', 'alias' => 'batchedit');
+$lang->execution->homeMenu->list  = array('link' => '执行|execution|all|', 'alias' => 'create,batchedit');
 
 $lang->execution->menu = new stdclass();
 $lang->execution->menu->task     = array('link' => '任务|execution|task|executionID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');

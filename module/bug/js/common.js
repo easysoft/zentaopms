@@ -547,7 +547,9 @@ function notice()
         else
         {
             executionID = $('#execution').val();
-            html += '<a href="' + createLink('build', 'create','executionID=' + executionID) + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
+            link = createLink('build', 'create','executionID=' + executionID + '&productID=' + $('#product').val());
+            link += config.requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
+            html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createBuild + '</a> ';
             html += '<a href="javascript:loadExecutionBuilds(' + executionID + ')">' + refresh + '</a>';
         }
         var $bba = $('#buildBoxActions');

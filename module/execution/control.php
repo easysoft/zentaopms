@@ -1270,19 +1270,6 @@ class execution extends control
             }
         }
 
-        $isSprint = true;
-        if($this->config->systemMode == 'new' and !empty($projectID))
-        {
-            $project = $this->project->getById($projectID);
-            if($project->model == 'scrum')
-            {
-                unset($this->lang->execution->endList[62]);
-                unset($this->lang->execution->endList[93]);
-                unset($this->lang->execution->endList[186]);
-                unset($this->lang->execution->endList[365]);
-            }
-        }
-
         $executionID = key($this->executions);
         $this->execution->setMenu($this->executions, $executionID);
 
@@ -1307,7 +1294,6 @@ class execution extends control
         $this->view->copyExecutionID = $copyExecutionID;
         $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->users           = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->isSprint        = $isSprint;
         $this->display();
     }
 

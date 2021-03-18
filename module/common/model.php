@@ -2469,7 +2469,10 @@ EOD;
 
         foreach($lang->$openApp->menu as $label => $menu)
         {
-            $lang->$openApp->menu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
+            if(isset($lang->$openApp->menu->{$label}['link']))
+            {
+                $lang->$openApp->menu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
+            }
         }
 
         if($openApp == 'program')
