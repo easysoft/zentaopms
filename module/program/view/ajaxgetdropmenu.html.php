@@ -58,11 +58,11 @@ $programsPinYin = common::convert2Pinyin($programNames);
 $('#programTree').tree();
 $(function()
 {
-    $('input[name^="showClosed"]').click(function()
+    $(document).on('change', 'input[name^="showClosed"]', function()
     {
         var showClosed = $(this).is(':checked') ? 1 : 0;
         $.cookie('showClosed', showClosed, {expires:config.cookieLife, path:config.webRoot});
-        window.location.reload();
+        $("#dropMenu > .list-group").load(createLink('program', 'ajaxgetdropmenu', 'programID=' + programID + '&module=' + module + '&method=' + method));
     });
 });
 </script>
