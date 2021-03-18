@@ -312,12 +312,13 @@ $lang->my->workMenu->testcase    = 'Test Case|my|work|mode=testcase&type=assignt
 $lang->my->workMenu->testtask    = 'Test Task|my|work|mode=testtask&type=wait';
 
 $lang->my->contributeMenu = new stdclass();
-$lang->my->contributeMenu->task        = 'Task|my|contribute|mode=task';
+$lang->my->contributeMenu->task     = 'Task|my|contribute|mode=task';
 if($config->URAndSR) $lang->my->contributeMenu->requirement = "$lang->URCommon|my|contribute|mode=requirement";
-$lang->my->contributeMenu->story       = "$lang->SRCommon|my|contribute|mode=story";
-$lang->my->contributeMenu->bug         = 'Bug|my|contribute|mode=bug';
-$lang->my->contributeMenu->testcase    = 'Test Case|my|contribute|mode=testtask&type=openedbyme';
-$lang->my->contributeMenu->testtask    = 'Test Task|my|contribute|mode=testtask&type=done';
+$lang->my->contributeMenu->story    = "$lang->SRCommon|my|contribute|mode=story";
+$lang->my->contributeMenu->bug      = 'Bug|my|contribute|mode=bug';
+$lang->my->contributeMenu->testcase = 'Test Case|my|contribute|mode=testtask&type=openedbyme';
+$lang->my->contributeMenu->testtask = 'Test Task|my|contribute|mode=testtask&type=done';
+$lang->my->contributeMenu->doc      = 'Doc|my|contribute|mode=doc&type=openedbyme';
 
 $lang->my->dividerMenu = ',myProject,team,';
 
@@ -355,7 +356,7 @@ $lang->execution->subMenu->view->tree      = 'Xem theo cây|execution|tree|execu
 $lang->execution->subMenu->qa = new stdclass();
 $lang->execution->subMenu->qa->bug      = 'Bug|execution|bug|executionID=%s';
 $lang->execution->subMenu->qa->build    = array('link' => 'Bản dựng|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->subMenu->qa->testtask = array('link' => 'Yêu cầu|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->subMenu->qa->testtask = array('link' => 'Yêu cầu|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask', 'alias' => 'create');
 
 $lang->execution->subMenu->more = new stdclass();
 $lang->execution->subMenu->more->whitelist = array('link' => 'Whitelist|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
@@ -573,45 +574,6 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
-/* Menu group. */
-$lang->menugroup = new stdclass();
-$lang->menugroup->release     = 'product';
-$lang->menugroup->story       = 'product';
-$lang->menugroup->branch      = 'product';
-$lang->menugroup->productplan = 'product';
-$lang->menugroup->task        = 'project';
-$lang->menugroup->build       = 'project';
-$lang->menugroup->convert     = 'admin';
-$lang->menugroup->upgrade     = 'admin';
-$lang->menugroup->user        = 'company';
-$lang->menugroup->group       = 'company';
-$lang->menugroup->bug         = 'qa';
-$lang->menugroup->testcase    = 'qa';
-$lang->menugroup->case        = 'qa';
-$lang->menugroup->testtask    = 'qa';
-$lang->menugroup->testsuite   = 'qa';
-$lang->menugroup->caselib     = 'qa';
-$lang->menugroup->testreport  = 'qa';
-$lang->menugroup->people      = 'admin';
-$lang->menugroup->dept        = 'company';
-$lang->menugroup->todo        = 'my';
-$lang->menugroup->score       = 'my';
-$lang->menugroup->action      = 'admin';
-$lang->menugroup->backup      = 'admin';
-$lang->menugroup->cron        = 'admin';
-$lang->menugroup->extension   = 'admin';
-$lang->menugroup->custom      = 'admin';
-$lang->menugroup->mail        = 'admin';
-$lang->menugroup->dev         = 'admin';
-$lang->menugroup->entry       = 'admin';
-$lang->menugroup->webhook     = 'admin';
-$lang->menugroup->message     = 'admin';
-
-$lang->menugroup->repo    = 'ci';
-$lang->menugroup->jenkins = 'ci';
-$lang->menugroup->compile = 'ci';
-$lang->menugroup->job     = 'ci';
-
 /* Nav group.*/
 $lang->navGroup = new stdclass();
 $lang->navGroup->my     = 'my';
@@ -651,7 +613,7 @@ $lang->navGroup->auditplan      = 'project';
 $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
 $lang->navGroup->projectrelease = 'project';
-$lang->navGroup->projectbuild   = 'project';
+$lang->navGroup->build          = 'project';
 $lang->navGroup->repo           = 'project';
 $lang->navGroup->job            = 'project';
 $lang->navGroup->jenkins        = 'project';
@@ -662,6 +624,7 @@ $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
+$lang->navGroup->repo      = 'execution';
 
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
@@ -895,7 +858,7 @@ $lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|project
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
 $lang->menu->scrum->qa             = 'QA|qa|index';
 $lang->menu->scrum->ci             = 'Code|repo|browse';
-$lang->menu->scrum->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
+$lang->menu->scrum->build          = array('link' => 'Build|project|build|project={PROJECT}');
 $lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
 $lang->menu->scrum->dynamic        = array('link' => 'Dynamic|project|dynamic|project={PROJECT}');
 $lang->menu->scrum->projectsetting = array('link' => 'Setting|project|view|project={PROJECT}', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
@@ -922,7 +885,7 @@ $lang->menu->waterfall->ci             = 'Repo|repo|browse|';
 $lang->menu->waterfall->track          = array('link' => 'Track|projectstory|track', 'alias' => 'track');
 $lang->menu->waterfall->qa             = 'QA|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
-$lang->menu->waterfall->projectbuild   = array('link' => 'Build|projectbuild|browse|project={PROJECT}');
+$lang->menu->waterfall->build          = array('link' => 'Build|project|build|project={PROJECT}');
 $lang->menu->waterfall->dynamic        = array('link' => 'Dynamic|project|dynamic|project={PROJECT}');
 $lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc,workestimation,durationestimation,budget,pssp,measrecord,report');
 $lang->menu->waterfall->projectsetting = array('link' => 'Setting|project|view|project={PROJECT}', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
@@ -962,6 +925,6 @@ $lang->projectstory->menu       = new stdclass();
 $lang->stakeholder->menu = $lang->scrum->setMenu;
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'projectbuild', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'project', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
 
 include (dirname(__FILE__) . '/menuOrder.php');

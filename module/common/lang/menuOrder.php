@@ -23,7 +23,7 @@ $lang->waterfall->menuOrder[38] = 'review';
 $lang->waterfall->menuOrder[39] = 'cm';
 $lang->waterfall->menuOrder[40] = 'qa';
 $lang->waterfall->menuOrder[45] = 'doc';
-$lang->waterfall->menuOrder[50] = 'projectbuild';
+$lang->waterfall->menuOrder[50] = 'build';
 $lang->waterfall->menuOrder[55] = 'projectrelease';
 $lang->waterfall->menuOrder[60] = 'weekly';
 $lang->waterfall->menuOrder[65] = 'other';
@@ -37,7 +37,7 @@ $lang->scrum->menuOrder[15] = 'projectstory';
 $lang->scrum->menuOrder[20] = 'qa';
 $lang->scrum->menuOrder[25] = 'ci';
 $lang->scrum->menuOrder[30] = 'doc';
-$lang->scrum->menuOrder[35] = 'projectbuild';
+$lang->scrum->menuOrder[35] = 'build';
 $lang->scrum->menuOrder[40] = 'projectrelease';
 $lang->scrum->menuOrder[45] = 'other';
 $lang->scrum->menuOrder[48] = 'dynamic';
@@ -58,6 +58,12 @@ $lang->my->menuOrder[35] = 'dynamic';
 $lang->my->menuOrder[40] = 'follow';
 $lang->my->menuOrder[45] = 'contacts';
 $lang->todo->menuOrder = $lang->my->menuOrder;
+
+/* program menu order. */
+$lang->program->menuOrder[5]  = 'product';
+$lang->program->menuOrder[10] = 'project';
+$lang->program->menuOrder[15] = 'personnel';
+$lang->program->menuOrder[20] = 'stakeholder';
 
 /* product menu order. */
 $lang->product->menuOrder[5]  = 'dashboard';

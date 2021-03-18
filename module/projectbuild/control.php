@@ -40,6 +40,7 @@ class projectBuild extends control
         $this->config->build->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
 
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project');
+        commonModel::setAppObjectID('project', $projectID);
 
         if($type == 'bysearch')
         {

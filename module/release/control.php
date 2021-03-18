@@ -21,9 +21,7 @@ class release extends control
      */
     public function commonAction($productID, $branch = 0)
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID, '', $branch);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', $branch);
 
         $this->loadModel('product');
         $product = $this->product->getById($productID);
@@ -82,6 +80,8 @@ class release extends control
         $releaseBuilds = $this->release->getReleaseBuilds($productID, $branch);
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
+
+        commonModel::setAppObjectID('product', $productID);
 
         $this->commonAction($productID, $branch);
         $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->create;

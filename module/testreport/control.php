@@ -65,7 +65,7 @@ class testreport extends control
      */
     public function browse($objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if($objectType != 'product' and $objectType != 'project') die('Type Error!');
+        if($objectType != 'product' and $objectType != 'execution') die('Type Error!');
         $this->session->set('reportList', $this->app->getURI(true));
 
         $objectID = $this->commonAction($objectID, $objectType);
@@ -81,7 +81,7 @@ class testreport extends control
 
         $reports = $this->testreport->getList($objectID, $objectType, $extra, $orderBy, $pager);
 
-        if($objectType == 'project' and isset($_POST['taskIdList']))
+        if($objectType == 'execution' and isset($_POST['taskIdList']))
         {
             $taskIdList = $_POST['taskIdList'];
             foreach($reports as $reportID => $report)
@@ -552,7 +552,6 @@ class testreport extends control
             $executionID      = $this->execution->saveState($objectID, $this->executions);
             $this->execution->setMenu($this->executions, $executionID);
             $this->lang->testreport->menu = $this->lang->execution->menu;
-            $this->lang->menugroup->testreport = 'execution';
             return $executionID;
         }
     }

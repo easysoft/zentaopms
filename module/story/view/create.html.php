@@ -86,10 +86,11 @@
             <td colspan="2" class='sourceTd'>
               <div class="input-group">
                 <div class="input-group">
-                  <div class="input-group-addon"><?php echo $lang->story->source;?></div>
+                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
                   <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
                   <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
-                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
+                  <?php $sourceNoteWidth = isonlybody() ? "style='width: 70px;'" : "style='width: 140px;'"?>
+                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' $sourceNoteWidth");?>
                 </div>
               </div>
             </td>
@@ -98,21 +99,29 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
-            <td><?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?></td>
-            <?php if(!$this->story->checkForceReview()):?>
-            <td>
-              <div class='checkbox-primary'>
-                <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
-                <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
+            <td colspan="2">
+              <div class="table-row">
+                <div class="table-col">
+                  <?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?>
+                </div>
+                <?php if(!$this->story->checkForceReview()):?>
+                <div class="table-col w-130px">
+                  <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
+                    <div class='checkbox-primary'>
+                      <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
+                      <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
+                    </div>
+                  </span>
+                </div>
+                <?php endif;?>
               </div>
             </td>
-            <?php endif;?>
             <?php if($type == 'requirement'):?>
               <?php if(strpos(",$showFields,", ',source,') !== false):?>
               <td colspan="2" class='sourceTd'>
                 <div class="input-group">
                   <div class="input-group">
-                    <div class="input-group-addon"><?php echo $lang->story->source;?></div>
+                    <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
                     <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
                     <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
                     <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
@@ -125,7 +134,7 @@
           <?php if($type == 'story' and $this->config->URAndSR):?>
           <tr>
             <th><?php echo $lang->story->requirement;?></th>
-            <td colspan=2><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
+            <td colspan="4"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
           </tr>
           <?php endif;?>
           <tr>

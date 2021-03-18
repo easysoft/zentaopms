@@ -40,7 +40,6 @@ ALTER TABLE `zt_webhook` CHANGE `projects` `executions` mediumint(8) unsigned NO
 ALTER TABLE `zt_task` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_doclib` ADD `project` mediumint(8) unsigned NOT NULL AFTER `product`;
 ALTER TABLE `zt_doc` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_story` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_bug` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_case` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_testtask` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;

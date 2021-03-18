@@ -49,8 +49,7 @@ class product extends control
      */
     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher();
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher();
 
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
@@ -79,8 +78,7 @@ class product extends control
     public function project($status = 'all', $productID = 0, $branch = 0, $involved = 0)
     {
         $this->product->setMenu($this->products, $productID, $branch);
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         $this->app->loadLang('my');
         $this->app->loadLang('execution');
@@ -162,9 +160,7 @@ class product extends control
             $this->session->set('storyList',   $this->app->getURI(true));
             $this->session->set('productList', $this->app->getURI(true));
 
-            $this->lang->product->menu = $this->lang->product->viewMenu;
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
             $this->product->setMenu($this->products, $productID, $branch);
         }
 
@@ -309,9 +305,6 @@ class product extends control
      */
     public function create($programID = 0)
     {
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher();
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-
         if(!empty($_POST))
         {
             $productID = $this->product->create();
@@ -320,21 +313,22 @@ class product extends control
 
             $this->executeHooks($productID);
 
-            $moduleName = $programID ? 'program'    : $this->moduleName;
-            $methodName = $programID ? 'product' : 'browse';
-            $param      = $programID ? "programID=$programID" : "productID=$productID";
+            $openApp    = $this->app->openApp;
+            $moduleName = $openApp == 'program'? 'program' : $this->moduleName;
+            $methodName = $openApp == 'program'? 'product' : 'browse';
+            $param      = $openApp == 'program' ? "programID=$programID" : "productID=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         if($programID)
         {
-            $this->app->rawModule = 'program';
-            $this->app->rawMethod = 'product';
-            $this->lang->navGroup->program = 'program';
-            $this->loadModel('program')->setViewMenu($programID);
-            $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-            $this->lang->program->mainMenuAction = $this->program->getMainAction();
+            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
+            commonModel::setAppObjectID('program', $programID);
+        }
+        else
+        {
+            $this->lang->product->switcherMenu = $this->product->getSwitcher();
         }
 
         $this->loadModel('user');
@@ -350,6 +344,7 @@ class product extends control
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->programID  = $programID;
         $this->view->poUsers    = $poUsers;
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
@@ -376,9 +371,7 @@ class product extends control
     {
         /* Set menu. */
         $this->app->loadLang('custom');
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         /* Init vars. */
         $product              = $this->product->getById($productID);
@@ -473,12 +466,7 @@ class product extends control
 
         if($programID)
         {
-            $this->app->rawModule = 'program';
-            $this->app->rawMethod = 'product';
-            $this->lang->navGroup->program = 'program';
-            $this->loadModel('program')->setViewMenu($programID);
-            $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-            $this->lang->program->mainMenuAction = $this->program->getMainAction();
+            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
         }
 
         /* Get the relevant person in charge. */
@@ -565,12 +553,7 @@ class product extends control
         }
 
         /* Navigation remains under the program. */
-        $this->app->rawModule = 'program';
-        $this->app->rawMethod = 'product';
-        $this->lang->navGroup->program = 'program';
-        $this->loadModel('program')->setViewMenu($programID);
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
+        $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst', $appendPoUsers);
@@ -647,9 +630,7 @@ class product extends control
 
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($this->products, $productID);
@@ -706,9 +687,7 @@ class product extends control
      */
     public function roadmap($productID, $branch = 0)
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, '', $branch);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
         $this->product->setMenu($this->products, $productID, $branch);
 
         $this->session->set('releaseList',     $this->app->getURI(true));
@@ -780,8 +759,7 @@ class product extends control
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
         $this->view->position[] = $this->lang->product->dynamic;
 
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, $type);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, $type);
 
         $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
@@ -812,9 +790,7 @@ class product extends control
         $product   = $this->product->getStatByID($productID);
         if(!$product) die(js::locate('product', 'all'));
 
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($this->products, $productID);
@@ -838,6 +814,21 @@ class product extends control
     }
 
     /**
+     * Ajax get products.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProducts($executionID)
+    {
+        $products  = array('' => '');
+        $products += $this->product->getProductPairsByProject($executionID);
+
+        die(html::select('product', $products, '', "class='form-control' onchange='loadBranches(this.value)'"));
+    }
+
+    /**
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID
@@ -848,8 +839,9 @@ class product extends control
      */
     public function ajaxGetProjects($productID, $branch = 0, $projectID = 0)
     {
-        $projects = $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : $branch);
-        if($this->app->getViewType() == 'json') die(json_encode($peojects));
+        $projects  = array('' => '');
+        $projects += $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : $branch);
+        if($this->app->getViewType() == 'json') die(json_encode($projects));
 
         die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID})'"));
     }
@@ -871,7 +863,7 @@ class product extends control
 
         if($number === '')
         {
-            die(html::select('execution', $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
+            die(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
         }
         else
         {
@@ -941,7 +933,7 @@ class product extends control
 
         $moduleGroup = zget($this->lang->navGroup, $module);
         $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
-        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->PRJ, 'all', 'program desc, line desc, ') : $this->product->getList(0, 'all', 0, 0, 'program desc, line desc, ');
+        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->PRJ) : $this->product->getList();
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
@@ -1002,7 +994,6 @@ class product extends control
             $this->app->loadLang($fromModule);
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
 
-            $this->lang->set('menugroup.product', $activeMenu);
             $this->lang->product->menu      = $this->lang->qa->menu;
             $this->lang->product->menuOrder = $this->lang->qa->menuOrder;
         }
@@ -1012,7 +1003,6 @@ class product extends control
         {
             $this->app->loadLang($fromModule);
 
-            $this->lang->set('menugroup.product', $activeMenu);
             $projectModel = $this->loadModel('project')->getByID($this->session->PRJ);
             $this->lang->product->menu      = $this->lang->menu->{$projectModel->model};
             $this->lang->product->menuOrder = $this->lang->{$projectModel->model}->menuOrder;
@@ -1020,7 +1010,6 @@ class product extends control
             /* The secondary test menu processing in the project. */
             if(in_array($fromModule, array('qa', 'bug', 'testtask', 'testreport')))
             {
-                $this->lang->set('menugroup.product', 'qa');
                 $moduleIndex = array_search('product', $this->lang->noMenuModule);
                 if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -1115,9 +1104,7 @@ class product extends control
      */
     public function whitelist($productID = 0, $module = 'product', $objectType = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, '', 0);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', 0);
         $this->product->setMenu($this->products, $productID, 0);
         $this->lang->modulePageNav = '';
 
@@ -1135,9 +1122,7 @@ class product extends control
      */
     public function addWhitelist($productID = 0, $deptID = 0, $branch = '')
     {
-        $this->lang->product->menu           = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, '', $branch);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
         $this->product->setMenu($this->products, $productID, $branch);
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);

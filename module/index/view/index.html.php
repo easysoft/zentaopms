@@ -96,6 +96,7 @@ js::set('defaultOpen', $open);
         </div>
         <?php else:?>
         <div class='version-content'>
+          <?php $lastVersion = end($latestVersionList);?>
           <?php foreach($latestVersionList as $versionNumber => $version):?>
           <div class="version-list">
             <div>
@@ -105,10 +106,12 @@ js::set('defaultOpen', $open);
             <div class="version-detail"><?php echo $version->explain;?></div>
             <div class="version-footer">
               <a href="<?php echo inLink('changeLog', 'version=' . $versionNumber);?>" class="btn btn-link iframe" data-width="800"><?php echo $lang->index->log;?></strong></a>
-              <a href='<?php echo $version->link?>' class='btn btn-primary upgrade-now' style='color: white;' target='_blank'><?php echo $lang->index->upgrade;?></a>
+              <a href='<?php echo $version->link?>' class='btn btn-primary upgrade-now' style='color: white;' target='_blank'><?php echo $lang->index->upgradeNow;?></a>
             </div>
           </div>
+          <?php if($version->name != $lastVersion->name):?>
           <hr class='version-hr'>
+          <?php endif;?>
           <?php endforeach;?>
         </div>
         <?php endif;?>

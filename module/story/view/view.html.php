@@ -164,7 +164,7 @@
                 <td class='c-actions'>
                   <?php
                   common::printIcon('story', 'change', "storyID=$child->id", $child, 'list', 'alter');
-                  common::printIcon('story', 'review', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'review', "storyID=$child->id", $child, 'list', 'search', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'assignTo', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'close',  "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'activate', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
@@ -189,7 +189,7 @@
         <?php if(!$story->deleted):?>
         <?php
         common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', 'alter', '', 'showinonlybody');
-        common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
+        common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', 'search', '', 'showinonlybody');
         if($story->status == 'active' and $story->stage == 'wait' and $story->parent <= 0 and !isonlybody())
         {
             $divideLang = $lang->story->subdivide;
@@ -456,7 +456,7 @@
             <table class="table table-data">
               <tbody>
                 <?php if(!empty($fromBug)):?>
-                <tr class='text-top'>
+                <tr>
                   <th class='thWidth'><?php echo $lang->story->legendFromBug;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
@@ -466,7 +466,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='text-top thWidth'><?php echo $lang->story->legendBugs;?></th>
+                  <th class='thWidth'><?php echo $lang->story->legendBugs;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
@@ -479,7 +479,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <th class='text-top'><?php echo $lang->story->legendCases;?></th>
+                  <th><?php echo $lang->story->legendCases;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
@@ -492,7 +492,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <th class='text-top thWidth'><?php echo $lang->story->legendLinkStories;?></th>
+                  <th class='thWidth'><?php echo $lang->story->legendLinkStories;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                       <?php
@@ -506,7 +506,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <th class='text-top'><?php echo $lang->story->legendChildStories;?></th>
+                  <th><?php echo $lang->story->legendChildStories;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                       <?php

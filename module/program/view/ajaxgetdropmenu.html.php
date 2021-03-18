@@ -9,12 +9,12 @@ $programsPinYin = common::convert2Pinyin($programNames);
   <div class="table-col col-left">
     <div class='list-group'>
     <?php
-    echo $this->program->getPGMTreeMenu();
+    echo $this->program->getTreeMenu();
     ?>
     </div>
     <div class="col-footer">
       <div class='pull-right'>
-        <?php echo html::checkbox('showClosed', array('1' => $lang->program->PGMShowClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
+        <?php echo html::checkbox('showClosed', array('1' => $lang->program->showClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
       </div>
     </div>
   </div>
@@ -34,6 +34,7 @@ $programsPinYin = common::convert2Pinyin($programNames);
 #programTree li > a > span.title {color: #3C4353; white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; vertical-align: middle;}
 #programTree li > a > span.user {color: #838a9d;}
 #programTree li > a > span.user > .icon-person {font-size: 14px; position: relative; top: -1px; color: #a6aab8}
+#programTree li > a:first-child {padding-left: 18px;}
 
 #programTree li > .list-toggle {transform: rotate(0deg); width: 16px; height: 16px; border: 4px solid #a6aab8; border-radius: 2px; top: 7px;}
 #programTree li > .list-toggle:before {content: ' '; display: block; position: absolute; border: 1px solid #a6aab8; top: 2px; left: -3px; right: -3px; bottom: 2px; min-width: 0; transition: all .2s;}
@@ -58,11 +59,11 @@ $programsPinYin = common::convert2Pinyin($programNames);
 $('#programTree').tree();
 $(function()
 {
-    $('input[name^="showClosed"]').click(function()
+    $(document).on('change', 'input[name^="showClosed"]', function()
     {
         var showClosed = $(this).is(':checked') ? 1 : 0;
         $.cookie('showClosed', showClosed, {expires:config.cookieLife, path:config.webRoot});
-        window.location.reload();
+        $("#dropMenu > .list-group").load(createLink('program', 'ajaxgetdropmenu', 'programID=' + programID + '&module=' + module + '&method=' + method));
     });
 });
 </script>

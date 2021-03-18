@@ -73,6 +73,7 @@ class personnel extends control
     public function invest($programID = 0)
     {
         $this->setProgramMenu($programID);
+        commonModel::setAppObjectID('program', $programID);
 
         $this->view->title      = $this->lang->personnel->invest;
         $this->view->position[] = $this->lang->personnel->invest;
@@ -224,9 +225,7 @@ class personnel extends control
     public function setProgramMenu($programID = 0)
     {
         $this->loadModel('program');
-        $this->lang->navGroup->program       = 'program';
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        $this->program->setViewMenu($programID);
+        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
+        commonModel::setAppObjectID('program', $programID);
     }
 }

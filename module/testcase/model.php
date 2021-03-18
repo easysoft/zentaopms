@@ -80,7 +80,7 @@ class testcaseModel extends model
             ->add('fromBug', $bugID)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa', 'project', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' && $this->app->openApp == 'project', 'project', $this->session->PRJ)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
@@ -176,7 +176,7 @@ class testcaseModel extends model
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
-            if($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa') $data[$i]->project = $this->session->PRJ;
+            if($this->config->systemMode == 'new' && $this->lang->navGroup->testcase == 'project') $data[$i]->project = $this->session->PRJ;
             $data[$i]->branch       = $cases->branch[$i];
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
@@ -285,7 +285,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t3.story=t2.story')
             ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story=t4.id')
             ->where('t2.product')->eq((int)$productID)
-            ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.project')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->app->openApp == 'project')->andWhere('t1.project')->eq($this->session->PRJ)->fi()
             ->beginIF($branch)->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
@@ -530,7 +530,7 @@ class testcaseModel extends model
      */
     public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
-        return $this->dao->select('t1.*,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t1.*,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.assignedTo')->eq($account)
@@ -1198,6 +1198,9 @@ class testcaseModel extends model
                     $oldCase->steps  = $this->joinStep($oldStep);
                     $caseData->steps = $this->joinStep($steps);
                     $changes  = common::createChanges($oldCase, $caseData);
+
+                    $this->updateCase2Project($oldCase, $caseData, $caseID);
+
                     $actionID = $this->action->create('case', $caseID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
@@ -1235,6 +1238,9 @@ class testcaseModel extends model
                             if($stepData->type == 'step')  $parentStepID = 0;
                         }
                     }
+
+                    $this->syncCase2Project($caseData, $caseID);
+
                     $this->action->create('case', $caseID, 'Opened');
                 }
             }
@@ -1658,9 +1664,13 @@ class testcaseModel extends model
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
             $projects = array_keys($projects);
         }
-        elseif($this->lang->navGroup->testcase == 'project' and empty($case->story))
+        elseif($this->app->openApp == 'project' and empty($case->story))
         {
             $projects = array($this->session->PRJ);
+        }
+        elseif($this->app->openApp == 'execution' and empty($case->story))
+        {
+            $projects = array($this->session->execution);
         }
 
         if(!empty($projects))
@@ -1707,8 +1717,9 @@ class testcaseModel extends model
         if($storyChanged)
         {
             /* If the new related story isn't linked the project, unlink the case. */
+            $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($oldCase->story)->fetchAll('project');
             $this->dao->delete()->from(TABLE_PROJECTCASE)
-                ->where('project')->eq($oldCase->project)
+                ->where('project')->in(array_keys($projects))
                 ->andWhere('`case`')->eq($oldCase->id)
                 ->exec();
 

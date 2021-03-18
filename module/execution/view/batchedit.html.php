@@ -42,7 +42,7 @@
         <thead>
           <tr>
             <th class='w-50px'><?php echo $lang->idAB;?></th>
-            <th class='required <?php echo $minWidth?>'><?php echo $lang->execution->name;?></th>
+            <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->name;?></th>
             <th class='w-150px required'><?php echo $lang->execution->code;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'PM',     ' hidden') . zget($requiredFields, 'PM',     '', ' required');?>'><?php echo $lang->execution->PM;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->execution->PO;?></th>
@@ -55,7 +55,6 @@
             <th class='w-150px<?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'>    <?php echo $lang->execution->desc;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'teamname', ' hidden') . zget($requiredFields, 'teamname', '', ' required');?>'><?php echo $lang->execution->teamname;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'days',     ' hidden') . zget($requiredFields, 'days',     '', ' required');?>'><?php echo $lang->execution->days;?></th>
-            <th class='w-80px'><?php echo $lang->execution->order;?></th>
           </tr>
         </thead>
         <tbody>
@@ -76,7 +75,7 @@
             <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$executionID]", $rdUsers, $executions[$executionID]->RD, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'type',   'hidden')?>'>
               <?php
-              if($isStage)
+              if($executions[$executionID]->type == 'stage')
               {
                   echo html::select("attributes[$executionID]",    $lang->stage->typeList,   $executions[$executionID]->attribute,   'class=form-control');
               }
@@ -97,7 +96,6 @@
                 <span class='input-group-addon'><?php echo $lang->execution->day;?></span>
               </div>
             </td>
-            <td><?php echo html::input("orders[$executionID]", $executions[$executionID]->order, "class='form-control'")?></td>
           </tr>
           <?php
           if(isset($this->config->moreLinks["PMs[$executionID]"])) unset($this->config->moreLinks["PMs[$executionID]"]);

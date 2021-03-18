@@ -22,7 +22,7 @@
 .table td.has-child > .plan-toggle > .icon:before {text-align: left;}
 .table td.has-child > .plan-toggle.collapsed > .icon {-ms-transform:rotate(90deg); -moz-transform:rotate(90deg); -o-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform: rotate(90deg);}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
-.hours {text-align: right;}
+.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
 </style>
 <div id='mainMenu' class='clearfix'>
@@ -36,7 +36,7 @@
   <?php endif;?>
   <div class='btn-toolbar pull-left'>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
-    <?php echo html::a(inlink("all", "status=$key&projectID=$projectID&from=$from&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
+    <?php echo html::a(inlink("all", "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -48,15 +48,9 @@
   <?php if($from == 'execution'):?>
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
-    <div class="cell">
-      <?php echo $projectTree;?>
-      <div class="text-center">
-        <?php common::printLink('project', 'projectTitle', '', $lang->project->moduleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
-      </div>
-    </div>
+    <div class="cell"><?php echo $projectTree;?></div>
   </div>
   <?php endif;?>
-  <?php $canOrder = (common::hasPriv('execution', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
   <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table'>
     <table class='table has-sort-head table-fixed' id='executionList'>
@@ -73,16 +67,13 @@
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $from == 'execution' ? $lang->execution->execName : $lang->execution->name);?></th>
           <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
-          <th class='w-90px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
-          <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
-          <th class='w-40px'><?php echo $lang->execution->totalEstimate;?></th>
-          <th class='w-40px'><?php echo $lang->execution->totalConsumed;?></th>
-          <th class='w-40px'><?php echo $lang->execution->totalLeft;?></th>
+          <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
+          <th class='w-100px'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
+          <th class='w-60px text-center'><?php echo $lang->execution->totalEstimate;?></th>
+          <th class='w-60px text-center'><?php echo $lang->execution->totalConsumed;?></th>
+          <th class='w-60px text-center'><?php echo $lang->execution->totalLeft;?></th>
           <th class='w-60px'><?php echo $lang->execution->progress;?></th>
           <th class='w-100px'><?php echo $lang->execution->burn;?></th>
-          <?php if($canOrder):?>
-          <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->execution->orderAB);?></th>
-          <?php endif;?>
         </tr>
       </thead>
       <tbody class='sortable' id='executionTableList'>
@@ -100,7 +91,7 @@
           <td class='text-left <?php if(!empty($execution->children)) echo 'has-child';?>' title='<?php echo $execution->name?>'>
             <?php
             if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
-            echo !empty($execution->children) ? $execution->name : html::a($this->createLink('execution', 'view', 'execution=' . $execution->id), $execution->name);
+            echo !empty($execution->children) ? $execution->name : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $execution->name);
             ?>
             <?php if(!empty($execution->children)):?>
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
@@ -121,9 +112,6 @@
             </div>
           </td>
           <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
-          <?php if($canOrder):?>
-          <td class='sort-handler'><i class="icon icon-move"></i></td>
-          <?php endif;?>
         </tr>
         <?php if(!empty($execution->children)):?>
          <?php $i = 0;?>
@@ -144,7 +132,7 @@
                <?php
                if(isset($child->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
                echo "<span class='label label-badge label-light' title='{$lang->programplan->children}'>{$lang->programplan->childrenAB}</span>";
-               echo html::a($this->createLink('execution', 'view', 'execution=' . $child->id), $child->name);
+               echo html::a($this->createLink('execution', 'task', 'execution=' . $child->id), $child->name);
                ?>
              </td>
              <td><?php echo zget($users, $child->PM);?></td>
@@ -162,9 +150,6 @@
                </div>
              </td>
              <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
-             <?php if($canOrder):?>
-             <td class='sort-handler'><i class="icon icon-move"></i></td>
-             <?php endif;?>
            </tr>
            <?php $i ++;?>
            <?php endforeach;?>
@@ -178,7 +163,6 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->execution->batchEdit, '', 'btn');?></div>
       <?php endif;?>
-      <?php if(!$canOrder and common::hasPriv('execution', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&from=$from&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $from == 'execution' ? $lang->execution->execUpdateOrder : $lang->execution->updateOrder, '', "class='btn'");?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

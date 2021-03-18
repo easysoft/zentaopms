@@ -83,7 +83,6 @@ class user extends control
         $this->user->resetMenu();
 
         /* set menus. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
@@ -126,7 +125,6 @@ class user extends control
         $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Set menu. */
-        $this->lang->set('menugroup.user', 'company');
 
         /* Change the menu when in my module. */
         $this->user->resetMenu();
@@ -175,7 +173,6 @@ class user extends control
         $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Set the menu. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Change the menu when in my module. */
@@ -220,7 +217,6 @@ class user extends control
         $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Set menu. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Load the lang of bug module. */
@@ -264,7 +260,6 @@ class user extends control
         $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* Set menu. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Save session. */
@@ -321,7 +316,6 @@ class user extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
          /* Set menu. */
-        $this->lang->set('menugroup.user', 'company');
 
         /* Change the menu when in my module. */
         $this->user->resetMenu();
@@ -380,7 +374,6 @@ class user extends control
 
         /* Set the menus. */
         $this->loadModel('project');
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Change the menu when in my module. */
@@ -423,7 +416,6 @@ class user extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set the menus. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Change the menu when in my module. */
@@ -467,7 +459,6 @@ class user extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set the menus. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Change the menu when in my module. */
@@ -545,7 +536,6 @@ class user extends control
      */
     public function create($deptID = 0)
     {
-        $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
@@ -603,7 +593,6 @@ class user extends control
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
-        $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
@@ -647,7 +636,6 @@ class user extends control
      */
     public function edit($userID)
     {
-        $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
         if(!empty($_POST))
@@ -694,7 +682,6 @@ class user extends control
             if($this->post->account) $this->user->batchEdit();
             die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID"), 'parent'));
         }
-        $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
@@ -1013,7 +1000,6 @@ class user extends control
         $denyType = 'nopriv';
         if(isset($rights[$module][$method]))
         {
-            $menu = isset($this->lang->menugroup->$module) ? $this->lang->menugroup->$module : $module;
             $menu = strtolower($menu);
 
             if(!isset($acls['views'][$menu])) $denyType = 'noview';
@@ -1105,7 +1091,6 @@ class user extends control
         $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
         /* set menus. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Save session. */

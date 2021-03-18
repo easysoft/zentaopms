@@ -119,12 +119,12 @@ class projectModel extends model
      */
     public function saveState($projectID = 0, $projects = array())
     {
-        if($projectID > 0) $this->session->set('project', (int)$projectID);
-        if($projectID == 0 and $this->cookie->lastProject) $this->session->set('project', (int)$this->cookie->lastProject);
-        if($projectID == 0 and $this->session->PRJ == '') $this->session->set('project', key($projects));
+        if($projectID > 0) $this->session->set('PRJ', (int)$projectID);
+        if($projectID == 0 and $this->cookie->lastProject) $this->session->set('PRJ', (int)$this->cookie->lastProject);
+        if($projectID == 0 and $this->session->PRJ == '') $this->session->set('PRJ', key($projects));
         if(!isset($projects[$this->session->PRJ]))
         {
-            $this->session->set('project', key($projects));
+            $this->session->set('PRJ', key($projects));
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false) $this->accessDenied();
         }
 
@@ -142,6 +142,7 @@ class projectModel extends model
      */
     public function getSwitcher($projectID, $currentModule, $currentMethod)
     {
+        if($currentModule == 'project' and $currentMethod == 'browse') return;
         $this->session->set('moreProjectLink', $this->app->getURI(true));
 
         $currentProjectName = $this->lang->project->common;
@@ -152,26 +153,12 @@ class projectModel extends model
         }
 
         $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'><span class='text'><i class='icon icon-project'></i> {$currentProjectName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-btn'>" . html::a(helper::createLink('project', 'browse'), "<i class='icon icon-project'></i> {$this->lang->project->common}", '', "class='btn'") . '</div>';
+        $output .= "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'><span class='text'>{$currentProjectName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
         return $output;
-    }
-
-    /**
-     * Get project main menu action.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return string
-     */
-    public function getMainAction($module, $method)
-    {
-        $link = html::a(helper::createLink('project', 'browse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
-        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
-        return common::hasPriv('project', 'browse') ? $html : '';
     }
 
     /**
@@ -295,12 +282,14 @@ class projectModel extends model
             ->groupBy('project')
             ->fetchPairs();
 
+        $this->loadModel('product');
         foreach($projectIdList as $projectID)
         {
-            $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-            $allStories[$projectID]  = $this->product->getTotalStoriesByProduct($productIdList, 'story');
-            $doneStories[$projectID] = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'closed');
-            $leftStories[$projectID] = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'active');
+            $productIdList = $this->product->getProductIDByProject($projectID, false);
+
+            $allStories[$projectID]  = $this->getTotalStoriesByProject($projectID, $productIdList, 'story');
+            $doneStories[$projectID] = $this->getTotalStoriesByProject($projectID, $productIdList, 'story', 'closed');
+            $leftStories[$projectID] = $this->getTotalStoriesByProject($projectID, $productIdList, 'story', 'active');
         }
 
         $leftBugs = $this->getTotalBugByProject($projectIdList, 'active');
@@ -322,6 +311,30 @@ class projectModel extends model
         }
 
         return $projects;
+    }
+
+    /**
+     * Get the number of stories associated with the project.
+     *
+     * @param  int     $projectID
+     * @param  array   $productIdList
+     * @param  string  $type          story|requirement
+     * @param  string  $status        all|closed|active
+     * @access public
+     * @return int
+     */
+    public function getTotalStoriesByProject($projectID = 0, $productIdList, $type = 'story', $status = 'all')
+    {
+        return $this->dao->select('count(t2.id) as stories')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t2.type')->eq($type)
+            ->andWhere('t2.product')->in($productIdList)
+            ->beginIF($status == 'active')->andWhere('t2.status')->in('active,changed')->fi()
+            ->beginIF($status == 'closed')->andWhere('t2.status')->eq('closed')->fi()
+            ->beginIF($status == 'closed')->andWhere('t2.closedReason')->eq('done')->fi()
+            ->andWhere('deleted')->eq('0')
+            ->fetch('stories');
     }
 
     /**
@@ -540,17 +553,17 @@ class projectModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  string $type execution|execution
+     * @param  string $type project|execution
      * @access public
      * @return void
      */
-    public function buildProjectBuildSearchForm($products, $queryID, $actionURL, $type = 'execution')
+    public function buildProjectBuildSearchForm($products, $queryID, $actionURL, $type = 'project')
     {
         $this->loadModel('build');
 
         /* Set search param. */
         if($type == 'execution') $this->config->build->search['module'] = 'executionBuild';
-        if($type == 'execution')   $this->config->build->search['module'] = 'executionBuild';
+        if($type == 'project') $this->config->build->search['module'] = 'projectBuild';
         $this->config->build->search['actionURL'] = $actionURL;
         $this->config->build->search['queryID']   = $queryID;
         $this->config->build->search['params']['product']['values'] = $products;

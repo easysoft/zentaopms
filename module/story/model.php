@@ -2359,11 +2359,6 @@ class storyModel extends model
 
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
-            if($execution->type == 'project')
-            {
-                $statusFeatureList = $this->lang->projectstory->featureBarList['status'];
-                $otherFeatureList  = $this->lang->projectstory->featureBarList['other'];
-            }
 
             $stories = $this->dao->select('distinct t1.*, t2.*,t3.branch as productBranch,t4.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -2375,10 +2370,8 @@ class storyModel extends model
                 ->beginIF($execution->type == 'project')
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)
                 ->beginIF($type == 'bybranch')->andWhere('t2.branch')->eq($branch)->fi()
-                ->beginIF(isset($statusFeatureList) and in_array($type, array_keys($statusFeatureList)))->andWhere('t2.status')->eq(substr($type, 0, -5))->fi()
-                ->beginIF(isset($otherFeatureList) and in_array($type, array_keys($otherFeatureList)))->andWhere('t2.' . substr($type, 0, -2))->eq($this->app->user->account)->fi()
+                ->beginIF(strpos('changed|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
-                ->beginIF($type == 'willclose')->andWhere('t2.stage')->in('developed,released')->andWhere('t2.status')->ne('closed')->fi()
                 ->fi()
                 ->beginIF($execution->type != 'project')
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
@@ -3483,7 +3476,7 @@ class storyModel extends model
                     }
 
                     common::printIcon('story', 'change',     $vars . "&from=$story->from", $story, 'list', 'alter', '', '', false, "data-group=$story->from");
-                    common::printIcon('story', 'review',     $vars . "&from=$story->from", $story, 'list', 'glasses', '', '', false, "data-group=$story->from");
+                    common::printIcon('story', 'review',     $vars . "&from=$story->from", $story, 'list', 'search', '', '', false, "data-group=$story->from");
                     common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit',       $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');

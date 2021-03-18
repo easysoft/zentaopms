@@ -42,16 +42,21 @@ class testcase extends control
 
         /* Set test case menu group. */
         $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
+        if($this->app->openApp == 'qa')
         {
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
             //$this->lang->noMenuModule[] = $this->app->rawModule;
         }
-        else 
-        {    
+        elseif($this->app->openApp == 'project')
+        {
             $this->lang->testcase->menu    = $this->lang->projectQa->menu;
             $this->lang->testcase->subMenu = $this->lang->projectQa->subMenu;
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->lang->testcase->menu    = $this->lang->execution->qaMenu;
+            $this->lang->testcase->subMenu = '';
         }
 
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
@@ -247,6 +252,8 @@ class testcase extends control
      */
     public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
     {
+        if($this->app->openApp == 'execution') commonModel::setAppObjectID('execution', $this->session->execution);
+
         $testcaseID = $from == 'testcase' ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
 
@@ -283,6 +290,7 @@ class testcase extends control
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
             $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            if($this->app->openApp == 'execution') $response['locate'] = $this->createLink('execution', 'testcase', "executionID={$this->session->execution}&type=all");
             $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -366,6 +374,11 @@ class testcase extends control
             $modules = $this->tree->getAllChildID($modules);
         }
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
+        if($this->app->openApp != 'qa')
+        {
+            $projectID = $this->app->openApp == 'project' ? $this->session->PRJ : $this->session->execution;
+            $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch);
+        }
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
 
         /* Set custom. */
@@ -746,14 +759,14 @@ class testcase extends control
 
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
         $caseIDList = array_unique($caseIDList);
-
-        /* Get the edited cases. */
-        $cases = $this->testcase->getByList($caseIDList);
         $branchProduct = false;
 
         /* The cases of a product. */
         if($productID)
         {
+            /* Get the edited cases. */
+            $cases = $this->testcase->getByList($caseIDList);
+
             if($type == 'lib')
             {
                 $libID     = $productID;
@@ -789,8 +802,14 @@ class testcase extends control
         /* The cases of my. */
         else
         {
+            /* Get the edited cases. */
+            $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                ->where('t2.id')->in($caseIDList)
+                ->fetchAll('id');
+            $caseIDList = array_keys($cases);
+
             $this->lang->testcase->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.testcase', 'my');
             $this->lang->testcase->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
 

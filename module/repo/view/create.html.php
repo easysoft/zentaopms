@@ -18,7 +18,7 @@
   <div class='main-col main-content'>
     <div class='center-block'>
       <div class='main-header'>
-        <h2><?php echo $lang->repo->create; ?></h2>
+        <h2><?php echo $lang->repo->createAction;?></h2>
       </div>
       <form id='repoForm' method='post' class='form-ajax'>
         <table class='table table-form'>

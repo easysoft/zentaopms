@@ -59,7 +59,6 @@ class execution extends control
      */
     public function index($locate = 'auto', $executionID = 0)
     {
-        $this->lang->execution->menu = $this->lang->execution->homeMenu;
         if($locate == 'yes') $this->locate($this->createLink('execution', 'task'));
 
         $this->commonAction($executionID);
@@ -541,7 +540,7 @@ class execution extends control
         $this->app->session->set('executionList', $uri);
 
         $this->loadModel('bug');
-        $executions = $this->execution->getPairs($this->session->PRJ, 'all', 'nocode');
+        $executions = $this->execution->getPairs(0, 'all', 'nocode');
         $this->execution->setMenu($executions, $executionID);
 
         /* Load pager. */
@@ -1053,7 +1052,7 @@ class execution extends control
         $this->view->orderBy      = $orderBy;
         $this->view->tasks        = $productTasks;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products     = $this->loadModel('product')->getPairs('', $this->session->PRJ);
+        $this->view->products     = $this->loadModel('product')->getPairs('', 0);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
@@ -1169,6 +1168,7 @@ class execution extends control
     /**
      * Create a execution.
      *
+     * @param string $projectID
      * @param string $productID
      * @param string $executionID
      * @param string $copyExecutionID
@@ -1178,8 +1178,13 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function create($productID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no')
+    public function create($productID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $projectID = 0)
     {
+        if($this->app->openApp == 'project')
+        {
+            commonModel::setAppobjectID('project', $projectID);
+        }
+
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
@@ -1220,6 +1225,7 @@ class execution extends control
             $team        = $copyExecution->team;
             $acl         = $copyExecution->acl;
             $whitelist   = $copyExecution->whitelist;
+            $projectID   = $copyExecution->project;
             $products    = $this->execution->getProducts($copyExecutionID);
             foreach($products as $product)
             {
@@ -1268,19 +1274,6 @@ class execution extends control
             }
         }
 
-        $isSprint = true;
-        if($this->config->systemMode == 'new')
-        {
-            $project = $this->project->getById($this->session->PRJ);
-            if($project->model == 'scrum')
-            {
-                unset($this->lang->execution->endList[62]);
-                unset($this->lang->execution->endList[93]);
-                unset($this->lang->execution->endList[186]);
-                unset($this->lang->execution->endList[365]);
-            }
-        }
-
         $executionID = key($this->executions);
         $this->execution->setMenu($this->executions, $executionID);
 
@@ -1288,15 +1281,16 @@ class execution extends control
         $this->view->position[]      = $this->view->title;
         $this->view->executions      = array('' => '') + $this->execution->getList();
         $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->acl             = $acl;
         $this->view->plan            = $plan;
         $this->view->name            = $name;
         $this->view->code            = $code;
         $this->view->team            = $team;
-        $this->view->allProjects     = array('' => '') + $this->project->getPairsByModel();
+        $this->view->allProjects     = array(0 => '') + $this->project->getPairsByModel();
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
+        $this->view->projectID       = $projectID;
         $this->view->products        = $products;
         $this->view->productPlan     = array(0 => '') + $productPlan;
         $this->view->productPlans    = array(0 => '') + $productPlans;
@@ -1304,7 +1298,6 @@ class execution extends control
         $this->view->copyExecutionID = $copyExecutionID;
         $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->users           = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->isSprint        = $isSprint;
         $this->display();
     }
 
@@ -1511,8 +1504,6 @@ class execution extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
-        $project = $this->project->getById($this->session->PRJ);
-
         $this->view->title           = $this->lang->execution->batchEdit;
         $this->view->position[]      = $this->lang->execution->batchEdit;
         $this->view->executionIDList = $executionIDList;
@@ -1521,7 +1512,6 @@ class execution extends control
         $this->view->poUsers         = $poUsers;
         $this->view->qdUsers         = $qdUsers;
         $this->view->rdUsers         = $rdUsers;
-        $this->view->isStage         = $project->model == 'waterfall' ? true : false;
         $this->display();
     }
 
@@ -2549,24 +2539,43 @@ class execution extends control
     /**
      * Drop menu page.
      *
-     * @param  int    $executionID
      * @param  int    $module
      * @param  int    $method
      * @param  int    $extra
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($executionID, $module, $method, $extra)
+    public function ajaxGetDropMenu($module, $method, $extra)
     {
-        $execution = $this->execution->getByID($executionID);
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('order_desc')->fetchAll('id');
+
+        /* Sort execution by project. */
+        $orderedExecutions = array();
+        foreach($projects as $projectID => $project)
+        {
+            $type       = $project->model == 'scrum' ? 'sprint' : 'stage';
+            $orderBy    = $project->model == 'scrum' ? 'id_desc' : 'id_asc';
+            $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('id')->in($this->app->user->view->sprints)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('project')->eq($project->id)
+                ->andWhere('type')->eq($type)
+                ->orderBy($orderBy)
+                ->fetchAll('id');
+
+            foreach($executions as $execution)
+            {
+                if(isset($orderedExecutions[$execution->parent])) unset($orderedExecutions[$execution->parent]);
+                $orderedExecutions[$execution->id] = $execution;
+            }
+        }
 
         $this->view->link        = $this->execution->getLink($module, $method, $extra);
-        $this->view->executionID = $executionID;
         $this->view->module      = $module;
         $this->view->method      = $method;
         $this->view->extra       = $extra;
         $this->view->projects    = $this->project->getPairsByModel();
-        $this->view->executions  = $this->execution->getList();
+        $this->view->executions  = $orderedExecutions;
         $this->display();
     }
 
@@ -2659,14 +2668,13 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'all', $projectID = 0, $from = 'execution', $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $projectID = 0, $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        $this->lang->execution->menu = $this->lang->execution->homeMenu;
-
         $this->app->loadLang('my');
         $this->app->loadLang('product');
         $this->app->loadLang('programplan');
 
+        $from = $this->app->openApp;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true));
         if($from == 'project') $this->lang->navGroup->execution = 'project';
 
@@ -2803,6 +2811,8 @@ class execution extends control
             $this->post->set('kind', 'execution');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
+
+        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->execution->common;
 
         $this->display();
     }
@@ -2953,7 +2963,7 @@ class execution extends control
         $this->view->cases      = $cases;
         $this->view->story      = $story;
         $this->view->users      = $users;
-        $this->view->executions = $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'nocode');
+        $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
         $this->view->actions    = $this->loadModel('action')->getList('story', $storyID);
         $this->view->modulePath = $modulePath;
         $this->view->version    = $version == 0 ? $story->version : $version;

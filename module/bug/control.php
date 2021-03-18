@@ -285,6 +285,9 @@ class bug extends control
         /* Whether there is a object to transfer bug, for example feedback. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
+
+        if(isset($output['executionID'])) commonModel::setAppObjectID('execution', $output['executionID']);
+
         foreach($output as $paramKey => $paramValue)
         {
             if(isset($this->config->bug->fromObjects[$paramKey]))
@@ -478,19 +481,24 @@ class bug extends control
 
         /* Get products and projects. */
         $products = $this->products;
+        $projects = array('' => '');
         if($projectID)
         {
             $products    = array();
             $productList = $this->product->getOrderedProducts('all', 40, $projectID);
             foreach($productList as $product) $products[$product->id] = $product->name;
 
-            $project  = $this->loadModel('project')->getByID($projectID);
-            $projects = array($projectID => $project->name);
+            $project   = $this->loadModel('project')->getByID($projectID);
+            $projects += array($projectID => $project->name);
         }
         else
         {
-            $projects = $this->product->getProjectPairsByProduct($productID, $branch);
+            $projects += $this->product->getProjectPairsByProduct($productID, $branch);
         }
+
+        /* Get executions. */
+        $executions = array('' => '');
+        if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
 
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
@@ -507,7 +515,7 @@ class bug extends control
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->stories          = $stories;
         $this->view->projects         = $projects;
-        $this->view->executions       = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
+        $this->view->executions       = $executions;
         $this->view->builds           = $builds;
         $this->view->moduleID         = (int)$moduleID;
         $this->view->projectID        = $projectID;
@@ -653,7 +661,6 @@ class bug extends control
         elseif($from == 'repo')
         {
             session_write_close();
-            $this->lang->set('menugroup.bug', 'repo');
             $repos = $this->loadModel('repo')->getRepoPairs($this->session->PRJ);
             $this->repo->setMenu($repos);
             $this->lang->bug->menu = $this->lang->repo->menu;

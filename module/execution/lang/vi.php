@@ -190,7 +190,6 @@ $lang->execution->batchUnlinkStory  = 'Hủy liên kết câu chuyện hàng lo�
 $lang->execution->importTask        = 'Chuyển thành nhiệm vụ';
 $lang->execution->importPlanStories = 'Liên kết câu chuyện theo kế hoạch';
 $lang->execution->importBug         = 'Nhập Bug';
-$lang->execution->updateOrder       = "Đánh giá {$lang->executionCommon}";
 $lang->execution->tree              = 'Cây';
 $lang->execution->treeTask          = 'Chỉ hiện nhiệm vụ';
 $lang->execution->treeStory         = 'Chỉ hiện câu chuyện';

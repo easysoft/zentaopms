@@ -54,6 +54,7 @@ $lang->doc->searchDoc      = '搜索';
 $lang->doc->fast           = '快速访问';
 $lang->doc->allDoc         = '所有文档';
 $lang->doc->openedByMe     = '由我创建';
+$lang->doc->editedByMe     = '由我编辑';
 $lang->doc->orderByOpen    = '最近添加';
 $lang->doc->orderByEdit    = '最近更新';
 $lang->doc->orderByVisit   = '最近访问';

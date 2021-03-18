@@ -182,14 +182,14 @@ class executionModel extends model
             }
         }
 
-        $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "objectID=$executionID&module=$currentModule&method=$currentMethod&extra=$extra");
+        $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "module=$currentModule&method=$currentMethod&extra=$extra");
         $currentExecutionName = '';
         if(isset($currentExecution->name)) $currentExecutionName = $currentExecution->name;
 
         if($this->config->systemMode == 'classic')
         {
             $this->session->set('moreExecutionLink', $this->app->getURI(true));
-            $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-sprint'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-sprint'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
 
@@ -212,7 +212,7 @@ class executionModel extends model
      */
     public function tree()
     {
-        $products     = $this->loadModel('product')->getPairs('nocode', $this->session->PRJ);
+        $products     = $this->loadModel('product')->getPairs('nocode', 0);
         $productGroup = $this->getProductGroupList();
         $executionTree  = "<ul class='tree tree-lines'>";
         foreach($productGroup as $productID => $executions)
@@ -871,24 +871,6 @@ class executionModel extends model
         }
     }
 
-    /**
-     * Get execution main menu action.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return string
-     */
-    public function getMainAction($module, $method)
-    {
-        if(in_array($method, array('index', 'all', 'batchedit'))) return;
-
-        $link = html::a(helper::createLink('execution', 'all'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
-        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
-
-        return common::hasPriv('execution', 'all') ? $html : '';
-    }
-
     /*
      * Get execution switcher.
      *
@@ -911,8 +893,9 @@ class executionModel extends model
             $currentExecutionName = $currentExecution->name;
         }
 
-        $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "objectID=$executionID&module=$currentModule&method=$currentMethod&extra=");
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'>{$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "module=$currentModule&method=$currentMethod&extra=");
+        $output  = "<div class='btn-group header-btn'>" . html::a(helper::createLink('execution', 'all'), "<i class='icon icon-run'></i> {$this->lang->execution->common}", '', "class='btn'") . '</div>';
+        $output .= "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'>{$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
@@ -937,7 +920,7 @@ class executionModel extends model
         if($projectID)
         {
             $executionModel = $this->dao->select('model')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('model');
-            $orderBy = $executionModel == 'waterfall' ? 'sortStatus_asc,begin_asc,id_asc' : 'begin_desc';
+            $orderBy = $executionModel == 'waterfall' ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
 
             /* Waterfall execution, when all phases are closed, in reverse order of date. */
             if($executionModel == 'waterfall')
@@ -1726,10 +1709,10 @@ class executionModel extends model
      */
     public function getTasks2Imported($toExecution, $branches)
     {
-        $products   = $this->getProducts($toExecution);
+        $products = $this->getProducts($toExecution);
         if(empty($products)) return array();
 
-        $execution    = $this->getById($toExecution);
+        $execution  = $this->getById($toExecution);
         $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in(array_keys($products))
@@ -1872,6 +1855,7 @@ class executionModel extends model
 
         $bugToTasks = fixer::input('post')->get();
         $bugs       = $this->bug->getByList(array_keys($bugToTasks->import));
+        $projectID  = $this->loadModel('execution')->getProjectID($executionID);
         foreach($bugToTasks->import as $key => $value)
         {
             $bug = zget($bugs, $key, '');
@@ -1879,8 +1863,8 @@ class executionModel extends model
 
             $task = new stdClass();
             $task->bug          = $bug;
-            $task->PRJ          = $this->session->PRJ;
-            $task->execution      = $executionID;
+            $task->project      = $projectID;
+            $task->execution    = $executionID;
             $task->story        = $bug->story;
             $task->storyVersion = $bug->storyVersion;
             $task->module       = isset($modules[$bug->module]) ? $bug->module : 0;
@@ -3576,7 +3560,7 @@ class executionModel extends model
         $productPairs = $this->getStageLinkProductPairs($stageIdList);
 
         $recentExecutions = isset($this->config->execution->recentExecutions) ? explode(',', $this->config->execution->recentExecutions) : array();
-        $allExecution     = array('recent' => array(), 'mine' => array());
+        $allExecution     = array('recent' => array(), 'involved' => array());
         foreach($executions as $execution)
         {
             if($execution->type == 'stage')  $execution->name = zget($projectPairs, $execution->project) . '/' . zget($productPairs, $execution->id) . '/' . $execution->name;
@@ -3587,7 +3571,7 @@ class executionModel extends model
                 $allExecution['recent'][$index] = $execution;
                 continue;
             }
-            $allExecution['mine'][] = $execution;
+            $allExecution['involved'][] = $execution;
         }
 
         ksort($allExecution['recent']);

@@ -6,7 +6,7 @@
   <div class='side-col col-lg' id='sidebar'>
     <?php include 'blockreportlist.html.php';?>
   </div>
-  <div class='main-col w-800px'>
+  <div class='main-col'>
     <div class='cell'>
       <div class="row" id='conditions'>
         <div class='w-220px col-md-3 col-sm-6'>

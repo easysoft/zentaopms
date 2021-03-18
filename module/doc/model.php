@@ -27,7 +27,7 @@ class docModel extends model
      */
     public function setMenu($type = '', $libID = 0, $moduleID = 0, $productID = 0, $executionID = 0, $crumb = '')
     {
-        $btnStyle     = $this->lang->navGroup->doc == 'doc' ? 'header-angle-btn' : 'angle-btn';
+        $btnStyle     = $this->lang->navGroup->doc == 'doc' ? 'header-btn' : 'angle-btn';
         $isLimitWidth = $this->lang->navGroup->doc == 'doc' ? '' : 'btn-limit';
         $selectHtml   = "<div class='btn-group $btnStyle'>";
         $selectHtml  .= html::a(helper::createLink('doc', 'index'), $this->lang->doc->index, '', "class='btn'");
@@ -352,6 +352,22 @@ class docModel extends model
                 ->andWhere('lib')->in($allLibs)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('addedBy')->eq($this->app->user->account)
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($browseType == 'editedbyme')
+        {
+            $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
+                ->where('objectType')->eq('doc')
+                ->andWhere('actor')->eq($this->app->user->account)
+                ->fetchAll('objectID');
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in(array_keys($docIDList))
+                ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
+                ->andWhere('lib')->in($allLibs)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll('id');
@@ -1824,15 +1840,14 @@ class docModel extends model
     public function appendNavCSS()
     {
         $navCSS = '';
-        if($this->lang->navGroup->doc == 'doc')
+        if($this->app->openApp == 'doc')
         {
             $navCSS .= <<<EOF
 #subHeader {margin-top: -50px; background: rgba(0,0,0,0);}
 #pageActions .btn-link {color: #fff; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
-.header-angle-btn {padding: 0;}
-.header-angle-btn .btn{padding: 6px 12px;}
+.header-btn {padding: 0;}
 EOF;
-            if($this->app->rawMethod != 'index') $navCSS .= '.header-angle-btn+.header-angle-btn::after, .header-angle-btn+.header-angle-btn::before {top: -50px;}';
+            if($this->app->rawMethod != 'index') $navCSS .= '.header-btn+.header-btn::after, .header-btn+.header-btn::before {top: -50px;}';
         }
         return $navCSS;
     }

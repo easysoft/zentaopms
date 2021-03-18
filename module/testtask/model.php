@@ -143,7 +143,11 @@ class testtaskModel extends model
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
 
-        $this->lang->testtask->menu->testcase['subModule'] = 'testtask';
+        if($this->lang->navGroup->testcase == 'project' && $this->app->rawMethod == 'browseunits')
+        {
+            $lang->projectQa->menu->testcase['subModule'] = 'testtask';
+        }
+
         if($this->lang->navGroup->testtask == 'qa')
         {
             foreach($this->lang->qa->subMenu->testcase as $key => $menu)
@@ -979,11 +983,13 @@ class testtaskModel extends model
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
 
             /* When the cases linked the testtask, the cases link to the project. */
-            if($this->lang->navGroup->testtask != 'qa')
+            if($this->app->openApp != 'qa')
             {
                 $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                $project   = $this->app->openApp == 'project' ? $this->session->PRJ : $this->session->execution;
+
                 $data = new stdclass();
-                $data->project = $this->session->PRJ;
+                $data->project = $project;
                 $data->product = $this->session->product;
                 $data->case    = $caseID;
                 $data->version = 1;
@@ -1268,7 +1274,7 @@ class testtaskModel extends model
     {
         $runs = array();
         $postData   = fixer::input('post')->get();
-        $caseIdList = array_keys($postData->results);
+        $caseIdList = isset($postData->caseIDList) ? array_keys($postData->caseIDList) : array_keys($postData->results);
         if($runCaseType == 'testtask')
         {
             $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)
@@ -1287,7 +1293,8 @@ class testtaskModel extends model
         $now = helper::now();
         foreach($postData->results as $caseID => $result)
         {
-            $runID       = isset($runs[$caseID]) ? $runs[$caseID] : 0;
+            $runID       = isset($runs[$caseID]) ? $runs[$caseID] : (isset($postData->caseIDList) ? $caseID : 0);
+            $version     = $postData->version[$caseID];
             $dbSteps     = isset($stepGroups[$caseID]) ? $stepGroups[$caseID] : array();
             $postSteps   = isset($postData->steps[$caseID]) ? $postData->steps[$caseID] : array();
             $postReals   = $postData->reals[$caseID];
@@ -1309,13 +1316,16 @@ class testtaskModel extends model
                 $step           = array();
                 $step['result'] = $caseResult;
                 $step['real']   = $caseResult == 'pass' ? '' : $postReals[0];
-                $stepResults[] = $step;
+                $stepResults[]  = $step;
             }
+
+            /* Replace caseID if caseID is runID. */
+            if(isset($postData->caseIDList[$caseID])) $caseID = $postData->caseIDList[$caseID];
 
             $result              = new stdClass();
             $result->run         = $runID;
             $result->case        = $caseID;
-            $result->version     = $postData->version[$caseID];
+            $result->version     = $version;
             $result->caseResult  = $caseResult;
             $result->stepResults = serialize($stepResults);
             $result->lastRunner  = $this->app->user->account;

@@ -12,38 +12,6 @@
 class qa extends control
 {
     /**
-     * Project id.
-     *
-     * @var    int
-     * @access public
-     */
-    public $projectID;
-
-    /**
-     * Construct.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        /* Set qa menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
-        {
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            $this->lang->noMenuModule[] = $this->app->rawModule;
-        }
-        else 
-        {    
-            $this->lang->qa->menu    = $this->lang->projectQa->menu;
-            $this->lang->qa->subMenu = $this->lang->projectQa->subMenu;
-        }
-    }
-
-    /**
      * The index of qa, go to bug's browse page.
      *
      * @access public

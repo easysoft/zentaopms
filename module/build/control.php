@@ -19,14 +19,23 @@ class build extends control
      * @access public
      * @return void
      */
-    public function create($executionID, $productID = 0)
+    public function create($executionID = 0, $productID = 0, $projectID = 0)
     {
-        /* Create execution if no execution. */
-        if($executionID == 0) die(js::locate($this->createLink('execution', 'create'), 'parent'));
+        /* Load these models. */
+        $this->loadModel('execution');
+        $this->loadModel('user');
+
+        if($this->app->openApp == 'project')
+        {
+            commonModel::setAppObjectID('project', $projectID);
+            $executions  = $this->execution->getPairs($projectID);
+            $executionID = key($executions);
+        }
 
         if(!empty($_POST))
         {
-            $buildID = $this->build->create($executionID);
+            $executionID = $this->post->execution;
+            $buildID     = $this->build->create($executionID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
 
@@ -36,31 +45,32 @@ class build extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
-        /* Load these models. */
-        $this->loadModel('execution');
-        $this->loadModel('user');
-
-        /* Set session and get execution by id. */
-        $this->session->set('buildCreate', $this->app->getURI(true));
         $execution = $this->execution->getByID($executionID);
+        if($this->app->openApp == 'execution')
+        {
+            /* Set session and get execution by id. */
+            $this->session->set('buildCreate', $this->app->getURI(true));
 
-        /* Set menu. */
-        $executions = $this->execution->getPairs($execution->project);
-        $this->execution->setMenu($executions, $executionID);
+            /* Set menu. */
+            $executions = $this->execution->getPairs($execution->project);
+            $this->execution->setMenu($executions, $executionID);
+            commonModel::setAppObjectID('execution', $executionID);
+        }
+
 
         $productGroups = $this->execution->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
         $products      = array();
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
-        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->build->create;
-        $this->view->position[] = html::a($this->createLink('execution', 'task', "executionID=$executionID"), $execution->name);
+        $this->view->title      = $this->lang->build->create;
         $this->view->position[] = $this->lang->build->create;
 
         $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
         $this->view->branches      = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->executionID   = $executionID;
         $this->view->products      = $products;
+        $this->view->executions    = isset($executions) ? $executions : array();
         $this->view->lastBuild     = $this->build->getLast($executionID);
         $this->view->productGroups = $productGroups;
         $this->view->users         = $this->user->getPairs('nodeleted|noclosed');
@@ -100,7 +110,7 @@ class build extends control
         $build = $this->build->getById((int)$buildID);
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution);
+        $this->execution->setMenu($this->execution->getPairs($build->project), $build->execution);
 
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
@@ -195,8 +205,8 @@ class build extends control
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
         /* Set menu. */
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution, $buildID);
-        $executions = $this->execution->getPairs($this->session->PRJ, 'all', 'empty');
+        commonModel::setAppObjectID('execution', $build->execution);
+        $executions = $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'empty');
 
         $this->view->title         = "BUILD #$build->id $build->name - " . $executions[$build->execution];
         $this->view->position[]    = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $executions[$build->execution]);
@@ -390,7 +400,7 @@ class build extends control
         $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
         $build   = $this->build->getById($buildID);
         $product = $this->loadModel('product')->getById($build->product);
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution);
+        $this->loadModel('execution')->setMenu($this->execution->getPairs($build->project), $build->execution);
         $this->loadModel('story');
         $this->loadModel('tree');
         $this->loadModel('product');
@@ -509,7 +519,7 @@ class build extends control
         /* Set menu. */
         $build   = $this->build->getByID($buildID);
         $product = $this->loadModel('product')->getByID($build->product);
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution);
+        $this->loadModel('execution')->setMenu($this->execution->getPairs($build->project), $build->execution);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

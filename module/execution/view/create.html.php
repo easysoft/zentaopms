@@ -35,7 +35,6 @@
 <?php js::set('holders', $lang->execution->placeholder);?>
 <?php js::set('errorSameProducts', $lang->execution->errorSameProducts);?>
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
-<?php js::set('isSprint', $isSprint);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -48,7 +47,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->project;?></th>
-          <td class="col-main"><?php echo html::select("project", $allProjects, '', "class='form-control chosen' required onchange='loadBranches(this)'");?></td>
+          <td class="col-main"><?php echo html::select("project", $allProjects, $projectID, "class='form-control chosen' required onchange='refreshPage(this.value)'");?></td>
           <td></td><td></td>
         </tr>
         <tr>
@@ -86,31 +85,9 @@
         </tr>
         <tr>
           <th><?php echo $lang->execution->type;?></th>
-          <td>
-          <?php
-          if($isSprint)
-          {
-              echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'");
-          }
-          else
-          {
-              echo html::select('attribute', $lang->stage->typeList, '', "class='form-control'");
-          }
-          ?>
-          </td>
+          <td><?php echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'"); ?></td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
-        <?php if(!$isSprint):?>
-        <tr>
-          <th><?php echo $lang->programplan->percent;?></th>
-          <td>
-            <div class='input-group'>
-              <?php echo html::input('percent', '', "class='form-control'");?>
-              <span class='input-group-addon'>%</span>
-            </div>
-          </td>
-        </tr>
-        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->execution->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
@@ -183,7 +160,6 @@
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
-            <?php if($isSprint) echo html::hidden('lifetime', 'short');?>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
           </td>

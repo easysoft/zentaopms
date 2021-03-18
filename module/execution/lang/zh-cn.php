@@ -11,7 +11,7 @@
  */
 /* 字段列表。*/
 $lang->executionCommon           = $lang->executionCommon;
-$lang->execution->common         = $lang->executionCommon . '视图';
+$lang->execution->common         = '执行';
 $lang->execution->allExecutions  = '所有' . $lang->executionCommon;
 $lang->execution->id             = $lang->executionCommon . '编号';
 $lang->execution->type           = $lang->executionCommon . '类型';
@@ -70,6 +70,7 @@ $lang->execution->undone         = '未完成';
 $lang->execution->unclosed       = '未关闭';
 $lang->execution->typeDesc       = "运维{$lang->executionCommon}没有{$lang->SRCommon}、bug、版本、测试功能。";
 $lang->execution->mine           = '我负责：';
+$lang->execution->involved       = '我参与：';
 $lang->execution->other          = '其他：';
 $lang->execution->deleted        = '已删除';
 $lang->execution->delayed        = '已延期';
@@ -200,8 +201,6 @@ $lang->execution->batchUnlinkStory  = "批量移除{$lang->SRCommon}";
 $lang->execution->importTask        = '转入任务';
 $lang->execution->importPlanStories = "按计划关联{$lang->SRCommon}";
 $lang->execution->importBug         = '导入Bug';
-$lang->execution->updateOrder       = "{$lang->executionCommon}排序";
-$lang->execution->execUpdateOrder   = "执行排序";
 $lang->execution->tree              = '树状图';
 $lang->execution->treeTask          = '只看任务';
 $lang->execution->treeStory         = "只看{$lang->SRCommon}";

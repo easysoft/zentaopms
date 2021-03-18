@@ -67,7 +67,7 @@ $lang->project->realBegan          = '实际开始日期';
 $lang->project->bygrid             = '看板';
 $lang->project->bylist             = '列表';
 $lang->project->mine               = '我参与的';
-$lang->project->myProject          = '我参与：';
+$lang->project->myProject          = '我负责：';
 $lang->project->other              = '其他：';
 $lang->project->acl                = '访问控制';
 $lang->project->setPlanduration    = '设置工期';
@@ -102,6 +102,7 @@ $lang->project->changeProgramTip       = '修改项目集后，该项目关联�
 $lang->project->linkedProjectsTip      = '关联的项目如下';
 $lang->project->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';
 $lang->project->linkStoryByPlanTips    = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此项目中";
+$lang->project->createExecution        = "该项目下没有{$lang->executionCommon}，请先创建{$lang->executionCommon}";
 
 $lang->project->tenThousand = '万';
 

@@ -19,6 +19,12 @@
     </div>
     <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
       <table class='table table-form'>
+        <?php if(!empty($executions)):?>
+        <tr>
+          <th><?php echo $lang->executionCommon;?></th>
+          <td><?php echo html::select('execution', $executions, $executionID, "onchange='loadProducts(this.value);' class='form-control chosen' required");?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->build->product;?></th>
           <?php if(!empty($products)):?>

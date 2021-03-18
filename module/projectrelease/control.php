@@ -41,7 +41,6 @@ class projectrelease extends control
      */
     public function commonAction($productID = 0, $branch = 0)
     {
-        $this->lang->product->menu         = $this->lang->product->viewMenu;
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         /* Get product and product list by project. */
@@ -59,20 +58,23 @@ class projectrelease extends control
     /**
      * Browse releases.
      *
+     * @param  int    $projectID
      * @param  string $type
      * @access public
      * @return void
      */
-    public function browse($type = 'all')
+    public function browse($projectID, $type = 'all')
     {
         $this->session->set('releaseList', $this->app->getURI(true));
         $execution = $this->loadModel('execution')->getById($this->session->PRJ);
+        commonModel::setAppObjectID('project', $projectID);
 
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
         $this->view->execution  = $execution;
         $this->view->products   = $this->loadModel('product')->getProducts($this->session->PRJ);
-        $this->view->releases   = $this->projectrelease->getList($this->session->PRJ, $type);
+        $this->view->releases   = $this->projectrelease->getList($projectID, $type);
+        $this->view->projectID  = $projectID;
         $this->view->type       = $type;
         $this->display();
     }
@@ -80,10 +82,11 @@ class projectrelease extends control
     /**
      * Create a release.
      *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function create()
+    public function create($projectID)
     {
         $this->app->loadConfig('release');
         $this->config->projectrelease->create = $this->config->release->create;
@@ -106,7 +109,9 @@ class projectrelease extends control
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
+        commonModel::setAppObjectID('project', $projectID);
         $this->commonAction();
+
         $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
         $this->view->position[]  = $this->lang->release->create;
         $this->view->builds      = $builds;

@@ -263,6 +263,7 @@ function loadProductProjects(productID)
 function loadProductExecutions(productID, projectID = 0)
 {
     if(!projectID) projectID = $('#project').find("option:selected").val();
+    if(!projectID) productID = 0;
     required = $('#execution_chosen').hasClass('required');
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
@@ -271,6 +272,7 @@ function loadProductExecutions(productID, projectID = 0)
     $('#executionIdBox').load(link, function()
     {
         $(this).find('select').chosen();
+        if(typeof(bugExecution) == 'string') $('#executionIdBox').prepend("<span class='input-group-addon' style='border-left-width: 0px;'>" + bugExecution + "</span>");
         if(required) $(this).addClass('required');
     });
 }
@@ -545,7 +547,9 @@ function notice()
         else
         {
             executionID = $('#execution').val();
-            html += '<a href="' + createLink('build', 'create','executionID=' + executionID) + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
+            link = createLink('build', 'create','executionID=' + executionID + '&productID=' + $('#product').val());
+            link += config.requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
+            html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createBuild + '</a> ';
             html += '<a href="javascript:loadExecutionBuilds(' + executionID + ')">' + refresh + '</a>';
         }
         var $bba = $('#buildBoxActions');

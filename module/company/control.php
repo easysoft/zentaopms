@@ -51,7 +51,6 @@ class company extends control
         $this->lang->navGroup->company = 'admin';
 
         $this->loadModel('search');
-        $this->lang->set('menugroup.company', 'company');
 
         $deptID = $type == 'bydept' ? (int)$param : 0;
         $this->company->setMenu($deptID);
