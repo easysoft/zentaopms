@@ -983,11 +983,13 @@ class testtaskModel extends model
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
 
             /* When the cases linked the testtask, the cases link to the project. */
-            if($this->lang->navGroup->testtask != 'qa')
+            if($this->app->openApp != 'qa')
             {
                 $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                $project   = $this->app->openApp == 'project' ? $this->session->PRJ : $this->session->execution;
+
                 $data = new stdclass();
-                $data->project = $this->session->PRJ;
+                $data->project = $project;
                 $data->product = $this->session->product;
                 $data->case    = $caseID;
                 $data->version = 1;

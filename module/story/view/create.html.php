@@ -89,7 +89,8 @@
                   <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
                   <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
                   <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
-                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
+                  <?php $sourceNoteWidth = isonlybody() ? "style='width: 70px;'" : "style='width: 140px;'"?>
+                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' $sourceNoteWidth");?>
                 </div>
               </div>
             </td>
@@ -120,7 +121,7 @@
               <td colspan="2" class='sourceTd'>
                 <div class="input-group">
                   <div class="input-group">
-                    <div class="input-group-addon"><?php echo $lang->story->source;?></div>
+                    <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
                     <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
                     <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
                     <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>

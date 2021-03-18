@@ -432,7 +432,7 @@ $lang->action->label->product     = $lang->productCommon . '|product|view|produc
 $lang->action->label->productplan = "计划|productplan|view|productID=%s";
 $lang->action->label->release     = '发布|release|view|productID=%s';
 $lang->action->label->story       = "{$lang->SRCommon}|story|view|storyID=%s";
-$lang->action->label->program     = "项目集|program|pgmproduct|programID=%s";
+$lang->action->label->program     = "项目集|program|product|programID=%s";
 $lang->action->label->project     = "项目|project|index|projectID=%s";
 if($config->systemMode == 'new')
 {

@@ -102,6 +102,7 @@ $lang->project->changeProgramTip       = '修改项目集后，该项目关联�
 $lang->project->linkedProjectsTip      = '关联的项目如下';
 $lang->project->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';
 $lang->project->linkStoryByPlanTips    = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此项目中";
+$lang->project->createExecution        = "该项目下没有{$lang->executionCommon}，请先创建{$lang->executionCommon}";
 
 $lang->project->tenThousand = '万';
 

@@ -60,9 +60,9 @@ class buildModel extends model
      */
     public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0)
     {
-        return $this->dao->select('t1.*, t2.name as projectName, t2.id as projectID, t3.name as productName, t4.name as branchName')
+        return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.project')->eq((int)$projectID)
@@ -293,7 +293,6 @@ class buildModel extends model
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.product')->in($products)
-            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->PRJ)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');

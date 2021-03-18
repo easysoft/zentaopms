@@ -313,9 +313,10 @@ class product extends control
 
             $this->executeHooks($productID);
 
-            $moduleName = $programID ? 'program'    : $this->moduleName;
-            $methodName = $programID ? 'product' : 'browse';
-            $param      = $programID ? "programID=$programID" : "productID=$productID";
+            $openApp    = $this->app->openApp;
+            $moduleName = $openApp == 'program'? 'program' : $this->moduleName;
+            $methodName = $openApp == 'program'? 'product' : 'browse';
+            $param      = $openApp == 'program' ? "programID=$programID" : "productID=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
@@ -813,6 +814,21 @@ class product extends control
     }
 
     /**
+     * Ajax get products.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProducts($executionID)
+    {
+        $products  = array('' => '');
+        $products += $this->product->getProductPairsByProject($executionID);
+
+        die(html::select('product', $products, '', "class='form-control' onchange='loadBranches(this.value)'"));
+    }
+
+    /**
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID
@@ -825,7 +841,7 @@ class product extends control
     {
         $projects  = array('' => '');
         $projects += $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : $branch);
-        if($this->app->getViewType() == 'json') die(json_encode($peojects));
+        if($this->app->getViewType() == 'json') die(json_encode($projects));
 
         die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID})'"));
     }

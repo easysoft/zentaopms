@@ -39,15 +39,21 @@ class testtask extends control
 
         /* Set testtask menu group. */
         $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
+        if($this->app->openApp == 'qa')
         {
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            //$this->lang->noMenuModule[] = $this->app->rawModule;
         }
-        else
+        elseif($this->app->openApp == 'project')
         {
-            $this->lang->testtask->menu    = $this->lang->projectQa->menu;
-            $this->lang->testtask->subMenu = $this->lang->projectQa->subMenu;
+            $this->lang->testcase->menu    = $this->lang->projectQa->menu;
+            $this->lang->testcase->subMenu = $this->lang->projectQa->subMenu;
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->lang->testcase->menu    = $this->lang->execution->qaMenu;
+            $this->lang->testcase->subMenu = '';
         }
 
         $this->loadModel('product');

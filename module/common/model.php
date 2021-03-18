@@ -2374,7 +2374,7 @@ EOD;
         self::initProjectSubmenu();
         if($project->model == 'scrum')
         {
-            $lang->menuOrder = $lang->scrum->menuOrder;
+            $lang->project->menuOrder = $lang->scrum->menuOrder;
 
             /* The scrum project temporarily hides the trace matrix. */
             unset($lang->projectstory->menu->track);
@@ -2385,7 +2385,7 @@ EOD;
         {
             $lang->project->dividerMenu = str_replace(',project,', ',', $lang->project->dividerMenu);
             $lang->release->menu        = new stdclass();
-            $lang->menuOrder            = $lang->waterfall->menuOrder;
+            $lang->project->menuOrder   = $lang->waterfall->menuOrder;
             return self::processMenuVars($lang->menu->waterfall);
         }
     }
@@ -2469,7 +2469,10 @@ EOD;
 
         foreach($lang->$openApp->menu as $label => $menu)
         {
-            $lang->$openApp->menu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
+            if(isset($lang->$openApp->menu->{$label}['link']))
+            {
+                $lang->$openApp->menu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
+            }
         }
 
         if($openApp == 'program')

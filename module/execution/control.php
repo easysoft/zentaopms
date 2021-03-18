@@ -59,7 +59,6 @@ class execution extends control
      */
     public function index($locate = 'auto', $executionID = 0)
     {
-        $this->lang->execution->menu = $this->lang->execution->homeMenu;
         if($locate == 'yes') $this->locate($this->createLink('execution', 'task'));
 
         $this->commonAction($executionID);
@@ -1170,17 +1169,22 @@ class execution extends control
      * Create a execution.
      *
      * @param string $projectID
-     * @param string $productID
      * @param string $executionID
      * @param string $copyExecutionID
      * @param int    $planID
      * @param string $confirm
+     * @param string $productID
      *
      * @access public
      * @return void
      */
-    public function create($productID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $projectID = 0)
+    public function create($projectID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0)
     {
+        if($this->app->openApp == 'project')
+        {
+            commonModel::setAppObjectID('project', $projectID);
+        }
+
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
@@ -1260,6 +1264,7 @@ class execution extends control
                     if(!empty($planID)) break;
                 }
             }
+
             if(!empty($planID))
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "productID=&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));
@@ -1267,19 +1272,6 @@ class execution extends control
             else
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "productID=&executionID=$executionID")));
-            }
-        }
-
-        $isSprint = true;
-        if($this->config->systemMode == 'new' and !empty($projectID))
-        {
-            $project = $this->project->getById($projectID);
-            if($project->model == 'scrum')
-            {
-                unset($this->lang->execution->endList[62]);
-                unset($this->lang->execution->endList[93]);
-                unset($this->lang->execution->endList[186]);
-                unset($this->lang->execution->endList[365]);
             }
         }
 
@@ -1307,7 +1299,6 @@ class execution extends control
         $this->view->copyExecutionID = $copyExecutionID;
         $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->users           = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->isSprint        = $isSprint;
         $this->display();
     }
 
@@ -2678,14 +2669,13 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'all', $projectID = 0, $from = 'execution', $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $projectID = 0, $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        $this->lang->execution->menu = $this->lang->execution->homeMenu;
-
         $this->app->loadLang('my');
         $this->app->loadLang('product');
         $this->app->loadLang('programplan');
 
+        $from = $this->app->openApp;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true));
         if($from == 'project') $this->lang->navGroup->execution = 'project';
 

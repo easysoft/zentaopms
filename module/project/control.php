@@ -662,15 +662,75 @@ class project extends control
     /**
      * Execution list.
      *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function execution()
+    public function execution($projectID = 0)
     {
-        $PRJ = $this->session->PRJ;
-        if(!$PRJ) $PRJ = current(explode(',', $this->app->user->view->projects));
+        $this->locate($this->createLink('execution', 'all', "status=all&projectID=$projectID", '', false));
+    }
 
-        $this->locate($this->createLink('execution', 'all', "status=all&executionID=0&from=project", '', false, $PRJ));
+    /**
+     * Browse builds of a project.
+     *
+     * @param  string $type      all|product|bysearch
+     * @param  int    $param
+     * @access public
+     * @return void
+     */
+    public function build($projectID = 0, $type = 'all', $param = 0)
+    {
+        /* Load module and get project. */
+        $this->loadModel('build');
+        $project   = $this->project->getByID($projectID);
+
+        /* Get products' list. */
+        $products = $this->project->getProducts($projectID, false);
+        $products = array('' => '') + $products;
+
+        /* Build the search form. */
+        $type      = strtolower($type);
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
+
+        $executions = $this->execution->getByProject($projectID, 'all', '', true);
+        $this->config->build->search['fields']['execution'] = $this->project->lang->executionCommon;
+        $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
+
+        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project');
+
+        if($type == 'bysearch')
+        {
+            $builds = $this->build->getProjectBuildsBySearch((int)$projectID, (int)$param);
+        }
+        else
+        {
+            $builds = $this->build->getProjectBuilds((int)$projectID, $type, $param);
+        }
+
+        /* Set project builds. */
+        $projectBuilds = array();
+        if(!empty($builds))
+        {
+            foreach($builds as $build) $projectBuilds[$build->product][] = $build;
+        }
+
+        /* Header and position. */
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->execution->build;
+        $this->view->position[] = $this->lang->execution->build;
+
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->buildsTotal   = count($builds);
+        $this->view->projectBuilds = $projectBuilds;
+        $this->view->product       = $type == 'product' ? $param : 'all';
+        $this->view->projectID     = $projectID;
+        $this->view->project       = $project;
+        $this->view->products      = $products;
+        $this->view->executions    = $executions;
+        $this->view->type          = $type;
+
+        $this->display();
     }
 
     /**
@@ -1307,25 +1367,21 @@ class project extends control
      * Adjust the navigation.
      *
      * @param  string $from
-     * @param  int    $projectID
+     * @param  int    $objectID  projectID|programID
      * @access public
      * @return void
      */
-    public function adjustNavigation($from = '', $projectID = 0)
+    public function adjustNavigation($from = '', $objectID = 0)
     {
         if($from == 'project')
         {
-            $this->lang->navGroup->project = 'project';
             $this->lang->project->menu = $this->lang->scrum->setMenu;
             $moduleIndex = array_search('project', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         }
-
-        if($from == 'pgmproject')
+        else if($from == 'pgmproject')
         {
-            $this->app->rawMethod = 'pgmproject';
-            $this->lang->project->switcherMenu = $this->project->getPGMSwitcher($projectID, true);
-            $this->project->setPGMViewMenu($projectID);
+            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($objectID, true);
         }
     }
 }
