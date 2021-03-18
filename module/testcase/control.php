@@ -290,6 +290,7 @@ class testcase extends control
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
             $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            if($this->app->openApp == 'execution') $response['locate'] = $this->createLink('execution', 'testcase', "executionID={$this->session->execution}&type=all");
             $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));

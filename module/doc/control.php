@@ -567,10 +567,10 @@ class doc extends control
 
     /**
      * Delete file for doc.
-     * 
-     * @param  int    $docID 
-     * @param  int    $fileID 
-     * @param  string $confirm 
+     *
+     * @param  int    $docID
+     * @param  int    $fileID
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -728,7 +728,7 @@ class doc extends control
     }
 
     /**
-     * Ajax get all child module. 
+     * Ajax get all child module.
      *
      * @access public
      * @return void
@@ -919,7 +919,7 @@ class doc extends control
             $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
             $this->lang->noMenuModule[] = 'doc';
         }
-        elseif($from == 'project')
+        elseif($from == 'project' or $from == 'execution')
         {
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
         }
@@ -947,7 +947,7 @@ class doc extends control
 
         $this->view->type         = $type;
         $this->view->object       = $object;
-        $this->view->from         = $$from;
+        $this->view->from         = $from;
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
         $this->display();

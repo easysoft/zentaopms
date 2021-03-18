@@ -1169,6 +1169,7 @@ class execution extends control
     /**
      * Create a execution.
      *
+     * @param string $projectID
      * @param string $productID
      * @param string $executionID
      * @param string $copyExecutionID
@@ -1178,7 +1179,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function create($productID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no')
+    public function create($productID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $projectID = 0)
     {
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
@@ -1220,6 +1221,7 @@ class execution extends control
             $team        = $copyExecution->team;
             $acl         = $copyExecution->acl;
             $whitelist   = $copyExecution->whitelist;
+            $projectID   = $copyExecution->project;
             $products    = $this->execution->getProducts($copyExecutionID);
             foreach($products as $product)
             {
@@ -1268,19 +1270,6 @@ class execution extends control
             }
         }
 
-        $isSprint = true;
-        if($this->config->systemMode == 'new')
-        {
-            $project = $this->project->getById($this->session->PRJ);
-            if($project->model == 'scrum')
-            {
-                unset($this->lang->execution->endList[62]);
-                unset($this->lang->execution->endList[93]);
-                unset($this->lang->execution->endList[186]);
-                unset($this->lang->execution->endList[365]);
-            }
-        }
-
         $executionID = key($this->executions);
         $this->execution->setMenu($this->executions, $executionID);
 
@@ -1288,15 +1277,16 @@ class execution extends control
         $this->view->position[]      = $this->view->title;
         $this->view->executions      = array('' => '') + $this->execution->getList();
         $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->acl             = $acl;
         $this->view->plan            = $plan;
         $this->view->name            = $name;
         $this->view->code            = $code;
         $this->view->team            = $team;
-        $this->view->allProjects     = array('' => '') + $this->project->getPairsByModel();
+        $this->view->allProjects     = array(0 => '') + $this->project->getPairsByModel();
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
+        $this->view->projectID       = $projectID;
         $this->view->products        = $products;
         $this->view->productPlan     = array(0 => '') + $productPlan;
         $this->view->productPlans    = array(0 => '') + $productPlans;
@@ -1304,7 +1294,6 @@ class execution extends control
         $this->view->copyExecutionID = $copyExecutionID;
         $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->users           = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->isSprint        = $isSprint;
         $this->display();
     }
 

@@ -49,6 +49,11 @@ class build extends control
         $this->session->set('buildCreate', $this->app->getURI(true));
         $execution = $this->execution->getByID($executionID);
 
+        /* Set menu. */
+        $executions = $this->execution->getPairs($execution->project);
+        $this->execution->setMenu($executions, $executionID);
+        commonModel::setAppObjectID('execution', $executionID);
+
         $productGroups = $this->execution->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
         $products      = array();

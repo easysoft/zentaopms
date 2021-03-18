@@ -501,7 +501,6 @@ class project extends control
     public function view($projectID = 0)
     {
         $this->app->loadLang('bug');
-        $this->lang->navGroup->project = 'project';
         $this->lang->project->menu = $this->lang->scrum->setMenu;
         $moduleIndex = array_search('project', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
@@ -546,7 +545,6 @@ class project extends control
      */
     public function group($projectID = 0, $programID = 0)
     {
-        $this->lang->navGroup->project = 'project';
         $this->lang->project->menu = $this->lang->scrum->setMenu;
         $moduleIndex = array_search('project', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
@@ -1214,7 +1212,6 @@ class project extends control
     {
         if($from == 'project')
         {
-            $this->lang->navGroup->project = 'project';
             $this->lang->project->menu = $this->lang->scrum->setMenu;
             $moduleIndex = array_search('project', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
@@ -1378,9 +1375,6 @@ class project extends control
      */
     public function adjustNavigation($from = '', $projectID = 0)
     {
-        if($from == 'browse') $this->lang->project->menu = $this->lang->project->menu;
-        if($from == 'program') $this->lang->navGroup->project = 'project';
-
         if($from == 'project')
         {
             $this->lang->navGroup->project = 'project';

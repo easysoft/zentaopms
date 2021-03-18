@@ -2289,10 +2289,12 @@ EOD;
     {
         global $lang, $config;
 
+        /* If homeMenu is not exists or unset, display menu. */
         if(!isset($lang->$openApp->homeMenu))
         {
-            $lang->menu      = $lang->$openApp->menu;
+            $lang->menu      = $openApp == 'project' ? self::getProjectMainMenu($moduleName) : $lang->$openApp->menu;
             $lang->menuOrder = $lang->$openApp->menuOrder;
+
             return;
         }
 
@@ -2302,6 +2304,7 @@ EOD;
             return;
         }
 
+        /* If the method is in homeMenu, display homeMenu. */
         foreach($lang->$openApp->homeMenu as $menu)
         {
             $link = is_array($menu) ? $menu['link'] : $menu;
@@ -2314,22 +2317,9 @@ EOD;
             }
         }
 
-        if($openApp == 'project')
-        {
-            if($config->systemMode == 'classic' or ($moduleName == 'project' and $methodName == 'browse'))
-            {
-                $lang->menu = $lang->project->homeMenu;
-            }
-            else
-            {
-                $lang->menu = self::getProjectMainMenu($moduleName);
-            }
-        }
-        else
-        {
-            $lang->menu      = $lang->$openApp->menu;
-            $lang->menuOrder = $lang->$openApp->menuOrder;
-        }
+        /* Default, display menu. */
+        $lang->menu      = $openApp == 'project' ? self::getProjectMainMenu($moduleName) : $lang->$openApp->menu;
+        $lang->menuOrder = $lang->$openApp->menuOrder;
     }
 
     /**
@@ -2384,7 +2374,7 @@ EOD;
         self::initProjectSubmenu();
         if($project->model == 'scrum')
         {
-            $lang->menuOrder = $lang->scrum->menuOrder;
+            $lang->project->menuOrder = $lang->scrum->menuOrder;
 
             /* The scrum project temporarily hides the trace matrix. */
             unset($lang->projectstory->menu->track);
@@ -2395,7 +2385,7 @@ EOD;
         {
             $lang->project->dividerMenu = str_replace(',project,', ',', $lang->project->dividerMenu);
             $lang->release->menu        = new stdclass();
-            $lang->menuOrder            = $lang->waterfall->menuOrder;
+            $lang->project->menuOrder   = $lang->waterfall->menuOrder;
             return self::processMenuVars($lang->menu->waterfall);
         }
     }
@@ -2479,7 +2469,10 @@ EOD;
 
         foreach($lang->$openApp->menu as $label => $menu)
         {
-            $lang->$openApp->menu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
+            if(isset($lang->$openApp->menu->{$label}['link']))
+            {
+                $lang->$openApp->menu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
+            }
         }
 
         if($openApp == 'program')

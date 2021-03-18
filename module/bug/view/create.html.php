@@ -72,7 +72,7 @@ js::set('oldProjectID', $projectID);
           </tr>
           <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
           <tr>
-            <th><?php echo ($showExecution) ? $lang->bug->execution : $lang->bug->type;?></th>
+            <th><?php echo ($showExecution) ? $lang->bug->project : $lang->bug->type;?></th>
 
             <?php if(!$showExecution):?>
             <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
@@ -97,8 +97,11 @@ js::set('oldProjectID', $projectID);
                 <div class='table-col' id='projectBox'>
                   <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?>
                 </div>
-                <div class='table-col' id='executionIdBox'>
-                  <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
+                <div class='table-col'>
+                  <div class='input-group' id='executionIdBox'>
+                    <span class='input-group-addon fix-border'><?php echo $lang->bug->execution;?></span>
+                    <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
+                  </div>
                 </div>
             </td>
             <?php endif;?>
@@ -322,6 +325,7 @@ js::set('oldProjectID', $projectID);
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
+<?php js::set('bugExecution', $lang->bug->execution);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>

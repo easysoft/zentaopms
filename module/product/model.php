@@ -32,7 +32,7 @@ class productModel extends model
         $product = $this->getByID($productID);
         if($product)
         {
-            $this->lang->modulePageNav = $this->getModuleNav($products, '', $product, $extra, $branch, $module, $moduleType);
+            $this->getModuleNav($products, '', $product, $extra, $branch, $module, $moduleType);
         }
 
         foreach($this->lang->product->menu as $key => $menu)

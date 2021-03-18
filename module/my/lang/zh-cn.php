@@ -14,6 +14,7 @@ $lang->my->bug             = '我的Bug';
 $lang->my->testTask        = '我的版本';
 $lang->my->testCase        = '我的用例';
 $lang->my->story           = "我的{$lang->SRCommon}";
+$lang->my->doc             = "我的文档";
 $lang->my->createProgram   = '添加项目';
 $lang->my->project         = "我的项目";
 $lang->my->execution       = "我的{$lang->executionCommon}";
