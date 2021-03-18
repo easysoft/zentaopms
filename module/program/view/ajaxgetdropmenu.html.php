@@ -34,6 +34,7 @@ $programsPinYin = common::convert2Pinyin($programNames);
 #programTree li > a > span.title {color: #3C4353; white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; vertical-align: middle;}
 #programTree li > a > span.user {color: #838a9d;}
 #programTree li > a > span.user > .icon-person {font-size: 14px; position: relative; top: -1px; color: #a6aab8}
+#programTree li > a:first-child {padding-left: 18px;}
 
 #programTree li > .list-toggle {transform: rotate(0deg); width: 16px; height: 16px; border: 4px solid #a6aab8; border-radius: 2px; top: 7px;}
 #programTree li > .list-toggle:before {content: ' '; display: block; position: absolute; border: 1px solid #a6aab8; top: 2px; left: -3px; right: -3px; bottom: 2px; min-width: 0; transition: all .2s;}
