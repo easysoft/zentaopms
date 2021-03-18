@@ -48,6 +48,8 @@ class story extends control
      */
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
+        commonModel::setAppObjectID('product', $productID);
+
         $this->story->replaceURLang($type);
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
