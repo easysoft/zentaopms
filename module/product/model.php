@@ -763,7 +763,6 @@ class productModel extends model
         if($browseType == 'changedstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'changed', $type, $sort, $pager);
         if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
         if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $type, $sort, $pager);
-        if($browseType == 'emptysr')      $stories = $this->story->getEmptySR($productID, $branch, $modules, '', $type, $sort, $pager);
 
         return $stories;
     }
