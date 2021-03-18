@@ -634,6 +634,8 @@ $lang->navGroup->doc = 'doc';
 
 $lang->navGroup->qa = 'qa';
 
+$lang->navGroup->repo = 'repo';
+
 $lang->navGroup->company       = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
