@@ -63,7 +63,7 @@ class build extends control
         $products      = array();
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
-        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->build->create;
+        $this->view->title      = $this->lang->build->create;
         $this->view->position[] = $this->lang->build->create;
 
         $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
@@ -110,7 +110,7 @@ class build extends control
         $build = $this->build->getById((int)$buildID);
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution);
+        $this->execution->setMenu($this->execution->getPairs($build->project), $build->execution);
 
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
@@ -400,7 +400,7 @@ class build extends control
         $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
         $build   = $this->build->getById($buildID);
         $product = $this->loadModel('product')->getById($build->product);
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution);
+        $this->loadModel('execution')->setMenu($this->execution->getPairs($build->project), $build->execution);
         $this->loadModel('story');
         $this->loadModel('tree');
         $this->loadModel('product');
@@ -519,7 +519,7 @@ class build extends control
         /* Set menu. */
         $build   = $this->build->getByID($buildID);
         $product = $this->loadModel('product')->getByID($build->product);
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution);
+        $this->loadModel('execution')->setMenu($this->execution->getPairs($build->project), $build->execution);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
