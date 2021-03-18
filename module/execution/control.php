@@ -137,7 +137,7 @@ class execution extends control
         $this->loadModel('datatable');
         $this->loadModel('setting');
 
-        if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create', ''), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
+        if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
 
         /* Set browse type. */
         $browseType = strtolower($status);
@@ -1201,7 +1201,7 @@ class execution extends control
                 }
                 else
                 {
-                    die(js::confirm($this->lang->execution->importPlanStory, inlink('create', "productID=&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "productID=&executionID=$executionID"), 'parent', 'parent'));
+                    die(js::confirm($this->lang->execution->importPlanStory, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID"), 'parent', 'parent'));
                 }
             }
             $this->view->title       = $this->lang->execution->tips;
@@ -1270,11 +1270,11 @@ class execution extends control
 
             if(!empty($planID))
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "productID=&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));
             }
             else
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "productID=&executionID=$executionID")));
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID")));
             }
         }
 
