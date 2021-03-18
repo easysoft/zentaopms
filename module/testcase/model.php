@@ -80,7 +80,7 @@ class testcaseModel extends model
             ->add('fromBug', $bugID)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa', 'project', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' && $this->app->openApp == 'project', 'project', $this->session->PRJ)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
@@ -176,7 +176,7 @@ class testcaseModel extends model
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
-            if($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa') $data[$i]->project = $this->session->PRJ;
+            if($this->config->systemMode == 'new' && $this->lang->navGroup->testcase == 'project') $data[$i]->project = $this->session->PRJ;
             $data[$i]->branch       = $cases->branch[$i];
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
@@ -1664,9 +1664,13 @@ class testcaseModel extends model
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
             $projects = array_keys($projects);
         }
-        elseif($this->lang->navGroup->testcase == 'project' and empty($case->story))
+        elseif($this->app->openApp == 'project' and empty($case->story))
         {
             $projects = array($this->session->PRJ);
+        }
+        elseif($this->app->openApp == 'execution' and empty($case->story))
+        {
+            $projects = array($this->session->execution);
         }
 
         if(!empty($projects))

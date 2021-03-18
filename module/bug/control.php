@@ -285,6 +285,9 @@ class bug extends control
         /* Whether there is a object to transfer bug, for example feedback. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
+
+        if(isset($output['executionID'])) commonModel::setAppObjectID('execution', $output['executionID']);
+
         foreach($output as $paramKey => $paramValue)
         {
             if(isset($this->config->bug->fromObjects[$paramKey]))

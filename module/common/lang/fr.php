@@ -356,7 +356,7 @@ $lang->execution->subMenu->view->tree      = 'Arborescence|execution|tree|execut
 $lang->execution->subMenu->qa = new stdclass();
 $lang->execution->subMenu->qa->bug      = 'Bug|execution|bug|executionID=%s';
 $lang->execution->subMenu->qa->build    = array('link' => 'Build|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->subMenu->qa->testtask = array('link' => 'Recette|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->subMenu->qa->testtask = array('link' => 'Recette|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask', 'alias' => 'create');
 
 $lang->execution->subMenu->more = new stdclass();
 $lang->execution->subMenu->more->whitelist = array('link' => 'Whitelist|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
@@ -618,6 +618,7 @@ $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
+$lang->navGroup->repo      = 'execution';
 
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';

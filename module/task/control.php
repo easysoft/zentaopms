@@ -39,6 +39,8 @@ class task extends control
      */
     public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
+        commonModel::setAppObjectID('execution', $executionID);
+
         $executions  = $this->execution->getPairs($this->session->PRJ);
         $executionID = $this->execution->saveState($executionID, $executions);
 

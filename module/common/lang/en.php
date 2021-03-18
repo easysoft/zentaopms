@@ -344,13 +344,13 @@ $lang->execution->menu->kanban   = array('link' => 'Kanban|execution|kanban|exec
 $lang->execution->menu->burn     = array('link' => 'Burndown|execution|burn|executionID=%s');
 $lang->execution->menu->view     = array('link' => 'View|execution|grouptask|executionID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->execution->menu->story    = array('link' => 'Story|execution|story|executionID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->execution->menu->bug      = array('link' => 'Bug|execution|bug|executionID=%s');
-$lang->execution->menu->build    = array('link' => 'Build|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->menu->testtask = array('link' => 'Request|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->menu->qa       = array('link' => 'Bug|execution|qa|executionID=%s', 'subModule' => 'bug', 'alias' => 'qa,bug,testcase,testtask,testreport');
+$lang->execution->menu->repo     = array('link' => 'Repo|repo|browse|projectID=%s');
 $lang->execution->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
-$lang->execution->menu->product  = $lang->productCommon . '|execution|manageproducts|executionID=%s';
-$lang->execution->menu->team     = array('link' => 'Team|execution|team|executionID=%s', 'alias' => 'managemembers');
-$lang->execution->menu->more     = array('link' => 'More|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit', 'class' => 'dropdown dropdown-hover');
+$lang->execution->menu->build    = array('link' => 'Build|execution|build|executionID=%s', 'subModule' => 'build');
+$lang->execution->menu->release  = array('link' => 'Release|projectrelease|browse|project=%s');
+$lang->execution->menu->action   = array('link' => 'Dynamics|execution|dynamic|executionID=%s');
+$lang->execution->menu->setting  = array('link' => 'Settings|execution|view|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
 
 $lang->execution->subMenu = new stdclass();
 $lang->execution->subMenu->view = new stdclass();
@@ -360,7 +360,7 @@ $lang->execution->subMenu->view->tree      = 'Tree View|execution|tree|execution
 $lang->execution->subMenu->qa = new stdclass();
 $lang->execution->subMenu->qa->bug      = 'Bug|execution|bug|executionID=%s';
 $lang->execution->subMenu->qa->build    = array('link' => 'Build|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->subMenu->qa->testtask = array('link' => 'Request|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask');
+$lang->execution->subMenu->qa->testtask = array('link' => 'Request|execution|testtask|executionID=%s', 'subModule' => 'testreport,testtask', 'alias' => 'create');
 
 $lang->execution->subMenu->more = new stdclass();
 $lang->execution->subMenu->more->whitelist = array('link' => 'Whitelist|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
@@ -623,8 +623,11 @@ $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
+$lang->navGroup->repo      = 'execution';
 
 $lang->navGroup->doc = 'doc';
+
+$lang->navGroup->qa = 'qa';
 
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
@@ -857,7 +860,7 @@ $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->index          = 'Index|project|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
-$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story', 'subModule' => 'story', 'alias' => 'story,track');
+$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|project={PROJECT}', 'subModule' => 'story', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
 $lang->menu->scrum->qa             = 'QA|qa|index';
 $lang->menu->scrum->ci             = 'Code|repo|browse';
@@ -882,7 +885,7 @@ $lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|brows
 $lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|project|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
 $lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|project={PROJECT}');
 $lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story');
+$lang->menu->waterfall->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|project={PROJECT}');
 $lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
 $lang->menu->waterfall->ci             = 'Repo|repo|browse|';
 $lang->menu->waterfall->track          = array('link' => 'Track|projectstory|track', 'alias' => 'track');

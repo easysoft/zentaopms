@@ -42,16 +42,21 @@ class testcase extends control
 
         /* Set test case menu group. */
         $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
+        if($this->app->openApp == 'qa')
         {
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
             //$this->lang->noMenuModule[] = $this->app->rawModule;
         }
-        else
+        elseif($this->app->openApp == 'project')
         {
             $this->lang->testcase->menu    = $this->lang->projectQa->menu;
             $this->lang->testcase->subMenu = $this->lang->projectQa->subMenu;
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->lang->testcase->menu    = $this->lang->execution->qaMenu;
+            $this->lang->testcase->subMenu = '';
         }
 
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
@@ -247,6 +252,8 @@ class testcase extends control
      */
     public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
     {
+        if($this->app->openApp == 'execution') commonModel::setAppObjectID('execution', $this->session->execution);
+
         $testcaseID = $from == 'testcase' ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
 
@@ -283,6 +290,7 @@ class testcase extends control
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
             $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            if($this->app->openApp == 'execution') $response['locate'] = $this->createLink('execution', 'testcase', "executionID={$this->session->execution}&type=all");
             $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));

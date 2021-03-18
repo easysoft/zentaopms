@@ -2289,19 +2289,6 @@ EOD;
     {
         global $lang, $config;
 
-        if($openApp == 'project')
-        {
-            if($config->systemMode == 'classic' or ($moduleName == 'project' and $methodName == 'browse'))
-            {
-                $lang->menu = $lang->project->menu;
-            }
-            else
-            {
-                $lang->menu = self::getProjectMainMenu($moduleName);
-            }
-            return;
-        }
-
         if(!isset($lang->$openApp->homeMenu))
         {
             $lang->menu      = $lang->$openApp->menu;
@@ -2327,8 +2314,22 @@ EOD;
             }
         }
 
-        $lang->menu      = $lang->$openApp->menu;
-        $lang->menuOrder = $lang->$openApp->menuOrder;
+        if($openApp == 'project')
+        {
+            if($config->systemMode == 'classic' or ($moduleName == 'project' and $methodName == 'browse'))
+            {
+                $lang->menu = $lang->project->homeMenu;
+            }
+            else
+            {
+                $lang->menu = self::getProjectMainMenu($moduleName);
+            }
+        }
+        else
+        {
+            $lang->menu      = $lang->$openApp->menu;
+            $lang->menuOrder = $lang->$openApp->menuOrder;
+        }
     }
 
     /**
