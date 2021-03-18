@@ -212,7 +212,7 @@ class executionModel extends model
      */
     public function tree()
     {
-        $products     = $this->loadModel('product')->getPairs('nocode', $this->session->PRJ);
+        $products     = $this->loadModel('product')->getPairs('nocode', 0);
         $productGroup = $this->getProductGroupList();
         $executionTree  = "<ul class='tree tree-lines'>";
         foreach($productGroup as $productID => $executions)
@@ -1709,10 +1709,10 @@ class executionModel extends model
      */
     public function getTasks2Imported($toExecution, $branches)
     {
-        $products   = $this->getProducts($toExecution);
+        $products = $this->getProducts($toExecution);
         if(empty($products)) return array();
 
-        $execution    = $this->getById($toExecution);
+        $execution  = $this->getById($toExecution);
         $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in(array_keys($products))
@@ -1855,6 +1855,7 @@ class executionModel extends model
 
         $bugToTasks = fixer::input('post')->get();
         $bugs       = $this->bug->getByList(array_keys($bugToTasks->import));
+        $projectID  = $this->loadModel('execution')->getProjectID($executionID);
         foreach($bugToTasks->import as $key => $value)
         {
             $bug = zget($bugs, $key, '');
@@ -1862,8 +1863,8 @@ class executionModel extends model
 
             $task = new stdClass();
             $task->bug          = $bug;
-            $task->PRJ          = $this->session->PRJ;
-            $task->execution      = $executionID;
+            $task->project      = $projectID;
+            $task->execution    = $executionID;
             $task->story        = $bug->story;
             $task->storyVersion = $bug->storyVersion;
             $task->module       = isset($modules[$bug->module]) ? $bug->module : 0;

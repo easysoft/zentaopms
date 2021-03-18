@@ -205,8 +205,8 @@ class build extends control
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
         /* Set menu. */
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($this->session->PRJ), $build->execution, $buildID);
-        $executions = $this->execution->getPairs($this->session->PRJ, 'all', 'empty');
+        commonModel::setAppObjectID('execution', $build->execution);
+        $executions = $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'empty');
 
         $this->view->title         = "BUILD #$build->id $build->name - " . $executions[$build->execution];
         $this->view->position[]    = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $executions[$build->execution]);

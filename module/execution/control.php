@@ -475,7 +475,7 @@ class execution extends control
         $toExecution = $execution->id;
         $branches    = $this->execution->getBranches($toExecution);
         $tasks       = $this->execution->getTasks2Imported($toExecution, $branches);
-        $executions  = $this->execution->getsToImport(array_keys($tasks), $execution->type);
+        $executions  = $this->execution->getToImport(array_keys($tasks), $execution->type);
         unset($executions[$toExecution]);
         unset($tasks[$toExecution]);
 
@@ -540,7 +540,7 @@ class execution extends control
         $this->app->session->set('executionList', $uri);
 
         $this->loadModel('bug');
-        $executions = $this->execution->getPairs($this->session->PRJ, 'all', 'nocode');
+        $executions = $this->execution->getPairs(0, 'all', 'nocode');
         $this->execution->setMenu($executions, $executionID);
 
         /* Load pager. */
@@ -1052,7 +1052,7 @@ class execution extends control
         $this->view->orderBy      = $orderBy;
         $this->view->tasks        = $productTasks;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products     = $this->loadModel('product')->getPairs('', $this->session->PRJ);
+        $this->view->products     = $this->loadModel('product')->getPairs('', 0);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
@@ -2963,7 +2963,7 @@ class execution extends control
         $this->view->cases      = $cases;
         $this->view->story      = $story;
         $this->view->users      = $users;
-        $this->view->executions = $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'nocode');
+        $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
         $this->view->actions    = $this->loadModel('action')->getList('story', $storyID);
         $this->view->modulePath = $modulePath;
         $this->view->version    = $version == 0 ? $story->version : $version;
