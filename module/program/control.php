@@ -386,7 +386,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function project($programID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function project($programID = 0, $browseType = 'all', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $programID = $this->program->saveState($programID, $this->program->getPairs());
         if(!$programID) $this->locate($this->createLink('program', 'browse'));

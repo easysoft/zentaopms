@@ -27,7 +27,10 @@ class build extends control
 
         if($this->app->openApp == 'project')
         {
+            $model = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
+            $this->lang->project->menu = $this->lang->menu->$model;
             commonModel::setAppObjectID('project', $projectID);
+
             $executions  = $this->execution->getPairs($projectID);
             $executionID = key($executions);
         }
@@ -41,7 +44,7 @@ class build extends control
 
             $this->executeHooks($buildID);
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadProjectBuilds($executionID)")); // Code for task #5126.
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadExecutionBuilds($executionID)")); // Code for task #5126.
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
@@ -359,7 +362,7 @@ class build extends control
             {
                 $html  = html::a($this->createLink('build', 'create', "executionID=$executionID&productID=$productID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
                 $html .= '&nbsp; ';
-                $html .= html::a("javascript:loadProjectBuilds($executionID)", $this->lang->refresh);
+                $html .= html::a("javascript:loadExecutionBuilds($executionID)", $this->lang->refresh);
                 die($html);
             }
             die(html::select('build', $builds, $build, "class='form-control'"));

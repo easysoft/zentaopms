@@ -28,19 +28,19 @@ foreach($products as $product)
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
-        $myProductsHtml .= html::a($linkHtml, $productName, '', "class='text-important' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-group='$openApp'");
+        $myProductsHtml .= html::a($linkHtml, $productName, '', "class='text-important' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
     }
     else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
-        $normalProductsHtml .= html::a($linkHtml, $productName, '', "title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-group='$openApp'");
+        $normalProductsHtml .= html::a($linkHtml, $productName, '', "title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
     }
     else if($product->status == 'closed')
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $objectID);
-        $closedProductsHtml .= html::a($linkHtml, $productName, '', "title='{$productName}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-group='$openApp'");
+        $closedProductsHtml .= html::a($linkHtml, $productName, '', "title='{$productName}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
     }
 }
 ?>
@@ -62,7 +62,7 @@ foreach($products as $product)
     </div>
     <div class="col-footer">
       <?php //echo html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->product->all, '', 'class="not-list-item"'); ?>
-      <?php echo html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $lang->product->create, '', 'class="not-list-item"'); ?>
+      <?php echo html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $lang->product->create, '', 'class="not-list-item" data-app="product"'); ?>
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>

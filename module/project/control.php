@@ -1369,25 +1369,21 @@ class project extends control
      * Adjust the navigation.
      *
      * @param  string $from
-     * @param  int    $projectID
+     * @param  int    $objectID  projectID|programID
      * @access public
      * @return void
      */
-    public function adjustNavigation($from = '', $projectID = 0)
+    public function adjustNavigation($from = '', $objectID = 0)
     {
         if($from == 'project')
         {
-            $this->lang->navGroup->project = 'project';
             $this->lang->project->menu = $this->lang->scrum->setMenu;
             $moduleIndex = array_search('project', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         }
-
-        if($from == 'pgmproject')
+        else if($from == 'pgmproject')
         {
-            $this->app->rawMethod = 'pgmproject';
-            $this->lang->project->switcherMenu = $this->project->getPGMSwitcher($projectID, true);
-            $this->project->setPGMViewMenu($projectID);
+            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($objectID, true);
         }
     }
 }

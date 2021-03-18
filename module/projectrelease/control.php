@@ -59,23 +59,28 @@ class projectrelease extends control
      * Browse releases.
      *
      * @param  int    $projectID
+     * @param  int    $executionID
      * @param  string $type
      * @access public
      * @return void
      */
-    public function browse($projectID, $type = 'all')
+    public function browse($projectID = 0, $executionID = 0, $type = 'all')
     {
         $this->session->set('releaseList', $this->app->getURI(true));
         $execution = $this->loadModel('execution')->getById($this->session->PRJ);
-        commonModel::setAppObjectID('project', $projectID);
 
-        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->release->browse;
-        $this->view->position[] = $this->lang->release->browse;
-        $this->view->execution  = $execution;
-        $this->view->products   = $this->loadModel('product')->getProducts($this->session->PRJ);
-        $this->view->releases   = $this->projectrelease->getList($projectID, $type);
-        $this->view->projectID  = $projectID;
-        $this->view->type       = $type;
+        if($projectID) commonModel::setAppObjectID('project', $projectID);
+        if($executionID) commonModel::setAppObjectID('execution', $executionID);
+
+        $this->view->title       = $execution->name . $this->lang->colon . $this->lang->release->browse;
+        $this->view->position[]  = $this->lang->release->browse;
+        $this->view->execution   = $execution;
+        $this->view->products    = $this->loadModel('product')->getProducts($this->session->PRJ);
+        $this->view->releases    = $this->projectrelease->getList($projectID, $type);
+        $this->view->projectID   = $projectID;
+        $this->view->executionID = $executionID;
+        $this->view->type        = $type;
+        $this->view->from        = $this->app->openApp;
         $this->display();
     }
 

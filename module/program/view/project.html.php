@@ -45,7 +45,7 @@ js::set('browseType', $browseType);
         <?php if(isset($this->config->maxVersion)):?>
         <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
         <?php elseif($this->config->systemMode == 'new'):?>
-        <?php common::printLink('project', 'create', "mode=scrum&programID=$programID&from=program", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide"');?>
+        <?php common::printLink('project', 'create', "mode=scrum&programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide"');?>
         <?php endif;?>
       </p>
     </div>
@@ -62,7 +62,7 @@ js::set('browseType', $browseType);
             <?php
               foreach($setting as $value)
               {
-                if($value->id == 'status' and $browseType !== 'all') $value->show = false;
+                if($value->id == 'projectStatus' and $browseType !== 'all') $value->show = false;
                 if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
               }
             ?>

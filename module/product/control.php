@@ -321,15 +321,7 @@ class product extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        if($programID)
-        {
-            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
-            commonModel::setAppObjectID('program', $programID);
-        }
-        else
-        {
-            $this->lang->product->switcherMenu = $this->product->getSwitcher();
-        }
+        if($programID) commonModel::setAppObjectID('program', $programID);
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
@@ -869,7 +861,7 @@ class product extends control
         {
             $executionsName = "executions[$number]";
             $executions     = empty($executions) ? array('' => '') : $executions;
-            die(html::select($executionsName, $executions, '', "class='form-control' onchange='loadProjectBuilds($productID, this.value, $number)'"));
+            die(html::select($executionsName, $executions, '', "class='form-control' onchange='loadExecutionBuilds($executionID, this.value, $number)'"));
         }
     }
 

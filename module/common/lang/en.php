@@ -348,7 +348,7 @@ $lang->execution->menu->qa       = array('link' => 'Bug|execution|qa|executionID
 $lang->execution->menu->repo     = array('link' => 'Repo|repo|browse|projectID=%s');
 $lang->execution->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=execution&objectID=%s&from=execution', 'subModule' => 'doc');
 $lang->execution->menu->build    = array('link' => 'Build|execution|build|executionID=%s', 'subModule' => 'build');
-$lang->execution->menu->release  = array('link' => 'Release|projectrelease|browse|project=%s');
+$lang->execution->menu->release  = array('link' => 'Release|projectrelease|browse|projectID=0&executionID=%s', 'subModule' => 'projectrelease');
 $lang->execution->menu->action   = array('link' => 'Dynamics|execution|dynamic|executionID=%s');
 $lang->execution->menu->setting  = array('link' => 'Settings|execution|view|executionID=%s', 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
 
@@ -529,7 +529,7 @@ $lang->admin->menu->custom    = array('link' => 'Custom|custom|index', 'subModul
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => 'Message|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => 'System|backup|index', 'subModule' => 'cron,backup,action');
+$lang->admin->menu->system    = array('link' => 'System|backup|index', 'subModule' => 'cron,backup,action,search');
 
 $lang->subject = new stdclass();
 $lang->subject->menu = new stdclass();
@@ -930,6 +930,6 @@ $lang->projectstory->menu       = new stdclass();
 $lang->stakeholder->menu = $lang->scrum->setMenu;
 
 $lang->nc->menu = $lang->auditplan->menu;
-$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'project', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage');
+$lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'project', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage', 'entry', 'jenkins');
 
 include (dirname(__FILE__) . '/menuOrder.php');

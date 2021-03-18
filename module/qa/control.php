@@ -17,19 +17,22 @@ class qa extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'auto', $productID = 0)
+    public function index($locate = 'auto', $productID = 0, $projectID = 0)
     {
-        $this->products = $this->loadModel('product')->getProductPairsByProject($this->projectID, 'noclosed');
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=qa&moduleGroup=' . $this->lang->navGroup->qa . '&activeMenu=index')));
+        if($this->app->openApp == 'qa') $this->lang->noMenuModule[] = 'qa';
+
+        $products = $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
+        if(empty($products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=qa&moduleGroup=' . $this->lang->navGroup->qa . '&activeMenu=index')));
         if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
 
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $products);
         $branch    = (int)$this->cookie->preBranch;
-        $this->qa->setMenu($this->products, $productID, $branch);
+        $this->qa->setMenu($products, $productID, $branch);
+        commonModel::setAppObjectID('qa', $productID);
 
         $this->view->title      = $this->lang->qa->index;
         $this->view->position[] = $this->lang->qa->index;
-        $this->view->products   = $this->products;
+        $this->view->products   = $products;
         $this->display();
     }
 }

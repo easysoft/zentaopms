@@ -9,7 +9,7 @@ $programsPinYin = common::convert2Pinyin($programNames);
   <div class="table-col col-left">
     <div class='list-group'>
     <?php
-    echo $this->program->getTreeMenu();
+    echo $this->program->getTreeMenu(0, 'program', '', $module, $method);
     ?>
     </div>
     <div class="col-footer">
@@ -23,7 +23,7 @@ $programsPinYin = common::convert2Pinyin($programNames);
 .tree li.has-list.open:before {border-left: none;}
 #programTree li {padding: 0 0 0 8px;}
 #programTree li.has-list {padding-left: 20px;}
-#programTree li > a {display: block; padding: 5px 0; border-radius: 2px; padding-left: 6px; height: 30px;}
+#programTree li > a {display: block; padding: 6px 0; border-radius: 2px; padding-left: 6px; height: 30px;}
 #programTree li > a > span {display: inline-block;}
 #programTree li > a > span + span {margin-left: 8px;}
 #programTree li.selected > a {background-color: #E8F3FC;}
