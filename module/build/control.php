@@ -19,14 +19,19 @@ class build extends control
      * @access public
      * @return void
      */
-    public function create($executionID, $productID = 0)
+    public function create($executionID = 0, $productID = 0, $projectID = 0)
     {
-        /* Create execution if no execution. */
-        if($executionID == 0) die(js::locate($this->createLink('execution', 'create'), 'parent'));
+        if($this->app->openApp == 'project')
+        {
+            commonModel::setAppObjectID('project', $projectID);
+            $executions  = $this->loadModel('execution')->getPairs($projectID);
+            $executionID = key($executions);
+        }
 
         if(!empty($_POST))
         {
-            $buildID = $this->build->create($executionID);
+            $executionID = $this->post->execution;
+            $buildID     = $this->build->create($executionID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
 
@@ -44,23 +49,19 @@ class build extends control
         $this->session->set('buildCreate', $this->app->getURI(true));
         $execution = $this->execution->getByID($executionID);
 
-        /* Set menu. */
-        $executions = $this->execution->getPairs($execution->project);
-        $this->execution->setMenu($executions, $executionID);
-
         $productGroups = $this->execution->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
         $products      = array();
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->build->create;
-        $this->view->position[] = html::a($this->createLink('execution', 'task', "executionID=$executionID"), $execution->name);
         $this->view->position[] = $this->lang->build->create;
 
         $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
         $this->view->branches      = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->executionID   = $executionID;
         $this->view->products      = $products;
+        $this->view->executions    = isset($executions) ? $executions : array();
         $this->view->lastBuild     = $this->build->getLast($executionID);
         $this->view->productGroups = $productGroups;
         $this->view->users         = $this->user->getPairs('nodeleted|noclosed');

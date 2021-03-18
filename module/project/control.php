@@ -676,6 +676,68 @@ class project extends control
     }
 
     /**
+     * Browse builds of a project.
+     *
+     * @param  string $type      all|product|bysearch
+     * @param  int    $param
+     * @access public
+     * @return void
+     */
+    public function build($projectID = 0, $type = 'all', $param = 0)
+    {
+        /* Load module and get project. */
+        $this->loadModel('build');
+        $project   = $this->project->getByID($projectID);
+
+        /* Get products' list. */
+        $products = $this->project->getProducts($projectID, false);
+        $products = array('' => '') + $products;
+
+        /* Build the search form. */
+        $type      = strtolower($type);
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
+
+        $executions = $this->execution->getByProject($projectID, 'all', '', true);
+        $this->config->build->search['fields']['execution'] = $this->project->lang->executionCommon;
+        $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
+
+        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project');
+
+        if($type == 'bysearch')
+        {
+            $builds = $this->build->getProjectBuildsBySearch((int)$projectID, (int)$param);
+        }
+        else
+        {
+            $builds = $this->build->getProjectBuilds((int)$projectID, $type, $param);
+        }
+
+        /* Set project builds. */
+        $projectBuilds = array();
+        if(!empty($builds))
+        {
+            foreach($builds as $build) $projectBuilds[$build->product][] = $build;
+        }
+
+        /* Header and position. */
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->execution->build;
+        $this->view->position[] = $this->lang->execution->build;
+
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->buildsTotal   = count($builds);
+        $this->view->projectBuilds = $projectBuilds;
+        $this->view->product       = $type == 'product' ? $param : 'all';
+        $this->view->projectID     = $projectID;
+        $this->view->project       = $project;
+        $this->view->products      = $products;
+        $this->view->executions    = $executions;
+        $this->view->type          = $type;
+
+        $this->display();
+    }
+
+    /**
      * Project manage view.
      *
      * @param  int    $groupID
