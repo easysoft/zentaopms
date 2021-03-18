@@ -1182,7 +1182,10 @@ class execution extends control
     {
         if($this->app->openApp == 'project')
         {
-            commonModel::setAppObjectID('project', $projectID);
+            $project = $this->project->getByID($projectID);
+            $model   = $project->model;
+            $this->lang->project->menu = $this->lang->menu->$model;
+            commonModel::setAppobjectID('project', $projectID);
         }
 
         $this->app->loadLang('program');
@@ -1299,6 +1302,7 @@ class execution extends control
         $this->view->copyExecutionID = $copyExecutionID;
         $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->users           = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->from            = $this->app->openApp;
         $this->display();
     }
 

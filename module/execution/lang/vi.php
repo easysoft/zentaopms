@@ -10,12 +10,17 @@
  * @link  http://www.zentao.net
  */
 /* Fields. */
+$lang->executionCommon           = $lang->executionCommon;
 $lang->execution->common         = $lang->executionCommon;
 $lang->execution->allExecutions  = 'Tất cả ' . $lang->executionCommon;
 $lang->execution->id             = 'ID '.$lang->executionCommon;
 $lang->execution->type           = 'Loại';
 $lang->execution->name           = "Tên {$lang->executionCommon}";
 $lang->execution->code           = 'Mã';
+$lang->execution->project        = 'Project';
+$lang->execution->execName       = 'Execution Name';
+$lang->execution->execCode       = 'Execution Code';
+$lang->execution->execType       = 'Execution Type';
 $lang->execution->statge         = 'Giai đoạn';
 $lang->execution->pri            = 'Ưu tiên';
 $lang->execution->openedBy       = 'Mở bởi';
@@ -35,14 +40,15 @@ $lang->execution->workHourUnit   = 'H';
 $lang->execution->totalHours     = 'Giờ khả dụng';
 $lang->execution->totalDays      = 'Ngày khả dụng';
 $lang->execution->status         = 'Tình trạng';
+$lang->execution->execStatus     = 'Status';
 $lang->execution->subStatus      = 'Tình trạng con';
 $lang->execution->desc           = 'Mô tả';
+$lang->execution->execDesc       = 'Description';
 $lang->execution->owner          = 'Sở hữu';
 $lang->execution->PO             = "Sở hữu {$lang->executionCommon}";
 $lang->execution->PM             = "Quản lý {$lang->executionCommon}";
 $lang->execution->QD             = 'Quản lý QA';
 $lang->execution->RD             = 'Quản lý phát hành';
-$lang->execution->qa             = 'QA';
 $lang->execution->release        = 'Phát hành';
 $lang->execution->acl            = 'Quyền truy cập';
 $lang->execution->teamname       = 'Tên đội nhóm';
@@ -69,6 +75,7 @@ $lang->execution->mine           = 'Của bạn: ';
 $lang->execution->other          = 'Khác:';
 $lang->execution->deleted        = 'Đã xóa';
 $lang->execution->delayed        = 'Tạm ngưng';
+$lang->execution->delayed        = 'Delayed';
 $lang->execution->product        = $lang->execution->products;
 $lang->execution->readjustTime   = "Điều chỉnh {$lang->executionCommon} Thời gian";
 $lang->execution->readjustTask   = 'Điều chỉnh nhiệm vụ Thời gian';
@@ -97,6 +104,10 @@ $lang->execution->endList[62]  = '2 tháng';
 $lang->execution->endList[93]  = '3 tháng';
 $lang->execution->endList[186] = '6 tháng';
 $lang->execution->endList[365] = '1 năm';
+
+$lang->execution->lifeTimeList['short'] = "Short-Term";
+$lang->execution->lifeTimeList['long']  = "Long-Term";
+$lang->execution->lifeTimeList['ops']   = "DevOps";
 
 $lang->team = new stdclass();
 $lang->team->account    = 'Người dùng';
@@ -148,6 +159,7 @@ $lang->execution->dynamic           = 'Lịch sử';
 $lang->execution->latestDynamic     = 'Lịch sử';
 $lang->execution->build             = 'Danh sách bản dựng';
 $lang->execution->testtask          = 'Kiểm thử';
+$lang->execution->testtask          = 'Request';
 $lang->execution->burn              = 'Burndown';
 $lang->execution->computeBurn       = 'Cập nhật';
 $lang->execution->burnData          = 'Dữ liệu Burndown';
@@ -178,6 +190,8 @@ $lang->execution->computeBurnAction = "Tính Burndown";
 $lang->execution->create            = "Tạo {$lang->executionCommon}";
 $lang->execution->copy              = "Sao chép {$lang->executionCommon}";
 $lang->execution->delete            = "Xóa {$lang->executionCommon}";
+$lang->execution->copy              = "Copy {$lang->executionCommon}";
+$lang->execution->delete            = "Delete {$lang->executionCommon}";
 $lang->execution->browse            = "{$lang->executionCommon} List";
 $lang->execution->list              = "{$lang->executionCommon} List";
 $lang->execution->edit              = "Sửa {$lang->executionCommon}";
@@ -244,8 +258,6 @@ $lang->execution->linkStoryByPlanTips = "Hành động này sẽ liên kết t�
 $lang->execution->selectExecution       = "Chọn {$lang->executionCommon}";
 $lang->execution->selectExecution     = "Select Execution";
 $lang->execution->beginAndEnd         = 'Thời gian';
-$lang->execution->begin               = 'Bắt đầu';
-$lang->execution->end                 = 'Kết thúc';
 $lang->execution->lblStats            = 'Chấm công';
 $lang->execution->stats               = 'Khả dụng: <strong>%s</strong>(giờ). Dự tính: <strong>%s</strong>(giờ). Đã làm: <strong>%s</strong>(giờ). Còn: <strong>%s</strong>(giờ).';
 $lang->execution->taskSummary         = "Tổng nhiệm vụ:<strong>%s</strong>. Đang đợi: <strong>%s</strong>. Đang làm: <strong>%s</strong>.  &nbsp;&nbsp;&nbsp;  Dự tính: <strong>%s</strong>(giờ). Đã làm: <strong>%s</strong>(giờ). Còn: <strong>%s</strong>(giờ).";
@@ -304,12 +316,7 @@ $lang->execution->fixFirstWithLeft          = 'Cập nhật cả giờ còn lạ
 $lang->execution->unfinishedExecution         = "This {$lang->executionCommon} has ";
 $lang->execution->unfinishedTask            = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug             = "[%s] unresolved bugs. ";
-
-$lang->execution->action = new stdclass();
-$lang->execution->action->opened  = '$date, được tạo bởi <strong>$actor</strong>  $extra.' . "\n";
-$lang->execution->action->managed = '$date, quản lý bởi <strong>$actor</strong> . $extra' . "\n";
-$lang->execution->action->edited  = '$date, edited by <strong>$actor</strong> . $extra' . "\n";
-$lang->execution->action->extra   = "{$lang->productCommon} liên kết này là %s.";
+$lang->execution->projectNotEmpty           = 'Project cannot be empty.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
