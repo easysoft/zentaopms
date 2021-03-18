@@ -14,6 +14,18 @@ function loadProductLines(rootID)
     });
 }
 
+/**
+ * Set parent program.
+ *
+ * @param  $parentProgram
+ * @access public
+ * @return void
+ */
+function setParentProgram(parentProgram)
+{
+    location.href = createLink('product', 'create', 'programID=' + parentProgram);
+}
+
 $('#program').change(function()
 {
     var programID = $(this).val();

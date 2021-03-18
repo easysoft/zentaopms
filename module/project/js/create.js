@@ -27,12 +27,12 @@ $(function()
 /**
  * Set parent program.
  *
+ * @param  $parentProgram
  * @access public
  * @return void
  */
-function setParentProgram()
+function setParentProgram(parentProgram)
 {
-    var parentProgram = $("#parent").val();
     location.href = createLink('project', 'create', 'model=' + model + '&programID=' + parentProgram);
 }
 
