@@ -28,7 +28,6 @@ class taskModel extends model
             return false;
         }
 
-        $this->getExtraRequiredFields();
         $executionID    = (int)$executionID;
         $taskIdList     = array();
         $taskFiles      = array();
@@ -47,7 +46,7 @@ class taskModel extends model
             ->setDefault('execution', $executionID)
             ->setDefault('estimate,left,story', 0)
             ->setDefault('status', 'wait')
-            ->setIF($this->config->systemMode == 'new', 'project', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new', 'project', $this->getProjectID($executionID))
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('estStarted', '0000-00-00')
@@ -280,8 +279,8 @@ class taskModel extends model
         $assignedTo = '';
 
         /* Get task data. */
-        $this->getExtraRequiredFields();
         $extendFields = $this->getFlowExtendFields();
+        $projectID    = $this->getProjectID($executionID);
         $data         = array();
         foreach($tasks->name as $i => $name)
         {
@@ -303,7 +302,7 @@ class taskModel extends model
             $data[$i]->pri        = $tasks->pri[$i];
             $data[$i]->estimate   = $tasks->estimate[$i];
             $data[$i]->left       = $tasks->estimate[$i];
-            $data[$i]->project    = $this->config->systemMode == 'new' ? $this->session->PRJ : 0;
+            $data[$i]->project    = $this->config->systemMode == 'new' ? $projectID : 0;
             $data[$i]->execution  = $executionID;
             $data[$i]->estStarted = empty($tasks->estStarted[$i]) ? '0000-00-00' : $tasks->estStarted[$i];
             $data[$i]->deadline   = empty($tasks->deadline[$i]) ? '0000-00-00' : $tasks->deadline[$i];
@@ -779,8 +778,6 @@ class taskModel extends model
      */
     public function update($taskID)
     {
-        $this->getExtraRequiredFields();
-
         $oldTask = $this->getByID($taskID);
         if($this->post->estimate < 0 or $this->post->left < 0 or $this->post->consumed < 0)
         {
@@ -1872,6 +1869,11 @@ class taskModel extends model
         return $this->processTask($task);
     }
 
+    public function getProjectID($executionID = 0)
+    {
+        return $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+    }
+
     /**
      * Get task list.
      *
@@ -2534,7 +2536,7 @@ class taskModel extends model
 
         $datas = $this->processData4Report($tasks, '', 'execution');
 
-        $executions = $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'all');
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
         foreach($datas as $executionID => $data)
         {
             $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
@@ -3249,22 +3251,5 @@ class taskModel extends model
             if(isset($users[$member->account])) $members[$member->account] = $users[$member->account];
         }
         return $members;
-    }
-
-    /**
-     * Get additional required fields.
-     *
-     * @access public
-     * @return void
-     */
-    public function getExtraRequiredFields()
-    {
-        /* Add required fields to waterfall execution. */
-        $execution = $this->loadModel('project')->getByID($this->session->PRJ);
-        if(!empty($execution) && $execution->model == 'waterfall')
-        {
-            $this->config->task->create->requiredFields .= ',estStarted,deadline';
-            $this->config->task->edit->requiredFields   .= ',estStarted,deadline';
-        }
     }
 }
