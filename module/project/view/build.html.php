@@ -75,7 +75,7 @@
             <?php
             if(common::hasPriv('build', 'linkstory') and common::hasPriv('build', 'view') and common::canBeChanged('build', $build))
             {
-                echo html::a($this->createLink('build', 'view', "buildID=$build->id&type=story&link=true"), "<i class='icon icon-link'></i>", '', "class='btn' title='{$lang->build->linkStory}'");
+                echo html::a($this->createLink('build', 'view', "buildID=$build->id&type=story&link=true"), "<i class='icon icon-link'></i>", '', "class='btn' title='{$lang->build->linkStory}' data-app='project'");
             }
             common::printIcon('testtask', 'create', "product=$build->product&project={$build->execution}&build=$build->id", $build, 'list', 'bullhorn', '', '', '', "data-app='execution'");
             $lang->project->bug = $lang->execution->viewBug;
