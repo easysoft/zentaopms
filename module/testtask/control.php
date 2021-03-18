@@ -186,7 +186,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function create($productID, $executionID = 0, $build = 0)
+    public function create($productID, $executionID = 0, $build = 0, $projectID = 0)
     {
         if(!empty($_POST))
         {
@@ -200,7 +200,6 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
-        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->PRJ;
         $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
