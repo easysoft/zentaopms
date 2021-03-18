@@ -34,12 +34,8 @@ class projectModel extends model
     {
         echo(js::alert($this->lang->project->accessDenied));
 
-        if(!$this->server->http_referer) die(js::locate(helper::createLink('project', 'browse')));
-
-        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('project', 'browse')));
-
-        die(js::locate('back'));
+        unset($_SESSION['PRJ']);
+        die(js::locate(helper::createLink('project', 'index')));
     }
 
     /**
