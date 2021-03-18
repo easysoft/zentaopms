@@ -1181,6 +1181,11 @@ class execution extends control
      */
     public function create($productID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $projectID = 0)
     {
+        if($this->app->openApp == 'project')
+        {
+            commonModel::setAppobjectID('project', $projectID);
+        }
+
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
