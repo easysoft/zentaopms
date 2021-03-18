@@ -37,7 +37,7 @@ class story extends control
      * @param  int    $branch
      * @param  int    $moduleID
      * @param  int    $storyID
-     * @param  int    $executionID
+     * @param  int    $objectID  projectID|executionID
      * @param  int    $bugID
      * @param  int    $planID
      * @param  int    $todoID
@@ -46,29 +46,11 @@ class story extends control
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
-        commonModel::setAppObjectID('product', $productID);
-
         $this->story->replaceURLang($type);
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
-
-        if($executionID)
-        {
-            $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
-            if($execution->type == 'project')
-            {
-                $this->app->rawModule = 'projectstory';
-                $this->lang->navGroup->projectstory = 'project';
-                $this->lang->product->menu = $this->lang->menu->{$execution->model};
-            }
-            else
-            {
-                $this->app->rawModule = 'execution';
-                $this->lang->navGroup->story = 'execution';
-            }
-            $this->view->execution = $execution;
-        }
+        commonModel::setAppObjectID($this->app->openApp, $this->app->openApp == 'product' ? $productID : $objectID);
 
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -845,26 +827,9 @@ class story extends control
 
         /* Set the menu. */
         $from = $this->app->openApp;
-        if($from == 'project')
+        if($from == 'execution' or $from == 'project')
         {
-            $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
-            $this->lang->product->menu = $this->lang->menu->{$project->model};
-            $this->execution->setMenu($this->execution->getPairs($this->session->PRJ, 'all', 'nodeleted'), $project->id);
-
-            /* If status is done, can not create task from story. */
-            $execution = $this->execution->getById($param);
-            if($execution->status == 'done') $from = '';
-        }
-        else
-        {
-            $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($product->id);
-
-            if($this->app->rawModule == 'projectstory')
-            {
-                $project = $this->dao->findById((int)$this->session->PRJ)->from(TABLE_PROJECT)->fetch();
-                $this->lang->product->menu = $this->lang->menu->{$project->model};
-            }
+            commonModel::setAppObjectID($from, $param);
         }
 
         $this->executeHooks($storyID);
