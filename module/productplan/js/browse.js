@@ -1,5 +1,5 @@
 $(document).on('click', '.task-toggle', function(e)
-{   
+{
     var $toggle = $(this);
     var id = $(this).data('id');
     var isCollapsed = $toggle.toggleClass('collapsed').hasClass('collapsed');
@@ -24,7 +24,7 @@ $(function()
     {
         var PRJID  = $('#project').val();
         var planID = $('#planID').val();
-        parent.location.href = createLink('project', 'create', 'productID=' + productID + '&projectID=&copyProjectID=&planID=' + planID, '', '', PRJID);
+        parent.location.href = createLink('execution', 'create', 'productID=' + productID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&projectID=' + PRJID, '', '');
     });
 });
 $(document).on('click', 'td.content .more', function(e)

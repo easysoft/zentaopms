@@ -48,7 +48,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->project;?></th>
-          <td class="col-main"><?php echo html::select("project", $allProjects, '', "class='form-control chosen' required onchange='loadBranches(this)'");?></td>
+          <td class="col-main"><?php echo html::select("project", $allProjects, $projectID, "class='form-control chosen' required onchange='refreshPage(this.value)'");?></td>
           <td></td><td></td>
         </tr>
         <tr>

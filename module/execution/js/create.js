@@ -57,3 +57,14 @@ function showLifeTimeTips()
     }
 }
 
+/**
+ * Refresh page.
+ *
+ * @param  object $projectID
+ * @access public
+ * @return void
+ */
+function refreshPage(projectID)
+{
+    location.href = createLink('execution', 'create', 'productID=&executionID=&copyExecutionID=&planID=&confirm=no&projectID=' + projectID);
+}
