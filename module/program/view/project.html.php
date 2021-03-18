@@ -30,7 +30,7 @@ js::set('browseType', $browseType);
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(isset($this->config->maxVersion)):?>
-    <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->program->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php elseif($this->config->systemMode == 'new'):?>
     <?php common::printLink('project', 'create', "mode=scrum&programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
     <?php endif;?>
@@ -56,13 +56,13 @@ js::set('browseType', $browseType);
         $setting = $this->datatable->getSetting('program');
       ?>
       <table class='table has-sort-head'>
-      <?php $canBatchEdit = common::hasPriv('program', 'PRJBatchEdit');?>
+      <?php $canBatchEdit = common::hasPriv('project', 'batchEdit');?>
         <thead>
           <tr>
             <?php
               foreach($setting as $value)
               {
-                if($value->id == 'PRJStatus' and $browseType !== 'all') $value->show = false;
+                if($value->id == 'status' and $browseType !== 'all') $value->show = false;
                 if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
               }
             ?>
@@ -85,7 +85,7 @@ js::set('browseType', $browseType);
         <?php
         if($canBatchEdit)
         {
-            $actionLink = $this->createLink('program', 'PRJBatchEdit', "from=pgmproject&programID=$programID");
+            $actionLink = $this->createLink('project', 'batchEdit', "from=pgmproject&programID=$programID");
             $misc       = "data-form-action='$actionLink'";
             echo html::commonButton($lang->edit, $misc);
         }

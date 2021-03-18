@@ -127,14 +127,12 @@
                   <?php endforeach;?>
                 </div>
                 <?php endif;?>
-                <?php endforeach;?>
-                <?php endif;?>
               </td>
             </tr>
             <?php endforeach;?>
           </table>
         </td>
-     </tr>
+      </tr>
       <tr>
         <td colspan='2' class='form-actions text-center'>
           <?php echo html::submitButton();?>

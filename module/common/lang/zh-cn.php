@@ -133,6 +133,7 @@ list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
+if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> 项目集|$programModule|$programMethod|";
 $lang->mainNav->product = "<i class='icon icon-product'></i> 产品|$productModule|$productMethod|";
 if($config->systemMode == 'new')
 {
@@ -149,7 +150,6 @@ $lang->mainNav->doc     = '<i class="icon icon-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = "<i class='icon icon-statistic'></i> 统计|report|productSummary|";
 $lang->mainNav->system  = '<i class="icon icon-group"></i> 组织|my|team|';
 $lang->mainNav->admin   = '<i class="icon icon-cog-outline"></i> 后台|admin|index|';
-if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> 项目集|$programModule|$programMethod|";
 
 $lang->dividerMenu = ',qa,report,admin,';
 

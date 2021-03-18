@@ -30,7 +30,7 @@
       ?>
       <tr>
         <td class='c-id-xs'><?php echo sprintf('%03d', $issue->id);?></td>
-        <td class='c-name' title='<?php echo $issue->title?>'><?php echo html::a($this->createLink('issue', 'view', "issueID=$issue->id", '', '', $issue->PRJ), $issue->title)?></td>
+        <td class='c-name' title='<?php echo $issue->title?>'><?php echo html::a($this->createLink('issue', 'view', "issueID=$issue->id", '', '', $issue->project), $issue->title)?></td>
         <?php if($longBlock):?>
         <td class='c-pri'><?php echo zget($lang->issue->priList, $issue->pri)?></td>
         <td class='c-severity'><?php echo zget($lang->issue->severityList, $issue->severity)?></td>

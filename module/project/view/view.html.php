@@ -91,7 +91,7 @@
       <div class="btn-toolbar">
         <?php
         $params = "project=$project->id";
-        common::printBack(inlink('prjbrowse'));
+        common::printBack(inlink('browse'));
         if(!$project->deleted)
         {
             echo "<div class='divider'></div>";

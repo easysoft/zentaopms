@@ -32,7 +32,7 @@
         <div class="col-4 tile">
           <div class="overview-title"><i class="icon-program-group icon-group"></i> <?php echo $lang->block->totalPeople;?></div>
           <div class="tile-amount">
-          <?php echo $totalData[$projectID]->teamCount ? html::a($this->createLink('program', 'prjmanageMembers', 'projectID=' . $projectID), $totalData[$projectID]->teamCount) : 0;?>
+          <?php echo $totalData[$projectID]->teamCount ? html::a($this->createLink('project', 'manageMembers', 'projectID=' . $projectID), $totalData[$projectID]->teamCount) : 0;?>
           </div>
         </div>
         <div class="col-4 tile">

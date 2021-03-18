@@ -192,9 +192,9 @@ $lang->project->childLongTime          = "If a child as long-term projects, the 
 $lang->project->readjustTime           = 'Change the project begin&end date.';
 $lang->project->notAllowRemoveProducts = 'The story of this product is linked with the project. Unlink it before doing any action.';
 
-$lang->project->PRJProgramTitle['0']    = 'Hide';
-$lang->project->PRJProgramTitle['base'] = 'Base-level project only';
-$lang->project->PRJProgramTitle['end']  = 'End-level project only';
+$lang->project->programTitle['0']    = 'Hide';
+$lang->project->programTitle['base'] = 'Base-level project only';
+$lang->project->programTitle['end']  = 'End-level project only';
 
 $lang->project->accessDenied      = 'Access denied to this project';
 $lang->project->chooseProgramType = 'Select management type';
