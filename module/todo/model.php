@@ -38,6 +38,14 @@ class todoModel extends model
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
+        if($todo->type != 'custom')
+        {
+            $type   = $todo->type;
+            $object = $this->loadModel($type)->getByID($this->post->$type);
+            if(isset($object->name))  $todo->name = $object->name;
+            if(isset($object->title)) $todo->name = $object->title;
+        }
+
         if($todo->end < $todo->begin)
         {
             dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
@@ -499,8 +507,8 @@ class todoModel extends model
      * @access public
      * @return object
      */
-    public function getByList($todoIDList = 0) 
-    {    
+    public function getByList($todoIDList = 0)
+    {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->beginIF($todoIDList)->where('id')->in($todoIDList)->fi()
             ->fetchAll('id');
@@ -698,9 +706,9 @@ class todoModel extends model
     }
 
     /**
-     * Assign todo. 
-     * 
-     * @param  int    $todoID 
+     * Assign todo.
+     *
+     * @param  int    $todoID
      * @access public
      * @return bool
      */
@@ -722,8 +730,8 @@ class todoModel extends model
 
     /**
      * Get todo count.
-     * 
-     * @param  string $account 
+     *
+     * @param  string $account
      * @access public
      * @return int
      */
