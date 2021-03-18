@@ -22,7 +22,7 @@
 .table td.has-child > .plan-toggle > .icon:before {text-align: left;}
 .table td.has-child > .plan-toggle.collapsed > .icon {-ms-transform:rotate(90deg); -moz-transform:rotate(90deg); -o-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform: rotate(90deg);}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
-.hours {text-align: right;}
+.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
 </style>
 <div id='mainMenu' class='clearfix'>
@@ -67,11 +67,11 @@
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $from == 'execution' ? $lang->execution->execName : $lang->execution->name);?></th>
           <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
-          <th class='w-90px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
-          <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
-          <th class='w-40px'><?php echo $lang->execution->totalEstimate;?></th>
-          <th class='w-40px'><?php echo $lang->execution->totalConsumed;?></th>
-          <th class='w-40px'><?php echo $lang->execution->totalLeft;?></th>
+          <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
+          <th class='w-100px'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
+          <th class='w-60px text-center'><?php echo $lang->execution->totalEstimate;?></th>
+          <th class='w-60px text-center'><?php echo $lang->execution->totalConsumed;?></th>
+          <th class='w-60px text-center'><?php echo $lang->execution->totalLeft;?></th>
           <th class='w-60px'><?php echo $lang->execution->progress;?></th>
           <th class='w-100px'><?php echo $lang->execution->burn;?></th>
         </tr>
