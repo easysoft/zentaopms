@@ -407,10 +407,12 @@ class programModel extends model
      * @param  int    $programID
      * @param  string $from
      * @param  string $vars
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return string
      */
-    public function getTreeMenu($programID = 0, $from = 'program', $vars = '')
+    public function getTreeMenu($programID = 0, $from = 'program', $vars = '', $moduleName = '', $methodName = '')
     {
         $programMenu = array();
         $query = $this->dao->select('*')->from(TABLE_PROJECT)
@@ -430,7 +432,7 @@ class programModel extends model
 
         while($program = $stmt->fetch())
         {
-            $link = $from == 'program' ? helper::createLink('program', 'product', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
+            $link = $from == 'program' ? helper::createLink($moduleName, $methodName, "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
             $linkHtml = html::a($link, html::icon($this->lang->icons[$program->type], 'icon icon-sm text-muted') . ' ' . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
