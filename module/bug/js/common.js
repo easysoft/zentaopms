@@ -272,7 +272,7 @@ function loadProductExecutions(productID, projectID = 0)
     $('#executionIdBox').load(link, function()
     {
         $(this).find('select').chosen();
-        if(typeof(bugExecution) == 'string') $('#executionIdBox').prepend("<span class='input-group-addon' style='border-left-width: 1px;'>" + bugExecution + "</span>");
+        if(typeof(bugExecution) == 'string') $('#executionIdBox').prepend("<span class='input-group-addon' style='border-left-width: 0px;'>" + bugExecution + "</span>");
         if(required) $(this).addClass('required');
     });
 }
