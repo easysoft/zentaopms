@@ -45,7 +45,7 @@ $lang->build->unlinkBug     = 'Unlink Bug';
 $lang->build->stories       = "Finished {$lang->SRCommon}";
 $lang->build->bugs          = 'Resolved Bugs';
 $lang->build->generatedBugs = 'Reported Bugs';
-$lang->build->noProduct     = " <span style='color:red'>This {$lang->executionCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
+$lang->build->noProduct     = " <span id='noProduct' style='color:red'>This {$lang->executionCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s' data-app='%s'> link {$lang->productCommon}</a></span>";
 $lang->build->noBuild       = 'No builds yet.';
 
 $lang->build->notice = new stdclass();
