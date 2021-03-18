@@ -685,6 +685,8 @@ class project extends control
         $this->loadModel('build');
         $project   = $this->project->getByID($projectID);
 
+        $this->session->set('buildList', $this->app->getURI(true));
+
         /* Get products' list. */
         $products = $this->project->getProducts($projectID, false);
         $products = array('' => '') + $products;

@@ -20,6 +20,6 @@ $(function()
  */
 function changeProduct(productID)
 {
-    link = createLink('project', 'build', 'type=product&param=' + productID);
+    link = createLink('project', 'build', 'projectID=' + projectID + '&type=product&param=' + productID);
     location.href = link;
 }
