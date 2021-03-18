@@ -29,7 +29,7 @@ $isQa        = $app->openApp == 'qa';
         <?php if($isProject)   echo isset($lang->project->switcherMenu) ? $lang->project->switcherMenu : '';;?>
         <?php endif;?>
       </div>
-      <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>
+      <nav id='navbar'><?php commonModel::printMainMenu($app->rawModule, $app->rawMethod);?></nav>
     </div>
   </div>
   <?php if(!in_array($app->rawModule, $lang->noMenuModule)):?>
