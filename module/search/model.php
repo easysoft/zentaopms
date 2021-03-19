@@ -578,13 +578,13 @@ class searchModel extends model
             {
                 if(!isset($this->config->objectTables[$record->objectType])) continue;
                 $table       = $this->config->objectTables[$record->objectType];
-                $executionID = $this->dao->select('execution')->from($table)->where('id')->eq($record->objectID)->fetch('execution');
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $executionID);
+                $projectID = $this->dao->select('project')->from($table)->where('id')->eq($record->objectID)->fetch('project');
+                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $projectID);
             }
             elseif($module == 'issue')
             {
-                $issue             = $this->dao->select('id,execution,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
-                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->execution);
+                $issue             = $this->dao->select('id,project,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
+                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
                 $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
             }
             elseif($module == 'story')
