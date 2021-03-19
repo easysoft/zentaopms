@@ -1453,14 +1453,11 @@ class story extends control
 
 
         $this->lang->navGroup->story = $from;
-        if($from == 'project')
+        $moduleIndex = array_search('story', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        if($from == 'qa')
         {
-            $moduleIndex = array_search('story', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        }
-        else
-        {
-            $this->app->loadConfig('qa');
+            $this->loadModel('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
 
