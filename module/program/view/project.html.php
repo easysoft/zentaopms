@@ -16,7 +16,7 @@ js::set('programID', $programID);
 js::set('browseType', $browseType);
 ?>
 <style>
-.project-type-label.label-outline {width: 47px;}
+.project-type-label.label-outline {width: 50px;}
 </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolBar pull-left">
