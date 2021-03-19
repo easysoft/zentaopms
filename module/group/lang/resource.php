@@ -225,6 +225,7 @@ if($config->systemMode == 'new')
     $lang->resource->project->manageProducts    = 'manageProducts';
     $lang->resource->project->view              = 'view';
     $lang->resource->project->dynamic           = 'dynamic';
+    $lang->resource->project->build             = 'build';
 
     $lang->project->methodOrder[0]   = 'index';
     $lang->project->methodOrder[5]   = 'browse';
@@ -253,6 +254,7 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[120] = 'manageProducts';
     $lang->project->methodOrder[125] = 'view';
     $lang->project->methodOrder[130] = 'dynamic';
+    $lang->project->methodOrder[135] = 'build';
 
     /* Personnel . */
     $lang->resource->personnel = new stdclass();
@@ -283,10 +285,6 @@ if($config->systemMode == 'new')
     $lang->projectstory->methodOrder[20] = 'linkStory';
     $lang->projectstory->methodOrder[25] = 'unlinkStory';
     $lang->projectstory->methodOrder[23] = 'importplanstories';
-
-    /* Release. */
-    $lang->resource->projectbuild = new stdclass();
-    $lang->resource->projectbuild->browse = 'browse';
 
     /* Release. */
     $lang->resource->projectrelease = new stdclass();
