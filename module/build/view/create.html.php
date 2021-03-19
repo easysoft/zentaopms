@@ -40,11 +40,10 @@
               ?>
             </div>
           </td>
-          <td></td>
           <?php else:?>
           <td>
             <div class='input-group'>
-              <?php printf($lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate"), $openApp);?>
+              <?php printf($lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), $openApp);?>
             </div>
           </td>
           <?php endif;?>

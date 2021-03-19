@@ -152,6 +152,7 @@ class testtask extends control
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
         $this->loadModel('testtask')->setUnitMenu($this->products, $productID);
+        $this->lang->testtask->menuOrder = $this->lang->testcase->menuOrder;
 
         /* Load pager. */
         if($browseType == 'newest') $recPerPage = '10';

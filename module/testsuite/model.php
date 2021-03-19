@@ -24,21 +24,7 @@ class testsuiteModel extends model
     public function setMenu($products, $productID)
     {
         $this->loadModel('product')->setMenu($products, $productID);
-        $selectHtml = $this->select($products, $productID, 'testsuite', 'browse');
-        if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
 
-        $pageNav     = '';
-        $pageActions = '';
-        $isMobile    = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-        }
-        $pageNav .= $selectHtml;
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
         foreach($this->lang->testsuite->menu as $key => $value)
         {
             if($this->config->global->flow == 'full' and $this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testsuite', $key, $productID);

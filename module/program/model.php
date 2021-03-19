@@ -372,7 +372,6 @@ class programModel extends model
      * Get program swapper.
      *
      * @param  int     $programID
-     * @param  bool    $active
      * @access private
      * @return string
      */

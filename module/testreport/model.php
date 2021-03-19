@@ -23,16 +23,7 @@ class testreportModel extends model
     public function setMenu($products, $productID, $branch = 0)
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'testreport', 'browse', $this->session->PRJ, $branch);
 
-        /* Remove branch. */
-        if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
-
-        $pageNav     = $selectHtml;
-        $pageActions = '';
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
         foreach($this->lang->testtask->menu as $key => $value)
         {
             if($this->lang->navGroup->testreport != 'qa') $this->loadModel('qa')->setSubMenu('testreport', $key, $productID);

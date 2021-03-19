@@ -28,20 +28,7 @@ class testcaseModel extends model
     public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc')
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'case');
-        $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch, $moduleID, 'case');
 
-        $pageNav     = '';
-        $pageActions = '';
-        $isMobile    = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-        }
-        $pageNav .= $selectHtml;
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
         foreach($this->lang->testcase->menu as $key => $menu)
         {
             if($this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);

@@ -636,11 +636,6 @@ class treeModel extends model
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
-        $manage = $userFunc[1] == 'createBugLink' ? true : false;
-
-        /* if not manage, only get linked modules and ignore others. */
-        if(!$manage) $executionModules = $this->getBugTreeModules($rootID, true);
-
         /* Get module according to product. */
         $productNum = count($products);
         foreach($products as $id => $product)
