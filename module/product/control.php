@@ -814,10 +814,14 @@ class product extends control
      */
     public function ajaxGetProducts($executionID)
     {
-        $products  = array('' => '');
-        $products += $this->product->getProductPairsByProject($executionID);
+        $this->loadModel('build');
+        $products = $this->product->getProductPairsByProject($executionID);
+        if(empty($products))
+        {
+            die(printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate"), 'project'));
+        }
 
-        die(html::select('product', $products, '', "class='form-control' onchange='loadBranches(this.value)'"));
+        die(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required"));
     }
 
     /**

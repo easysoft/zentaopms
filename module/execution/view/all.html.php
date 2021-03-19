@@ -82,7 +82,7 @@
           <td class='c-id'>
             <?php if($canBatchEdit):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='executionIDList[<?php echo $execution->id;?>]' value='<?php echo $execution->id;?>' />
+              <input type='checkbox' name='executionIDList[<?php echo $execution->id;?>]' value='<?php echo $execution->id;?>' autocomplete='off' />
               <label></label>
             </div>
             <?php endif;?>

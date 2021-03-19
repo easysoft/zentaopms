@@ -348,7 +348,7 @@ class my extends control
     public function bug($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. load Lang. */
-        if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
         $this->app->loadLang('bug');
 
         /* Load pager. */
@@ -397,7 +397,7 @@ class my extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('testtaskList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
 
         $this->app->loadLang('testcase');
 
@@ -433,7 +433,7 @@ class my extends control
     public function testcase($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
-        if($this->app->viewType != 'json') $this->session->set('caseList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->loadModel('testcase');
         $this->loadModel('testtask');
 
@@ -478,7 +478,7 @@ class my extends control
     public function doc($type = 'openedbyme', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
-        if($this->app->viewType != 'json') $this->session->set('docList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('docList', $this->app->getURI(true), 'doc');
         $this->loadModel('doc');
 
         /* Load pager. */
@@ -521,8 +521,8 @@ class my extends control
         $this->loadModel('program');
         $this->app->loadLang('project');
 
-        $this->app->session->set('programList', $this->app->getURI(true));
-        $this->app->session->set('projectBrowse', $this->app->getURI(true));
+        $this->app->session->set('programList', $this->app->getURI(true), 'program');
+        $this->app->session->set('projectBrowse', $this->app->getURI(true), 'project');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);

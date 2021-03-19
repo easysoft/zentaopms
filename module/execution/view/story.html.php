@@ -47,7 +47,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php
-    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export' data-group='execution'");
+    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export' data-app='execution'");
 
     if(common::canModify('execution', $execution))
     {
@@ -60,8 +60,8 @@
             echo '</button>';
             echo "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
             $storyModuleID = (int)$this->cookie->storyModuleParam;
-            if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id"), $lang->story->create, '', "data-group='execution'") . '</li>';
-            if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id"), $lang->story->batchCreate, '', "data-group='execution'") . '</li>';
+            if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id"), $lang->story->create, '', "data-app='execution'") . '</li>';
+            if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id"), $lang->story->batchCreate, '', "data-app='execution'") . '</li>';
             echo '</ul>';
             echo '</div>';
         }
@@ -158,7 +158,7 @@
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
             <td class='cell-id'>
               <?php if($canBatchAction):?>
-              <?php echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$execution->id"), sprintf('%03d', $story->id), null, "data-group='execution'");?>
+              <?php echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$execution->id"), sprintf('%03d', $story->id), null, "data-app='execution'");?>
               <?php else:?>
               <?php printf('%03d', $story->id);?>
               <?php endif;?>
@@ -170,7 +170,7 @@
             <td class='c-name' title="<?php echo $story->title?>">
               <?php if(isset($branchGroups[$story->product][$story->branch])) echo "<span class='label label-outline label-badge'>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
               <?php if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";?>
-              <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color' data-group='execution'");?>
+              <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color' data-app='execution'");?>
             </td>
             <td class='c-user' title='<?php echo zget($users, $story->openedBy);?>'><?php echo zget($users, $story->openedBy);?></td>
             <td class='c-user' title='<?php echo zget($users, $story->assignedTo);?>'><?php echo zget($users, $story->assignedTo);?></td>

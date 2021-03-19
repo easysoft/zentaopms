@@ -221,7 +221,7 @@
             echo "</div>";
         }
 
-        if($from == 'project') common::printIcon('task', 'create', "execution=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'plus', '', 'showinonlybody');
+        if($from == 'execution') common::printIcon('task', 'create', "execution=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'plus', '', 'showinonlybody');
 
         echo $this->buildOperateMenu($story, 'view');
 

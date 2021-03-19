@@ -73,7 +73,9 @@ class build extends control
         $this->view->branches      = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->executionID   = $executionID;
         $this->view->products      = $products;
-        $this->view->executions    = isset($executions) ? $executions : array();
+        $this->view->projectID     = $projectID;
+        $this->view->executions    = $executions;
+        $this->view->openApp       = $this->app->openApp;
         $this->view->lastBuild     = $this->build->getLast($executionID);
         $this->view->productGroups = $productGroups;
         $this->view->users         = $this->user->getPairs('nodeleted|noclosed');

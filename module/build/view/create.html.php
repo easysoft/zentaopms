@@ -19,7 +19,7 @@
     </div>
     <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
       <table class='table table-form'>
-        <?php if(!empty($executions)):?>
+        <?php if($projectID != 0):?>
         <tr>
           <th><?php echo $lang->executionCommon;?></th>
           <td><?php echo html::select('execution', $executions, $executionID, "onchange='loadProducts(this.value);' class='form-control chosen' required");?></td>
@@ -42,8 +42,13 @@
           </td>
           <td></td>
           <?php else:?>
-          <td class='text-muted' colspan='2'><?php printf($lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate"));?></td>
+          <td>
+            <div class='input-group'>
+              <?php printf($lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate"), $openApp);?>
+            </div>
+          </td>
           <?php endif;?>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->build->name;?></th>
