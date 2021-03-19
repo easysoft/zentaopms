@@ -91,7 +91,7 @@ js::set('dittoNotice', $dittoNotice);
             <?php $disableHour = (isset($teams[$taskID]) or $tasks[$taskID]->parent < 0) ? "disabled='disabled'" : '';?>
             <?php
             $members      = array('' => '', 'ditto' => $this->lang->task->ditto);
-            $teamAccounts = array_keys($executionTeams[$tasks[$taskID]->execution]);
+            $teamAccounts = !empty($executionTeams[$tasks[$taskID]->execution]) ? array_keys($executionTeams[$tasks[$taskID]->execution]) : array();
             foreach($teamAccounts as $teamAccount) $members[$teamAccount] = $users[$teamAccount];
             $members['closed'] = 'Closed';
 

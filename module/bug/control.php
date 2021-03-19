@@ -382,7 +382,7 @@ class bug extends control
         $this->bug->setMenu($this->products, $productID, $branch);
 
         /* Init vars. */
-        $projectID   = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
+        $projectID   = $this->session->PRJ ? $this->session->PRJ : 0;
         $moduleID    = 0;
         $executionID = 0;
         $taskID      = 0;

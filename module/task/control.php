@@ -475,9 +475,13 @@ class task extends control
         /* The tasks of my. */
         else
         {
-            $this->lang->task->menu      = $this->lang->my->menu;
-            $this->lang->task->menuOrder = $this->lang->my->menuOrder;
+            /* Set my menu. */
             $this->loadModel('my')->setMenu();
+            $moduleIndex = array_search('task', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+            $this->lang->task->menu = $this->lang->my->workMenu;
+            $this->lang->my->menu->myWork['subModule'] = 'task';
+
             $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
             $this->view->title      = $this->lang->task->batchEdit;
             $this->view->users      = $this->loadModel('user')->getPairs('noletter');
