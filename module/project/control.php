@@ -389,7 +389,7 @@ class project extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $locateLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('view', "projectID=$projectID");
+            $locateLink = $this->session->projectBrowse ? $this->session->projectBrowse : inLink('view', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
             if($from == 'programProject') $locateLink = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
@@ -1289,7 +1289,7 @@ class project extends control
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            $locateLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('manageProducts', "projectID=$projectID");
+            $locateLink = $this->session->projectBrowse ? $this->session->projectBrowse : inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
             if($from == 'programproject') $locateLink = $this->session->programProject ? $this->session->programProject : inLink('programProject', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));

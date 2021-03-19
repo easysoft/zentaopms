@@ -34,7 +34,6 @@ class projectModel extends model
     {
         echo(js::alert($this->lang->project->accessDenied));
 
-        unset($_SESSION['PRJ']);
         die(js::locate(helper::createLink('project', 'index')));
     }
 
@@ -1570,7 +1569,7 @@ class projectModel extends model
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
-        $project = $this->getByID($this->session->PRJ);
+        $project = $this->getByID($projectID);
         if($project and $project->model == 'waterfall')
         {
             foreach($parents as $id => $execution)

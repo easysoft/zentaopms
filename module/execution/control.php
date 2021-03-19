@@ -1402,7 +1402,7 @@ class execution extends control
         $isSprint = true;
         if($this->config->systemMode == 'new')
         {
-            $project = $this->project->getById($this->session->PRJ);
+            $project = $this->project->getById($execution->project);
             if($project->model == 'scrum')
             {
                 unset($this->lang->execution->endList[62]);
@@ -1431,8 +1431,8 @@ class execution extends control
 
         $this->view->title                = $title;
         $this->view->position             = $position;
-        $this->view->executions             = $executions;
-        $this->view->execution              = $execution;
+        $this->view->executions           = $executions;
+        $this->view->execution            = $execution;
         $this->view->poUsers              = $poUsers;
         $this->view->pmUsers              = $pmUsers;
         $this->view->qdUsers              = $qdUsers;
@@ -1718,7 +1718,6 @@ class execution extends control
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->app->loadLang('program');
-        $this->session->PRJ = $execution->project;
 
         /* Execution not found to prevent searching for .*/
         if(!isset($this->executions[$execution->id])) $this->executions = $this->execution->getPairs($execution->execution, 'all', 'nocode');
@@ -2793,9 +2792,9 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $projectID = $from == 'project' ? $this->session->PRJ : 0;
+            $projectID = $from == 'project' ? $this->session->project : 0;
             $executionStats = $this->project->getStats($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
-            $users        = $this->loadModel('user')->getPairs('noletter');
+            $users = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)
             {
                 $execution->PM            = zget($users, $execution->PM);

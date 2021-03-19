@@ -182,7 +182,7 @@ $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
 $lang->personnel->menu->invest     = array('link' => "投入人员|personnel|invest|programID=%s");
 $lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|programID=%s");
-$lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|objectID=%s", 'alias' => 'addwhitelist');
+$lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|programID=%s", 'alias' => 'addwhitelist');
 
 /* Scrum menu. */
 $lang->product = new stdclass();
