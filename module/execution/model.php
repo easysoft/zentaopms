@@ -113,7 +113,7 @@ class executionModel extends model
         if($methodName == 'all') $label = $this->lang->execution->allExecutions;
         if($methodName == 'create' and $moduleName == 'execution') $label = $this->lang->execution->create;
 
-        foreach($this->lang->execution->viewMenu as $key => $menu) common::setMenuVars($this->lang->execution->viewMenu, $key, $executionID);
+        foreach($this->lang->execution->menu as $key => $menu) common::setMenuVars($this->lang->execution->menu, $key, $executionID);
         foreach($this->lang->execution->qaMenu as $key => $menu) common::setMenuVars($this->lang->execution->qaMenu, $key, $executionID);
 
         foreach($this->lang->execution->menu as $key => $menu)

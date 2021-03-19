@@ -44,12 +44,7 @@ class projectStory extends control
      */
     public function story($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->session->set('storyList', $this->app->getURI(true));
-
-        $this->lang->story->title             = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
-        $this->lang->story->createRequirement = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->createRequirement);
-        $this->lang->story->createStory       = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->createStory);
-        $this->lang->story->noStory           = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->noStory);
+        $this->session->set('storyList', $this->app->getURI(true), 'project');
 
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=project");
     }

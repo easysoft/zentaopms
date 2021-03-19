@@ -133,7 +133,7 @@ list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 /* Main menu. */
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
-$lang->mainNav->product = "<i class='icon icon-menu-product'></i> Product|$productModule|$productMethod|";
+$lang->mainNav->product = "<i class='icon icon-product'></i> Product|$productModule|$productMethod|";
 if($config->systemMode == 'new')
 {
     $lang->mainNav->project   = "<i class='icon icon-project'></i> Project|$projectModule|$projectMethod|";
@@ -192,7 +192,7 @@ $lang->product->homeMenu->list = array('link' => $lang->productCommon . '|produc
 
 $lang->product->menu = new stdclass();
 $lang->product->menu->dashboard   = array('link' => 'Dashboard|product|dashboard|productID=%s');
-if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+if($config->URAndSR) $lang->product->menu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->plan        = array('link' => "Plan|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->menu->release     = array('link' => "Release|release|browse|productID=%s", 'subModule' => 'release');
@@ -213,7 +213,7 @@ $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
 $lang->productplan = new stdclass();
 
-$lang->release->menu     = $lang->product->viewMenu;
+$lang->release->menu     = $lang->product->menu;
 $lang->branch->menu      = $lang->product->menu;
 $lang->productplan->menu = $lang->product->menu;
 
@@ -366,6 +366,12 @@ $lang->execution->subMenu->more = new stdclass();
 $lang->execution->subMenu->more->whitelist = array('link' => 'Whitelist|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
 $lang->execution->subMenu->more->action    = array('link' => 'Dynamics|execution|dynamic|executionID=%s');
 $lang->execution->subMenu->more->view      = array('link' => 'Overview|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+
+$lang->execution->qaMenu = new stdclass();
+$lang->execution->qaMenu->qa         = array('link' => '仪表盘|execution|qa|executionID=%s');
+$lang->execution->qaMenu->bug        = array('link' => 'Bug|execution|bug|executionID=%s');
+$lang->execution->qaMenu->testcase   = array('link' => '用例|execution|testcase|executionID=%s', 'alias' => 'create');
+$lang->execution->qaMenu->testtask   = array('link' => '测试单|execution|testtask|executionID=%s');
 
 $lang->execution->dividerMenu = ',execution,programplan,executionbuild,story,doc,other,';
 
