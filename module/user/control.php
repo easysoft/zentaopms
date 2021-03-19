@@ -63,8 +63,8 @@ class user extends control
         /* Set thie url to session. */
         $uri = $this->app->getURI(true);
         $this->session->set('todoList', $uri);
-        $this->session->set('bugList',  $uri);
-        $this->session->set('taskList', $uri);
+        $this->session->set('bugList',  $uri, 'qa');
+        $this->session->set('taskList', $uri, 'execution');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -114,7 +114,7 @@ class user extends control
     public function story($userID, $storyType = 'story', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        $this->session->set('storyList', $this->app->getURI(true));
+        $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -162,7 +162,7 @@ class user extends control
     public function task($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
-        $this->session->set('taskList', $this->app->getURI(true));
+        $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -206,7 +206,7 @@ class user extends control
     public function bug($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
-        $this->session->set('bugList', $this->app->getURI(true));
+        $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -263,7 +263,7 @@ class user extends control
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Save session. */
-        $this->session->set('testtaskList', $this->app->getURI(true));
+        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
 
         $this->app->loadLang('testcase');
 
@@ -301,7 +301,7 @@ class user extends control
     public function testcase($userID, $type = 'case2Him', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->app->loadLang('testcase');
 
         /* Load pager. */
@@ -362,7 +362,7 @@ class user extends control
     public function execution($userID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('projectList',  $uri);
+        $this->session->set('executionList', $uri, 'execution');
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
@@ -405,7 +405,7 @@ class user extends control
     public function issue($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('issueList',  $uri);
+        $this->session->set('issueList', $uri, 'project');
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
@@ -448,7 +448,7 @@ class user extends control
     public function risk($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('riskList',  $uri);
+        $this->session->set('riskList', $uri, 'project');
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
@@ -1094,17 +1094,18 @@ class user extends control
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Save session. */
-        $uri   = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('projectList',     $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
+        $uri = $this->app->getURI(true);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
