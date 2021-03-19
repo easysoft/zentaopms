@@ -382,19 +382,19 @@ $lang->qa->menu = new stdclass();
 
 $lang->qa->menu->index      = array('link' => '仪表盘|qa|index');
 $lang->qa->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto');
-$lang->qa->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'subModule' => 'testsuite,caselib', 'class' => 'dropdown dropdown-hover');
-$lang->qa->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testreport', 'class' => 'dropdown dropdown-hover');
+$lang->qa->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'subModule' => 'testcase,testsuite,caselib,story', 'class' => 'dropdown dropdown-hover');
+$lang->qa->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testreport,testtask', 'class' => 'dropdown dropdown-hover');
 $lang->qa->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 $lang->qa->subMenu = new stdclass();
 $lang->qa->subMenu->testcase = new stdclass();
 $lang->qa->subMenu->testcase->feature   = array('link' => '用例|testcase|browse|productID=%s', 'subModule' => 'testcase,tree,story,testtask');
 $lang->qa->subMenu->testcase->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'subModule' => 'testsuite');
-$lang->qa->subMenu->testcase->caselib   = array('link' => '用例库|caselib|browse|libID=0');
+$lang->qa->subMenu->testcase->caselib   = array('link' => '用例库|caselib|browse|libID=0', 'subModule' => 'caselib');
 
 $lang->qa->subMenu->testtask = new stdclass();
-$lang->qa->subMenu->testtask->testtask = array('link' => '测试单|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
-$lang->qa->subMenu->testtask->report   = array('link' => '报告|testreport|browse|productID=%s', 'alias' => 'view,edit');
+$lang->qa->subMenu->testtask->testtask = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testtask');
+$lang->qa->subMenu->testtask->report   = array('link' => '报告|testreport|browse|productID=%s', 'subModule' => 'testreport');
 
 $lang->qa->subMenu->automation = new stdclass();
 $lang->qa->subMenu->automation->browse      = array('link' => '介绍|automation|browse|productID=%s', 'alias' => '');

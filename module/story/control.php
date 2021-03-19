@@ -1451,17 +1451,17 @@ class story extends control
         $this->session->set('productList', $this->app->getURI(true));
         $products = $this->product->getPairs();
 
-
         $this->lang->navGroup->story = $from;
         $moduleIndex = array_search('story', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
         if($from == 'qa')
         {
             $this->loadModel('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
 
-        $this->lang->story->menu      = $this->lang->testcase->menu;
+        $this->lang->story->menu      = $this->lang->qa->subMenu->testcase;
         $this->lang->story->menuOrder = $this->lang->testcase->menuOrder;
         $this->loadModel('testcase')->setMenu($products, $productID);
 
