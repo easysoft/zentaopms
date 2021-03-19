@@ -267,6 +267,18 @@ class story extends control
             }
         }
 
+        /* Get block id of assinge to me. */
+        $blockID = 0;
+        if(isonlybody())
+        {
+            $blockID = $this->dao->select('id')->from(TABLE_BLOCK)
+                ->where('block')->eq('assingtome')
+                ->andWhere('module')->eq('my')
+                ->andWhere('account')->eq($this->app->user->account)
+                ->orderBy('order_desc')
+                ->fetch('id');
+        }
+
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
@@ -297,6 +309,7 @@ class story extends control
         $this->view->verify           = $verify;
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
+        $this->view->blockID          = $blockID;
         $this->view->URS              = $type == 'story' ? $this->story->getRequierements($productID) : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->view->type             = $type;

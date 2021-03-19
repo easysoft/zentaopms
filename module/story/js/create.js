@@ -21,3 +21,7 @@ function refreshPlan()
 {
     $('a.refresh').click();
 }
+
+$(window).unload(function(){
+    if(blockID) window.parent.refreshBlock($('#block' + blockID));
+});

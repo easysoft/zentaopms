@@ -455,6 +455,7 @@ class bug extends control
         {
             $builds  = $this->loadModel('build')->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,noterminate,nodone');
             $stories = $this->story->getExecutionStoryPairs($executionID);
+            if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         }
         else
         {
@@ -494,6 +495,18 @@ class bug extends control
         else
         {
             $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+        }
+
+        /* Get block id of assinge to me. */
+        $blockID = 0;
+        if(isonlybody())
+        {
+            $blockID = $this->dao->select('id')->from(TABLE_BLOCK)
+                ->where('block')->eq('assingtome')
+                ->andWhere('module')->eq('my')
+                ->andWhere('account')->eq($this->app->user->account)
+                ->orderBy('order_desc')
+                ->fetch('id');
         }
 
         /* Get executions. */
@@ -541,6 +554,7 @@ class bug extends control
         $this->view->type             = $type;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
+        $this->view->blockID          = $blockID;
         $this->view->color            = $color;
         $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
         $this->view->isStepsTemplate  = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;

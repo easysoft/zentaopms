@@ -12,6 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
+<?php js::set('blockID', $blockID); ?>
 <?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>

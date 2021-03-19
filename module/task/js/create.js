@@ -474,3 +474,7 @@ $('#modalTeam .btn').click(function()
         $('#estimate').val(time);
     })
 });
+
+$(window).unload(function(){
+    if(blockID) window.parent.refreshBlock($('#block' + blockID));
+});

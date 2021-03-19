@@ -192,6 +192,18 @@ class task extends control
         }
         $stories = $this->story->getExecutionStoryPairs($executionID, 0, 0, $moduleIdList, 'full', 'unclosed');
 
+        /* Get block id of assinge to me. */
+        $blockID = 0;
+        if(isonlybody())
+        {
+            $blockID = $this->dao->select('id')->from(TABLE_BLOCK)
+                ->where('block')->eq('assingtome')
+                ->andWhere('module')->eq('my')
+                ->andWhere('account')->eq($this->app->user->account)
+                ->orderBy('order_desc')
+                ->fetch('id');
+        }
+
         $title      = $execution->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $execution->name);
         $position[] = $this->lang->task->common;
@@ -214,6 +226,7 @@ class task extends control
         $this->view->stories          = $stories;
         $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         $this->view->members          = $members;
+        $this->view->blockID          = $blockID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
     }

@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
+<?php js::set('blockID', $blockID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
