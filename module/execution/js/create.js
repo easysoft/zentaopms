@@ -1,6 +1,6 @@
 function setCopyProject(executionID)
 {
-    location.href = createLink('execution', 'create', 'productID=&executionID=0&copyExecutionID=' + executionID);
+    location.href = createLink('execution', 'create', 'projectID=&executionID=0&copyExecutionID=' + executionID);
 }
 
 $(function()
@@ -66,5 +66,5 @@ function showLifeTimeTips()
  */
 function refreshPage(projectID)
 {
-    location.href = createLink('execution', 'create', 'productID=&executionID=&copyExecutionID=&planID=&confirm=no&projectID=' + projectID);
+    location.href = createLink('execution', 'create', 'projectID=' + projectID);
 }
