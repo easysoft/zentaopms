@@ -859,7 +859,7 @@ $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->index          = 'Index|project|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
-$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|project={PROJECT}', 'subModule' => 'story', 'alias' => 'story,track');
+$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|', 'subModule' => 'story', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
 $lang->menu->scrum->qa             = 'QA|qa|index';
 $lang->menu->scrum->ci             = 'Code|repo|browse';
