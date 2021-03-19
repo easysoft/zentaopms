@@ -47,6 +47,7 @@ $lang->execution->execDesc       = 'Description';
 $lang->execution->owner          = 'Sở hữu';
 $lang->execution->PO             = "Sở hữu {$lang->executionCommon}";
 $lang->execution->PM             = "Quản lý {$lang->executionCommon}";
+$lang->execution->execPM         = "Quản lý Execution";
 $lang->execution->QD             = 'Quản lý QA';
 $lang->execution->RD             = 'Quản lý phát hành';
 $lang->execution->release        = 'Phát hành';

@@ -47,6 +47,7 @@ $lang->execution->execDesc       = 'Description';
 $lang->execution->owner          = 'Owner';
 $lang->execution->PO             = "{$lang->executionCommon} Owner";
 $lang->execution->PM             = "{$lang->executionCommon} Manager";
+$lang->execution->execPM         = "Execution Manager";
 $lang->execution->QD             = 'Test Manager';
 $lang->execution->RD             = 'Release Manager';
 $lang->execution->release        = 'Release';

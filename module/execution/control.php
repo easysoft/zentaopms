@@ -1517,6 +1517,7 @@ class execution extends control
         $this->view->poUsers         = $poUsers;
         $this->view->qdUsers         = $qdUsers;
         $this->view->rdUsers         = $rdUsers;
+        $this->view->from            = $this->app->openApp;
         $this->display();
     }
 

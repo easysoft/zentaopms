@@ -47,6 +47,7 @@ $lang->execution->execDesc       = '执行描述';
 $lang->execution->owner          = '负责人';
 $lang->execution->PO             = $lang->productCommon . '负责人';
 $lang->execution->PM             = $lang->executionCommon . '负责人';
+$lang->execution->execPM         = '执行负责人';
 $lang->execution->QD             = '测试负责人';
 $lang->execution->RD             = '发布负责人';
 $lang->execution->release        = '发布';

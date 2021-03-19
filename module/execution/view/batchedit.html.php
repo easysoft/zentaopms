@@ -42,17 +42,17 @@
         <thead>
           <tr>
             <th class='w-50px'><?php echo $lang->idAB;?></th>
-            <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->name;?></th>
-            <th class='w-150px required'><?php echo $lang->execution->code;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'PM',     ' hidden') . zget($requiredFields, 'PM',     '', ' required');?>'><?php echo $lang->execution->PM;?></th>
+            <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $from == 'execution' ? $lang->execution->execName : $lang->execution->name;?></th>
+            <th class='w-150px required'><?php echo $from == 'execution' ? $lang->execution->execCode : $lang->execution->code;?></th>
+            <th class='w-150px<?php echo zget($visibleFields, 'PM',     ' hidden') . zget($requiredFields, 'PM',     '', ' required');?>'><?php echo $from == 'execution' ? $lang->execution->execPM : $lang->execution->PM;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->execution->PO;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->execution->QD;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'RD',     ' hidden') . zget($requiredFields, 'RD',     '', ' required');?>'><?php echo $lang->execution->RD;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'type',   ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'><?php echo $lang->execution->type;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->execution->status;?></th>
+            <th class='w-100px<?php echo zget($visibleFields, 'type',   ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'><?php echo $from == 'execution' ? $lang->execution->execType : $lang->execution->type;?></th>
+            <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status;?></th>
             <th class='w-110px required'><?php echo $lang->execution->begin;?></th>
             <th class='w-110px required'><?php echo $lang->execution->end;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'>    <?php echo $lang->execution->desc;?></th>
+            <th class='w-150px<?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'>    <?php echo $from == 'execution' ? $lang->execution->execDesc : $lang->execution->desc;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'teamname', ' hidden') . zget($requiredFields, 'teamname', '', ' required');?>'><?php echo $lang->execution->teamname;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'days',     ' hidden') . zget($requiredFields, 'days',     '', ' required');?>'><?php echo $lang->execution->days;?></th>
           </tr>
