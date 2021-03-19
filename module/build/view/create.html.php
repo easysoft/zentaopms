@@ -19,7 +19,7 @@
     </div>
     <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
       <table class='table table-form'>
-        <?php if($projectID != 0):?>
+        <?php if($openApp == 'project'):?>
         <tr>
           <th><?php echo $lang->executionCommon;?></th>
           <td><?php echo html::select('execution', $executions, $executionID, "onchange='loadProducts(this.value);' class='form-control chosen' required");?></td>

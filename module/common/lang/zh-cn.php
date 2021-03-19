@@ -182,7 +182,7 @@ $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
 $lang->personnel->menu->invest     = array('link' => "投入人员|personnel|invest|programID=%s");
 $lang->personnel->menu->accessible = array('link' => "可访问人员|personnel|accessible|programID=%s");
-$lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|objectID=%s", 'alias' => 'addwhitelist');
+$lang->personnel->menu->whitelist  = array('link' => "白名单|personnel|whitelist|programID=%s", 'alias' => 'addwhitelist');
 
 /* Scrum menu. */
 $lang->product = new stdclass();
@@ -383,19 +383,18 @@ $lang->qa->menu = new stdclass();
 $lang->qa->menu->index      = array('link' => '仪表盘|qa|index');
 $lang->qa->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto');
 $lang->qa->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'subModule' => 'testsuite,caselib', 'class' => 'dropdown dropdown-hover');
-$lang->qa->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult', 'class' => 'dropdown dropdown-hover');
+$lang->qa->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testreport', 'class' => 'dropdown dropdown-hover');
 $lang->qa->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 $lang->qa->subMenu = new stdclass();
 $lang->qa->subMenu->testcase = new stdclass();
-$lang->qa->subMenu->testcase->feature   = array('link' => '功能测试|testcase|browse|productID=%s', 'subModule' => 'testcase,tree,story');
-$lang->qa->subMenu->testcase->unit      = array('link' => '单元测试|testtask|browseUnits|productID=%s', 'alias' => 'browseunits');
+$lang->qa->subMenu->testcase->feature   = array('link' => '用例|testcase|browse|productID=%s', 'subModule' => 'testcase,tree,story,testtask');
 $lang->qa->subMenu->testcase->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'subModule' => 'testsuite');
 $lang->qa->subMenu->testcase->caselib   = array('link' => '用例库|caselib|browse|libID=0');
 
 $lang->qa->subMenu->testtask = new stdclass();
 $lang->qa->subMenu->testtask->testtask = array('link' => '测试单|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
-$lang->qa->subMenu->testtask->report   = array('link' => '报告|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
+$lang->qa->subMenu->testtask->report   = array('link' => '报告|testreport|browse|productID=%s', 'alias' => 'view,edit');
 
 $lang->qa->subMenu->automation = new stdclass();
 $lang->qa->subMenu->automation->browse      = array('link' => '介绍|automation|browse|productID=%s', 'alias' => '');
@@ -406,67 +405,38 @@ $lang->qa->subMenu->automation->browse      = array('link' => '介绍|automation
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
+$lang->bug->menu    = $lang->qa->menu;
 $lang->bug->subMenu = $lang->qa->subMenu;
-
-$lang->bug->menu->index      = array('link' => '仪表盘|qa|index');
-$lang->bug->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto', 'subModule' => 'tree');
-$lang->bug->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->bug->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->bug->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
+$lang->testcase->menu    = $lang->qa->menu;
 $lang->testcase->subMenu = $lang->qa->subMenu;
-$lang->testcase->menu->index      = array('link' => '仪表盘|qa|index');
-$lang->testcase->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testcase->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story', 'class' => 'dropdown dropdown-hover');
-$lang->testcase->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->testcase->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = new stdclass();
+$lang->testtask->menu    = $lang->qa->menu;
 $lang->testtask->subMenu = $lang->qa->subMenu;
-$lang->testtask->menu->index      = array('link' => '仪表盘|qa|index');
-$lang->testtask->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testtask->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->testtask->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->testtask->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 $lang->testsuite = new stdclass();
 $lang->testsuite->menu = new stdclass();
+$lang->testsuite->menu    = $lang->qa->menu;
 $lang->testsuite->subMenu = $lang->qa->subMenu;
-$lang->testsuite->menu->index      = array('link' => '仪表盘|qa|index');
-$lang->testsuite->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testsuite->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'subModule' => 'testsuite', 'class' => 'dropdown dropdown-hover');
-$lang->testsuite->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->testsuite->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 $lang->testreport = new stdclass();
 $lang->testreport->menu = new stdclass();
+$lang->testreport->menu    = $lang->qa->menu;
 $lang->testreport->subMenu = $lang->qa->subMenu;
-$lang->testreport->menu->index      = array('link' => '仪表盘|qa|index');
-$lang->testreport->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testreport->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->testreport->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testreport', 'class' => 'dropdown dropdown-hover');
-$lang->testreport->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
+$lang->caselib->menu    = $lang->qa->menu;
 $lang->caselib->subMenu = $lang->qa->subMenu;
-$lang->caselib->menu->index      = array('link' => '仪表盘|qa|index');
-$lang->caselib->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->caselib->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'subModule' => 'caselib', 'class' => 'dropdown dropdown-hover');
-$lang->caselib->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->caselib->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 $lang->automation = new stdclass();
 $lang->automation->menu = new stdclass();
+$lang->automation->menu    = $lang->qa->menu;
 $lang->automation->subMenu = $lang->qa->subMenu;
-$lang->automation->menu->index      = array('link' => '仪表盘|qa|index');
-$lang->automation->menu->bug        = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->automation->menu->testcase   = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
-$lang->automation->menu->testtask   = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testreport', 'class' => 'dropdown dropdown-hover');
-$lang->automation->menu->automation = array('link' => '自动化|automation|browse|productID=%s', 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();
@@ -867,7 +837,7 @@ $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
 $lang->menu->scrum->index          = '仪表盘|project|index|project={PROJECT}';
 $lang->menu->scrum->execution      = "$lang->executionCommon|project|execution|projectID={PROJECT}";
-$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|projectID={PROJECT}', 'alias' => 'story,track');
+$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = array('link' => '文档|doc|objectLibs|type=project&objectID={PROJECT}', 'subModule' => 'doc');
 $lang->menu->scrum->qa             = array('link' => '测试|qa|index', 'subModule' => 'testcase,testtask');
 $lang->menu->scrum->ci             = '代码|repo|browse';

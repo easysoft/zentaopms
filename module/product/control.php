@@ -130,7 +130,7 @@ class product extends control
         $this->loadModel('execution');
 
         /* Set product, module and query. */
-        $productID = $this->app->rawModule != 'projectstory' ? $this->product->saveState($productID, $this->products) : $productID;
+        $productID = $this->app->openApp != 'projectstory' ? $this->product->saveState($productID, $this->products) : $productID;
         $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);

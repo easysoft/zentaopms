@@ -32,7 +32,7 @@ class build extends control
             commonModel::setAppObjectID('project', $projectID);
 
             $executions  = $this->execution->getPairs($projectID);
-            $executionID = key($executions);
+            $executionID = $executionID == 0 ? key($executions) : $executionID;
         }
 
         if(!empty($_POST))
