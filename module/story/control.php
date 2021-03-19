@@ -83,7 +83,7 @@ class story extends control
             $response['message'] = $this->lang->saveSuccess;
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
-            $storyResult = $this->story->create($executionID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
+            $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
             if(!$storyResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -95,15 +95,15 @@ class story extends control
             if($storyResult['status'] == 'exists')
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
-                if($executionID == 0)
+                if($objectID == 0)
                 {
                     $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}");
                 }
                 else
                 {
-                    $execution          = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
+                    $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
                     $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
-                    $param              = $execution->type == 'project' ? "project=$executionID" : "executionID=$executionID";
+                    $param              = $execution->type == 'project' ? "project=$objectID" : "executionID=$objectID";
                     $response['locate'] = $this->createLink($moduleName, 'story', $param);
                 }
                 $this->send($response);
@@ -119,9 +119,9 @@ class story extends control
             }
             $actionID = $this->action->create('story', $storyID, $action, '', $extra);
 
-            if($executionID != 0)
+            if($objectID != 0)
             {
-                if($executionID != $this->session->PRJ) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $executionID);
+                if($objectID != $this->session->PRJ) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $objectID);
                 $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $this->session->PRJ);
             }
 
@@ -139,12 +139,12 @@ class story extends control
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
-                $response['locate']  = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=0&executionID=$executionID&bugID=$bugID");
+                $response['locate']  = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=0&objectID=$objectID&bugID=$bugID");
                 $this->send($response);
             }
 
             $moduleID = $this->post->module ? $this->post->module : 0;
-            if($executionID == 0)
+            if($objectID == 0)
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
                 $productID = $this->post->product ? $this->post->product : $productID;
@@ -155,9 +155,9 @@ class story extends control
             else
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, true);
-                $execution          = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
+                $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
                 $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
-                $param              = $execution->type == 'project' ? "productID=$productID" : "executionID=$executionID&orderBy=id_desc&browseType=unclosed";
+                $param              = $execution->type == 'project' ? "productID=$productID" : "executionID=$objectID&orderBy=id_desc&browseType=unclosed";
                 $response['locate'] = $this->createLink($moduleName, 'story', $param);
             }
             if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
@@ -165,9 +165,9 @@ class story extends control
         }
 
         /* Set products, users and module. */
-        if($executionID != 0)
+        if($objectID != 0)
         {
-            $products  = $this->product->getProductPairsByProject($executionID);
+            $products  = $this->product->getProductPairsByProject($objectID);
             $productID = empty($productID) ? key($products) : $productID;
             $product   = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
         }
@@ -290,7 +290,7 @@ class story extends control
         $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
         $this->view->productID        = $productID;
         $this->view->product          = $product;
-        $this->view->executionID      = $executionID;
+        $this->view->objectID         = $objectID;
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
         $this->view->spec             = $spec;
@@ -298,7 +298,7 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->URS              = $type == 'story' ? $this->story->getRequierements($productID) : '';
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->needReview       = ($this->app->user->account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->view->type             = $type;
 
         $this->display();

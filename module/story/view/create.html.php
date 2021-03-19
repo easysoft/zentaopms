@@ -257,7 +257,7 @@
   </div>
 </div>
 <?php if(isset($execution)) js::set('execution', $execution);?>
-<?php js::set('executionID', $executionID);?>
+<?php js::set('executionID', $objectID);?>
 <?php js::set('storyModule', $lang->story->module);?>
 <?php js::set('storyType', $type);?>
 <script>
