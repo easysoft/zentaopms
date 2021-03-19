@@ -1095,9 +1095,9 @@ class testtask extends control
         /* The case of my. */
         else
         {
-            $this->lang->testtask->menu = $this->lang->my->menu;
-            $this->lang->testtask->menuOrder = $this->lang->my->menuOrder;
-            $this->loadModel('my')->setMenu();
+            $this->lang->testtask->menu = $this->lang->my->workMenu;
+            $this->lang->my->menu->myWork['subModule'] = 'testtask';
+
             $this->view->title = $this->lang->testtask->batchRun;
 
             $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
