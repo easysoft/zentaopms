@@ -2512,8 +2512,8 @@ class super
         }
         elseif($this->scope == 'session')
         {
-            $openApp = $openApp ? $openApp : $this->openApp;
-            $openApp ? $_SESSION["app-$openApp"][$key] = $value : $_SESSION[$key] = $value;
+            if($openApp) $_SESSION["app-$openApp"][$key] = $value;
+            $_SESSION[$key] = $value;
         }
         elseif($this->scope == 'env')
         {

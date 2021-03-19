@@ -45,7 +45,7 @@ $lang->build->unlinkBug     = 'Hủy liên kết Bug';
 $lang->build->stories       = "{$lang->SRCommon} đã kết thúc";
 $lang->build->bugs          = 'Bugs đã giải quyết';
 $lang->build->generatedBugs = 'Bugs đã báo cáo';
-$lang->build->noProduct     = " <span id='noProduct' style='color:red'>{$lang->executionCommon} này chưa liên kết tới {$lang->productCommon}, bởi vậy Bản dựng này không thể tạo. Vui lòng liên kết <a href='%s' data-app='%s'> {$lang->productCommon} trước</a></span>";
+$lang->build->noProduct     = " <span id='noProduct' style='color:red'>{$lang->executionCommon} này chưa liên kết tới {$lang->productCommon}, bởi vậy Bản dựng này không thể tạo. Vui lòng liên kết <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'> {$lang->productCommon} trước</a></span>";
 $lang->build->noBuild       = 'Không có bản dựng nào';
 
 $lang->build->notice = new stdclass();

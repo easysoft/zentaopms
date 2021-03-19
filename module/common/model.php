@@ -698,7 +698,7 @@ class commonModel extends model
                 if($currentModule == 'product' and $currentMethod == 'browse') $active = '';
                 if($currentModule == 'story') $active = '';
 
-                $misc = $openApp != $lang->navGroup->$module ? "data-app='$openApp'" : '';
+                $misc = isset($lang->navGroup->$module) and $openApp != $lang->navGroup->$module ? "data-app='$openApp'" : '';
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $subMenu . "</li>\n";
 
                 echo $menuItemHtml;
