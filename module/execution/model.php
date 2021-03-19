@@ -275,23 +275,23 @@ class executionModel extends model
         /* When the cookie and session do not exist, get it from the database. */
         if(empty($executionID) and isset($this->config->execution->lastExecution) and isset($executions[$this->config->execution->lastExecution]))
         {
-            $this->session->set('execution', $this->config->execution->lastExecution);
+            $this->session->set('execution', $this->config->execution->lastExecution, $this->app->openApp);
             $this->setProjectSession($this->session->execution);
             return $this->session->execution;
         }
 
-        if($executionID > 0) $this->session->set('execution', (int)$executionID);
+        if($executionID > 0) $this->session->set('execution', (int)$executionID, $this->app->openApp);
         if($executionID == 0 and $this->cookie->lastExecution)
         {
             /* Execution link is execution-task. */
             $executionID = (int)$this->cookie->lastExecution;
             $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
-            $this->session->set('execution', $executionID);
+            $this->session->set('execution', $executionID, $this->app->openApp);
         }
         if($executionID == 0 and $this->session->execution == '') $this->session->set('execution', key($executions));
         if(!isset($executions[$this->session->execution]))
         {
-            $this->session->set('execution', key($executions));
+            $this->session->set('execution', key($executions), $this->app->openApp);
             if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->execution},") === false) $this->accessDenied();
         }
 
