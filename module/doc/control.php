@@ -448,6 +448,15 @@ class doc extends control
             $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->execution);
         }
 
+        /* Set my menu. */
+        if($this->app->openApp == 'my')
+        {
+            $this->lang->doc->menu     = $this->lang->my->contributeMenu;
+            $this->lang->modulePageNav = '';
+            $this->lang->TRActions     = '';
+            $this->lang->my->menu->contribute['subModule'] = 'doc';
+        }
+
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);
         $this->view->position[] = $this->lang->doc->edit;

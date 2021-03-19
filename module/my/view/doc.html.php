@@ -25,7 +25,7 @@
   <?php if(empty($docs)):?>
   <div class="table-empty-tip">
     <p>
-      <span class="text-muted"><?php echo $lang->project->empty;?></span>
+      <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
     </p>
   </div>
   <?php else:?>
@@ -35,7 +35,9 @@
         <tr>
           <th class="c-name"><?php echo $lang->doc->title;?></th>
           <th class="c-num"><?php echo $lang->doc->size;?></th>
+          <?php if($type != 'openedbyme'):?>
           <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
+          <?php endif;?>
           <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
           <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
           <th class="w-90px text-center"><?php echo $lang->actions;?></th>
@@ -48,7 +50,9 @@
         <tr>
           <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0&from={$lang->navGroup->doc}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title={$doc->title}");?></td>
           <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
+          <?php if($type != 'openedbyme'):?>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
+          <?php endif;?>
           <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'y-m-d');?></td>
           <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'y-m-d');?></td>
           <td class="c-actions">
