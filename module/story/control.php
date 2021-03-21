@@ -849,7 +849,7 @@ class story extends control
         if($from == 'execution')
         {
             $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
-            $this->execution->setMenu($execution, $param);
+            $this->execution->setMenu($executions, $param);
         }
         elseif($from == 'project')
         {

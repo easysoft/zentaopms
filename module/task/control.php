@@ -39,10 +39,9 @@ class task extends control
      */
     public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
-        commonModel::setAppObjectID('execution', $executionID);
-
         $executions  = $this->execution->getPairs();
         $executionID = $this->execution->saveState($executionID, $executions);
+        $this->execution->setMenu($executions, $executionID);
 
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
