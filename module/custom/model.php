@@ -228,6 +228,7 @@ class customModel extends model
             $subModule = '';
             $subMenu   = '';
             $alias     = '';
+            $exclude   = '';
 
             $link = (is_array($item) and isset($item['link'])) ? $item['link'] : $item;
             /* The variable of item has not link and is not link then ignore it. */
@@ -258,6 +259,7 @@ class customModel extends model
                     if(isset($item['subModule'])) $subModule = $item['subModule'];
                     if(isset($item['subMenu']))   $subMenu   = $item['subMenu'];
                     if(isset($item['alias']))     $alias     = $item['alias'];
+                    if(isset($item['exclude']))   $exclude   = $item['exclude'];
                 }
 
                 $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
@@ -292,6 +294,7 @@ class customModel extends model
                 if($subModule)$menuItem->subModule = $subModule;
                 if($subMenu)  $menuItem->subMenu   = $subMenu;
                 if($alias)    $menuItem->alias     = $alias;
+                if($exclude)  $menuItem->exclude   = $exclude;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
                 /* Hidden menu by config in mobile. */

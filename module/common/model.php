@@ -662,14 +662,15 @@ class commonModel extends model
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
             $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
             $class     = isset($menuItem->class) ? $menuItem->class : '';
+            $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
 
             $active = '';
-            if($menuItem->name == $currentModule)
+            if($menuItem->name == $currentModule and strpos(",$exclude,", ",$currentMethod,") === false)
             {
                 $activeMenu = $menuItem->name;
                 $active = 'active';
             }
-            if($subModule and in_array($currentModule, $subModule))
+            if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
             {
                 $activeMenu = $menuItem->name;
                 $active = 'active';
@@ -687,7 +688,7 @@ class commonModel extends model
                     if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
-                if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false))
+                if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and strpos(",$exclude,", ",$currentMethod,") === false)
                 {
                     $activeMenu = $menuItem->name;
                     $active = 'active';

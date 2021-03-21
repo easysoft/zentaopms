@@ -380,10 +380,10 @@ $lang->company->menuOrder[30] = 'addUser';
 
 /* Admin menu. */
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany', 'exclude' => 'admin-safe');
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
 $lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'subModule' => 'holiday');
-$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'subModule' => 'custom');
+$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-timezone');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
@@ -426,7 +426,7 @@ $lang->admin->menu->system['subMenu'] = new stdclass();
 $lang->admin->menu->system['subMenu']->data       = array('link' => "{$lang->admin->data}|backup|index", 'subModule' => 'action');
 $lang->admin->menu->system['subMenu']->safe       = array('link' => "$lang->safety|admin|safe", 'alias' => 'checkweak');
 $lang->admin->menu->system['subMenu']->cron       = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
-$lang->admin->menu->system['subMenu']->timezone   = array('link' => "$lang->timezone|custom|timezone", 'subModule' => 'custom');
+$lang->admin->menu->system['subMenu']->timezone   = array('link' => "$lang->timezone|custom|timezone");
 $lang->admin->menu->system['subMenu']->buildIndex = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
 
 $lang->admin->dividerMenu = ',company,message,system,';
