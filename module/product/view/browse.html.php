@@ -14,7 +14,7 @@
 <?php include '../../common/view/datatable.fix.html.php';?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
-<?php js::set('projectID', $this->session->PRJ);?>
+<?php js::set('projectID', $projectID);?>
 <?php js::set('branch', $branch);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php
@@ -144,8 +144,14 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
         }
         else
         {
-            $link     = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
-            if($isProjectStory) $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID");
+            if($from == 'project')
+            {
+                $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID");
+            }
+            else
+            {
+                $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
+            }
             $disabled = '';
             if(!common::hasPriv('story', 'create'))
             {
@@ -182,7 +188,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
         echo "<i class='icon-link'></i> {$lang->execution->linkStory} <span class='caret'></span>";
         echo '</button>';
         echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
-        if(common::hasPriv('projectstory', 'linkStory')) echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project={$this->session->PRJ}"), $lang->execution->linkStory). "</li>";
+        if(common::hasPriv('projectstory', 'linkStory')) echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project=$projectID"), $lang->execution->linkStory). "</li>";
         if(common::hasPriv('projectstory', 'importPlanStories') and !empty($productID)) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
         echo '</ul>';
     }
@@ -216,9 +222,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
       <p>
         <span class="text-muted"><?php echo $storyType == 'story' ? $lang->story->noStory : $lang->story->noRequirement;?></span>
         <?php if(common::canModify('product', $product) and common::hasPriv('story', 'create')):?>
-        <?php $projectID  = $isProjectStory ? $this->session->PRJ : 0;?>
-        <?php $openApp  = $isProjectStory ? 'project' : 'product';?>
-        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->createCommon, '', "class='btn btn-info' data-group='$openApp'");?>
+        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->createCommon, '', "class='btn btn-info' data-group='$from'");?>
         <?php endif;?>
       </p>
     </div>

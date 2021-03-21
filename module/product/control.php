@@ -294,7 +294,7 @@ class product extends control
         $this->view->products        = $this->products;
         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
         $this->view->storyType       = $storyType;
-        $this->view->from            = $from;
+        $this->view->from            = $this->app->openApp;
         $this->display();
     }
 
