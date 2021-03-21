@@ -43,19 +43,6 @@ class bugModel extends model
 
         $this->lang->modulePageNav = $pageNav;
         $this->lang->TRActions     = $pageActions;
-        foreach($this->lang->bug->menu as $key => $menu)
-        {
-            if($this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('bug', $key, $productID);
-            $replace = $productID;
-            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->bug->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->bug == 'qa')
-        {
-            $this->lang->qa->menu         = $this->lang->bug->menu;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        }
     }
 
     /**

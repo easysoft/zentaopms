@@ -72,7 +72,7 @@ class testsuite extends control
         $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=testsuite&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=testsuite')));
         $productID = $this->product->saveState($productID, $this->products);
-        $this->testsuite->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -137,7 +137,7 @@ class testsuite extends control
         /* Set menu. */
         $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $productID  = $this->product->saveState($productID, $this->products);
-        $this->testsuite->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->create;
         $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);

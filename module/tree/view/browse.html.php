@@ -26,7 +26,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
 <?php $name = $viewType == 'line' ? $lang->tree->line : (($viewType == 'doc' or $viewType == 'feedback' or $viewType == 'trainskill' or $viewType == 'trainpost') ? $lang->tree->cate : $lang->tree->name);?>
 <?php $title = ($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') ? '' : ((strpos($viewType, 'doc') !== false || strpos($viewType, 'feedback') !== false) ? $lang->doc->childType : $lang->tree->child);?>
-<div id="mainMenu" class="clearfix">
+<!--div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
     <?php echo html::a($backLink, '<i class="icon icon-back icon-sm"></i>' . $lang->goback, '', 'class="btn btn-secondary"');?>
@@ -63,7 +63,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none
       </span>
     </div>
   </div>
-</div>
+</div-->
 <div id="mainContent" class="main-row">
   <div class="side-col col-4">
     <div class="panel">

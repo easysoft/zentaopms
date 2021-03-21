@@ -177,6 +177,8 @@ class project extends control
         $this->lang->noMenuModule[] = 'project';
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
+        $this->project->setMenu($projectID);
+
         $project = $this->project->getByID($projectID);
         if(empty($project) || $project->type != 'project') die(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -291,11 +293,7 @@ class project extends control
             }
         }
 
-        if($programID)
-        {
-            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
-            commonModel::setAppObjectID('program', $programID);
-        }
+        if($programID) $this->program->setMenu($programID);
 
         $this->lang->noMenuModule[] = 'project';
 
@@ -375,9 +373,6 @@ class project extends control
         $project   = $this->project->getByID($projectID);
         $programID = $project->parent;
 
-        /* Navigation stay in program when enter from program list. */
-        $this->adjustNavigation($from, $programID);
-
         if($_POST)
         {
             $changes = $this->project->update($projectID);
@@ -456,9 +451,6 @@ class project extends control
     {
         $this->loadModel('action');
 
-        /* Navigation stay in project when enter from project list. */
-        $this->adjustNavigation($from, $projectID);
-
         if($this->post->names)
         {
             $allChanges = $this->project->batchUpdate();
@@ -500,8 +492,8 @@ class project extends control
      */
     public function view($projectID = 0)
     {
+        $this->project->setMenu($projectID);
         $this->app->loadLang('bug');
-        $this->lang->project->menu = $this->lang->scrum->setMenu;
         $moduleIndex = array_search('project', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -545,7 +537,8 @@ class project extends control
      */
     public function group($projectID = 0, $programID = 0)
     {
-        $this->lang->project->menu = $this->lang->scrum->setMenu;
+        $this->project->setMenu($projectID);
+
         $moduleIndex = array_search('project', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -604,7 +597,7 @@ class project extends control
      */
     public function dynamic($projectID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
-        $this->lang->noMenuModule[] = 'project';
+        $this->project->setMenu($projectID);
 
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -683,7 +676,8 @@ class project extends control
     {
         /* Load module and get project. */
         $this->loadModel('build');
-        $project   = $this->project->getByID($projectID);
+        $project = $this->project->getByID($projectID);
+        $this->project->setMenu($projectID);
 
         $this->session->set('buildList', $this->app->getURI(true));
 
@@ -854,8 +848,8 @@ class project extends control
      */
     public function manageMembers($projectID, $dept = '')
     {
-        $this->lang->navGroup->project = 'project';
-        $this->lang->project->menu = $this->lang->scrum->setMenu;
+        $this->project->setMenu($projectID);
+
         $moduleIndex = array_search('project', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -1196,7 +1190,6 @@ class project extends control
     /**
      * Get white list personnel.
      *
-     * @param  int    $programID
      * @param  int    $projectID
      * @param  string $module
      * @param  string $from  project|program|programProject
@@ -1208,19 +1201,14 @@ class project extends control
      * @access public
      * @return void
      */
-    public function whitelist($programID = 0, $projectID = 0, $module = 'project', $from = 'project', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist($projectID = 0, $module = 'project', $from = 'project', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($from == 'project')
         {
-            $this->lang->project->menu = $this->lang->scrum->setMenu;
+            $this->project->setMenu($projectID);
+
             $moduleIndex = array_search('project', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        }
-        if($from == 'programproject')
-        {
-            $this->app->rawMethod = 'programproject';
-            $this->lang->navGroup->project     = 'project';
-            $this->lang->project->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
         }
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
@@ -1238,9 +1226,6 @@ class project extends control
      */
     public function addWhitelist($projectID = 0, $deptID = 0, $programID = 0, $from = 'project')
     {
-        /* Navigation stay in project when enter from project list. */
-        $this->adjustNavigation($from, $projectID);
-
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=project&programID=$programID&from=$from");
     }
 
@@ -1268,8 +1253,7 @@ class project extends control
      */
     public function manageProducts($projectID, $programID = 0, $from = 'project')
     {
-        /* Navigation stay in project when enter from project list. */
-        $this->adjustNavigation($from, $projectID);
+        $this->project->setMenu($projectID);
 
         if(!empty($_POST))
         {
@@ -1363,27 +1347,5 @@ class project extends control
             $response['multiLinkedProjects'] = $multiLinkedProjects;
         }
         die(json_encode($response));
-    }
-
-    /**
-     * Adjust the navigation.
-     *
-     * @param  string $from
-     * @param  int    $objectID  projectID|programID
-     * @access public
-     * @return void
-     */
-    public function adjustNavigation($from = '', $objectID = 0)
-    {
-        if($from == 'project')
-        {
-            $this->lang->project->menu = $this->lang->scrum->setMenu;
-            $moduleIndex = array_search('project', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        }
-        else if($from == 'pgmproject')
-        {
-            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($objectID, true);
-        }
     }
 }

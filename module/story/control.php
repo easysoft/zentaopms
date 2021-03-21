@@ -49,8 +49,10 @@ class story extends control
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
         $this->story->replaceURLang($type);
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
-        commonModel::setAppObjectID($this->app->openApp, $this->app->openApp == 'product' ? $productID : $objectID);
+        if($this->app->openApp == 'product')
+        {
+            $this->loadModel('product')->setMenu($productID);
+        }
 
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -1358,8 +1360,8 @@ class story extends control
         {
             $products  = $this->product->getPairs();
             $productID = $this->product->saveState($productID, $products);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-            $this->product->setMenu($products, $productID, $branch);
+            $this->product->products = $this->product->saveState($productID, $products);
+            $this->product->setMenu($productID, $branch);
         }
 
         /* Save session. */

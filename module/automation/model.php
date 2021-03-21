@@ -13,34 +13,4 @@
 <?php
 class automationModel extends model
 {
-    /**
-     * Set the menu.
-     *
-     * @param  array $products
-     * @param  int   $productID
-     * @param  int   $branch
-     * @access public
-     * @return void
-     */
-    public function setMenu($products, $productID, $branch = 0)
-    {
-        $this->loadModel('product');
-        foreach($this->lang->testtask->menu as $key => $value)
-        {
-            if($this->lang->navGroup->testtask != 'qa') $this->loadModel('qa')->setSubMenu('automation', $key, $productID);
-            common::setMenuVars($this->lang->testtask->menu, $key, $productID);
-        }
-
-        if($this->lang->navGroup->automation == 'qa')
-        {
-            foreach($this->lang->qa->subMenu->automation as $key => $menu)
-            {
-                common::setMenuVars($this->lang->qa->subMenu->automation, $key, $productID);
-            }
-            $this->lang->qa->menu         = $this->lang->automation->menu;
-            $this->lang->automation->menu = $this->lang->qa->subMenu->automation;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        }
-    }
-
 }

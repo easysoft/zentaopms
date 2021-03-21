@@ -98,11 +98,10 @@ class program extends control
         $programID = $this->program->saveState($programID, $this->program->getPairs());
         setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
+        $this->program->setMenu($programID);
+
         $program = $this->program->getByID($programID);
         if(empty($program) || $program->type != 'program') die(js::error($this->lang->notFound) . js::locate('back'));
-
-        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
-        commonModel::setAppObjectID('program', $programID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -389,14 +388,13 @@ class program extends control
     public function project($programID = 0, $browseType = 'all', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $programID = $this->program->saveState($programID, $this->program->getPairs());
-        if(!$programID) $this->locate($this->createLink('program', 'browse'));
         setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        if(!$programID) $this->locate($this->createLink('program', 'browse'));
+
+        $this->program->setMenu($programID);
 
         $this->app->session->set('programProject', $this->app->getURI(true));
         $this->app->session->set('projectList', $this->app->getURI(true));
-
-        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
-        commonModel::setAppObjectID('program', $programID);
 
         $this->loadModel('datatable');
 
@@ -436,8 +434,7 @@ class program extends control
      */
     public function stakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
-        commonModel::setAppObjectID('program', $programID);
+        $this->program->setMenu($programID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);

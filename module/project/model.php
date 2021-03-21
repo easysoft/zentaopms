@@ -1584,4 +1584,21 @@ class projectModel extends model
 
         return array_merge($parents, $orphan);
     }
+
+    /**
+     * Set menu of project module.
+     *
+     * @param  int    $objectID  projectID
+     * @access public
+     * @return void
+     */
+    public function setMenu($objectID)
+    {
+        $project = $this->getByID($objectID);
+        $this->lang->project->menu      = $this->lang->{$project->model}->menu;
+        $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
+
+        $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
+        common::setMenuVars('project', $objectID);
+    }
 }

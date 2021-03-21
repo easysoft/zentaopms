@@ -28,10 +28,20 @@ class tree extends control
     {
         $this->loadModel('product');
 
+        if($this->app->openApp == 'product')
+        {
+            $this->product->setMenu($rootID);;
+        }
+        else if($this->app->openApp == 'qa')
+        {
+            $products = $this->product->getPairs('noclosed');
+            $this->loadModel('qa')->setMenu($products, $rootID);;
+        }
+
         /* According to the type, set the module root and modules. */
         if(strpos('story|bug|case', $viewType) !== false)
         {
-            $product = $this->product->getById($rootID);
+            $product = $this->loadModel('product')->getById($rootID);
             if(empty($product)) $this->locate($this->createLink('product', 'create'));
             if(!empty($product->type) && $product->type != 'normal')
             {

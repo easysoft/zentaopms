@@ -543,10 +543,10 @@ class testreport extends control
             $this->products = $this->product->getProductPairsByProject($projectID);
             if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=testreport&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=report')));
             $productID      = $this->product->saveState($objectID, $this->products);
-            $this->testreport->setMenu($this->products, $productID);
+            $this->loadModel('qa')->setMenu($this->products, $productID);
             return $productID;
         }
-        elseif($objectType == 'project')
+        elseif($objectType == 'execution')
         {
             $this->executions = $this->execution->getPairs($this->session->PRJ, 'all', 'nocode');
             $executionID      = $this->execution->saveState($objectID, $this->executions);

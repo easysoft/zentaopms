@@ -27,27 +27,7 @@ class testcaseModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc')
     {
-        $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'case');
-
-        foreach($this->lang->testcase->menu as $key => $menu)
-        {
-            if($this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
-
-            $replace = $productID;
-            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->testcase->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->testcase == 'qa')
-        {
-            foreach($this->lang->qa->subMenu->testcase as $key => $menu)
-            {
-                common::setMenuVars($this->lang->qa->subMenu->testcase, $key, $productID);
-            }
-            $this->lang->qa->menu         = $this->lang->testcase->menu;
-            $this->lang->testcase->menu   = $this->lang->qa->subMenu->testcase;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        }
+        $this->loadModel('qa')->setMenu($products, $productID, $branch, $moduleID, 'case');
     }
 
     /**

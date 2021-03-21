@@ -14,39 +14,6 @@
 class testsuiteModel extends model
 {
     /**
-     * Set the menu.
-     *
-     * @param  array $products
-     * @param  int   $productID
-     * @access public
-     * @return void
-     */
-    public function setMenu($products, $productID)
-    {
-        $this->loadModel('product')->setMenu($products, $productID);
-
-        foreach($this->lang->testsuite->menu as $key => $value)
-        {
-            if($this->config->global->flow == 'full' and $this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testsuite', $key, $productID);
-            $replace = $productID;
-            if($this->lang->navGroup->testsuite == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->testsuite->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->testsuite == 'qa')
-        {
-            foreach($this->lang->qa->subMenu->testcase as $key => $menu)
-            {
-                common::setMenuVars($this->lang->qa->subMenu->testcase, $key, $productID);
-            }
-
-            $this->lang->qa->menu         = $this->lang->testsuite->menu;
-            $this->lang->testsuite->menu  = $this->lang->qa->subMenu->testcase;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', 0);
-        }
-    }
-
-    /**
      * Build select string.
      *
      * @param  array  $products

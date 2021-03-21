@@ -834,4 +834,10 @@ class programModel extends model
 
         return $budgetUnitList;
     }
+
+    public function setMenu($programID)
+    {
+        $this->lang->switcherMenu = $this->getSwitcher($programID);
+        common::setMenuVars('program', $programID);
+    }
 }

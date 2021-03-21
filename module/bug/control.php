@@ -45,6 +45,7 @@ class bug extends control
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('task');
+        $this->loadModel('qa');
 
         /* Set bug menu group. */
         $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
@@ -92,6 +93,10 @@ class bug extends control
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('datatable');
+
+        $products = $this->loadModel('product')->getPairs('noclosed');
+        $productID = $this->product->saveState($productID, $products);
+        $this->qa->setMenu($products, $productID);
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
@@ -281,6 +286,8 @@ class bug extends control
     public function create($productID, $branch = '', $extras = '')
     {
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+
+        $this->qa->setMenu($this->products, $productID);
 
         /* Whether there is a object to transfer bug, for example feedback. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);

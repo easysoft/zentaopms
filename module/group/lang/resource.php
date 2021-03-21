@@ -139,23 +139,6 @@ $lang->resource->todo->activate     = 'activate';
 $lang->resource->todo->close        = 'close';
 $lang->resource->todo->batchClose   = 'batchClose';
 
-$lang->todo->methodOrder[5]  = 'create';
-$lang->todo->methodOrder[10] = 'createCycle';
-$lang->todo->methodOrder[15] = 'batchCreate';
-$lang->todo->methodOrder[20] = 'edit';
-$lang->todo->methodOrder[25] = 'batchEdit';
-$lang->todo->methodOrder[30] = 'view';
-$lang->todo->methodOrder[35] = 'delete';
-$lang->todo->methodOrder[40] = 'export';
-$lang->todo->methodOrder[45] = 'start';
-$lang->todo->methodOrder[50] = 'finish';
-$lang->todo->methodOrder[55] = 'batchFinish';
-$lang->todo->methodOrder[60] = 'import2Today';
-$lang->todo->methodOrder[65] = 'assignTo';
-$lang->todo->methodOrder[70] = 'activate';
-$lang->todo->methodOrder[75] = 'close';
-$lang->todo->methodOrder[80] = 'batchClose';
-
 global $config;
 if($config->systemMode == 'new')
 {

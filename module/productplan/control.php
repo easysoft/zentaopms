@@ -22,9 +22,8 @@ class productplan extends control
      */
     public function commonAction($productID, $branch = 0)
     {
-        $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, '', $branch);
+        $this->loadModel('product')->setMenu($productID, $branch);
 
-        $this->loadModel('product');
         $this->app->loadConfig('execution');
         $product = $this->product->getById($productID);
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
@@ -60,8 +59,6 @@ class productplan extends control
 
         $this->commonAction($productID, $branchID);
         $lastPlan = $this->productplan->getLast($productID, $branchID, $parent);
-
-        if($productID) commonModel::setAppObjectID('product', $productID);
 
         if($lastPlan)
         {

@@ -7,36 +7,18 @@ include 'chosen.html.php';
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
-<?php
-$isProgram   = $app->openApp == 'program';
-$isProduct   = $app->openApp == 'product';
-$isProject   = $app->openApp == 'project';
-$isExecution = $app->openApp == 'execution';
-$isReport    = $app->openApp == 'report';
-$isQa        = $app->openApp == 'qa';
-?>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
-      <div id='heading'>
-        <?php if($isProduct)   echo isset($lang->product->switcherMenu) ? $lang->product->switcherMenu : '';?>
-        <?php if($isQa)        echo isset($lang->qa->switcherMenu) ? $lang->qa->switcherMenu : '';?>
-        <?php if($this->config->systemMode == 'new'):?>
-        <?php if($isProgram)   echo isset($lang->program->switcherMenu) ? $lang->program->switcherMenu : '';?>
-        <?php if($isProject)   echo $this->loadModel('project')->getSwitcher($this->session->PRJ, $app->rawModule, $app->rawMethod);?>
-        <?php if($isExecution) echo $this->loadModel('execution')->getSwitcher($this->session->execution, $app->rawModule, $app->rawMethod);?>
-        <?php elseif($this->config->systemMode == 'classic'):?>
-        <?php if($isProject)   echo isset($lang->project->switcherMenu) ? $lang->project->switcherMenu : '';;?>
-        <?php endif;?>
-      </div>
-      <nav id='navbar'><?php commonModel::printMainMenu($app->rawModule, $app->rawMethod);?></nav>
+      <div id='heading'><?php echo isset($lang->switcherMenu) ? $lang->switcherMenu : '';?></div>
+      <nav id='navbar'><?php $activeMenu = commonModel::printMainMenu();?></nav>
     </div>
   </div>
-  <?php if(!in_array($app->rawModule, $lang->noMenuModule)):?>
+  <?php if(isset($lang->{$app->openApp}->menu->$activeMenu) and isset($lang->{$app->openApp}->menu->$activeMenu['subMenu'])):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>
-      <nav id='subNavbar'><?php common::printModuleMenu($app->rawModule, $app->rawMethod);?></nav>
+      <nav id='subNavbar'><?php common::printModuleMenu($activeMenu);?></nav>
       <div id="pageActions"><div class='btn-toolbar'><?php if(isset($lang->TRActions)) echo $lang->TRActions;?></div></div>
     </div>
   </div>

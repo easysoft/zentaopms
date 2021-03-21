@@ -93,10 +93,7 @@ class repoModel extends model
             $this->lang->modulePageNav = $repoIndex;
         }
 
-        foreach($this->lang->repo->menu as $key => $menu)
-        {
-            common::setMenuVars($this->lang->repo->menu, $key, $repoID);
-        }
+        common::setMenuVars('devops', $repoID);
 
         session_start();
         $this->session->set('repoID', $repoID);

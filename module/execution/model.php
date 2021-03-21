@@ -58,29 +58,18 @@ class executionModel extends model
      * @param  int    $buildID
      * @param  string $extra
      * @access public
-     * @return bool
+     * @return void
      */
     public function setMenu($executions, $executionID, $buildID = 0, $extra = '')
     {
-        if(empty($executions))
-        {
-            $project = $this->loadModel('project')->getByID($this->session->PRJ);
-            if($project->model == 'waterfall')
-            {
-                if(($this->app->moduleName == 'programplan' && $this->app->methodName != 'create') || $this->app->moduleName == 'execution') die(js::locate(helper::createLink('programplan', 'create', "projectID=$project->id")));
-            }
-            else
-            {
-                if($this->app->moduleName == 'execution' && $this->app->methodName != 'create') die(js::locate(helper::createLink('execution', 'create')));
-            }
-        }
-
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
         $this->session->set('execution', $executionID);
 
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
+
+        /*
         if($execution and $execution->lifetime == 'ops')
         {
             unset($this->lang->execution->menu->story);
@@ -89,13 +78,16 @@ class executionModel extends model
             unset($this->lang->execution->subMenu->qa->build);
             unset($this->lang->execution->subMenu->qa->testtask);
         }
+         */
 
         /* Hide story and qa menu when execution is story or design type. */
+        /*
         if($execution and ($execution->attribute == 'story' or $execution->attribute == 'design'))
         {
             unset($this->lang->execution->menu->story);
             unset($this->lang->execution->menu->qa);
         }
+         */
 
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
 
@@ -108,43 +100,8 @@ class executionModel extends model
             $this->cookie->executionMode = 'all';
         }
 
-        /* Set execution module page nav. */
-        $label = $this->lang->execution->index;
-        if($methodName == 'all') $label = $this->lang->execution->allExecutions;
-        if($methodName == 'create' and $moduleName == 'execution') $label = $this->lang->execution->create;
-
-        foreach($this->lang->execution->menu as $key => $menu) common::setMenuVars($this->lang->execution->menu, $key, $executionID);
-        foreach($this->lang->execution->qaMenu as $key => $menu) common::setMenuVars($this->lang->execution->qaMenu, $key, $executionID);
-
-        foreach($this->lang->execution->menu as $key => $menu)
-        {
-            common::setMenuVars($this->lang->execution->menu, $key, $executionID);
-
-            if(isset($this->lang->execution->subMenu->$key))
-            {
-                $executionSubMenu = $this->lang->execution->subMenu->$key;
-                $subMenu = common::createSubMenu($this->lang->execution->subMenu->$key, $executionID);
-
-                if(!empty($subMenu))
-                {
-                    foreach($subMenu as $menuKey => $menu)
-                    {
-                        $itemMenu = zget($executionSubMenu, $menuKey, '');
-                        $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
-                        $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
-                        $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
-                        if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
-                        {
-                            $this->lang->execution->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
-                            break;
-                        }
-                    }
-                    $this->lang->execution->menu->{$key}['subMenu'] = $subMenu;
-                }
-            }
-        }
-
-        return true;
+        $this->lang->switcherMenu = $this->getSwitcher($executionID, $this->app->rawModule, $this->app->rawMethod);
+        common::setMenuVars('execution', $executionID);
     }
 
     /**

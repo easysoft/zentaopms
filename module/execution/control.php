@@ -1184,8 +1184,8 @@ class execution extends control
         {
             $project = $this->project->getByID($projectID);
             $model   = $project->model;
-            $this->lang->project->menu = $this->lang->menu->$model;
-            commonModel::setAppobjectID('project', $projectID);
+
+            $this->project->setMenu($projectID);
         }
 
         $this->app->loadLang('program');
@@ -2682,7 +2682,7 @@ class execution extends control
 
         $from = $this->app->openApp;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');
-        if($from == 'project') $this->lang->navGroup->execution = 'project';
+        if($from == 'project') $this->project->setMenu($projectID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);

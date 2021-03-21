@@ -1,5 +1,6 @@
 <?php
 $lang->mainNav->menuOrder[5]  = 'my';
+if($config->systemMode == 'new') $lang->mainNav->menuOrder[10] = 'program';
 $lang->mainNav->menuOrder[15] = 'product';
 $lang->mainNav->menuOrder[20] = 'project';
 $lang->mainNav->menuOrder[21] = 'execution';
@@ -9,12 +10,11 @@ $lang->mainNav->menuOrder[30] = 'doc';
 $lang->mainNav->menuOrder[35] = 'report';
 $lang->mainNav->menuOrder[60] = 'system';
 $lang->mainNav->menuOrder[70] = 'admin';
-if($config->systemMode == 'new') $lang->mainNav->menuOrder[10] = 'program';
 
 /* Waterfall menu order. */
-$lang->waterfall->menuOrder[5]  = 'programindex';
-$lang->waterfall->menuOrder[10] = 'programplan';
-$lang->waterfall->menuOrder[15] = 'project';
+$lang->waterfall->menuOrder[5]  = 'index';
+$lang->waterfall->menuOrder[10] = 'execution';
+$lang->waterfall->menuOrder[15] = 'programplan';
 $lang->waterfall->menuOrder[20] = 'projectstory';
 $lang->waterfall->menuOrder[25] = 'design';
 $lang->waterfall->menuOrder[30] = 'ci';
@@ -43,11 +43,11 @@ $lang->scrum->menuOrder[45] = 'other';
 $lang->scrum->menuOrder[48] = 'dynamic';
 $lang->scrum->menuOrder[50] = 'projectsetting';
 
-/* index menu order. */
+/* Index menu order. */
 $lang->index->menuOrder[5]  = 'product';
 $lang->index->menuOrder[10] = 'project';
 
-/* my menu order. */
+/* My menu order. */
 $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'myWork';
 $lang->my->menuOrder[15] = 'myProject';
@@ -59,13 +59,13 @@ $lang->my->menuOrder[40] = 'follow';
 $lang->my->menuOrder[45] = 'contacts';
 $lang->todo->menuOrder = $lang->my->menuOrder;
 
-/* program menu order. */
+/* Program menu order. */
 $lang->program->menuOrder[5]  = 'product';
 $lang->program->menuOrder[10] = 'project';
 $lang->program->menuOrder[15] = 'personnel';
 $lang->program->menuOrder[20] = 'stakeholder';
 
-/* product menu order. */
+/* Product menu order. */
 $lang->product->menuOrder[5]  = 'dashboard';
 $lang->product->menuOrder[10] = 'story';
 $lang->product->menuOrder[15] = 'plan';
@@ -85,7 +85,7 @@ $lang->productplan->menuOrder = $lang->product->menuOrder;
 $lang->release->menuOrder     = $lang->product->menuOrder;
 $lang->branch->menuOrder      = $lang->product->menuOrder;
 
-/* project menu order. */
+/* Execution menu order. */
 $lang->execution->menuOrder[5]  = 'task';
 $lang->execution->menuOrder[10] = 'kanban';
 $lang->execution->menuOrder[15] = 'burn';
@@ -100,9 +100,6 @@ $lang->execution->menuOrder[55] = 'release';
 $lang->execution->menuOrder[60] = 'action';
 $lang->execution->menuOrder[65] = 'setting';
 
-$lang->task->menuOrder  = $lang->execution->menuOrder;
-$lang->build->menuOrder = $lang->execution->menuOrder;
-
 /* qa menu order. */
 $lang->qa->menuOrder[5]      = 'product';
 $lang->qa->menuOrder[10]     = 'index';
@@ -112,27 +109,14 @@ $lang->qa->menuOrder[25]     = 'testtask';
 $lang->qa->menuOrder[30]     = 'report';
 $lang->qa->menuOrder[35]     = 'testsuite';
 $lang->qa->menuOrder[40]     = 'caselib';
-$lang->bug->menuOrder        = $lang->qa->menuOrder;
-$lang->testtask->menuOrder   = $lang->qa->menuOrder;
-$lang->testreport->menuOrder = $lang->qa->menuOrder;
 
-$lang->testcase->menuOrder[5]  = 'feature';
-$lang->testcase->menuOrder[10] = 'unit';
-$lang->testcase->menuOrder[15] = 'testsuite';
-$lang->testcase->menuOrder[20] = 'caselib';
-$lang->caselib->menuOrder   = $lang->testcase->menuOrder;
-$lang->testsuite->menuOrder = $lang->testcase->menuOrder;
+$lang->devops->menuOrder[5]  = 'code';
+$lang->devops->menuOrder[10] = 'build';
+$lang->devops->menuOrder[15] = 'jenkins';
+$lang->devops->menuOrder[20] = 'maintain';
+$lang->devops->menuOrder[25] = 'rules';
 
-$lang->ci->menuOrder[5]  = 'code';
-$lang->ci->menuOrder[10] = 'build';
-$lang->ci->menuOrder[15] = 'jenkins';
-$lang->ci->menuOrder[20] = 'maintain';
-$lang->ci->menuOrder[25] = 'rules';
-
-$lang->repo->menuOrder    = $lang->ci->menuOrder;
-$lang->jenkins->menuOrder = $lang->ci->menuOrder;
-
-/* doc menu order. */
+/* Doc menu order. */
 $lang->doc->menuOrder[5]  = 'list';
 $lang->doc->menuOrder[10] = 'product';
 $lang->doc->menuOrder[15] = 'project';
@@ -140,31 +124,28 @@ $lang->doc->menuOrder[20] = 'custom';
 $lang->doc->menuOrder[25] = 'index';
 $lang->doc->menuOrder[30] = 'create';
 
-/* report menu order. */
+/* Report menu order. */
 $lang->report->menuOrder[5]  = 'annual';
 $lang->report->menuOrder[10] = 'product';
 $lang->report->menuOrder[15] = 'execution';
 $lang->report->menuOrder[20] = 'test';
 $lang->report->menuOrder[25] = 'staff';
 
-/* company menu order. */
+/* Company menu order. */
 $lang->company->menuOrder[5]  = 'browseUser';
 $lang->company->menuOrder[10] = 'dept';
 $lang->company->menuOrder[15] = 'browseGroup';
 $lang->company->menuOrder[20] = 'addGroup';
 $lang->company->menuOrder[25] = 'batchAddUser';
 $lang->company->menuOrder[30] = 'addUser';
-$lang->dept->menuOrder        = $lang->company->menuOrder;
-$lang->group->menuOrder       = $lang->company->menuOrder;
-$lang->user->menuOrder        = $lang->company->menuOrder;
 
-/* system menu order. */
+/* System menu order. */
 $lang->system->menuOrder[5]  = 'team';
 $lang->system->menuOrder[10] = 'calendar';
 $lang->system->menuOrder[15] = 'dynamic';
 $lang->system->menuOrder[20] = 'view';
 
-/* admin menu order. */
+/* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
 $lang->admin->menuOrder[10] = 'company';
 $lang->admin->menuOrder[15] = 'model';

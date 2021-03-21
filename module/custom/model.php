@@ -317,7 +317,7 @@ class customModel extends model
         if(empty($module)) $module = 'main';
 
         global $app, $lang, $config;
-        $allMenu = $module == 'main' ? $lang->menu : (isset($lang->$module->menu) ? $lang->$module->menu : $lang->my->menu);
+        $allMenu = $module == 'main' ? $lang->menu : $lang->menu->$module['subMenu'];
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
         $flowModule = $config->global->flow . '_' . $module;
         $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
@@ -325,6 +325,7 @@ class customModel extends model
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
         if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
         $menu = self::setMenuByConfig($allMenu, $customMenu, $module);
+
         return $menu;
     }
 

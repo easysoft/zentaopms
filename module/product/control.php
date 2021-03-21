@@ -56,7 +56,7 @@ class product extends control
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
-        //$this->product->setMenu($this->products, $productID, $branch);
+        //$this->product->setMenu($productID, $branch);
 
         if(common::hasPriv('product', 'create')) $this->lang->TRActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
 
@@ -77,8 +77,7 @@ class product extends control
      */
     public function project($status = 'all', $productID = 0, $branch = 0, $involved = 0)
     {
-        $this->product->setMenu($this->products, $productID, $branch);
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
+        $this->product->setMenu($productID, $branch);
 
         $this->app->loadLang('my');
         $this->app->loadLang('execution');
@@ -122,6 +121,8 @@ class product extends control
      */
     public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $from = 'product')
     {
+        $this->product->setMenu($productID, $branch);
+
         /* Lower browse type. */
         $browseType = strtolower($browseType);
 
@@ -161,7 +162,6 @@ class product extends control
             $this->session->set('productList', $this->app->getURI(true));
 
             $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
-            $this->product->setMenu($this->products, $productID, $branch);
         }
 
         /* Set moduleTree. */
@@ -321,8 +321,6 @@ class product extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        if($programID) commonModel::setAppObjectID('program', $programID);
-
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
@@ -361,9 +359,7 @@ class product extends control
      */
     public function edit($productID, $action = 'edit', $extra = '', $programID = 0)
     {
-        /* Set menu. */
         $this->app->loadLang('custom');
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         /* Init vars. */
         $product              = $this->product->getById($productID);
@@ -451,7 +447,7 @@ class product extends control
         }
 
         $productID = $this->product->saveState($productID, $this->products);
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($productID);
 
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
@@ -598,7 +594,7 @@ class product extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($productID);
 
         $this->view->product    = $product;
         $this->view->title      = $this->view->product->name . $this->lang->colon .$this->lang->close;
@@ -622,10 +618,9 @@ class product extends control
 
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -680,7 +675,7 @@ class product extends control
     public function roadmap($productID, $branch = 0)
     {
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        $this->product->setMenu($this->products, $productID, $branch);
+        $this->product->setMenu($productID, $branch);
 
         $this->session->set('releaseList',     $this->app->getURI(true));
         $this->session->set('productPlanList', $this->app->getURI(true));
@@ -725,7 +720,7 @@ class product extends control
         $this->session->set('caseList',        $uri);
         $this->session->set('testtaskList',    $uri);
 
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($productID);
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
@@ -782,10 +777,8 @@ class product extends control
         $product   = $this->product->getStatByID($productID);
         if(!$product) die(js::locate('product', 'all'));
 
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
-
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1101,7 +1094,7 @@ class product extends control
     public function whitelist($productID = 0, $module = 'product', $objectType = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', 0);
-        $this->product->setMenu($this->products, $productID, 0);
+        $this->product->setMenu($productID, 0);
         $this->lang->modulePageNav = '';
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -1118,8 +1111,7 @@ class product extends control
      */
     public function addWhitelist($productID = 0, $deptID = 0, $branch = '')
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        $this->product->setMenu($this->products, $productID, $branch);
+        $this->product->setMenu($productID, $branch);
         $moduleIndex = array_search('product', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         $this->lang->modulePageNav = '';
@@ -1223,7 +1215,7 @@ class product extends control
         /* Get current product. */
         $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getById($productID);
-        $this->product->setMenu($this->products, $productID, $branch);
+        $this->product->setMenu($productID, $branch);
 
         /* Set menu.*/
         $this->session->set('buildList', $this->app->getURI(true));

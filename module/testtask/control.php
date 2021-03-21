@@ -100,7 +100,7 @@ class testtask extends control
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
-        $this->testtask->setMenu($this->products, $productID, $branch);
+        $this->loadModel('qa')->setMenu($this->products, $productID, $branch);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -151,8 +151,7 @@ class testtask extends control
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
-        $this->loadModel('testtask')->setUnitMenu($this->products, $productID);
-        $this->lang->testtask->menuOrder = $this->lang->testcase->menuOrder;
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Load pager. */
         if($browseType == 'newest') $recPerPage = '10';
