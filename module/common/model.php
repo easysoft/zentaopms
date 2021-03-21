@@ -788,8 +788,6 @@ class commonModel extends model
 
         $openApp = $app->openApp;
 
-        if(in_array($moduleName, array('admin', 'repo', 'ops', 'feedback'))) return;
-
         self::getModuleMenu($activeMenu);
 
         if(!isset($lang->$openApp->menu))

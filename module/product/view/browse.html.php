@@ -135,18 +135,17 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
       <ul class='dropdown-menu'>
         <li>
         <?php
-        $openApp = $isProjectStory ? 'project' : 'product';
         if(commonModel::isTutorialMode())
         {
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
-            if($isProjectStory) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID={$this->session->PRJ}");
+            if($isProjectStory) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID=$projectID");
             $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
             echo html::a($link, $lang->story->createCommon, '', "data-group='$openApp'");
         }
         else
         {
             $link     = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
-            if($isProjectStory) $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID={$this->session->PRJ}");
+            if($isProjectStory) $link = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID");
             $disabled = '';
             if(!common::hasPriv('story', 'create'))
             {

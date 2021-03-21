@@ -161,6 +161,7 @@ $lang->personnel->accessible = '可访问人员';
 $lang->stakeholder->common = '干系人';
 $lang->release->common     = '发布';
 $lang->message->common     = '通知';
+$lang->mail->common        = '邮件';
 
 $lang->my->shortCommon          = '地盘';
 $lang->testcase->shortCommon    = '用例';
@@ -170,7 +171,6 @@ $lang->testreport->shortCommon  = '报告';
 $lang->qa->shortCommon          = 'QA';
 
 $lang->dashboard  = '仪表盘';
-$lang->todo       = '待处理';
 $lang->contribute = '贡献';
 $lang->dynamic    = '动态';
 $lang->contact    = '联系人';
@@ -197,13 +197,14 @@ $lang->intro      = '介绍';
 $lang->indexPage  = '首页';
 $lang->model      = '模型';
 $lang->redev      = '二次开发';
-$lang->mail       = '邮件';
 $lang->browser    = '浏览器';
 $lang->db         = '数据库';
 $lang->editor     = '编辑器';
 $lang->timezone   = '时区';
 $lang->safety     = '安全';
 $lang->calendar   = '日程';
+
+$lang->my->work = '待处理';
 
 $lang->project->report = '报告';
 

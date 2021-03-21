@@ -17,7 +17,7 @@
 </div>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
-  <!--div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('system');?></div-->
+  <div class='btn-toolbar pull-left'><?php // common::printAdminSubMenu('system');?></div>
 </div>
 <div id='mainContent' class="main-row">
   <div class='side-col' id='sidebar'>

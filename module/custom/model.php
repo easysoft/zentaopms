@@ -155,6 +155,7 @@ class customModel extends model
         $menuModuleName = $module;
         $order          = 1;
         $customMenuMap  = array();
+        $openApp        = $app->openApp;
         $isTutorialMode = commonModel::isTutorialMode();
 
         if($customMenu)
@@ -194,7 +195,7 @@ class customModel extends model
         }
         elseif($module)
         {
-            $menuOrder = ($module == 'main' and isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->$module->menuOrder) ? $lang->$module->menuOrder : array());
+            $menuOrder = ($module == 'main' and isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->menu->$module['menuOrder']) ? $lang->menu->$module['menuOrder'] : array());
             if($menuOrder)
             {
                 ksort($menuOrder);

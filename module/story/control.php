@@ -53,6 +53,10 @@ class story extends control
         {
             $this->loadModel('product')->setMenu($productID);
         }
+        else if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($objectID);
+        }
 
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);

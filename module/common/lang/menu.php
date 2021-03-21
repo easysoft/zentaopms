@@ -34,11 +34,9 @@ $lang->mainNav->menuOrder[60] = 'system';
 $lang->mainNav->menuOrder[70] = 'admin';
 
 /* My menu. */
-$lang->my = new stdclass();
 $lang->my->menu = new stdclass();
-
 $lang->my->menu->index      = array('link' => "$lang->dashboard|my|index");
-$lang->my->menu->work       = array('link' => "$lang->todo|my|work|mode=task");
+$lang->my->menu->work       = array('link' => "{$lang->my->work}|my|work|mode=task");
 if($config->systemMode == 'new') $lang->my->menu->project = array('link' => "{$lang->project->common}|my|project|");
 $lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|execution|type=undone");
 $lang->my->menu->contribute = array('link' => "$lang->contribute|my|contribute|mode=task");
@@ -281,6 +279,11 @@ $lang->execution->menu->qa['subMenu']->testcase   = array('link' => "{$lang->tes
 $lang->execution->menu->qa['subMenu']->testtask   = array('link' => "{$lang->testtask->common}|execution|testtask|executionID=%s");
 // $lang->execution->menu->qa['subMenu']->testreport = array('link' => "$lang->project->report|testreport|browse|exeutionID=%s&type=execution");
 
+$lang->execution->menu->qa['menuOrder'][5]  = 'qa';
+$lang->execution->menu->qa['menuOrder'][10] = 'bug';
+$lang->execution->menu->qa['menuOrder'][15] = 'testcase';
+$lang->execution->menu->qa['menuOrder'][20] = 'testtask';
+
 $lang->execution->menu->settings['subMenu'] = new stdclass();
 $lang->execution->menu->settings['subMenu']->view      = array('link' => "$lang->overview|execution|view|executionID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->execution->menu->settings['subMenu']->products  = array('link' => "$lang->productCommon|execution|manageproducts|executionID=%s");
@@ -388,7 +391,7 @@ $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,search');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,search,admin');
 
 /* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
@@ -400,36 +403,28 @@ $lang->admin->menuOrder[30] = 'extension';
 $lang->admin->menuOrder[35] = 'dev';
 $lang->admin->menuOrder[40] = 'system';
 
-/*
-$lang->admin->subMenuOrder = new stdclass();
-$lang->admin->subMenuOrder->message[5]  = 'mail';
-$lang->admin->subMenuOrder->message[10] = 'webhook';
-$lang->admin->subMenuOrder->message[15] = 'browser';
-$lang->admin->subMenuOrder->message[20] = 'setting';
-$lang->admin->subMenuOrder->sso[5]      = 'ranzhi';
-$lang->admin->subMenuOrder->dev[5]      = 'api';
-$lang->admin->subMenuOrder->dev[10]     = 'db';
-$lang->admin->subMenuOrder->dev[15]     = 'editor';
-$lang->admin->subMenuOrder->dev[20]     = 'entry';
-$lang->admin->subMenuOrder->system[5]   = 'data';
-$lang->admin->subMenuOrder->system[10]  = 'safe';
-$lang->admin->subMenuOrder->system[15]  = 'cron';
-$lang->admin->subMenuOrder->system[20]  = 'timezone';
-$lang->admin->subMenuOrder->system[25]  = 'buildIndex';
- */
-
 $lang->admin->menu->message['subMenu'] = new stdclass();
 $lang->admin->menu->message['subMenu']->message = new stdclass();
-$lang->admin->menu->message['subMenu']->mail    = array('link' => "$lang->mail|mail|index", 'subModule' => 'mail');
+$lang->admin->menu->message['subMenu']->mail    = array('link' => "{$lang->mail->common}|mail|index", 'subModule' => 'mail');
 $lang->admin->menu->message['subMenu']->webhook = array('link' => "Webhook|webhook|browse", 'subModule' => 'webhook');
 $lang->admin->menu->message['subMenu']->browser = array('link' => "$lang->browser|message|browser");
 $lang->admin->menu->message['subMenu']->setting = array('link' => "$lang->settings|message|setting");
+
+$lang->admin->menu->message['menuOrder'][5]  = 'mail';
+$lang->admin->menu->message['menuOrder'][10] = 'webhook';
+$lang->admin->menu->message['menuOrder'][15] = 'browser';
+$lang->admin->menu->message['menuOrder'][20] = 'setting';
 
 $lang->admin->menu->dev['subMenu'] = new stdclass();
 $lang->admin->menu->dev['subMenu']->api    = array('link' => "API|dev|api");
 $lang->admin->menu->dev['subMenu']->db     = array('link' => "$lang->db|dev|db");
 $lang->admin->menu->dev['subMenu']->editor = array('link' => "$lang->editor|dev|editor");
 $lang->admin->menu->dev['subMenu']->entry  = array('link' => "{$lang->admin->entry}|entry|browse", 'subModule' => 'entry');
+
+$lang->admin->menu->dev['menuOrder'][5]  = 'api';
+$lang->admin->menu->dev['menuOrder'][10] = 'db';
+$lang->admin->menu->dev['menuOrder'][15] = 'editor';
+$lang->admin->menu->dev['menuOrder'][20] = 'entry';
 
 $lang->admin->menu->system['subMenu'] = new stdclass();
 $lang->admin->menu->system['subMenu']->data       = array('link' => "{$lang->admin->data}|backup|index", 'subModule' => 'action');

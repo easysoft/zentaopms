@@ -61,6 +61,7 @@ $lang->devops      = new stdclass();
 $lang->team        = new stdclass();
 $lang->automation  = new stdclass();
 $lang->personnel   = new stdclass();
+$lang->mail        = new stdclass();
 
 $lang->projectrelease = new stdclass();
 $lang->projectstory   = new stdclass();

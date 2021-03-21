@@ -30,6 +30,7 @@ class projectStory extends control
     /**
      * Get software requirements from product.
      *
+     * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $browseType
@@ -42,11 +43,11 @@ class projectStory extends control
      * @access public
      * @return void
      */
-    public function story($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($projectID = 0, $productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->session->set('storyList', $this->app->getURI(true), 'project');
 
-        echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=project");
+        echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }
 
     /**

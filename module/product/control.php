@@ -115,13 +115,14 @@ class product extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
-     * @param  string $from product|project
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $from = 'product')
+    public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
-        $this->product->setMenu($productID, $branch);
+        if($this->app->openApp == 'product') $this->product->setMenu($productID, $branch);
+        if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($projectID);
 
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -289,6 +290,7 @@ class product extends control
         $this->view->storyBugs       = $storyBugs;
         $this->view->storyCases      = $storyCases;
         $this->view->param           = $param;
+        $this->view->projectID       = $projectID;
         $this->view->products        = $this->products;
         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
         $this->view->storyType       = $storyType;
