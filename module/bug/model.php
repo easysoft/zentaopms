@@ -1397,6 +1397,71 @@ class bugModel extends model
     }
 
     /**
+     * Get bugs of a project.
+     *
+     * @param  int    $projectID
+     * @param  int    $build
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  string $excludeBugs
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getProjectBugs($projectID, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
+    {
+        $type = strtolower($type);
+        if($type == 'bysearch')
+        {
+            $queryID  = (int)$param;
+            $products = $this->loadModel('project')->getProducts($projectID);
+
+            if($this->session->projectBugQuery == false) $this->session->set('projectBugQuery', ' 1 = 1');
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('projectBugQuery', $query->sql);
+                    $this->session->set('projectBugForm', $query->form);
+                }
+            }
+
+            $allProduct = "`product` = 'all'";
+            $bugQuery   = $this->session->projectBugQuery;
+            if(strpos($this->session->projectBugQuery, $allProduct) !== false)
+            {
+                $bugQuery = str_replace($allProduct, '1', $this->session->projectBugQuery);
+            }
+
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)
+                ->where($bugQuery)
+                ->andWhere('project')->eq((int)$projectID)
+                ->andWhere('deleted')->eq(0)
+                ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        else
+        {
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)
+                ->where('deleted')->eq(0)
+                ->beginIF(empty($build))->andWhere('project')->eq($projectID)->fi()
+                ->beginIF($type == 'unresolved')->andWhere('status')->eq('active')->fi()
+                ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
+                ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
+                ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+
+        return $bugs;
+    }
+
+    /**
      * Get bugs of a execution.
      *
      * @param  int    $executionID

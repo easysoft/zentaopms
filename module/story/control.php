@@ -846,9 +846,18 @@ class story extends control
 
         /* Set the menu. */
         $from = $this->app->openApp;
-        if($from == 'execution' or $from == 'project')
+        if($from == 'execution')
         {
-            commonModel::setAppObjectID($from, $param);
+            $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+            $this->execution->setMenu($execution, $param);
+        }
+        elseif($from == 'project')
+        {
+            $this->loadModel('project')->setMenu($param);
+        }
+        elseif($from == 'product')
+        {
+            $this->product->setMenu($story->product, $story->branch);
         }
 
         $this->executeHooks($storyID);
