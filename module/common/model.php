@@ -732,7 +732,7 @@ class commonModel extends model
                     $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
                 }
 
-                $misc = isset($lang->navGroup->$module) and $openApp != $lang->navGroup->$module ? "data-app='$openApp'" : '';
+                $misc = (isset($lang->navGroup->$module) and $openApp != $lang->navGroup->$module) ? "data-app='$openApp'" : '';
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
 
                 echo $menuItemHtml;
@@ -2267,7 +2267,7 @@ EOD;
             return;
         }
 
-        if($app->rawMethod == 'create')
+        if($app->rawModule == $openApp && $app->rawMethod == 'create')
         {
             $lang->menu = $lang->$openApp->homeMenu;
             return;

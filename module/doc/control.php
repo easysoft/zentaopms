@@ -840,7 +840,7 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getPairs($this->session->PRJ, 'all', 0, true), $objectID);
+            $this->project->setMenu($objectID);
         }
         else
         {
@@ -934,9 +934,13 @@ class doc extends control
             $this->doc->setMenu($type, 0, 0, $productID, $executionID, $crumb);
             
         }
+        elseif($from == 'execution')
+        {
+            $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+            $this->execution->setMenu($executions, $objectID);
+        }
         else
         {
-            $this->lang->noMenuModule[] = 'doc';
             $this->loadModel($from)->setMenu($objectID);
         }
 
