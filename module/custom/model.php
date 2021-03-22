@@ -195,7 +195,7 @@ class customModel extends model
         }
         elseif($module)
         {
-            $menuOrder = ($module == 'main' and isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->menu->$module['menuOrder']) ? $lang->menu->$module['menuOrder'] : array());
+            $menuOrder = ($module == 'main' and isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->menu->{$module}['menuOrder']) ? $lang->menu->{$module}['menuOrder'] : array());
             if($menuOrder)
             {
                 ksort($menuOrder);
@@ -321,7 +321,8 @@ class customModel extends model
         if(empty($module)) $module = 'main';
 
         global $app, $lang, $config;
-        $allMenu = $module == 'main' ? $lang->menu : $lang->menu->$module['subMenu'];
+        if($module == 'main') $allMenu = $lang->menu;
+        if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
         $flowModule = $config->global->flow . '_' . $module;
         $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();

@@ -69,7 +69,7 @@ $config->project->datatable->fieldList['budget']['required'] = 'yes';
 
 $config->project->datatable->fieldList['teamCount']['title']    = 'teamCount';
 $config->project->datatable->fieldList['teamCount']['fixed']    = 'no';
-$config->project->datatable->fieldList['teamCount']['width']    = '40';
+$config->project->datatable->fieldList['teamCount']['width']    = '70';
 $config->project->datatable->fieldList['teamCount']['required'] = 'no';
 $config->project->datatable->fieldList['teamCount']['sort']     = 'no';
 

@@ -63,7 +63,7 @@ foreach($products as $product)
     </div>
     <div class="col-footer">
       <?php //echo html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->product->all, '', 'class="not-list-item"'); ?>
-      <?php echo html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $lang->product->create, '', 'class="not-list-item" data-app="product"'); ?>
+      <?php //echo html::a(helper::createLink('project', 'browse', 'programID=0&browseType=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>

@@ -2089,8 +2089,11 @@ class execution extends control
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create($this->objectType, $executionID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            if(isonlybody()) die(js::reload('parent'));
-            die(js::locate($browseExecutionLink));
+            if(isonlybody())
+            {
+                $this->session->set('executionID' , $executionID);
+                die(js::reload('parent'));
+            }
         }
 
         $this->loadModel('product');

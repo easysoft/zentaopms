@@ -1,7 +1,7 @@
 /**
  * Set duplicate field.
- * 
- * @param  string $resolution 
+ *
+ * @param  string $resolution
  * @access public
  * @return void
  */
@@ -68,3 +68,8 @@ $(document).on('change', 'select', function()
         $(this).trigger("change");
     }
 })
+
+$(function()
+{
+    $('#subNavbar li[data-id="bug"]').addClass('active');
+});

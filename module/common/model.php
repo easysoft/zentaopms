@@ -125,7 +125,7 @@ class commonModel extends model
     public function setOpenApp()
     {
         $openApp = $this->app->openApp;
-        if($this->lang->navGroup->$openApp)
+        if(isset($this->lang->navGroup->$openApp))
         {
             $this->app->openApp = $this->lang->navGroup->$openApp;
         }
@@ -665,7 +665,7 @@ class commonModel extends model
             $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
 
             $active = '';
-            if($menuItem->name == $currentModule and strpos(",$exclude,", ",$currentMethod,") === false)
+            if($menuItem->name == $currentModule and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
             {
                 $activeMenu = $menuItem->name;
                 $active = 'active';
@@ -788,8 +788,6 @@ class commonModel extends model
         $methodName = $app->rawMethod;
 
         $openApp = $app->openApp;
-
-        self::getModuleMenu($activeMenu);
 
         if(!isset($lang->$openApp->menu))
         {
@@ -2353,20 +2351,6 @@ EOD;
             $lang->project->menuOrder   = $lang->waterfall->menuOrder;
             return self::processMenuVars($lang->menu->waterfall);
         }
-    }
-
-    /**
-     * Get my module menu by methodName.
-     *
-     * @param  string $activeMenu
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function getModuleMenu($activeMenu)
-    {
-        global $app, $lang;
-        $lang->{$app->openApp}->menu = $lang->{$app->openApp}->menu->$activeMenu['subMenu'];
     }
 
     /**

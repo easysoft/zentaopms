@@ -14,7 +14,7 @@ include 'chosen.html.php';
       <nav id='navbar'><?php $activeMenu = commonModel::printMainMenu();?></nav>
     </div>
   </div>
-  <?php if(isset($lang->{$app->openApp}->menu->$activeMenu) and isset($lang->{$app->openApp}->menu->$activeMenu['subMenu'])):?>
+  <?php if(isset($lang->{$app->openApp}->menu->$activeMenu) and isset($lang->{$app->openApp}->menu->{$activeMenu}['subMenu'])):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>

@@ -120,7 +120,7 @@
         }
         if(moduleName === 'my')    
         {
-            if(['todo', 'team', 'calendar'].includes(methodLowerCase)) return 'system';
+            if(['team'].includes(methodLowerCase)) return 'system';
         }
         if(moduleName === 'company') if(methodLowerCase == 'browse') return 'admin';
         if(moduleName === 'tree')
