@@ -1094,8 +1094,8 @@ class testtask extends control
         /* The case of my. */
         else
         {
-            $this->lang->testtask->menu = $this->lang->my->workMenu;
-            $this->lang->my->menu->myWork['subModule'] = 'testtask';
+            $this->lang->testtask->menu = $this->lang->my->menu->work;
+            $this->lang->my->menu->work['subModule'] = 'testtask';
 
             $this->view->title = $this->lang->testtask->batchRun;
 
