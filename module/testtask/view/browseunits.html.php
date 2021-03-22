@@ -52,9 +52,9 @@
           <th class='text-left'>        <?php common::printOrderLink('build',     $orderBy, $vars, $lang->testtask->build);?></th>
           <th class='c-user text-left'> <?php common::printOrderLink('owner',     $orderBy, $vars, $lang->testtask->owner);?></th>
           <th class='w-90px text-left'> <?php common::printOrderLink('begin',     $orderBy, $vars, $lang->testtask->execTime);?></th>
-          <th class='w-50px text-center'><?php echo $lang->testtask->caseCount;?></th>
-          <th class='w-40px text-center'><?php echo $lang->testtask->passCount;?></th>
-          <th class='w-40px text-center'><?php echo $lang->testtask->failCount;?></th>
+          <th class='w-60px text-center'><?php echo $lang->testtask->caseCount;?></th>
+          <th class='w-60px text-center'><?php echo $lang->testtask->passCount;?></th>
+          <th class='w-60px text-center'><?php echo $lang->testtask->failCount;?></th>
           <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -64,7 +64,7 @@
         <td><?php printf('%03d', $task->id);?></td>
         <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('unitCases', "taskID=$task->id"), $task->name);?></td>
         <td class='c-name' title="<?php echo $task->executionName?>"><?php echo $task->executionName?></td>
-        <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName);?></td>
+        <td class='c-name' title="<?php echo $task->buildName;?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', 'data-app="execution"');?></td>
         <td><?php echo zget($users, $task->owner);?></td>
         <td><?php echo $task->begin?></td>
         <td class='text-center'><?php echo $task->caseCount?></td>
@@ -96,8 +96,7 @@ $(function()
 {
     $('#<?php echo $browseType?>UnitTab').addClass('selected');
     $('#browseunitsTab').addClass('btn-active-text');
-    $('#navbar li[data-id="testtask"]').removeClass('active');
-    $('#navbar li[data-id="testcase"]').addClass('active');
+    $('#subNavbar li[data-id="case"]').addClass('active');
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

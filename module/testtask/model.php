@@ -100,6 +100,8 @@ class testtaskModel extends model
     public function getProductUnitTasks($productID, $browseType = '', $orderBy = 'id_desc', $pager = null)
     {
         $beginAndEnd = $this->loadModel('action')->computeBeginAndEnd($browseType);
+        if(empty($beginAndEnd)) $beginAndEnd = array('begin' => '', 'end' => '');
+
         if($browseType == 'newest') $orderBy = 'end_desc,' . $orderBy;
         $tasks = $this->dao->select("t1.*, t2.name AS productName, t3.name AS executionName, t4.name AS buildName")
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -117,6 +119,7 @@ class testtaskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
         $resultGroups = $this->dao->select('t1.task, t2.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTRESULT)->alias('t2')->on('t1.id=t2.run')
             ->where('t1.task')->in(array_keys($tasks))

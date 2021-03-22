@@ -306,18 +306,17 @@ $lang->qa->menu->testtask   = array('link' => "{$lang->testtask->common}|testtas
 $lang->qa->menu->automation = array('link' => "{$lang->automation->common}|automation|browse|productID=%s", 'alias' => '', 'class' => 'dropdown dropdown-hover');
 
 /* QA menu order. */
-$lang->qa->menuOrder[5]      = 'product';
-$lang->qa->menuOrder[10]     = 'index';
-$lang->qa->menuOrder[15]     = 'bug';
-$lang->qa->menuOrder[20]     = 'testcase';
-$lang->qa->menuOrder[25]     = 'testtask';
-$lang->qa->menuOrder[30]     = 'report';
-$lang->qa->menuOrder[35]     = 'testsuite';
-$lang->qa->menuOrder[40]     = 'caselib';
+$lang->qa->menuOrder[5]  = 'product';
+$lang->qa->menuOrder[10] = 'index';
+$lang->qa->menuOrder[15] = 'bug';
+$lang->qa->menuOrder[20] = 'testcase';
+$lang->qa->menuOrder[25] = 'testtask';
+$lang->qa->menuOrder[30] = 'report';
+$lang->qa->menuOrder[35] = 'testsuite';
+$lang->qa->menuOrder[40] = 'caselib';
 
 $lang->qa->menu->testcase['subMenu'] = new stdclass();
-$lang->qa->menu->testcase['subMenu']->feature   = array('link' => "{$lang->testcase->feature}|testcase|browse|productID=%s", 'subModule' => 'testcase,tree,story');
-$lang->qa->menu->testcase['subMenu']->unit      = array('link' => "{$lang->testcase->unit}|testtask|browseUnits|productID=%s", 'alias' => 'browseunits');
+$lang->qa->menu->testcase['subMenu']->case      = array('link' => "{$lang->testcase->case}|testcase|browse|productID=%s", 'subModule' => 'testcase,tree,story');
 $lang->qa->menu->testcase['subMenu']->testsuite = array('link' => "{$lang->testcase->testsuite}|testsuite|browse|productID=%s", 'subModule' => 'testsuite');
 $lang->qa->menu->testcase['subMenu']->caselib   = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0");
 
