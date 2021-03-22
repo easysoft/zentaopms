@@ -28,9 +28,9 @@
     </a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::canModify('execution', $execution)):?>
-    <?php common::printIcon('testreport', 'browse', "objectID=$executionID&objectType=execution", '', 'button','flag muted');?>
-    <?php common::printLink('testtask', 'create', "product=0&executionID=$executionID&build=&projectID=$execution->project", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
+    <?php if(common::canModify('project', $project)):?>
+    <?php common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag muted');?>
+    <?php common::printLink('testtask', 'create', "product=0&projectID=$projectID&build=&projectID=$project->project", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
 </div>
@@ -39,8 +39,8 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span>
-      <?php if(common::canModify('execution', $execution) and common::hasPriv('testtask', 'create')):?>
-      <?php echo html::a($this->createLink('testtask', 'create', "product=0&execution=$executionID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
+      <?php if(common::canModify('project', $project) and common::hasPriv('testtask', 'create')):?>
+      <?php echo html::a($this->createLink('testtask', 'create', "product=0&project=$projectID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -48,7 +48,7 @@
   <form class="main-table table-testtask" data-ride="table" data-group="true" method="post" target='hiddenwin' id='testtaskForm'>
     <table class="table table-grouped has-sort-head" id='taskList'>
       <thead>
-        <?php $vars = "executionID=$executionID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+        <?php $vars = "projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <?php $canTestReport = ($canBeChanged and common::hasPriv('testreport', 'browse'));?>
         <tr class='<?php if($total) echo 'divider'; ?>'>
           <th class='c-side text-center'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
@@ -132,7 +132,7 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
       <?php
-      $actionLink = $this->createLink('testreport', 'browse', "objectID=$executionID&objctType=execution");
+      $actionLink = $this->createLink('testreport', 'browse', "objectID=$projectID&objctType=project");
       $misc       = common::hasPriv('testreport', 'browse') ? "onclick=\"setFormAction('$actionLink', '', '#testtaskForm')\"" : "disabled='disabled'";
       echo html::commonButton($lang->testreport->common, $misc);
       ?>

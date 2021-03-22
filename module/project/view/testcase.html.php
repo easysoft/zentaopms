@@ -1,10 +1,10 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a(inlink('testcase', "executionID=$executionID&type=$type&orderBy=$orderBy"), "<span class='text'>{$lang->execution->all}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a(inlink('testcase', "projectID=$projectID&type=$type&orderBy=$orderBy"), "<span class='text'>{$lang->project->all}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::canModify('execution', $execution)) echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary' data-app='execution'");?>
+    <?php if(common::canModify('project', $project)) echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=project&param=$project->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary' data-app='project'");?>
   </div>
 </div>
 <div id="mainContent">
@@ -12,15 +12,15 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
-      <?php if(common::canModify('execution', $execution) and common::hasPriv('testcase', 'create')):?>
-      <?php echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info' data-app='execution'");?>
+      <?php if(common::canModify('project', $project) and common::hasPriv('testcase', 'create')):?>
+      <?php echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=project&param=$project->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info' data-app='project'");?>
       <?php endif;?>
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' method='post' id='executionBugForm' data-ride="table">
+  <form class='main-table' method='post' id='projectBugForm' data-ride="table">
     <table class='table has-sort-head' id='bugList'>
-    <?php $vars = "executionID=$executionID&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+    <?php $vars = "projectID=$projectID&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='w-50px'>  <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>

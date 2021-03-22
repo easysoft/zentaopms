@@ -68,15 +68,17 @@ class projectrelease extends control
     public function browse($projectID = 0, $executionID = 0, $type = 'all')
     {
         $this->session->set('releaseList', $this->app->getURI(true));
-        $execution = $this->loadModel('execution')->getById($this->session->project);
+        $project   = $this->project->getById($projectID);
+        $execution = $this->loadModel('execution')->getById($executionID);
 
         if($projectID) $this->project->setMenu($projectID);
         if($executionID) $this->loadModel('execution')->setMenu($executionID, $this->app->rawModule, $this->app->rawMethod);
 
-        $this->view->title       = $execution->name . $this->lang->colon . $this->lang->release->browse;
+        $this->view->title       = $project->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[]  = $this->lang->release->browse;
         $this->view->execution   = $execution;
-        $this->view->products    = $this->loadModel('product')->getProducts($this->session->project);
+        $this->view->project     = $project;
+        $this->view->products    = $this->loadModel('product')->getProducts($this->session->PRJ);
         $this->view->releases    = $this->projectrelease->getList($projectID, $type);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
