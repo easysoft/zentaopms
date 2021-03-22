@@ -79,7 +79,7 @@
             }
             common::printIcon('testtask', 'create', "product=$build->product&executionID={$build->execution}&build=$build->id&projectID=$projectID", $build, 'list', 'bullhorn', '', '', '', "data-app='execution'");
             $lang->project->bug = $lang->execution->viewBug;
-            common::printIcon('execution', 'bug',  "project={$build->execution}&orderBy=status&build=$build->id", $build, 'list', '', '', '', '', "data-app='execution'");
+            common::printIcon('build', 'view', "buildID=$build->id&type=generatedBug", $build, 'list', 'bug', '', '', '', "data-app='project'");
             common::printIcon('build',   'edit', "buildID=$build->id", $build, 'list');
             if(common::hasPriv('build',  'delete', $build))
             {
