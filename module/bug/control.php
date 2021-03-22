@@ -675,7 +675,7 @@ class bug extends control
         /* Set menu. */
         if($from == 'bug')
         {
-            $this->bug->setMenu($this->products, $bug->product, $bug->branch);
+            $this->qa->setMenu($this->products, $bug->product, $bug->branch);
         }
         elseif($from == 'repo')
         {
