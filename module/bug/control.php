@@ -496,6 +496,9 @@ class bug extends control
 
             $project   = $this->loadModel('project')->getByID($projectID);
             $projects += array($projectID => $project->name);
+
+            /* Set project menu. */
+            if($this->app->openApp == 'project') $this->project->setMenu($projectID);
         }
         else
         {
