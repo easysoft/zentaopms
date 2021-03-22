@@ -832,6 +832,22 @@ function adjustMenuWidth()
     }
 }
 
+/**
+ * Scroll to selected item in drop menu.
+ *
+ * @access public
+ * @return void
+ */
+function scrollToSelected()
+{
+    $('#dropMenu .table-row .list-group').mouseout(function(){$(this).find('.active').removeClass('active')});
+    if($('#dropMenu .table-row .col-left .list-group .selected').length > 0)
+    {
+        var offsetHeight = 75;
+        $('#dropMenu .table-row .col-left .list-group').scrollTop($('#dropMenu .table-row .col-left .list-group .selected').position().top - offsetHeight);
+    }
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

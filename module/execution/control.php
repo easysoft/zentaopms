@@ -104,7 +104,7 @@ class execution extends control
         $actions         = $this->loadModel('action')->getList('execution', $executionID);
 
         /* Set menu. */
-        $this->execution->setMenu($this->executions, $executionID, $buildID = 0, $extra);
+        $this->execution->setMenu($executionID, $buildID = 0, $extra);
 
         /* Assign. */
         $this->view->executions      = $this->executions;
@@ -1279,7 +1279,7 @@ class execution extends control
         }
 
         $executionID = key($this->executions);
-        $this->execution->setMenu($this->executions, $executionID);
+        $this->execution->setMenu($executionID);
 
         $this->view->title           = $this->lang->execution->create;
         $this->view->position[]      = $this->view->title;
@@ -1358,7 +1358,7 @@ class execution extends control
         }
 
         /* Set menu. */
-        $this->execution->setMenu($this->executions, $executionID);
+        $this->execution->setMenu($executionID);
 
         $executions = array('' => '') + $this->executions;
         $execution  = $this->execution->getById($executionID);
@@ -1477,7 +1477,7 @@ class execution extends control
             die(js::locate($this->session->executionList, 'parent'));
         }
 
-        $this->execution->setMenu($this->executions, $executionID);
+        $this->execution->setMenu($executionID);
 
         $executionIDList = $this->post->executionIDList ? $this->post->executionIDList : die(js::locate($this->session->executionList, 'parent'));
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');
@@ -1730,7 +1730,7 @@ class execution extends control
         }
 
         /* Set menu. */
-        $this->execution->setMenu($this->executions, $execution->id);
+        $this->execution->setMenu($execution->id);
         $this->app->loadLang('bug');
 
         list($dateList, $interval) = $this->execution->getDateList($execution->begin, $execution->end, 'noweekend', 0, 'Y-m-d');
@@ -1782,7 +1782,7 @@ class execution extends control
         /* Compatibility IE8*/
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $this->execution->setMenu($this->executions, $executionID);
+        $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
         $tasks   = $this->execution->getKanbanTasks($executionID, "id");
         $bugs    = $this->loadModel('bug')->getExecutionBugs($executionID);
@@ -1828,7 +1828,7 @@ class execution extends control
     {
         $this->showModuleMenu();
 
-        $this->execution->setMenu($this->executions, $executionID);
+        $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
         $tree    = $this->execution->getTree($executionID);
 
@@ -1953,7 +1953,7 @@ class execution extends control
 
         }
 
-        $this->execution->setMenu($this->executions, $executionID);
+        $this->execution->setMenu($executionID);
         $execution = $this->execution->getById($executionID);
 
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
@@ -1977,7 +1977,7 @@ class execution extends control
         /* Compatibility IE8*/
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $this->execution->setMenu($this->executions, $executionID);
+        $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
         $stories = $this->loadModel('story')->getExecutionStories($executionID);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
@@ -2100,7 +2100,7 @@ class execution extends control
         $execution  = $this->execution->getById($executionID);
 
         /* Set menu. */
-        $this->execution->setMenu($this->executions, $execution->id);
+        $this->execution->setMenu($execution->id);
 
         /* Title and position. */
         $title      = $this->lang->execution->manageProducts . $this->lang->colon . $execution->name;
@@ -2181,7 +2181,7 @@ class execution extends control
         $roles = $this->user->getUserRoles(array_keys($users));
 
         /* Set menu. */
-        $this->execution->setMenu($this->executions, $execution->id);
+        $this->execution->setMenu($execution->id);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["accounts[]"] = $this->config->user->moreLink;
 
         $title      = $this->lang->execution->manageMembers . $this->lang->colon . $execution->name;
@@ -2263,7 +2263,7 @@ class execution extends control
         if($execution->type == 'project') $browseLink = $this->createLink('projectstory', 'story', "projectID=$executionID");
 
         $this->session->set('storyList', $this->app->getURI(true), 'product'); // Save session.
-        if($execution->type != 'execution') $this->execution->setMenu($this->executions, $execution->id);     // Set menu.
+        if($execution->type != 'execution') $this->execution->setMenu($execution->id);     // Set menu.
 
         if(empty($products))
         {
@@ -2451,7 +2451,7 @@ class execution extends control
         $sort    = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
-        $this->execution->setMenu($this->executions, $executionID);
+        $this->execution->setMenu($executionID);
         if($executionID == 0)
         {
             $this->executions = array('0' => $this->lang->execution->selectExecution) + $this->executions;
@@ -2731,7 +2731,7 @@ class execution extends control
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
-        $this->execution->setMenu($this->executions, $executionID);
+        $this->execution->setMenu($executionID);
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$executionID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
@@ -2752,7 +2752,7 @@ class execution extends control
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
-        $this->execution->setMenu($this->executions, $executionID);
+        $this->execution->setMenu($executionID);
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$executionID&dept=$deptID&objectType=sprint&module=execution");
     }
