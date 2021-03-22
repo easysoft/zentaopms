@@ -205,16 +205,17 @@ class block extends control
      *
      * @param  string    $module
      * @param  string    $type
+     * @param  int       $projectID
      * @access public
      * @return void
      */
-    public function dashboard($module, $type = '')
+    public function dashboard($module, $type = '', $projectID = 0)
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getBlockList($module, $type);
 
         $commonField = 'common';
-        if($module == 'project')
+        if($module == 'project' and $projectID)
         {
             $project     = $this->loadModel('project')->getByID($this->session->PRJ);
             $commonField = $project->model . 'common';
