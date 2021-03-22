@@ -347,16 +347,25 @@ $lang->devops->menuOrder[20] = 'maintain';
 $lang->devops->menuOrder[25] = 'rules';
 
 /* Doc menu.*/
-$lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
+$lang->doc->menu->recent   = array('link' => "{$lang->doc->recent}|doc|recent");
+$lang->doc->menu->my       = array('link' => "{$lang->doc->my}|doc|my");
+$lang->doc->menu->favorite = array('link' => "{$lang->doc->favorite}|doc|favorite");
+$lang->doc->menu->product  = array('link' => "{$lang->doc->product}|doc|product");
+$lang->doc->menu->project  = array('link' => "{$lang->doc->project}|doc|project");
+$lang->doc->menu->custom   = array('link' => "{$lang->doc->custom}|doc|project");
+$lang->doc->menu->wiki     = array('link' => "{$lang->doc->wiki}|doc|project");
+
+$lang->doc->dividerMenu = ',product,';
 
 /* Doc menu order. */
-$lang->doc->menuOrder[5]  = 'list';
-$lang->doc->menuOrder[10] = 'product';
-$lang->doc->menuOrder[15] = 'project';
-$lang->doc->menuOrder[20] = 'custom';
-$lang->doc->menuOrder[25] = 'index';
-$lang->doc->menuOrder[30] = 'create';
+$lang->doc->menuOrder[5]  = 'recent';
+$lang->doc->menuOrder[10] = 'my';
+$lang->doc->menuOrder[15] = 'favorite';
+$lang->doc->menuOrder[20] = 'product';
+$lang->doc->menuOrder[25] = 'project';
+$lang->doc->menuOrder[30] = 'custom';
+$lang->doc->menuOrder[35] = 'wiki';
 
 /* Report menu.*/
 $lang->report->menu = new stdclass();

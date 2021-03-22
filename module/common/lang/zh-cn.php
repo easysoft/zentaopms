@@ -204,6 +204,14 @@ $lang->calendar   = '日程';
 
 $lang->my->work = '待处理';
 
+$lang->doc->recent   = '最近文档';
+$lang->doc->my       = '我的文档';
+$lang->doc->favorite = '我的收藏';
+$lang->doc->product  = '产品库';
+$lang->doc->project  = '项目库';
+$lang->doc->custom   = '自定义库';
+$lang->doc->wiki     = 'WIKI';
+
 $lang->project->report = '报告';
 
 $lang->report->weekly = '周报';
