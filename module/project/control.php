@@ -1326,13 +1326,22 @@ class project extends control
         }
         else
         {
-            $projectIdList = $this->project->getExecutionsByProject($projectID);
-            $this->project->delete(TABLE_PROJECT, $projectID);
-            $this->dao->update(TABLE_PROJECT)->set('deleted')->eq(1)->where('id')->in(array_keys($projectIdList))->exec();
-            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
-            $this->project->updateUserView($projectID);
-            $this->session->set('project', '');
+            $this->loadModel('user');
+            $this->loadModel('action');
 
+            $this->project->delete(TABLE_PROJECT, $projectID);
+            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('execution')->eq($projectID)->exec();
+            $this->user->updateUserView($projectID, 'project');
+
+            /* Delete the execution under the project. */
+            $executionIdList = $this->execution->getByProject($projectID);
+            if(empty($executionIdList)) die(js::reload('parent'));
+
+            $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->in(array_keys($executionIdList))->exec();
+            foreach($executionIdList as $executionID => $execution) $this->action->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+            $this->user->updateUserView($executionIdList, 'sprint');
+
+            $this->session->set('project', '');
             die(js::reload('parent'));
         }
     }

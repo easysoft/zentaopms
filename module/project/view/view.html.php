@@ -90,8 +90,9 @@
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php
-        $params = "project=$project->id";
-        common::printBack(inlink('browse'));
+        $params     = "project=$project->id";
+        $browseLink = $this->session->projectList ? $this->session->projectList : inlink('browse');
+        common::printBack($browseLink);
         if(!$project->deleted)
         {
             echo "<div class='divider'></div>";

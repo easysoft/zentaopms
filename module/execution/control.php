@@ -2038,9 +2038,9 @@ class execution extends control
         {
             /* Delete execution. */
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
-            $this->loadModel('action')->create($this->objectType, $executionID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
-            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('execution')->eq($executionID)->exec();
+            $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
             $this->execution->updateUserView($executionID);
+
             $this->session->set('execution', '');
             $this->executeHooks($executionID);
             die(js::locate(inlink('index'), 'parent'));

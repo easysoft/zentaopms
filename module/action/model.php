@@ -501,7 +501,7 @@ class actionModel extends model
 
         foreach($typeTrashes as $objectType => $objectIds)
         {
-            if(!isset($this->config->objectTables[$objectType]))continue;
+            if(!isset($this->config->objectTables[$objectType])) continue;
 
             $objectIds = array_unique($objectIds);
             $table     = $this->config->objectTables[$objectType];
