@@ -987,10 +987,6 @@ class product extends control
         {
             $this->app->loadLang($fromModule);
 
-            $projectModel = $this->loadModel('project')->getByID($this->session->project);
-            $this->lang->product->menu      = $this->lang->menu->{$projectModel->model};
-            $this->lang->product->menuOrder = $this->lang->{$projectModel->model}->menuOrder;
-
             /* The secondary test menu processing in the project. */
             if(in_array($fromModule, array('qa', 'bug', 'testtask', 'testreport')))
             {

@@ -1463,8 +1463,6 @@ class story extends control
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
 
-        $this->lang->story->menu      = $this->lang->qa->subMenu->testcase;
-        $this->lang->story->menuOrder = $this->lang->testcase->menuOrder;
         $this->loadModel('testcase')->setMenu($products, $productID);
 
         /* Append id for secend sort. */
