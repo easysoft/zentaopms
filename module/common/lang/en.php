@@ -863,17 +863,10 @@ $lang->icons['score']              = 'tint';
 /* Scrum menu. */
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
-<<<<<<< Updated upstream
-$lang->menu->scrum->index          = 'Index|project|index|project={PROJECT}';
-$lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
-$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|', 'subModule' => 'story', 'alias' => 'story,track');
-$lang->menu->scrum->doc            = 'Doc|doc|index|';
-=======
 $lang->menu->scrum->index          = 'Index|project|index|project=%s';
 $lang->menu->scrum->project        = array('link' => "$lang->executionCommon|project|index|locate=no");
 $lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|project=%s', 'subModule' => 'story', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s', 'subModule' => 'doc');
->>>>>>> Stashed changes
 $lang->menu->scrum->qa             = 'QA|qa|index';
 $lang->menu->scrum->ci             = 'Code|repo|browse';
 $lang->menu->scrum->build          = array('link' => 'Build|project|build|project=%s');
