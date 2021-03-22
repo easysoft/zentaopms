@@ -58,7 +58,7 @@
             <?php 
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::submitButton($lang->save);
-            echo html::backButton();
+            echo html::a($app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), $lang->goback, '', 'class="btn btn-wide"');
             ?>
           </div>
           <hr class='small' />

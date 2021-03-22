@@ -95,23 +95,9 @@ class tree extends control
         }
         elseif($viewType == 'bug')
         {
-            $this->lang->navGroup->tree = 'qa';
-            $productPairs = array();
-            if($from == 'project')
-            {
-                $this->lang->navGroup->tree = 'project';
-                $productPairs = $this->product->getProductPairsByProject($this->session->project);
-            }
-            elseif($from == 'qa')
-            {
-                $this->app->loadConfig('qa');
-                foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-                $productPairs = $this->product->getPairs();
-            }
-
-            $this->loadModel('bug')->setMenu($productPairs, $rootID);
-            $this->lang->tree->menu      = $this->lang->bug->menu;
-            $this->lang->tree->menuOrder = $this->lang->bug->menuOrder;
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $this->app->rawModule = 'bug';
 
             $title      = $this->lang->tree->manageBug;
             $position[] = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
@@ -130,25 +116,9 @@ class tree extends control
         }
         elseif($viewType == 'case')
         {
-            $this->lang->navGroup->tree = 'qa';
-
-            $productPairs = array();
-            if($from == 'project')
-            {
-                $this->lang->navGroup->tree = 'project';
-                $productPairs = $this->product->getProductPairsByProject($this->session->project);
-            }
-            elseif($from == 'qa')
-            {
-                $this->lang->navGroup->tree = 'qa';
-                $this->app->loadConfig('qa');
-                foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-                $productPairs = $this->product->getPairs();
-            }
-
-            $this->loadModel('testcase')->setMenu($productPairs, $rootID);
-            $this->lang->tree->menu      = $this->lang->testcase->menu;
-            $this->lang->tree->menuOrder = $this->lang->testcase->menuOrder;
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $this->app->rawModule = 'testcase';
 
             $title      = $this->lang->tree->manageCase;
             $position[] = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
@@ -156,21 +126,11 @@ class tree extends control
         }
         elseif($viewType == 'caselib')
         {
-            $this->lang->navGroup->tree = 'qa';
-            if($from == 'project')
-            {
-                $this->lang->navGroup->tree  = 'project';
-            }
-            elseif($from == 'qa')
-            {
-                $this->lang->navGroup->tree = 'qa';
-                $this->app->loadConfig('qa');
-                foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            }
+            $this->app->loadConfig('qa');
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
 
             $this->caselib->setLibMenu($this->caselib->getLibraries(), $rootID);
-            $this->lang->tree->menu      = $this->lang->caselib->menu;
-            $this->lang->tree->menuOrder = $this->lang->caselib->menuOrder;
+            $this->app->rawModule = 'caselib';
 
             $title      = $this->lang->tree->manageCaseLib;
             $position[] = html::a($this->createLink('caselib', 'browse', "libID=$rootID"), $lib->name);

@@ -128,7 +128,7 @@ js::set('suiteID',        $suiteID);
               if(common::hasPriv('testcase', 'batchReview') and ($config->testcase->needReview or !empty($config->testcase->forceReview)))
               {
                   echo "<li class='dropdown-submenu'>";
-                  echo html::a('javascript:;', "<span class='text'>{$lang->testcase->review}</span>", '', "id='reviewItem'");
+                  echo html::a('javascript:;', $lang->testcase->review, '', "id='reviewItem'");
                   echo "<ul class='dropdown-menu'>";
                   unset($lang->testcase->reviewResultList['']);
                   foreach($lang->testcase->reviewResultList as $key => $result)

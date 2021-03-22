@@ -66,7 +66,7 @@ class testreport extends control
     public function browse($objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($objectType != 'product' and $objectType != 'execution') die('Type Error!');
-        $this->session->set('reportList', $this->app->getURI(true));
+        $this->session->set('reportList', $this->app->getURI(true), 'qa');
 
         $objectID = $this->commonAction($objectID, $objectType);
         $object   = $this->$objectType->getById($objectID);
