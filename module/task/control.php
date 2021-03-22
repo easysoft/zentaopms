@@ -41,7 +41,7 @@ class task extends control
     {
         $executions  = $this->execution->getPairs();
         $executionID = $this->execution->saveState($executionID, $executions);
-        $this->execution->setMenu($executions, $executionID);
+        $this->execution->setMenu($executionID);
 
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
@@ -83,7 +83,7 @@ class task extends control
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
-        $this->execution->setMenu($executions, $execution->id);
+        $this->execution->setMenu($execution->id);
 
         if(!empty($_POST))
         {
@@ -1342,7 +1342,7 @@ class task extends control
 
         $executions = $this->execution->getPairs();
 
-        $this->execution->setMenu($executions, $executionID);
+        $this->execution->setMenu($executionID);
         $this->executions          = $executions;
         $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->task->report->common;
         $this->view->position[]    = $this->executions[$executionID];

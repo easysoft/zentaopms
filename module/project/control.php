@@ -174,7 +174,6 @@ class project extends control
      */
     public function index($projectID = 0)
     {
-        $this->lang->noMenuModule[] = 'project';
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
         $this->project->setMenu($projectID);

@@ -29,7 +29,6 @@ class release extends control
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}&branch=$branch"), $this->view->product->name);
-        $this->product->setMenu($this->product->getPairs(), $productID, $branch);
     }
 
     /**

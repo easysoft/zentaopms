@@ -541,7 +541,7 @@ class execution extends control
 
         $this->loadModel('bug');
         $executions = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->execution->setMenu($executions, $executionID);
+        $this->execution->setMenu($executionID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

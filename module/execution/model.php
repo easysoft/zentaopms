@@ -53,15 +53,15 @@ class executionModel extends model
     /**
      * Set menu.
      *
-     * @param  array  $executions
      * @param  int    $executionID
      * @param  int    $buildID
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function setMenu($executions, $executionID, $buildID = 0, $extra = '')
+    public function setMenu($executionID, $buildID = 0, $extra = '')
     {
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
         $this->session->set('execution', $executionID);

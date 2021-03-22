@@ -306,7 +306,7 @@ class tree extends control
         $executions = $this->execution->getPairs($this->session->PRJ);
 
         /* Set menu. */
-        $this->execution->setMenu($executions, $rootID);
+        $this->execution->setMenu($rootID);
         $this->lang->tree->menu      = $this->lang->execution->menu;
         $this->lang->tree->menuOrder = $this->lang->execution->menuOrder;
 

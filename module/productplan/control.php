@@ -31,7 +31,7 @@ class productplan extends control
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$productID}&branch=$branch"), $product->name);
-        $this->product->setMenu($this->product->getPairs(), $productID, $branch);
+        $this->product->setMenu($productID, $branch);
     }
 
     /**

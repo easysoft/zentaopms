@@ -46,9 +46,8 @@ class build extends control
         }
         elseif($this->app->openApp == 'execution')
         {
-            $execution  = $this->execution->getByID($executionID);
             $executions = $this->execution->getPairs($execution->project);
-            $this->execution->setMenu($executions, $executionID);
+            $this->execution->setMenu($executionID);
         }
 
         $productGroups = $this->execution->getProducts($executionID);

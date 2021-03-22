@@ -293,7 +293,7 @@ class bug extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
 
-        if(isset($output['executionID'])) commonModel::setAppObjectID('execution', $output['executionID']);
+        if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
 
         foreach($output as $paramKey => $paramValue)
         {

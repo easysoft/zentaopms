@@ -768,7 +768,7 @@ class productModel extends model
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
 
-        $product = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $products : array($productID => $products[$productID]);
+        $product = ($this->app->openApp == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
         /* Get module of all products.*/

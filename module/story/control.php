@@ -342,8 +342,7 @@ class story extends control
 
         if($executionID)
         {
-            $executions = $this->execution->getPairs();
-            $this->execution->setMenu($executions, $executionID);
+            $this->execution->setMenu($executionID);
 
             $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
             if($execution->type == 'project')
@@ -848,8 +847,7 @@ class story extends control
         $from = $this->app->openApp;
         if($from == 'execution')
         {
-            $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
-            $this->execution->setMenu($executions, $param);
+            $this->execution->setMenu($param);
         }
         elseif($from == 'project')
         {
