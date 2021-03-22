@@ -49,7 +49,7 @@ foreach($executions as $execution)
     ?>
     </div>
     <div class="col-footer">
-      <?php echo html::a(helper::createLink('execution', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->execution->all, '', 'class="not-list-item"'); ?>
+      <?php //echo html::a(helper::createLink('execution', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->execution->all, '', 'class="not-list-item"'); ?>
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->execution->doneExecutions;?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
