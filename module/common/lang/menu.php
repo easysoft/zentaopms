@@ -36,6 +36,7 @@ $lang->mainNav->menuOrder[45] = 'admin';
 /* My menu. */
 $lang->my->menu = new stdclass();
 $lang->my->menu->index      = array('link' => "$lang->dashboard|my|index");
+$lang->my->menu->calendar   = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->work       = array('link' => "{$lang->my->work}|my|work|mode=task");
 if($config->systemMode == 'new') $lang->my->menu->project = array('link' => "{$lang->project->common}|my|project|");
 $lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|execution|type=undone");
@@ -46,14 +47,15 @@ $lang->my->menu->contacts   = array('link' => "$lang->contact|my|managecontacts|
 
 /* My menu order. */
 $lang->my->menuOrder[5]  = 'index';
-$lang->my->menuOrder[10] = 'work';
-$lang->my->menuOrder[15] = 'project';
-$lang->my->menuOrder[20] = 'execution';
-$lang->my->menuOrder[25] = 'contribute';
-$lang->my->menuOrder[30] = 'score';
-$lang->my->menuOrder[35] = 'dynamic';
-$lang->my->menuOrder[40] = 'follow';
-$lang->my->menuOrder[45] = 'contacts';
+$lang->my->menuOrder[10] = 'calendar';
+$lang->my->menuOrder[15] = 'work';
+$lang->my->menuOrder[20] = 'project';
+$lang->my->menuOrder[25] = 'execution';
+$lang->my->menuOrder[30] = 'contribute';
+$lang->my->menuOrder[35] = 'score';
+$lang->my->menuOrder[40] = 'dynamic';
+$lang->my->menuOrder[45] = 'follow';
+$lang->my->menuOrder[50] = 'contacts';
 
 $lang->my->menu->work['subMenu'] = new stdclass();
 $lang->my->menu->work['subMenu']->task     = "{$lang->task->common}|my|work|mode=task";
@@ -138,7 +140,7 @@ $lang->product->menuOrder[65] = 'all';
 $lang->product->menu->settings['subMenu'] = new stdclass();
 $lang->product->menu->settings['subMenu']->view      = array('link' => "{$lang->overview}|product|view|productID=%s", 'alias' => 'edit');
 $lang->product->menu->settings['subMenu']->module    = array('link' => "{$lang->module}|tree|browse|product=%s&view=story", 'subModule' => 'tree');
-// $lang->product->menu->settings['subMenu']->branch    = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
+$lang->product->menu->settings['subMenu']->branch    = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
 $lang->product->menu->settings['subMenu']->whitelist = array('link' => "{$lang->whitelist}|product|whitelist|product=%s", 'subModule' => 'personnel');
 
 $lang->product->dividerMenu = $config->URAndSR ? ',requirement,set,' : ',track,set,';
@@ -387,14 +389,14 @@ $lang->company->menuOrder[30] = 'addUser';
 
 /* Admin menu. */
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany', 'exclude' => 'admin-safe');
+$lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
 $lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'subModule' => 'holiday');
 $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-timezone');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,search,admin');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,search,admin', 'exclude' => 'admin-index');
 
 /* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
@@ -445,7 +447,6 @@ $lang->subject->menu->storyConcept = array('link' => "{$lang->subject->storyConc
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
 $lang->system->menu->team     = array('link' => "{$lang->team->common}|my|team|", 'subModule' => 'user');
-$lang->system->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->system->menu->dynamic  = array('link' => "$lang->dynamic|company|dynamic|");
 $lang->system->menu->view     = array('link' => "{$lang->company->common}|company|view");
 

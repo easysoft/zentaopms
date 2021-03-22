@@ -451,7 +451,7 @@ class doc extends control
         /* Set my menu. */
         if($this->app->openApp == 'my')
         {
-            $this->lang->doc->menu     = $this->lang->my->contributeMenu;
+            $this->lang->doc->menu     = $this->lang->my->menu->contribute;
             $this->lang->modulePageNav = '';
             $this->lang->TRActions     = '';
             $this->lang->my->menu->contribute['subModule'] = 'doc';
@@ -932,7 +932,7 @@ class doc extends control
             $productID   = $type == 'product'   ? $objectID : 0;
             $executionID = $type == 'execution' ? $objectID : 0;
             $this->doc->setMenu($type, 0, 0, $productID, $executionID, $crumb);
-            
+
         }
         elseif($from == 'execution')
         {

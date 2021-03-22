@@ -478,8 +478,8 @@ class task extends control
             $this->loadModel('my')->setMenu();
             $moduleIndex = array_search('task', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-            $this->lang->task->menu = $this->lang->my->workMenu;
-            $this->lang->my->menu->myWork['subModule'] = 'task';
+            $this->lang->task->menu = $this->lang->my->menu->work;
+            $this->lang->my->menu->work['subModule'] = 'task';
 
             $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
             $this->view->title      = $this->lang->task->batchEdit;

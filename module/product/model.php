@@ -1685,5 +1685,15 @@ class productModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($productID, $extra, $branch);
         $params = array('branch' => $branch);
         common::setMenuVars('product', $productID, $params);
+
+        if($product->type == 'normal')
+        {
+            unset($this->lang->product->menu->settings['subMenu']->branch);
+        }
+        else
+        {
+            $branchLink = $this->lang->product->menu->settings['subMenu']->branch['link'];
+            $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
+        }
     }
 }

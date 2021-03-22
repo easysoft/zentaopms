@@ -56,7 +56,7 @@ class repo extends control
         }
         else
         {
-            $this->repo->setMenu($repos, $repoID);
+            $this->repo->setMenu($this->repos, $repoID);
         }
 
         if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create', "objectID=$objectID")));
@@ -124,7 +124,7 @@ class repo extends control
         $this->view->position[] = $this->lang->repo->create;
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products   = $this->loadModel('product')->getProductPairsByProject($this->projectID);
+        $this->view->products   = $this->loadModel('product')->getProductPairsByProject($objectID);
 
         $this->display();
     }

@@ -912,8 +912,8 @@ class bug extends control
             $this->loadModel('my')->setMenu();
             $moduleIndex = array_search('bug', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-            $this->lang->task->menu = $this->lang->my->workMenu;
-            $this->lang->my->menu->myWork['subModule'] = 'bug';
+            $this->lang->task->menu = $this->lang->my->menu->work;
+            $this->lang->my->menu->work['subModule'] = 'bug';
 
             $this->view->position[] = html::a($this->createLink('my', 'bug'), $this->lang->my->bug);
             $this->view->title      = "BUG" . $this->lang->bug->batchEdit;
