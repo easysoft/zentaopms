@@ -665,7 +665,7 @@ class commonModel extends model
             $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
 
             $active = '';
-            if($menuItem->name == $currentModule and strpos(",$exclude,", ",$currentMethod,") === false)
+            if($menuItem->name == $currentModule and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
             {
                 $activeMenu = $menuItem->name;
                 $active = 'active';
