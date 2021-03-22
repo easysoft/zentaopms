@@ -347,14 +347,6 @@ class custom extends control
      */
     public function browseStoryConcept()
     {
-        /* Process menu.*/
-        $this->app->loadLang('custom');
-        $this->lang->custom->menu = $this->lang->subject->menu;
-        $this->lang->navGroup->custom = 'admin';
-        $this->lang->admin->menu->model['subModule'] .= ',custom';
-        $key = array_search('custom', $this->lang->noMenuModule);
-        if($key !== false) unset($this->lang->noMenuModule[$key]);
-
         $this->view->title      = $this->lang->custom->browseStoryConcept;
         $this->view->position[] = $this->lang->custom->browseStoryConcept;
         $this->view->URSRList   = $this->custom->getURSRList();

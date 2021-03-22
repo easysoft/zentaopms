@@ -71,12 +71,4 @@ foreach($products as $product)
    <div class='list-group'><?php echo $closedProductsHtml;?></div>
   </div>
 </div>
-<script>
-$(function()
-{
-    if($('#dropMenu .table-row .col-left .list-group .selected').length > 0)
-    {
-        $('#dropMenu .table-row .col-left .list-group').scrollTop($('#dropMenu .table-row .col-left .list-group .selected').position().top - 75);
-    }
-})
-</script>
+<script>scrollToSelected();</script>

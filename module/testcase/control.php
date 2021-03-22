@@ -46,7 +46,6 @@ class testcase extends control
         {
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            //$this->lang->noMenuModule[] = $this->app->rawModule;
         }
         elseif($this->app->openApp == 'project')
         {

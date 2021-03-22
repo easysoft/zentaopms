@@ -140,7 +140,6 @@ $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
 $lang->task->common       = '任务';
 $lang->bug->common        = 'Bug';
-$lang->doc->common        = '文档';
 $lang->testcase->common   = '测试用例';
 $lang->testtask->common   = '测试单';
 $lang->score->common      = '我的积分';
@@ -180,7 +179,6 @@ $lang->track      = '矩阵';
 $lang->settings   = '设置';
 $lang->overview   = '概况';
 $lang->module     = '模块';
-$lang->settings   = '设置';
 $lang->priv       = '权限';
 $lang->design     = '设计';
 $lang->other      = '其他';
@@ -201,7 +199,7 @@ $lang->browser    = '浏览器';
 $lang->db         = '数据库';
 $lang->editor     = '编辑器';
 $lang->timezone   = '时区';
-$lang->safety     = '安全';
+$lang->security   = '安全';
 $lang->calendar   = '日程';
 
 $lang->my->work = '待处理';
@@ -218,9 +216,9 @@ $lang->testcase->unit      = '单元测试';
 $lang->testcase->testsuite = '套件';
 $lang->testcase->caselib   = '用例库';
 
-$lang->devops->build = '构建';
-$lang->devops->repo  = '版本库';
-$lang->devops->rules = '指令';
+$lang->devops->compile = '构建';
+$lang->devops->repo    = '版本库';
+$lang->devops->rules   = '指令';
 
 $lang->admin->system     = '系统';
 $lang->admin->entry      = '应用';

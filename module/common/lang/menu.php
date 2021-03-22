@@ -295,7 +295,7 @@ $lang->execution->menu->settings['subMenu']->products  = array('link' => "$lang-
 $lang->execution->menu->settings['subMenu']->team      = array('link' => "{$lang->team->common}|execution|team|executionID=%s", 'alias' => 'managemembers');
 $lang->execution->menu->settings['subMenu']->whitelist = array('link' => "$lang->whitelist|execution|whitelist|executionID=%s", 'subModule' => 'personnel', 'alias' => 'addwhitelist');
 
-$lang->execution->dividerMenu = ',story,build,setting,';
+$lang->execution->dividerMenu = ',story,build,settings,';
 
 /* QA menu.*/
 $lang->qa->menu = new stdclass();
@@ -335,13 +335,13 @@ $lang->qa->menu->automation['subMenu']->browse      = array('link' => "{$lang->i
 /* DevOps menu. */
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code     = array('link' => "{$lang->devops->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccomment');
-$lang->devops->menu->build    = array('link' => "{$lang->devops->build}|job|browse", 'subModule' => 'compile,job');
+$lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->menu->jenkins  = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
 $lang->devops->menu->maintain = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
 $lang->devops->menu->rules    = array('link' => "{$lang->devops->rules}|repo|setrules");
 
 $lang->devops->menuOrder[5]  = 'code';
-$lang->devops->menuOrder[10] = 'build';
+$lang->devops->menuOrder[10] = 'compile';
 $lang->devops->menuOrder[15] = 'jenkins';
 $lang->devops->menuOrder[20] = 'maintain';
 $lang->devops->menuOrder[25] = 'rules';
@@ -438,7 +438,7 @@ $lang->admin->menu->dev['menuOrder'][20] = 'entry';
 
 $lang->admin->menu->system['subMenu'] = new stdclass();
 $lang->admin->menu->system['subMenu']->data       = array('link' => "{$lang->admin->data}|backup|index", 'subModule' => 'action');
-$lang->admin->menu->system['subMenu']->safe       = array('link' => "$lang->safety|admin|safe", 'alias' => 'checkweak');
+$lang->admin->menu->system['subMenu']->safe       = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak');
 $lang->admin->menu->system['subMenu']->cron       = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
 $lang->admin->menu->system['subMenu']->timezone   = array('link' => "$lang->timezone|custom|timezone");
 $lang->admin->menu->system['subMenu']->buildIndex = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");

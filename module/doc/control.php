@@ -113,17 +113,11 @@ class doc extends control
         /* According the from, set menus. */
         if($from == 'product')
         {
-            $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $productID);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
-            $this->lang->noMenuModule[] = 'doc';
+            $this->product->setMenu($productID);
         }
         elseif($from == 'project')
         {
-            $this->lang->doc->menu      = $this->lang->project->menu;
-            $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $lib->project);
+            $this->project->setMenu($lib->project);
         }
         else
         {
@@ -342,22 +336,13 @@ class doc extends control
         /* According the from, set menus. */
         if($this->from == 'product')
         {
-            $this->lang->navGroup->doc  = 'product';
-            $this->lang->doc->menu      = $this->lang->product->menu;
-            $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $lib->product);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($lib->product);
-            $this->lang->noMenuModule[] = 'doc';
+            $this->product->setMenu($lib->product);
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         }
         elseif($this->from == 'project')
         {
-            $this->lang->navGroup->doc  = 'project';
-            $this->lang->doc->menu      = $this->lang->project->menu;
-            $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $lib->project);
+            $this->project->setMenu($lib->project);
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         }
@@ -427,21 +412,11 @@ class doc extends control
         /* According the from, set menus. */
         if($this->from == 'product')
         {
-            $objectID = $lib->product;
-            $this->lang->navGroup->doc  = 'product';
-            $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
-            $this->lang->noMenuModule[] = 'doc';
+            $this->product->setMenu($lib->product);
         }
         elseif($this->from == 'project')
         {
-            $objectID = $lib->project;
-            $this->lang->navGroup->doc  = 'project';
-            $this->lang->doc->menu      = $this->lang->project->menu;
-            $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getExecutionsByProject($this->session->project, 'all', 0, true), $objectID);
+            $this->project->setMenu($lib->project);
         }
         else
         {
@@ -499,21 +474,11 @@ class doc extends control
         /* According the from, set menus. */
         if($this->from == 'product')
         {
-            $objectID = $lib->product;
-            $this->lang->navGroup->doc  = 'product';
-            $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
-            $this->lang->noMenuModule[] = 'doc';
+            $this->product->setMenu($lib->product);
         }
         elseif($this->from == 'project')
         {
-            $objectID = $lib->project;
-            $this->lang->navGroup->doc  = 'project';
-            $this->lang->doc->menu      = $this->lang->project->menu;
-            $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $objectID);
+            $this->project->setMenu($lib->project);
         }
         else
         {
@@ -828,18 +793,10 @@ class doc extends control
         /* According the from, set menus. */
         if($this->from == 'product')
         {
-            $this->lang->navGroup->doc  = 'product';
-            $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
-            $this->lang->noMenuModule[] = 'doc';
+            $this->product->setMenu($lib->product);
         }
         elseif($this->from == 'project')
         {
-            $this->lang->navGroup->doc  = 'project';
-            $this->lang->doc->menu      = $this->lang->project->menu;
-            $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
             $this->project->setMenu($objectID);
         }
         else
@@ -921,7 +878,6 @@ class doc extends control
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
         if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->project));
-        $this->lang->noMenuModule[] = 'doc';
 
         $from = $this->app->openApp;
         if($from == 'doc')

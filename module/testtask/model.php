@@ -16,15 +16,15 @@ class testtaskModel extends model
     /**
      * Create a test task.
      *
-     * @param  int   $productID
+     * @param  int   $projectID
      * @access public
      * @return void
      */
-    function create()
+    function create($projectID)
     {
         $task = fixer::input('post')
             ->setDefault('build', '')
-            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa', 'project', $this->session->project)
+            ->setIF($this->config->systemMode == 'new' and $this->app->openApp != 'qa', 'project', $projectID)
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('uid,contactListMenu')
