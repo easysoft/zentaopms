@@ -8,4 +8,4 @@ $(function()
     });
 });
 
-$(".tree .active").parent('li').addClass('active');
+$(".tree #program" + programID).parent('li').addClass('active');

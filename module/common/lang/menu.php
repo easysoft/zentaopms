@@ -369,16 +369,16 @@ $lang->doc->menuOrder[35] = 'wiki';
 
 /* Report menu.*/
 $lang->report->menu = new stdclass();
-$lang->report->menu->annual    = array('link' => "{$lang->report->annual}|report|annualData|year=&dept=&userID=" . (isset($_SESSION['user']) ? zget($_SESSION['user'], 'id', 0) : 0), 'target' => '_blank');
-$lang->report->menu->product   = array('link' => "{$lang->product->common}|report|productsummary");
-$lang->report->menu->execution = array('link' => "{$lang->execution->common}|report|executiondeviation");
-$lang->report->menu->test      = array('link' => "{$lang->qa->common}|report|bugcreate", 'alias' => 'bugassign');
-$lang->report->menu->staff     = array('link' => "{$lang->system->common}|report|workload");
+$lang->report->menu->annual  = array('link' => "{$lang->report->annual}|report|annualData|year=&dept=&userID=" . (isset($_SESSION['user']) ? zget($_SESSION['user'], 'id', 0) : 0), 'target' => '_blank');
+$lang->report->menu->product = array('link' => "{$lang->product->common}|report|productsummary");
+$lang->report->menu->project = array('link' => "{$lang->project->common}|report|projectdeviation");
+$lang->report->menu->test    = array('link' => "{$lang->qa->common}|report|bugcreate", 'alias' => 'bugassign');
+$lang->report->menu->staff   = array('link' => "{$lang->system->common}|report|workload");
 
 /* Report menu order. */
 $lang->report->menuOrder[5]  = 'annual';
 $lang->report->menuOrder[10] = 'product';
-$lang->report->menuOrder[15] = 'execution';
+$lang->report->menuOrder[15] = 'project';
 $lang->report->menuOrder[20] = 'test';
 $lang->report->menuOrder[25] = 'staff';
 

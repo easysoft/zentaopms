@@ -210,7 +210,7 @@ tbody tr td:first-child input {display: none;}
                   if($canBeChanged and common::hasPriv('build', 'unlinkBug'))
                   {
                       $unlinkURL = inlink('unlinkBug', "buildID=$build->id&bug=$bug->id");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn btn-icon' title='{$lang->build->unlinkBug}'");
+                      echo html::a("###", '<i class="icon-unlink"></i>', '', "onclick='ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)' class='btn' title='{$lang->build->unlinkBug}'");
                   }
                   ?>
                 </td>

@@ -18,7 +18,7 @@ $lang->report->percent         = '%';
 $lang->report->undefined       = 'Undefined';
 $lang->report->query           = 'Query';
 $lang->report->annual          = 'Annual Summary';
-$lang->report->executionCommon = 'Execution';
+$lang->report->project         = 'Project';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -38,30 +38,30 @@ $lang->report->assign['assign']   = 'Assigned';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->executionDeviation = 'Execution Deviation';
-$lang->report->productSummary     = $lang->productCommon . ' Summary';
-$lang->report->bugCreate          = 'Bug Reported Summary';
-$lang->report->bugAssign          = 'Bug Assigned Summary';
-$lang->report->workload           = 'Team Workload Summary';
-$lang->report->workloadAB         = 'Workload';
-$lang->report->bugOpenedDate      = 'Bug reported from';
-$lang->report->begin              = 'Begin';
-$lang->report->end                = 'End';
-$lang->report->beginAndEnd        = ' From';
-$lang->report->dept               = 'Department';
-$lang->report->deviationChart     = 'Execution Deviation Chart';
+$lang->report->projectDeviation = 'Project Deviation';
+$lang->report->productSummary   = $lang->productCommon . ' Summary';
+$lang->report->bugCreate        = 'Bug Reported Summary';
+$lang->report->bugAssign        = 'Bug Assigned Summary';
+$lang->report->workload         = 'Team Workload Summary';
+$lang->report->workloadAB       = 'Workload';
+$lang->report->bugOpenedDate    = 'Bug reported from';
+$lang->report->begin            = 'Begin';
+$lang->report->end              = 'End';
+$lang->report->beginAndEnd      = ' From';
+$lang->report->dept             = 'Department';
+$lang->report->deviationChart   = 'Project Deviation Chart';
 
 $lang->reportList = new stdclass();
-$lang->reportList->execution = new stdclass();
-$lang->reportList->product   = new stdclass();
-$lang->reportList->test      = new stdclass();
-$lang->reportList->staff     = new stdclass();
+$lang->reportList->project = new stdclass();
+$lang->reportList->product = new stdclass();
+$lang->reportList->test    = new stdclass();
+$lang->reportList->staff   = new stdclass();
 
-$lang->reportList->execution->lists[10] = 'Execution Deviation|report|executiondeviation';
-$lang->reportList->product->lists[10]   = $lang->productCommon . ' Summary|report|productsummary';
-$lang->reportList->test->lists[10]      = 'Bug Reported Summary|report|bugcreate';
-$lang->reportList->test->lists[13]      = 'Bug Assigned Summary|report|bugassign';
-$lang->reportList->staff->lists[10]     = 'Team Workload Summary|report|workload';
+$lang->reportList->project->lists[10] = 'Execution Deviation|report|projectdeviation';
+$lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
+$lang->reportList->test->lists[10]    = 'Bug Reported Summary|report|bugcreate';
+$lang->reportList->test->lists[13]    = 'Bug Assigned Summary|report|bugassign';
+$lang->reportList->staff->lists[10]   = 'Team Workload Summary|report|workload';
 
 $lang->report->id            = 'ID';
 $lang->report->execution     = $lang->executionCommon;

@@ -17,7 +17,8 @@ js::set('programID', $programID);
 js::set('browseType', $browseType);
 ?>
 <style>
-.project-type-label.label-outline {width: 50px;}
+.project-type-label.label-outline {width: 50px; min-width: 50px;}
+.project-type-label.label {overflow: unset !important; text-overflow: unset !important; white-space: unset !important;}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if($this->config->systemMode == 'new'):?>
@@ -52,7 +53,7 @@ js::set('browseType', $browseType);
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
-      <?php echo $projectTree;?>
+      <?php echo $programTree;?>
       <div class="text-center">
         <?php common::printLink('project', 'projectProgramTitle', '', $lang->project->moduleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
       </div>
