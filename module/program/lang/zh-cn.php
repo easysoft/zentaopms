@@ -13,7 +13,7 @@ $lang->program->children  = '子项目集';
 $lang->program->parent    = '父项目集';
 $lang->program->allInput  = '项目集总投入';
 $lang->program->teamCount = '项目集成员';
-$lang->program->longTime  = '长期项目';
+$lang->program->longTime  = '长期项目集';
 $lang->program->view      = '项目集详情';
 
 /* Actions. */
