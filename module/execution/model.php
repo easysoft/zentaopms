@@ -2444,8 +2444,8 @@ class executionModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.status')->ne('closed')
             ->andWhere('t2.stage')->in('wait,planned,executioned,developing')
-            ->groupBy('execution')
-            ->fetchAll('execution');
+            ->groupBy('project')
+            ->fetchAll('project');
 
         foreach($burns as $executionID => $burn)
         {
