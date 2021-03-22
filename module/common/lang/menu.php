@@ -420,6 +420,11 @@ $lang->admin->menu->message['menuOrder'][10] = 'webhook';
 $lang->admin->menu->message['menuOrder'][15] = 'browser';
 $lang->admin->menu->message['menuOrder'][20] = 'setting';
 
+$lang->admin->menu->company['subMenu'] = new stdclass();
+$lang->admin->menu->company['subMenu']->browseUser  = array('link' => "{$lang->user->common}|company|browse", 'subModule' => 'user');
+$lang->admin->menu->company['subMenu']->dept        = array('link' => "{$lang->dept->common}|dept|browse", 'subModule' => 'dept');
+$lang->admin->menu->company['subMenu']->browseGroup = array('link' => "{$lang->priv}|group|browse", 'subModule' => 'group');
+
 $lang->admin->menu->dev['subMenu'] = new stdclass();
 $lang->admin->menu->dev['subMenu']->api    = array('link' => "API|dev|api");
 $lang->admin->menu->dev['subMenu']->db     = array('link' => "$lang->db|dev|db");

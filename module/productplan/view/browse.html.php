@@ -56,7 +56,7 @@
         </th>
         <th class='w-160px'><?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
         <?php if($this->session->currentProductType != 'normal'):?>
-        <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
+        <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->productplan->branch);?></th>
         <?php endif;?>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
         <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>

@@ -22,16 +22,17 @@ class productplan extends control
      */
     public function commonAction($productID, $branch = 0)
     {
-        $this->loadModel('product')->setMenu($productID, $branch);
+        $product = $this->loadModel('product')->getById($productID);
+        if(empty($product)) $this->locate($this->createLink('product', 'create'));
 
         $this->app->loadConfig('execution');
-        $product = $this->product->getById($productID);
-        if(empty($product)) $this->locate($this->createLink('product', 'create'));
+        $this->product->setMenu($productID, $branch);
+        $this->session->set('currentProductType', $product->type);
+
         $this->view->product  = $product;
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$productID}&branch=$branch"), $product->name);
-        $this->product->setMenu($productID, $branch);
     }
 
     /**
@@ -206,8 +207,6 @@ class productplan extends control
      */
     public function browse($productID = 0, $branch = 0, $browseType = 'all', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
-        $this->app->loadLang('project');
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
