@@ -49,12 +49,12 @@ $lang->my->menu->contacts   = array('link' => "$lang->contact|my|managecontacts|
 $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
 $lang->my->menuOrder[15] = 'work';
-$lang->my->menuOrder[20] = 'project';
-$lang->my->menuOrder[25] = 'execution';
-$lang->my->menuOrder[30] = 'contribute';
-$lang->my->menuOrder[35] = 'score';
+$lang->my->menuOrder[20] = 'follow';
+$lang->my->menuOrder[25] = 'project';
+$lang->my->menuOrder[30] = 'execution';
+$lang->my->menuOrder[35] = 'contribute';
 $lang->my->menuOrder[40] = 'dynamic';
-$lang->my->menuOrder[45] = 'follow';
+$lang->my->menuOrder[45] = 'score';
 $lang->my->menuOrder[50] = 'contacts';
 
 $lang->my->menu->work['subMenu'] = new stdclass();
@@ -81,7 +81,7 @@ $lang->my->menu->contribute['subMenu']->testcase = "{$lang->testcase->shortCommo
 $lang->my->menu->contribute['subMenu']->testtask = "{$lang->testtask->common}|my|contribute|mode=testtask&type=done";
 $lang->my->menu->contribute['subMenu']->doc      = "{$lang->doc->common}|my|contribute|mode=doc&type=openedbyme";
 
-$lang->my->dividerMenu = ',work,score,';
+$lang->my->dividerMenu = ',work,dynamic,';
 
 /* Program menu. */
 $lang->program->homeMenu = new stdclass();

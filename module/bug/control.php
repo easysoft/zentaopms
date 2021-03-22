@@ -103,7 +103,7 @@ class bug extends control
 
         /* Set productID, moduleID, queryID and branch. */
         if(!$this->projectID) $productID = $this->product->saveState($productID, $this->products);
-        $branch    = ($branch == '') ? (int)$this->cookie->preBranch  : (int)$branch;
+        $branch = ($branch == '') ? (int)$this->cookie->preBranch : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 

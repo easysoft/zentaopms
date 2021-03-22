@@ -37,7 +37,7 @@
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('todo', 'export')) echo html::a(helper::createLink('todo', 'export', "userID={$user->id}&orderBy=$orderBy", 'html', true), "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link export'");?>
     <?php common::printLink('todo', 'batchCreate', '', "<i class='icon icon-plus'></i> " . $lang->todo->batchCreate, '', "id='batchCreate' class='btn btn-secondary iframe' data-width='80%'", '', 'true');?>
-    <?php common::printLink('todo', 'create', '', "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "id='create' class='btn btn-primary iframe' data-width='80%'", '', 'true');?>
+    <?php common::printLink('todo', 'create', '', "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "id='create' class='btn btn-primary iframe' data-width='80%' data-app='my'", '', 'true');?>
   </div>
 </div>
 <div id="mainContent">
@@ -46,7 +46,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->my->noTodo;?></span>
       <?php if(common::hasPriv('todo', 'create')):?>
-      <?php echo html::a($this->createLink('todo', 'create'), "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('todo', 'create'), "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "class='btn btn-info' data-app='my'");?>
       <?php endif;?>
     </p>
   </div>
