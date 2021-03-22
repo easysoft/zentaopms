@@ -810,8 +810,8 @@ class testcase extends control
 
             /* The cases of my. */
             $this->loadModel('my')->setMenu();
-            $this->lang->testcase->menu = $this->lang->my->workMenu;
-            $this->lang->my->menu->myWork['subModule'] = 'testcase';
+            $this->lang->testcase->menu = $this->lang->my->menu->work;
+            $this->lang->my->menu->work['subModule'] = 'testcase';
 
             $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->testCase);
             $this->view->title      = $this->lang->testcase->batchEdit;

@@ -36,6 +36,7 @@ $lang->mainNav->menuOrder[45] = 'admin';
 /* My menu. */
 $lang->my->menu = new stdclass();
 $lang->my->menu->index      = array('link' => "$lang->dashboard|my|index");
+$lang->my->menu->calendar   = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->work       = array('link' => "{$lang->my->work}|my|work|mode=task");
 if($config->systemMode == 'new') $lang->my->menu->project = array('link' => "{$lang->project->common}|my|project|");
 $lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|execution|type=undone");
@@ -46,14 +47,15 @@ $lang->my->menu->contacts   = array('link' => "$lang->contact|my|managecontacts|
 
 /* My menu order. */
 $lang->my->menuOrder[5]  = 'index';
-$lang->my->menuOrder[10] = 'work';
-$lang->my->menuOrder[15] = 'project';
-$lang->my->menuOrder[20] = 'execution';
-$lang->my->menuOrder[25] = 'contribute';
-$lang->my->menuOrder[30] = 'score';
-$lang->my->menuOrder[35] = 'dynamic';
-$lang->my->menuOrder[40] = 'follow';
-$lang->my->menuOrder[45] = 'contacts';
+$lang->my->menuOrder[10] = 'calendar';
+$lang->my->menuOrder[15] = 'work';
+$lang->my->menuOrder[20] = 'project';
+$lang->my->menuOrder[25] = 'execution';
+$lang->my->menuOrder[30] = 'contribute';
+$lang->my->menuOrder[35] = 'score';
+$lang->my->menuOrder[40] = 'dynamic';
+$lang->my->menuOrder[45] = 'follow';
+$lang->my->menuOrder[50] = 'contacts';
 
 $lang->my->menu->work['subMenu'] = new stdclass();
 $lang->my->menu->work['subMenu']->task     = "{$lang->task->common}|my|work|mode=task";
@@ -445,7 +447,6 @@ $lang->subject->menu->storyConcept = array('link' => "{$lang->subject->storyConc
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
 $lang->system->menu->team     = array('link' => "{$lang->team->common}|my|team|", 'subModule' => 'user');
-$lang->system->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->system->menu->dynamic  = array('link' => "$lang->dynamic|company|dynamic|");
 $lang->system->menu->view     = array('link' => "{$lang->company->common}|company|view");
 

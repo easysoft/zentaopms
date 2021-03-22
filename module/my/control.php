@@ -129,7 +129,6 @@ class my extends control
      */
     public function todo($type = 'before', $userID = '', $status = 'all', $orderBy = "date_desc,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->lang->navGroup->my = 'system';
         /* Save session. */
         $uri = $this->app->getURI(true);
         if($this->app->viewType != 'json')
