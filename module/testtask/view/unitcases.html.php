@@ -51,12 +51,7 @@ js::set('flow', $config->global->flow);
 <script>
 $(function()
 {
-    <?php if($this->config->global->flow == 'full'):?>
-    $('#subNavbar [data-id=testcase]').addClass('active');
-    <?php else:?>
-    $('#navbar li.active').removeClass('active');
-    $('#navbar li[data-id=unit]').addClass('active');
-    <?php endif;?>
+    $('#subNavbar li[data-id="case"]').addClass('active');
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

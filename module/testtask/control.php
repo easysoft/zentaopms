@@ -135,12 +135,14 @@ class testtask extends control
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
         $this->loadModel('testcase');
         $this->app->loadLang('tree');
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
+        $this->app->rawModule = 'testcase';
 
         /* Load pager. */
         if($browseType == 'newest') $recPerPage = '10';
@@ -291,13 +293,11 @@ class testtask extends control
 
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->product->saveState($task->product, $this->products);
+        $this->loadModel('qa')->setMenu($this->products, $task->product);
+        $this->app->rawModule = 'testcase';
 
-        /* Set menu, save session. */
-        $this->lang->testtask->menu      = $this->lang->testcase->menu;
-        $this->lang->testtask->menuOrder = $this->lang->testcase->menuOrder;
-        $this->lang->testtask->subMenu->testcase->unit['subModule'] = 'testtask';
-        $this->loadModel('testtask')->setUnitMenu($this->products, $productID, 0, $taskID);
-        $this->session->set('caseList', $this->app->getURI(true));
+        /* Save session. */
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* Load lang. */
         $this->app->loadLang('testtask');
