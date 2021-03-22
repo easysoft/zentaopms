@@ -32,12 +32,6 @@ class report extends control
         /* Set report menu group. */
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if(!$this->projectID) $this->lang->navGroup->report = 'report';
-        if($this->lang->navGroup->report == 'project' && isset($this->config->maxVersion))
-        {
-            $index = array_search('report', $this->lang->noMenuModule);
-            unset($this->lang->noMenuModule[$index]);
-            $this->lang->report->menu = $this->lang->report->projectMenu;
-        }
 
         if((isset($this->config->proVersion) || isset($this->config->bizVersion)) && $this->lang->navGroup->report == 'report' && common::hasPriv('report', 'custom')) $this->lang->report->mainMenuAction = html::a(helper::createLink('report', 'custom'), $this->lang->crystal->custom, '', "class='btn btn-link'");
     }

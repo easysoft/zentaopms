@@ -1232,7 +1232,7 @@ class docModel extends model
      */
     public function getLibsByObject($type, $objectID, $mode = '')
     {
-        if($type != 'product' and $type != 'execution') return false;
+        if($type != 'product' and $type != 'project' and $type != 'execution') return false;
         $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
 
         if($type == 'product')
@@ -1318,7 +1318,7 @@ class docModel extends model
      */
     public function getLibFiles($type, $objectID, $orderBy, $pager = null)
     {
-        if($type != 'execution' and $type != 'product') return true;
+        if($type != 'execution' and $type != 'project' and $type != 'product') return true;
         $this->loadModel('file');
         $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->fetchAll('id');
         foreach($docs as $id => $doc)
@@ -1377,6 +1377,38 @@ class docModel extends model
                 ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
                 ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
                 ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
+                ->markRight(1)
+                ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($type == 'project')
+        {
+            $executionIdList = $this->loadModel('execution')->getIdList($objectID);
+            $taskPairs  = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
+            $taskIdList = 0;
+            if(!empty($taskPairs))
+            {
+                $taskIdList = array_keys($taskPairs);
+                $taskIdList = implode(',', $taskIdList);
+            }
+
+            $buildPairs  = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
+            $buildIdList = 0;
+            if(!empty($buildPairs))
+            {
+                $buildIdList = array_keys($buildPairs);
+                $buildIdList = implode(',', $buildIdList);
+            }
+
+            $executionIdList = join(',', $executionIdList);
+            $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
+                ->where('size')->gt('0')
+                ->andWhere("(objectType = 'execution' and objectID in ($executionIdList))", true)
+                ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
+                ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
+                ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
                 ->markRight(1)
                 ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
                 ->orderBy($orderBy)

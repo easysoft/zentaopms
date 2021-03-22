@@ -77,15 +77,9 @@ class tree extends control
         if($viewType == 'story')
         {
             /* Set menu.*/
-            $moduleIndex = array_search('tree', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-            $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($rootID, 'story');
-
             $products = $this->product->getPairs();
-
             $this->product->saveState($rootID, $products);
-            $this->product->setMenu($products, $rootID, $branch, 'story', '', 'story');
-            $this->lang->tree->menu = $this->lang->product->setMenu;
+            $this->product->setMenu($rootID);
 
             unset($products[$rootID]);
             $currentProduct = key($products);
@@ -110,8 +104,6 @@ class tree extends control
             }
             elseif($from == 'qa')
             {
-                $this->lang->noMenuModule[] = 'tree';
-                $this->lang->navGroup->tree = 'qa';
                 $this->app->loadConfig('qa');
                 foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
                 $productPairs = $this->product->getPairs();
@@ -127,9 +119,6 @@ class tree extends control
         }
         elseif($viewType == 'feedback')
         {
-            $this->lang->navGroup->tree = 'feedback';
-            $this->lang->noMenuModule[] = 'tree';
-
             $this->app->loadLang('feedback');
             $this->lang->tree->menu = $this->lang->feedback->menu;
             $root = new stdclass();
@@ -151,7 +140,6 @@ class tree extends control
             }
             elseif($from == 'qa')
             {
-                $this->lang->noMenuModule[] = 'tree';
                 $this->lang->navGroup->tree = 'qa';
                 $this->app->loadConfig('qa');
                 foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
@@ -175,7 +163,6 @@ class tree extends control
             }
             elseif($from == 'qa')
             {
-                $this->lang->noMenuModule[] = 'tree';
                 $this->lang->navGroup->tree = 'qa';
                 $this->app->loadConfig('qa');
                 foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
@@ -196,14 +183,11 @@ class tree extends control
             if($from == 'product')
             {
                 $productID = $lib->product;
-                $this->lang->noMenuModule[] = 'tree';
                 unset($this->lang->product->menu->set['subModule']);
-                $this->lang->navGroup->tree = 'product';
-                $this->lang->product->switcherMenu = $this->loadModel('product')->getSwitcher($productID, 'story');
 
                 $products = $this->product->getPairs();
                 $this->product->saveState($productID, $products);
-                $this->product->setMenu($products, $productID, $branch);
+                $this->product->setMenu($productID, $branch);
             }
             elseif($from == 'project')
             {
