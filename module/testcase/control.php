@@ -376,7 +376,7 @@ class testcase extends control
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
         if($this->app->openApp != 'qa')
         {
-            $projectID = $this->app->openApp == 'project' ? $this->session->PRJ : $this->session->execution;
+            $projectID = $this->app->openApp == 'project' ? $this->session->project : $this->session->execution;
             $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch);
         }
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.

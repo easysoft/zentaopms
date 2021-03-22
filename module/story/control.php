@@ -127,8 +127,8 @@ class story extends control
 
             if($objectID != 0)
             {
-                if($objectID != $this->session->PRJ) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $objectID);
-                $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $this->session->PRJ);
+                if($objectID != $this->session->project) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $objectID);
+                $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $this->session->project);
             }
 
             if($todoID > 0)
@@ -386,7 +386,7 @@ class story extends control
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
                 $this->execution->linkStory($executionID, $stories, $products);
-                if($executionID != $this->session->PRJ) $this->execution->linkStory($this->session->PRJ, $stories, $products);
+                if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
             }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
@@ -653,7 +653,7 @@ class story extends control
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
             $this->lang->story->menu = $this->lang->execution->menu;
 
-            $this->execution->setMenu($this->execution->getPairs($this->session->PRJ, 'all', 'nodeleted'), $executionID);
+            $this->execution->setMenu($this->execution->getPairs($this->session->project, 'all', 'nodeleted'), $executionID);
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
 
             $execution = $this->execution->getByID($executionID);
@@ -1137,7 +1137,7 @@ class story extends control
         {
             $this->lang->story->menu      = $this->lang->execution->menu;
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
-            $this->execution->setMenu($this->execution->getPairs($this->session->PRJ, 'all', 'nodeleted'), $executionID);
+            $this->execution->setMenu($this->execution->getPairs($this->session->project, 'all', 'nodeleted'), $executionID);
             $execution = $this->execution->getByID($executionID);
             $this->view->position[] = html::a($this->createLink('execution', 'story', "executionID=$execution->id"), $execution->name);
             $this->view->title      = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
@@ -1207,7 +1207,7 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->story->successToTask;
 
-            $this->story->batchToTask($executionID, $this->session->PRJ);
+            $this->story->batchToTask($executionID, $this->session->project);
 
             if(dao::isError())
             {
@@ -1388,7 +1388,7 @@ class story extends control
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $tracks = $this->story->getTracks($productID, $branch, $pager);
 
-        if($this->app->rawModule == 'projectstory') $projectProducts = $this->product->getProducts($this->session->PRJ);
+        if($this->app->rawModule == 'projectstory') $projectProducts = $this->product->getProducts($this->session->project);
 
         $this->view->title      = $this->lang->story->track;
         $this->view->position[] = $this->lang->story->track;

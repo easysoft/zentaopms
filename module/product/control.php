@@ -175,7 +175,7 @@ class product extends control
             $browseType = 'unclosed';
             if($this->app->rawModule == 'projectstory' and empty($productID))
             {
-                $moduleTree = $this->tree->getExecutionStoryTreeMenu($this->session->PRJ, 0, array('treeModel', 'createProjectStoryLink'));
+                $moduleTree = $this->tree->getExecutionStoryTreeMenu($this->session->project, 0, array('treeModel', 'createProjectStoryLink'));
             }
             else
             {
@@ -186,7 +186,7 @@ class product extends control
         {
             if($this->app->rawModule == 'projectstory' and empty($productID))
             {
-                $moduleTree = $this->tree->getExecutionStoryTreeMenu($this->session->PRJ, 0, array('treeModel', 'createProjectStoryLink'));
+                $moduleTree = $this->tree->getExecutionStoryTreeMenu($this->session->project, 0, array('treeModel', 'createProjectStoryLink'));
             }
             else
             {
@@ -214,12 +214,12 @@ class product extends control
         if($this->app->rawModule == 'projectstory')
         {
             if(!empty($product)) $this->session->set('currentProductType', $product->type);
-            $this->products  = $this->loadModel('project')->getProducts($this->session->PRJ, false);
-            $projectProducts = $this->product->getProducts($this->session->PRJ);
+            $this->products  = $this->loadModel('project')->getProducts($this->session->project, false);
+            $projectProducts = $this->product->getProducts($this->session->project);
             $productPlans    = $this->execution->getPlans($projectProducts);
 
             if($browseType == 'bybranch') $param = $branch;
-            $stories = $this->story->getExecutionStories($this->session->PRJ, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
+            $stories = $this->story->getExecutionStories($this->session->project, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
         }
         else
         {
@@ -926,7 +926,7 @@ class product extends control
 
         $moduleGroup = zget($this->lang->navGroup, $module);
         $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
-        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->PRJ) : $this->product->getList();
+        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList();
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
@@ -934,7 +934,7 @@ class product extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
         $this->view->products  = $products;
-        $this->view->projectID = $moduleGroup == 'project' ? $this->session->PRJ : 0;
+        $this->view->projectID = $moduleGroup == 'project' ? $this->session->project : 0;
         $this->view->programs  = $this->loadModel('program')->getPairs(true);
         $this->view->lines     = $this->product->getLinePairs();
         $this->view->openApp   = $moduleGroup;
@@ -996,7 +996,7 @@ class product extends control
         {
             $this->app->loadLang($fromModule);
 
-            $projectModel = $this->loadModel('project')->getByID($this->session->PRJ);
+            $projectModel = $this->loadModel('project')->getByID($this->session->project);
             $this->lang->product->menu      = $this->lang->menu->{$projectModel->model};
             $this->lang->product->menuOrder = $this->lang->{$projectModel->model}->menuOrder;
 
@@ -1213,7 +1213,7 @@ class product extends control
         $this->session->set('productList', $this->app->getURI(true));
 
         /* Get all product list. Locate to the create product page if there is no product. */
-        $this->products = $this->product->getPairs('', $this->session->PRJ);
+        $this->products = $this->product->getPairs('', $this->session->project);
         if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
 
         /* Get current product. */

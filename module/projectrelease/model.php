@@ -122,7 +122,7 @@ class projectreleaseModel extends model
         }
 
         $release = fixer::input('post')
-            ->add('project', $this->session->PRJ)
+            ->add('project', $this->session->project)
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
             ->setDefault('stories', '')
@@ -151,7 +151,7 @@ class projectreleaseModel extends model
             else
             {
                 $build = new stdclass();
-                $build->project   = $this->session->PRJ;
+                $build->project   = $this->session->project;
                 $build->product   = (int)$productID;
                 $build->branch    = (int)$branch;
                 $build->name      = $release->name;

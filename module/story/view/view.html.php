@@ -53,7 +53,7 @@
     $openApp    = 'product';
     if($this->app->rawModule == 'projectstory')
     {
-        $otherParam = "storyID=&projectID={$this->session->PRJ}";
+        $otherParam = "storyID=&projectID={$this->session->project}";
         $openGroup  = 'project';
     }
     ?>

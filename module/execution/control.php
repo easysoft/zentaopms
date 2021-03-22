@@ -2928,7 +2928,7 @@ class execution extends control
             }
             $planStories = array_keys($planStory);
             $this->execution->linkStory($executionID, $planStories, $planProducts);
-            if($executionID != $this->session->PRJ) $this->execution->linkStory($this->session->PRJ, $planStories, $planProducts);
+            if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $planStories, $planProducts);
         }
 
         $moduleName = 'execution';

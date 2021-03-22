@@ -126,7 +126,6 @@ class bug extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu and save session. */
-        $this->bug->setMenu($this->products, $productID, $branch, $moduleID, $browseType, $orderBy);
         $this->session->set('bugList', $this->app->getURI(true));
 
         /* Set moduleTree. */
@@ -389,7 +388,7 @@ class bug extends control
         $this->bug->setMenu($this->products, $productID, $branch);
 
         /* Init vars. */
-        $projectID   = $this->session->PRJ ? $this->session->PRJ : 0;
+        $projectID   = $this->session->project ? $this->session->project : 0;
         $moduleID    = 0;
         $executionID = 0;
         $taskID      = 0;
@@ -630,7 +629,7 @@ class bug extends control
             $showFields = trim($showFields, ',');
         }
 
-        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
+        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
@@ -666,8 +665,8 @@ class bug extends control
         /* Judge bug exits or not. */
         $bug = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
-        if($bug->project) $this->session->PRJ = $bug->project;
-        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
+        if($bug->project) $this->session->project = $bug->project;
+        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->project);
 
         $this->bug->checkBugExecutionPriv($bug);
 
@@ -682,7 +681,7 @@ class bug extends control
         elseif($from == 'repo')
         {
             session_write_close();
-            $repos = $this->loadModel('repo')->getRepoPairs($this->session->PRJ);
+            $repos = $this->loadModel('repo')->getRepoPairs($this->session->project);
             $this->repo->setMenu($repos);
             $this->lang->bug->menu = $this->lang->repo->menu;
         }
@@ -813,7 +812,7 @@ class bug extends control
         $oldResolvedBuild = array();
         if(($bug->resolvedBuild) and isset($allBuilds[$bug->resolvedBuild])) $oldResolvedBuild[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
 
-        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
+        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
@@ -1179,7 +1178,7 @@ class bug extends control
             }
         }
 
-        $projectID  = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
+        $projectID  = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
         $bug        = $this->bug->getById($bugID);
         $productID  = $bug->product;
         $users      = $this->user->getPairs('noclosed');
@@ -1835,7 +1834,7 @@ class bug extends control
             foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
         }
 
-        $products = $this->product->getProducts($this->session->PRJ, $this->config->CRProduct ? 'all' : 'noclosed', 'program desc, line desc, ');
+        $products = $this->product->getProducts($this->session->project, $this->config->CRProduct ? 'all' : 'noclosed', 'program desc, line desc, ');
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
@@ -1843,7 +1842,7 @@ class bug extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
         $this->view->products  = $products;
-        $this->view->projectID = $this->session->PRJ;
+        $this->view->projectID = $this->session->project;
         $this->view->programs  = $this->loadModel('program')->getPairs(true);
         $this->view->lines     = $this->product->getLinePairs();
         $this->display();

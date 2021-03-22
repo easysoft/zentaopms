@@ -54,7 +54,7 @@ class testreportModel extends model
     {
         $data = fixer::input('post')
             ->stripTags($this->config->testreport->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testreport != 'qa', 'project', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testreport != 'qa', 'project', $this->session->project)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('stories', ',')
@@ -146,7 +146,7 @@ class testreportModel extends model
     {
         $objectID = (int)$objectID;
         return $this->dao->select('*')->from(TABLE_TESTREPORT)->where('deleted')->eq(0)
-            ->beginIF($this->lang->navGroup->testreport != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->lang->navGroup->testreport != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->beginIF($objectType == 'project')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('project')->fi()
             ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
             ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()

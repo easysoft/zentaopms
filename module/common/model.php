@@ -477,7 +477,7 @@ class commonModel extends model
                 if(isset($lang->$model->dropMenu->$key))
                 {
                     $programDropMenu = $lang->$model->dropMenu->$key;
-                    $dropMenu        = common::createDropMenu($programDropMenu, $app->session->PRJ);
+                    $dropMenu        = common::createDropMenu($programDropMenu, $app->session->project);
 
                     if(!empty($dropMenu))
                     {
@@ -1726,7 +1726,7 @@ EOD;
             if(!defined('IN_UPGRADE') and $inProject)
             {
                 /* Check program priv. */
-                if($this->session->PRJ and strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
+                if($this->session->project and strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }
@@ -1763,7 +1763,7 @@ EOD;
 
         /* If is the program admin, have all program privs. */
         $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
-        if($inProject && $app->session->PRJ && strpos(",{$app->user->rights['projects']},", ",{$app->session->PRJ},") !== false) return true;
+        if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
 
         /* If module is project and method is execution, check for all execution privilege. */
         if($module == 'project' and $method == 'execution')
@@ -1809,8 +1809,8 @@ EOD;
     public function resetProgramPriv($module, $method)
     {
         /* Get user program priv. */
-        if(!$this->app->session->PRJ) return;
-        $program       = $this->dao->findByID($this->app->session->PRJ)->from(TABLE_PROJECT)->fetch();
+        if(!$this->app->session->project) return;
+        $program       = $this->dao->findByID($this->app->session->project)->from(TABLE_PROJECT)->fetch();
         $programRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
             ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
             ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group=t3.group')
@@ -2331,7 +2331,7 @@ EOD;
     public static function getProjectMainMenu($moduleName)
     {
         global $app, $lang, $dbh, $config;
-        $project = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
+        $project = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->project}'")->fetch();
         if(empty($project)) return;
 
         self::initProjectSubmenu();

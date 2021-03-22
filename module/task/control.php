@@ -253,7 +253,7 @@ class task extends control
 
         if($this->config->systemMode == 'new')
         {
-            $project = $this->project->getByID($this->session->PRJ);
+            $project = $this->project->getByID($this->session->project);
             if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
         }
 
@@ -644,7 +644,7 @@ class task extends control
     {
         $task = $this->task->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->PRJ = $task->project;
+        $this->session->project = $task->project;
 
         if($task->fromBug != 0)
         {

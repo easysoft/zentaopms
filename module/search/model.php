@@ -266,8 +266,8 @@ class searchModel extends model
             $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
             $users['$@me'] = $this->lang->search->me;
         }
-        if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->PRJ);
-        if($hasExecution) $executions = array('' => '') + $this->loadModel('execution')->getPairs($this->session->PRJ);
+        if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->project);
+        if($hasExecution) $executions = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project);
 
         foreach($fields as $fieldName)
         {

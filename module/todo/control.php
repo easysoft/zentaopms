@@ -398,7 +398,7 @@ class todo extends control
         }
 
         $projects = $this->loadModel('project')->getPairsByModel('all');
-        if(!isset($this->session->PRJ)) $this->session->set('project', key($projects));
+        if(!isset($this->session->project)) $this->session->set('project', key($projects));
 
         $this->view->title           = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;
         $this->view->position[]      = $this->lang->todo->view;
@@ -409,9 +409,9 @@ class todo extends control
         $this->view->actions         = $this->loadModel('action')->getList('todo', $todoID);
         $this->view->from            = $from;
         $this->view->projects        = $projects;
-        $this->view->executions      = $this->loadModel('execution')->getPairs($this->session->PRJ);
+        $this->view->executions      = $this->loadModel('execution')->getPairs($this->session->project);
         $this->view->products        = $this->loadModel('product')->getPairs();
-        $this->view->projectProducts = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $this->view->projectProducts = $this->loadModel('product')->getProductPairsByProject($this->session->project);
 
         $this->display();
     }

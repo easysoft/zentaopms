@@ -14,7 +14,7 @@ class stakeholderModel extends model
         $data = fixer::input('post')
             ->setIF($programID == 0, 'objectType', 'project')
             ->setIF($programID != 0, 'objectType', 'program')
-            ->setIF($programID == 0, 'objectID', $this->session->PRJ)
+            ->setIF($programID == 0, 'objectID', $this->session->project)
             ->setIF($programID != 0, 'objectID', $programID)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::today())
@@ -113,17 +113,17 @@ class stakeholderModel extends model
         $this->loadModel('action');
         $data = (array)fixer::input('post')->get();
 
-        $members  = $this->loadModel('execution')->getTeamMemberPairs($this->session->PRJ);
+        $members  = $this->loadModel('execution')->getTeamMemberPairs($this->session->project);
         $accounts = array_unique($data['accounts']);
-        $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->PRJ)->andWhere('objectType')->eq('project')->fetchPairs();
-        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->PRJ)->andWhere('objectType')->eq('project')->exec();
+        $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->project)->andWhere('objectType')->eq('project')->fetchPairs();
+        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->project)->andWhere('objectType')->eq('project')->exec();
 
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
 
             $stakeholder = new stdclass();
-            $stakeholder->objectID    = $this->session->PRJ;
+            $stakeholder->objectID    = $this->session->project;
             $stakeholder->objectType  = 'project';
             $stakeholder->user        = $account;
             $stakeholder->type		  = in_array($account, array_keys($members)) ? 'inside' : 'outside';
@@ -142,7 +142,7 @@ class stakeholderModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $this->loadModel('user')->updateUserView($this->session->PRJ, 'project', $changedAccounts);
+        $this->loadModel('user')->updateUserView($this->session->project, 'project', $changedAccounts);
     }
 
     /**
@@ -206,7 +206,7 @@ class stakeholderModel extends model
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.objectID=t4.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.objectID')->eq($this->session->PRJ)
+            ->andWhere('t1.objectID')->eq($this->session->project)
             ->beginIF($browseType == 'inside')->andWhere('t1.type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('t1.type')->eq('outside')->fi()
             ->beginIF($browseType == 'key')->andWhere('t1.key')->ne('0')->fi()
@@ -230,7 +230,7 @@ class stakeholderModel extends model
     {
         $stakeholders = $this->dao->select('id, user')->from(TABLE_STAKEHOLDER)
             ->where('deleted')->eq('0')
-            ->andWhere('objectID')->eq($this->session->PRJ)
+            ->andWhere('objectID')->eq($this->session->project)
             ->orderBy('id_desc')
             ->fetchPairs();
 
@@ -309,7 +309,7 @@ class stakeholderModel extends model
         $stakeholders = $this->dao->select('t2.realname as name, t2.account, t1.type, t2.role')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.objectID')->eq($this->session->PRJ)
+            ->andWhere('t1.objectID')->eq($this->session->project)
             ->fetchGroup('type');
 
         return $stakeholders;
@@ -329,7 +329,7 @@ class stakeholderModel extends model
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->where('t1.id')->eq($userID)
             ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t1.objectID')->eq($this->session->PRJ)
+            ->andWhere('t1.objectID')->eq($this->session->project)
             ->fetch();
 
         return $stakeholder;
@@ -344,7 +344,7 @@ class stakeholderModel extends model
     public function getProcessGroup()
     {
         $group = $this->dao->select('process, activity')->from(TABLE_PROGRAMACTIVITY)
-            ->where('project')->eq($this->session->PRJ)
+            ->where('project')->eq($this->session->project)
             ->andWhere('result')->eq('yes')
             ->fetchGroup('process');
 
@@ -374,7 +374,7 @@ class stakeholderModel extends model
     {
         return $this->dao->select('*')->from(TABLE_INTERVENTION)
             ->where('deleted')->eq(0)
-            ->andWhere('project')->eq($this->session->PRJ)
+            ->andWhere('project')->eq($this->session->project)
             ->fetchAll('activity');
     }
 
@@ -389,7 +389,7 @@ class stakeholderModel extends model
         $stakeholders = $this->getStakeHolderPairs();
         return $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('deleted')->eq(0)
-            ->andWhere('project')->eq($this->session->PRJ)
+            ->andWhere('project')->eq($this->session->project)
             ->andWhere('owner')->in(array_values($stakeholders))
             ->orWhere('activity')->ne('')
             ->orderBy('id_desc')
@@ -440,7 +440,7 @@ class stakeholderModel extends model
             ->add('userID', $userID)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', date('Y-m-d'))
-            ->add('project', $this->session->PRJ)
+            ->add('project', $this->session->project)
             ->stripTags($this->config->stakeholder->editor->expect['id'], $this->config->allowedTags)
             ->get();
 
@@ -492,7 +492,7 @@ class stakeholderModel extends model
         $expects = $this->dao->select('t1.*,t2.key,t3.realname')->from(TABLE_EXPECT)->alias('t1')
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t2')->on('t1.userID=t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t2.user=t3.account')
-            ->where('t1.project')->eq($this->session->PRJ)
+            ->where('t1.project')->eq($this->session->project)
             ->beginIF($browseType == 'bysearch')
             ->andWhere($stakeholderQuery)
             ->fi()
@@ -565,7 +565,7 @@ class stakeholderModel extends model
         $users = $this->dao->select("t1.id, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
-            ->where('t1.objectID')->eq($this->session->PRJ)
+            ->where('t1.objectID')->eq($this->session->project)
             ->andWhere('t1.deleted')->eq('0')
             ->fetchPairs('id', 'realname');
 
@@ -583,7 +583,7 @@ class stakeholderModel extends model
         $users = $this->dao->select("t1.user, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
-            ->where('t1.objectID')->eq($this->session->PRJ)
+            ->where('t1.objectID')->eq($this->session->project)
             ->andWhere('t1.deleted')->eq('0')
             ->fetchPairs('user', 'realname');
 
@@ -644,7 +644,7 @@ class stakeholderModel extends model
     public function getStakeholderIssue($account)
     {
         $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
-            ->where('project')->eq($this->session->PRJ)
+            ->where('project')->eq($this->session->project)
             ->andWhere('owner')->eq($account)
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
