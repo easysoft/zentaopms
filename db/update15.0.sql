@@ -37,6 +37,7 @@ ALTER TABLE `zt_testreport` CHANGE `project` `execution` mediumint(8) unsigned N
 ALTER TABLE `zt_testtask` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_webhook` CHANGE `projects` `executions` mediumint(8) unsigned NOT NULL;
 
+ALTER TABLE `zt_action` ADD `project` mediumint(8) unsigned NOT NULL AFTER `product`;
 ALTER TABLE `zt_task` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_doclib` ADD `project` mediumint(8) unsigned NOT NULL AFTER `product`;
 ALTER TABLE `zt_doc` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
