@@ -23,7 +23,7 @@ class projectStory extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->project);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=projectstory&moduleGroup=' . $this->lang->navGroup->projectstory . '&activeMenu=projectstory')));
     }
 
@@ -81,7 +81,7 @@ class projectStory extends control
     public function view($storyID)
     {
         $story = $this->loadModel('story')->getByID($storyID);
-        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->PRJ);
+        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->project);
     }
 
     /**

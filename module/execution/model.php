@@ -53,15 +53,15 @@ class executionModel extends model
     /**
      * Set menu.
      *
-     * @param  array  $executions
      * @param  int    $executionID
      * @param  int    $buildID
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function setMenu($executions, $executionID, $buildID = 0, $extra = '')
+    public function setMenu($executionID, $buildID = 0, $extra = '')
     {
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
         $this->session->set('execution', $executionID);
@@ -1674,7 +1674,7 @@ class executionModel extends model
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in(array_keys($products))
             ->andWhere('t2.project')->eq($execution->project)
-            ->fetchGroup('execution');
+            ->fetchGroup('project');
         $branches = str_replace(',', "','", $branches);
 
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
@@ -1991,7 +1991,7 @@ class executionModel extends model
             $this->story->setStage($storyID);
             $this->linkCases($executionID, (int)$products[$storyID], $storyID);
 
-            $action = $executionID == $this->session->PRJ ? 'linked2project' : 'linked2execution';
+            $action = $executionID == $this->session->project ? 'linked2project' : 'linked2execution';
             $this->action->create('story', $storyID, $action, '', $executionID);
         }
     }
@@ -2024,7 +2024,7 @@ class executionModel extends model
 
             $this->dao->insert(TABLE_PROJECTCASE)->data($object)->exec();
 
-            $action = $executionID == $this->session->PRJ ? 'linked2project' : 'linked2execution';
+            $action = $executionID == $this->session->project ? 'linked2project' : 'linked2execution';
 
             $this->action->create('case', $caseID, $action, '', $executionID);
         }
@@ -2069,7 +2069,7 @@ class executionModel extends model
             }
         }
         $this->linkStory($executionID, $planStories, $planProducts);
-        $this->linkStory($this->session->PRJ, $planStories, $planProducts);
+        $this->linkStory($this->session->project, $planStories, $planProducts);
         if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate(helper::createLink('execution', 'create', "productID=&executionID=$executionID"));
     }
 
@@ -2102,7 +2102,7 @@ class executionModel extends model
 
         $this->loadModel('story')->setStage($storyID);
         $this->unlinkCases($executionID, $storyID);
-        $objectType = $executionID == $this->session->PRJ ? unlinkedfromproject : unlinkedfromexecution;
+        $objectType = $executionID == $this->session->project ? unlinkedfromproject : unlinkedfromexecution;
         $this->loadModel('action')->create('story', $storyID, $objectType, '', $executionID);
 
         $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->andWhere('status')->in('wait,doing')->fetchPairs('id');
@@ -2130,7 +2130,7 @@ class executionModel extends model
         foreach($cases as $caseID => $case)
         {
             $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->andWhere('`case`')->eq($caseID)->limit(1)->exec();
-            $action = $executionID == $this->session->PRJ ? 'unlinkedfromproject' : 'unlinkedfromexecution';
+            $action = $executionID == $this->session->project ? 'unlinkedfromproject' : 'unlinkedfromexecution';
             $this->action->create('case', $caseID, $action, '', $executionID);
         }
 

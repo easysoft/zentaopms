@@ -29,6 +29,10 @@ $lang->project->manageGroupMember = '维护分组用户';
 $lang->project->moduleSetting     = '列表设置';
 $lang->project->moduleOpen        = '显示项目集名';
 $lang->project->dynamic           = '动态';
+$lang->project->qa                = '测试仪表盘';
+$lang->project->bug               = 'Bug';
+$lang->project->testcase          = '用例';
+$lang->project->testtask          = '测试单';
 $lang->project->build             = '版本';
 $lang->project->updateOrder       = '排序';
 $lang->project->sort              = '项目排序';
@@ -41,6 +45,7 @@ $lang->project->errorSameProducts = '项目不能关联多个相同的产品。'
 $lang->project->errorNoProducts   = '最少关联一个产品';
 $lang->project->copyNoProject     = '没有可用的项目来复制';
 $lang->project->searchByName      = '输入项目名称进行检索';
+$lang->project->deleted           = '已删除';
 
 /* Fields. */
 $lang->project->common             = '项目';

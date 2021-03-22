@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('system');?></div>
   <div class='btn-toolbar pull-right'>
     <?php if($type == 'hidden') echo html::a(inLink('trash', "type=all"),    $lang->goback, '', "class='btn'");?>
     <?php if($type == 'all')    echo html::a(inLink('trash', "type=hidden"), "<i class='icon-eye-close'></i> " . $lang->action->dynamic->hidden, '', "class='btn btn-danger'");?>
@@ -36,10 +35,10 @@
       <thead>
         <tr class='colhead'>
           <th class='w-130px'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
-          <th class='w-id'>  <?php common::printOrderLink('objectID',   $orderBy, $vars, $lang->idAB);?></th>
+          <th class='w-id'><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->idAB);?></th>
           <th><?php echo $lang->action->objectName;?></th>
-          <th class='w-100px'><?php common::printOrderLink('actor',     $orderBy, $vars, $lang->action->actor);?></th>
-          <th class='w-150px'><?php common::printOrderLink('date',      $orderBy, $vars, $lang->action->date);?></th>
+          <th class='w-100px'><?php common::printOrderLink('actor', $orderBy, $vars, $lang->action->actor);?></th>
+          <th class='w-150px'><?php common::printOrderLink('date', $orderBy, $vars, $lang->action->date);?></th>
           <th class='w-100px'><?php echo $lang->actions;?></th>
         </tr>
       </thead>

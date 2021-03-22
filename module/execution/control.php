@@ -496,10 +496,10 @@ class execution extends control
         $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
         $this->app->session->set('storyList', $this->app->getURI(true), 'product');
 
-        $this->view->title          = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
-        $this->view->position[]     = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
-        $this->view->position[]     = $this->lang->execution->importTask;
-        $this->view->tasks2Imported = $tasks2Imported;
+        $this->view->title            = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
+        $this->view->position[]       = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
+        $this->view->position[]       = $this->lang->execution->importTask;
+        $this->view->tasks2Imported   = $tasks2Imported;
         $this->view->executions       = $executions;
         $this->view->executionID      = $execution->id;
         $this->view->fromExecution    = $fromExecution;
@@ -541,7 +541,7 @@ class execution extends control
 
         $this->loadModel('bug');
         $executions = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->execution->setMenu($executions, $executionID);
+        $this->execution->setMenu($executionID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -2038,9 +2038,9 @@ class execution extends control
         {
             /* Delete execution. */
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
-            $this->loadModel('action')->create($this->objectType, $executionID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
-            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('execution')->eq($executionID)->exec();
+            $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
             $this->execution->updateUserView($executionID);
+
             $this->session->set('execution', '');
             $this->executeHooks($executionID);
             die(js::locate(inlink('index'), 'parent'));
@@ -2928,7 +2928,7 @@ class execution extends control
             }
             $planStories = array_keys($planStory);
             $this->execution->linkStory($executionID, $planStories, $planProducts);
-            if($executionID != $this->session->PRJ) $this->execution->linkStory($this->session->PRJ, $planStories, $planProducts);
+            if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $planStories, $planProducts);
         }
 
         $moduleName = 'execution';

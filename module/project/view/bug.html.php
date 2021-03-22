@@ -1,11 +1,11 @@
 <?php
 /**
- * The bug view file of execution module of ZenTaoPMS.
+ * The bug view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     execution
+ * @package     project
  * @version     $Id: bug.html.php 4894 2013-06-25 01:28:39Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -15,32 +15,32 @@
   <div class="btn-toolbar pull-left">
     <?php
     $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
-    echo html::a($this->inlink('bug', "executionID={$execution->id}&orderBy=status,id_desc&build=$buildID&type=all"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a($this->inlink('bug', "executionID={$execution->id}&orderBy=status,id_desc&build=$buildID&type=unresolved"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "projectID={$project->id}&orderBy=status,id_desc&build=$buildID&type=all"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "projectID={$project->id}&orderBy=status,id_desc&build=$buildID&type=unresolved"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
     ?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=&executionID=$execution->id", "<i class='icon icon-export muted'> </i>" . $lang->bug->export, '', "class='btn btn-link export'");?>
-    <?php if(common::canModify('execution', $execution)) common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extras=executionID=$execution->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=&projectID=$project->id", "<i class='icon icon-export muted'> </i>" . $lang->bug->export, '', "class='btn btn-link export'");?>
+    <?php if(common::canModify('project', $project)) common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extras=projectID=$project->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
-  <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox" data-module='executionBug'></div>
+  <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox" data-module='projectBug'></div>
   <?php if(empty($bugs)):?>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
-      <?php if(common::canModify('execution', $execution) and common::hasPriv('bug', 'create')):?>
-      <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=executionID=$execution->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
+      <?php if(common::canModify('project', $project) and common::hasPriv('bug', 'create')):?>
+      <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' method='post' id='executionBugForm' data-ride="table">
+  <form class='main-table' method='post' id='projectBugForm' data-ride="table">
     <table class='table has-sort-head' id='bugList'>
       <?php $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');?>
-      <?php $vars = "executionID={$execution->id}&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <?php $vars = "projectID={$project->id}&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr>
           <th class='c-id'>
@@ -124,7 +124,7 @@
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo?> <span class="caret"></span></button>
           <?php
           $withSearch = count($memberPairs) > 10;
-          $actionLink = $this->createLink('bug', 'batchAssignTo', "executionID={$execution->id}&type=execution");
+          $actionLink = $this->createLink('bug', 'batchAssignTo', "projectID={$project->id}&type=project");
           echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
 
           if($withSearch)

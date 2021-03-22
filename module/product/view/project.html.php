@@ -34,13 +34,13 @@
           <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->project->name;?></th>
           <th class='w-150px'><?php echo $lang->project->common;?></th>
-          <th class='w-80px'><?php echo $lang->project->PM;?></th>
-          <th class='w-100px'><?php echo $lang->project->begin;?></th>
-          <th class='w-100px'><?php echo $lang->project->end;?></th>
-          <th class='w-100px'><?php echo $lang->project->status;?></th>
-          <th class='w-100px'><?php echo $lang->project->budget;?></th>
-          <th class='w-80px text-right'><?php echo $lang->project->estimate;?></th>
-          <th class='w-80px text-right'><?php echo $lang->project->consume;?></th>
+          <th class='w-100px'><?php echo $lang->project->PM;?></th>
+          <th class='w-80px'><?php echo $lang->project->begin;?></th>
+          <th class='w-80px'><?php echo $lang->project->end;?></th>
+          <th class='w-70px'><?php echo $lang->project->status;?></th>
+          <th class='w-80px'><?php echo $lang->project->budget;?></th>
+          <th class='w-60px text-right'><?php echo $lang->project->estimate;?></th>
+          <th class='w-60px text-right'><?php echo $lang->project->consume;?></th>
           <th class='w-60px'><?php echo $lang->project->progress;?></th>
         </tr>
       </thead>
@@ -61,7 +61,7 @@
           <td class='c-status' title='<?php echo $status;?>'>
             <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
           </td>
-          <td><?php echo $project->budget != 0 ? zget($lang->program->currencySymbol, $project->budgetUnit) . number_format($project->budget, 2) : $this->lang->project->future;?></td>
+          <td><?php echo $project->budget != 0 ? number_format($project->budget, 2) . zget($lang->project->currencySymbol, $project->budgetUnit) : $this->lang->project->future;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHourUnit;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHourUnit;?></td>
           <td>

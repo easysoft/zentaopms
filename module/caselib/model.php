@@ -222,7 +222,7 @@ class caselibModel extends model
         $lib = fixer::input('post')
             ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
             ->setForce('type', 'library')
-            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa', 'project', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa', 'project', $this->session->project)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid')
@@ -266,7 +266,7 @@ class caselibModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where('lib')->eq((int)$libID)
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
+                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq(0)
                 ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
                 ->beginIF($browseType == 'wait')->andWhere('status')->eq($browseType)->fi()
@@ -303,7 +303,7 @@ class caselibModel extends model
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq((int)$libID)->fi()
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
+                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq(0)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($sort)->page($pager)->fetchAll();
@@ -524,7 +524,7 @@ class caselibModel extends model
             }
             else
             {
-                $caseData->project    = $this->session->PRJ;
+                $caseData->project    = $this->session->project;
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
@@ -618,7 +618,7 @@ class caselibModel extends model
                 $data[$i]->openedDate   = $now;
                 $data[$i]->status       = $forceNotReview ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
-                if($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa') $data[$i]->project = $this->session->PRJ;
+                if($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa') $data[$i]->project = $this->session->project;
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()

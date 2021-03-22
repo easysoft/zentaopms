@@ -123,7 +123,7 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getPairs($this->session->PRJ, 'all', 0, true), $lib->project);
+            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $lib->project);
         }
         else
         {
@@ -226,7 +226,7 @@ class doc extends control
             }
         }
 
-        $projectID  = $this->session->PRJ;
+        $projectID  = $this->session->project;
         $products   = $this->product->getProductPairsByProject($projectID, 'noclosed');
         $executions = $this->execution->getByProject($projectID, 'all', 0, true);
 
@@ -357,7 +357,7 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getPairs($this->session->PRJ, 'all', 0, true), $lib->project);
+            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $lib->project);
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         }
@@ -441,7 +441,7 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getExecutionsByProject($this->session->PRJ, 'all', 0, true), $objectID);
+            $this->project->setMenu($this->project->getExecutionsByProject($this->session->project, 'all', 0, true), $objectID);
         }
         else
         {
@@ -513,7 +513,7 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getPairs($this->session->PRJ, 'all', 0, true), $objectID);
+            $this->project->setMenu($this->project->getPairs($this->session->project, 'all', 0, true), $objectID);
         }
         else
         {
@@ -920,7 +920,7 @@ class doc extends control
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-        if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->PRJ));
+        if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->project));
         $this->lang->noMenuModule[] = 'doc';
 
         $from = $this->app->openApp;
@@ -936,8 +936,7 @@ class doc extends control
         }
         elseif($from == 'execution')
         {
-            $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
-            $this->execution->setMenu($executions, $objectID);
+            $this->execution->setMenu($objectID);
         }
         else
         {

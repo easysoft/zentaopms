@@ -52,11 +52,9 @@ class build extends control
         }
         elseif($this->app->openApp == 'execution')
         {
-            $execution  = $this->execution->getByID($executionID);
             $executions = $this->execution->getPairs($execution->project);
-            $this->execution->setMenu($executions, $executionID);
-
-            $this->session->set('PRJ', $execution->project);
+            $this->execution->setMenu($executionID);
+            $this->session->set('project', $execution->project);
         }
 
         $productGroups = $this->execution->getProducts($executionID);
@@ -134,7 +132,7 @@ class build extends control
             $execution->name = '';
         }
 
-        $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->PRJ);
+        $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project);
         if(!isset($executions[$build->execution])) $executions[$build->execution] = $execution->name;
 
         $productGroups = $this->execution->getProducts($build->execution);
@@ -184,7 +182,7 @@ class build extends control
 
         $build = $this->build->getByID((int)$buildID, true);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->PRJ = $build->project;
+        $this->session->project = $build->project;
 
         if($this->app->openApp == 'project')
         {
@@ -226,7 +224,7 @@ class build extends control
 
         /* Set menu. */
         commonModel::setMenuVars('execution', $build->execution);
-        $executions = $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'empty');
+        $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
 
         $this->view->title         = "BUILD #$build->id $build->name - " . $executions[$build->execution];
         $this->view->position[]    = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $executions[$build->execution]);
@@ -554,7 +552,7 @@ class build extends control
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, $viewType = 'bug', $startModuleID = 0);
-        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($build->product, 0, 'id_desc', $this->session->PRJ);
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($build->product, 0, 'id_desc', $this->session->project);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 

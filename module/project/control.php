@@ -174,7 +174,6 @@ class project extends control
      */
     public function index($projectID = 0)
     {
-        $this->lang->noMenuModule[] = 'project';
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
         $this->project->setMenu($projectID);
@@ -712,7 +711,7 @@ class project extends control
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->bug->common;
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[] = $this->bug->common;
+        $position[] = $this->lang->bug->common;
 
         /* Load pager and get bugs, user. */
         $this->app->loadClass('pager', $static = true);
@@ -722,12 +721,10 @@ class project extends control
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
-        $memberPairs = array();
+        $memberPairs   = array();
         $memberPairs[] = "";
-        foreach($this->view->teamMembers as $key => $member)
-        {
-            $memberPairs[$key] = $member->realname;
-        }
+        $teamMembers   = $this->project->getTeamMembers($projectID);
+        foreach($teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
 
         /* Build the search form. */
         $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
@@ -744,6 +741,7 @@ class project extends control
         $this->view->orderBy     = $orderBy;
         $this->view->users       = $users;
         $this->view->productID   = $productID;
+        $this->view->project     = $this->project->getById($projectID);
         $this->view->branchID    = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
         $this->view->memberPairs = $memberPairs;
         $this->view->type        = $type;
@@ -789,7 +787,7 @@ class project extends control
         $this->view->pager       = $pager;
         $this->view->type        = $type;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->execution   = $this->execution->getByID($executionID);
+        $this->view->project     = $this->project->getById($projectID);
 
         $this->display();
     }
@@ -835,7 +833,7 @@ class project extends control
         $this->view->tasks        = $productTasks;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products     = $this->loadModel('product')->getPairs('', 0);
-        $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
 
         $this->display();
     }
@@ -1326,13 +1324,22 @@ class project extends control
         }
         else
         {
-            $projectIdList = $this->project->getExecutionsByProject($projectID);
-            $this->project->delete(TABLE_PROJECT, $projectID);
-            $this->dao->update(TABLE_PROJECT)->set('deleted')->eq(1)->where('id')->in(array_keys($projectIdList))->exec();
-            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
-            $this->project->updateUserView($projectID);
-            $this->session->set('project', '');
+            $this->loadModel('user');
+            $this->loadModel('action');
 
+            $this->project->delete(TABLE_PROJECT, $projectID);
+            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('execution')->eq($projectID)->exec();
+            $this->user->updateUserView($projectID, 'project');
+
+            /* Delete the execution under the project. */
+            $executionIdList = $this->execution->getByProject($projectID);
+            if(empty($executionIdList)) die(js::reload('parent'));
+
+            $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->in(array_keys($executionIdList))->exec();
+            foreach($executionIdList as $executionID => $execution) $this->action->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+            $this->user->updateUserView($executionIdList, 'sprint');
+
+            $this->session->set('project', '');
             die(js::reload('parent'));
         }
     }

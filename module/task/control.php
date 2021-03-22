@@ -41,7 +41,7 @@ class task extends control
     {
         $executions  = $this->execution->getPairs();
         $executionID = $this->execution->saveState($executionID, $executions);
-        $this->execution->setMenu($executions, $executionID);
+        $this->execution->setMenu($executionID);
 
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
@@ -83,7 +83,7 @@ class task extends control
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
-        $this->execution->setMenu($executions, $execution->id);
+        $this->execution->setMenu($execution->id);
 
         if(!empty($_POST))
         {
@@ -253,7 +253,7 @@ class task extends control
 
         if($this->config->systemMode == 'new')
         {
-            $project = $this->project->getByID($this->session->PRJ);
+            $project = $this->project->getByID($this->session->project);
             if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
         }
 
@@ -644,7 +644,7 @@ class task extends control
     {
         $task = $this->task->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->PRJ = $task->project;
+        $this->session->project = $task->project;
 
         if($task->fromBug != 0)
         {
@@ -1342,7 +1342,7 @@ class task extends control
 
         $executions = $this->execution->getPairs();
 
-        $this->execution->setMenu($executions, $executionID);
+        $this->execution->setMenu($executionID);
         $this->executions          = $executions;
         $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->task->report->common;
         $this->view->position[]    = $this->executions[$executionID];

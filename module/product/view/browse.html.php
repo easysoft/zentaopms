@@ -167,7 +167,7 @@ $isProjectStory = $this->app->rawModule == 'projectstory';
         <li <?php echo $batchDisabled;?>>
         <?php
           $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=0&plan=0&type=$storyType");
-          if($isProjectStory) $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project={$this->session->PRJ}");
+          if($isProjectStory) $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project={$this->session->project}");
           echo html::a($batchLink, $lang->story->batchCreate, '', "data-group='$openApp'");
         ?>
         </li>

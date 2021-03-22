@@ -9,6 +9,8 @@
  * @version     $Id: zh-cn.php 4955 2013-07-02 01:47:21Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
+global $config;
+
 $lang->action->common     = '系统日志';
 $lang->action->product    = $lang->productCommon;
 $lang->action->project    = '项目';
@@ -73,7 +75,7 @@ $lang->action->objectTypes['productplan'] = '计划';
 $lang->action->objectTypes['release']     = '发布';
 $lang->action->objectTypes['program']     = '项目集';
 $lang->action->objectTypes['project']     = '项目';
-$lang->action->objectTypes['execution']   = $lang->executionCommon;
+$lang->action->objectTypes['execution']   = $config->systemMode == 'new' ? '执行' : $lang->executionCommon;
 $lang->action->objectTypes['task']        = '任务';
 $lang->action->objectTypes['build']       = '版本';
 $lang->action->objectTypes['job']         = '构建';
@@ -427,7 +429,6 @@ $lang->action->dynamicAction->entry['created'] = '添加应用';
 $lang->action->dynamicAction->entry['edited']  = '编辑应用';
 
 /* 用来生成相应对象的链接。*/
-global $config;
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = "计划|productplan|view|productID=%s";
 $lang->action->label->release     = '发布|release|view|productID=%s';
