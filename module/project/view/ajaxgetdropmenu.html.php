@@ -29,7 +29,7 @@ foreach($projects as $project)
     }
     else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
     {
-        $normalProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='selected' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
+        $normalProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
     }
     else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
 }
