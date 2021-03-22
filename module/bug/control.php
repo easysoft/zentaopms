@@ -387,7 +387,7 @@ class bug extends control
         $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
 
         /* Init vars. */
-        $projectID   = $this->session->project ? $this->session->project : 0;
+        $projectID   = 0;
         $moduleID    = 0;
         $executionID = 0;
         $taskID      = 0;
@@ -496,6 +496,9 @@ class bug extends control
 
             $project   = $this->loadModel('project')->getByID($projectID);
             $projects += array($projectID => $project->name);
+
+            /* Set project menu. */
+            if($this->app->openApp == 'project') $this->project->setMenu($projectID);
         }
         else
         {

@@ -718,7 +718,7 @@ class custom extends control
             $data = fixer::input('post')->join('showLibs', ',')->get();
             if(isset($data->showLibs)) $data = $data->showLibs;
             $this->loadModel('setting')->setItem("{$this->app->user->account}.doc.custom.showLibs", $data);
-            die(js::reload('parent.parent'));
+            die(js::reload('parent'));
         }
     }
 

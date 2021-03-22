@@ -119,7 +119,7 @@ class product extends control
      */
     public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->app->openApp != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
 
         if($this->app->openApp == 'product') $this->product->setMenu($productID, $branch);
         if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($projectID);

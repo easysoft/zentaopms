@@ -38,17 +38,14 @@ class build extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
+        /* Set menu. */
         if($this->app->openApp == 'project')
         {
-            $model = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
-            $this->lang->project->menu      = $this->lang->$model->menu;
-            $this->lang->project->menuOrder = $this->lang->$model->menuOrder;
-            commonModel::setMenuVars('project', $projectID);
-
+            $this->loadModel('project')->setMenu($projectID);
             $executions  = $this->execution->getPairs($projectID);
             $executionID = isset($executions[$this->session->executionID]) ? $this->session->executionID : key($executions);
             $this->session->set('executionID', 0);
-            $this->session->set('PRJ', $projectID);
+            $this->session->set('project', $projectID);
         }
         elseif($this->app->openApp == 'execution')
         {
@@ -110,16 +107,15 @@ class build extends control
         $this->loadModel('product');
         $build = $this->build->getById((int)$buildID);
 
+        /* Set menu. */
         if($this->app->openApp == 'project')
         {
-            $model = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($build->project)->fetch('model');
-            $this->lang->project->menu      = $this->lang->$model->menu;
-            $this->lang->project->menuOrder = $this->lang->$model->menuOrder;
-            commonModel::setMenuVars('project', $build->project);
+            $this->loadModel('project')->setMenu($build->project);
         }
-
-        /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs($build->project), $build->execution);
+        elseif($this->app->openApp == 'exectuion')
+        {
+            $this->execution->setMenu($this->execution->getPairs($build->project), $build->execution);
+        }
 
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
@@ -179,18 +175,9 @@ class build extends control
      */
     public function view($buildID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-
         $build = $this->build->getByID((int)$buildID, true);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->session->project = $build->project;
-
-        if($this->app->openApp == 'project')
-        {
-            $model = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($build->project)->fetch('model');
-            $this->lang->project->menu      = $this->lang->$model->menu;
-            $this->lang->project->menuOrder = $this->lang->$model->menuOrder;
-            commonModel::setMenuVars('project', $build->project);
-        }
 
         /* Set session and load modules. */
         if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
@@ -223,7 +210,15 @@ class build extends control
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
         /* Set menu. */
-        commonModel::setMenuVars('execution', $build->execution);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($build->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($build->execution);
+        }
+
         $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
 
         $this->view->title         = "BUILD #$build->id $build->name - " . $executions[$build->execution];

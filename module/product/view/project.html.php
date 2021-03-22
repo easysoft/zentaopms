@@ -38,7 +38,7 @@
           <th class='w-80px'><?php echo $lang->project->begin;?></th>
           <th class='w-80px'><?php echo $lang->project->end;?></th>
           <th class='w-70px'><?php echo $lang->project->status;?></th>
-          <th class='w-80px'><?php echo $lang->project->budget;?></th>
+          <th class='w-90px'><?php echo $lang->project->budget;?></th>
           <th class='w-60px text-right'><?php echo $lang->project->estimate;?></th>
           <th class='w-60px text-right'><?php echo $lang->project->consume;?></th>
           <th class='w-60px'><?php echo $lang->project->progress;?></th>
@@ -50,7 +50,7 @@
         <tr>
           <td><?php printf('%03d', $project->id);?></td>
           <td class='text-left'><?php echo html::a($this->createLink('project', explode('-', $config->projectLink)[1], 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');?></td>
-          <td><?php echo isset($project->programName) ? $project->programName : '';?></td>
+          <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
           <td>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
             <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='800'");?>
@@ -61,7 +61,9 @@
           <td class='c-status' title='<?php echo $status;?>'>
             <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
           </td>
-          <td><?php echo $project->budget != 0 ? number_format($project->budget, 2) . zget($lang->project->currencySymbol, $project->budgetUnit) : $this->lang->project->future;?></td>
+          <?php $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->project->tenThousand : number_format((float)$project->budget, 1);?>
+          <?php $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;?>
+          <td title='<?php echo $budgetTitle;?>' class='text-ellipsis'><?php echo $budgetTitle;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHourUnit;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHourUnit;?></td>
           <td>
