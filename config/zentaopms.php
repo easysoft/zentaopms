@@ -193,8 +193,8 @@ if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefi
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
-$config->objectTables['story']       = TABLE_STORY;
 $config->objectTables['productplan'] = TABLE_PRODUCTPLAN;
+$config->objectTables['story']       = TABLE_STORY;
 $config->objectTables['release']     = TABLE_RELEASE;
 $config->objectTables['program']     = TABLE_PROJECT;
 $config->objectTables['project']     = TABLE_PROJECT;
