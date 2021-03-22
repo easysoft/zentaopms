@@ -35,25 +35,31 @@ class repo extends control
      * Common actions.
      *
      * @param  int    $objectID  projectID|executionID
+     * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function commonAction($objectID)
+    public function commonAction($objectID, $repoID = 0)
     {
-        if($this->app->openApp == 'project')
-        {
-            /* Set repo menu group. */
-            $this->scm       = $this->app->loadClass('scm');
-            $this->repos     = $this->repo->getRepoPairs($objectID);
-            if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create', "objectID=$objectID")));
+        $openApp     = $this->app->openApp;
+        $this->repos = $this->repo->getRepoPairs($openApp, $objectID);
+        $this->scm   = $this->app->loadClass('scm');
 
+        if($openApp == 'project')
+        {
             $this->loadModel('project')->setMenu($objectID);
         }
-        else if($this->app->openApp == 'execution')
+        else if($openApp == 'execution')
         {
             $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
             $this->execution->setMenu($executions, $objectID);
         }
+        else
+        {
+            $this->repo->setMenu($repos, $repoID);
+        }
+
+        if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create', "objectID=$objectID")));
     }
 
     /**

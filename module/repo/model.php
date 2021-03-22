@@ -285,18 +285,19 @@ class repoModel extends model
     /**
      * Get repo pairs.
      *
+     * @param  string $type  project|execution|repo
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getRepoPairs($projectID = 0)
+    public function getRepoPairs($type, $projectID = 0)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->fetchAll();
 
         /* Get products. */
-        $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
+        $productIdList = ($type == 'project' or $type == 'execution') ? $this->loadModel('product')->getProductIDByProject($projectID, false) : array();
 
         $repoPairs = array();
         foreach($repos as $repo)
@@ -305,7 +306,7 @@ class repoModel extends model
             $scm = $repo->SCM == 'Subversion' ? 'svn' : 'git';
             if($this->checkPriv($repo))
             {
-                if($projectID)
+                if($type == 'project' or $type == 'execution')
                 {
                     foreach($productIdList as $productID)
                     {
