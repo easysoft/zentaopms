@@ -125,7 +125,7 @@ class commonModel extends model
     public function setOpenApp()
     {
         $openApp = $this->app->openApp;
-        if($this->lang->navGroup->$openApp)
+        if(isset($this->lang->navGroup->$openApp))
         {
             $this->app->openApp = $this->lang->navGroup->$openApp;
         }
