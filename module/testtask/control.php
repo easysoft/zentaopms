@@ -45,16 +45,6 @@ class testtask extends control
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
             //$this->lang->noMenuModule[] = $this->app->rawModule;
         }
-        elseif($this->app->openApp == 'project')
-        {
-            $this->lang->testcase->menu    = $this->lang->projectQa->menu;
-            $this->lang->testcase->subMenu = $this->lang->projectQa->subMenu;
-        }
-        elseif($this->app->openApp == 'execution')
-        {
-            $this->lang->testcase->menu    = $this->lang->execution->qaMenu;
-            $this->lang->testcase->subMenu = '';
-        }
 
         $this->loadModel('product');
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
@@ -190,12 +180,26 @@ class testtask extends control
     {
         if(!empty($_POST))
         {
-            $taskID = $this->testtask->create();
+            $taskID = $this->testtask->create($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
 
             $this->executeHooks($taskID);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse', "productID=$productID")));
+            $task = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch();
+            if($this->app->openApp == 'project') $link = $this->createLink('project', 'testtask', "projectID=$task->project");
+            if($this->app->openApp == 'execution') $link = $this->createLink('execution', 'testtask', "executionID=$task->execution");
+            if($this->app->openApp == 'qa') $link = $this->createLink('testtask', 'browse', "productID=$productID");
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+        }
+
+        /* Set menu. */
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($projectID);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($executionID);
         }
 
         /* Create testtask from testtask of test.*/
