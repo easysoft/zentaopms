@@ -520,11 +520,10 @@ class projectModel extends model
      * Build the query.
      *
      * @param  int    $projectID
-     * @param  string $type   list|dropmenu
      * @access public
      * @return object
      */
-    public function buildMenuQuery($projectID = 0, $type = 'list')
+    public function buildMenuQuery($projectID = 0)
     {
         $path    = '';
         $project = $this->getByID($projectID);
@@ -532,11 +531,9 @@ class projectModel extends model
 
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
-            ->beginIF($type == 'list')->andWhere('type')->eq('project')->fi()
-            ->beginIF($type == 'dropmenu')->andWhere('type')->in('project,project')->fi()
+            ->andWhere('type')->eq('program')->fi()
             ->andWhere('status')->ne('closed')
-            ->beginIF(!$this->app->user->admin and $type == 'list')->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$this->app->user->admin and $type == 'dropmenu')->andWhere('id')->in($this->app->user->view->projects . ',' . $this->app->user->view->projects)->fi()
+            ->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
             ->orderBy('grade desc, `order`')
             ->get();
@@ -592,14 +589,13 @@ class projectModel extends model
      * @param  int       $projectID
      * @param  string    $userFunc
      * @param  int       $param
-     * @param  string    $type  list|dropmenu
      * @access public
      * @return string
      */
-    public function getTreeMenu($projectID = 0, $userFunc, $param = 0, $type = 'list')
+    public function getTreeMenu($projectID = 0, $userFunc, $param = 0)
     {
         $projectMenu = array();
-        $stmt        = $this->dbh->query($this->buildMenuQuery($projectID, $type));
+        $stmt        = $this->dbh->query($this->buildMenuQuery($projectID));
 
         while($project = $stmt->fetch())
         {
@@ -646,7 +642,7 @@ class projectModel extends model
 
         if($this->app->rawModule == 'execution') $link = helper::createLink('execution', 'all', "status=all&projectID={$project->id}");
 
-        return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
+        return html::a($link, $icon . $project->name, '_self', "id=program{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
     /**

@@ -53,7 +53,7 @@ js::set('browseType', $browseType);
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
-      <?php echo $projectTree;?>
+      <?php echo $programTree;?>
       <div class="text-center">
         <?php common::printLink('project', 'projectProgramTitle', '', $lang->project->moduleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
       </div>
