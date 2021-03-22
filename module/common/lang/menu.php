@@ -63,6 +63,13 @@ $lang->my->menu->work['subMenu']->bug      = "{$lang->bug->common}|my|work|mode=
 $lang->my->menu->work['subMenu']->testcase = "{$lang->testcase->common}|my|work|mode=testcase&type=assigntome";
 $lang->my->menu->work['subMenu']->testtask = "{$lang->testtask->common}|my|work|mode=testtask&type=wait";
 
+$lang->my->menu->work['menuOrder'][5]  = 'task';
+$lang->my->menu->work['menuOrder'][10] = 'requirement';
+$lang->my->menu->work['menuOrder'][15] = 'story';
+$lang->my->menu->work['menuOrder'][20] = 'bug';
+$lang->my->menu->work['menuOrder'][25] = 'testcase';
+$lang->my->menu->work['menuOrder'][30] = 'testtask';
+
 $lang->my->menu->contribute['subMenu'] = new stdclass();
 $lang->my->menu->contribute['subMenu']->task     = "{$lang->task->common}|my|contribute|mode=task";
 if($config->URAndSR) $lang->my->menu->contribute['subMenu']->requirement = "$lang->URCommon|my|contribute|mode=requirement";

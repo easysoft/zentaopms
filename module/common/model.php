@@ -789,8 +789,6 @@ class commonModel extends model
 
         $openApp = $app->openApp;
 
-        self::getModuleMenu($activeMenu);
-
         if(!isset($lang->$openApp->menu))
         {
             echo "<ul></ul>";
@@ -2353,20 +2351,6 @@ EOD;
             $lang->project->menuOrder   = $lang->waterfall->menuOrder;
             return self::processMenuVars($lang->menu->waterfall);
         }
-    }
-
-    /**
-     * Get my module menu by methodName.
-     *
-     * @param  string $activeMenu
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function getModuleMenu($activeMenu)
-    {
-        global $app, $lang;
-        $lang->{$app->openApp}->menu = $lang->{$app->openApp}->menu->$activeMenu['subMenu'];
     }
 
     /**
