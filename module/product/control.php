@@ -77,11 +77,9 @@ class product extends control
      */
     public function project($status = 'all', $productID = 0, $branch = 0, $involved = 0)
     {
-        $this->product->setMenu($productID, $branch);
-
-        $this->app->loadLang('my');
         $this->app->loadLang('execution');
-        $this->app->loadLang('program');
+
+        $this->product->setMenu($productID, $branch);
 
         /* Get PM id list. */
         $accounts     = array();
@@ -134,8 +132,7 @@ class product extends control
         $this->loadModel('execution');
 
         /* Set product, module and query. */
-        $productID = $this->app->openApp != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
-        $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
+        $branch = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 

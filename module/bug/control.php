@@ -385,7 +385,6 @@ class bug extends control
         $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
         $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
-        $this->bug->setMenu($this->products, $productID, $branch);
 
         /* Init vars. */
         $projectID   = 0;
@@ -590,7 +589,7 @@ class bug extends control
         /* Get product, then set menu. */
         $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
-        $this->bug->setMenu($this->products, $productID, $branch);
+        $this->qa->setMenu($this->products, $productID, $branch);
 
         /* If executionID is setted, get builds and stories of this execution. */
         if($executionID)
@@ -676,7 +675,7 @@ class bug extends control
         /* Set menu. */
         if($from == 'bug')
         {
-            $this->bug->setMenu($this->products, $bug->product, $bug->branch);
+            $this->qa->setMenu($this->products, $bug->product, $bug->branch);
         }
         elseif($from == 'repo')
         {
