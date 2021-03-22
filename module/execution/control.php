@@ -496,10 +496,10 @@ class execution extends control
         $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
         $this->app->session->set('storyList', $this->app->getURI(true), 'product');
 
-        $this->view->title          = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
-        $this->view->position[]     = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
-        $this->view->position[]     = $this->lang->execution->importTask;
-        $this->view->tasks2Imported = $tasks2Imported;
+        $this->view->title            = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
+        $this->view->position[]       = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
+        $this->view->position[]       = $this->lang->execution->importTask;
+        $this->view->tasks2Imported   = $tasks2Imported;
         $this->view->executions       = $executions;
         $this->view->executionID      = $execution->id;
         $this->view->fromExecution    = $fromExecution;

@@ -1674,7 +1674,7 @@ class executionModel extends model
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in(array_keys($products))
             ->andWhere('t2.project')->eq($execution->project)
-            ->fetchGroup('execution');
+            ->fetchGroup('project');
         $branches = str_replace(',', "','", $branches);
 
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
