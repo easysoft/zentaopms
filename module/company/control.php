@@ -148,8 +148,6 @@ class company extends control
      */
     public function view()
     {
-        $this->lang->noMenuModule[] = 'company';
-
         $this->company->setMenu();
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->view;
         $this->view->position[] = $this->lang->company->view;
@@ -170,8 +168,6 @@ class company extends control
      */
     public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
-        $this->lang->noMenuModule[] = 'company';
-
         $this->company->setMenu();
         $this->app->loadLang('user');
         $this->app->loadLang('execution');

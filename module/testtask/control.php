@@ -43,7 +43,6 @@ class testtask extends control
         {
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            //$this->lang->noMenuModule[] = $this->app->rawModule;
         }
         elseif($this->app->openApp == 'project')
         {
@@ -212,11 +211,12 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->create;
 
-        $this->view->executions = $executions;
-        $this->view->productID  = $productID;
-        $this->view->builds     = $builds;
-        $this->view->build      = $build;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
+        $this->view->executionID = $executionID;
+        $this->view->executions  = $executions;
+        $this->view->productID   = $productID;
+        $this->view->builds      = $builds;
+        $this->view->build       = $build;
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
 
         $this->display();
     }

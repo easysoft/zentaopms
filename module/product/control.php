@@ -119,7 +119,7 @@ class product extends control
      */
     public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->app->openApp != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
 
         if($this->app->openApp == 'product') $this->product->setMenu($productID, $branch);
         if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($projectID);
@@ -450,9 +450,6 @@ class product extends control
         $productID = $this->product->saveState($productID, $this->products);
         $this->product->setMenu($productID);
 
-        $moduleIndex = array_search('product', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
         if($programID)
         {
             $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
@@ -616,9 +613,6 @@ class product extends control
     {
         $product = $this->product->getStatByID($productID);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
-
-        $moduleIndex = array_search('product', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($productID);
@@ -1000,9 +994,6 @@ class product extends control
             /* The secondary test menu processing in the project. */
             if(in_array($fromModule, array('qa', 'bug', 'testtask', 'testreport')))
             {
-                $moduleIndex = array_search('product', $this->lang->noMenuModule);
-                if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
                 $menu = $this->lang->qa->menu->$activeMenu;
                 $menu['subModule'] = 'product';
                 $this->lang->qa->menu->$activeMenu = $menu;
@@ -1113,8 +1104,6 @@ class product extends control
     public function addWhitelist($productID = 0, $deptID = 0, $branch = '')
     {
         $this->product->setMenu($productID, $branch);
-        $moduleIndex = array_search('product', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
         $this->lang->modulePageNav = '';
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&objectType=product&module=product");

@@ -109,7 +109,7 @@ class story extends control
                 {
                     $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
                     $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
-                    $param              = $execution->type == 'project' ? "project=$objectID" : "executionID=$objectID";
+                    $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID";
                     $response['locate'] = $this->createLink($moduleName, 'story', $param);
                 }
                 $this->send($response);
@@ -163,7 +163,7 @@ class story extends control
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, true);
                 $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
                 $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
-                $param              = $execution->type == 'project' ? "productID=$productID" : "executionID=$objectID&orderBy=id_desc&browseType=unclosed";
+                $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID&orderBy=id_desc&browseType=unclosed";
                 $response['locate'] = $this->createLink($moduleName, 'story', $param);
             }
             if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
@@ -406,7 +406,7 @@ class story extends control
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, false);
                 $moduleName = $execution->type == 'project' ? 'projectstory' : 'execution';
-                $param      = $execution->type == 'project' ? "productID=$productID" : "executionID=$executionID&orderBy=id_desc&browseType=unclosed";
+                $param      = $execution->type == 'project' ? "projectID=$executionID&productID=$productID" : "executionID=$executionID&orderBy=id_desc&browseType=unclosed";
                 $link       = $this->createLink($moduleName, 'story', $param);
                 die(js::locate($link, 'parent'));
             }
@@ -648,14 +648,7 @@ class story extends control
         elseif($executionID)
         {
             /* The stories of a execution. */
-            $this->lang->navGroup->story = 'execution';
-            $moduleIndex = array_search('story', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-            $this->lang->story->menu = $this->lang->execution->menu;
-
-            $this->execution->setMenu($this->execution->getPairs($this->session->project, 'all', 'nodeleted'), $executionID);
-            $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
-
+            $this->execution->setMenu($executionID);
             $execution = $this->execution->getByID($executionID);
 
             $branchProduct  = false;
@@ -1463,10 +1456,6 @@ class story extends control
     {
         $this->session->set('productList', $this->app->getURI(true));
         $products = $this->product->getPairs();
-
-        $this->lang->navGroup->story = $from;
-        $moduleIndex = array_search('story', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
         if($from == 'qa')
         {

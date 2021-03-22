@@ -699,6 +699,89 @@ class treeModel extends model
     }
 
     /**
+     * Get the tree menu of case in html.
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @param  int    $startModule
+     * @param  int    $userFunc
+     * @param  string $extra
+     * @access public
+     * @return void
+     */
+    public function getCaseTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc, $extra = '')
+    {
+        $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
+
+        /* If createdVersion <= 4.1, go to getTreeMenu(). */
+        $products     = $this->loadModel('product')->getProductPairsByProject($rootID);
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+
+        /* createdVersion > 4.1. */
+        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-case'>";
+
+        /* Set the start module. */
+        $startModulePath = '';
+        if($startModule > 0)
+        {
+            $startModule = $this->getById($startModule);
+            if($startModule) $startModulePath = $startModule->path . '%';
+        }
+
+        /* Get module according to product. */
+        $productNum = count($products);
+        foreach($products as $id => $product)
+        {
+            $extra['productID'] = $id;
+            $link  = helper::createLink('testcase', 'browse', "productID=$id");
+            $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id' data-app='project'");
+
+            /* tree menu. */
+            $tree = '';
+            if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
+            foreach($branchGroups[$id] as $branch => $branchName)
+            {
+                $treeMenu = array();
+                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $id and type = 'case') OR (root = $id and type = 'story' and branch ='$branch'))")
+                    ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                    ->andWhere('deleted')->eq(0)
+                    ->orderBy('grade desc, `order`, type')
+                    ->get();
+                $stmt = $this->dbh->query($query);
+                while($module = $stmt->fetch())
+                {
+                    $this->buildTree($treeMenu, $module, 'case', $userFunc, $extra);
+                }
+                if(isset($treeMenu[0]) and $branch) $treeMenu[0] = "<li><a>$branchName</a><ul>{$treeMenu[0]}</ul></li>";
+                $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
+            }
+
+            if($tree) $tree = "<ul>" . $tree . "</ul>\n</li>";
+            $menu .= $tree;
+        }
+
+        /* Get case module. */
+        if($startModule == 0)
+        {
+            /* tree menu. */
+            $treeMenu = array();
+            $query = $this->dao->select('*')->from(TABLE_MODULE)
+                ->where('root')->eq((int)$rootID)
+                ->andWhere('type')->eq('case')
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('grade desc, `order`, type')
+                ->get();
+            $stmt  = $this->dbh->query($query);
+            while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, 'case', $userFunc, $extra);
+
+            $tree  = isset($treeMenu[0]) ? $treeMenu[0] : '';
+            $menu .= $tree . '</li>';
+        }
+        $menu .= '</ul>';
+        return $menu;
+    }
+
+    /**
      * Get execution story tree menu.
      *
      * @param  int    $rootID
@@ -731,8 +814,8 @@ class treeModel extends model
         $productNum   = count($products);
         foreach($products as $id => $product)
         {
-            $extra['productID'] = $id;
-            $projectProductLink   = helper::createLink('projectstory', 'story', "productID=$id");
+            $extra['productID']   = $id;
+            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id");
             $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&ordery=&status=byProduct&praram=$id");
             $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
             if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
@@ -761,7 +844,7 @@ class treeModel extends model
                 if((isset($treeMenu[0]) and $branch) or isset($executionBranches[$branch]))
                 {
                     $childMenu = isset($treeMenu[0]) ? "<ul>{$treeMenu[0]}</ul>" : '';
-                    $projectBranchLink   = helper::createLink('projectstory', 'story', "productID=$id&branch=" . (empty($branch) ? 0 : $branch) . "&browseType=byBranch");
+                    $projectBranchLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=" . (empty($branch) ? 0 : $branch) . "&browseType=byBranch");
                     $executionBranchLink = helper::createLink('execution', 'story', "executionID=$rootID&ordery=&status=byBranch&praram=" . (empty($branch) ? "{$id},0" : $branch));
                     $link = $this->app->rawModule == 'projectstory' ? $projectBranchLink : $executionBranchLink;
                     if($branchName) $treeMenu[0] = "<li>" . html::a($link, $branchName, '_self', "id='branch" . (empty($branch) ? "{$id}_0" : $branch) . "'") . "{$childMenu}</li>";
@@ -979,7 +1062,7 @@ class treeModel extends model
     public function createProjectStoryLink($type, $module, $extra)
     {
         $productID = $extra['productID'];
-        return html::a(helper::createLink('projectstory', 'story', "productID=$productID&branch=&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('projectstory', 'story', "projectID={$extra['executionID']}productID=$productID&branch=&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
@@ -1104,7 +1187,7 @@ class treeModel extends model
      */
     public function createCaseLink($type, $module)
     {
-        return html::a(helper::createLink('testcase', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('testcase', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->openApp}'");
     }
 
     /**

@@ -35,7 +35,7 @@
         <?php endif;?>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->execution;?></th>
-          <td class='w-p35-f'><?php echo html::select('execution', $executions, '', "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></td><td></td>
+          <td class='w-p35-f'><?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></td><td></td>
         </tr>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->build;?></th>

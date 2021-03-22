@@ -51,7 +51,7 @@ class repo extends control
         }
         else if($openApp == 'execution')
         {
-            $this->execution->setMenu($objectID);
+            $this->loadModel('execution')->setMenu($objectID);
         }
         else
         {
@@ -115,7 +115,6 @@ class repo extends control
 
         $this->commonAction($objectID);
 
-        array_push($this->lang->noMenuModule, 'repo');
         $this->app->loadLang('action');
         $this->repo->setMenu($this->repos, '', false);
 
@@ -758,7 +757,6 @@ class repo extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setRules')));
         }
 
-        array_push($this->lang->noMenuModule, 'repo');
         $this->repo->setMenu($this->repos, $this->session->repoID, false);
 
         $this->app->loadLang('task');

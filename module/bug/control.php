@@ -53,7 +53,6 @@ class bug extends control
         {
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            $this->lang->noMenuModule[] = $this->app->rawModule;
         }
         else
         {
@@ -496,6 +495,9 @@ class bug extends control
 
             $project   = $this->loadModel('project')->getByID($projectID);
             $projects += array($projectID => $project->name);
+
+            /* Set project menu. */
+            if($this->app->openApp == 'project') $this->project->setMenu($projectID);
         }
         else
         {
@@ -908,8 +910,6 @@ class bug extends control
             }
 
             $this->loadModel('my')->setMenu();
-            $moduleIndex = array_search('bug', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
             $this->lang->task->menu = $this->lang->my->menu->work;
             $this->lang->my->menu->work['subModule'] = 'bug';
 
