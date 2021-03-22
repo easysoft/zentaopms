@@ -37,7 +37,7 @@ class report extends control
     }
 
     /**
-     * The index of report, goto execution deviation.
+     * The index of report, goto project deviation.
      *
      * @access public
      * @return void
@@ -48,23 +48,23 @@ class report extends control
     }
 
     /**
-     * Execution deviation report.
+     * Project deviation report.
      *
      * @access public
      * @return void
      */
-    public function executionDeviation($begin = 0, $end = 0)
+    public function projectDeviation($begin = 0, $end = 0)
     {
         $begin = $begin ? date('Y-m-d', strtotime($begin)) : '';
         $end   = $end   ? date('Y-m-d', strtotime($end))   : '';
 
-        $this->view->title      = $this->lang->report->executionDeviation;
-        $this->view->position[] = $this->lang->report->executionDeviation;
+        $this->view->title      = $this->lang->report->projectDeviation;
+        $this->view->position[] = $this->lang->report->projectDeviation;
 
-        $this->view->executions = $this->report->getExecutions($begin, $end);
-        $this->view->begin      = $begin;
-        $this->view->end        = $end;
-        $this->view->submenu    = 'execution';
+        $this->view->projects = $this->report->getProjects($begin, $end);
+        $this->view->begin    = $begin;
+        $this->view->end      = $end;
+        $this->view->submenu  = 'project';
         $this->display();
     }
 

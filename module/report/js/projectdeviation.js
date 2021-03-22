@@ -23,6 +23,6 @@ function changeDate(begin, end)
             end = end + endarray[i];
         }
     }
-    link = createLink('report', 'executiondeviation', 'begin=' + begin + '&end=' + end);
+    link = createLink('report', 'projectdeviation', 'begin=' + begin + '&end=' + end);
     location.href=link;
 }

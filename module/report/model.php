@@ -91,16 +91,18 @@ class reportModel extends model
     /**
      * Get executions.
      *
+     * @param  string $begin 
+     * @param  string $end 
      * @access public
      * @return void
      */
-    public function getExecutions($begin = 0, $end = 0)
+    public function getProjects($begin = 0, $end = 0)
     {
-        $tasks = $this->dao->select('t1.*,t2.name as executionName')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+        $tasks = $this->dao->select('t1.*,t2.name as projectName')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
             ->andWhere('t2.status')->eq('closed')
@@ -109,23 +111,23 @@ class reportModel extends model
             ->orderBy('t2.end_desc')
             ->fetchAll();
 
-        $executions = array();
+        $projects = array();
         foreach($tasks as $task)
         {
-            $executionID = $task->execution;
-            if(!isset($executions[$executionID]))
+            $projectID = $task->project;
+            if(!isset($projects[$projectID]))
             {
-                $executions[$executionID] = new stdclass();
-                $executions[$executionID]->estimate = 0;
-                $executions[$executionID]->consumed = 0;
+                $projects[$projectID] = new stdclass();
+                $projects[$projectID]->estimate = 0;
+                $projects[$projectID]->consumed = 0;
             }
 
-            $executions[$executionID]->name      = $task->executionName;
-            $executions[$executionID]->estimate += $task->estimate;
-            $executions[$executionID]->consumed += $task->consumed;
+            $projects[$projectID]->name      = $task->executionName;
+            $projects[$projectID]->estimate += $task->estimate;
+            $projects[$projectID]->consumed += $task->consumed;
         }
 
-        return $executions;
+        return $projects;
     }
 
     /**

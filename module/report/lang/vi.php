@@ -9,16 +9,16 @@
  * @version  $Id: vi.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->report->common          = 'Báo cáo';
-$lang->report->index           = 'Trang báo cáo';
-$lang->report->list            = 'Báo cáo';
-$lang->report->item            = 'Hạng mục';
-$lang->report->value           = 'Giá trị';
-$lang->report->percent         = '%';
-$lang->report->undefined       = 'Chưa định nghĩa';
-$lang->report->query           = 'Truy vấn';
-$lang->report->annual          = 'Tóm tắt theo năm';
-$lang->report->executionCommon = 'Execution';
+$lang->report->common     = 'Báo cáo';
+$lang->report->index      = 'Trang báo cáo';
+$lang->report->list       = 'Báo cáo';
+$lang->report->item       = 'Hạng mục';
+$lang->report->value      = 'Giá trị';
+$lang->report->percent    = '%';
+$lang->report->undefined  = 'Chưa định nghĩa';
+$lang->report->query      = 'Truy vấn';
+$lang->report->annual     = 'Tóm tắt theo năm';
+$lang->report->project    = 'Project';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -38,30 +38,30 @@ $lang->report->assign['assign']   = 'Đã giao';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->executionDeviation = 'Độ lệch thực hiện';
-$lang->report->productSummary     = 'Tóm tắt '.$lang->productCommon;
-$lang->report->bugCreate          = 'Báo cáo Bug';
-$lang->report->bugAssign          = 'Bàn giao Bug';
-$lang->report->workload           = 'Lượng công việc đội nhóm';
-$lang->report->workloadAB         = 'Lượng công việc';
-$lang->report->bugOpenedDate      = 'Bug được báo cáo từ';
-$lang->report->beginAndEnd        = ' từ';
-$lang->report->begin              = 'Begin';
-$lang->report->end                = 'End';
-$lang->report->dept               = 'Phòng/Ban';
-$lang->report->deviationChart     = 'Biểu đồ chênh lệcthực hiệnh';
+$lang->report->projectDeviation = 'Độ lệch thực hiện';
+$lang->report->productSummary   = 'Tóm tắt '.$lang->productCommon;
+$lang->report->bugCreate        = 'Báo cáo Bug';
+$lang->report->bugAssign        = 'Bàn giao Bug';
+$lang->report->workload         = 'Lượng công việc đội nhóm';
+$lang->report->workloadAB       = 'Lượng công việc';
+$lang->report->bugOpenedDate    = 'Bug được báo cáo từ';
+$lang->report->beginAndEnd      = ' từ';
+$lang->report->begin            = 'Begin';
+$lang->report->end              = 'End';
+$lang->report->dept             = 'Phòng/Ban';
+$lang->report->deviationChart   = 'Biểu đồ chênh lệcthực hiệnh';
 
 $lang->reportList = new stdclass();
-$lang->reportList->execution = new stdclass();
-$lang->reportList->product   = new stdclass();
-$lang->reportList->test      = new stdclass();
-$lang->reportList->staff     = new stdclass();
+$lang->reportList->project = new stdclass();
+$lang->reportList->product = new stdclass();
+$lang->reportList->test    = new stdclass();
+$lang->reportList->staff   = new stdclass();
 
-$lang->reportList->execution->lists[10] = 'Chênh lệchthực hiện|report|executiondeviation';
-$lang->reportList->product->lists[10]   = 'Tóm tắt '.$lang->productCommon . '|report|productsummary';
-$lang->reportList->test->lists[10]      = 'Báo cáo Bug|report|bugcreate';
-$lang->reportList->test->lists[13]      = 'Bàn giao Bug|report|bugassign';
-$lang->reportList->staff->lists[10]     = 'Lượng công việc đội nhóm|report|workload';
+$lang->reportList->project->lists[10] = 'Chênh lệchthực hiện|reportprojectdeviation';
+$lang->reportList->product->lists[10] = 'Tóm tắt '.$lang->productCommon . '|report|productsummary';
+$lang->reportList->test->lists[10]    = 'Báo cáo Bug|report|bugcreate';
+$lang->reportList->test->lists[13]    = 'Bàn giao Bug|report|bugassign';
+$lang->reportList->staff->lists[10]   = 'Lượng công việc đội nhóm|report|workload';
 
 $lang->report->id            = 'ID';
 $lang->report->execution     = $lang->executionCommon;
