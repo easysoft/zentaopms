@@ -77,11 +77,9 @@ class product extends control
      */
     public function project($status = 'all', $productID = 0, $branch = 0, $involved = 0)
     {
-        $this->product->setMenu($productID, $branch);
-
-        $this->app->loadLang('my');
         $this->app->loadLang('execution');
-        $this->app->loadLang('program');
+
+        $this->product->setMenu($productID, $branch);
 
         /* Get PM id list. */
         $accounts     = array();
