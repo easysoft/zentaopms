@@ -2260,7 +2260,7 @@ class execution extends control
         $execution  = $this->execution->getById($executionID);
         $products   = $this->execution->getProducts($executionID);
         $browseLink = $this->createLink('execution', 'story', "executionID=$executionID");
-        if($execution->type == 'project') $browseLink = $this->createLink('projectstory', 'story');
+        if($execution->type == 'project') $browseLink = $this->createLink('projectstory', 'story', "projectID=$executionID");
 
         $this->session->set('storyList', $this->app->getURI(true), 'product'); // Save session.
         if($execution->type != 'execution') $this->execution->setMenu($this->executions, $execution->id);     // Set menu.
@@ -2936,7 +2936,7 @@ class execution extends control
         if($execution->type == 'project')
         {
             $moduleName = 'projectstory';
-            $param      = "productID=$productID";
+            $param      = "projectID=$executionID";
         }
         if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, 'story', $param));
         die(js::locate(helper::createLink($moduleName, 'story', $param), 'parent'));
