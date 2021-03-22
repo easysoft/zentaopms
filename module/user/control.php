@@ -79,9 +79,6 @@ class user extends control
         $date    = (int)$type == 0 ? helper::today() : $type;
         $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
 
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
-
         /* set menus. */
         $this->view->userList = $this->user->setUserList($users, $userID);
 
@@ -123,11 +120,6 @@ class user extends control
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
         $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
-
-        /* Set menu. */
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         /* Modify story title. */
         $this->loadModel('story');
@@ -175,9 +167,6 @@ class user extends control
         /* Set the menu. */
         $this->view->userList = $this->user->setUserList($users, $userID);
 
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
-
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
         $this->view->position[] = $this->lang->user->task;
@@ -221,9 +210,6 @@ class user extends control
 
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
         $this->view->position[] = $this->lang->user->bug;
@@ -270,9 +256,6 @@ class user extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
-
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
         $this->view->position[] = $this->lang->user->testTask;
         $this->view->tasks      = $this->loadModel('testtask')->getByUser($account, $pager, $sort);
@@ -314,11 +297,6 @@ class user extends control
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
-
-         /* Set menu. */
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $cases = array();
         if($type == 'case2Him')
@@ -376,9 +354,6 @@ class user extends control
         $this->loadModel('project');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
-
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
         $this->view->position[] = $this->lang->user->execution;
         $this->view->tabID      = 'project';
@@ -417,9 +392,6 @@ class user extends control
 
         /* Set the menus. */
         $this->view->userList = $this->user->setUserList($users, $userID);
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
         $this->view->position[] = $this->lang->user->issue;
@@ -461,9 +433,6 @@ class user extends control
         /* Set the menus. */
         $this->view->userList = $this->user->setUserList($users, $userID);
 
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
-
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->risk;
         $this->view->position[] = $this->lang->user->risk;
         $this->view->risks      = $this->loadModel('risk')->getUserRisks($type, $account, $orderBy, $pager);
@@ -489,9 +458,6 @@ class user extends control
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
         $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->position[]   = $this->lang->user->common;
@@ -1115,9 +1081,6 @@ class user extends control
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
         $sort    = $this->loadModel('common')->appendOrder($orderBy);
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', 'all', $date, $direction);
 

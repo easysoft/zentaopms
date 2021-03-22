@@ -265,7 +265,6 @@ class execution extends control
      */
     public function grouptask($executionID = 0, $groupBy = 'story', $filter = '')
     {
-        $this->showModuleMenu();
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -826,7 +825,6 @@ class execution extends control
      */
     public function qa($executionID = 0)
     {
-        $this->showModuleMenu();
         $this->commonAction($executionID);
         $this->view->title = $this->lang->execution->qa;
         $this->display();
@@ -848,8 +846,6 @@ class execution extends control
      */
     public function bug($executionID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->showModuleMenu();
-
         /* Load these two models. */
         $this->loadModel('bug');
         $this->loadModel('user');
@@ -924,7 +920,6 @@ class execution extends control
     {
         $this->loadModel('testcase');
         $this->loadModel('testtask');
-        $this->showModuleMenu();
         $this->commonAction($executionID);
 
         $products  = $this->execution->getProducts($executionID);
@@ -1024,8 +1019,6 @@ class execution extends control
      */
     public function testtask($executionID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->showModuleMenu();
-
         $this->loadModel('testtask');
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
@@ -1148,9 +1141,6 @@ class execution extends control
      */
     public function team($executionID = 0)
     {
-        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -1318,8 +1308,6 @@ class execution extends control
      */
     public function edit($executionID, $action = 'edit', $extra = '')
     {
-        $this->showModuleMenu();
-
         /* Load language files and get browseExecutionLink. */
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
@@ -1712,8 +1700,6 @@ class execution extends control
      */
     public function view($executionID)
     {
-        $this->showModuleMenu();
-
         $execution = $this->execution->getById($executionID, true);
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -1826,11 +1812,10 @@ class execution extends control
      */
     public function tree($executionID, $type = 'task')
     {
-        $this->showModuleMenu();
-
         $this->execution->setMenu($executionID);
+
         $execution = $this->loadModel('execution')->getById($executionID);
-        $tree    = $this->execution->getTree($executionID);
+        $tree      = $this->execution->getTree($executionID);
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -2057,9 +2042,6 @@ class execution extends control
      */
     public function manageProducts($executionID, $from = '')
     {
-        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
@@ -2149,8 +2131,6 @@ class execution extends control
      */
     public function manageMembers($executionID = 0, $team2Import = 0, $dept = 0)
     {
-        $this->showModuleMenu();
-
         if(!empty($_POST))
         {
             $this->execution->manageMembers($executionID);
@@ -2724,9 +2704,6 @@ class execution extends control
      */
     public function whitelist($executionID = 0, $module='execution', $objectType = 'sprint', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
@@ -2746,8 +2723,6 @@ class execution extends control
      */
     public function addWhitelist($executionID = 0, $deptID = 0)
     {
-        $this->showModuleMenu();
-
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
 
@@ -3024,17 +2999,5 @@ class execution extends control
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
-    }
-
-    /**
-     * Show module menu for some module.
-     *
-     * @access public
-     * @return void
-     */
-    public function showModuleMenu()
-    {
-        $moduleIndex = array_search('execution', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
     }
 }
