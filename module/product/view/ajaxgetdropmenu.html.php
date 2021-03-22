@@ -22,43 +22,44 @@ $closedProductsHtml = '';
 
 foreach($products as $product)
 {
+    $selected     = $product->id == $productID ? 'selected' : '';
     $productName  = $product->program ? zget($programs, $product->program, '') . '/' : '';
     $productName .= $product->line ? zget($lines, $product->line, '') . '/' . $product->name : $product->name;
     if($product->status == 'normal' and $product->PO == $this->app->user->account)
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
-        $myProductsHtml .= html::a($linkHtml, $productName, '', "class='text-important' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
+        $myProductsHtml .= html::a($linkHtml, $productName, '', "class='text-important $selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
     }
     else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
-        $normalProductsHtml .= html::a($linkHtml, $productName, '', "title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
+        $normalProductsHtml .= html::a($linkHtml, $productName, '', "class='$selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
     }
     else if($product->status == 'closed')
     {
         $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
         $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $objectID);
-        $closedProductsHtml .= html::a($linkHtml, $productName, '', "title='{$productName}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
+        $closedProductsHtml .= html::a($linkHtml, $productName, '', "class='$selected' title='{$productName}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
     }
 }
 ?>
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
-    <?php
-    if(!empty($myProductsHtml))
-    {
-        echo "<div class='heading'>{$lang->product->mine}</div>";
-        echo $myProductsHtml;
-        if(!empty($myProductsHtml))
-        {
-            echo "<div class='heading'>{$lang->product->other}</div>";
-        }
-    }
-    echo $normalProductsHtml;
-    ?>
+      <?php
+      if(!empty($myProductsHtml))
+      {
+          echo "<div class='heading'>{$lang->product->mine}</div>";
+          echo $myProductsHtml;
+          if(!empty($myProductsHtml))
+          {
+              echo "<div class='heading'>{$lang->product->other}</div>";
+          }
+      }
+      echo $normalProductsHtml;
+      ?>
     </div>
     <div class="col-footer">
       <?php //echo html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->product->all, '', 'class="not-list-item"'); ?>
@@ -67,8 +68,15 @@ foreach($products as $product)
     </div>
   </div>
   <div class="table-col col-right">
-   <div class='list-group'>
-    <?php echo $closedProductsHtml;?>
-    </div>
+   <div class='list-group'><?php echo $closedProductsHtml;?></div>
   </div>
 </div>
+<script>
+$(function()
+{
+    if($('#dropMenu .table-row .col-left .list-group .selected').length > 0)
+    {
+        $('#dropMenu .table-row .col-left .list-group').scrollTop($('#dropMenu .table-row .col-left .list-group .selected').position().top - 75);
+    }
+})
+</script>

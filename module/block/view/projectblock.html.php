@@ -10,10 +10,10 @@
     <thead>
       <tr>
         <th class='c-name w-100px'><?php echo $lang->project->name;?></th>
-        <th class='w-100px'><?php echo $lang->program->PM;?></th>
-        <th class='w-80px'><?php echo $lang->program->status;?></th>
+        <th class='w-80px'><?php echo $lang->program->PM;?></th>
+        <th class='w-60px'><?php echo $lang->program->status;?></th>
         <?php if($longBlock):?>
-        <th class='w-60px'><?php echo $lang->program->teamCount;?></th>
+        <th class='w-90px'><?php echo $lang->program->teamCount;?></th>
         <th class='w-90px text-right'><?php echo $lang->task->consumed;?></th>
         <th class='w-80px text-right'><?php echo $lang->program->budget;?></th>
         <th class='w-80px'><?php echo $lang->project->leftStories;?></th>

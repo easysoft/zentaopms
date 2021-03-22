@@ -47,7 +47,7 @@ class program extends control
 
         if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-secondary'");
 
-        $this->app->session->set('programList', $this->app->getURI(true));
+        $this->session->set('programList', $this->app->getURI(true));
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
@@ -368,7 +368,7 @@ class program extends control
         if($confirm == 'no') die(js::confirm($this->lang->program->confirmDelete, $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
 
         $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
-        $this->loadModel('action')->create('program', $programID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+        $this->loadModel('action')->create('program', $programID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         die(js::reload('parent'));
     }

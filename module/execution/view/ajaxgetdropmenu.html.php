@@ -20,33 +20,34 @@ $executionsPinYin = common::convert2Pinyin($executionNames);
 
 foreach($executions as $execution)
 {
+    $selected      = $execution->id == $executionID ? 'selected' : '';
     $executionName = zget($projects, $execution->project) . '/' . $execution->name;
     if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
     {
-        $myProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='text-important' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
+        $myProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='text-important $selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
     }
     else if($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account))
     {
-        $normalProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
+        $normalProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='$selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
     }
-    else if($execution->status == 'done' or $execution->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
+    else if($execution->status == 'done' or $execution->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='$selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
 }
 ?>
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
-    <?php
-    if(!empty($myProjectsHtml))
-    {
-        echo "<div class='heading'>{$lang->execution->mine}</div>";
-        echo $myProjectsHtml;
-        if(!empty($myProjectsHtml))
-        {
-            echo "<div class='heading'>{$lang->execution->other}</div>";
-        }
-    }
-    echo $normalProjectsHtml;
-    ?>
+      <?php
+      if(!empty($myProjectsHtml))
+      {
+          echo "<div class='heading'>{$lang->execution->mine}</div>";
+          echo $myProjectsHtml;
+          if(!empty($myProjectsHtml))
+          {
+              echo "<div class='heading'>{$lang->execution->other}</div>";
+          }
+      }
+      echo $normalProjectsHtml;
+      ?>
     </div>
     <div class="col-footer">
       <?php //echo html::a(helper::createLink('execution', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->execution->all, '', 'class="not-list-item"'); ?>
@@ -54,10 +55,15 @@ foreach($executions as $execution)
     </div>
   </div>
   <div class="table-col col-right">
-   <div class='list-group'>
-    <?php
-    echo $closedProjectsHtml;
-    ?>
-    </div>
+   <div class='list-group'><?php echo $closedProjectsHtml;?></div>
   </div>
 </div>
+<script>
+$(function()
+{
+    if($('#dropMenu .table-row .col-left .list-group .selected').length > 0)
+    {
+        $('#dropMenu .table-row .col-left .list-group').scrollTop($('#dropMenu .table-row .col-left .list-group .selected').position().top - 75);
+    }
+})
+</script>

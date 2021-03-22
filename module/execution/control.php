@@ -2038,9 +2038,9 @@ class execution extends control
         {
             /* Delete execution. */
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
-            $this->loadModel('action')->create($this->objectType, $executionID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
-            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('execution')->eq($executionID)->exec();
+            $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
             $this->execution->updateUserView($executionID);
+
             $this->session->set('execution', '');
             $this->executeHooks($executionID);
             die(js::locate(inlink('index'), 'parent'));
@@ -2554,7 +2554,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($module, $method, $extra)
+    public function ajaxGetDropMenu($executionID, $module, $method, $extra)
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('order_desc')->fetchAll('id');
 
@@ -2582,6 +2582,7 @@ class execution extends control
         $this->view->link        = $this->execution->getLink($module, $method, $extra);
         $this->view->module      = $module;
         $this->view->method      = $method;
+        $this->view->executionID = $executionID;
         $this->view->extra       = $extra;
         $this->view->projects    = $this->project->getPairsByModel();
         $this->view->executions  = $orderedExecutions;

@@ -883,7 +883,7 @@ class my extends control
         $this->view->programLink      = isset($this->config->programLink) ? $this->config->programLink : 'program-browse';
         $this->view->productLink      = isset($this->config->productLink) ? $this->config->productLink : 'product-all';
         $this->view->projectLink      = isset($this->config->projectLink) ? $this->config->projectLink : 'project-browse';
-        $this->view->executionLink    = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
+        //$this->view->executionLink  = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
         $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
 
         $this->display();
