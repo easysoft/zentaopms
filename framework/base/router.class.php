@@ -382,7 +382,6 @@ class baseRouter
         $this->setErrorHandler();
         $this->setTimezone();
         $this->startSession();
-        $this->setProject();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
@@ -852,18 +851,6 @@ class baseRouter
 
             define('SESSION_STARTED', true);
         }
-    }
-
-    /**
-     * 从Get里取project id 设置到session中。
-     * Get project id from Get and set it to session.
-     *
-     * @access public
-     * @return void
-     */
-    public function setProject()
-    {
-        if(isset($_GET['PRJ'])) $this->session->set('PRJ', $_GET['PRJ']); //Set project id into session.
     }
 
     /**
@@ -1830,7 +1817,6 @@ class baseRouter
         global $filter;
 
         /* Remove these three params. */
-        unset($passedParams['PRJ']);
         unset($passedParams['onlybody']);
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 

@@ -144,3 +144,7 @@ $(function()
         }
     });
 });
+
+$(window).unload(function(){
+    if(blockID) window.parent.refreshBlock($('#block' + blockID));
+});

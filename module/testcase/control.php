@@ -799,7 +799,6 @@ class testcase extends control
                 $this->view->title      = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
             }
         }
-        /* The cases of my. */
         else
         {
             /* Get the edited cases. */
@@ -809,9 +808,10 @@ class testcase extends control
                 ->fetchAll('id');
             $caseIDList = array_keys($cases);
 
-            $this->lang->testcase->menu = $this->lang->my->menu;
-            $this->lang->testcase->menuOrder = $this->lang->my->menuOrder;
+            /* The cases of my. */
             $this->loadModel('my')->setMenu();
+            $this->lang->testcase->menu = $this->lang->my->workMenu;
+            $this->lang->my->menu->myWork['subModule'] = 'testcase';
 
             $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->testCase);
             $this->view->title      = $this->lang->testcase->batchEdit;

@@ -23,8 +23,7 @@ class qaModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $extra = '')
     {
-        $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'qa', 'index', $extra, $branch);
+        $selectHtml = $this->loadModel('product')->select($products, $productID, 'qa', 'index', $extra, $branch);
 
         $productIndex = '';
         $isMobile     = $this->app->viewType == 'mhtml';
@@ -39,7 +38,8 @@ class qaModel extends model
             $productIndex .= $selectHtml;
         }
 
-        if($this->lang->navGroup->qa == 'qa') $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
+        if($this->app->rawModule != 'qa') $this->lang->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
+        common::setMenuVars('qa', $productID);
     }
 
     /**

@@ -27,40 +27,7 @@ class testcaseModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc')
     {
-        $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'case');
-        $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch, $moduleID, 'case');
-
-        $pageNav     = '';
-        $pageActions = '';
-        $isMobile    = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-        }
-        $pageNav .= $selectHtml;
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
-        foreach($this->lang->testcase->menu as $key => $menu)
-        {
-            if($this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
-
-            $replace = $productID;
-            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->testcase->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->testcase == 'qa')
-        {
-            foreach($this->lang->qa->subMenu->testcase as $key => $menu)
-            {
-                common::setMenuVars($this->lang->qa->subMenu->testcase, $key, $productID);
-            }
-            $this->lang->qa->menu         = $this->lang->testcase->menu;
-            $this->lang->testcase->menu   = $this->lang->qa->subMenu->testcase;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        }
+        $this->loadModel('qa')->setMenu($products, $productID, $branch, $moduleID, 'case');
     }
 
     /**
@@ -294,6 +261,28 @@ class testcaseModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager, 't1.case')
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get project cases.
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getProjectCases($projectID, $orderBy = 'id_desc', $pager = null, $browseType = '')
+    {
+        return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('t1.project')->eq((int)$projectID)
+            ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
     }
 

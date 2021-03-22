@@ -27,6 +27,7 @@ class projectrelease extends control
         $products = array();
         $this->loadModel('product');
         $this->loadModel('release');
+        $this->loadModel('project');
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->PRJ);
         if(empty($this->view->products)) $this->locate($this->createLink('product', 'create'));
     }
@@ -52,7 +53,7 @@ class projectrelease extends control
         $this->view->product  = $product;
         $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->branch   = $branch;
-        $this->view->project  = $this->loadModel('project')->getByID($this->session->PRJ);
+        $this->view->project  = $this->project->getByID($this->session->PRJ);
     }
 
     /**
@@ -69,8 +70,8 @@ class projectrelease extends control
         $this->session->set('releaseList', $this->app->getURI(true));
         $execution = $this->loadModel('execution')->getById($this->session->PRJ);
 
-        if($projectID) commonModel::setAppObjectID('project', $projectID);
-        if($executionID) commonModel::setAppObjectID('execution', $executionID);
+        if($projectID) $this->project->setMenu($projectID);
+        if($executionID) $this->loadModel('execution')->setMenu($executionID, $this->app->rawModule, $this->app->rawMethod);
 
         $this->view->title       = $execution->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[]  = $this->lang->release->browse;
@@ -114,7 +115,7 @@ class projectrelease extends control
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
-        commonModel::setAppObjectID('project', $projectID);
+        $this->project->setMenu($projectID);
         $this->commonAction();
 
         $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;

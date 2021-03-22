@@ -14,37 +14,6 @@
 class productModel extends model
 {
     /**
-     *
-     * Set menu.
-     *
-     * @param array  $products
-     * @param int    $productID
-     * @param int    $branch
-     * @param int    $module
-     * @param string $moduleType
-     * @param string $extra
-     *
-     * @access public
-     * @return void
-     */
-    public function setMenu($products, $productID, $branch = 0, $module = 0, $moduleType = '', $extra = '')
-    {
-        $product = $this->getByID($productID);
-        if($product)
-        {
-            $this->getModuleNav($products, '', $product, $extra, $branch, $module, $moduleType);
-        }
-
-        foreach($this->lang->product->menu as $key => $menu)
-        {
-            $replace = array();
-            $replace['productID'] = $productID;
-            $replace['branch']    = $branch;
-            common::setMenuVars($this->lang->product->menu, $key, $replace);
-        }
-    }
-
-    /**
      * Get product module menu.
      *
      * @param  array  $products
@@ -1693,5 +1662,28 @@ class productModel extends model
                 $this->loadModel('action')->create('project', $projectID, 'Managed', '', join(',', $newProducts));
             }
         }
+    }
+
+    /**
+     *
+     * Set menu.
+     *
+     * @param int    $productID
+     * @param int    $branch
+     * @param int    $module
+     * @param string $moduleType
+     * @param string $extra
+     *
+     * @access public
+     * @return void
+     */
+    public function setMenu($productID, $branch = 0, $module = 0, $moduleType = '', $extra = '')
+    {
+        $product = $this->getByID($productID);
+        if(!$product) return;
+
+        $this->lang->switcherMenu = $this->getSwitcher($productID, $extra, $branch);
+        $params = array('branch' => $branch);
+        common::setMenuVars('product', $productID, $params);
     }
 }

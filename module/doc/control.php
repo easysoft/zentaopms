@@ -448,6 +448,15 @@ class doc extends control
             $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->execution);
         }
 
+        /* Set my menu. */
+        if($this->app->openApp == 'my')
+        {
+            $this->lang->doc->menu     = $this->lang->my->contributeMenu;
+            $this->lang->modulePageNav = '';
+            $this->lang->TRActions     = '';
+            $this->lang->my->menu->contribute['subModule'] = 'doc';
+        }
+
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);
         $this->view->position[] = $this->lang->doc->edit;
@@ -831,7 +840,7 @@ class doc extends control
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-            $this->project->setMenu($this->project->getPairs($this->session->PRJ, 'all', 0, true), $objectID);
+            $this->project->setMenu($objectID);
         }
         else
         {
@@ -912,18 +921,10 @@ class doc extends control
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
         if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->PRJ));
+        $this->lang->noMenuModule[] = 'doc';
 
-        if($from == 'product')
-        {
-            $this->product->setMenu($this->product->getPairs(), $objectID);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($objectID);
-            $this->lang->noMenuModule[] = 'doc';
-        }
-        elseif($from == 'project' or $from == 'execution')
-        {
-            if($this->config->systemMode == 'classic') $this->lang->noMenuModule[] = 'doc';
-        }
-        else
+        $from = $this->app->openApp;
+        if($from == 'doc')
         {
             $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->executionCommon) . $this->lang->doc->separator;
             if($this->productID and $type == 'execution') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
@@ -931,6 +932,16 @@ class doc extends control
             $productID   = $type == 'product'   ? $objectID : 0;
             $executionID = $type == 'execution' ? $objectID : 0;
             $this->doc->setMenu($type, 0, 0, $productID, $executionID, $crumb);
+            
+        }
+        elseif($from == 'execution')
+        {
+            $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+            $this->execution->setMenu($executions, $objectID);
+        }
+        else
+        {
+            $this->loadModel($from)->setMenu($objectID);
         }
 
         /* Set Custom. */

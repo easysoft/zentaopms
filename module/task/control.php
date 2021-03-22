@@ -39,10 +39,9 @@ class task extends control
      */
     public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
-        commonModel::setAppObjectID('execution', $executionID);
-
         $executions  = $this->execution->getPairs();
         $executionID = $this->execution->saveState($executionID, $executions);
+        $this->execution->setMenu($executions, $executionID);
 
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
@@ -192,6 +191,18 @@ class task extends control
         }
         $stories = $this->story->getExecutionStoryPairs($executionID, 0, 0, $moduleIdList, 'full', 'unclosed');
 
+        /* Get block id of assinge to me. */
+        $blockID = 0;
+        if(isonlybody())
+        {
+            $blockID = $this->dao->select('id')->from(TABLE_BLOCK)
+                ->where('block')->eq('assingtome')
+                ->andWhere('module')->eq('my')
+                ->andWhere('account')->eq($this->app->user->account)
+                ->orderBy('order_desc')
+                ->fetch('id');
+        }
+
         $title      = $execution->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $execution->name);
         $position[] = $this->lang->task->common;
@@ -214,6 +225,7 @@ class task extends control
         $this->view->stories          = $stories;
         $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         $this->view->members          = $members;
+        $this->view->blockID          = $blockID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
     }
@@ -462,9 +474,13 @@ class task extends control
         /* The tasks of my. */
         else
         {
-            $this->lang->task->menu      = $this->lang->my->menu;
-            $this->lang->task->menuOrder = $this->lang->my->menuOrder;
+            /* Set my menu. */
             $this->loadModel('my')->setMenu();
+            $moduleIndex = array_search('task', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+            $this->lang->task->menu = $this->lang->my->workMenu;
+            $this->lang->my->menu->myWork['subModule'] = 'task';
+
             $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
             $this->view->title      = $this->lang->task->batchEdit;
             $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -787,8 +803,8 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->session->set('estimateList', $this->app->getURI(true));
-        if(isonlybody() && $this->config->requestType != 'GET') $this->session->set('estimateList', $this->app->getURI(true) . '?onlybody=yes');
+        $this->session->set('estimateList', $this->app->getURI(true), 'execution');
+        if(isonlybody() && $this->config->requestType != 'GET') $this->session->set('estimateList', $this->app->getURI(true) . '?onlybody=yes', 'execution');
 
         $this->view->task      = $this->task->getById($taskID);
         $this->view->estimates = $this->task->getTaskEstimate($taskID);

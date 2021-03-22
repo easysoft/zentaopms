@@ -33,6 +33,7 @@ class commonModel extends model
             $this->loadCustomFromDB();
             if(!$this->checkIP()) die($this->lang->ipLimited);
             $this->app->loadLang('company');
+            $this->setOpenApp();
         }
     }
 
@@ -112,6 +113,21 @@ class commonModel extends model
             if(!defined('IN_UPGRADE')) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
+        }
+    }
+
+    /**
+     * Set openApp.
+     *
+     * @access public
+     * @return void
+     */
+    public function setOpenApp()
+    {
+        $openApp = $this->app->openApp;
+        if($this->lang->navGroup->$openApp)
+        {
+            $this->app->openApp = $this->lang->navGroup->$openApp;
         }
     }
 
@@ -405,39 +421,39 @@ class commonModel extends model
      * @access public
      * @return array
      */
-    public static function createSubMenu($items, $replace)
+    public static function createDropMenu($items, $replace)
     {
-        $subMenu = array();
-        foreach($items as $subMenuKey => $subMenuLink)
+        $dropMenu = array();
+        foreach($items as $dropMenuKey => $dropMenuLink)
         {
-            if(is_array($subMenuLink) and isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
+            if(is_array($dropMenuLink) and isset($dropMenuLink['link'])) $dropMenuLink = $dropMenuLink['link'];
             if(is_array($replace))
             {
-                $subMenuLink = vsprintf($subMenuLink, $replace);
+                $dropMenuLink = vsprintf($dropMenuLink, $replace);
             }
             else
             {
-                $subMenuLink = sprintf($subMenuLink, $replace);
+                $dropMenuLink = sprintf($dropMenuLink, $replace);
             }
-            list($subMenuName, $subMenuModule, $subMenuMethod, $subMenuParams) = explode('|', $subMenuLink);
+            list($dropMenuName, $dropMenuModule, $dropMenuMethod, $dropMenuParams) = explode('|', $dropMenuLink);
 
             $link = array();
-            $link['module'] = $subMenuModule;
-            $link['method'] = $subMenuMethod;
-            $link['vars']   = $subMenuParams;
+            $link['module'] = $dropMenuModule;
+            $link['method'] = $dropMenuMethod;
+            $link['vars']   = $dropMenuParams;
 
-            $subMenuItem     = isset($items->$subMenuKey) ? $items->$subMenuKey : array();
+            $dropMenuItem     = isset($items->$dropMenuKey) ? $items->$dropMenuKey : array();
             $menu            = new stdclass();
-            $menu->name      = $subMenuKey;
+            $menu->name      = $dropMenuKey;
             $menu->link      = $link;
-            $menu->text      = $subMenuName;
-            $menu->subModule = isset($subMenuItem['subModule']) ? $subMenuItem['subModule'] : '';
-            $menu->alias     = isset($subMenuItem['alias'])     ? $subMenuItem['alias'] : '';
+            $menu->text      = $dropMenuName;
+            $menu->subModule = isset($dropMenuItem['subModule']) ? $dropMenuItem['subModule'] : '';
+            $menu->alias     = isset($dropMenuItem['alias'])     ? $dropMenuItem['alias'] : '';
             $menu->hidden    = false;
-            $subMenu[$subMenuKey] = $menu;
+            $dropMenu[$dropMenuKey] = $menu;
         }
 
-        return $subMenu;
+        return $dropMenu;
     }
 
     /**
@@ -458,16 +474,16 @@ class commonModel extends model
             foreach($lang->menu->$model as $key => $menu)
             {
                 /* Replace for dropdown submenu. */
-                if(isset($lang->$model->subMenu->$key))
+                if(isset($lang->$model->dropMenu->$key))
                 {
-                    $programSubMenu = $lang->$model->subMenu->$key;
-                    $subMenu        = common::createSubMenu($programSubMenu, $app->session->PRJ);
+                    $programDropMenu = $lang->$model->dropMenu->$key;
+                    $dropMenu        = common::createDropMenu($programDropMenu, $app->session->PRJ);
 
-                    if(!empty($subMenu))
+                    if(!empty($dropMenu))
                     {
-                        foreach($subMenu as $menuKey => $menu)
+                        foreach($dropMenu as $menuKey => $menu)
                         {
-                            $itemMenu = zget($programSubMenu, $menuKey, '');
+                            $itemMenu = zget($programDropMenu, $menuKey, '');
                             $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
                             $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
                             $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
@@ -478,7 +494,7 @@ class commonModel extends model
                                 break;
                             }
                         }
-                        $lang->menu->$model->{$key}['subMenu'] = $subMenu;
+                        $lang->menu->$model->{$key}['dropMenu'] = $dropMenu;
                     }
                 }
             }
@@ -486,34 +502,34 @@ class commonModel extends model
     }
 
     /**
-     * Print admin subMenu.
+     * Print admin dropMenu.
      *
-     * @param  string    $subMenu
+     * @param  string    $dropMenu
      * @static
      * @access public
      * @return void
      */
-    public static function printAdminSubMenu($subMenu)
+    public static function printAdminDropMenu($dropMenu)
     {
         global $app, $lang;
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
-        if(isset($lang->admin->subMenuOrder->$subMenu))
+        if(isset($lang->admin->dropMenuOrder->$dropMenu))
         {
-            ksort($lang->admin->subMenuOrder->$subMenu);
-            foreach($lang->admin->subMenuOrder->$subMenu as $type)
+            ksort($lang->admin->dropMenuOrder->$dropMenu);
+            foreach($lang->admin->dropMenuOrder->$dropMenu as $type)
             {
-                if(isset($lang->admin->subMenu->$subMenu->$type))
+                if(isset($lang->admin->dropMenu->$dropMenu->$type))
                 {
                     $subModule = '';
                     $alias     = '';
-                    $link      = $lang->admin->subMenu->$subMenu->$type;
-                    if(is_array($lang->admin->subMenu->$subMenu->$type))
+                    $link      = $lang->admin->dropMenu->$dropMenu->$type;
+                    if(is_array($lang->admin->dropMenu->$dropMenu->$type))
                     {
-                        $subMenuType = $lang->admin->subMenu->$subMenu->$type;
-                        if(isset($subMenuType['subModule'])) $subModule = $subMenuType['subModule'];
-                        if(isset($subMenuType['alias']))     $alias     = $subMenuType['alias'];
-                        if(isset($subMenuType['link']))      $link      = $subMenuType['link'];
+                        $dropMenuType = $lang->admin->dropMenu->$dropMenu->$type;
+                        if(isset($dropMenuType['subModule'])) $subModule = $dropMenuType['subModule'];
+                        if(isset($dropMenuType['alias']))     $alias     = $dropMenuType['alias'];
+                        if(isset($dropMenuType['link']))      $link      = $dropMenuType['link'];
                     }
 
                     list($text, $moduleName, $methodName)= explode('|', $link);
@@ -614,25 +630,26 @@ class commonModel extends model
     /**
      * Print the main menu.
      *
-     * @param  string $currentModule
-     * @param  string $currentMethod
-     *
      * @static
      * @access public
-     * @return void
+     * @return string
      */
-    public static function printMainMenu($currentModule, $currentMethod)
+    public static function printMainMenu()
     {
         global $app, $lang, $config;
 
         /* Set main menu by openApp and module. */
-        $openApp = $app->openApp ? $app->openApp : $lang->navGroup->$currentModule;
-        self::setMainMenuByOpenApp($openApp, $currentModule, $currentMethod);
+        self::setMainMenu();
+
+        $activeMenu = '';
+        $openApp = $app->openApp;
+
+        $currentModule = $app->rawModule;
+        $currentMethod = $app->rawMethod;
 
         /* Print all main menus. */
-        $menu       = customModel::getMainMenu();
-        $activeName = 'active';
-        $lastMenu   = end($menu);
+        $menu     = customModel::getMainMenu();
+        $lastMenu = end($menu);
 
         echo "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
@@ -645,8 +662,19 @@ class commonModel extends model
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
             $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
             $class     = isset($menuItem->class) ? $menuItem->class : '';
-            $active    = $menuItem->name == $currentModule ? "active" : '';
-            if($subModule) $active = in_array($currentModule, $subModule) ? 'active' : '';
+            $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
+
+            $active = '';
+            if($menuItem->name == $currentModule and strpos(",$exclude,", ",$currentMethod,") === false)
+            {
+                $activeMenu = $menuItem->name;
+                $active = 'active';
+            }
+            if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
+            {
+                $activeMenu = $menuItem->name;
+                $active = 'active';
+            }
 
             if($menuItem->link)
             {
@@ -660,46 +688,52 @@ class commonModel extends model
                     if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
-                if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
-
-                $label   = $menuItem->text;
-                $subMenu = '';
-
-                /* Print sub menus. */
-                if(isset($menuItem->subMenu))
+                if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and strpos(",$exclude,", ",$currentMethod,") === false)
                 {
-                    foreach($menuItem->subMenu as $subMenuItem)
+                    $activeMenu = $menuItem->name;
+                    $active = 'active';
+                }
+
+                $label    = $menuItem->text;
+                $dropMenu = '';
+
+                /* Print drop menus. */
+                if(isset($menuItem->dropMenu))
+                {
+                    foreach($menuItem->dropMenu as $dropMenuItem)
                     {
-                        if($subMenuItem->hidden) continue;
+                        if($dropMenuItem->hidden) continue;
 
                         $subActive  = '';
                         $subModule  = '';
                         $subMethod  = '';
                         $subParams  = '';
                         $subProgram = '';
-                        $subLabel   = $subMenuItem->text;
-                        if(isset($subMenuItem->link['module'])) $subModule = $subMenuItem->link['module'];
-                        if(isset($subMenuItem->link['method'])) $subMethod = $subMenuItem->link['method'];
-                        if(isset($subMenuItem->link['vars']))   $subParams = $subMenuItem->link['vars'];
+                        $subLabel   = $dropMenuItem->text;
+                        if(isset($dropMenuItem->link['module'])) $subModule = $dropMenuItem->link['module'];
+                        if(isset($dropMenuItem->link['method'])) $subMethod = $dropMenuItem->link['method'];
+                        if(isset($dropMenuItem->link['vars']))   $subParams = $dropMenuItem->link['vars'];
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
-                        if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
-                        $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . $subProgram . '</li>';
+
+                        $subActive = 'active';
+                        if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod))
+                        {
+                            $activeMenu = $menuItem->name;
+                            $active = 'active';
+                            $subActive = 'active';
+                        }
+                        $dropMenu .= "<li class='$subActive' data-id='$dropMenuItem->name'>" . html::a($subLink, $subLabel) . $subProgram . '</li>';
                     }
 
-                    if(empty($subMenu)) continue;
+                    if(empty($dropMenu)) continue;
 
                     $label   .= "<span class='caret'></span>";
-                    $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
+                    $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
                 }
 
-                /* Avoid highlighting the same navigation method at the same time. */
-                if($currentModule == 'feedback' and $currentMethod == 'admin') $active = '';
-                if($currentModule == 'product' and $currentMethod == 'browse') $active = '';
-                if($currentModule == 'story') $active = '';
-
-                $misc = isset($lang->navGroup->$module) and $openApp != $lang->navGroup->$module ? "data-app='$openApp'" : '';
-                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $subMenu . "</li>\n";
+                $misc = (isset($lang->navGroup->$module) and $openApp != $lang->navGroup->$module) ? "data-app='$openApp'" : '';
+                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
 
                 echo $menuItemHtml;
             }
@@ -709,6 +743,8 @@ class commonModel extends model
             }
         }
         echo "</ul>\n";
+
+        return $activeMenu;
     }
 
     /**
@@ -739,40 +775,23 @@ class commonModel extends model
     /**
      * Print the module menu.
      *
-     * @param  string $moduleName
+     * @param  string $actveMenu
      * @param  string $methodName
      * @static
      * @access public
      * @return void
      */
-    public static function printModuleMenu($moduleName, $methodName)
+    public static function printModuleMenu($activeMenu)
     {
-        global $config, $lang, $app;
+        global $app, $lang;
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
 
-        /* Set main menu by openApp. */
-        $openApp = $app->openApp ? $app->openApp : $lang->navGroup->$moduleName;
-        if(in_array($moduleName, array('admin', 'repo', 'ops', 'feedback'))) return;
+        $openApp = $app->openApp;
 
-        if($openApp == 'my') self::getMyModuleMenu($moduleName, $methodName);
-        if($openApp == 'project') self::getProjectModuleMenu($moduleName, $methodName);
-        if($openApp == 'product')
-        {
-            $lang->product->menu = $lang->product->setMenu;
-            self::processMenuVars($lang->product->menu);
-        }
-        if($openApp == 'execution')
-        {
-            if(in_array($methodName, array('grouptask', 'tree'))) $lang->execution->menu = $lang->execution->viewMenu;
-            if(in_array($methodName, array('qa', 'bug', 'testtask', 'testcase', 'testreport'))) $lang->execution->menu = $lang->execution->qaMenu;
-            if(in_array($methodName, array('view', 'manageproducts', 'team', 'whitelist', 'edit', 'managemembers', 'addwhitelist'))) $lang->execution->menu = self::processMenuVars($lang->execution->settingMenu);
-        }
-        if(strpos('qa|bug|testcase|testreport|testtask', $moduleName) !== false and $openApp == 'project')
-        {
-            unset($lang->$moduleName->menu->testsuite);
-            unset($lang->$moduleName->menu->caselib);
-        }
+        self::getModuleMenu($activeMenu);
 
-        if(!isset($lang->$moduleName->menu))
+        if(!isset($lang->$openApp->menu))
         {
             echo "<ul></ul>";
             return;
@@ -785,8 +804,8 @@ class commonModel extends model
         $isMobile       = $app->viewType === 'mhtml';
 
         /* When use workflow then set rawModule to moduleName. */
-        if($moduleName == 'flow') $moduleName = $app->rawModule;
-        $menu = customModel::getModuleMenu($moduleName);
+        if($moduleName == 'flow') $activeMenu = $app->rawModule;
+        $menu = customModel::getModuleMenu($activeMenu);
 
         /* If this is not workflow then use rawModule and rawMethod to judge highlight. */
         if($app->isFlow)
@@ -830,37 +849,37 @@ class commonModel extends model
                 if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
 
                 $label   = $menuItem->text;
-                $subMenu = '';
+                $dropMenu = '';
                 /* Print sub menus. */
-                if(isset($menuItem->subMenu))
+                if(isset($menuItem->dropMenu))
                 {
-                    foreach($menuItem->subMenu as $subMenuItem)
+                    foreach($menuItem->dropMenu as $dropMenuItem)
                     {
-                        if($subMenuItem->hidden) continue;
+                        if($dropMenuItem->hidden) continue;
 
                         $subActive = '';
                         $subModule = '';
                         $subMethod = '';
                         $subParams = '';
-                        $subLabel  = $subMenuItem->text;
-                        if(isset($subMenuItem->link['module'])) $subModule = $subMenuItem->link['module'];
-                        if(isset($subMenuItem->link['method'])) $subMethod = $subMenuItem->link['method'];
-                        if(isset($subMenuItem->link['vars']))   $subParams = $subMenuItem->link['vars'];
+                        $subLabel  = $dropMenuItem->text;
+                        if(isset($dropMenuItem->link['module'])) $subModule = $dropMenuItem->link['module'];
+                        if(isset($dropMenuItem->link['method'])) $subMethod = $dropMenuItem->link['method'];
+                        if(isset($dropMenuItem->link['vars']))   $subParams = $dropMenuItem->link['vars'];
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
 
-                        $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . '</li>';
+                        $dropMenu .= "<li class='$subActive' data-id='$dropMenuItem->name'>" . html::a($subLink, $subLabel) . '</li>';
                     }
 
-                    if(empty($subMenu)) continue;
+                    if(empty($dropMenu)) continue;
 
                     $label   .= "<span class='caret'></span>";
-                    $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
+                    $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
                 }
 
-                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
+                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $dropMenu . "</li>\n";
                 if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, "class='$class $active'") . "\n";
                 echo $menuItemHtml;
             }
@@ -1370,7 +1389,6 @@ EOD;
         }
 
         $changes    = array();
-        $magicQuote = get_magic_quotes_gpc();
         foreach($new as $key => $value)
         {
             if(is_object($value) or is_array($value)) continue;
@@ -1384,7 +1402,6 @@ EOD;
             if(strtolower($key) == 'canceleddate' && $value == '')  continue;
             if(strtolower($key) == 'closeddate'   && $value == '')  continue;
 
-            if($magicQuote) $value = stripslashes($value);
             if(isset($old->$key) and $value != stripslashes($old->$key))
             {
                 $diff = '';
@@ -1921,52 +1938,6 @@ EOD;
     }
 
     /**
-     * Replace the %s of one key of a menu by $params.
-     *
-     * All the menus are defined in the common's language file. But there're many dynamic params, so in the defination,
-     * we used %s as placeholder. These %s should be setted in one module.
-     *
-     * The items of one module's menu may be an string or array. For example, please see module/common/lang.
-     *
-     * @param  string $object     the menus of one module
-     * @param  string $key        the menu item to be replaced
-     * @param  string $params     the params passed to the menu item
-     * @access public
-     * @return void
-     */
-    public static function setMenuVars($menu, $key, $params)
-    {
-        if(!isset($menu->$key)) return false;
-
-        if(is_array($params))
-        {
-            if(is_array($menu->$key))
-            {
-                $menu->$key = (object)$menu->$key;
-                $menu->$key->link = vsprintf($menu->$key->link, $params);
-                $menu->$key = (array)$menu->$key;
-            }
-            else
-            {
-                $menu->$key = vsprintf($menu->$key, $params);
-            }
-        }
-        else
-        {
-            if(is_array($menu->$key))
-            {
-                $menu->$key = (object)$menu->$key;
-                $menu->$key->link = sprintf($menu->$key->link, $params);
-                $menu->$key = (array)$menu->$key;
-            }
-            else
-            {
-                $menu->$key = sprintf($menu->$key, $params);
-            }
-        }
-    }
-
-    /**
      * Get the full url of the system.
      *
      * @access public
@@ -2276,29 +2247,27 @@ EOD;
     }
 
     /**
-     * Set main menu by openApp.
+     * Set main menu.
      *
-     * @param  string  $openApp
-     * @param  string  $moduleName
-     * @param  string  $methodName
      * @static
      * @access public
      * @return string
      */
-    public static function setMainMenuByOpenApp($openApp, $moduleName, $methodName)
+    public static function setMainMenu()
     {
-        global $lang, $config;
+        global $app, $lang;
+
+        $openApp = $app->openApp;
 
         /* If homeMenu is not exists or unset, display menu. */
         if(!isset($lang->$openApp->homeMenu))
         {
-            $lang->menu      = $openApp == 'project' ? self::getProjectMainMenu($moduleName) : $lang->$openApp->menu;
+            $lang->menu      = $lang->$openApp->menu;
             $lang->menuOrder = $lang->$openApp->menuOrder;
-
             return;
         }
 
-        if($methodName == 'create')
+        if($app->rawModule == $openApp && $app->rawMethod == 'create')
         {
             $lang->menu = $lang->$openApp->homeMenu;
             return;
@@ -2310,7 +2279,7 @@ EOD;
             $link = is_array($menu) ? $menu['link'] : $menu;
             $method = explode('|', $link)[2];
 
-            if($method == $methodName)
+            if($method == $app->rawMethod)
             {
               $lang->menu = $lang->$openApp->homeMenu;
               return;
@@ -2318,7 +2287,7 @@ EOD;
         }
 
         /* Default, display menu. */
-        $lang->menu      = $openApp == 'project' ? self::getProjectMainMenu($moduleName) : $lang->$openApp->menu;
+        $lang->menu      = $lang->$openApp->menu;
         $lang->menuOrder = $lang->$openApp->menuOrder;
     }
 
@@ -2337,10 +2306,6 @@ EOD;
         foreach($menus as $name => $setting)
         {
             $link = is_array($setting) ? $setting['link'] : $setting;
-
-            if(strpos($link, "{PRODUCT}") !== false)   $link = str_replace('{PRODUCT}', $app->session->product, $link);
-            if(strpos($link, "{EXECUTION}") !== false) $link = str_replace('{EXECUTION}', $app->session->execution, $link);
-            if(strpos($link, "{PROJECT}") !== false)   $link = str_replace('{PROJECT}', $app->session->PRJ, $link);
 
             if(is_array($setting))
             {
@@ -2391,46 +2356,17 @@ EOD;
     }
 
     /**
-     * Get project module menu by model.
-     *
-     * @param  varchar $moduleName
-     * @param  varchar $methodName
-     * @static
-     * @access public
-     * @return string
-     */
-    public static function getProjectModuleMenu($moduleName, $methodName)
-    {
-        global $app, $lang, $dbh;
-        $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->PRJ}'")->fetch();
-        if(empty($program)) return;
-        if($program->model == 'waterfall')
-        {
-            $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
-        }
-        if($program->model == 'scrum')
-        {
-            $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
-            unset($lang->stakeholder->menu->issue);
-            unset($lang->stakeholder->menu->plan);
-            unset($lang->stakeholder->menu->expectation);
-        }
-    }
-
-    /**
      * Get my module menu by methodName.
      *
-     * @param  string $moduleName
-     * @param  string $methodName
+     * @param  string $activeMenu
      * @static
      * @access public
      * @return void
      */
-    public static function getMyModuleMenu($moduleName, $methodName)
+    public static function getModuleMenu($activeMenu)
     {
-        global $lang;
-        if($methodName == 'work')       $lang->my->menu = $lang->my->workMenu;
-        if($methodName == 'contribute') $lang->my->menu = $lang->my->contributeMenu;
+        global $app, $lang;
+        $lang->{$app->openApp}->menu = $lang->{$app->openApp}->menu->$activeMenu['subMenu'];
     }
 
     /**
@@ -2455,37 +2391,58 @@ EOD;
     }
 
     /**
-     * Set objectID in current App.
+     * Replace the %s of one key of a menu by objectID or $params.
      *
-     * @param  string  $openApp
+     * All the menus are defined in the common's language file. But there're many dynamic params, so in the defination,
+     * we used %s as placeholder. These %s should be setted in one module.
+     *
+     * @param  string  $moduleName
      * @param  int     $objectID
+     * @param  array   $params
      *
      * @access public
      * @return string
      */
-    static public function setAppObjectID($openApp, $objectID)
+    static public function setMenuVars($moduleName, $objectID, $params = array())
     {
         global $lang;
 
-        foreach($lang->$openApp->menu as $label => $menu)
+        foreach($lang->$moduleName->menu as $label => $menu)
         {
-            if(isset($lang->$openApp->menu->{$label}['link']))
+            $lang->$moduleName->menu->$label = self::setMenuVarsEx($menu, $objectID, $params);
+            if(isset($menu['subMenu']))
             {
-                $lang->$openApp->menu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
-            }
-        }
-
-        if($openApp == 'program')
-        {
-            foreach($lang->personnel->menu as $label => $menu)
-            {
-                $menu['link'] = is_array($menu) ? sprintf($menu['link'], $objectID) : sprintf($menu, $objectID);
-                $lang->personnel->menu->$label = $menu;
+                foreach($menu['subMenu'] as $key => $subMenu)
+                {
+                    $lang->$moduleName->menu->{$label}['subMenu']->$key = self::setMenuVarsEx($subMenu, $objectID, $params);
+                }
             }
         }
 
         /* If objectID is set, cannot use homeMenu. */
-        unset($lang->$openApp->homeMenu);
+        unset($lang->$moduleName->homeMenu);
+    }
+
+    /*
+     * Replace the %s of one key of a menu by objectID or $params.
+     * @param  object  $menu
+     * @param  int     $objectID
+     * @param  array   $params
+     */
+    static private function setMenuVarsEx($menu, $objectID, $params = array())
+    {
+        if(is_array($menu))
+        {
+            $link = sprintf($menu['link'], $objectID);
+            $menu['link'] = vsprintf($link, $params);
+        }
+        else
+        {
+            $menu = sprintf($menu, $objectID);
+            $menu = vsprintf($menu, $params);
+        }
+
+        return $menu;
     }
 }
 

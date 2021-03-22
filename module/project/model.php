@@ -34,7 +34,6 @@ class projectModel extends model
     {
         echo(js::alert($this->lang->project->accessDenied));
 
-        unset($_SESSION['PRJ']);
         die(js::locate(helper::createLink('project', 'index')));
     }
 
@@ -115,16 +114,16 @@ class projectModel extends model
      */
     public function saveState($projectID = 0, $projects = array())
     {
-        if($projectID > 0) $this->session->set('PRJ', (int)$projectID);
-        if($projectID == 0 and $this->cookie->lastProject) $this->session->set('PRJ', (int)$this->cookie->lastProject);
-        if($projectID == 0 and $this->session->PRJ == '') $this->session->set('PRJ', key($projects));
-        if(!isset($projects[$this->session->PRJ]))
+        if($projectID > 0) $this->session->set('project', (int)$projectID);
+        if($projectID == 0 and $this->cookie->lastProject) $this->session->set('project', (int)$this->cookie->lastProject);
+        if($projectID == 0 and $this->session->project == '') $this->session->set('project', key($projects));
+        if(!isset($projects[$this->session->project]))
         {
-            $this->session->set('PRJ', key($projects));
-            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false) $this->accessDenied();
+            $this->session->set('project', key($projects));
+            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false) $this->accessDenied();
         }
 
-        return $this->session->PRJ;
+        return $this->session->project;
     }
 
     /*
@@ -1570,7 +1569,7 @@ class projectModel extends model
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
-        $project = $this->getByID($this->session->PRJ);
+        $project = $this->getByID($projectID);
         if($project and $project->model == 'waterfall')
         {
             foreach($parents as $id => $execution)
@@ -1584,5 +1583,22 @@ class projectModel extends model
         foreach($children as $child) $orphan = array_merge($child, $orphan);
 
         return array_merge($parents, $orphan);
+    }
+
+    /**
+     * Set menu of project module.
+     *
+     * @param  int    $objectID  projectID
+     * @access public
+     * @return void
+     */
+    public function setMenu($objectID)
+    {
+        $project = $this->getByID($objectID);
+        $this->lang->project->menu      = $this->lang->{$project->model}->menu;
+        $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
+
+        $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
+        common::setMenuVars('project', $objectID);
     }
 }

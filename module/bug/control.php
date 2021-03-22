@@ -45,6 +45,7 @@ class bug extends control
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('task');
+        $this->loadModel('qa');
 
         /* Set bug menu group. */
         $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
@@ -92,6 +93,10 @@ class bug extends control
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('datatable');
+
+        $products = $this->loadModel('product')->getPairs('noclosed');
+        $productID = $this->product->saveState($productID, $products);
+        $this->qa->setMenu($products, $productID);
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
@@ -282,6 +287,8 @@ class bug extends control
     {
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
+        $this->qa->setMenu($this->products, $productID);
+
         /* Whether there is a object to transfer bug, for example feedback. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
@@ -382,7 +389,7 @@ class bug extends control
         $this->bug->setMenu($this->products, $productID, $branch);
 
         /* Init vars. */
-        $projectID   = $this->lang->navGroup->bug == 'project' ? $this->session->PRJ : 0;
+        $projectID   = $this->session->PRJ ? $this->session->PRJ : 0;
         $moduleID    = 0;
         $executionID = 0;
         $taskID      = 0;
@@ -455,6 +462,7 @@ class bug extends control
         {
             $builds  = $this->loadModel('build')->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,noterminate,nodone');
             $stories = $this->story->getExecutionStoryPairs($executionID);
+            if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         }
         else
         {
@@ -494,6 +502,18 @@ class bug extends control
         else
         {
             $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+        }
+
+        /* Get block id of assinge to me. */
+        $blockID = 0;
+        if(isonlybody())
+        {
+            $blockID = $this->dao->select('id')->from(TABLE_BLOCK)
+                ->where('block')->eq('assingtome')
+                ->andWhere('module')->eq('my')
+                ->andWhere('account')->eq($this->app->user->account)
+                ->orderBy('order_desc')
+                ->fetch('id');
         }
 
         /* Get executions. */
@@ -541,6 +561,7 @@ class bug extends control
         $this->view->type             = $type;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
+        $this->view->blockID          = $blockID;
         $this->view->color            = $color;
         $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
         $this->view->isStepsTemplate  = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
@@ -888,11 +909,12 @@ class bug extends control
                 }
             }
 
-            $this->lang->navGroup->bug  = 'my';
-            $this->lang->noMenuModule[] = 'bug';
-            $this->lang->bug->menu      = $this->lang->my->menu;
-            $this->lang->bug->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
+            $moduleIndex = array_search('bug', $this->lang->noMenuModule);
+            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+            $this->lang->task->menu = $this->lang->my->workMenu;
+            $this->lang->my->menu->myWork['subModule'] = 'bug';
+
             $this->view->position[] = html::a($this->createLink('my', 'bug'), $this->lang->my->bug);
             $this->view->title      = "BUG" . $this->lang->bug->batchEdit;
         }

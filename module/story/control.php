@@ -49,8 +49,14 @@ class story extends control
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
         $this->story->replaceURLang($type);
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
-        commonModel::setAppObjectID($this->app->openApp, $this->app->openApp == 'product' ? $productID : $objectID);
+        if($this->app->openApp == 'product')
+        {
+            $this->loadModel('product')->setMenu($productID);
+        }
+        else if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($objectID);
+        }
 
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -267,6 +273,18 @@ class story extends control
             }
         }
 
+        /* Get block id of assinge to me. */
+        $blockID = 0;
+        if(isonlybody())
+        {
+            $blockID = $this->dao->select('id')->from(TABLE_BLOCK)
+                ->where('block')->eq('assingtome')
+                ->andWhere('module')->eq('my')
+                ->andWhere('account')->eq($this->app->user->account)
+                ->orderBy('order_desc')
+                ->fetch('id');
+        }
+
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
@@ -297,6 +315,7 @@ class story extends control
         $this->view->verify           = $verify;
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
+        $this->view->blockID          = $blockID;
         $this->view->URS              = $type == 'story' ? $this->story->getRequierements($productID) : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->view->type             = $type;
@@ -827,9 +846,18 @@ class story extends control
 
         /* Set the menu. */
         $from = $this->app->openApp;
-        if($from == 'execution' or $from == 'project')
+        if($from == 'execution')
         {
-            commonModel::setAppObjectID($from, $param);
+            $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+            $this->execution->setMenu($executions, $param);
+        }
+        elseif($from == 'project')
+        {
+            $this->loadModel('project')->setMenu($param);
+        }
+        elseif($from == 'product')
+        {
+            $this->product->setMenu($story->product, $story->branch);
         }
 
         $this->executeHooks($storyID);
@@ -1345,8 +1373,8 @@ class story extends control
         {
             $products  = $this->product->getPairs();
             $productID = $this->product->saveState($productID, $products);
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-            $this->product->setMenu($products, $productID, $branch);
+            $this->product->products = $this->product->saveState($productID, $products);
+            $this->product->setMenu($productID, $branch);
         }
 
         /* Save session. */
@@ -1438,20 +1466,17 @@ class story extends control
         $this->session->set('productList', $this->app->getURI(true));
         $products = $this->product->getPairs();
 
-
         $this->lang->navGroup->story = $from;
-        if($from == 'project')
+        $moduleIndex = array_search('story', $this->lang->noMenuModule);
+        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+
+        if($from == 'qa')
         {
-            $moduleIndex = array_search('story', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        }
-        else
-        {
-            $this->app->loadConfig('qa');
+            $this->loadModel('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
 
-        $this->lang->story->menu      = $this->lang->testcase->menu;
+        $this->lang->story->menu      = $this->lang->qa->subMenu->testcase;
         $this->lang->story->menuOrder = $this->lang->testcase->menuOrder;
         $this->loadModel('testcase')->setMenu($products, $productID);
 

@@ -361,6 +361,7 @@ class docModel extends model
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('actor')->eq($this->app->user->account)
+                ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)

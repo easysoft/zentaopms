@@ -133,7 +133,7 @@ list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 /* Main menu. */
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> My|my|index|';
-$lang->mainNav->product = "<i class='icon icon-menu-product'></i> Product|$productModule|$productMethod|";
+$lang->mainNav->product = "<i class='icon icon-product'></i> Product|$productModule|$productMethod|";
 if($config->systemMode == 'new')
 {
     $lang->mainNav->project   = "<i class='icon icon-project'></i> Project|$projectModule|$projectMethod|";
@@ -182,7 +182,7 @@ $lang->personnel = new stdClass();
 $lang->personnel->menu = new stdClass();
 $lang->personnel->menu->invest     = array('link' => "Investment|personnel|invest|programID=%s");
 $lang->personnel->menu->accessible = array('link' => "Accessible|personnel|accessible|programID=%s");
-$lang->personnel->menu->whitelist  = array('link' => "Whitelist|personnel|whitelist|program=ID%s", 'alias' => 'addwhitelist');
+$lang->personnel->menu->whitelist  = array('link' => "Whitelist|personnel|whitelist|programID=%s", 'alias' => 'addwhitelist');
 
 /* Scrum menu. */
 $lang->product = new stdclass();
@@ -192,7 +192,7 @@ $lang->product->homeMenu->list = array('link' => $lang->productCommon . '|produc
 
 $lang->product->menu = new stdclass();
 $lang->product->menu->dashboard   = array('link' => 'Dashboard|product|dashboard|productID=%s');
-if($config->URAndSR) $lang->product->viewMenu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
+if($config->URAndSR) $lang->product->menu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->plan        = array('link' => "Plan|productplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->product->menu->release     = array('link' => "Release|release|browse|productID=%s", 'subModule' => 'release');
@@ -204,16 +204,16 @@ $lang->product->menu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->menu->set         = array('link' => 'Setting|product|view|productID=%s', 'subModule' => 'tree,branch', 'alias' => 'edit');
 
 $lang->product->setMenu = new stdclass();
-$lang->product->setMenu->view      = array('link' => 'View|product|view|productID={PRODUCT}', 'alias' => 'edit');
-$lang->product->setMenu->module    = array('link' => 'Module|tree|browse|product={PRODUCT}&view=story', 'subModule' => 'tree');
-$lang->product->setMenu->branch    = array('link' => '@branch@|branch|manage|product={PRODUCT}', 'subModule' => 'branch');
-$lang->product->setMenu->whitelist = array('link' => 'Whitelist|product|whitelist|product={PRODUCT}', 'subModule' => 'personnel');
+$lang->product->setMenu->view      = array('link' => 'View|product|view|productID=%s', 'alias' => 'edit');
+$lang->product->setMenu->module    = array('link' => 'Module|tree|browse|product=%s&view=story', 'subModule' => 'tree');
+$lang->product->setMenu->branch    = array('link' => '@branch@|branch|manage|product=%s', 'subModule' => 'branch');
+$lang->product->setMenu->whitelist = array('link' => 'Whitelist|product|whitelist|product=%s', 'subModule' => 'personnel');
 
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
 $lang->productplan = new stdclass();
 
-$lang->release->menu     = $lang->product->viewMenu;
+$lang->release->menu     = $lang->product->menu;
 $lang->branch->menu      = $lang->product->menu;
 $lang->productplan->menu = $lang->product->menu;
 
@@ -366,6 +366,12 @@ $lang->execution->subMenu->more = new stdclass();
 $lang->execution->subMenu->more->whitelist = array('link' => 'Whitelist|execution|whitelist|executionID=%s', 'subModule' => 'personnel', 'alias' => 'addwhitelist');
 $lang->execution->subMenu->more->action    = array('link' => 'Dynamics|execution|dynamic|executionID=%s');
 $lang->execution->subMenu->more->view      = array('link' => 'Overview|execution|view|executionID=%s', 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+
+$lang->execution->qaMenu = new stdclass();
+$lang->execution->qaMenu->qa         = array('link' => '仪表盘|execution|qa|executionID=%s');
+$lang->execution->qaMenu->bug        = array('link' => 'Bug|execution|bug|executionID=%s');
+$lang->execution->qaMenu->testcase   = array('link' => '用例|execution|testcase|executionID=%s', 'alias' => 'create');
+$lang->execution->qaMenu->testtask   = array('link' => '测试单|execution|testtask|executionID=%s');
 
 $lang->execution->dividerMenu = ',execution,programplan,executionbuild,story,doc,other,';
 
@@ -857,43 +863,50 @@ $lang->icons['score']              = 'tint';
 /* Scrum menu. */
 $lang->menu = new stdclass();
 $lang->menu->scrum = new stdclass();
+<<<<<<< Updated upstream
 $lang->menu->scrum->index          = 'Index|project|index|project={PROJECT}';
 $lang->menu->scrum->project        = "$lang->executionCommon|project|index|locate=no";
-$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|project={PROJECT}', 'subModule' => 'story', 'alias' => 'story,track');
+$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|', 'subModule' => 'story', 'alias' => 'story,track');
 $lang->menu->scrum->doc            = 'Doc|doc|index|';
+=======
+$lang->menu->scrum->index          = 'Index|project|index|project=%s';
+$lang->menu->scrum->project        = array('link' => "$lang->executionCommon|project|index|locate=no");
+$lang->menu->scrum->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|project=%s', 'subModule' => 'story', 'alias' => 'story,track');
+$lang->menu->scrum->doc            = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s', 'subModule' => 'doc');
+>>>>>>> Stashed changes
 $lang->menu->scrum->qa             = 'QA|qa|index';
 $lang->menu->scrum->ci             = 'Code|repo|browse';
-$lang->menu->scrum->build          = array('link' => 'Build|project|build|project={PROJECT}');
+$lang->menu->scrum->build          = array('link' => 'Build|project|build|project=%s');
 $lang->menu->scrum->projectrelease = array('link' => 'Release|projectrelease|browse');
-$lang->menu->scrum->dynamic        = array('link' => 'Dynamic|project|dynamic|project={PROJECT}');
-$lang->menu->scrum->projectsetting = array('link' => 'Setting|project|view|project={PROJECT}', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
+$lang->menu->scrum->dynamic        = array('link' => 'Dynamic|project|dynamic|project=%s');
+$lang->menu->scrum->projectsetting = array('link' => 'Setting|project|view|project=%s', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
 $lang->scrum = new stdclass();
 $lang->scrum->setMenu = new stdclass();
-$lang->scrum->setMenu->view        = array('link' => 'View|project|view|project={PROJECT}');
-$lang->scrum->setMenu->products    = array('link' => 'Product|project|manageProducts|project={PROJECT}', 'alias' => 'manageproducts');
-$lang->scrum->setMenu->members     = array('link' => 'Member|project|manageMembers|project={PROJECT}', 'alias' => 'managemembers');
-$lang->scrum->setMenu->whitelist   = array('link' => 'White List|project|whitelist|project={PROJECT}', 'subModule' => 'personnel');
+$lang->scrum->setMenu->view        = array('link' => 'View|project|view|project=%s');
+$lang->scrum->setMenu->products    = array('link' => 'Product|project|manageProducts|project=%s', 'alias' => 'manageproducts');
+$lang->scrum->setMenu->members     = array('link' => 'Member|project|manageMembers|project=%s', 'alias' => 'managemembers');
+$lang->scrum->setMenu->whitelist   = array('link' => 'White List|project|whitelist|project=%s', 'subModule' => 'personnel');
 $lang->scrum->setMenu->stakeholder = array('link' => '干系人|stakeholder|browse|', 'subModule' => 'stakeholder');
-$lang->scrum->setMenu->group       = array('link' => 'Priv Group|project|group|project={PROJECT}', 'alias' => 'group,manageview,managepriv');
+$lang->scrum->setMenu->group       = array('link' => 'Priv Group|project|group|project=%s', 'alias' => 'group,manageview,managepriv');
 
 /* Waterfall menu. */
 $lang->menu->waterfall = new stdclass();
-$lang->menu->waterfall->index          = array('link' => 'Dashboard|project|index|project={PROJECT}');
-$lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|browse|project={PROJECT}', 'subModule' => 'programplan');
-$lang->menu->waterfall->project        = array('link' => $lang->executionCommon . '|execution|task|executionID={EXECUTION}', 'subModule' => ',project,task,');
-$lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|project={PROJECT}');
-$lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|project={PROJECT}', 'subModule' => ',milestone,');
-$lang->menu->waterfall->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|project={PROJECT}');
-$lang->menu->waterfall->design         = 'Design|design|browse|product={PRODUCT}';
+$lang->menu->waterfall->index          = array('link' => 'Dashboard|project|index|project=%s');
+$lang->menu->waterfall->programplan    = array('link' => 'Plan|programplan|browse|project=%s', 'subModule' => 'programplan');
+$lang->menu->waterfall->execution      = array('link' => $lang->executionCommon . '|execution|all|status=all&projectID=%s', 'subModule' => ',project,task,');
+$lang->menu->waterfall->doc            = array('link' => 'Doc|doc|index|project=%s');
+$lang->menu->waterfall->weekly         = array('link' => 'Weekly|weekly|index|project=%s', 'subModule' => ',milestone,');
+$lang->menu->waterfall->projectstory   = array('link' => $lang->SRCommon . '|projectstory|story|project=%s');
+$lang->menu->waterfall->design         = 'Design|design|browse|product=0&project=%s';
 $lang->menu->waterfall->ci             = 'Repo|repo|browse|';
 $lang->menu->waterfall->track          = array('link' => 'Track|projectstory|track', 'alias' => 'track');
 $lang->menu->waterfall->qa             = 'QA|qa|index';
 $lang->menu->waterfall->projectrelease = array('link' => 'Release|projectrelease|browse');
-$lang->menu->waterfall->build          = array('link' => 'Build|project|build|project={PROJECT}');
-$lang->menu->waterfall->dynamic        = array('link' => 'Dynamic|project|dynamic|project={PROJECT}');
+$lang->menu->waterfall->build          = array('link' => 'Build|project|build|project=%s');
+$lang->menu->waterfall->dynamic        = array('link' => 'Dynamic|project|dynamic|project=%s');
 $lang->menu->waterfall->other          = array('link' => 'Other|project|other', 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc,workestimation,durationestimation,budget,pssp,measrecord,report');
-$lang->menu->waterfall->projectsetting = array('link' => 'Setting|project|view|project={PROJECT}', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
+$lang->menu->waterfall->projectsetting = array('link' => 'Setting|project|view|project=%s', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
 $lang->waterfall = new stdclass();
 $lang->waterfall->subMenu = new stdclass();

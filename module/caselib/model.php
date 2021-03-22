@@ -99,34 +99,16 @@ class caselibModel extends model
 
         $this->lang->modulePageNav = $pageNav;
         $this->lang->TRActions     = $pageActions;
-        foreach($this->lang->caselib->menu as $key => $value)
-        {
-            if($this->config->global->flow == 'full' and $this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('caselib', $key, $libID);
-            $replace = $libID;
-            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->caselib->menu, $key, $replace);
-        }
 
         if($this->config->global->flow != 'full' && $this->app->getMethodName() != 'view') $this->lang->caselib->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->testcase->bySearch}</a>";
-        if($this->lang->navGroup->caselib == 'qa')
+        if(!empty($libraries))
         {
-            foreach($this->lang->qa->subMenu->testcase as $key => $menu)
-            {
-                common::setMenuVars($this->lang->qa->subMenu->testcase, $key, $libID);
-            }
-            $this->lang->qa->menu           = $this->lang->caselib->menu;
-            $this->lang->caselib->menu      = $this->lang->qa->subMenu->testcase;
-            $this->lang->qa->mainMenuAction = html::a(helper::createLink('caselib', 'create'), "<i class='icon-plus'></i>" . $this->lang->caselib->create, '', "class='btn btn-link'");
+            $dropMenuLink = helper::createLink('caselib', 'ajaxGetDropMenu', "objectID=$libID&module=caselib&method=browse");
 
-            if(!empty($libraries))
-            {
-                $dropMenuLink = helper::createLink('caselib', 'ajaxGetDropMenu', "objectID=$libID&module=caselib&method=browse");
-
-                $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentLibName}'><span class='text'><i class='icon icon-product'></i> {$currentLibName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-                $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-                $output .= "</div></div>";
-                $this->lang->qa->switcherMenu = $output;
-            }
+            $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentLibName}'><span class='text'><i class='icon icon-product'></i> {$currentLibName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "</div></div>";
+            $this->lang->qa->switcherMenu = $output;
         }
     }
 

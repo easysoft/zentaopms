@@ -27,22 +27,33 @@ class repo extends control
             die(js::locate('back'));
         }
 
-        /* Set repo menu group. */
-        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
-        if(!$this->projectID)
-        {
-            $this->lang->navGroup->repo    = 'repo';
-            $this->lang->navGroup->jenkins = 'repo';
-            $this->lang->navGroup->job     = 'repo';
-            $this->lang->navGroup->compile = 'repo';
-        }
-
-        $this->scm       = $this->app->loadClass('scm');
-        $this->repos     = $this->repo->getRepoPairs($this->projectID);
-        if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create')));
-
         /* Unlock session for wait to get data of repo. */
         session_write_close();
+    }
+
+    /**
+     * Common actions.
+     *
+     * @param  int    $objectID  projectID|executionID
+     * @access public
+     * @return void
+     */
+    public function commonAction($objectID)
+    {
+        if($this->app->openApp == 'project')
+        {
+            /* Set repo menu group. */
+            $this->scm       = $this->app->loadClass('scm');
+            $this->repos     = $this->repo->getRepoPairs($objectID);
+            if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create', "objectID=$objectID")));
+
+            $this->loadModel('project')->setMenu($objectID);
+        }
+        else if($this->app->openApp == 'execution')
+        {
+            $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+            $this->execution->setMenu($executions, $objectID);
+        }
     }
 
     /**
@@ -81,10 +92,11 @@ class repo extends control
     /**
      * Create a repo.
      *
+     * @param  int    $objectID  projectID|executionID
      * @access public
      * @return void
      */
-    public function create()
+    public function create($objectID)
     {
         if($_POST)
         {
@@ -95,6 +107,8 @@ class repo extends control
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID", '', false, $this->projectID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
+
+        $this->commonAction($objectID);
 
         array_push($this->lang->noMenuModule, 'repo');
         $this->app->loadLang('action');
@@ -282,14 +296,16 @@ class repo extends control
      * Browse repo.
      *
      * @param  int    $repoID
-     * @param  string $path
+     * @param  int    $objectID
      * @param  string $revision
      * @param  int    $refresh
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
+    public function browse($repoID = 0, $objectID = 0, $revision = 'HEAD', $refresh = 0)
     {
+        $this->commonAction($objectID);
+
         /* Get path and refresh. */
         if($this->get->repoPath) $path = $this->get->repoPath;
         if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;

@@ -100,7 +100,7 @@ class testtask extends control
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
-        $this->testtask->setMenu($this->products, $productID, $branch);
+        $this->loadModel('qa')->setMenu($this->products, $productID, $branch);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -151,7 +151,7 @@ class testtask extends control
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
-        $this->loadModel('testtask')->setUnitMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Load pager. */
         if($browseType == 'newest') $recPerPage = '10';
@@ -1094,9 +1094,9 @@ class testtask extends control
         /* The case of my. */
         else
         {
-            $this->lang->testtask->menu = $this->lang->my->menu;
-            $this->lang->testtask->menuOrder = $this->lang->my->menuOrder;
-            $this->loadModel('my')->setMenu();
+            $this->lang->testtask->menu = $this->lang->my->workMenu;
+            $this->lang->my->menu->myWork['subModule'] = 'testtask';
+
             $this->view->title = $this->lang->testtask->batchRun;
 
             $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')

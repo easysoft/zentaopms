@@ -186,9 +186,9 @@ class execution extends control
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',    $uri);
-        $this->app->session->set('storyList',   $uri);
-        $this->app->session->set('executionList', $uri);
+        $this->app->session->set('taskList',      $uri, 'execution');
+        $this->app->session->set('storyList',     $uri, 'product');
+        $this->app->session->set('executionList', $uri, 'execution');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_desc';
@@ -270,8 +270,8 @@ class execution extends control
         $executionID = $execution->id;
 
         /* Save session. */
-        $this->app->session->set('taskList',  $this->app->getURI(true));
-        $this->app->session->set('storyList', $this->app->getURI(true));
+        $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
+        $this->app->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Header and session. */
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->task;
@@ -493,8 +493,8 @@ class execution extends control
         }
 
         /* Save session. */
-        $this->app->session->set('taskList',  $this->app->getURI(true));
-        $this->app->session->set('storyList', $this->app->getURI(true));
+        $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
+        $this->app->session->set('storyList', $this->app->getURI(true), 'product');
 
         $this->view->title          = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
         $this->view->position[]     = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
@@ -535,9 +535,9 @@ class execution extends control
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('bugList',    $uri);
-        $this->app->session->set('storyList',   $uri);
-        $this->app->session->set('executionList', $uri);
+        $this->app->session->set('bugList',    $uri, 'qa');
+        $this->app->session->set('storyList',   $uri, 'product');
+        $this->app->session->set('executionList', $uri, 'execution');
 
         $this->loadModel('bug');
         $executions = $this->execution->getPairs(0, 'all', 'nocode');
@@ -721,7 +721,7 @@ class execution extends control
         }
 
         /* Save session. */
-        $this->app->session->set('storyList', $this->app->getURI(true));
+        $this->app->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';
@@ -855,7 +855,7 @@ class execution extends control
         $this->loadModel('user');
 
         /* Save session. */
-        $this->session->set('bugList', $this->app->getURI(true));
+        $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         $type      = strtolower($type);
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
@@ -963,7 +963,7 @@ class execution extends control
     {
         /* Load module and set session. */
         $this->loadModel('testtask');
-        $this->session->set('buildList', $this->app->getURI(true));
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -1028,7 +1028,7 @@ class execution extends control
 
         $this->loadModel('testtask');
         /* Save session. */
-        $this->session->set('testtaskList', $this->app->getURI(true));
+        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
 
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -1184,8 +1184,8 @@ class execution extends control
         {
             $project = $this->project->getByID($projectID);
             $model   = $project->model;
-            $this->lang->project->menu = $this->lang->menu->$model;
-            commonModel::setAppobjectID('project', $projectID);
+
+            $this->project->setMenu($projectID);
         }
 
         $this->app->loadLang('program');
@@ -1402,7 +1402,7 @@ class execution extends control
         $isSprint = true;
         if($this->config->systemMode == 'new')
         {
-            $project = $this->project->getById($this->session->PRJ);
+            $project = $this->project->getById($execution->project);
             if($project->model == 'scrum')
             {
                 unset($this->lang->execution->endList[62]);
@@ -1431,8 +1431,8 @@ class execution extends control
 
         $this->view->title                = $title;
         $this->view->position             = $position;
-        $this->view->executions             = $executions;
-        $this->view->execution              = $execution;
+        $this->view->executions           = $executions;
+        $this->view->execution            = $execution;
         $this->view->poUsers              = $poUsers;
         $this->view->pmUsers              = $pmUsers;
         $this->view->qdUsers              = $qdUsers;
@@ -1718,7 +1718,6 @@ class execution extends control
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->app->loadLang('program');
-        $this->session->PRJ = $execution->project;
 
         /* Execution not found to prevent searching for .*/
         if(!isset($this->executions[$execution->id])) $this->executions = $this->execution->getPairs($execution->execution, 'all', 'nocode');
@@ -1776,9 +1775,9 @@ class execution extends control
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',  $uri);
-        $this->app->session->set('storyList', $uri);
-        $this->app->session->set('bugList',   $uri);
+        $this->app->session->set('taskList',  $uri, 'execution');
+        $this->app->session->set('storyList', $uri, 'product');
+        $this->app->session->set('bugList',   $uri, 'qa');
 
         /* Compatibility IE8*/
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
@@ -1835,11 +1834,11 @@ class execution extends control
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',    $uri);
-        $this->app->session->set('storyList',   $uri);
-        $this->app->session->set('executionList', $uri);
-        $this->app->session->set('caseList', $uri);
-        $this->app->session->set('bugList', $uri);
+        $this->app->session->set('taskList',    $uri, 'execution');
+        $this->app->session->set('storyList',   $uri, 'product');
+        $this->app->session->set('executionList', $uri, 'execution');
+        $this->app->session->set('caseList', $uri, 'qa');
+        $this->app->session->set('bugList', $uri, 'qa');
 
         if($type === 'json') die(helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
 
@@ -1973,7 +1972,7 @@ class execution extends control
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('storyList', $uri);
+        $this->app->session->set('storyList', $uri, 'product');
 
         /* Compatibility IE8*/
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
@@ -2090,6 +2089,7 @@ class execution extends control
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create($this->objectType, $executionID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
+            if(isonlybody()) die(js::reload('parent'));
             die(js::locate($browseExecutionLink));
         }
 
@@ -2259,7 +2259,7 @@ class execution extends control
         $browseLink = $this->createLink('execution', 'story', "executionID=$executionID");
         if($execution->type == 'project') $browseLink = $this->createLink('projectstory', 'story');
 
-        $this->session->set('storyList', $this->app->getURI(true)); // Save session.
+        $this->session->set('storyList', $this->app->getURI(true), 'product'); // Save session.
         if($execution->type != 'execution') $this->execution->setMenu($this->executions, $execution->id);     // Set menu.
 
         if(empty($products))
@@ -2429,16 +2429,16 @@ class execution extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('executionList',   $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
 
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
@@ -2681,8 +2681,8 @@ class execution extends control
         $this->app->loadLang('programplan');
 
         $from = $this->app->openApp;
-        if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true));
-        if($from == 'project') $this->lang->navGroup->execution = 'project';
+        if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');
+        if($from == 'project') $this->project->setMenu($projectID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -2792,9 +2792,9 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $projectID = $from == 'project' ? $this->session->PRJ : 0;
+            $projectID = $from == 'project' ? $this->session->project : 0;
             $executionStats = $this->project->getStats($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
-            $users        = $this->loadModel('user')->getPairs('noletter');
+            $users = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)
             {
                 $execution->PM            = zget($users, $execution->PM);

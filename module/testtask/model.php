@@ -14,153 +14,6 @@
 class testtaskModel extends model
 {
     /**
-     * Set the menu.
-     *
-     * @param  array $products
-     * @param  int   $productID
-     * @access public
-     * @return void
-     */
-    public function setMenu($products, $productID, $branch = 0, $testtask = 0)
-    {
-        $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse', '', $branch);
-
-        if($testtask and $this->app->viewType != 'mhtml')
-        {
-            $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'), 0, 0, $this->session->PRJ);
-            if(!isset($testtasks[$testtask])) $testtasks[$testtask] = $this->getById($testtask);
-
-            $selectHtml .= "<div class='btn-group angle-btn'>";
-            $selectHtml .= "<div class='btn-group'>";
-            $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $testtasks[$testtask]->name . " <span class='caret'></span></a>";
-            $selectHtml .= "<ul class='dropdown-menu'>";
-            foreach($testtasks as $testtask) $selectHtml .= '<li>' . html::a(helper::createLink('testtask', 'cases', "taskID=$testtask->id"), "<i class='icon icon-file-o'></i> {$testtask->name}") . '</li>';
-            $selectHtml .= "</ul>";
-            $selectHtml .= "</div>";
-            $selectHtml .= "</div>";
-
-            $this->lang->TRActions = '';
-            if(common::hasPriv('testtask', 'view'))     $this->lang->TRActions .= html::a(helper::createLink('testtask', 'view', "taskID={$testtask->id}"), "<i class='icon icon-file-text'> </i>" . $this->lang->testtask->view, '', "class='btn'");
-            if(common::hasPriv('testreport', 'browse')) $this->lang->TRActions .= html::a(helper::createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra={$testtask->id}"), "<i class='icon icon-flag'> </i>" . $this->lang->testtask->reportField, '', "class='btn'");
-        }
-
-        $this->app->loadLang('qa');
-        $productIndex = $selectHtml;
-
-        $pageNav     = '';
-        $pageActions = '';
-        $isMobile    = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $this->app->loadLang('qa');
-            $pageNav = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-        }
-        $pageNav .= $selectHtml;
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
-        foreach($this->lang->testtask->menu as $key => $value)
-        {
-            if($this->lang->navGroup->testtask != 'qa') $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
-            $replace = ($key == 'product') ? $selectHtml : $productID;
-            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->testtask->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->testtask == 'qa')
-        {
-            foreach($this->lang->qa->subMenu->testtask as $key => $menu)
-            {
-                common::setMenuVars($this->lang->qa->subMenu->testtask, $key, $productID);
-            }
-            $this->lang->qa->menu         = $this->lang->testtask->menu;
-            $this->lang->testtask->menu   = $this->lang->qa->subMenu->testtask;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        }
-    }
-
-    /**
-     * Set unit menu.
-     *
-     * @param  array  $products
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $testtask
-     * @access public
-     * @return void
-     */
-    public function setUnitMenu($products, $productID, $branch = 0, $testtask = 0)
-    {
-        $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'testtask', 'browseUnits', '', $branch);
-
-        if($testtask and $this->app->viewType != 'mhtml')
-        {
-            $testtasks = $this->getProductUnitTasks($productID, 'all', 'id_desc');
-            if(!isset($testtasks[$testtask])) $testtasks[$testtask] = $this->getById($testtask);
-
-            $selectHtml .= "<div class='btn-group angle-btn'>";
-            $selectHtml .= "<div class='btn-group'>";
-            $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $testtasks[$testtask]->name . " <span class='caret'></span></a>";
-            $selectHtml .= "<ul class='dropdown-menu'>";
-            foreach($testtasks as $testtask) $selectHtml .= '<li>' . html::a(helper::createLink('testtask', 'unitCases', "taskID=$testtask->id"), "<i class='icon icon-file-o'></i> {$testtask->name}") . '</li>';
-            $selectHtml .= "</ul>";
-            $selectHtml .= "</div>";
-            $selectHtml .= "</div>";
-        }
-
-        $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-        $productIndex .= $selectHtml;
-
-        $pageNav     = '';
-        $pageActions = '';
-        $isMobile    = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-        }
-        else
-        {
-            if($this->config->global->flow == 'full')
-            {
-                $this->app->loadLang('qa');
-                $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-            }
-        }
-        $pageNav .= $selectHtml;
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
-        if($this->config->global->flow != 'full') $this->lang->testtask->menu = new stdclass();
-        foreach($this->lang->testtask->menu as $key => $value)
-        {
-            if($this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
-            $replace = ($key == 'product') ? $selectHtml : $productID;
-            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->testtask->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->testcase == 'project' && $this->app->rawMethod == 'browseunits')
-        {
-            $lang->projectQa->menu->testcase['subModule'] = 'testtask';
-        }
-
-        if($this->lang->navGroup->testtask == 'qa')
-        {
-            foreach($this->lang->qa->subMenu->testcase as $key => $menu)
-            {
-                common::setMenuVars($this->lang->qa->subMenu->testcase, $key, $productID);
-            }
-            $this->lang->qa->menu         = $this->lang->testcase->menu;
-            $this->lang->testtask->menu   = $this->lang->qa->subMenu->testcase;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        }
-    }
-
-    /**
      * Create a test task.
      *
      * @param  int   $productID
@@ -284,6 +137,28 @@ class testtaskModel extends model
         }
 
         return $tasks;
+    }
+
+    /**
+     * Get test tasks of a project.
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getProjectTasks($projectID, $orderBy = 'id_desc', $pager = null)
+    {
+        return $this->dao->select('t1.*, t2.name AS buildName')
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
+            ->where('t1.project')->eq((int)$projectID)
+            ->andWhere('t1.auto')->ne('unit')
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
     }
 
     /**

@@ -26,10 +26,10 @@ class personnel extends control
      */
     public function accessible($programID = 0, $deptID = 0, $browseType='browse', $param = 0, $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->setProgramMenu($programID);
+        $this->loadModel('program')->setMenu($programID);
         $this->app->loadLang('user');
 
-        $program = $this->loadModel('program')->getByID($programID);
+        $program = $this->program->getByID($programID);
 
         /* Set the pager. */
         $this->app->loadClass('pager', true);
@@ -72,8 +72,7 @@ class personnel extends control
      */
     public function invest($programID = 0)
     {
-        $this->setProgramMenu($programID);
-        commonModel::setAppObjectID('program', $programID);
+        $this->loadModel('program')->setMenu($programID);
 
         $this->view->title      = $this->lang->personnel->invest;
         $this->view->position[] = $this->lang->personnel->invest;
@@ -99,7 +98,14 @@ class personnel extends control
      */
     public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0, $from = '')
     {
-        if($module == 'personnel') $this->setProgramMenu($objectID);
+        if($this->app->openApp == 'program')
+        {
+            $this->loadModel('program')->setMenu($objectID);
+        }
+        else if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($objectID);
+        }
 
         if($module == 'product')
         {
@@ -149,7 +155,15 @@ class personnel extends control
      */
     public function addWhitelist($objectID = 0, $deptID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
     {
-        if($module == 'personnel') $this->setProgramMenu($objectID);
+        if($this->app->openApp == 'program')
+        {
+            $this->loadModel('program')->setMenu($objectID);
+        }
+        else if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($objectID);
+        }
+
         $this->app->loadLang('execution');
 
         if($_POST)
@@ -213,19 +227,5 @@ class personnel extends control
 
             die(js::reload('parent'));
         }
-    }
-
-    /*
-     * Setting up the program menu.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return void
-     */
-    public function setProgramMenu($programID = 0)
-    {
-        $this->loadModel('program');
-        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID);
-        commonModel::setAppObjectID('program', $programID);
     }
 }

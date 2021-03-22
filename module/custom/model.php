@@ -155,6 +155,7 @@ class customModel extends model
         $menuModuleName = $module;
         $order          = 1;
         $customMenuMap  = array();
+        $openApp        = $app->openApp;
         $isTutorialMode = commonModel::isTutorialMode();
 
         if($customMenu)
@@ -194,7 +195,7 @@ class customModel extends model
         }
         elseif($module)
         {
-            $menuOrder = ($module == 'main' and isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->$module->menuOrder) ? $lang->$module->menuOrder : array());
+            $menuOrder = ($module == 'main' and isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->menu->$module['menuOrder']) ? $lang->menu->$module['menuOrder'] : array());
             if($menuOrder)
             {
                 ksort($menuOrder);
@@ -227,6 +228,7 @@ class customModel extends model
             $subModule = '';
             $subMenu   = '';
             $alias     = '';
+            $exclude   = '';
 
             $link = (is_array($item) and isset($item['link'])) ? $item['link'] : $item;
             /* The variable of item has not link and is not link then ignore it. */
@@ -257,6 +259,7 @@ class customModel extends model
                     if(isset($item['subModule'])) $subModule = $item['subModule'];
                     if(isset($item['subMenu']))   $subMenu   = $item['subMenu'];
                     if(isset($item['alias']))     $alias     = $item['alias'];
+                    if(isset($item['exclude']))   $exclude   = $item['exclude'];
                 }
 
                 $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
@@ -291,6 +294,7 @@ class customModel extends model
                 if($subModule)$menuItem->subModule = $subModule;
                 if($subMenu)  $menuItem->subMenu   = $subMenu;
                 if($alias)    $menuItem->alias     = $alias;
+                if($exclude)  $menuItem->exclude   = $exclude;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
                 /* Hidden menu by config in mobile. */
@@ -317,7 +321,7 @@ class customModel extends model
         if(empty($module)) $module = 'main';
 
         global $app, $lang, $config;
-        $allMenu = $module == 'main' ? $lang->menu : (isset($lang->$module->menu) ? $lang->$module->menu : $lang->my->menu);
+        $allMenu = $module == 'main' ? $lang->menu : $lang->menu->$module['subMenu'];
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
         $flowModule = $config->global->flow . '_' . $module;
         $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
@@ -325,6 +329,7 @@ class customModel extends model
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
         if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
         $menu = self::setMenuByConfig($allMenu, $customMenu, $module);
+
         return $menu;
     }
 

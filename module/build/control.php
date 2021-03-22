@@ -25,16 +25,6 @@ class build extends control
         $this->loadModel('execution');
         $this->loadModel('user');
 
-        if($this->app->openApp == 'project')
-        {
-            $model = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
-            $this->lang->project->menu = $this->lang->menu->$model;
-            commonModel::setAppObjectID('project', $projectID);
-
-            $executions  = $this->execution->getPairs($projectID);
-            $executionID = key($executions);
-        }
-
         if(!empty($_POST))
         {
             $executionID = $this->post->execution;
@@ -48,18 +38,17 @@ class build extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
-        $execution = $this->execution->getByID($executionID);
-        if($this->app->openApp == 'execution')
+        if($this->app->openApp == 'project')
         {
-            /* Set session and get execution by id. */
-            $this->session->set('buildCreate', $this->app->getURI(true));
+            $this->project->setMenu($projectID);
 
-            /* Set menu. */
-            $executions = $this->execution->getPairs($execution->project);
-            $this->execution->setMenu($executions, $executionID);
-            commonModel::setAppObjectID('execution', $executionID);
         }
-
+        elseif($this->app->openApp == 'execution')
+        {
+            $executions  = $this->execution->getPairs($projectID);
+            $executionID = $executionID == 0 ? key($executions) : $executionID;
+            $this->execution->setMenu($executions, $executionID);
+        }
 
         $productGroups = $this->execution->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);

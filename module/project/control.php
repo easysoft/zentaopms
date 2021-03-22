@@ -177,6 +177,8 @@ class project extends control
         $this->lang->noMenuModule[] = 'project';
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
+        $this->project->setMenu($projectID);
+
         $project = $this->project->getByID($projectID);
         if(empty($project) || $project->type != 'project') die(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -291,11 +293,7 @@ class project extends control
             }
         }
 
-        if($programID)
-        {
-            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
-            commonModel::setAppObjectID('program', $programID);
-        }
+        if($programID) $this->program->setMenu($programID);
 
         $this->lang->noMenuModule[] = 'project';
 
@@ -375,9 +373,6 @@ class project extends control
         $project   = $this->project->getByID($projectID);
         $programID = $project->parent;
 
-        /* Navigation stay in program when enter from program list. */
-        $this->adjustNavigation($from, $programID);
-
         if($_POST)
         {
             $changes = $this->project->update($projectID);
@@ -389,7 +384,7 @@ class project extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $locateLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('view', "projectID=$projectID");
+            $locateLink = $this->session->projectBrowse ? $this->session->projectBrowse : inLink('view', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
             if($from == 'programProject') $locateLink = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
@@ -456,9 +451,6 @@ class project extends control
     {
         $this->loadModel('action');
 
-        /* Navigation stay in project when enter from project list. */
-        $this->adjustNavigation($from, $projectID);
-
         if($this->post->names)
         {
             $allChanges = $this->project->batchUpdate();
@@ -500,8 +492,8 @@ class project extends control
      */
     public function view($projectID = 0)
     {
+        $this->project->setMenu($projectID);
         $this->app->loadLang('bug');
-        $this->lang->project->menu = $this->lang->scrum->setMenu;
         $moduleIndex = array_search('project', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -545,7 +537,8 @@ class project extends control
      */
     public function group($projectID = 0, $programID = 0)
     {
-        $this->lang->project->menu = $this->lang->scrum->setMenu;
+        $this->project->setMenu($projectID);
+
         $moduleIndex = array_search('project', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -604,7 +597,7 @@ class project extends control
      */
     public function dynamic($projectID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
-        $this->lang->noMenuModule[] = 'project';
+        $this->project->setMenu($projectID);
 
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -672,6 +665,182 @@ class project extends control
     }
 
     /**
+     * Project qa dashboard.
+     *
+     * @param  int $projectID
+     * @access public
+     * @return void
+     */
+    public function qa($projectID = 0)
+    {
+        $this->project->setMenu($projectID);
+        $this->view->title = $this->lang->project->qa;
+        $this->display();
+    }
+
+    /**
+     * Project bug list.
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $build
+     * @param  string $type
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Load these two models. */
+        $this->loadModel('bug');
+        $this->loadModel('user');
+
+        /* Save session. */
+        $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $this->project->setMenu($projectID);
+
+        $project   = $this->project->getByID($projectID);
+        $type      = strtolower($type);
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $products  = $this->project->getProducts($projectID);
+        $productID = key($products);    // Get the first product for creating bug.
+        $branchID  = isset($products[$productID]) ? $products[$productID]->branch : 0;
+
+        /* Header and position. */
+        $title      = $project->name . $this->lang->colon . $this->lang->bug->common;
+        $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[] = $this->bug->common;
+
+        /* Load pager and get bugs, user. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $sort  = $this->loadModel('common')->appendOrder($orderBy);
+        $bugs  = $this->bug->getProjectBugs($projectID, $build, $type, $param, $sort, '', $pager);
+        $users = $this->user->getPairs('noletter');
+
+        /* team member pairs. */
+        $memberPairs = array();
+        $memberPairs[] = "";
+        foreach($this->view->teamMembers as $key => $member)
+        {
+            $memberPairs[$key] = $member->realname;
+        }
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
+        $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
+
+        /* Assign. */
+        $this->view->title       = $title;
+        $this->view->position    = $position;
+        $this->view->bugs        = $bugs;
+        $this->view->tabID       = 'bug';
+        $this->view->build       = $this->loadModel('build')->getById($build);
+        $this->view->buildID     = $this->view->build ? $this->view->build->id : 0;
+        $this->view->pager       = $pager;
+        $this->view->orderBy     = $orderBy;
+        $this->view->users       = $users;
+        $this->view->productID   = $productID;
+        $this->view->branchID    = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
+        $this->view->memberPairs = $memberPairs;
+        $this->view->type        = $type;
+        $this->view->param       = $param;
+
+        $this->display();
+    }
+
+    /**
+     * Project case list.
+     *
+     * @param  int    $projectID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function testcase($projectID = 0, $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('testcase');
+        $this->loadModel('testtask');
+
+        $this->project->setMenu($projectID);
+
+        $products  = $this->project->getProducts($projectID);
+        $productID = key($products);    // Get the first product for creating testcase.
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $cases = $this->loadModel('testcase')->getProjectCases($projectID, $orderBy, $pager, $type);
+        $cases = $this->testcase->appendData($cases, 'run');
+
+        $this->view->title       = $this->lang->execution->testcase;
+        $this->view->projectID   = $projectID;
+        $this->view->productID   = $productID;
+        $this->view->cases       = $cases;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->type        = $type;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->execution   = $this->execution->getByID($executionID);
+
+        $this->display();
+    }
+
+    /**
+     * Project test task list.
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function testtask($projectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('testtask');
+
+        /* Save session. */
+        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
+
+        $this->project->setMenu($projectID);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $productTasks = array();
+
+        $project = $this->project->getByID($projectID);
+        $tasks = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
+        foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
+
+        $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->common;
+        $this->view->position[]   = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $project->name);
+        $this->view->position[]   = $this->lang->testtask->common;
+        $this->view->project      = $project;
+        $this->view->projectID    = $projectID;
+        $this->view->projectName  = $project->name;
+        $this->view->pager        = $pager;
+        $this->view->orderBy      = $orderBy;
+        $this->view->tasks        = $productTasks;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->products     = $this->loadModel('product')->getPairs('', 0);
+        $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+
+        $this->display();
+    }
+
+    /**
      * Browse builds of a project.
      *
      * @param  string $type      all|product|bysearch
@@ -683,7 +852,8 @@ class project extends control
     {
         /* Load module and get project. */
         $this->loadModel('build');
-        $project   = $this->project->getByID($projectID);
+        $project = $this->project->getByID($projectID);
+        $this->project->setMenu($projectID);
 
         $this->session->set('buildList', $this->app->getURI(true));
 
@@ -854,8 +1024,8 @@ class project extends control
      */
     public function manageMembers($projectID, $dept = '')
     {
-        $this->lang->navGroup->project = 'project';
-        $this->lang->project->menu = $this->lang->scrum->setMenu;
+        $this->project->setMenu($projectID);
+
         $moduleIndex = array_search('project', $this->lang->noMenuModule);
         if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
@@ -1196,7 +1366,6 @@ class project extends control
     /**
      * Get white list personnel.
      *
-     * @param  int    $programID
      * @param  int    $projectID
      * @param  string $module
      * @param  string $from  project|program|programProject
@@ -1208,19 +1377,14 @@ class project extends control
      * @access public
      * @return void
      */
-    public function whitelist($programID = 0, $projectID = 0, $module = 'project', $from = 'project', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist($projectID = 0, $module = 'project', $from = 'project', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($from == 'project')
         {
-            $this->lang->project->menu = $this->lang->scrum->setMenu;
+            $this->project->setMenu($projectID);
+
             $moduleIndex = array_search('project', $this->lang->noMenuModule);
             if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        }
-        if($from == 'programproject')
-        {
-            $this->app->rawMethod = 'programproject';
-            $this->lang->navGroup->project     = 'project';
-            $this->lang->project->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
         }
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
@@ -1238,9 +1402,6 @@ class project extends control
      */
     public function addWhitelist($projectID = 0, $deptID = 0, $programID = 0, $from = 'project')
     {
-        /* Navigation stay in project when enter from project list. */
-        $this->adjustNavigation($from, $projectID);
-
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=project&programID=$programID&from=$from");
     }
 
@@ -1268,8 +1429,7 @@ class project extends control
      */
     public function manageProducts($projectID, $programID = 0, $from = 'project')
     {
-        /* Navigation stay in project when enter from project list. */
-        $this->adjustNavigation($from, $projectID);
+        $this->project->setMenu($projectID);
 
         if(!empty($_POST))
         {
@@ -1289,7 +1449,7 @@ class project extends control
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            $locateLink = $this->session->PRJBrowse ? $this->session->PRJBrowse : inLink('manageProducts', "projectID=$projectID");
+            $locateLink = $this->session->projectBrowse ? $this->session->projectBrowse : inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
             if($from == 'programproject') $locateLink = $this->session->programProject ? $this->session->programProject : inLink('programProject', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
@@ -1363,27 +1523,5 @@ class project extends control
             $response['multiLinkedProjects'] = $multiLinkedProjects;
         }
         die(json_encode($response));
-    }
-
-    /**
-     * Adjust the navigation.
-     *
-     * @param  string $from
-     * @param  int    $objectID  projectID|programID
-     * @access public
-     * @return void
-     */
-    public function adjustNavigation($from = '', $objectID = 0)
-    {
-        if($from == 'project')
-        {
-            $this->lang->project->menu = $this->lang->scrum->setMenu;
-            $moduleIndex = array_search('project', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        }
-        else if($from == 'pgmproject')
-        {
-            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($objectID, true);
-        }
     }
 }

@@ -179,6 +179,7 @@ class settingModel extends model
         $config = array();
         foreach($records as $record)
         {
+            if(!isset($config[$record->owner])) $config[$record->owner] = new stdclass();
             if(!isset($record->module)) return array();    // If no module field, return directly. Since 3.2 version, there's the module field.
             if(empty($record->module)) continue;
 
