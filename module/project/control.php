@@ -206,7 +206,6 @@ class project extends control
      */
     public function browse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->lang->noMenuModule[] = 'project';
         if($this->session->moreProjectLink) $this->lang->project->mainMenuAction = html::a($this->session->moreProjectLink, '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
         $this->app->session->set('projectBrowse', $this->app->getURI(true));
         $this->loadModel('datatable');
@@ -293,8 +292,6 @@ class project extends control
         }
 
         if($programID) $this->program->setMenu($programID);
-
-        $this->lang->noMenuModule[] = 'project';
 
         $name      = '';
         $code      = '';
@@ -493,8 +490,6 @@ class project extends control
     {
         $this->project->setMenu($projectID);
         $this->app->loadLang('bug');
-        $moduleIndex = array_search('project', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
         $this->app->session->set('projectBrowse', $this->app->getURI(true));
 
@@ -537,9 +532,6 @@ class project extends control
     public function group($projectID = 0, $programID = 0)
     {
         $this->project->setMenu($projectID);
-
-        $moduleIndex = array_search('project', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
         $position[] = $this->lang->group->browse;
@@ -914,11 +906,6 @@ class project extends control
      */
     public function manageView($groupID, $projectID, $programID)
     {
-        $this->lang->navGroup->project = 'project';
-        $this->lang->project->menu = $this->lang->scrum->setMenu;
-        $moduleIndex = array_search('project', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
         if($_POST)
         {
             $this->group->updateView($groupID);
@@ -952,11 +939,6 @@ class project extends control
      */
     public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
-        $this->lang->navGroup->project = 'project';
-        $this->lang->project->menu = $this->lang->scrum->setMenu;
-        $moduleIndex = array_search('project', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
         if($type == 'byGroup')
         {
             $groupID = $param;
@@ -1023,9 +1005,6 @@ class project extends control
     public function manageMembers($projectID, $dept = '')
     {
         $this->project->setMenu($projectID);
-
-        $moduleIndex = array_search('project', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
 
         if(!empty($_POST))
         {
@@ -1386,13 +1365,7 @@ class project extends control
      */
     public function whitelist($projectID = 0, $module = 'project', $from = 'project', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if($from == 'project')
-        {
-            $this->project->setMenu($projectID);
-
-            $moduleIndex = array_search('project', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        }
+        if($from == 'project') $this->project->setMenu($projectID);
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
     }
