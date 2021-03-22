@@ -40,13 +40,14 @@ class build extends control
 
         if($this->app->openApp == 'project')
         {
-            $this->project->setMenu($projectID);
-
+            $executions  = $this->execution->getPairs($projectID);
+            $executionID = isset($executions[$this->session->executionID]) ? $this->session->executionID : key($executions);
+            $this->session->set('executionID', 0);
         }
         elseif($this->app->openApp == 'execution')
         {
-            $executions  = $this->execution->getPairs($projectID);
-            $executionID = $executionID == 0 ? key($executions) : $executionID;
+            $execution  = $this->execution->getByID($executionID);
+            $executions = $this->execution->getPairs($execution->project);
             $this->execution->setMenu($executions, $executionID);
         }
 
