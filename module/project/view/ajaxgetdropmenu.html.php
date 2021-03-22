@@ -20,34 +20,35 @@ $projectsPinYin = common::convert2Pinyin($projectNames);
 
 foreach($projects as $project)
 {
-    $link = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
+    $selected    = $project->id == $projectID ? 'selected' : '';
+    $link        = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
     $projectName = zget($programs, $project->parent, '') ? zget($programs, $project->parent) . '/' . $project->name : $project->name;
     if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
     {
-        $myProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='text-important' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
+        $myProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='text-important $selected' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
     }
     else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
     {
-        $normalProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
+        $normalProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='selected' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
     }
-    else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
+    else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
 }
 ?>
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
-    <?php
-    if(!empty($myProjectsHtml))
-    {
-        echo "<div class='heading'>{$lang->project->myProject}</div>";
-        echo $myProjectsHtml;
-        if(!empty($myProjectsHtml))
-        {
-            echo "<div class='heading'>{$lang->project->other}</div>";
-        }
-    }
-    echo $normalProjectsHtml;
-    ?>
+      <?php
+      if(!empty($myProjectsHtml))
+      {
+          echo "<div class='heading'>{$lang->project->myProject}</div>";
+          echo $myProjectsHtml;
+          if(!empty($myProjectsHtml))
+          {
+              echo "<div class='heading'>{$lang->project->other}</div>";
+          }
+      }
+      echo $normalProjectsHtml;
+      ?>
     </div>
     <div class="col-footer">
       <?php echo html::a(helper::createLink('project', 'browse', 'programID=0&browseType=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
@@ -55,10 +56,15 @@ foreach($projects as $project)
     </div>
   </div>
   <div class="table-col col-right">
-   <div class='list-group'>
-    <?php
-    echo $closedProjectsHtml;
-    ?>
-    </div>
+   <div class='list-group'><?php echo $closedProjectsHtml;?></div>
   </div>
 </div>
+<script>
+$(function()
+{
+    if($('#dropMenu .table-row .col-left .list-group .selected') > 0)
+    {
+        $('#dropMenu .table-row .col-left .list-group').scrollTop($('#dropMenu .table-row .col-left .list-group .selected').position().top - 75);
+    }
+})
+</script>

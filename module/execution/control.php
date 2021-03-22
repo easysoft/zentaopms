@@ -2551,7 +2551,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($module, $method, $extra)
+    public function ajaxGetDropMenu($executionID, $module, $method, $extra)
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('order_desc')->fetchAll('id');
 
@@ -2579,6 +2579,7 @@ class execution extends control
         $this->view->link        = $this->execution->getLink($module, $method, $extra);
         $this->view->module      = $module;
         $this->view->method      = $method;
+        $this->view->executionID = $executionID;
         $this->view->extra       = $extra;
         $this->view->projects    = $this->project->getPairsByModel();
         $this->view->executions  = $orderedExecutions;
