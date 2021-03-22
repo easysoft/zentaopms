@@ -51,7 +51,7 @@ class repo extends control
         }
         else if($openApp == 'execution')
         {
-            $this->execution->setMenu($objectID);
+            $this->loadModel('execution')->setMenu($objectID);
         }
         else
         {
