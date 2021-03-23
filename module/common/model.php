@@ -616,18 +616,6 @@ class commonModel extends model
     }
 
     /**
-     * Print recent menu.
-     *
-     * @access public
-     * @return void
-     */
-    public static function printRecentMenu()
-    {
-        global $lang;
-        echo '<li><a id="recentMenu"><i class="icon icon-recent"></i><span class="text">' . $lang->recent . '</span></a></li>';
-    }
-
-    /**
      * Print the main menu.
      *
      * @static

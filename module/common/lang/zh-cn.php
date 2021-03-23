@@ -69,7 +69,6 @@ $lang->required     = '必填';
 $lang->noData       = '暂无';
 $lang->fullscreen   = '全屏';
 $lang->retrack      = '收起';
-$lang->recent       = '近期';
 $lang->whitelist    = '访问白名单';
 
 $lang->actions         = '操作';
