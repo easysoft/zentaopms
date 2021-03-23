@@ -169,7 +169,7 @@ class testsuite extends control
         $productID = $suite->product;
 
         $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->project);
-        $this->testsuite->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Save session. */
         $this->session->set('caseList', $this->app->getURI(true));
