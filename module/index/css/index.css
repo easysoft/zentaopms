@@ -43,11 +43,12 @@ body.menu-hide {padding-left: 0;}
 #appsBar {position: fixed; left: 96px; bottom: 0; right: 0; height: 40px; z-index: 1012; background: #fff; border-top: 1px solid #eff1f7;}
 .menu-hide #appsBar {left: 40px;}
 #bars {position: absolute; left: 0; top: 0; bottom: 0; padding: 0 5px;}
-#bars > li {padding: 8px 5px;}
-#bars > li > a {height: 24px; color: #fff; background: #3c4353; padding: 2px 8px; line-height: 20px; border-radius: 2px;}
-#bars > li > a:hover, #bars > li > a:active, #bars > li > a:focus {background: #3c495c;}
-#bars > li.active > a, #bars > li.active > a:active, #bars > li.active > a:focus {background: #0c64eb;}
-#bars > li.active:after {content: ' '; display: block; position: absolute; background: #a0cafa; height: 3px; left: 5px; right: 5px; bottom: 0; border-radius: 2px;}
+#bars > li {padding: 8px 2px;}
+#bars > li > a {height: 24px; color: #000; padding: 2px 8px; line-height: 20px; border-radius: 2px;}
+#bars > li > a:hover, #bars > li > a:active, #bars > li > a:focus {background: #16a8f8;}
+#bars > li.active > a, #bars > li.active > a:active, #bars > li.active > a:focus {font-weight: 600; border-bottom: 2px solid #16a8f8;}
+#bars > li.active:after {content: ' '; display: block; position: absolute; height: 3px; left: 5px; right: 5px; bottom: 0; border-radius: 2px;}
+#bars > li.divider{margin-right: 5px; margin-top: 10px; height: 20px; border-right: 1px solid #d9d9d9;}
 
 #userNav {float: none; margin: 0;}
 #userNav>li {text-align: center;}
@@ -62,16 +63,12 @@ body.menu-hide {padding-left: 0;}
 #poweredBy {width: 40%; position: absolute; top: 4px; right: 0; padding: 0;}
 
 #globalSearchDiv {width: 52%; float: right; margin-right: 4px;}
-@media screen and (max-height: 768px)
-{
-  #globalSearchDiv {width: 62%;}
-}
-#globalSearchDiv .input-group {width: 82%; float: right; margin-top: 2px;}
-@media screen and (max-height: 768px)
-{
-  #globalSearchDiv .input-group {width: 100%;}
-}
-#globalSearchInput {height: 28px; padding-left: 10px;}
+#globalSearchDiv .input-group {width: 194px; float: right; margin-top: 2px;}
+#searchbox .dropdown-menu.show-quick-go.with-active {min-width: 270px;}
+#searchbox .dropdown-menu.show-quick-go > li {padding: 0 5px;}
+#searchbox .dropdown-menu {min-width: 150px;}
+
+#globalSearchInput {width: 150px; height: 28px; padding-left: 10px; border-right: 0px;}
 #globalSearchButton {height: 28px;}
 
 #globalBarLogo {width: 100%; float: right;}
@@ -83,7 +80,7 @@ body.menu-hide {padding-left: 0;}
 #searchbox a:hover {color: white;}
 #searchbox {width: 100%;}
 #searchbox .dropdown-menu {margin-top: 0px; left: 1px; position: absolute; top: -50px;}
-#searchbox .dropdown-menu > li > a {padding: 5px 8px;}
+#searchbox .dropdown-menu > li > a {padding: 5px 0px 5px 2px;}
 #searchbox .dropdown-menu > li {display: none;}
 #searchbox .dropdown-menu > li.search-type-all {width: 100%; display: block;}
 #searchbox .dropdown-menu > li:hover {position: relative;}
@@ -106,8 +103,4 @@ body.menu-hide {padding-left: 0;}
 @media screen and (max-height: 768px)
 {
   #upgradeContent{width: 85%;}
-  .version-name {width: 25%; text-overflow: ellipsis; white-space: nowrap;}
-  .version-date {width: 20%; color: #8a8a8a;}
-  .version-explain {width: 25%; color: #8a8a8a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-  .version-actions {width: 30%;}
 }

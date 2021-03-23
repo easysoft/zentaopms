@@ -69,7 +69,6 @@ $lang->required     = '必填';
 $lang->noData       = '暂无';
 $lang->fullscreen   = '全屏';
 $lang->retrack      = '收起';
-$lang->recent       = '近期';
 $lang->whitelist    = '访问白名单';
 
 $lang->actions         = '操作';
@@ -127,14 +126,15 @@ $lang->assignedToAB = '指派';
 $lang->typeAB       = '类型';
 
 $lang->common->common     = '公有模块';
-$lang->my->common         = '我的地盘';
+$lang->my->common         = '地盘';
 $lang->program->common    = '项目集';
 $lang->product->common    = '产品';
 $lang->project->common    = '项目';
 $lang->execution->common  = $config->systemMode == 'new' ? '执行' : $lang->executionCommon;
 $lang->qa->common         = '测试';
-$lang->devops->common     = '代码';
+$lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文档';
+$lang->repo->common       = '代码';
 $lang->report->common     = '统计';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
@@ -152,6 +152,7 @@ $lang->custom->common     = '自定义';
 $lang->extension->common  = '插件';
 $lang->company->common    = '公司';
 $lang->dept->common       = '部门';
+$lang->program->list      = '项目集列表';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';

@@ -9,5 +9,4 @@
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        https://www.zentao.pm
  */
-$lang->qa->common = 'QA';
 $lang->qa->index  = 'Accueil Qualité';

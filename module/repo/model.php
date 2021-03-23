@@ -35,6 +35,7 @@ class repoModel extends model
      */
     public function setMenu($repos, $repoID = '', $showSeleter = true)
     {
+        if(empty($repos)) $this->lang->switcherMenu = '';
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
 
@@ -57,7 +58,7 @@ class repoModel extends model
 
         if($showSeleter && !empty($repos))
         {
-            $repoIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . ($repo->SCM == 'Subversion' ? '[SVN] ' : '[GIT] ') . $repo->name . ' <span class="caret"></span></button>';
+            $repoIndex  = '<div class="btn-group header-btn"  id="swapper"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . ($repo->SCM == 'Subversion' ? '[SVN] ' : '[GIT] ') . $repo->name . ' <span class="caret"></span></button>';
             $repoIndex .= $this->select($repos, $repoID);
             $repoIndex .= '</div></div>';
 
@@ -77,7 +78,7 @@ class repoModel extends model
 
                 $this->setRepoBranch($branchID);
 
-                $repoIndex .= '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $branch . ' <span class="caret"></span></button>';
+                $repoIndex .= '<div class="btn-group header-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $branch . ' <span class="caret"></span></button>';
                 $repoIndex .= "<div class='dropdown-menu search-list' data-ride='searchList'>";
                 $repoIndex .= "<div class='list-group'>";
                 foreach($branches as $branch)
@@ -90,7 +91,7 @@ class repoModel extends model
                 $repoIndex .= "</div></div></div></div>";
             }
 
-            $this->lang->modulePageNav = $repoIndex;
+            $this->lang->switcherMenu = $repoIndex;
         }
 
         common::setMenuVars('devops', $repoID);
@@ -139,15 +140,13 @@ class repoModel extends model
      */
     public function getList($projectID = 0, $orderBy = 'id_desc', $pager = null)
     {
-        /* Get products. */
-        $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
-            ->andWhere('product')->in($productIdList)
             ->orderBy($orderBy)
             ->page($pager)->fetchAll('id');
 
+        /* Get products. */
+        $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
         foreach($repos as $i => $repo)
         {
             $repo->acl = json_decode($repo->acl);
@@ -157,7 +156,16 @@ class repoModel extends model
             }
             else
             {
-                if($projectID && !in_array($repo->product, $productIdList)) unset($repos[$i]);
+                if($projectID)
+                {
+                    $hasPriv = false;
+                    foreach(explode(',', $repo->product) as $productID)
+                    {
+                        if(isset($productIdList[$productID])) $hasPriv = true;
+                    }
+
+                    if(!$haspriv) unset($repos[$i]);
+                }
             }
         }
 

@@ -14,122 +14,6 @@
 class docModel extends model
 {
     /**
-     * Set menus
-     *
-     * @param  array  $libs
-     * @param  int    $libID
-     * @param  string $moduleID
-     * @param  int    $productID
-     * @param  int    $executionID
-     * @param  string $crumb
-     * @access public
-     * @return void
-     */
-    public function setMenu($type = '', $libID = 0, $moduleID = 0, $productID = 0, $executionID = 0, $crumb = '')
-    {
-        $btnStyle     = $this->lang->navGroup->doc == 'doc' ? 'header-btn' : 'angle-btn';
-        $isLimitWidth = $this->lang->navGroup->doc == 'doc' ? '' : 'btn-limit';
-        $selectHtml   = "<div class='btn-group $btnStyle'>";
-        $selectHtml  .= html::a(helper::createLink('doc', 'index'), $this->lang->doc->index, '', "class='btn'");
-        $selectHtml  .= '</div>';
-
-        if($type)
-        {
-            $fastLib = in_array($type, array_keys($this->lang->doc->fastMenuList)) ? $this->lang->doc->fastMenuList[$type] : $this->lang->doc->fast;
-
-            if($libID)
-            {
-                $lib = $this->getLibById($libID);
-                if(!$this->checkPrivLib($lib))
-                {
-                    echo(js::alert($this->lang->doc->accessDenied));
-                    $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-                    if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
-                    die(js::locate('back'));
-                }
-
-                $type = $lib->type;
-            }
-
-            if(isset($this->lang->doc->libTypeList[$type]))
-            {
-                $mainLib     = $this->lang->doc->libTypeList[$type];
-                $selectHtml .= "<div class='btn-group $btnStyle'>";
-                $selectHtml .= "<div class='btn-group'>";
-                $selectHtml .= "<a data-toggle='dropdown' class='btn $isLimitWidth' title=$mainLib>" . $mainLib . " <span class='caret'></span></a>";
-                $selectHtml .= "<ul class='dropdown-menu'>";
-                foreach($this->lang->doc->libTypeList as $libType => $libName)
-                {
-                    $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=$libType"), "<i class='icon {$this->lang->doc->libIconList[$libType]}'></i> {$this->lang->doc->libTypeList[$libType]}") . '</li>';
-                }
-                $selectHtml .='</ul></div></div>';
-            }
-
-            $currentLib = 0;
-            if(in_array($type, array_keys($this->lang->doc->libTypeList)))
-            {
-                if($type == 'product')   $currentLib = $productID;
-                if($type == 'execution') $currentLib = $executionID;
-                if($type != 'product' and $type != 'execution') $currentLib = $libID;
-
-                if($currentLib)
-                {
-                    $allLibGroups  = $this->getAllLibGroups($libID);
-                    $currentGroups = $allLibGroups[$type];
-                    /* Append closed execution. */
-                    if(!isset($currentGroups[$currentLib]) and $type == 'execution')
-                    {
-                        $execution = $this->dao->select('id,name,status')->from(TABLE_EXECUTION)->where('id')->eq($currentLib)->fetch();
-                        $currentGroups[$currentLib] = (array)$execution;
-                    }
-                    $currentLibName = is_array($currentGroups[$currentLib]) ? $currentGroups[$currentLib]['name'] : $currentGroups[$currentLib];
-
-                    $selectHtml .= "<div class='btn-group $btnStyle'>";
-                    $selectHtml .= "<div class='btn-group'>";
-                    $selectHtml .= "<a data-toggle='dropdown' class='btn $isLimitWidth' title=$currentLibName>" . $currentLibName . ' <span class="caret"></span></a>';
-                    $selectHtml .='<ul class="dropdown-menu">';
-                    if($type == 'product' or $type == 'execution')
-                    {
-                        foreach($currentGroups as $groupID => $libGroups)
-                        {
-                            $link = helper::createLink('doc', 'objectLibs', "type=$type&objectID=$groupID");
-                            $icon = $this->lang->doc->libIconList[$type];
-
-                            $active = $currentLib == $groupID ? "class='active'" : '';
-                            $selectHtml .= "<li $active>" . html::a($link, "<i class='icon {$icon}'></i> {$libGroups['name']}") . '</li>';
-                        }
-                    }
-                    else
-                    {
-                        foreach($currentGroups as $groupID => $groupName)
-                        {
-                            $active = $currentLib == $groupID ? "class='active'" : '';
-                            $selectHtml .= "<li $active>" . html::a(helper::createLink('doc', 'browse', "libID=$groupID"), "<i class='icon {$this->lang->doc->libIconList[$type]}'></i> {$groupName}") . '</li>';
-                        }
-                    }
-
-                    $selectHtml .= '</ul></div></div>';
-                }
-            }
-
-            /* Determines whether the doc lib is editable. */
-            $docLib            = new stdClass();
-            $docLib->product   = $productID;
-            $docLib->execution = $executionID;
-            $canBeChanged      = common::canBeChanged('doc', $docLib);
-
-            $lib      = isset($lib) ? $lib : new stdClass();
-            $actions  = $this->setFastMenu($fastLib);
-            $actions .= ($canBeChanged and common::hasPriv('doc', 'createLib', $lib)) ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe'") : '';
-
-            $this->lang->TRActions = $actions;
-        }
-
-        //$selectHtml .= $crumb ? $crumb : $this->getCrumbs($libID, $moduleID);
-        $this->lang->modulePageNav     = $selectHtml;
-    }
-
-    /**
      * Get library by id.
      *
      * @param  int    $libID
@@ -1878,7 +1762,6 @@ class docModel extends model
             $navCSS .= <<<EOF
 #subHeader {margin-top: -50px; background: rgba(0,0,0,0);}
 #pageActions .btn-link {color: #fff; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
-.header-btn {padding: 0;}
 EOF;
             if($this->app->rawMethod != 'index') $navCSS .= '.header-btn+.header-btn::after, .header-btn+.header-btn::before {top: -50px;}';
         }

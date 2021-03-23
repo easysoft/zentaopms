@@ -38,7 +38,7 @@ class qaModel extends model
             $productIndex .= $selectHtml;
         }
 
-        if($this->app->rawModule != 'qa') $this->lang->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
+        if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
         common::setMenuVars('qa', $productID);
     }
 

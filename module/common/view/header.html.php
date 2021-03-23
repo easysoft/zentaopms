@@ -10,7 +10,10 @@ include 'chosen.html.php';
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
-      <div id='heading'><?php echo isset($lang->switcherMenu) ? $lang->switcherMenu : '';?></div>
+      <div id='heading'>
+        <?php common::printHomeButton($app->openApp);?> 
+        <?php echo isset($lang->switcherMenu) ? $lang->switcherMenu : '';?>
+      </div>
       <nav id='navbar'><?php $activeMenu = commonModel::printMainMenu();?></nav>
     </div>
   </div>

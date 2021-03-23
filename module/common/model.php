@@ -571,6 +571,30 @@ class commonModel extends model
     }
 
     /**
+     * Print upper left corner home button.
+     *
+     * @param  string $openApp
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printHomeButton($openApp)
+    {
+        global $lang;
+
+        if(!$openApp) return;
+        $icon = zget($lang->navIcons, $openApp, '');
+        
+        $nav = $lang->mainNav->$openApp;
+        list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
+
+        $link = $openApp != 'execution' ? helper::createLink($currentModule, $currentMethod) : '';
+        $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='btn'") : "$icon {$lang->$openApp->common}";
+
+        echo "<div class='btn-group header-btn'>" . $html . '</div>';
+    }
+
+    /**
      * Get main nav items list
      *
      * @param  string $moduleName
@@ -613,18 +637,6 @@ class commonModel extends model
             }
         }
         return $items;
-    }
-
-    /**
-     * Print recent menu.
-     *
-     * @access public
-     * @return void
-     */
-    public static function printRecentMenu()
-    {
-        global $lang;
-        echo '<li><a id="recentMenu"><i class="icon icon-recent"></i><span class="text">' . $lang->recent . '</span></a></li>';
     }
 
     /**

@@ -36,9 +36,6 @@ js::set('defaultOpen', $open);
   <nav id='menuNav'>
     <ul class='nav nav-default' id='menuMainNav'>
     </ul>
-    <ul class='nav nav-default'>
-      <?php commonModel::printRecentMenu();?>
-    </ul>
   </nav>
   <div class="table-col col-right">
     <div id="moreExecution" class="more-execution-show" data-ride="searchList">

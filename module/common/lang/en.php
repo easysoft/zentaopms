@@ -69,7 +69,6 @@ $lang->required     = 'Required';
 $lang->noData       = 'No data.';
 $lang->fullscreen   = 'Fullscreen';
 $lang->retrack      = 'Retrack';
-$lang->recent       = 'Recent';
 $lang->whitelist    = 'Access whitelist';
 
 $lang->actions         = 'Action';
@@ -152,6 +151,7 @@ $lang->custom->common     = 'Custom';
 $lang->extension->common  = 'Extension';
 $lang->company->common    = 'Company';
 $lang->dept->common       = 'Dept';
+$lang->program->list      = 'Program List';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';

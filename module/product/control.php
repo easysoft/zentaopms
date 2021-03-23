@@ -1017,7 +1017,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($browseType = 'noclosed', $orderBy = 'order_asc')
+    public function all($browseType = 'noclosed', $orderBy = 'program_asc')
     {
         if($this->session->moreProductLink) $this->lang->product->mainMenuAction = html::a($this->session->moreProductLink, '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
 

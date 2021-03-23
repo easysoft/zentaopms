@@ -43,8 +43,6 @@ class doc extends control
         $this->from = 'doc';
         setcookie('from', 'doc', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $this->doc->setMenu();
-
         $this->session->set('docList', $this->app->getURI(true));
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 5, 1);
@@ -122,7 +120,6 @@ class doc extends control
         else
         {
             $menuType = (!$type && (in_array($browseType, array_keys($this->lang->doc->fastMenuList)) || $browseType == 'bysearch')) ? $browseType : $type;
-            $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $executionID);
         }
         $this->session->set('docList', $this->app->getURI(true));
 
@@ -346,10 +343,6 @@ class doc extends control
 
             $this->lang->TRActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         }
-        else
-        {
-            $this->doc->setMenu($type, $libID, $moduleID, $lib->product, $lib->execution);
-        }
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->create;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);
@@ -418,10 +411,6 @@ class doc extends control
         {
             $this->project->setMenu($lib->project);
         }
-        else
-        {
-            $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->execution);
-        }
 
         /* Set my menu. */
         if($this->app->openApp == 'my')
@@ -479,11 +468,6 @@ class doc extends control
         elseif($this->from == 'project')
         {
             $this->project->setMenu($lib->project);
-        }
-        else
-        {
-            /* Set menu. */
-            $this->doc->setMenu($type, $doc->lib, $doc->module, $lib->product, $lib->execution);
         }
 
         $this->view->title      = "DOC #$doc->id $doc->title - " . $lib->name;
@@ -736,8 +720,6 @@ class doc extends control
         $this->view->title      = $libName;
         $this->view->position[] = $libName;
 
-        $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID = 0, $executionID = 0, $crumb);
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -819,8 +801,6 @@ class doc extends control
                 $executionID = $objectID;
                 if(!$this->executionID->checkPriv($objectID)) $this->accessDenied();
             }
-
-            $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID, $executionID, $crumb);
         }
 
         /* Load pager. */
@@ -880,17 +860,7 @@ class doc extends control
         if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->project));
 
         $from = $this->app->openApp;
-        if($from == 'doc')
-        {
-            $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->executionCommon) . $this->lang->doc->separator;
-            if($this->productID and $type == 'execution') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
-            $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
-            $productID   = $type == 'product'   ? $objectID : 0;
-            $executionID = $type == 'execution' ? $objectID : 0;
-            $this->doc->setMenu($type, 0, 0, $productID, $executionID, $crumb);
-
-        }
-        elseif($from == 'execution')
+        if($from == 'execution')
         {
             $this->execution->setMenu($objectID);
         }

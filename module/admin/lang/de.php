@@ -9,7 +9,6 @@
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->admin->common        = 'Admin';
 $lang->admin->index         = 'Admin Home';
 $lang->admin->checkDB       = 'Datenbank prüfen';
 $lang->admin->sso           = 'SSO';

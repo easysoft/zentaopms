@@ -1,4 +1,17 @@
 <?php
+$lang->navIcons = array();
+$lang->navIcons['my']        = "<i class='icon icon-menu-my'></i>";
+$lang->navIcons['program']   = "<i class='icon icon-program'></i>";
+$lang->navIcons['product']   = "<i class='icon icon-product'></i>";
+$lang->navIcons['project']   = "<i class='icon icon-project'></i>";
+$lang->navIcons['execution'] = "<i class='icon icon-run'></i>";
+$lang->navIcons['qa']        = "<i class='icon icon-test'></i>";
+$lang->navIcons['devops']    = "<i class='icon icon-devops'></i>";
+$lang->navIcons['doc']       = "<i class='icon icon-doc'></i>";
+$lang->navIcons['report']    = "<i class='icon icon-statistic'></i>";
+$lang->navIcons['system']    = "<i class='icon icon-group'></i>";
+$lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
+
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
 list($productModule, $productMethod)     = explode('-', $config->productLink);
@@ -7,20 +20,20 @@ list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 
 /* Main Navigation. */
 $lang->mainNav = new stdclass();
-$lang->mainNav->my = "<i class='icon icon-menu-my'></i> {$lang->my->shortCommon}|my|index|";
-if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> {$lang->program->common}|$programModule|$programMethod|";
-$lang->mainNav->product = "<i class='icon icon-product'></i> {$lang->product->common}|$productModule|$productMethod|";
-if($config->systemMode == 'new') $lang->mainNav->project = "<i class='icon icon-project'></i> {$lang->project->common}|$projectModule|$projectMethod|";
+$lang->mainNav->my = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
+if($config->systemMode == 'new') $lang->mainNav->program = "{$lang->navIcons['program']} {$lang->program->common}|$programModule|$programMethod|";
+$lang->mainNav->product = "{$lang->navIcons['product']} {$lang->product->common}|$productModule|$productMethod|";
+if($config->systemMode == 'new') $lang->mainNav->project = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
 
-$lang->mainNav->execution = "<i class='icon icon-run'></i> {$lang->execution->common}|$executionModule|$executionMethod|";
-$lang->mainNav->qa        = "<i class='icon icon-test'></i> {$lang->qa->common}|qa|index|";
-$lang->mainNav->devops    = "<i class='icon icon-code1'></i> DevOps|repo|browse|";
-$lang->mainNav->doc       = "<i class='icon icon-doc'></i> {$lang->doc->common}|doc|index|";
-$lang->mainNav->report    = "<i class='icon icon-statistic'></i> {$lang->report->common}|report|productSummary|";
-$lang->mainNav->system    = "<i class='icon icon-group'></i> {$lang->system->common}|my|team|";
-$lang->mainNav->admin     = "<i class='icon icon-cog-outline'></i> {$lang->admin->common}|admin|index|";
+$lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
+$lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
+$lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|browse|";
+$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
+$lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
+$lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
+$lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
-$lang->dividerMenu = ',devops,report,';
+$lang->dividerMenu = ',devops,system,';
 $lang->mainNav->menuOrder[5]  = 'my';
 if($config->systemMode == 'new') $lang->mainNav->menuOrder[10] = 'program';
 $lang->mainNav->menuOrder[15] = 'product';
@@ -28,9 +41,9 @@ $lang->mainNav->menuOrder[20] = 'project';
 $lang->mainNav->menuOrder[21] = 'execution';
 $lang->mainNav->menuOrder[23] = 'qa';
 $lang->mainNav->menuOrder[25] = 'devops';
-$lang->mainNav->menuOrder[30] = 'system';
-$lang->mainNav->menuOrder[35] = 'doc';
-$lang->mainNav->menuOrder[40] = 'report';
+$lang->mainNav->menuOrder[30] = 'doc';
+$lang->mainNav->menuOrder[35] = 'report';
+$lang->mainNav->menuOrder[40] = 'system';
 $lang->mainNav->menuOrder[45] = 'admin';
 
 /* My menu. */
@@ -85,7 +98,7 @@ $lang->my->dividerMenu = ',work,dynamic,';
 
 /* Program menu. */
 $lang->program->homeMenu = new stdclass();
-$lang->program->homeMenu->browse = array('link' => "{$lang->program->common}|program|browse|");
+$lang->program->homeMenu->browse = array('link' => "{$lang->program->list}|program|browse|");
 
 $lang->program->menu = new stdclass();
 $lang->program->menu->product     = array('link' => "{$lang->product->common}|program|product|programID=%s", 'alias' => 'view');
@@ -158,7 +171,7 @@ $lang->scrum->menu->execution = array('link' => "$lang->executionCommon|project|
 $lang->scrum->menu->story     = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory', 'alias' => 'story,track');
 $lang->scrum->menu->doc       = array('link' => "{$lang->doc->common}|doc|objectLibs|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->scrum->menu->qa        = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
-$lang->scrum->menu->devops    = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
+$lang->scrum->menu->devops    = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
 $lang->scrum->menu->build     = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->scrum->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
@@ -200,7 +213,7 @@ $lang->waterfall->menu->doc         = array('link' => "{$lang->doc->common}|doc|
 $lang->waterfall->menu->weekly      = array('link' => "{$lang->project->report}|weekly|index|project=%s", 'subModule' => ',milestone,');
 $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory');
 $lang->waterfall->menu->design      = array('link' => "$lang->design|design|browse|product=0&project=%s");
-$lang->waterfall->menu->repo        = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
+$lang->waterfall->menu->repo        = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
 $lang->waterfall->menu->track       = array('link' => "$lang->track|projectstory|track", 'alias' => 'track');
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
 $lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse", 'subModule' => 'projectrelease');
@@ -251,7 +264,7 @@ $lang->execution->menu->burn     = array('link' => "$lang->burn|execution|burn|e
 $lang->execution->menu->view     = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
 $lang->execution->menu->qa       = array('link' => "{$lang->qa->common}|execution|qa|executionID=%s", 'subModule' => 'bug', 'alias' => 'qa,bug,testcase,testtask,testreport');
-$lang->execution->menu->repo     = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
+$lang->execution->menu->repo     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
 $lang->execution->menu->doc      = array('link' => "{$lang->doc->common}|doc|objectLibs|type=execution&objectID=%s", 'subModule' => 'doc');
 $lang->execution->menu->build    = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
 $lang->execution->menu->release  = array('link' => "{$lang->release->common}|projectrelease|browse|projectID=0&executionID=%s", 'subModule' => 'projectrelease');
@@ -333,7 +346,7 @@ $lang->qa->menu->automation['subMenu']->browse      = array('link' => "{$lang->i
 
 /* DevOps menu. */
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code     = array('link' => "{$lang->devops->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccomment');
+$lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccomment');
 $lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->menu->jenkins  = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
 $lang->devops->menu->maintain = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
@@ -404,7 +417,7 @@ $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,search,admin', 'exclude' => 'admin-index');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin', 'exclude' => 'admin-index');
 
 /* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
@@ -457,7 +470,6 @@ $lang->subject->menu = new stdclass();
 $lang->subject->menu->storyConcept = array('link' => "{$lang->subject->storyConcept}|custom|browsestoryconcept|");
 
 /* System menu. */
-$lang->system = new stdclass();
 $lang->system->menu = new stdclass();
 $lang->system->menu->team     = array('link' => "{$lang->team->common}|my|team|", 'subModule' => 'user');
 $lang->system->menu->dynamic  = array('link' => "$lang->dynamic|company|dynamic|");
@@ -505,9 +517,6 @@ $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->build          = 'project';
-$lang->navGroup->job            = 'project';
-$lang->navGroup->jenkins        = 'project';
-$lang->navGroup->compile        = 'project';
 $lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->execution = 'execution';
@@ -524,8 +533,11 @@ $lang->navGroup->testcase   = 'qa';
 $lang->navGroup->testtask   = 'qa';
 $lang->navGroup->automation = 'qa';
 
-$lang->navGroup->devops = 'devops';
-$lang->navGroup->repo   = 'devops';
+$lang->navGroup->devops  = 'devops';
+$lang->navGroup->repo    = 'devops';
+$lang->navGroup->job     = 'devops';
+$lang->navGroup->jenkins = 'devops';
+$lang->navGroup->compile = 'devops';
 
 $lang->navGroup->company       = 'system';
 $lang->navGroup->sqlbuilder    = 'system';

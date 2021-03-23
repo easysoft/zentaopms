@@ -9,7 +9,6 @@
  * @version     $Id: zh-cn.php 4767 2013-05-05 06:10:13Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->admin->common        = '后台管理';
 $lang->admin->index         = '后台管理首页';
 $lang->admin->checkDB       = '检查数据库';
 $lang->admin->sso           = 'ZDOO集成';

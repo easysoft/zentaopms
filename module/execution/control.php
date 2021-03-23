@@ -2531,28 +2531,25 @@ class execution extends control
     /**
      * Drop menu page.
      *
-     * @param  int    $module
-     * @param  int    $method
-     * @param  int    $extra
+     * @param  int    $executionID
+     * @param  string $module
+     * @param  string $method
+     * @param  mix    $extra
      * @access public
      * @return void
      */
     public function ajaxGetDropMenu($executionID, $module, $method, $extra)
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('order_desc')->fetchAll('id');
-
-        /* Sort execution by project. */
         $orderedExecutions = array();
-        foreach($projects as $projectID => $project)
+
+        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc');
+        foreach($projects as $project)
         {
-            $type       = $project->model == 'scrum' ? 'sprint' : 'stage';
-            $orderBy    = $project->model == 'scrum' ? 'id_desc' : 'id_asc';
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('id')->in($this->app->user->view->sprints)
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('project')->eq($project->id)
-                ->andWhere('type')->eq($type)
-                ->orderBy($orderBy)
+                ->orderBy('id_desc')
                 ->fetchAll('id');
 
             foreach($executions as $execution)
@@ -2570,41 +2567,6 @@ class execution extends control
         $this->view->projects    = $this->project->getPairsByModel();
         $this->view->executions  = $orderedExecutions;
         $this->display();
-    }
-
-    /**
-     * Get recent executions.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetRecentExecutions()
-    {
-        $allExecutions = $this->execution->getRecentExecutions();
-        if(!empty($allExecutions))
-        {
-            foreach($allExecutions as $type => $executionList)
-            {
-                echo '<div class="heading">'. $this->lang->execution->$type . '</div>';
-                $color          = $type == 'recent' ? 'text-brown' : '';
-                $executions     = $allExecutions[$type];
-                $executionsName = array();
-                foreach($executions as $execution) $executionsName[] = $execution->name;
-                $executionsPinYin = common::convert2Pinyin($executionsName);
-                foreach($executions as $execution)
-                {
-                    $link = helper::createLink('execution', 'task', 'executionID=' . $execution->id, '', false, $execution->project);
-                    $execution->code = empty($execution->code) ? $execution->name : $execution->code;
-                    $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
-                    $class   = "class='search-list-item $color' title='$execution->name' $dataKey";
-                    echo html::a($link, '<i class="icon icon-' . $this->lang->icons[$execution->type] . '"></i> ' . $execution->name, '', $class);
-                }
-            }
-        }
-        else
-        {
-            echo '<div class="table-empty-tip">' . $this->lang->noData . '</div>';
-        }
     }
 
     /**
@@ -2805,7 +2767,7 @@ class execution extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->execution->common;
+        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->executionCommon;
 
         $this->display();
     }
