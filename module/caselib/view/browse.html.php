@@ -19,6 +19,11 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
 js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
 js::set('flow',          $config->global->flow);
 ?>
+<style>
+.btn-group a i.icon-plus {font-size: 16px;}
+.btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
+.btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+</style>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
     <div class="title">
@@ -55,9 +60,18 @@ js::set('flow',          $config->global->flow);
      <?php common::printLink('caselib', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->caselib->exportTemplet, '', "class='btn btn-link export' data-width='35%'");?>
      <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i>" . $lang->testcase->fileImport, '', "class='btn btn-link export'");?>
     </div>
-    <?php $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);?>
-    <?php common::printLink('caselib', 'batchCreateCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");?>
-    <?php common::printLink('caselib', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
+    <div class='btn-group dropdown'>
+      <?php
+      $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);
+      $actionLink = $this->createLink('caselib', 'createCase', $params);
+      echo html::a($actionLink, "<i class='icon icon-plus'></i> {$lang->testcase->create}", '', "class='btn btn-primary'");
+      ?>
+      <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+      <ul class='dropdown-menu'>
+        <li><?php echo html::a($actionLink, $lang->testcase->create);?></li>
+        <li><?php echo html::a($this->createLink('caselib', 'batchCreateCase', $params), $lang->testcase->batchCreate);?></li>
+      </ul>
+    </div>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
