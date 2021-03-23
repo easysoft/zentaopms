@@ -585,23 +585,10 @@ class commonModel extends model
         if(!$openApp) return;
         $icon = zget($lang->navIcons, $openApp, '');
         
-        $module = $openApp;
-        $method = 'index';
+        $nav = $lang->mainNav->$openApp;
+        list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
 
-        if($openApp == 'devops')
-        {
-            $module = 'repo';
-            $method = 'browse';
-        }
-        if($openApp == 'program' or $openApp == 'project') $method = 'browse';
-        if($openApp == 'product') $method = 'all';
-        if($openApp == 'system')
-        {
-            $module = 'my';
-            $method = 'team';
-        }
-
-        $link = $openApp != 'execution' ? helper::createLink($module, $method) : '';
+        $link = $openApp != 'execution' ? helper::createLink($currentModule, $currentMethod) : '';
         $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='btn'") : "$icon {$lang->$openApp->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
