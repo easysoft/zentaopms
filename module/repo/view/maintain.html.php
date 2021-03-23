@@ -31,11 +31,11 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($repoList as $id => $repo):?>
+        <?php foreach($repoList as $repo):?>
         <tr>
           <td class='text-center'><?php echo $repo->id; ?></td>
           <td class='text'><?php echo zget($lang->repo->scmList, $repo->SCM); ?></td>
-          <td class='text' title='<?php echo $repo->name; ?>'><?php echo html::a($this->createLink('repo', 'browse', "repoID={$repo->id}"), $repo->name);?></td>
+          <td class='text' title='<?php echo $repo->name; ?>'><?php echo html::a($this->createLink('repo', 'browse', "repoID={$repo->id}&objectID=$objectID"), $repo->name);?></td>
           <td class='text'>
           <?php
           $productList = explode(',', str_replace(' ', '', $repo->product));
@@ -48,8 +48,8 @@
           <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
           <td class='text-left c-actions'>
             <?php
-            common::printIcon('repo', 'edit', "repoID=$repo->id", '', 'list',  'edit');
-            if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$repo->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
+            common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list',  'edit');
+            if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$repo->id&objectID=$objectID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
             ?>
           </td>
         </tr>
