@@ -23,10 +23,13 @@ class caselibModel extends model
      */
     public function setLibMenu($libraries, $libID, $moduleID = 0)
     {
+        /* Set case lib menu. */
+        $this->loadModel('qa')->setMenu($this->loadModel('product')->getPairs(), $this->session->product);
+
         $currentLibName = zget($libraries, $libID, '');
 
-        $isMobile       = $this->app->viewType == 'mhtml';
-        $selectHtml     = '';
+        $isMobile   = $this->app->viewType == 'mhtml';
+        $selectHtml = '';
         if(!empty($libraries))
         {
             if($isMobile)
