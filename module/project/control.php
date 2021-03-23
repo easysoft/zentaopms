@@ -748,7 +748,10 @@ class project extends control
      * Project case list.
      *
      * @param  int    $projectID
-     * @param  string $type
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $browseType
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -756,34 +759,9 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testcase($projectID = 0, $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($projectID = 0, $productID = 0, $branch = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->loadModel('testcase');
-        $this->loadModel('testtask');
-
-        $this->project->setMenu($projectID);
-
-        $products  = $this->project->getProducts($projectID);
-        $productID = key($products);    // Get the first product for creating testcase.
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        $cases = $this->loadModel('testcase')->getProjectCases($projectID, $orderBy, $pager, $type);
-        $cases = $this->testcase->appendData($cases, 'run');
-
-        $this->view->title       = $this->lang->execution->testcase;
-        $this->view->projectID   = $projectID;
-        $this->view->productID   = $productID;
-        $this->view->cases       = $cases;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->type        = $type;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->project     = $this->project->getById($projectID);
-
-        $this->display();
+        echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal=$orderBy&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }
 
     /**

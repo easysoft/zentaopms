@@ -141,8 +141,15 @@ class testtask extends control
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
-        $this->loadModel('qa')->setMenu($this->products, $productID);
-        $this->app->rawModule = 'testcase';
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID);
+            $this->app->rawModule = 'testcase';
+        }
 
         /* Load pager. */
         if($browseType == 'newest') $recPerPage = '10';

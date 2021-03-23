@@ -202,6 +202,8 @@ class testcaseModel extends model
 
             $this->loadModel('score')->create('testcase', 'create', $caseID);
             $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
+            if($this->app->openApp == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->PRJ);
+            if($this->app->openApp == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
     }
@@ -251,7 +253,8 @@ class testcaseModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t3.story=t2.story')
             ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story=t4.id')
-            ->where('t2.product')->eq((int)$productID)
+            ->where('1=1')
+            ->beginIF(!empty((int)$productID))->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF($this->app->openApp == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->beginIF($branch)->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
@@ -411,7 +414,7 @@ class testcaseModel extends model
         $cases = array();
         if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait')
         {
-            if($group == 'project')
+            if($this->app->openApp == 'project')
             {
                 $cases = $this->getModuleProjectCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
             }
@@ -423,12 +426,14 @@ class testcaseModel extends model
         /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
         {
-            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id = t3.case')
                 ->where("t2.status = 'active'")
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
-                ->andWhere('t1.product')->eq($productID)
-                ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
+                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+                ->beginIF($this->app->openApp == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
                 ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
@@ -1353,9 +1358,18 @@ class testcaseModel extends model
      */
     public function buildSearchForm($productID, $products, $queryID, $actionURL)
     {
-        $this->config->testcase->search['params']['product']['values'] = array($productID => $products[$productID], 'all' => $this->lang->testcase->allProduct);
-        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
-        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+        $product = ($this->app->openApp == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
+        $this->config->testcase->search['params']['product']['values'] = $product + array('all' => $this->lang->testcase->allProduct);
+
+        $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
+        if(!$productID)
+        {
+            $module = array();
+            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
+        }
+        $this->config->testcase->search['params']['module']['values'] = $module;
+
+        $this->config->testcase->search['params']['lib']['values'] = $this->loadModel('caselib')->getLibraries();
 
         if($this->session->currentProductType == 'normal')
         {
@@ -1429,7 +1443,7 @@ class testcaseModel extends model
                 if($canBatchAction)
                 {
                     $disabled = $canBeChanged ? '' : 'disabled';
-                    echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id));
+                    echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id), '', "data-app='{$this->app->openApp}'");
                 }
                 else
                 {
@@ -1444,7 +1458,7 @@ class testcaseModel extends model
             case 'title':
                 if($case->branch) echo "<span class='label label-info label-outline'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
-                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]") : html::a($caseLink, $case->title, null, "style='color: $case->color'")) : "<span style='color: $case->color'>$case->title</span>";
+                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->openApp}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]", '', "data-app='{$this->app->openApp}'") : html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->openApp}'")) : "<span style='color: $case->color'>$case->title</span>";
                 break;
             case 'branch':
                 echo $branches[$case->branch];
@@ -1534,7 +1548,7 @@ class testcaseModel extends model
                     }
 
                     common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'iframe', true, "data-width='95%'");
-                    common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'run', '', 'runCase iframe', false, "data-width='95%'");
+                    common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
                     common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                     if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
                     common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
@@ -1678,7 +1692,6 @@ class testcaseModel extends model
         }
     }
 
-
     /**
      * Deal with the relationship between the case and project when edit the case.
      *
@@ -1707,8 +1720,10 @@ class testcaseModel extends model
         {
             /* If the new related story isn't linked the project, unlink the case. */
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($oldCase->story)->fetchAll('project');
+
+            $projectIdList = array_keys($projects);
             $this->dao->delete()->from(TABLE_PROJECTCASE)
-                ->where('project')->in(array_keys($projects))
+                ->where('project')->in()
                 ->andWhere('`case`')->eq($oldCase->id)
                 ->exec();
 

@@ -1458,9 +1458,16 @@ class story extends control
         $products = $this->product->getPairs();
 
         $this->loadModel('testcase');
-        $this->app->rawModule = 'testcase';
-        $this->loadModel('qa')->setMenu($products, $productID);
-        foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->app->rawModule = 'testcase';
+            $this->loadModel('qa')->setMenu($products, $productID);
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+        }
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
