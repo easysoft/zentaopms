@@ -114,11 +114,11 @@
         {
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
         }
-        if(moduleName === 'user')    
+        if(moduleName === 'user')
         {
             if(['todo', 'task', 'story', 'bug', 'testtask', 'testcase', 'execution', 'dynamic', 'profile', 'view'].includes(methodLowerCase)) return 'system';
         }
-        if(moduleName === 'my')    
+        if(moduleName === 'my')
         {
             if(['team'].includes(methodLowerCase)) return 'system';
         }
@@ -219,6 +219,9 @@
                 .attr('data-app', appCode)
                 .attr('class', 'show-in-app')
                 .html(app.text);
+            var barCount = $('#bars li').length;
+
+            if(barCount) $bar = $('<li class="divider"></li>').appendTo($bars);
             $bar = $('<li></li>').attr('data-app', appCode)
                 .attr('id', 'appBar-' + appCode)
                 .append($link)

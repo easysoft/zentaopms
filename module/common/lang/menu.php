@@ -20,7 +20,7 @@ $lang->mainNav->report    = "<i class='icon icon-statistic'></i> {$lang->report-
 $lang->mainNav->system    = "<i class='icon icon-group'></i> {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "<i class='icon icon-cog-outline'></i> {$lang->admin->common}|admin|index|";
 
-$lang->dividerMenu = ',devops,report,';
+$lang->dividerMenu = ',devops,system,';
 $lang->mainNav->menuOrder[5]  = 'my';
 if($config->systemMode == 'new') $lang->mainNav->menuOrder[10] = 'program';
 $lang->mainNav->menuOrder[15] = 'product';
@@ -28,9 +28,9 @@ $lang->mainNav->menuOrder[20] = 'project';
 $lang->mainNav->menuOrder[21] = 'execution';
 $lang->mainNav->menuOrder[23] = 'qa';
 $lang->mainNav->menuOrder[25] = 'devops';
-$lang->mainNav->menuOrder[30] = 'system';
-$lang->mainNav->menuOrder[35] = 'doc';
-$lang->mainNav->menuOrder[40] = 'report';
+$lang->mainNav->menuOrder[30] = 'doc';
+$lang->mainNav->menuOrder[35] = 'report';
+$lang->mainNav->menuOrder[40] = 'system';
 $lang->mainNav->menuOrder[45] = 'admin';
 
 /* My menu. */
@@ -85,7 +85,7 @@ $lang->my->dividerMenu = ',work,dynamic,';
 
 /* Program menu. */
 $lang->program->homeMenu = new stdclass();
-$lang->program->homeMenu->browse = array('link' => "{$lang->program->common}|program|browse|");
+$lang->program->homeMenu->browse = array('link' => "{$lang->program->list}|program|browse|");
 
 $lang->program->menu = new stdclass();
 $lang->program->menu->product     = array('link' => "{$lang->product->common}|program|product|programID=%s", 'alias' => 'view');
@@ -404,7 +404,7 @@ $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,search,admin', 'exclude' => 'admin-index');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin', 'exclude' => 'admin-index');
 
 /* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';

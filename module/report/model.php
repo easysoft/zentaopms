@@ -13,6 +13,10 @@
 <?php
 class reportModel extends model
 {
+    public function setMenu()
+    {
+        $this->lang->switcherMenu = "<div class='btn-group header-btn'>" . html::a(helper::createLink('report', 'productsummary'), "<i class='icon icon-statistic'></i> {$this->lang->report->common}", '', "class='btn'") . '</div>';
+    }
     /**
      * Compute percent of every item.
      *

@@ -122,7 +122,7 @@ class doc extends control
         else
         {
             $menuType = (!$type && (in_array($browseType, array_keys($this->lang->doc->fastMenuList)) || $browseType == 'bysearch')) ? $browseType : $type;
-            $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $executionID);
+            $this->doc->setMenu();
         }
         $this->session->set('docList', $this->app->getURI(true));
 
@@ -348,7 +348,7 @@ class doc extends control
         }
         else
         {
-            $this->doc->setMenu($type, $libID, $moduleID, $lib->product, $lib->execution);
+            $this->doc->setMenu();
         }
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->create;
@@ -420,7 +420,7 @@ class doc extends control
         }
         else
         {
-            $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->execution);
+            $this->doc->setMenu();
         }
 
         /* Set my menu. */
@@ -483,7 +483,7 @@ class doc extends control
         else
         {
             /* Set menu. */
-            $this->doc->setMenu($type, $doc->lib, $doc->module, $lib->product, $lib->execution);
+            $this->doc->setMenu();
         }
 
         $this->view->title      = "DOC #$doc->id $doc->title - " . $lib->name;
@@ -736,7 +736,7 @@ class doc extends control
         $this->view->title      = $libName;
         $this->view->position[] = $libName;
 
-        $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID = 0, $executionID = 0, $crumb);
+        $this->doc->setMenu();
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -820,7 +820,7 @@ class doc extends control
                 if(!$this->executionID->checkPriv($objectID)) $this->accessDenied();
             }
 
-            $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID, $executionID, $crumb);
+            $this->doc->setMenu();
         }
 
         /* Load pager. */
@@ -887,7 +887,7 @@ class doc extends control
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
             $productID   = $type == 'product'   ? $objectID : 0;
             $executionID = $type == 'execution' ? $objectID : 0;
-            $this->doc->setMenu($type, 0, 0, $productID, $executionID, $crumb);
+            $this->doc->setMenu();
 
         }
         elseif($from == 'execution')

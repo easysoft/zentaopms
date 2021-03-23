@@ -9,7 +9,6 @@
  * @version  $Id: vi.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->report->common     = 'Báo cáo';
 $lang->report->index      = 'Trang báo cáo';
 $lang->report->list       = 'Báo cáo';
 $lang->report->item       = 'Hạng mục';

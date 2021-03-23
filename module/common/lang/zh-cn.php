@@ -69,7 +69,6 @@ $lang->required     = '必填';
 $lang->noData       = '暂无';
 $lang->fullscreen   = '全屏';
 $lang->retrack      = '收起';
-$lang->recent       = '近期';
 $lang->whitelist    = '访问白名单';
 
 $lang->actions         = '操作';
@@ -152,6 +151,7 @@ $lang->custom->common     = '自定义';
 $lang->extension->common  = '插件';
 $lang->company->common    = '公司';
 $lang->dept->common       = '部门';
+$lang->program->list      = '项目集列表';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';

@@ -38,7 +38,8 @@ class qaModel extends model
             $productIndex .= $selectHtml;
         }
 
-        if($this->app->rawModule != 'qa') $this->lang->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
+        $this->lang->switcherMenu = "<div class='btn-group header-btn'>" . html::a(helper::createLink('qa', 'index'), "<i class='icon icon-test'></i> {$this->lang->qa->common}", '', "class='btn'") . '</div>';
+        if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu .= $this->product->getSwitcher($productID, $extra, $branch);
         common::setMenuVars('qa', $productID);
     }
 

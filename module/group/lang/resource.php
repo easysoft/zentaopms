@@ -209,6 +209,10 @@ if($config->systemMode == 'new')
     $lang->resource->project->view              = 'view';
     $lang->resource->project->dynamic           = 'dynamic';
     $lang->resource->project->build             = 'build';
+    $lang->resource->project->qa                = 'qa';
+    $lang->resource->project->bug               = 'bug';
+    $lang->resource->project->testcase          = 'testcase';
+    $lang->resource->project->testtask          = 'testtask';
 
     $lang->project->methodOrder[0]   = 'index';
     $lang->project->methodOrder[5]   = 'browse';
@@ -238,6 +242,10 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[125] = 'view';
     $lang->project->methodOrder[130] = 'dynamic';
     $lang->project->methodOrder[135] = 'build';
+    $lang->project->methodOrder[140] = 'qa';
+    $lang->project->methodOrder[145] = 'bug';
+    $lang->project->methodOrder[150] = 'testcase';
+    $lang->project->methodOrder[155] = 'testtask';
 
     /* Personnel . */
     $lang->resource->personnel = new stdclass();
@@ -509,18 +517,18 @@ $lang->release->methodOrder[70] = 'changeStatus';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
-$lang->resource->execution->index             = 'index';
+//$lang->resource->execution->index             = 'index';
 $lang->resource->execution->view              = 'view';
 $lang->resource->execution->browse            = 'browse';
 $lang->resource->execution->create            = 'create';
-$lang->resource->execution->edit              = 'edit';
-$lang->resource->execution->batchedit         = 'batchEdit';
+$lang->resource->execution->edit              = 'editAB';
+$lang->resource->execution->batchedit         = 'batchEditAB';
 $lang->resource->execution->start             = 'startAction';
 $lang->resource->execution->activate          = 'activateAction';
 $lang->resource->execution->putoff            = 'delayAction';
 $lang->resource->execution->suspend           = 'suspendAction';
 $lang->resource->execution->close             = 'closeAction';
-$lang->resource->execution->delete            = 'delete';
+$lang->resource->execution->delete            = 'deleteAB';
 $lang->resource->execution->task              = 'task';
 $lang->resource->execution->grouptask         = 'groupTask';
 $lang->resource->execution->importtask        = 'importTask';
@@ -553,10 +561,10 @@ $lang->resource->execution->printKanban       = 'printKanbanAction';
 $lang->resource->execution->tree              = 'treeAction';
 $lang->resource->execution->treeTask          = 'treeOnlyTask';
 $lang->resource->execution->treeStory         = 'treeOnlyStory';
-$lang->resource->execution->all               = 'allExecutions';
+//$lang->resource->execution->all               = 'allExecutionAB';
 $lang->resource->execution->kanbanHideCols    = 'kanbanHideCols';
 $lang->resource->execution->kanbanColsColor   = 'kanbanColsColor';
-$lang->resource->execution->export            = 'exportAction';
+//$lang->resource->execution->export            = 'exportAction';
 $lang->resource->execution->storyKanban       = 'storyKanban';
 $lang->resource->execution->storySort         = 'storySort';
 $lang->resource->execution->whitelist         = 'whitelist';
@@ -564,7 +572,7 @@ $lang->resource->execution->addWhitelist      = 'addWhitelist';
 $lang->resource->execution->unbindWhitelist    = 'unbindWhitelist';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
-$lang->execution->methodOrder[0]   = 'index';
+//$lang->execution->methodOrder[0]   = 'index';
 //if($config->systemMode == 'classic') $lang->project->methodOrder[1] = 'list';
 $lang->execution->methodOrder[5]   = 'view';
 $lang->execution->methodOrder[10]  = 'browse';
@@ -610,8 +618,8 @@ $lang->execution->methodOrder[205] = 'kanbanColsColor';
 $lang->execution->methodOrder[210] = 'tree';
 $lang->execution->methodOrder[215] = 'treeTask';
 $lang->execution->methodOrder[220] = 'treeStory';
-$lang->execution->methodOrder[225] = 'all';
-$lang->execution->methodOrder[230] = 'export';
+//$lang->execution->methodOrder[225] = 'all';
+//$lang->execution->methodOrder[230] = 'export';
 $lang->execution->methodOrder[235] = 'storyKanban';
 $lang->execution->methodOrder[240] = 'storySort';
 $lang->execution->methodOrder[245] = 'whitelist';
@@ -1213,14 +1221,14 @@ $lang->tree->methodOrder[30] = 'delete';
 /* Report. */
 $lang->resource->report = new stdclass();
 $lang->resource->report->index              = 'index';
-$lang->resource->report->executionDeviation = 'executionDeviation';
+$lang->resource->report->projectDeviation   = 'projectDeviation';
 $lang->resource->report->productSummary     = 'productSummary';
 $lang->resource->report->bugCreate          = 'bugCreate';
 $lang->resource->report->bugAssign          = 'bugAssign';
 $lang->resource->report->workload           = 'workload';
 
 $lang->report->methodOrder[0]  = 'index';
-$lang->report->methodOrder[5]  = 'executionDeviation';
+$lang->report->methodOrder[5]  = 'projectDeviation';
 $lang->report->methodOrder[10] = 'productSummary';
 $lang->report->methodOrder[15] = 'bugCreate';
 $lang->report->methodOrder[20] = 'workload';

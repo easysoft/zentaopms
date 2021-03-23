@@ -2567,41 +2567,6 @@ class execution extends control
     }
 
     /**
-     * Get recent executions.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetRecentExecutions()
-    {
-        $allExecutions = $this->execution->getRecentExecutions();
-        if(!empty($allExecutions))
-        {
-            foreach($allExecutions as $type => $executionList)
-            {
-                echo '<div class="heading">'. $this->lang->execution->$type . '</div>';
-                $color          = $type == 'recent' ? 'text-brown' : '';
-                $executions     = $allExecutions[$type];
-                $executionsName = array();
-                foreach($executions as $execution) $executionsName[] = $execution->name;
-                $executionsPinYin = common::convert2Pinyin($executionsName);
-                foreach($executions as $execution)
-                {
-                    $link = helper::createLink('execution', 'task', 'executionID=' . $execution->id, '', false, $execution->project);
-                    $execution->code = empty($execution->code) ? $execution->name : $execution->code;
-                    $dataKey = 'date-key="' . zget($executionsPinYin, $execution->name, $execution->name) . '"';
-                    $class   = "class='search-list-item $color' title='$execution->name' $dataKey";
-                    echo html::a($link, '<i class="icon icon-' . $this->lang->icons[$execution->type] . '"></i> ' . $execution->name, '', $class);
-                }
-            }
-        }
-        else
-        {
-            echo '<div class="table-empty-tip">' . $this->lang->noData . '</div>';
-        }
-    }
-
-    /**
      * Update order.
      *
      * @access public
@@ -2799,7 +2764,7 @@ class execution extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->execution->common;
+        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->executionCommon;
 
         $this->display();
     }
