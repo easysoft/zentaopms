@@ -569,7 +569,6 @@ class testcase extends control
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
             $this->caselib->setLibMenu($libraries, $case->lib);
-            $this->lang->testcase->menu = $this->lang->caselib->menu;
 
             $this->view->title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);
@@ -676,7 +675,6 @@ class testcase extends control
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
             $this->caselib->setLibMenu($libraries, $case->lib);
-            $this->lang->testcase->menu = $this->lang->caselib->menu;
 
             $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);

@@ -76,8 +76,8 @@ class testtask extends control
     public function browse($productID = 0, $branch = '', $type = 'local,totalStatus', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $beginTime = 0, $endTime = 0)
     {
         /* Save session. */
-        $this->session->set('testtaskList', $this->app->getURI(true));
-        $this->session->set('buildList', $this->app->getURI(true));
+        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $scopeAndStatus = explode(',', $type);
         $this->session->set('testTaskVersionScope', $scopeAndStatus[0]);
@@ -1211,7 +1211,9 @@ class testtask extends control
             die(js::locate($this->createLink('testtask', 'unitCases', "taskID=$taskID"), 'parent'));
         }
 
+        /* Set menu. */
         $this->loadModel('qa')->setMenu($this->products, $productID);
+        $this->app->rawModule = 'testcase';
 
         $this->app->loadLang('job');
 

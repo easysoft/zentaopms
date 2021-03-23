@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php $browseLink = $this->session->caseList ? $this->session->caseList : $this->createLink('caselib', 'browse', "libID=$lib->id");?>
+    <?php $browseLink = $this->session->caselibList ? $this->session->caselibList : $this->createLink('caselib', 'browse', "libID=$lib->id");?>
     <?php common::printBack($browseLink, 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>

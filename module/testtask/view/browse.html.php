@@ -89,7 +89,7 @@ $status = $this->session->testTaskVersionStatus;
       <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
       <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
       <td class='c-name' title="<?php echo $task->executionName?>"><?php echo $task->executionName?></td>
-      <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', "data-group={$lang->navGroup->testtask}");?></td>
+      <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', "data-group=execution");?></td>
       <td title="<?php echo zget($users, $task->owner);?>"><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
