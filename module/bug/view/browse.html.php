@@ -128,7 +128,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       }
     ?>
     <div class='btn-group dropdown'>
-      <?php echo html::a($createBugLink, "<i class='icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'");?>
+      <?php echo html::a($createBugLink, "<i class='icon-plus'></i> {$lang->bug->create}", '', "class='btn btn-primary'");?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu'>
         <li><?php echo html::a($createBugLink, $lang->bug->create);?></li>
