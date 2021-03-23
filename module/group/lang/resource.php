@@ -209,6 +209,10 @@ if($config->systemMode == 'new')
     $lang->resource->project->view              = 'view';
     $lang->resource->project->dynamic           = 'dynamic';
     $lang->resource->project->build             = 'build';
+    $lang->resource->project->qa                = 'qa';
+    $lang->resource->project->bug               = 'bug';
+    $lang->resource->project->testcase          = 'testcase';
+    $lang->resource->project->testtask          = 'testtask';
 
     $lang->project->methodOrder[0]   = 'index';
     $lang->project->methodOrder[5]   = 'browse';
@@ -238,6 +242,10 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[125] = 'view';
     $lang->project->methodOrder[130] = 'dynamic';
     $lang->project->methodOrder[135] = 'build';
+    $lang->project->methodOrder[140] = 'qa';
+    $lang->project->methodOrder[145] = 'bug';
+    $lang->project->methodOrder[150] = 'testcase';
+    $lang->project->methodOrder[155] = 'testtask';
 
     /* Personnel . */
     $lang->resource->personnel = new stdclass();
