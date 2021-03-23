@@ -318,6 +318,16 @@
         var app = openedApps[appCode];
         if(!app) return;
 
+        var appKeys = Object.keys(openedApps)
+        if(appKeys[0] == appCode)
+        {
+            $("#bars li.divider:first").remove();
+        }
+        else
+        {
+            $("#appBar-" + appCode).prev().remove();
+        }
+
         app.closed = true;
         hideApp(appCode);
         app.$app.remove();
