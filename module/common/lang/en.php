@@ -134,6 +134,7 @@ $lang->execution->common  = $config->systemMode == 'new' ? 'Execution' : $lang->
 $lang->qa->common         = 'QA';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = 'Doc';
+$lang->repo->common       = 'Code';
 $lang->report->common     = 'Statistic';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
@@ -219,8 +220,7 @@ $lang->report->annual = 'Annual Summary';
 $lang->report->notice = new stdclass();
 $lang->report->notice->help = 'Note: The report is generated on the results of browsing the list. Click, e.g. AssignedToMe, then click Create Report to generate a report based on AssignedToMe list.';
 
-$lang->testcase->feature   = 'Functional Test';
-$lang->testcase->unit      = 'Unit Test';
+$lang->testcase->case      = 'Test Case';
 $lang->testcase->testsuite = 'Test Suite';
 $lang->testcase->caselib   = 'Case Library';
 
