@@ -417,7 +417,7 @@ $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin', 'exclude' => 'admin-index');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search', 'exclude' => 'admin-index');
 
 /* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
@@ -486,6 +486,7 @@ $lang->navGroup = new stdclass();
 $lang->navGroup->my     = 'my';
 $lang->navGroup->effort = 'my';
 $lang->navGroup->score  = 'my';
+$lang->navGroup->todo   = 'my';
 
 $lang->navGroup->program   = 'program';
 $lang->navGroup->personnel = 'program';
@@ -543,7 +544,6 @@ $lang->navGroup->company       = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';
-$lang->navGroup->todo          = 'system';
 $lang->navGroup->ldap          = 'system';
 $lang->navGroup->process       = 'system';
 $lang->navGroup->activity      = 'system';
@@ -576,4 +576,3 @@ $lang->navGroup->dev       = 'admin';
 $lang->navGroup->entry     = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';
-$lang->navGroup->search    = 'admin';

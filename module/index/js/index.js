@@ -44,6 +44,20 @@
 
             if(!defaultApp) defaultApp = item.code;
         });
+
+        appsMap['search'] =
+        {
+            active: false,
+            code: "search",
+            group: "search",
+            icon: "icon-search",
+            methodName: "index",
+            moduleName: "search",
+            text: searchCommon,
+            title: "<i class='icon icon-search'></i> " + searchCommon,
+            url: "/index.php?m=search&f=index",
+            vars: ""
+        };
     }
 
     /**
@@ -135,6 +149,7 @@
                 return 'project';
             }
         }
+        if(moduleName === 'search' && methodLowerCase === 'buildindex') return 'admin';
 
         code = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return appsMap[code] ? code : '';
@@ -489,54 +504,8 @@
             var $menu = $('#userNav .dropdown-menu').addClass('hidden');
             setTimeout(function(){$menu.removeClass('hidden')}, 200);
         });
-
-        /* Hide execution list on mouseleave or click */
-        $(document).click(function()
-        {
-            $("#moreExecution").hide();
-        });
-
-        $("#recentMenu").click(function(event)
-        {
-            $('#globalSearchInput').click();
-            event.stopPropagation();
-            getExecutions();
-        });
-
-        $("#moreExecution").click(function(event)
-        {
-            event.stopPropagation();
-        });
     });
 }());
-
-/* Get recent executions. */
-function getExecutions()
-{
-    var $moreExecution = $('#moreExecution').toggle();
-    if(!$moreExecution.is(':hidden'))
-    {
-        if($('body').hasClass('menu-hide'))
-        {
-            $('#moreExecution').addClass('more-execution-hide');
-        }
-        else
-        {
-            $('#moreExecution').removeClass('more-execution-hide');
-        }
-
-        $.ajax(
-        {
-            url: createLink('execution', 'ajaxGetRecentExecutions'),
-            dataType: 'html',
-            type: 'post',
-            success: function(data)
-            {
-                $('#executionList').html(data);
-            }
-        })
-    }
-}
 
 $.extend(
 {
@@ -550,16 +519,19 @@ $.extend(
             var reg = /[^0-9]/;
             if(reg.test(objectValue) || objectType == 'all')
             {
-                location.href = createLink('search', 'index') + (config.requestType == 'PATH_INFO' ? '?' : '&') + 'words=' + objectValue;
+                var searchLink = createLink('search', 'index') + (config.requestType == 'PATH_INFO' ? '?' : '&') + 'words=' + objectValue;
             }
             else
             {
                 var types = objectType.split('-');
                 var searchModule = types[0];
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
-
-                location.href = createLink(searchModule, searchMethod, "id=" + objectValue);
+                var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
             }
+
+            $.post(createLink('index', 'ajaxClearObjectSession'), {objectType: objectType});
+            $.apps.open(searchLink);
+            $('#globalSearchInput').click();
         }
     }
 });

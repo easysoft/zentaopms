@@ -69,7 +69,7 @@ js::set('defaultOpen', $open);
             <?php echo common::printSearchBox();?>
           </div>
           <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example" id="searchboxExample">
-            <input id="globalSearchInput" type="search" onclick="this.value=''" onkeydown="if(event.keyCode==13) $.gotoObject();" class="form-control search-input" placeholder="<?php echo $lang->index->search;?>" autocomplete="off">
+            <input id="globalSearchInput" type="search" onclick="this.value=''" onkeydown="if(event.keyCode==13) $.gotoObject();" class="form-control search-input" placeholder="<?php echo $lang->index->pleaseInput;?>" autocomplete="off">
           </div>
           <span class="input-group-btn" onclick="javascript:$.gotoObject();">
             <button id="globalSearchButton" class="btn btn-secondary" type="button"><i class="icon icon-search"></i></button>
@@ -118,4 +118,5 @@ js::set('defaultOpen', $open);
 </div>
 <?php js::set('searchAB', $lang->searchAB);?>
 <?php js::set('searchObjectList', ',' . implode(',', array_keys($lang->searchObjects)) . ',');?>
+<?php js::set('searchCommon', $lang->index->search);?>
 <?php include '../../common/view/footer.lite.html.php';?>

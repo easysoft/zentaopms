@@ -52,7 +52,7 @@
         <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
         <td><?php echo $lang->todo->typeList[$todo->type];?></td>
         <td><span class='<?php echo 'pri' . zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?></span></td>
-        <td class='text-left'><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id", '', true), $todo->name, '', "class='iframe'");?></td>
+        <td class='text-left'><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=company", '', true), $todo->name, '', "class='iframe'");?></td>
         <td><?php echo $todo->begin;?></td>
         <td><?php echo $todo->end;?></td>
         <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>

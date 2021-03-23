@@ -543,8 +543,6 @@ class searchModel extends model
                 if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
 
                 if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
-                if($module == 'execution'  and common::haspriv('project', 'view'))     $allowedobject[] = $objectType;
-                if($module == 'project'    and common::haspriv('program', 'index'))    $allowedobject[] = $objectType;
                 if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
             }
         }
@@ -578,7 +576,7 @@ class searchModel extends model
             {
                 if(!isset($this->config->objectTables[$record->objectType])) continue;
                 $table       = $this->config->objectTables[$record->objectType];
-                $projectID = $this->dao->select('project')->from($table)->where('id')->eq($record->objectID)->fetch('project');
+                $projectID   = $this->dao->select('project')->from($table)->where('id')->eq($record->objectID)->fetch('project');
                 $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $projectID);
             }
             elseif($module == 'issue')
@@ -587,21 +585,17 @@ class searchModel extends model
                 $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
                 $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
             }
+            elseif($module == 'execution')
+            {
+                $execution         = $this->dao->select('id,type,project')->from(TABLE_EXECUTION)->where('id')->eq($record->objectID)->fetch();
+                $record->url       = helper::createLink('execution', $method, "id={$record->objectID}", '', false, $execution->project);
+                $record->extraType = $execution->type;
+            }
             elseif($module == 'story')
             {
                 $story             = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
                 $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
                 $record->extraType = $story->type;
-            }
-            elseif($module == 'execution')
-            {
-                $execution         = $this->dao->select('id,type,project')->from(TABLE_PROJECT)->where('id')->eq($record->objectID)->fetch();
-                $record->url       = helper::createLink('execution', $method, "id={$record->objectID}", '', false, $execution->project);
-                $record->extraType = $execution->type;
-            }
-            elseif($module == 'project')
-            {
-                $record->url = helper::createLink('project', 'index', "id={$record->objectID}", '', false, 0, true);
             }
             else
             {

@@ -488,8 +488,10 @@ class project extends control
      */
     public function view($projectID = 0)
     {
+        $project = $this->project->getById($projectID);
+        if(empty($project) || strpos('scrum,waterfall', $project->model) === false) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $this->project->setMenu($projectID);
-        $this->app->loadLang('bug');
 
         $this->app->session->set('projectBrowse', $this->app->getURI(true));
 
@@ -507,7 +509,7 @@ class project extends control
         $this->view->title        = $this->lang->project->view;
         $this->view->position     = $this->lang->project->view;
         $this->view->projectID    = $projectID;
-        $this->view->project      = $this->project->getByID($projectID);
+        $this->view->project      = $project;
         $this->view->products     = $products;
         $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');

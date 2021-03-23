@@ -157,7 +157,9 @@ class search extends control
             }
         }
 
-        $this->lang->search->menu = $this->lang->admin->menu;
+        $this->lang->navGroup->search  = 'admin';
+        $this->lang->search->menu      = $this->lang->admin->menu;
+        $this->lang->search->menuOrder = $this->lang->admin->menuOrder;
 
         $this->view->title = $this->lang->search->buildIndex;
         $this->display();
@@ -184,12 +186,15 @@ class search extends control
         if(empty($type)) $type = $this->post->type;
         if(empty($type) and ($recTotal != 0 or $pageID != 1)) $type = $this->session->searchIngType;
         $type = (empty($type) or $type[0] == 'all') ? 'all' : $type;
+        //if($objectType != 'all') $type = explode('', $objectType);
 
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $this->config->search->recPerPage, $pageID);
+        $pager  = new pager($recTotal, $this->config->search->recPerPage, $pageID);
+        $begin  = time();
+        $result = $this->search->getList($words, $pager, $type);
 
         /* Set session. */
-        $uri  = inlink('index', "recTotal=$recTotal&pageID=$pageID");
+        $uri  = inlink('index', "recTotal=$pager->recTotal&pageID=$pager->pageID");
         $uri .= strpos($uri, '?') === false ? '?' : '&';
         $uri .= 'words=' . $words;
         $this->session->set('bugList',         $uri);
@@ -198,6 +203,8 @@ class search extends control
         $this->session->set('docList',         $uri);
         $this->session->set('productList',     $uri);
         $this->session->set('productPlanList', $uri);
+        $this->session->set('programList',     $uri);
+        $this->session->set('projectList',     $uri);
         $this->session->set('executionList',   $uri);
         $this->session->set('releaseList',     $uri);
         $this->session->set('storyList',       $uri);
@@ -212,20 +219,18 @@ class search extends control
         $this->session->set('searchIngWord',   $words);
         $this->session->set('searchIngType',   $type);
 
-        $begin = time();
-        $this->view->results = $this->search->getList($words, $pager, $type);
-
         if(strpos($this->server->http_referer, 'search') === false)
         {
             $this->session->set('referer', $this->server->http_referer);
         }
 
-        $this->view->consumed = time() - $begin;
-        $this->view->title    = $this->lang->search->index;
-        $this->view->type     = $type;
-        $this->view->pager    = $pager;
-        $this->view->words    = $words;
-        $this->view->referer  = $this->session->referer;
+        $this->view->results    = $result;
+        $this->view->consumed   = time() - $begin;
+        $this->view->title      = $this->lang->search->index;
+        $this->view->type       = $type;
+        $this->view->pager      = $pager;
+        $this->view->words      = $words;
+        $this->view->referer    = $this->session->referer;
 
         $this->display();
     }

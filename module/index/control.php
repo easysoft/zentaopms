@@ -69,4 +69,10 @@ class index extends control
     {
         echo $this->fetch('misc', 'getsid');
     }
+
+    public function ajaxClearObjectSession()
+    {
+        $objectType = $this->post->objectType;
+        $this->session->set($objectType . 'List', '');
+    }
 }

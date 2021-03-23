@@ -1,7 +1,8 @@
 <?php
-$lang->index->common = 'Home';
-$lang->index->index  = 'Home';
-$lang->index->search = 'Please input';
+$lang->index->common      = 'Home';
+$lang->index->index       = 'Home';
+$lang->index->pleaseInput = 'Please input';
+$lang->index->search      = 'Search';
 
 $lang->index->app = new stdClass();
 $lang->index->app->open   = 'Open';
