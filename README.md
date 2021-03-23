@@ -1,6 +1,6 @@
 ## 1. What is ZenTao?
 
-ZenTao is an open source project management software, developed by Qingdao Nature Easy Soft Network Technology Co. Ltd. Combining product management, project management, QA management, document management, company management and todo management. It is a professional project management software, covering the core process of software development projects.
+ZenTao is an open source project management software, developed by Qingdao Nature Easy Soft Network Technology Co. Ltd. Combining product management, project management, test management, document management, company management and CI management. It is a professional project management software, covering the core process of software development projects.
 
 
 ZenTao is practical and pragmatic. It has full features and beautiful interfaces, and is easy to use. ZenTao is well structured and can be flexibly extended. It also has powerful search features, various forms of statistical reports and complete API.
@@ -14,7 +14,7 @@ Zen(禅) and Tao(道) are the two Chinese characters that have rich meanings in 
 
 ## 3. Design philosophy of ZenTao Project Management Software
 
-The main design philosophy of ZenTao Project Management Software is based on Scrum, an internationally popular Agile methodology. Scrum is very pragmatic and easy to operate, so it fits in the fast iterative development of software projects. However, Scrum only defines the core management framework. There are still many details and processes that have to be extended and developed. Based on the philosophy of Scrum and with the observation of the current development situations in China, ZenTao integrates bug management, test case management, release management and document management, and it completely covers the entire lifecycle of software development. In ZenTao, the concepts of product, project and test are clearly defined. Product team, development team and QA team coordinate and check with each other while they function differently. The three teams interact with each other through stories, tasks and bugs, and eventually deliver the product with quality.
+The main design philosophy of ZenTao Project Management Software is based on Scrum, an internationally popular Agile methodology. [Scrum](https://www.zentao.pm/blog/scrum-framework-791.html) is very pragmatic and easy to operate, so it fits in the fast iterative development of software projects. However, Scrum only defines the core management framework. There are still many details and processes that have to be extended and developed. Based on the philosophy of Scrum and with the observation of the current development situations in China, ZenTao integrates bug management, test case management, release management and document management, and it completely covers the entire lifecycle of software development. In ZenTao, the concepts of product, project and test are clearly defined. Product team, development team and QA team coordinate and check with each other while they function differently. The three teams interact with each other through stories, tasks and bugs, and eventually deliver the product with quality.
 
 ## 4. Why choose ZenTao Project Management Software?
 
@@ -38,8 +38,8 @@ The main design philosophy of ZenTao Project Management Software is based on Scr
 * Organization management: including department, users, groups and privileges;
 * Statistics: various reports;
 * Search: powerful search functions to help you find the data you need.
-* Extension mechanism: extensible in almost any parts of ZenTao;
-* API mechanism: convenient for integration with other systems.
+* [Extension mechanism](https://www.zentao.pm/book/zentaophp-integration/api-scrum-tool-integration-204.html): extensible in almost any parts of ZenTao;
+* [API mechanism](https://www.zentao.pm/book/zentao-api-manual/zentao-sdk-api-intro-260.html): convenient for integration with other systems.
 
 ## 6. Website
 
