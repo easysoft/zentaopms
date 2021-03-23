@@ -14,17 +14,6 @@
 class docModel extends model
 {
     /**
-     * Set menu.
-     *
-     * @access public
-     * @return void
-     */
-    public function setMenu()
-    {
-        $this->lang->switcherMenu = "<div class='btn-group header-btn'>" . html::a(helper::createLink('doc', 'index'), "<i class='icon icon-doc'></i> {$this->lang->doc->common}", '', "class='btn'") . '</div>';
-    }
-
-    /**
      * Get library by id.
      *
      * @param  int    $libID

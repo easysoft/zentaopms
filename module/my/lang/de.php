@@ -1,8 +1,6 @@
 <?php
 global $config;
 
-$lang->my->common = 'Dashboard';
-
 /* Method List。*/
 $lang->my->index           = 'Home';
 $lang->my->todo            = 'My Todos';

@@ -571,6 +571,43 @@ class commonModel extends model
     }
 
     /**
+     * Print upper left corner home button.
+     *
+     * @param  string $openApp
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printHomeButton($openApp)
+    {
+        global $lang;
+
+        if(!$openApp) return;
+        $icon = zget($lang->navIcons, $openApp, '');
+        
+        $module = $openApp;
+        $method = 'index';
+
+        if($openApp == 'devops')
+        {
+            $module = 'repo';
+            $method = 'browse';
+        }
+        if($openApp == 'program' or $openApp == 'project') $method = 'browse';
+        if($openApp == 'product') $method = 'all';
+        if($openApp == 'system')
+        {
+            $module = 'my';
+            $method = 'team';
+        }
+
+        $link = $openApp != 'execution' ? helper::createLink($module, $method) : '';
+        $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='btn'") : "$icon {$lang->$openApp->common}";
+
+        echo "<div class='btn-group header-btn'>" . $html . '</div>';
+    }
+
+    /**
      * Get main nav items list
      *
      * @param  string $moduleName

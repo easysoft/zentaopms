@@ -126,13 +126,13 @@ $lang->assignedToAB = '指派';
 $lang->typeAB       = '类型';
 
 $lang->common->common     = '公有模块';
-$lang->my->common         = '我的地盘';
+$lang->my->common         = '地盘';
 $lang->program->common    = '项目集';
 $lang->product->common    = '产品';
 $lang->project->common    = '项目';
 $lang->execution->common  = $config->systemMode == 'new' ? '执行' : $lang->executionCommon;
 $lang->qa->common         = '测试';
-$lang->devops->common     = '代码';
+$lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文档';
 $lang->report->common     = '统计';
 $lang->system->common     = '组织';

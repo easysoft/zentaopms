@@ -1,4 +1,17 @@
 <?php
+$lang->navIcons = array();
+$lang->navIcons['my']        = "<i class='icon icon-menu-my'></i>";
+$lang->navIcons['program']   = "<i class='icon icon-program'></i>";
+$lang->navIcons['product']   = "<i class='icon icon-product'></i>";
+$lang->navIcons['project']   = "<i class='icon icon-project'></i>";
+$lang->navIcons['execution'] = "<i class='icon icon-run'></i>";
+$lang->navIcons['qa']        = "<i class='icon icon-test'></i>";
+$lang->navIcons['devops']    = "<i class='icon icon-code1'></i>";
+$lang->navIcons['doc']       = "<i class='icon icon-doc'></i>";
+$lang->navIcons['report']    = "<i class='icon icon-statistic'></i>";
+$lang->navIcons['system']    = "<i class='icon icon-group'></i>";
+$lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
+
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
 list($productModule, $productMethod)     = explode('-', $config->productLink);
@@ -7,18 +20,18 @@ list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 
 /* Main Navigation. */
 $lang->mainNav = new stdclass();
-$lang->mainNav->my = "<i class='icon icon-menu-my'></i> {$lang->my->shortCommon}|my|index|";
-if($config->systemMode == 'new') $lang->mainNav->program = "<i class='icon icon-program'></i> {$lang->program->common}|$programModule|$programMethod|";
-$lang->mainNav->product = "<i class='icon icon-product'></i> {$lang->product->common}|$productModule|$productMethod|";
-if($config->systemMode == 'new') $lang->mainNav->project = "<i class='icon icon-project'></i> {$lang->project->common}|$projectModule|$projectMethod|";
+$lang->mainNav->my = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
+if($config->systemMode == 'new') $lang->mainNav->program = "{$lang->navIcons['program']} {$lang->program->common}|$programModule|$programMethod|";
+$lang->mainNav->product = "{$lang->navIcons['product']} {$lang->product->common}|$productModule|$productMethod|";
+if($config->systemMode == 'new') $lang->mainNav->project = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
 
-$lang->mainNav->execution = "<i class='icon icon-run'></i> {$lang->execution->common}|$executionModule|$executionMethod|";
-$lang->mainNav->qa        = "<i class='icon icon-test'></i> {$lang->qa->common}|qa|index|";
-$lang->mainNav->devops    = "<i class='icon icon-code1'></i> DevOps|repo|browse|";
-$lang->mainNav->doc       = "<i class='icon icon-doc'></i> {$lang->doc->common}|doc|index|";
-$lang->mainNav->report    = "<i class='icon icon-statistic'></i> {$lang->report->common}|report|productSummary|";
-$lang->mainNav->system    = "<i class='icon icon-group'></i> {$lang->system->common}|my|team|";
-$lang->mainNav->admin     = "<i class='icon icon-cog-outline'></i> {$lang->admin->common}|admin|index|";
+$lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
+$lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
+$lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|browse|";
+$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
+$lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
+$lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
+$lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
 $lang->dividerMenu = ',devops,system,';
 $lang->mainNav->menuOrder[5]  = 'my';
@@ -457,7 +470,6 @@ $lang->subject->menu = new stdclass();
 $lang->subject->menu->storyConcept = array('link' => "{$lang->subject->storyConcept}|custom|browsestoryconcept|");
 
 /* System menu. */
-$lang->system = new stdclass();
 $lang->system->menu = new stdclass();
 $lang->system->menu->team     = array('link' => "{$lang->team->common}|my|team|", 'subModule' => 'user');
 $lang->system->menu->dynamic  = array('link' => "$lang->dynamic|company|dynamic|");

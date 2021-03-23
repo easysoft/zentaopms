@@ -29,9 +29,6 @@ class report extends control
     {
         parent::__construct();
 
-        /* Set report menu. */
-        $this->report->setMenu();
-
         /* Set report menu group. */
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if(!$this->projectID) $this->lang->navGroup->report = 'report';

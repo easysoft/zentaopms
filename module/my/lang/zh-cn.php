@@ -1,8 +1,6 @@
 <?php
 global $config;
 
-$lang->my->common = '我的地盘';
-
 /* 方法列表。*/
 $lang->my->index           = '首页';
 $lang->my->todo            = '我的待办';

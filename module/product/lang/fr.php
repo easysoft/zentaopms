@@ -9,7 +9,6 @@
  * @version     $Id: en.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        https://www.zentao.pm
  */
-$lang->product->common        = $lang->productCommon;
 $lang->product->index         = 'Accueil ' . $lang->productCommon;
 $lang->product->browse        = 'Liste Stories';
 $lang->product->dynamic       = 'Historique';

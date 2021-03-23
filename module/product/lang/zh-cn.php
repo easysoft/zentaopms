@@ -9,7 +9,6 @@
  * @version     $Id: zh-cn.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->common        = $lang->productCommon . '视图';
 $lang->product->index         = $lang->productCommon . '主页';
 $lang->product->browse        = "{$lang->SRCommon}列表";
 $lang->product->dynamic       = $lang->productCommon . '动态';
