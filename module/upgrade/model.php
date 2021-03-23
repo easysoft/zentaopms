@@ -4315,7 +4315,7 @@ class upgradeModel extends model
             if(isset($sprint->feedback)) $teams[$sprint->feedback] = $sprint->feedback;
         }
 
-        $teams += $this->dao->select('account')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->in($sprintIdList)->fetchPairs('account', 'account');
+        $teams += $this->dao->select('account')->from(TABLE_TEAM)->where('type')->eq('execution')->andWhere('root')->in($sprintIdList)->fetchPairs('account', 'account');
         $users = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs('account', 'account');
 
         /* Insert product and sprint team into project team. */
@@ -4332,12 +4332,6 @@ class upgradeModel extends model
             $team->join    = $today;
             $this->dao->replace(TABLE_TEAM)->data($team)->exec();
         }
-
-        /* Update project type to sprint. */
-        $this->dao->update(TABLE_TEAM)->set('type')->eq('sprint')
-            ->where('type')->eq('project')
-            ->andWhere('root')->in($sprintIdList)
-            ->exec();
 
         /* Get all actor in sprint and product. */
         foreach($productIdList as $productID) $productIdList[$productID] = ",{$productID},";
