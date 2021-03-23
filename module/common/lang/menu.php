@@ -20,7 +20,7 @@ $lang->mainNav->report    = "<i class='icon icon-statistic'></i> {$lang->report-
 $lang->mainNav->system    = "<i class='icon icon-group'></i> {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "<i class='icon icon-cog-outline'></i> {$lang->admin->common}|admin|index|";
 
-$lang->dividerMenu = ',devops,report,';
+$lang->dividerMenu = ',devops,system,';
 $lang->mainNav->menuOrder[5]  = 'my';
 if($config->systemMode == 'new') $lang->mainNav->menuOrder[10] = 'program';
 $lang->mainNav->menuOrder[15] = 'product';
@@ -28,9 +28,9 @@ $lang->mainNav->menuOrder[20] = 'project';
 $lang->mainNav->menuOrder[21] = 'execution';
 $lang->mainNav->menuOrder[23] = 'qa';
 $lang->mainNav->menuOrder[25] = 'devops';
-$lang->mainNav->menuOrder[30] = 'system';
-$lang->mainNav->menuOrder[35] = 'doc';
-$lang->mainNav->menuOrder[40] = 'report';
+$lang->mainNav->menuOrder[30] = 'doc';
+$lang->mainNav->menuOrder[35] = 'report';
+$lang->mainNav->menuOrder[40] = 'system';
 $lang->mainNav->menuOrder[45] = 'admin';
 
 /* My menu. */
