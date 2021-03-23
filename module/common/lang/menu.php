@@ -6,7 +6,7 @@ $lang->navIcons['product']   = "<i class='icon icon-product'></i>";
 $lang->navIcons['project']   = "<i class='icon icon-project'></i>";
 $lang->navIcons['execution'] = "<i class='icon icon-run'></i>";
 $lang->navIcons['qa']        = "<i class='icon icon-test'></i>";
-$lang->navIcons['devops']    = "<i class='icon icon-code1'></i>";
+$lang->navIcons['devops']    = "<i class='icon icon-devops'></i>";
 $lang->navIcons['doc']       = "<i class='icon icon-doc'></i>";
 $lang->navIcons['report']    = "<i class='icon icon-statistic'></i>";
 $lang->navIcons['system']    = "<i class='icon icon-group'></i>";
@@ -171,7 +171,7 @@ $lang->scrum->menu->execution = array('link' => "$lang->executionCommon|project|
 $lang->scrum->menu->story     = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'alias' => 'story,track');
 $lang->scrum->menu->doc       = array('link' => "{$lang->doc->common}|doc|objectLibs|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->scrum->menu->qa        = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
-$lang->scrum->menu->devops    = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
+$lang->scrum->menu->devops    = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
 $lang->scrum->menu->build     = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->scrum->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
@@ -213,7 +213,7 @@ $lang->waterfall->menu->doc         = array('link' => "{$lang->doc->common}|doc|
 $lang->waterfall->menu->weekly      = array('link' => "{$lang->project->report}|weekly|index|project=%s", 'subModule' => ',milestone,');
 $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s");
 $lang->waterfall->menu->design      = array('link' => "$lang->design|design|browse|product=0&project=%s");
-$lang->waterfall->menu->repo        = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
+$lang->waterfall->menu->repo        = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
 $lang->waterfall->menu->track       = array('link' => "$lang->track|projectstory|track", 'alias' => 'track');
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
 $lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse", 'subModule' => 'projectrelease');
@@ -264,7 +264,7 @@ $lang->execution->menu->burn     = array('link' => "$lang->burn|execution|burn|e
 $lang->execution->menu->view     = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
 $lang->execution->menu->qa       = array('link' => "{$lang->qa->common}|execution|qa|executionID=%s", 'subModule' => 'bug', 'alias' => 'qa,bug,testcase,testtask,testreport');
-$lang->execution->menu->repo     = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
+$lang->execution->menu->repo     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
 $lang->execution->menu->doc      = array('link' => "{$lang->doc->common}|doc|objectLibs|type=execution&objectID=%s", 'subModule' => 'doc');
 $lang->execution->menu->build    = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
 $lang->execution->menu->release  = array('link' => "{$lang->release->common}|projectrelease|browse|projectID=0&executionID=%s", 'subModule' => 'projectrelease');
@@ -346,7 +346,7 @@ $lang->qa->menu->automation['subMenu']->browse      = array('link' => "{$lang->i
 
 /* DevOps menu. */
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code     = array('link' => "{$lang->devops->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccomment');
+$lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccomment');
 $lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->menu->jenkins  = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
 $lang->devops->menu->maintain = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
@@ -517,9 +517,6 @@ $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->build          = 'project';
-$lang->navGroup->job            = 'project';
-$lang->navGroup->jenkins        = 'project';
-$lang->navGroup->compile        = 'project';
 $lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->execution = 'execution';
@@ -536,8 +533,11 @@ $lang->navGroup->testcase   = 'qa';
 $lang->navGroup->testtask   = 'qa';
 $lang->navGroup->automation = 'qa';
 
-$lang->navGroup->devops = 'devops';
-$lang->navGroup->repo   = 'devops';
+$lang->navGroup->devops  = 'devops';
+$lang->navGroup->repo    = 'devops';
+$lang->navGroup->job     = 'devops';
+$lang->navGroup->jenkins = 'devops';
+$lang->navGroup->compile = 'devops';
 
 $lang->navGroup->company       = 'system';
 $lang->navGroup->sqlbuilder    = 'system';

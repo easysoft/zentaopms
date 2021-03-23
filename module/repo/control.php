@@ -74,13 +74,17 @@ class repo extends control
     public function maintain($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $repoID = $this->session->repoID;
+        $this->commonAction($repoID);
         $this->repo->setMenu($this->repos, $repoID, false);
         if(common::hasPriv('repo', 'create')) $this->lang->TRActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");
 
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $repoList = $this->repo->getList(0, $orderBy);
 
-        $this->view->repoList   = $this->repo->getList($this->projectID, $orderBy, $pager);
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal   = count($repoList);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $repoList   = array_chunk($repoList, $pager->recPerPage);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->position[] = $this->lang->repo->common;
@@ -89,7 +93,8 @@ class repo extends control
         $this->view->repoID     = $repoID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->products   = $this->projectID ? $this->loadModel('product')->getProductPairsByProject($this->projectID) : $this->loadModel('product')->getPairs();
+        $this->view->repoList   = empty($repoList) ? $repoList: $repoList[$pageID - 1];; 
+        $this->view->products   = $this->loadModel('product')->getPairs();
 
         $this->display();
     }
@@ -311,6 +316,7 @@ class repo extends control
         $this->commonAction($objectID);
 
         /* Get path and refresh. */
+        $path = '';
         if($this->get->repoPath) $path = $this->get->repoPath;
         if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;
 
@@ -757,7 +763,9 @@ class repo extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setRules')));
         }
 
-        $this->repo->setMenu($this->repos, $this->session->repoID, false);
+        $repoID = $this->session->repoID;
+        $this->commonAction($repoID);
+        $this->repo->setMenu($this->repos, $repoID, false);
 
         $this->app->loadLang('task');
         $this->app->loadLang('bug');

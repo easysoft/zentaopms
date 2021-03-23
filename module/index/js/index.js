@@ -98,10 +98,6 @@
         {
             return (link.params.from || link.params.$3) == 'project' ? 'project' : 'execution';
         }
-        if(['repo', 'jenkins', 'job', 'compile'].includes(moduleName))
-        {
-            return link.prj ? 'project' : 'repo';
-        }
         if(moduleName === 'product')
         {
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';

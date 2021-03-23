@@ -17,10 +17,7 @@ class ciModel extends model
      */
     public function setMenu()
     {
-        $repoID     = $this->session->repoID;
-        $moduleName = $this->app->getModuleName();
-        foreach($this->lang->{$moduleName}->menu as $key => $menu) common::setMenuVars($this->lang->{$moduleName}->menu, $key, $repoID);
-        $this->lang->{$moduleName}->menuOrder = $this->lang->ci->menuOrder;
+        common::setMenuVars('devops', $this->session->repoID);
     }
 
     /**
