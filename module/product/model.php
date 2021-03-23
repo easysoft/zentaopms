@@ -228,21 +228,22 @@ class productModel extends model
      */
     public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)
-            ->where('deleted')->eq(0)
-            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
-            ->beginIF($line > 0)->andWhere('line')->eq($line)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
-            ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
-            ->beginIF($status != 'all' and $status != 'noclosed' and $status != 'involved')->andWhere('status')->in($status)->fi()
+        return $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
+            ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($status != 'all' and $status != 'noclosed' and $status != 'involved')->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
-            ->andWhere('PO', true)->eq($this->app->user->account)
-            ->orWhere('QD')->eq($this->app->user->account)
-            ->orWhere('RD')->eq($this->app->user->account)
-            ->orWhere('createdBy')->eq($this->app->user->account)
+            ->andWhere('t1.PO', true)->eq($this->app->user->account)
+            ->orWhere('t1.QD')->eq($this->app->user->account)
+            ->orWhere('t1.RD')->eq($this->app->user->account)
+            ->orWhere('t1.createdBy')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->orderBy('program_asc, line_desc, order_asc')
+            ->orderBy('t2.order_asc, t1.line_asc, t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }
@@ -1275,11 +1276,23 @@ class productModel extends model
         if(empty($products)) return array();
 
         $productKeys = array_keys($products);
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
-            ->where('id')->in($productKeys)
-            ->orderBy('program_asc, line_desc, ' . $orderBy)
-            ->page($pager)
-            ->fetchAll('id');
+        if($orderBy == 'program_asc')
+        {
+            $products = $this->dao->select('t1.id as id, t1.*')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+                ->where('t1.id')->in($productKeys)
+                ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        else
+        {
+            $products = $this->dao->select('*')->from(TABLE_PRODUCT)
+                ->where('id')->in($productKeys)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
 
         $linePairs = $this->getLinePairs();
         foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');
