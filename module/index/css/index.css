@@ -63,16 +63,11 @@ body.menu-hide {padding-left: 0;}
 #poweredBy {width: 40%; position: absolute; top: 4px; right: 0; padding: 0;}
 
 #globalSearchDiv {width: 52%; float: right; margin-right: 4px;}
-@media screen and (max-height: 768px)
-{
-  #globalSearchDiv {width: 62%;}
-}
-#globalSearchDiv .input-group {width: 82%; float: right; margin-top: 2px;}
-@media screen and (max-height: 768px)
-{
-  #globalSearchDiv .input-group {width: 100%;}
-}
-#globalSearchInput {height: 28px; padding-left: 10px;}
+#globalSearchDiv .input-group {width: 194px; float: right; margin-top: 2px;}
+#searchbox .dropdown-menu.show-quick-go.with-active {min-width: 260px;}
+#searchbox .dropdown-menu {min-width: 150px;}
+
+#globalSearchInput {width: 150px; height: 28px; padding-left: 10px; border-right: 0px;}
 #globalSearchButton {height: 28px;}
 
 #globalBarLogo {width: 100%; float: right;}
@@ -107,8 +102,4 @@ body.menu-hide {padding-left: 0;}
 @media screen and (max-height: 768px)
 {
   #upgradeContent{width: 85%;}
-  .version-name {width: 25%; text-overflow: ellipsis; white-space: nowrap;}
-  .version-date {width: 20%; color: #8a8a8a;}
-  .version-explain {width: 25%; color: #8a8a8a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-  .version-actions {width: 30%;}
 }
