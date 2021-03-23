@@ -27,6 +27,11 @@ js::set('unfoldTasks', $unfoldTasks);
 js::set('unfoldAll',   $lang->execution->treeLevel['all']);
 js::set('foldAll',     $lang->execution->treeLevel['root']);
 ?>
+<style>
+.btn-group a i.icon-plus {font-size: 16px;}
+.btn-group a.btn-primary {border-right: 1px solid #c3c3c3;}
+.btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <div class="title">
@@ -141,13 +146,19 @@ js::set('foldAll',     $lang->execution->treeLevel['root']);
     $checkObject->execution = $executionID;
     ?>
     <?php if(!common::checkNotCN()):?>
-    <?php
-    $link = $this->createLink('task', 'batchCreate', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
-    if($canBeChanged and common::hasPriv('task', 'batchCreate', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");
-
-    $link = $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
-    if($canBeChanged and common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
-    ?>
+    <?php if($canBeChanged and (common::hasPriv('task', 'batchCreate', $checkObject) or common::hasPriv('task', 'create', $checkObject))):?>
+    <div class='btn-group dropdown'>
+      <?php
+      $actionLink = $this->createLink('task', 'create', "executionID=$executionID");
+      echo html::a($actionLink, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
+      ?>
+      <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+      <ul class='dropdown-menu'>
+        <li><?php echo html::a($actionLink, $lang->task->create);?></li>
+        <li><?php echo html::a($this->createLink('task', 'batchCreate', "executionID=$executionID"), $lang->task->batchCreate);?></li>
+      </ul>
+    </div>
+    <?php endif;?>
     <?php else:?>
     <?php
     echo "<div class='btn-group dropdown-hover'>";
