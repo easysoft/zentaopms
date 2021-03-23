@@ -53,8 +53,8 @@ tbody tr td:first-child input {display: none;}
     {
         echo $this->buildOperateMenu($build, 'view');
 
-        if(common::hasPriv('build', 'edit'))   echo html::a($this->createLink('build', 'edit',   "buildID=$build->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-        if(common::hasPriv('build', 'delete')) echo html::a($this->createLink('build', 'delete', "buildID=$build->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+        if(common::hasPriv('build', 'edit'))   echo html::a($this->createLink('build', 'edit',   "buildID=$build->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}' data-app='{$app->openApp}'");
+        if(common::hasPriv('build', 'delete')) echo html::a($this->createLink('build', 'delete', "buildID=$build->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin' data-app='{$app->openApp}'");
     }
     ?>
   </div>

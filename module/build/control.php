@@ -42,8 +42,7 @@ class build extends control
         {
             $this->loadModel('project')->setMenu($projectID);
             $executions  = $this->execution->getPairs($projectID);
-            $executionID = isset($executions[$this->session->executionID]) ? $this->session->executionID : key($executions);
-            $this->session->set('executionID', 0);
+            $executionID = $executionID == 0 ? key($executions) : $executionID;
             $this->session->set('project', $projectID);
         }
         elseif($this->app->openApp == 'execution')
@@ -284,7 +283,8 @@ class build extends control
                 $this->send($response);
             }
 
-            die(js::locate($this->createLink('execution', 'build', "executionID=$build->execution"), 'parent'));
+            $link = $this->app->openApp == 'project' ? $this->createLink('project', 'build', "projectID=$build->project") : $this->createLink('execution', 'build', "executionID=$build->execution");
+            die(js::locate($link, 'parent'));
         }
     }
 
