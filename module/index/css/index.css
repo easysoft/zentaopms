@@ -64,7 +64,8 @@ body.menu-hide {padding-left: 0;}
 
 #globalSearchDiv {width: 52%; float: right; margin-right: 4px;}
 #globalSearchDiv .input-group {width: 194px; float: right; margin-top: 2px;}
-#searchbox .dropdown-menu.show-quick-go.with-active {min-width: 260px;}
+#searchbox .dropdown-menu.show-quick-go.with-active {min-width: 270px;}
+#searchbox .dropdown-menu.show-quick-go > li {padding: 0 5px;}
 #searchbox .dropdown-menu {min-width: 150px;}
 
 #globalSearchInput {width: 150px; height: 28px; padding-left: 10px; border-right: 0px;}
@@ -79,7 +80,7 @@ body.menu-hide {padding-left: 0;}
 #searchbox a:hover {color: white;}
 #searchbox {width: 100%;}
 #searchbox .dropdown-menu {margin-top: 0px; left: 1px; position: absolute; top: -50px;}
-#searchbox .dropdown-menu > li > a {padding: 5px 8px;}
+#searchbox .dropdown-menu > li > a {padding: 5px 0px 5px 2px;}
 #searchbox .dropdown-menu > li {display: none;}
 #searchbox .dropdown-menu > li.search-type-all {width: 100%; display: block;}
 #searchbox .dropdown-menu > li:hover {position: relative;}
