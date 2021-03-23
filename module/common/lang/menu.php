@@ -85,7 +85,7 @@ $lang->my->dividerMenu = ',work,dynamic,';
 
 /* Program menu. */
 $lang->program->homeMenu = new stdclass();
-$lang->program->homeMenu->browse = array('link' => "{$lang->program->common}|program|browse|");
+$lang->program->homeMenu->browse = array('link' => "{$lang->program->list}|program|browse|");
 
 $lang->program->menu = new stdclass();
 $lang->program->menu->product     = array('link' => "{$lang->product->common}|program|product|programID=%s", 'alias' => 'view');

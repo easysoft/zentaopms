@@ -151,6 +151,7 @@ $lang->custom->common     = '自定义';
 $lang->extension->common  = '插件';
 $lang->company->common    = '公司';
 $lang->dept->common       = '部门';
+$lang->program->list      = '项目集列表';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
