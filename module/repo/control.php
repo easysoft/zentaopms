@@ -75,7 +75,7 @@ class repo extends control
     {
         $repoID = $this->session->repoID;
         $this->commonAction($repoID);
-        $this->repo->setMenu($this->repos, $repoID, false);
+        $this->lang->switcherMenu = '';
         if(common::hasPriv('repo', 'create')) $this->lang->TRActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");
 
         $repoList = $this->repo->getList(0, $orderBy);
@@ -765,7 +765,7 @@ class repo extends control
 
         $repoID = $this->session->repoID;
         $this->commonAction($repoID);
-        $this->repo->setMenu($this->repos, $repoID, false);
+        $this->lang->switcherMenu = '';
 
         $this->app->loadLang('task');
         $this->app->loadLang('bug');

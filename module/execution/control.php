@@ -2543,18 +2543,26 @@ class execution extends control
         $orderedExecutions = array();
 
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc');
+        $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('id')->in($this->app->user->view->sprints)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('project')->in(array_keys($projects))
+            ->orderBy('id_desc')
+            ->fetchGroup('project', 'id');
+
+        $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
+            ->where('root')->in($this->app->user->view->sprints)
+            ->andWhere('type')->eq('execution')
+            ->fetchGroup('root', 'account');
+
         foreach($projects as $project)
         {
-            $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-                ->where('id')->in($this->app->user->view->sprints)
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('project')->eq($project->id)
-                ->orderBy('id_desc')
-                ->fetchAll('id');
+            $executions = zget($executionGroups, $project->id, array());
 
             foreach($executions as $execution)
             {
                 if(isset($orderedExecutions[$execution->parent])) unset($orderedExecutions[$execution->parent]);
+                $execution->teams = zget($teams, $execution->id, array());
                 $orderedExecutions[$execution->id] = $execution;
             }
         }
