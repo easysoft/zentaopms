@@ -27,6 +27,9 @@ class docModel extends model
      */
     public function setMenu($type = '', $libID = 0, $moduleID = 0, $productID = 0, $executionID = 0, $crumb = '')
     {
+        /* Set doc switcher menu. */
+        $this->lang->switcherMenu = "<div class='btn-group header-btn'>" . html::a(helper::createLink('doc', 'index'), "<i class='icon icon-doc'></i> {$this->lang->doc->common}", '', "class='btn'") . '</div>';
+
         $btnStyle     = $this->lang->navGroup->doc == 'doc' ? 'header-btn' : 'angle-btn';
         $isLimitWidth = $this->lang->navGroup->doc == 'doc' ? '' : 'btn-limit';
         $selectHtml   = "<div class='btn-group $btnStyle'>";
@@ -125,8 +128,7 @@ class docModel extends model
             $this->lang->TRActions = $actions;
         }
 
-        //$selectHtml .= $crumb ? $crumb : $this->getCrumbs($libID, $moduleID);
-        $this->lang->modulePageNav     = $selectHtml;
+        $this->lang->modulePageNav = $selectHtml;
     }
 
     /**
@@ -1878,7 +1880,6 @@ class docModel extends model
             $navCSS .= <<<EOF
 #subHeader {margin-top: -50px; background: rgba(0,0,0,0);}
 #pageActions .btn-link {color: #fff; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
-.header-btn {padding: 0;}
 EOF;
             if($this->app->rawMethod != 'index') $navCSS .= '.header-btn+.header-btn::after, .header-btn+.header-btn::before {top: -50px;}';
         }
