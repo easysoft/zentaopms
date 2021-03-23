@@ -2528,28 +2528,25 @@ class execution extends control
     /**
      * Drop menu page.
      *
-     * @param  int    $module
-     * @param  int    $method
-     * @param  int    $extra
+     * @param  int    $executionID
+     * @param  string $module
+     * @param  string $method
+     * @param  mix    $extra
      * @access public
      * @return void
      */
     public function ajaxGetDropMenu($executionID, $module, $method, $extra)
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('order_desc')->fetchAll('id');
-
-        /* Sort execution by project. */
         $orderedExecutions = array();
-        foreach($projects as $projectID => $project)
+
+        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc');
+        foreach($projects as $project)
         {
-            $type       = $project->model == 'scrum' ? 'sprint' : 'stage';
-            $orderBy    = $project->model == 'scrum' ? 'id_desc' : 'id_asc';
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('id')->in($this->app->user->view->sprints)
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('project')->eq($project->id)
-                ->andWhere('type')->eq($type)
-                ->orderBy($orderBy)
+                ->orderBy('id_desc')
                 ->fetchAll('id');
 
             foreach($executions as $execution)
