@@ -204,6 +204,14 @@ $lang->calendar   = '日程';
 
 $lang->my->work = '待处理';
 
+$lang->doc->recent   = '最近文档';
+$lang->doc->my       = '我的文档';
+$lang->doc->favorite = '我的收藏';
+$lang->doc->product  = '产品库';
+$lang->doc->project  = '项目库';
+$lang->doc->custom   = '自定义库';
+$lang->doc->wiki     = 'WIKI';
+
 $lang->project->report = '报告';
 
 $lang->report->weekly = '周报';
@@ -211,8 +219,7 @@ $lang->report->annual = '年度总结';
 $lang->report->notice = new stdclass();
 $lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。比如列表页面我们检索的是%tab%，那么报表就是基于之前检索的%tab%的结果集进行统计。';
 
-$lang->testcase->feature   = '功能测试';
-$lang->testcase->unit      = '单元测试';
+$lang->testcase->case      = '用例';
 $lang->testcase->testsuite = '套件';
 $lang->testcase->caselib   = '用例库';
 

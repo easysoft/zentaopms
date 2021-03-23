@@ -124,8 +124,8 @@ class bug extends control
         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
-        /* Set menu and save session. */
-        $this->session->set('bugList', $this->app->getURI(true));
+        /* Set session. */
+        $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         /* Set moduleTree. */
         if($browseType == '')

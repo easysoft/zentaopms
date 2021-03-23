@@ -2666,7 +2666,12 @@ class execution extends control
 
         $from = $this->app->openApp;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');
-        if($from == 'project') $this->project->setMenu($projectID);
+        if($from == 'project')
+        {
+            $projects  = $this->project->getPairsByProgram();
+            $projectID = $this->project->saveState($projectID, $projects);
+            $this->project->setMenu($projectID);
+        }
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);

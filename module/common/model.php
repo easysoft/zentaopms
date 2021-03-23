@@ -831,7 +831,7 @@ class commonModel extends model
             $class     = isset($menuItem->class) ? $menuItem->class : '';
             $active    = '';
             if($subModule and in_array($currentModule, $subModule)) $active = 'active';
-            if($alias and $moduleName == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
+            // if($alias and $moduleName == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
             if($menuItem->link)
             {
                 $target = '';

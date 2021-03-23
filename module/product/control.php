@@ -158,8 +158,8 @@ class product extends control
         if($this->app->rawModule == 'product')
         {
             /* Save session. */
-            $this->session->set('storyList',   $this->app->getURI(true));
-            $this->session->set('productList', $this->app->getURI(true));
+            $this->session->set('storyList',   $this->app->getURI(true), 'product');
+            $this->session->set('productList', $this->app->getURI(true), 'product');
 
             $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
         }
@@ -321,6 +321,8 @@ class product extends control
             $locate     = $this->createLink($moduleName, $methodName, $param);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
+
+        if($this->app->openApp == 'program') $this->loadModel('program')->setMenu($programID);
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
@@ -654,7 +656,7 @@ class product extends control
         {
             $this->product->delete(TABLE_PRODUCT, $productID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
-            $this->session->set('product', '');     // 清除session。
+            $this->session->set('product', '');
             $this->executeHooks($productID);
             die(js::locate($this->createLink('product', 'browse'), 'parent'));
         }
@@ -986,10 +988,6 @@ class product extends control
         if($moduleGroup == 'project')
         {
             $this->app->loadLang($fromModule);
-
-            $projectModel = $this->loadModel('project')->getByID($this->session->project);
-            $this->lang->product->menu      = $this->lang->menu->{$projectModel->model};
-            $this->lang->product->menuOrder = $this->lang->{$projectModel->model}->menuOrder;
 
             /* The secondary test menu processing in the project. */
             if(in_array($fromModule, array('qa', 'bug', 'testtask', 'testreport')))

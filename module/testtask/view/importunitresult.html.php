@@ -99,4 +99,10 @@
     </form>
   </div>
 </div>
+<script>
+$(function()
+{
+    $('#subNavbar li[data-id="case"]').addClass('active');
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>

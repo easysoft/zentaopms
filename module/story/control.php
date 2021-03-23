@@ -519,7 +519,7 @@ class story extends control
 
         /* Set menu. */
         $this->lang->product->switcherMenu = $this->product->getSwitcher($product->id);
-        $this->product->setMenu($products, $product->id, $story->branch);
+        $this->product->setMenu($product->id, $story->branch);
 
         $this->story->replaceURLang($story->type);
 
@@ -628,7 +628,7 @@ class story extends control
         /* The stories of a product. */
         if($productID)
         {
-            $this->product->setMenu($this->product->getPairs('nodeleted'), $productID, $branch);
+            $this->product->setMenu($productID, $branch);
             $product = $this->product->getByID($productID);
             $branchProduct = $product->type == 'normal' ? false : true;
 
@@ -960,7 +960,7 @@ class story extends control
         }
         else
         {
-            $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+            $this->product->setMenu($product->id, $story->branch);
         }
 
         /* Set the review result options. */
@@ -1046,7 +1046,7 @@ class story extends control
         $this->story->replaceURLang($story->type);
 
         /* Set menu. */
-        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
+        $this->product->setMenu($product->id, $story->branch);
 
         /* Set the closed reason options and remove subdivided options. */
         if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
@@ -1454,18 +1454,13 @@ class story extends control
      */
     public function zeroCase($productID, $orderBy = 'id_desc', $from = 'project')
     {
-        $this->session->set('productList', $this->app->getURI(true));
+        $this->session->set('storyList', $this->app->getURI(true), 'product');
         $products = $this->product->getPairs();
 
-        if($from == 'qa')
-        {
-            $this->loadModel('qa');
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-        }
-
-        $this->lang->story->menu      = $this->lang->qa->subMenu->testcase;
-        $this->lang->story->menuOrder = $this->lang->testcase->menuOrder;
-        $this->loadModel('testcase')->setMenu($products, $productID);
+        $this->loadModel('testcase');
+        $this->app->rawModule = 'testcase';
+        $this->loadModel('qa')->setMenu($products, $productID);
+        foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);

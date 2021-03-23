@@ -204,6 +204,14 @@ $lang->calendar   = 'Calendar';
 
 $lang->my->work = 'Work';
 
+$lang->doc->recent   = 'Recent';
+$lang->doc->my       = 'My';
+$lang->doc->favorite = 'Favorite';
+$lang->doc->product  = 'Product';
+$lang->doc->project  = 'Project';
+$lang->doc->custom   = 'Custom';
+$lang->doc->wiki     = 'WIKI';
+
 $lang->project->report = 'Report';
 
 $lang->report->weekly = 'Weekly';
@@ -250,6 +258,11 @@ $lang->searchObjects['project']     = 'Project';
 $lang->searchObjects['execution']   = $lang->executionCommon;
 $lang->searchObjects['user']        = 'User';
 $lang->searchTips                   = 'ID (ctrl+g)';
+
+/* Code formats for import. */
+$lang->importEncodeList['gbk']   = 'GBK';
+$lang->importEncodeList['big5']  = 'BIG5';
+$lang->importEncodeList['utf-8'] = 'UTF-8';
 
 /* File type list for export. */
 $lang->exportFileTypeList['csv']  = 'csv';

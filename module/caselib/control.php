@@ -195,7 +195,8 @@ class caselib extends control
         if(empty($libraries)) $this->locate(inlink('create'));
 
         /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        $this->session->set('caselibList', $this->app->getURI(true), 'qa');
 
         /* Set menu. */
         $libID = $this->caselib->saveLibState($libID, $libraries);
