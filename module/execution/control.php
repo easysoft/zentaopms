@@ -2222,7 +2222,7 @@ class execution extends control
     /**
      * Link stories to an execution.
      *
-     * @param  int    $executionID
+     * @param  int    $objectID
      * @param  string $browseType
      * @param  int    $param
      * @param  int    $recTotal
@@ -2231,31 +2231,39 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function linkStory($executionID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         $this->loadModel('story');
         $this->loadModel('product');
 
-        /* Get executions and products. */
-        $execution  = $this->execution->getById($executionID);
-        $products   = $this->execution->getProducts($executionID);
-        $browseLink = $this->createLink('execution', 'story', "executionID=$executionID");
-        if($execution->type == 'project') $browseLink = $this->createLink('projectstory', 'story', "projectID=$executionID");
+        /* Get projects, executions and products. */
+        $object     = $this->project->getByID($objectID, $this->app->openApp == 'project' ? 'project' : 'sprint,stage');
+        $products   = $this->project->getProducts($objectID);
+        $browseLink = $this->createLink($this->app->openApp == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
 
         $this->session->set('storyList', $this->app->getURI(true), 'product'); // Save session.
-        if($execution->type != 'execution') $this->execution->setMenu($execution->id);     // Set menu.
 
+        /* Only execution can have no products. */
         if(empty($products))
         {
             echo js::alert($this->lang->execution->errorNoLinkedProducts);
-            die(js::locate($this->createLink('execution', 'manageproducts', "executionID=$executionID")));
+            die(js::locate($this->createLink('execution', 'manageproducts', "executionID=$objectID")));
         }
 
         if(!empty($_POST))
         {
-            $this->execution->linkStory($executionID);
-            if($execution->project != 0) $this->execution->linkStory($execution->project);
+            $this->execution->linkStory($objectID);
+            if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
             die(js::locate($browseLink));
+        }
+
+        if($object->type == 'project')
+        {
+            $this->project->setMenu($object->id);
+        }
+        else if($object->type == 'sprint' or $object->type == 'stage')
+        {
+            $this->execution->setMenu($object->id);
         }
 
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
@@ -2282,28 +2290,24 @@ class execution extends control
         }
 
         /* Build the search form. */
-        $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "executionID=$executionID&browseType=bySearch&queryID=myQueryID");
+        $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory');
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch('', 0, $queryID, 'id', $executionID);
+            $allStories = $this->story->getBySearch('', 0, $queryID, 'id', $objectID);
         }
         else
         {
             $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
 
-        if($execution->project != 0) $projectStories = $this->story->getExecutionStoryPairs($execution->project);
-
-        $executionStories = $this->story->getExecutionStoryPairs($executionID);
+        $linkedStories = $this->story->getExecutionStoryPairs($objectID);
         foreach($allStories as $id => $story)
         {
-            if(isset($executionStories[$story->id])) unset($allStories[$id]);
-
+            if(isset($linkedStories[$story->id])) unset($allStories[$id]);
             if($story->parent < 0) unset($allStories[$id]);
-            if(!empty($projectStories) and !isset($projectStories[$story->id])) unset($allStories[$id]);
         }
 
         /* Pager. */
@@ -2313,13 +2317,12 @@ class execution extends control
         $allStories = array_chunk($allStories, $pager->recPerPage);
 
         /* Assign. */
-        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->linkStory;
-        $this->view->position[] = html::a($browseLink, $execution->name);
+        $this->view->title      = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
+        $this->view->position[] = html::a($browseLink, $object->name);
         $this->view->position[] = $this->lang->execution->linkStory;
 
-        $this->view->execution          = $execution;
+        $this->view->object           = $object;
         $this->view->products         = $products;
-        $this->view->executionStories = empty($executionStories) ? '' : $executionStories;
         $this->view->allStories       = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
         $this->view->pager            = $pager;
         $this->view->browseType       = $browseType;

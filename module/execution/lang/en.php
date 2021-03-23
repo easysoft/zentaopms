@@ -251,12 +251,12 @@ $lang->execution->byQuery = 'Search';
 
 /* Query condition list. */
 $lang->execution->allExecution      = "All {$lang->executionCommon}s";
-$lang->execution->aboveAllProduct = "All the above {$lang->productCommon}s";
+$lang->execution->aboveAllProduct   = "All the above {$lang->productCommon}s";
 $lang->execution->aboveAllExecution = "All the above {$lang->executionCommon}s";
 
 /* Page prompt. */
 $lang->execution->linkStoryByPlanTips = "This action will link all stories in this plan to the {$lang->executionCommon}.";
-$lang->execution->selectExecution       = "Select {$lang->executionCommon}";
+$lang->execution->selectExecution     = "Select {$lang->executionCommon}";
 $lang->execution->selectExecution     = "Select Stage/Sprint/Iteration";
 $lang->execution->beginAndEnd         = 'Duration';
 $lang->execution->lblStats            = 'Efforts';
@@ -275,7 +275,7 @@ $lang->execution->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php
 $lang->execution->whyNoStories        = "No story can be linked. Please check whether there is any story in {$lang->executionCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
 $lang->execution->productStories      = "Stories linked to {$lang->executionCommon} are the subeset of stories linked to {$lang->productCommon}. Stories can only be linked after they pass the review. <a href='%s'> Link Stories</a> now.";
 $lang->execution->haveDraft           = "%s stories in draft, so they can't be linked.";
-$lang->execution->doneExecutions        = 'Finished';
+$lang->execution->doneExecutions      = 'Finished';
 $lang->execution->selectDept          = 'Select Department';
 $lang->execution->selectDeptTitle     = 'Select User';
 $lang->execution->copyTeam            = 'Copy Team';
@@ -283,15 +283,15 @@ $lang->execution->copyFromTeam        = "Copy from {$lang->executionCommon} Team
 $lang->execution->noMatched           = "No $lang->executionCommon including '%s'can be found.";
 $lang->execution->copyTitle           = "Choose a {$lang->executionCommon} to copy.";
 $lang->execution->copyTeamTitle       = "Choose a {$lang->executionCommon} Team to copy.";
-$lang->execution->copyNoExecution       = "No {$lang->executionCommon} can be copied.";
-$lang->execution->copyFromExecution     = "Copy from {$lang->executionCommon} <strong>%s</strong>";
+$lang->execution->copyNoExecution     = "No {$lang->executionCommon} can be copied.";
+$lang->execution->copyFromExecution   = "Copy from {$lang->executionCommon} <strong>%s</strong>";
 $lang->execution->cancelCopy          = 'Cancel Copy';
 $lang->execution->byPeriod            = 'By Time';
 $lang->execution->byUser              = 'By User';
-$lang->execution->noExecution           = "No {$lang->executionCommon}. ";
+$lang->execution->noExecution         = "No {$lang->executionCommon}. ";
 $lang->execution->noMembers           = 'No team members yet. ';
 $lang->execution->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
-$lang->execution->linkPRJStoryTip     = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
+// $lang->execution->linkProjectStoryTip = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
 $lang->execution->linkAllStoryTip     = "({$lang->SRCommon} has never been linked under the execution, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
 
 /* Interactive prompts. */

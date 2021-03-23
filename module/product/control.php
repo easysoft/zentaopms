@@ -251,7 +251,10 @@ class product extends control
         /* Build search form. */
         $rawModule = $this->app->rawModule;
         $rawMethod = $this->app->rawMethod;
-        $actionURL = $this->createLink($rawModule, $rawMethod, "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
+
+        $params    = $rawModule == 'projectstory' ? "projectID=$projectID&" : '';
+        $actionURL = $this->createLink($rawModule, $rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
+
         $this->config->product->search['onMenuBar'] = 'yes';
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 

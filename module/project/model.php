@@ -160,12 +160,13 @@ class projectModel extends model
      * Get a project by id.
      *
      * @param  int    $projectID
+     * @param  string $type  project|sprint,stage
      * @access public
      * @return object
      */
-    public function getByID($projectID)
+    public function getByID($projectID, $type = 'project')
     {
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('`type`')->eq('project')->fetch();
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('`type`')->in($type)->fetch();
         if(!$project) return false;
 
         if($project->end == '0000-00-00') $project->end = '';

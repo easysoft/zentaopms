@@ -18,14 +18,12 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->linkStory;?></span></span>
-    <?php if($executionStories and ($this->app->rawModule == 'execution')):?>
-    <span class='btn btn-link'><span class='text'><?php echo $lang->execution->linkPRJStoryTip;?></span></span>
-    <?php elseif($this->app->rawModule == 'execution'):?>
+    <?php if($this->app->rawModule == 'execution'):?>
     <span class='btn btn-link'><span class='text'><?php echo $lang->execution->linkAllStoryTip;?></span></span>
     <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printBack($this->createLink($this->app->rawModule, 'story'), 'btn btn-link');?>
+    <?php common::printBack($this->createLink($this->app->rawModule, 'story', "objectID=$object->id"), 'btn btn-link');?>
   </div>
 </div>
 <div id="mainContent">
@@ -45,9 +43,9 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
+          <th><?php echo $lang->story->title;?></th>
           <th class='w-150px'><?php echo $lang->story->product;?></th>
           <th class='w-150px'><?php echo $lang->story->module;?></th>
-          <th><?php echo $lang->story->title;?></th>
           <th class='w-120px'><?php echo $lang->story->plan;?></th>
           <th class='w-80px'><?php echo $lang->story->stage;?></th>
           <?php if($productType != 'normal'):?>
@@ -67,14 +65,14 @@
           <?php echo html::hidden("products[$story->id]", $story->product);?>
         </td>
         <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-        <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
-        <td class='text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
         <td class='text-left nobr' title="<?php echo $story->title?>">
           <?php
           if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
           echo html::a($storyLink, $story->title);
           ?>
         </td>
+        <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
+        <td class='text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
         <td class='text-ellipsis' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
         <?php if($productType != 'normal'):?>
@@ -97,7 +95,7 @@
     </div>
     <?php else:?>
     <div class="table-empty-tip">
-      <p><span class="text-muted"><?php echo $lang->execution->whyNoStories;?></p>
+      <p><span class="text-muted"><?php echo $lang->{$app->rawModule}->whyNoStories;?></p>
     </div>
     <?php endif;?>
   </form>

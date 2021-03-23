@@ -7,6 +7,7 @@ $lang->projectstory->track             = '矩阵';
 $lang->projectstory->linkStory         = '关联' . $lang->SRCommon;
 $lang->projectstory->unlinkStory       = '移除' . $lang->SRCommon;
 $lang->projectstory->importplanstories = '按计划关联' . $lang->SRCommon;
+$lang->projectstory->whyNoStories      = "看起来没有{$lang->SRCommon}可以关联。请检查下项目关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 
 global $app;
 $app->loadLang('product');

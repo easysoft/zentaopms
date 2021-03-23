@@ -2191,7 +2191,7 @@ class storyModel extends model
     {
         if($executionID != '')
         {
-            $products = $this->loadModel('execution')->getProducts($executionID);
+            $products = $this->loadModel('project')->getProducts($executionID);
         }
         else
         {

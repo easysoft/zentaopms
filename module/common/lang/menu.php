@@ -155,7 +155,7 @@ $lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
 $lang->scrum->menu = new stdclass();
 $lang->scrum->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
 $lang->scrum->menu->execution = array('link' => "$lang->executionCommon|project|execution|projectID=%s");
-$lang->scrum->menu->story     = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'alias' => 'story,track');
+$lang->scrum->menu->story     = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory', 'alias' => 'story,track');
 $lang->scrum->menu->doc       = array('link' => "{$lang->doc->common}|doc|objectLibs|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->scrum->menu->qa        = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
 $lang->scrum->menu->devops    = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
@@ -198,7 +198,7 @@ $lang->waterfall->menu->programplan = array('link' => "{$lang->productplan->shor
 $lang->waterfall->menu->execution   = array('link' => "$lang->executionCommon|execution|all|status=all&projectID=%s", 'subModule' => ',project,task,');
 $lang->waterfall->menu->doc         = array('link' => "{$lang->doc->common}|doc|index|project=%s");
 $lang->waterfall->menu->weekly      = array('link' => "{$lang->project->report}|weekly|index|project=%s", 'subModule' => ',milestone,');
-$lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s");
+$lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory');
 $lang->waterfall->menu->design      = array('link' => "$lang->design|design|browse|product=0&project=%s");
 $lang->waterfall->menu->repo        = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
 $lang->waterfall->menu->track       = array('link' => "$lang->track|projectstory|track", 'alias' => 'track');

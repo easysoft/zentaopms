@@ -1465,6 +1465,7 @@ class executionModel extends model
             if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
             return $this->loadModel('tutorial')->getExecutionProducts();
         }
+
         $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')

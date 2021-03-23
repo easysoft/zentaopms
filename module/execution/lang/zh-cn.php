@@ -251,12 +251,12 @@ $lang->execution->byQuery = '搜索';
 
 /* 查询条件列表。*/
 $lang->execution->allExecution      = "所有{$lang->executionCommon}";
-$lang->execution->aboveAllProduct = "以上所有{$lang->productCommon}";
+$lang->execution->aboveAllProduct   = "以上所有{$lang->productCommon}";
 $lang->execution->aboveAllExecution = "以上所有{$lang->executionCommon}";
 
 /* 页面提示。*/
 $lang->execution->linkStoryByPlanTips = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此{$lang->executionCommon}中";
-$lang->execution->selectExecution       = "请选择{$lang->executionCommon}";
+$lang->execution->selectExecution     = "请选择{$lang->executionCommon}";
 $lang->execution->selectExecution     = "请选择阶段/迭代/冲刺";
 $lang->execution->beginAndEnd         = '起止时间';
 $lang->execution->lblStats            = '工时统计';
@@ -275,7 +275,7 @@ $lang->execution->howToUpdateBurn     = "<a href='https://api.zentao.net/goto.ph
 $lang->execution->whyNoStories        = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->executionCommon}关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->execution->productStories      = "{$lang->executionCommon}关联的{$lang->SRCommon}是{$lang->productCommon}{$lang->SRCommon}的子集，并且只有评审通过的{$lang->SRCommon}才能关联。请<a href='%s'>关联{$lang->SRCommon}</a>。";
 $lang->execution->haveDraft           = "有%s条草稿状态的{$lang->SRCommon}无法关联到该{$lang->executionCommon}";
-$lang->execution->doneExecutions        = '已结束';
+$lang->execution->doneExecutions      = '已结束';
 $lang->execution->selectDept          = '选择部门';
 $lang->execution->selectDeptTitle     = '选择一个部门的成员';
 $lang->execution->copyTeam            = '复制团队';
@@ -283,15 +283,15 @@ $lang->execution->copyFromTeam        = "复制自{$lang->executionCommon}团队
 $lang->execution->noMatched           = "找不到包含'%s'的$lang->executionCommon";
 $lang->execution->copyTitle           = "请选择一个{$lang->executionCommon}来复制";
 $lang->execution->copyTeamTitle       = "选择一个{$lang->executionCommon}团队来复制";
-$lang->execution->copyNoExecution       = "没有可用的{$lang->executionCommon}来复制";
-$lang->execution->copyFromExecution     = "复制自{$lang->executionCommon} <strong>%s</strong>";
+$lang->execution->copyNoExecution     = "没有可用的{$lang->executionCommon}来复制";
+$lang->execution->copyFromExecution   = "复制自{$lang->executionCommon} <strong>%s</strong>";
 $lang->execution->cancelCopy          = '取消复制';
 $lang->execution->byPeriod            = '按时间段';
 $lang->execution->byUser              = '按用户';
-$lang->execution->noExecution           = "暂时没有{$lang->executionCommon}。";
+$lang->execution->noExecution         = "暂时没有{$lang->executionCommon}。";
 $lang->execution->noMembers           = '暂时没有团队成员。';
 $lang->execution->workloadTotal       = "工作量占比累计不应当超过100, 当前产品下的工作量之和为%s";
-$lang->execution->linkPRJStoryTip     = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
+// $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
 $lang->execution->linkAllStoryTip     = "(项目下还未关联{$lang->SRCommon}，可直接关联该迭代/阶段/冲刺所关联产品的{$lang->SRCommon})";
 
 /* 交互提示。*/

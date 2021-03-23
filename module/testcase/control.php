@@ -42,22 +42,6 @@ class testcase extends control
 
         /* Set test case menu group. */
         $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if($this->app->openApp == 'qa')
-        {
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-        }
-        elseif($this->app->openApp == 'project')
-        {
-            $this->lang->testcase->menu    = $this->lang->projectQa->menu;
-            $this->lang->testcase->subMenu = $this->lang->projectQa->subMenu;
-        }
-        elseif($this->app->openApp == 'execution')
-        {
-            $this->lang->testcase->menu    = $this->lang->execution->qaMenu;
-            $this->lang->testcase->subMenu = '';
-        }
-
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
     }
@@ -251,7 +235,10 @@ class testcase extends control
      */
     public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
     {
-        if($this->app->openApp == 'execution') commonModel::setAppObjectID('execution', $this->session->execution);
+        if($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($this->session->execution);
+        }
 
         $testcaseID = $from == 'testcase' ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
