@@ -29,7 +29,7 @@ js::set('foldAll',     $lang->execution->treeLevel['root']);
 ?>
 <style>
 .btn-group a i.icon-plus {font-size: 16px;}
-.btn-group a.btn-primary {border-right: 1px solid #c3c3c3;}
+.btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 </style>
 <div id="mainMenu" class="clearfix">

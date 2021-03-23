@@ -2047,6 +2047,9 @@ class execution extends control
 
         $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
 
+        $this->loadModel('product');
+        $execution  = $this->execution->getById($executionID);
+
         if(!empty($_POST))
         {
             /* Get executionType and determine whether a product is linked with the stage. */
@@ -2073,13 +2076,9 @@ class execution extends control
 
             if(isonlybody())
             {
-                $this->session->set('executionID' , $executionID);
-                die(js::reload('parent'));
+                die(js::locate($this->createLink('build', 'create', "executionID=$executionID&productID=0&projectID=$execution->project"), 'parent'));
             }
         }
-
-        $this->loadModel('product');
-        $execution  = $this->execution->getById($executionID);
 
         /* Set menu. */
         $this->execution->setMenu($execution->id);

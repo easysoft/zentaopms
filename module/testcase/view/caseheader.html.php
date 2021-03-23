@@ -1,6 +1,11 @@
 <?php js::set('flow', $config->global->flow);?>
 <?php if(!isset($branch)) $branch = 0;?>
 <?php if($config->global->flow == 'full'):?>
+<style>
+.btn-group a i.icon-plus {font-size: 16px;}
+.btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
+.btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+</style>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
     <div class="title">
@@ -135,19 +140,19 @@
     </div>
     <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
     <?php if(!common::checkNotCN()):?>
-    <?php
-    if(common::hasPriv('testcase', 'batchCreate'))
-    {
-        $link = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
-        echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");
-    }
-
-    if(common::hasPriv('testcase', 'create'))
-    {
-        $link = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
-        echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary'");
-    }
-    ?>
+    <?php if(common::hasPriv('testcase', 'batchCreate') or common::hasPriv('testcase', 'create')):?>
+    <div class='btn-group dropdown'>
+      <?php
+      $actionLink = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
+      echo html::a($actionLink, "<i class='icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary'");
+      ?>
+      <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+      <ul class='dropdown-menu'>
+        <li><?php echo html::a($actionLink, $lang->testcase->create);?></li>
+        <li><?php echo html::a($this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule"), $lang->testcase->batchCreate);?></li>
+      </ul>
+    </div>
+    <?php endif;?>
     <?php if($this->app->rawMethod == 'browseunits' and common::canModify('product', $product)):?>
       <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary'");?>
     <?php endif;?>

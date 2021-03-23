@@ -349,3 +349,7 @@ update zt_config set `value`='project-browse' where `key`='projectLink';
 update zt_config set `value`='program-browse' where `key`='programLink';
 update zt_block set source='project', block='projectteam' where block='programteam' and source='program';
 update zt_block set source='project', block='project' where block='program' and source='program';
+
+update zt_team set type='execution' where type='project';
+update zt_action set objectType='execution' where objectType='project';
+update zt_file set objectType='execution' where objectType='project';

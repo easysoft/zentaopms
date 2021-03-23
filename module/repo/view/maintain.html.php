@@ -11,6 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<div id="mainMenu" class="clearfix">
+  <div class='pull-right'>
+    <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");?>
+  </div>
+</div>
 <div id='mainContent'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='repoList' class='table has-sort-head table-fixed'>
