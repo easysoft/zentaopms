@@ -1409,8 +1409,6 @@ class project extends control
      */
     public function manageProducts($projectID, $programID = 0, $from = 'project')
     {
-        $this->project->setMenu($projectID);
-
         if(!empty($_POST))
         {
             if(!isset($_POST['products']))
@@ -1429,15 +1427,23 @@ class project extends control
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            $locateLink = $this->session->projectBrowse ? $this->session->projectBrowse : inLink('manageProducts', "projectID=$projectID");
+            $locateLink = inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
             if($from == 'programproject') $locateLink = $this->session->programProject ? $this->session->programProject : inLink('programProject', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
         $this->loadModel('product');
-        $this->loadModel('program');
+
         $project = $this->project->getById($projectID);
+        if($this->app->openApp == 'program')
+        {
+            $this->program->setMenu($project->parent);
+        }
+        else if($this->app->openApp == 'project')
+        {
+            $this->project->setMenu($projectID);
+        }
 
         $allProducts        = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
         $linkedProducts     = $this->product->getProducts($project->id);
