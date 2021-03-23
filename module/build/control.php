@@ -27,8 +27,7 @@ class build extends control
 
         if(!empty($_POST))
         {
-            $executionID = $this->post->execution;
-            $buildID     = $this->build->create($executionID);
+            $buildID = $this->build->create($executionID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
 
