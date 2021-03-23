@@ -27,6 +27,8 @@ class repo extends control
             die(js::locate('back'));
         }
 
+        $this->projectID = $this->session->project ? $this->session->project : 0;
+
         /* Unlock session for wait to get data of repo. */
         session_write_close();
     }
@@ -106,7 +108,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function create($objectID)
+    public function create($objectID = 0)
     {
         if($_POST)
         {
@@ -155,7 +157,6 @@ class repo extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
         }
 
-        $this->repo->setMenu($this->repos, $repo->id, false);
         $this->app->loadLang('action');
 
         $repo->repoType       = $repo->id . '-' . $repo->SCM;
@@ -216,7 +217,6 @@ class repo extends control
     public function view($repoID, $entry, $revision = 'HEAD', $showBug = 'false', $encoding = '')
     {
         if($this->get->repoPath) $entry = $this->get->repoPath;
-        $this->repo->setMenu($this->repos, $repoID);
         $this->repo->setBackSession('view', $withOtherModule = true);
         if($repoID == 0) $repoID = $this->session->repoID;
 
@@ -232,6 +232,7 @@ class repo extends control
         $repo  = $this->repo->getRepoByID($repoID);
         $entry = $this->repo->decodePath($entry);
 
+        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);
         $path = $entry ? $info->path : '';
@@ -434,7 +435,6 @@ class repo extends control
     public function log($repoID = 0, $entry = '', $revision = 'HEAD', $type = 'dir', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         if($this->get->repoPath) $entry = $this->get->repoPath;
-        $this->repo->setMenu($this->repos, $repoID);
         $this->repo->setBackSession('log', $withOtherModule = true);
         if($repoID == 0) $repoID = $this->session->repoID;
 
@@ -453,6 +453,7 @@ class repo extends control
             $this->locate($this->repo->createLink('diff', "repoID=$repoID&entry=" . $this->repo->encodePath($path) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
         }
 
+        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);
 
@@ -488,7 +489,6 @@ class repo extends control
     {
         if($this->get->repoPath) $root = $this->get->repoPath;
 
-        $this->repo->setMenu($this->repos, $repoID);
         $this->repo->setBackSession();
         if($repoID == 0) $repoID = $this->session->repoID;
         $repo = $this->repo->getRepoByID($repoID);
@@ -496,6 +496,7 @@ class repo extends control
         /* Save session. */
         $this->session->set('revisionList', $this->app->getURI(true));
 
+        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
         $log = $this->scm->log('', $revision, $revision);
 
@@ -585,12 +586,12 @@ class repo extends control
     public function blame($repoID, $entry, $revision = 'HEAD', $encoding = '')
     {
         if($this->get->repoPath) $entry = $this->get->repoPath;
-        $this->repo->setMenu($this->repos, $repoID);
         if($repoID == 0) $repoID = $this->session->repoID;
         $repo  = $this->repo->getRepoByID($repoID);
         $file  = $entry;
         $entry = $this->repo->decodePath($entry);
 
+        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
         $encoding  = empty($encoding) ? $repo->encoding : $encoding;
         $encoding  = strtolower(str_replace('_', '-', $encoding));
@@ -632,7 +633,6 @@ class repo extends control
     public function diff($repoID, $entry = '', $oldRevision = '0', $newRevision = 'HEAD', $showBug = 'false', $encoding = '')
     {
         if($this->get->repoPath) $entry = $this->get->repoPath;
-        $this->repo->setMenu($this->repos, $repoID);
         if($repoID == 0) $repoID = $this->session->repoID;
         $file    = $entry;
         $repo    = $this->repo->getRepoByID($repoID);
@@ -658,6 +658,7 @@ class repo extends control
             $this->locate($this->repo->createLink('diff', "repoID=$repoID&entry=" . $this->repo->encodePath($entry) . "&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding"));
         }
 
+        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
@@ -741,6 +742,8 @@ class repo extends control
         if($this->get->repoPath) $path = $this->get->repoPath;
         $entry = $this->repo->decodePath($path);
         $repo  = $this->repo->getRepoByID($repoID);
+
+        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
         $content = $type == 'file' ? $this->scm->cat($entry, $fromRevision) : $this->scm->diff($entry, $fromRevision, $toRevision, 'patch');
         $fileName = basename(urldecode($entry));
@@ -788,7 +791,6 @@ class repo extends control
      */
     public function showSyncCommit($repoID = 0, $branch = '')
     {
-        $this->repo->setMenu($this->repos, $repoID);
         if($repoID == 0) $repoID = $this->session->repoID;
         if($branch) $branch = base64_decode($branch);
 
@@ -818,6 +820,7 @@ class repo extends control
         if(empty($repo)) die();
         if($repo->synced) die('finish');
 
+        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
 
         $branchID = '';
@@ -910,6 +913,7 @@ class repo extends control
         if($repo->SCM != 'Git') die('finish');
         if($branch) $branch = base64_decode($branch);
 
+        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
 
         $this->repo->setRepoBranch($branch);

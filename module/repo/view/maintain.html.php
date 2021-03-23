@@ -11,6 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<div id="mainMenu" class="clearfix">
+  <div class='pull-right'>
+    <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");?>
+  </div>
+</div>
 <div id='mainContent'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='repoList' class='table has-sort-head table-fixed'>
@@ -28,7 +33,7 @@
       <tbody>
         <?php foreach($repoList as $id => $repo):?>
         <tr>
-          <td class='text-center'><?php echo $id; ?></td>
+          <td class='text-center'><?php echo $repo->id; ?></td>
           <td class='text'><?php echo zget($lang->repo->scmList, $repo->SCM); ?></td>
           <td class='text' title='<?php echo $repo->name; ?>'><?php echo html::a($this->createLink('repo', 'browse', "repoID={$repo->id}"), $repo->name);?></td>
           <td class='text'>
@@ -43,8 +48,8 @@
           <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
           <td class='text-left c-actions'>
             <?php
-            common::printIcon('repo', 'edit', "repoID=$id", '', 'list',  'edit');
-            if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
+            common::printIcon('repo', 'edit', "repoID=$repo->id", '', 'list',  'edit');
+            if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$repo->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
             ?>
           </td>
         </tr>
