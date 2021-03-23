@@ -263,7 +263,7 @@ class baseHelper
      */
     static public function jsonEncode($data)
     {
-        return (function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc()) ? addslashes(json_encode($data)) : json_encode($data);
+        return json_encode($data);
     }
 
     /**
