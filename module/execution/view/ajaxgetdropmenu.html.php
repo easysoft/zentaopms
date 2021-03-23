@@ -11,8 +11,8 @@ $normalProjectsHtml = '';
 $closedProjectsHtml = '';
 foreach($executions as $execution)
 {
-    if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account) $iCharges++;
-    if($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account)) $others++;
+    if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account]))) $iCharges++;
+    if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account])) $others++;
     if($execution->status == 'done' or $execution->status == 'closed') $dones++;
     $executionNames[] = $execution->name;
 }
@@ -22,11 +22,11 @@ foreach($executions as $execution)
 {
     $selected      = $execution->id == $executionID ? 'selected' : '';
     $executionName = zget($projects, $execution->project) . '/' . $execution->name;
-    if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
+    if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
     {
         $myProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='text-important $selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
     }
-    else if($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account))
+    else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
     {
         $normalProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='$selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
     }
@@ -39,7 +39,7 @@ foreach($executions as $execution)
       <?php
       if(!empty($myProjectsHtml))
       {
-          echo "<div class='heading'>{$lang->execution->mine}</div>";
+          echo "<div class='heading'>{$lang->execution->involved}</div>";
           echo $myProjectsHtml;
           if(!empty($myProjectsHtml))
           {
