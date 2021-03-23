@@ -243,7 +243,7 @@ class productModel extends model
             ->orWhere('t1.createdBy')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->orderBy('t2.order_asc, t1.line_asc, t1.order_asc')
+            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }
