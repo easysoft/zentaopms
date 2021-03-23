@@ -12,10 +12,10 @@
 ?>
 <?php $pageCSS .= $this->doc->appendNavCSS();?>
 <?php include '../../common/view/header.html.php';?>
-<?php if($this->from == 'execution'):;?>
+<?php if($app->openApp == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
-<div class="fade main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
+<div class="fade main-row <?php if($app->openApp == 'doc') echo 'split-row';?>" id="mainRow">
   <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
   <?php endif;?>
@@ -27,7 +27,7 @@
     <div class="panel block-files block-sm no-margin">
       <div class="panel-heading">
         <div class="panel-title font-normal">
-          <i class="icon icon-folder-open-o text-muted"></i> <?php echo $this->from == 'doc' ? $object->name : $object->name . $lang->doc->common;?>
+          <i class="icon icon-folder-open-o text-muted"></i> <?php echo $app->openApp == 'doc' ? $object->name : $object->name . $lang->doc->common;?>
           <div class="btn-group pull-right">
             <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon text-primary'");?>
             <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon'");?>
@@ -37,19 +37,19 @@
       <div class='panel-body'>
         <div class="row row-grid files-grid" data-size="300">
           <?php foreach($libs as $libID => $lib):?>
-          <?php if($libID == 'execution' and $from != 'doc') continue;?>
+          <?php if($libID == 'execution' and $app->openApp != 'doc') continue;?>
           <?php if(strpos($config->doc->custom->objectLibs, 'files') === false && $libID == 'files') continue;?>
           <?php if(strpos($config->doc->custom->objectLibs, 'customFiles') === false && isset($lib->main) && !$lib->main) continue;?>
 
-          <?php $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");?>
+          <?php $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc");?>
           <?php if($libID == 'execution') $libLink = inlink('allLibs', "type=execution&product=$object->id");?>
-          <?php if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id&from=$from");?>
+          <?php if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id");?>
 
           <?php $icon = 'icon-folder text-yellow';?>
           <?php if($libID == 'files') $icon = 'icon-paper-clip text-brown';?>
 
           <div class="col">
-              <a class="file" href="<?php echo $libLink;?>" data-group=<?php echo $from;?>>
+              <a class="file" href="<?php echo $libLink;?>">
               <i class="file-icon icon <?php echo $icon;?>"></i>
               <div class="file-name"><?php echo ($libID != 'execution' && $libID != 'files' && strpos($lib->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $lib->name;?></div>
               <div class="text-primary file-info"><?php echo  $lib->allCount . $lang->doc->item;?></div>
@@ -64,7 +64,7 @@
               <?php endif;?>
               <?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
               <?php if(empty($lib->main)) common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
-              <?php common::printLink('tree', 'browse', "rootID=$libID&viewType=doc&currentModuleID=0&branch=0&from=$from", "<i class='icon icon-cog'></i>", '', "title='{$lang->doc->manageType}' class='btn btn-link'")?>
+              <?php common::printLink('tree', 'browse', "rootID=$libID&viewType=doc&currentModuleID=0&branch=0", "<i class='icon icon-cog'></i>", '', "title='{$lang->doc->manageType}' class='btn btn-link'")?>
               <?php endif;?>
             </div>
             <?php endif;?>

@@ -20,6 +20,8 @@ class repo extends control
     {
         parent::__construct();
 
+        $this->scm = $this->app->loadClass('scm');
+
         $disFuncs = str_replace(' ', '', ini_get('disable_functions'));
         if(stripos(",$disFuncs,", ',exec,') !== false or stripos(",$disFuncs,", ',shell_exec,') !== false)
         {
@@ -34,16 +36,15 @@ class repo extends control
     /**
      * Common actions.
      *
-     * @param  int    $objectID  projectID|executionID
      * @param  int    $repoID
+     * @param  int    $objectID  projectID|executionID
      * @access public
      * @return void
      */
-    public function commonAction($objectID, $repoID = 0)
+    public function commonAction($repoID = 0, $objectID = 0)
     {
         $openApp     = $this->app->openApp;
         $this->repos = $this->repo->getRepoPairs($openApp, $objectID);
-        $this->scm   = $this->app->loadClass('scm');
 
         if($openApp == 'project')
         {
@@ -64,6 +65,7 @@ class repo extends control
     /**
      * List all repo.
      *
+     * @param  int    $objectID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -71,10 +73,8 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function maintain($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function maintain($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $repoID = $this->session->repoID;
-        $this->commonAction($repoID);
         $this->lang->switcherMenu = '';
         if(common::hasPriv('repo', 'create')) $this->lang->TRActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");
 
@@ -90,11 +90,11 @@ class repo extends control
         $this->view->position[] = $this->lang->repo->common;
         $this->view->position[] = $this->lang->repo->browse;
 
-        $this->view->repoID     = $repoID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->repoList   = empty($repoList) ? $repoList: $repoList[$pageID - 1];; 
-        $this->view->products   = $this->loadModel('product')->getPairs();
+        $this->view->orderBy  = $orderBy;
+        $this->view->objectID = $objectID;
+        $this->view->pager    = $pager;
+        $this->view->repoList = empty($repoList) ? $repoList: $repoList[$pageID - 1];; 
+        $this->view->products = $this->loadModel('product')->getPairs();
 
         $this->display();
     }
@@ -106,7 +106,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function create($objectID)
+    public function create($objectID = 0)
     {
         if($_POST)
         {
@@ -114,11 +114,11 @@ class repo extends control
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID", '', false, $this->projectID);
+            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
-        $this->commonAction($objectID);
+        $this->commonAction(0, $objectID);
 
         $this->app->loadLang('action');
         $this->repo->setMenu($this->repos, '', false);
@@ -136,11 +136,14 @@ class repo extends control
      * Edit a repo.
      *
      * @param  int $repoID
+     * @param  int $objectID
      * @access public
      * @return void
      */
-    public function edit($repoID)
+    public function edit($repoID, $objectID = 0)
     {
+        $this->commonAction($repoID, $objectID);
+
         $repo = $this->repo->getRepoByID($repoID);
         if($_POST)
         {
@@ -161,9 +164,10 @@ class repo extends control
         $repo->repoType       = $repo->id . '-' . $repo->SCM;
         $this->view->repo     = $repo;
         $this->view->repoID   = $repoID;
+        $this->view->objectID = $objectID;
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products = $this->projectID ? $this->loadModel('product')->getProductPairsByProject($this->projectID) : $this->loadModel('product')->getPairs();
+        $this->view->products = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
@@ -176,15 +180,16 @@ class repo extends control
      * Delete repo.
      *
      * @param  int    $repoID
+     * @param  int    $objectID
      * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($repoID, $confirm = 'no')
+    public function delete($repoID, $objectID = 0, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&confirm=yes")));
+            die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&objectID=$objectID&confirm=yes")));
         }
 
         $relationID = $this->dao->select('id')->from(TABLE_RELATION)->where('extra')->eq($repoID)->fetch();
@@ -206,6 +211,7 @@ class repo extends control
      * View repo file.
      *
      * @param  int    $repoID
+     * @param  int    $objectID
      * @param  string $entry
      * @param  string $revision
      * @param  string $showBug
@@ -213,8 +219,10 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function view($repoID, $entry, $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    public function view($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
     {
+        $this->commonAction($repoID, $objectID);
+
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $this->repo->setMenu($this->repos, $repoID);
         $this->repo->setBackSession('view', $withOtherModule = true);
@@ -282,6 +290,7 @@ class repo extends control
         $this->view->showBug      = $showBug;
         $this->view->encoding     = str_replace('-', '_', $encoding);
         $this->view->repoID       = $repoID;
+        $this->view->objectID     = $objectID;
         $this->view->repo         = $repo;
         $this->view->revision     = $revision;
         $this->view->revisionName = $revisionName;
@@ -306,18 +315,16 @@ class repo extends control
      *
      * @param  int    $repoID
      * @param  int    $objectID
+     * @param  string $path
      * @param  string $revision
      * @param  int    $refresh
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $objectID = 0, $revision = 'HEAD', $refresh = 0)
+    public function browse($repoID = 0, $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
-        $this->commonAction($objectID);
+        $this->commonAction($repoID, $objectID);
 
-        /* Get path and refresh. */
-        $path = '';
-        if($this->get->repoPath) $path = $this->get->repoPath;
         if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;
 
         /* Set menu and session. */
@@ -343,7 +350,7 @@ class repo extends control
             $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
             $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
 
-            $this->locate($this->repo->createLink('diff', "repoID=$repoID&entry=" . $this->repo->encodePath($path) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
+            $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
         }
 
         /* Cache infos. */
@@ -410,6 +417,7 @@ class repo extends control
         $this->view->revision  = $revision;
         $this->view->infos     = $infos;
         $this->view->repoID    = $repoID;
+        $this->view->objectID  = $objectID;
         $this->view->pager     = $pager;
         $this->view->path      = urldecode($path);
         $this->view->logType   = $logType;
@@ -477,6 +485,7 @@ class repo extends control
      * Show repo revision.
      *
      * @param int    $repoID
+     * @param int    $objectID
      * @param int    $revision
      * @param string $root
      * @param string $type
@@ -484,11 +493,8 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function revision($repoID, $revision, $root = '', $type = 'dir')
+    public function revision($repoID, $objectID = 0, $revision, $root = '', $type = 'dir')
     {
-        if($this->get->repoPath) $root = $this->get->repoPath;
-
-        $this->repo->setMenu($this->repos, $repoID);
         $this->repo->setBackSession();
         if($repoID == 0) $repoID = $this->session->repoID;
         $repo = $this->repo->getRepoByID($repoID);
@@ -560,6 +566,7 @@ class repo extends control
         $this->view->type        = $type;
         $this->view->changes     = $changes;
         $this->view->repoID      = $repoID;
+        $this->view->objectID    = $objectID;
         $this->view->revision    = $log[0]->revision;
         $this->view->parentDir   = $parent;
         $this->view->oldRevision = $oldRevision;
@@ -576,14 +583,17 @@ class repo extends control
      * Blame repo file.
      *
      * @param  int    $repoID
+     * @param  int    $objectID
      * @param  string $entry
      * @param  string $revision
      * @param  string $encoding
      * @access public
      * @return void
      */
-    public function blame($repoID, $entry, $revision = 'HEAD', $encoding = '')
+    public function blame($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $encoding = '')
     {
+        $this->commonAction($repoID, $objectID);
+
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $this->repo->setMenu($this->repos, $repoID);
         if($repoID == 0) $repoID = $this->session->repoID;
@@ -606,6 +616,7 @@ class repo extends control
 
         $this->view->title        = $this->lang->repo->common;
         $this->view->repoID       = $repoID;
+        $this->view->objectID     = $objectID;
         $this->view->repo         = $repo;
         $this->view->revision     = $revision;
         $this->view->entry        = $entry;
@@ -621,6 +632,7 @@ class repo extends control
      * Show diff.
      *
      * @param  int    $repoID
+     * @param  int    $objectID
      * @param  string $entry
      * @param  string $oldRevision
      * @param  string $newRevision
@@ -629,11 +641,11 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function diff($repoID, $entry = '', $oldRevision = '0', $newRevision = 'HEAD', $showBug = 'false', $encoding = '')
+    public function diff($repoID, $objectID = 0, $entry = '', $oldRevision = '0', $newRevision = 'HEAD', $showBug = 'false', $encoding = '')
     {
+        $this->commonAction($repoID, $objectID);
+
         if($this->get->repoPath) $entry = $this->get->repoPath;
-        $this->repo->setMenu($this->repos, $repoID);
-        if($repoID == 0) $repoID = $this->session->repoID;
         $file    = $entry;
         $repo    = $this->repo->getRepoByID($repoID);
         $entry   = $this->repo->decodePath($entry);
@@ -655,7 +667,7 @@ class repo extends control
             }
             if($this->post->encoding) $encoding = $this->post->encoding;
 
-            $this->locate($this->repo->createLink('diff', "repoID=$repoID&entry=" . $this->repo->encodePath($entry) . "&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding"));
+            $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding"));
         }
 
         $this->scm->setEngine($repo);
@@ -708,6 +720,7 @@ class repo extends control
         $this->view->suffix      = $suffix;
         $this->view->file        = $file;
         $this->view->repoID      = $repoID;
+        $this->view->objectID    = $objectID;
         $this->view->repo        = $repo;
         $this->view->encoding    = str_replace('-', '_', $encoding);
         $this->view->arrange     = $arrange;
@@ -782,12 +795,15 @@ class repo extends control
      * Show sync comment.
      *
      * @param  int    $repoID
+     * @param  int    $objectID  projectID|executionID
      * @param  string $branch
      * @access public
      * @return void
      */
-    public function showSyncCommit($repoID = 0, $branch = '')
+    public function showSyncCommit($repoID = 0, $objectID = 0, $branch = '')
     {
+        $this->commonAction($repoID, $objectID);
+
         $this->repo->setMenu($this->repos, $repoID);
         if($repoID == 0) $repoID = $this->session->repoID;
         if($branch) $branch = base64_decode($branch);
@@ -798,8 +814,9 @@ class repo extends control
         $latestInDB = $this->repo->getLatestCommit($repoID);
         $this->view->version    = $latestInDB ? (int)$latestInDB->commit : 1;
         $this->view->repoID     = $repoID;
+        $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
-        $this->view->browseLink = $this->repo->createLink('browse', "repoID=$repoID", '', false, $this->projectID);
+        $this->view->browseLink = $this->repo->createLink('browse', "repoID=$repoID&objectID=$objectID", '', false);
         $this->display();
     }
 
@@ -813,6 +830,8 @@ class repo extends control
      */
     public function ajaxSyncCommit($repoID = 0, $type = 'batch')
     {
+        $this->commonAction($repoID);
+
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) die();

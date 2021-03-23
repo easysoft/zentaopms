@@ -34,7 +34,7 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
       <div class='detail'>
         <div class='detail-title'>
           <?php echo $lang->repo->changes;?>
-          <div class='pull-right'><?php if(common::hasPriv('repo', 'diff')) echo html::a($this->repo->createLink('diff', "repoID=$repoID&entry=&fromRevision=$oldRevision&toRevision=$revision"), $lang->repo->diffAll);?></div>
+          <div class='pull-right'><?php if(common::hasPriv('repo', 'diff')) echo html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&fromRevision=$oldRevision&toRevision=$revision"), $lang->repo->diffAll);?></div>
         </div>
         <div class='detail-content'>
           <table class='table no-margin'>
