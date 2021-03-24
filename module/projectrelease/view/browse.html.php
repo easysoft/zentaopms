@@ -23,7 +23,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('execution', $execution)):?>
-    <?php common::printLink('projectrelease', 'create', "projectID=$projectID", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
+    <?php common::printLink('projectrelease', 'create', "projectID=$projectID&executionID=$executionID", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
 </div>
@@ -33,7 +33,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
       <?php if(common::canModify('execution', $execution) and common::hasPriv('projectrelease', 'create')):?>
-      <?php echo html::a($this->createLink('projectrelease', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('projectrelease', 'create', "projectID=$projectID&executionID=$executionID"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
