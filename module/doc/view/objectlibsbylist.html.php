@@ -21,13 +21,13 @@
         </thead>
         <tbody>
           <?php foreach($libs as $libID => $lib):?>
-          <?php if($libID == 'execution' and $from != 'doc') continue;?>
+          <?php if($libID == 'execution' and $this->from != 'doc') continue;?>
           <?php if(strpos($config->doc->custom->objectLibs, 'files') === false && $libID == 'files') continue;?>
           <?php if(strpos($config->doc->custom->objectLibs, 'customFiles') === false && isset($lib->main) && !$lib->main) continue;?>
 
-          <?php $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");?>
+          <?php $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$this->from");?>
           <?php if($libID == 'execution') $libLink = inlink('allLibs', "type=execution&product=$object->id");?>
-          <?php if($libID == 'files')     $libLink = inlink('showFiles', "type=$type&objectID=$object->id&from=$from");?>
+          <?php if($libID == 'files')     $libLink = inlink('showFiles', "type=$type&objectID=$object->id&from=$this->from");?>
           <tr>
             <td class="c-name"><?php echo html::a($libLink, $lib->name);?></td>
             <td class="c-num"><?php echo  $lib->allCount . $lang->doc->item;?></td>
@@ -40,7 +40,7 @@
               <?php endif;?>
               <?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
               <?php if(empty($lib->main)) common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
-              <?php common::printLink('tree', 'browse', "rootID=$libID&viewType=doc&currentModuleID=0&branch=0&from=$from", "<i class='icon icon-cog'></i>", '', "title='{$lang->doc->manageType}' class='btn btn-link'")?>
+              <?php common::printLink('tree', 'browse', "rootID=$libID&viewType=doc&currentModuleID=0&branch=0&from=$this->from", "<i class='icon icon-cog'></i>", '', "title='{$lang->doc->manageType}' class='btn btn-link'")?>
               <?php endif;?>
             </td>
           </tr>
