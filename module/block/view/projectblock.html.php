@@ -10,12 +10,12 @@
     <thead>
       <tr>
         <th class='c-name w-100px'><?php echo $lang->project->name;?></th>
-        <th class='w-80px'><?php echo $lang->program->PM;?></th>
-        <th class='w-60px'><?php echo $lang->program->status;?></th>
+        <th class='w-80px'><?php echo $lang->project->PM;?></th>
+        <th class='w-60px'><?php echo $lang->project->status;?></th>
         <?php if($longBlock):?>
-        <th class='w-90px'><?php echo $lang->program->teamCount;?></th>
+        <th class='w-90px'><?php echo $lang->project->teamCount;?></th>
         <th class='w-90px text-right'><?php echo $lang->task->consumed;?></th>
-        <th class='w-80px text-right'><?php echo $lang->program->budget;?></th>
+        <th class='w-80px text-right'><?php echo $lang->project->budget;?></th>
         <th class='w-80px'><?php echo $lang->project->leftStories;?></th>
         <th class='w-80px'><?php echo $lang->project->leftTasks;?></th>
         <th class='w-80px'><?php echo $lang->project->leftBugs;?></th>
@@ -34,7 +34,7 @@
         <?php if($longBlock):?>
         <td class='text-center'><?php echo $project->teamCount;?></td>
         <td class='text-right' title="<?php echo $project->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->consumed . ' ' . $lang->execution->workHourUnit;?></td>
-        <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format((float)$project->budget, 1);?>
+        <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->project->tenThousand : number_format((float)$project->budget, 1);?>
         <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td class='text-center'><?php echo $project->leftStories;?></td>
         <td class='text-center'><?php echo $project->leftTasks;?></td>

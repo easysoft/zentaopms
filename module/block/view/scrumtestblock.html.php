@@ -31,18 +31,21 @@
     <tbody>
       <?php foreach($testtasks as $testtask):?>
       <?php
-      $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-      $viewLink = $this->createLink('testtask', 'view', "testtaskID={$testtask->id}");
+      $appid            = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+      $productViewLink  = $this->createLink('product', 'browse', "productID={$testtask->product}");
+      $projectViewLink  = $this->createLink('project', 'view', "projectID={$testtask->project}");
+      $testtaskViewLink = $this->createLink('testtask', 'view', "testtaskID={$testtask->id}");
+      $buildViewLink    = $this->createLink('build', 'view', "buildID={$testtask->build}");
       ?>
-      <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='text-left text-ellipsis' title='<?php echo $testtask->name?>'><?php echo $testtask->name?></td>
+      <tr class='text-center' <?php echo $appid?>>
+        <td class='text-left text-ellipsis' title='<?php echo $testtask->name?>'><?php echo html::a($testtaskViewLink, $testtask->name);?></td>
         <?php if($longBlock):?>
-        <td class='text-left text-ellipsis' title='<?php echo $testtask->productName?>'><?php echo $testtask->productName?></td>
+        <td class='text-left text-ellipsis' title='<?php echo $testtask->productName?>'><?php echo html::a($productViewLink, $testtask->productName);?></td>
         <?php endif;?>
         <?php if($longBlock):?>
-        <td class='text-left text-ellipsis' title='<?php echo $testtask->projectName?>'><?php echo $testtask->projectName?></td>
+        <td class='text-left text-ellipsis' title='<?php echo $testtask->projectName?>'><?php echo html::a($projectViewLink, $testtask->projectName);?></td>
         <?php endif;?>
-        <td class='text-left text-ellipsis' title='<?php echo $testtask->buildName?>'><?php echo $testtask->buildName?></td>
+        <td class='text-left text-ellipsis' title='<?php echo $testtask->buildName?>'><?php echo html::a($buildViewLink, $testtask->buildName);?></td>
         <td><?php echo zget($lang->testtask->statusList, $testtask->status)?></td>
       </tr>
       <?php endforeach;?>
