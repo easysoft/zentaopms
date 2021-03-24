@@ -74,7 +74,9 @@ class projectrelease extends control
         if($projectID) $this->project->setMenu($projectID);
         if($executionID) $this->loadModel('execution')->setMenu($executionID, $this->app->rawModule, $this->app->rawMethod);
 
-        $this->view->title       = $project->name . $this->lang->colon . $this->lang->release->browse;
+        $objectName = isset($project->name) ? $project->name : $execution->name;
+
+        $this->view->title       = $objectName . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[]  = $this->lang->release->browse;
         $this->view->execution   = $execution;
         $this->view->project     = $project;
@@ -91,10 +93,11 @@ class projectrelease extends control
      * Create a release.
      *
      * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function create($projectID)
+    public function create($projectID, $executionID = 0)
     {
         $this->app->loadConfig('release');
         $this->config->projectrelease->create = $this->config->release->create;
@@ -117,7 +120,8 @@ class projectrelease extends control
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
-        $this->project->setMenu($projectID);
+        if($projectID)   $this->project->setMenu($projectID);
+        if($executionID) $this->loadModel('execution')->setMenu($executionID);
         $this->commonAction();
 
         $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
@@ -226,6 +230,9 @@ class projectrelease extends control
 
         $this->commonAction($release->product);
         $product = $this->product->getById($release->product);
+
+        /* Set menu. */
+        $this->project->setMenu($release->project);
 
         $this->executeHooks($releaseID);
 
