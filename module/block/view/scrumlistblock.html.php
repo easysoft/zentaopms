@@ -39,7 +39,7 @@
       $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
       $viewLink = $this->createLink('execution', 'task', 'executionID=' . $execution->id);
       ?>
-      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+      <tr <?php echo $appid?>>
         <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($viewLink, $execution->name, '', "title='$execution->name'");?></nobr></td>
         <td class="c-date"><?php echo $execution->end;?></td>
         <?php if($longBlock):?>

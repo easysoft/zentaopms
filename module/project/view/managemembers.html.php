@@ -54,7 +54,7 @@
           <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $roles[$deptAccount]?>'/></td>
           <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
           <td>
-            <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
+            <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $config->execution->defaultWorkhours?>' />
           </td>
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
           <td class='c-actions text-center'>

@@ -213,8 +213,8 @@ class productplan extends control
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
-
         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+
         $this->commonAction($productID, $branch);
         $products               = $this->product->getPairs();
         $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->productplan->browse;

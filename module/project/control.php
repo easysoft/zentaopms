@@ -530,6 +530,7 @@ class project extends control
      */
     public function group($projectID = 0, $programID = 0)
     {
+        $this->loadModel('group');
         $this->project->setMenu($projectID);
 
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
@@ -559,6 +560,8 @@ class project extends control
      */
     public function createGroup($projectID = 0)
     {
+        $this->loadModel('group');
+
         if(!empty($_POST))
         {
             $_POST['project'] = $projectID;
@@ -1293,7 +1296,7 @@ class project extends control
             $this->user->updateUserView($projectID, 'project');
 
             /* Delete the execution under the project. */
-            $executionIdList = $this->execution->getByProject($projectID);
+            $executionIdList = $this->loadModel('execution')->getByProject($projectID);
             if(empty($executionIdList)) die(js::reload('parent'));
 
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->in(array_keys($executionIdList))->exec();
