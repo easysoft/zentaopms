@@ -153,7 +153,7 @@ js::set('foldAll',     $lang->execution->treeLevel['root']);
       echo html::a($actionLink, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
       ?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
-      <ul class='dropdown-menu'>
+      <ul class='dropdown-menu pull-right'>
         <li><?php echo html::a($actionLink, $lang->task->create);?></li>
         <li><?php echo html::a($this->createLink('task', 'batchCreate', "executionID=$executionID"), $lang->task->batchCreate);?></li>
       </ul>
