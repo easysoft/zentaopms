@@ -205,7 +205,7 @@ class company extends control
         $product   = $browseType  == 'product'   ? $param : 'all';
         $project   = $browseType  == 'project'   ? $param : 'all';
         $execution = $browseType  == 'execution' ? $param : 'all';
-        $period    = ($browseType == 'account' or $browseType == 'product' or $browseType == 'execution') ? 'all'  : $browseType;
+        $period    = in_array($browseType, array('account', 'product', 'project', 'execution')) ? 'all' : $browseType;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
         $date      = empty($date) ? '' : date('Y-m-d', $date);
 
@@ -213,6 +213,11 @@ class company extends control
         $products = $this->loadModel('product')->getPairs('nocode');
         $products = array($this->lang->company->product) + $products;
         $this->view->products = $products;
+
+        /* Get projects' list.*/
+        $projects = $this->loadModel('project')->getPairsByProgram(0);
+        $projects = array($this->lang->company->project) + $projects;
+        $this->view->projects = $projects;
 
         /* Get executions' list.*/
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
@@ -238,7 +243,7 @@ class company extends control
         }
         else
         {
-            $actions = $this->action->getDynamicBySearch($products, $executions, $queryID, $sort, $pager, $date, $direction);
+            $actions = $this->action->getDynamicBySearch($products, $projects, $executions, $queryID, $sort, $pager, $date, $direction);
         }
 
         /* Build search form. */
@@ -257,8 +262,9 @@ class company extends control
         $this->config->company->dynamic->search['actionURL'] = $this->createLink('company', 'dynamic', "browseType=bysearch&param=myQueryID");
         $this->config->company->dynamic->search['queryID'] = $queryID;
         $this->config->company->dynamic->search['params']['action']['values']    = $this->lang->action->search->label;
-        $this->config->company->dynamic->search['params']['execution']['values'] = $executions;
         $this->config->company->dynamic->search['params']['product']['values']   = $products;
+        $this->config->company->dynamic->search['params']['project']['values']   = $projects;
+        $this->config->company->dynamic->search['params']['execution']['values'] = $executions;
         $this->config->company->dynamic->search['params']['actor']['values']     = $accountPairs;
         $this->loadModel('search')->setSearchParams($this->config->company->dynamic->search);
 
@@ -267,6 +273,7 @@ class company extends control
         $this->view->account      = $account;
         $this->view->accountPairs = $accountPairs;
         $this->view->product      = $product;
+        $this->view->project      = $project;
         $this->view->execution    = $execution;
         $this->view->queryID      = $queryID;
         $this->view->orderBy      = $orderBy;

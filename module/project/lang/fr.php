@@ -190,7 +190,6 @@ $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = 'CMMI';
 $lang->project->waterfall              = 'CMMI';
 $lang->project->cannotCreateChild      = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
-$lang->project->hasChildren            = 'It has child projects or projects. You cannot delete it.';
 $lang->project->confirmDelete          = "Do you want to delete [%s]?";
 $lang->project->emptyPM                = 'No manager';
 $lang->project->cannotChangeToCat      = "It is not empty, so you cannot change it to a parent.";

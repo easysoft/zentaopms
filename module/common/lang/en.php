@@ -213,6 +213,8 @@ $lang->doc->project  = 'Project';
 $lang->doc->custom   = 'Custom';
 $lang->doc->wiki     = 'WIKI';
 
+$lang->product->list = $lang->productCommon . ' List';
+
 $lang->project->report = 'Report';
 
 $lang->report->weekly = 'Weekly';
@@ -234,7 +236,7 @@ $lang->admin->data       = 'Data';
 $lang->admin->cron       = 'Cron';
 $lang->admin->buildIndex = 'Full Text Search';
 
-$lang->subject->storyConcept = 'Story Concpet';
+$lang->storyConcept = 'Story Concpet';
 
 $lang->searchTips = '';
 $lang->searchAB   = 'Search';

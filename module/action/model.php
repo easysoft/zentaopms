@@ -762,6 +762,7 @@ class actionModel extends model
      * Get dynamic by search.
      *
      * @param  array  $products
+     * @param  array  $projects
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $orderBy
@@ -771,7 +772,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getDynamicBySearch($products, $executions, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next')
+    public function getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next')
     {
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
@@ -783,7 +784,8 @@ class actionModel extends model
         }
         if($this->session->actionQuery == false) $this->session->set('actionQuery', ' 1 = 1');
 
-        $allProduct    = "`product`   = 'all'";
+        $allProducts   = "`product`   = 'all'";
+        $allProjects   = "`project`   = 'all'";
         $allExecutions = "`execution` = 'all'";
         $actionQuery   = $this->session->actionQuery;
 
@@ -792,14 +794,25 @@ class actionModel extends model
         {
             $productID = $out[1];
         }
+
         /* If the sql not include 'product', add check purview for product. */
-        if(strpos($actionQuery, $allProduct) === false)
+        if(strpos($actionQuery, $allProducts) === false)
         {
             if(!in_array($productID, array_keys($products))) return array();
         }
         else
         {
-            $actionQuery = str_replace($allProduct, '1', $actionQuery);
+            $actionQuery = str_replace($allProducts, '1', $actionQuery);
+        }
+
+        /* If the sql not include 'project', add check purview for project. */
+        if(strpos($actionQuery, $allProjects) === false)
+        {
+            $actionQuery = $actionQuery . ' AND `project`' . helper::dbIN(array_keys($projects));
+        }
+        else
+        {
+            $actionQuery = str_replace($allProjects, '1', $actionQuery);
         }
 
         /* If the sql not include 'execution', add check purview for execution. */

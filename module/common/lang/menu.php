@@ -128,7 +128,7 @@ $lang->program->menu->personnel['subMenu']->whitelist  = array('link' => "{$lang
 /* Product menu. */
 $lang->product->homeMenu = new stdclass();
 $lang->product->homeMenu->home = array('link' => "{$lang->dashboard}|product|index|");
-$lang->product->homeMenu->list = array('link' => $lang->productCommon . '|product|all|', 'alias' => 'create,batchedit,manageline');
+$lang->product->homeMenu->list = array('link' => $lang->product->list . '|product|all|', 'alias' => 'create,batchedit,manageline');
 
 $lang->product->menu = new stdclass();
 $lang->product->menu->dashboard   = array('link' => "{$lang->dashboard}|product|dashboard|productID=%s");

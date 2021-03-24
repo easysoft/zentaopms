@@ -29,6 +29,7 @@ $lang->company->guest    = 'Gast Login';
 $lang->company->admins   = 'Administratoren';
 
 $lang->company->product   = $lang->productCommon;
+$lang->company->project   = 'Project';
 $lang->company->execution = $lang->executionCommon;
 $lang->company->user      = 'Benutzer';
 
