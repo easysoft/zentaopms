@@ -137,7 +137,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <div class='btn-group dropdown'>
       <?php echo html::a($this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID"), "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary' data-app='$openApp'");?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
-      <ul class='dropdown-menu'>
+      <ul class='dropdown-menu pull-right'>
         <li>
         <?php
         if(commonModel::isTutorialMode())
@@ -163,7 +163,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                 $link     = '###';
                 $disabled = 'disabled';
             }
-            echo html::a($link, $lang->story->createCommon, '', "class='$disabled' data-group='$openApp'");
+            echo html::a($link, $lang->story->create, '', "class='$disabled' data-group='$openApp'");
         }
         ?>
         </li>
