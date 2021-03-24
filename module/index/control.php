@@ -70,9 +70,17 @@ class index extends control
         echo $this->fetch('misc', 'getsid');
     }
 
+    /**
+     * ajaxClearObjectSession
+     *
+     * @access public
+     * @return void
+     */
     public function ajaxClearObjectSession()
     {
         $objectType = $this->post->objectType;
+        if($objectType == 'testcase') $objectType = 'case';
+
         $this->session->set($objectType . 'List', '');
     }
 }
