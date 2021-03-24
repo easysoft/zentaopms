@@ -35,7 +35,7 @@ js::set('suiteID',        $suiteID);
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class='text-center'>
-        <?php common::printLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$this->lang->navGroup->testcase}", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
+        <?php if(!empty($productID)) common::printLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$this->lang->navGroup->testcase}", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>
@@ -197,7 +197,7 @@ js::set('suiteID',        $suiteID);
             </div>
           </div>
           <?php endif;?>
-          <?php if($canBatchChangeModule):?>
+          <?php if($canBatchChangeModule and !empty($productID)):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 10;?>
