@@ -227,6 +227,7 @@ class customModel extends model
             $class     = '';
             $subModule = '';
             $subMenu   = '';
+            $dropMenu  = '';
             $alias     = '';
             $exclude   = '';
 
@@ -258,26 +259,31 @@ class customModel extends model
                     if(isset($item['class']))     $class     = $item['class'];
                     if(isset($item['subModule'])) $subModule = $item['subModule'];
                     if(isset($item['subMenu']))   $subMenu   = $item['subMenu'];
+                    if(isset($item['dropMenu']))  $dropMenu  = $item['dropMenu'];
                     if(isset($item['alias']))     $alias     = $item['alias'];
                     if(isset($item['exclude']))   $exclude   = $item['exclude'];
                 }
 
                 $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
 
-                if(is_array($item) and isset($item['subMenu']))
+                if(is_array($item) and (isset($item['subMenu']) or isset($item['dropMenu'])))
                 {
-                    foreach($item['subMenu'] as $subItem)
+                    foreach(array('subMenu', 'dropMenu') as $key)
                     {
-                        if(isset($subItem->link['module']) && isset($subItem->link['method']))
+                        if(!isset($item[$key])) continue;
+                        foreach($item[$key] as $subItem)
                         {
-                            $subItem->hidden = !common::hasPriv($subItem->link['module'], $subItem->link['method']);
+                            if(isset($subItem->link['module']) && isset($subItem->link['method']))
+                            {
+                                $subItem->hidden = !common::hasPriv($subItem->link['module'], $subItem->link['method']);
+                            }
                         }
-                    }
-                    if(isset($customMenuMap[$name]->subMenu))
-                    {
-                        foreach($customMenuMap[$name]->subMenu as $subItem)
+                        if(isset($customMenuMap[$name]->$key))
                         {
-                            if(isset($subItem->hidden) && isset($item['subMenu'][$subItem->name])) $item['subMenu'][$subItem->name]->hidden = $subItem->hidden;
+                            foreach($customMenuMap[$name]->$key as $subItem)
+                            {
+                                if(isset($subItem->hidden) && isset($item[$key][$subItem->name])) $item[$key][$subItem->name]->hidden = $subItem->hidden;
+                            }
                         }
                     }
                 }
@@ -293,6 +299,7 @@ class customModel extends model
                 if($class)    $menuItem->class     = $class;
                 if($subModule)$menuItem->subModule = $subModule;
                 if($subMenu)  $menuItem->subMenu   = $subMenu;
+                if($dropMenu) $menuItem->dropMenu  = $dropMenu;
                 if($alias)    $menuItem->alias     = $alias;
                 if($exclude)  $menuItem->exclude   = $exclude;
                 if($isTutorialMode) $menuItem->tutorial = true;

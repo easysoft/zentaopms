@@ -183,6 +183,7 @@ $lang->scrum->menu->devops    = array('link' => "{$lang->repo->common}|repo|brow
 $lang->scrum->menu->build     = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->scrum->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
+$lang->scrum->menu->other     = array('link' => "$lang->other|issue|browse|project=%s", 'class' => 'dropdown dropdown-hover');
 $lang->scrum->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
 /* Scrum menu order. */
@@ -225,7 +226,7 @@ $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|projec
 $lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse", 'subModule' => 'projectrelease');
 $lang->waterfall->menu->build       = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->waterfall->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
-$lang->waterfall->menu->other       = array('link' => "$lang->other|project|other", 'class' => 'dropdown dropdown-hover waterfall-list', 'subModule' => 'issue,risk,stakeholder,nc,workestimation,durationestimation,budget,pssp,measrecord,report');
+$lang->waterfall->menu->other       = array('link' => "$lang->other|workestimation|index|project=%s", 'class' => 'dropdown dropdown-hover');
 $lang->waterfall->menu->settings    = array('link' => "$lang->settings|project|view|project=%s", 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
 /* Waterfall menu order. */
@@ -246,11 +247,11 @@ $lang->waterfall->menuOrder[65] = 'other';
 $lang->waterfall->menuOrder[68] = 'dynamic';
 $lang->waterfall->menuOrder[70] = 'projectsetting';
 
-$lang->waterfall->menu->other['subMenu'] = new stdclass();
-$lang->waterfall->menu->other['subMenu']->estimation  = array('link' => "$lang->estimation|workestimation|index|program=%s", 'subModule' => 'workestimation,durationestimation,budget');
-$lang->waterfall->menu->other['subMenu']->issue       = array('link' => "$lang->issue|issue|browse|", 'subModule' => 'issue');
-$lang->waterfall->menu->other['subMenu']->risk        = array('link' => "$lang->risk|risk|browse|", 'subModule' => 'risk');
-$lang->waterfall->menu->other['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|", 'subModule' => 'stakeholder');
+$lang->waterfall->menu->other['dropMenu'] = new stdclass();
+$lang->waterfall->menu->other['dropMenu']->estimation  = array('link' => "$lang->estimation|workestimation|index|program=%s", 'subModule' => 'workestimation,durationestimation,budget');
+$lang->waterfall->menu->other['dropMenu']->issue       = array('link' => "$lang->issue|issue|browse|", 'subModule' => 'issue');
+$lang->waterfall->menu->other['dropMenu']->risk        = array('link' => "$lang->risk|risk|browse|", 'subModule' => 'risk');
+$lang->waterfall->menu->other['dropMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|", 'subModule' => 'stakeholder');
 
 $lang->waterfall->menu->settings = $lang->scrum->menu->settings;
 
