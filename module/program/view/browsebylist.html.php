@@ -96,15 +96,15 @@
             </ul>
           </div>
           <?php endif;?>
-          <?php common::printIcon('project', 'edit', "projectID=$program->id&from=browse", $program, 'list', 'edit', '', '', '', "data-group='program'", '', $program->id);?>
-          <?php common::printIcon('project', 'manageMembers', "projectID=$program->id", $program, 'list', 'group', '', '', '', 'data-group="program"', '', $program->id);?>
-          <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', '', '', 'data-group="program"', '', $program->id);?>
+          <?php common::printIcon('project', 'edit', "projectID=$program->id&from=browse", $program, 'list', 'edit', '', '', '', "data-app='project'", '', $program->id);?>
+          <?php common::printIcon('project', 'manageMembers', "projectID=$program->id", $program, 'list', 'group', '', '', '', 'data-app="project"', '', $program->id);?>
+          <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', '', '', 'data-app="project"', '', $program->id);?>
           <?php if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete')):?>
           <div class='btn-group'>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
               <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&programID=$program->parent&from=browse", $program, 'list', 'link', '', '', '', "data-app='project'", '', $program->id);?>
-              <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&programID=$program->parent&module=program&from=browse", $program, 'list', 'shield-check', '', '', '', "data-app='project'", '', $program->id);?>
+              <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&module=project&from=browse", $program, 'list', 'shield-check', '', '', '', "data-app='project'", '', $program->id);?>
               <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->delete}' data-group='program'");?>
             </ul>
           </div>
