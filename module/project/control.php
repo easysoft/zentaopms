@@ -832,7 +832,7 @@ class project extends control
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
 
-        $executions = $this->execution->getByProject($projectID, 'all', '', true);
+        $executions = $this->loadModel('execution')->getByProject($projectID, 'all', '', true);
         $this->config->build->search['fields']['execution'] = $this->project->lang->executionCommon;
         $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
 

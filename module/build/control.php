@@ -179,8 +179,8 @@ class build extends control
         $this->session->project = $build->project;
 
         /* Set session and load modules. */
-        if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
-        if($type == 'bug')  $this->session->set('bugList', $this->app->getURI(true));
+        if($type == 'story')$this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($type == 'bug')  $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         $this->loadModel('story');
         $this->loadModel('bug');
