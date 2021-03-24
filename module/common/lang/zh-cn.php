@@ -234,7 +234,7 @@ $lang->admin->data       = '数据';
 $lang->admin->cron       = '定时';
 $lang->admin->buildIndex = '重建索引';
 
-$lang->subject->storyConcept = '需求概念';
+$lang->storyConcept = '需求概念';
 
 $lang->searchTips = '';
 $lang->searchAB   = '搜索';
