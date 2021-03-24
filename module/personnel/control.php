@@ -109,7 +109,7 @@ class personnel extends control
 
         /* Load lang and set session. */
         $this->app->loadLang('user');
-        $this->app->session->set('whitelistBrowse', $this->app->getURI(true));
+        $this->app->session->set('whitelistList', $this->app->getURI(true), $this->app->openApp);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -165,7 +165,7 @@ class personnel extends control
             $this->personnel->addWhitelist($objectType, $objectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
-            $locateLink = $this->session->whitelistBrowse ? $this->session->whitelistBrowse : $this->createLink($module, 'whitelist', "objectID=$objectID");
+            $locateLink = $this->session->whitelistList ? $this->session->whitelistList : $this->createLink($module, 'whitelist', "objectID=$objectID");
             $openApp = $module == 'program' ? ($from == 'project' || $from == 'my' ? '#open=project' : '#open=program') : '';
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $openApp));
         }
