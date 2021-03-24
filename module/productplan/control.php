@@ -214,7 +214,7 @@ class productplan extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        $this->session->set('productPlanList', $this->app->getURI(true));
+        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
         $this->commonAction($productID, $branch);
         $products               = $this->product->getPairs();
         $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->productplan->browse;
@@ -249,8 +249,8 @@ class productplan extends control
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story');
-        $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug');
+        $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story', 'product');
+        $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug', 'qa');
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canBeChanged('plan', $plan);
@@ -359,7 +359,7 @@ class productplan extends control
             die(js::locate(inlink('view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
         }
 
-        $this->session->set('storyList', inlink('view', "planID=$planID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+        $this->session->set('storyList', inlink('view', "planID=$planID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
 
         $this->loadModel('story');
         $this->loadModel('tree');
@@ -498,7 +498,7 @@ class productplan extends control
 
         /* Load module and set session. */
         $this->loadModel('bug');
-        $this->session->set('bugList', inlink('view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+        $this->session->set('bugList', inlink('view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
 
         /* Init vars. */
         $projects  = $this->app->user->view->projects . ',0';

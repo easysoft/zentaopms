@@ -277,7 +277,7 @@ class project extends control
                 if($model == 'waterfall')
                 {
                     $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
-                    $this->session->set('projectPlanList', $this->createLink('projectplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID));
+                    $this->session->set('projectPlanList', $this->createLink('projectplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
                     $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('projectplan', 'create', "projectID=$projectID", '', '', $projectID)));
                 }
 
@@ -490,7 +490,7 @@ class project extends control
 
         $this->project->setMenu($projectID);
 
-        $this->app->session->set('projectList', $this->app->getURI(true));
+        $this->app->session->set('projectList', $this->app->getURI(true), 'project');
 
         $products = $this->loadModel('product')->getProducts($projectID);
         $linkedBranches = array();
@@ -591,16 +591,17 @@ class project extends control
 
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('executionList',   $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
@@ -826,7 +827,7 @@ class project extends control
         $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
-        $this->session->set('buildList', $this->app->getURI(true));
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         /* Get products' list. */
         $products = $this->project->getProducts($projectID, false);
