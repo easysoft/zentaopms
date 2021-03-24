@@ -24,6 +24,11 @@ js::set('productID',      $productID);
 js::set('branch',         $branch);
 js::set('suiteID',        $suiteID);
 ?>
+<?php if($this->app->openApp == 'project'): ?>
+<style>
+#subHeader #dropMenu .col-left .list-group {margin-bottom: 0px;}
+</style>
+<?php endif;?>
 <div id="mainContent" class="main-row fade">
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>

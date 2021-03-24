@@ -18,7 +18,7 @@
       <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
       <?php echo isonlybody() ? ("<span title='$project->name'>" . $project->name . '</span>') : html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
       <?php if(!isonlybody()):?>
-      <small><?php echo $lang->arrow . $lang->project->start;?></small>
+      <small><?php echo $lang->arrow . $lang->{$project->type}->start;?></small>
       <?php endif;?>
     </h2>
   </div>
@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>
-            <?php echo html::submitButton($lang->project->start);?>
+            <?php echo html::submitButton($lang->{$project->type}->start);?>
           </td>
         </tr>
       </tbody>
