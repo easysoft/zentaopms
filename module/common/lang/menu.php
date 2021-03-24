@@ -94,6 +94,14 @@ $lang->my->menu->contribute['subMenu']->testcase = "{$lang->testcase->shortCommo
 $lang->my->menu->contribute['subMenu']->testtask = "{$lang->testtask->common}|my|contribute|mode=testtask&type=done";
 $lang->my->menu->contribute['subMenu']->doc      = "{$lang->doc->common}|my|contribute|mode=doc&type=openedbyme";
 
+$lang->my->menu->contribute['menuOrder'][5]  = 'task';
+$lang->my->menu->contribute['menuOrder'][10] = 'requirement';
+$lang->my->menu->contribute['menuOrder'][15] = 'story';
+$lang->my->menu->contribute['menuOrder'][20] = 'bug';
+$lang->my->menu->contribute['menuOrder'][25] = 'testcase';
+$lang->my->menu->contribute['menuOrder'][30] = 'testtask';
+$lang->my->menu->contribute['menuOrder'][35] = 'doc';
+
 $lang->my->dividerMenu = ',work,dynamic,';
 
 /* Program menu. */
@@ -246,10 +254,7 @@ $lang->waterfall->menu->other['subMenu']->estimation  = array('link' => "$lang->
 $lang->waterfall->menu->other['subMenu']->issue       = array('link' => "$lang->issue|issue|browse|", 'subModule' => 'issue');
 $lang->waterfall->menu->other['subMenu']->risk        = array('link' => "$lang->risk|risk|browse|", 'subModule' => 'risk');
 $lang->waterfall->menu->other['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|", 'subModule' => 'stakeholder');
-$lang->waterfall->menu->other['subMenu']->report      = array('link' => "{$lang->measure}|report|projectsummary|project=%s", 'subModule' => ',report,measrecord');
-$lang->waterfall->menu->other['subMenu']->auditplan   = array('link' => "{$lang->qa->shortCommon}|auditplan|browse|", 'subModule' => 'nc');
 
-$lang->waterfall->menu->qa       = $lang->scrum->menu->qa;
 $lang->waterfall->menu->settings = $lang->scrum->menu->settings;
 
 /* Execution menu. */
@@ -429,6 +434,11 @@ $lang->admin->menuOrder[30] = 'extension';
 $lang->admin->menuOrder[35] = 'dev';
 $lang->admin->menuOrder[40] = 'system';
 
+$lang->admin->menu->model['subMenu'] = new stdclass();
+$lang->admin->menu->model['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
+
+$lang->admin->menu->model['menuOrder'][5] = 'storyConcept';
+
 $lang->admin->menu->message['subMenu'] = new stdclass();
 $lang->admin->menu->message['subMenu']->message = new stdclass();
 $lang->admin->menu->message['subMenu']->mail    = array('link' => "{$lang->mail->common}|mail|index", 'subModule' => 'mail');
@@ -467,7 +477,7 @@ $lang->admin->menu->system['subMenu']->buildIndex = array('link' => "{$lang->adm
 $lang->admin->dividerMenu = ',company,message,system,';
 
 $lang->subject->menu = new stdclass();
-$lang->subject->menu->storyConcept = array('link' => "{$lang->subject->storyConcept}|custom|browsestoryconcept|");
+$lang->subject->menu->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
 
 /* System menu. */
 $lang->system->menu = new stdclass();
