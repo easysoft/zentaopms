@@ -30,6 +30,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 ?>
 <style>
 .btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
+.btn-group a i.icon-plus {font-size: 16px;}
+.btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
+.btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if(!$isProjectStory):?>
@@ -131,8 +134,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       </ul>
     </div>
     <?php if(common::canModify('product', $product)):?>
-    <div class='btn-group dropdown-hover'>
-      <?php echo html::a('javascript:;', "<i class='icon icon-plus'></i> {$lang->story->create} </span><span class='caret'>", '', "class='btn btn-secondary'");?>
+    <div class='btn-group dropdown'>
+      <?php echo html::a($this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID"), "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary'");?>
+      <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu'>
         <li>
         <?php
