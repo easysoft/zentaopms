@@ -210,7 +210,7 @@ $lang->scrum->menu->settings['subMenu']->view        = array('link' => "$lang->o
 $lang->scrum->menu->settings['subMenu']->products    = array('link' => "{$lang->product->common}|project|manageProducts|project=%s", 'alias' => 'manageproducts');
 $lang->scrum->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|manageMembers|project=%s", 'alias' => 'managemembers');
 $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
-$lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|", 'subModule' => 'stakeholder');
+$lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
 $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 
 /* Waterfall menu. */

@@ -561,7 +561,7 @@ class executionModel extends model
         foreach($executions as $executionID => $execution)
         {
             $oldExecution = $oldExecutions[$executionID];
-            $team       = $this->getTeamMemberPairs($executionID);
+            $team         = $this->getTeamMemberPairs($executionID);
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')

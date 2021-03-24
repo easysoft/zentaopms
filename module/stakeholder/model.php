@@ -193,20 +193,21 @@ class stakeholderModel extends model
     /**
      * Get stakeholder list.
      *
+     * @param  int    $projectID
      * @param  string $browseType
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getStakeholders($browseType = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getStakeholders($projectID, $browseType = 'all', $orderBy = 'id_desc', $pager = null)
     {
         $stakeholders = $this->dao->select('t1.*, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t4.model as projectModel')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.objectID=t4.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.objectID')->eq($this->session->project)
+            ->andWhere('t1.objectID')->eq($projectID)
             ->beginIF($browseType == 'inside')->andWhere('t1.type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('t1.type')->eq('outside')->fi()
             ->beginIF($browseType == 'key')->andWhere('t1.key')->ne('0')->fi()
@@ -220,13 +221,14 @@ class stakeholderModel extends model
     /**
      * Get stakeholder pairs.
      *
+     * @param  int    $projectID
      * @param  string $browseType
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getStakeHolderPairs()
+    public function getStakeHolderPairs($projectID)
     {
         $stakeholders = $this->dao->select('id, user')->from(TABLE_STAKEHOLDER)
             ->where('deleted')->eq('0')

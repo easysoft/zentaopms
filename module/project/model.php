@@ -395,33 +395,40 @@ class projectModel extends model
     }
 
     /**
-     * Get project team member pairs.
+     * Get team members in pair.
      *
-     * @param  int  $programID
+     * @param  int    $projectID
+     * @param  string $params
+     * @param  string $usersToAppended
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs($programID = 0)
+    public function getTeamMemberPairs($projectID, $params = '', $usersToAppended = '')
     {
-      $projectList = $this->getPairsByProgram($programID);
-      if(!$projectList) return array('' => '');
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
+        $this->app->loadConfig('user');
 
-      $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
-          ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-          ->where('t1.root')->in(array_keys($projectList))
-          ->andWhere('t1.type')->eq('project')
-          ->andWhere('t2.deleted')->eq(0)
-          ->fetchAll('account');
-      if(!$users) return array('' => '');
+        $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
+        $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.root')->eq((int)$projectID)
+            ->andWhere('t1.type')->eq('project')
+            ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
+            ->andWhere('t2.deleted')->eq(0)
+            ->fi()
+            ->fetchAll($keyField);
 
-      foreach($users as $account => $user)
-      {
-        $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
-        if(!empty($this->config->isINT)) $firstLetter = '';
-        $users[$account] = $firstLetter . ($user->realname ? $user->realname : $user->account);
-      }
+        if($usersToAppended) $users += $this->dao->select("id, account, realname")->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
 
-      return array('' => '') + $users;
+        if(!$users) return array('' => '');
+
+        foreach($users as $account => $user)
+        {
+            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
+            if(!empty($this->config->isINT)) $firstLetter = '';
+            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
+        }
+        return array('' => '') + $users;
     }
 
     /**
