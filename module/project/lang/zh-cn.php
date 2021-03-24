@@ -46,6 +46,8 @@ $lang->project->errorNoProducts   = '最少关联一个产品';
 $lang->project->copyNoProject     = '没有可用的项目来复制';
 $lang->project->searchByName      = '输入项目名称进行检索';
 $lang->project->deleted           = '已删除';
+$lang->project->linkedProducts    = '已关联';
+$lang->project->unlinkedProducts  = '未关联';
 
 /* Fields. */
 $lang->project->common             = '项目';

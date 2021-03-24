@@ -20,7 +20,7 @@
   <div class='cell'>
     <form class='main-form form-ajax' method='post' id='productsBox' enctype='multipart/form-data'>
       <div class='detail'>
-        <div class='detail-title'><?php echo $lang->execution->linkedProducts;?></div>
+        <div class='detail-title'><?php echo $lang->project->linkedProducts;?></div>
         <div class='detail-content row'>
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class='detail'>
-        <div class='detail-title'><?php echo $lang->execution->unlinkedProducts;?></div>
+        <div class='detail-title'><?php echo $lang->project->unlinkedProducts;?></div>
         <div class='detail-content row'>
           <?php foreach($allProducts as $productID => $productName):?>
           <div class='col-sm-4'>

@@ -43,11 +43,10 @@ class program extends control
      */
     public function browse($status = 'all', $orderBy = 'order_asc')
     {
-        $this->lang->program->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
-
         if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-secondary'");
 
-        $this->session->set('programList', $this->app->getURI(true));
+        $this->session->set('programList', $this->app->getURI(true), 'program');
+        $this->session->set('projectList', $this->app->getURI(true), 'project');
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 

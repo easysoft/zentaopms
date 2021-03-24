@@ -396,7 +396,7 @@ class actionModel extends model
             }
             elseif(($actionName == 'opened' or $actionName == 'managed' or $actionName == 'edited') and ($objectType == 'execution' || $objectType == 'project'))
             {
-                $this->app->loadLang('executon');
+                $this->app->loadLang('execution');
                 $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
                 $action->extra  = '';
                 if($linkedProducts)

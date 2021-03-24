@@ -45,6 +45,8 @@ $lang->project->errorSameProducts = 'Project cannot be associated with multiple 
 $lang->project->errorNoProducts   = 'At least one product is associated';
 $lang->project->copyNoProject     = 'There are no items available to copy.';
 $lang->project->searchByName      = 'Enter the project name to search';
+$lang->project->linkedProducts    = "Linked {$lang->productCommon}s";
+$lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
 
 /* Fields. */
 $lang->project->common             = 'Program';

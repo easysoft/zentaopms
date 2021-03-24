@@ -162,7 +162,7 @@ class extension extends control
 
         /* Checking the extension pathes. */
         $return = $this->extension->checkExtensionPathes($extension);
-        if($this->session->dirs2Created == false) $this->session->set('dirs2Created', $return->dirs2Created);    // Save the dirs to be created.
+        if($this->session->dirs2Created == false) $this->session->set('dirs2Created', $return->dirs2Created, 'admin');    // Save the dirs to be created.
         if($return->result != 'ok')
         {
             $this->view->error = $return->errors;
@@ -302,7 +302,7 @@ class extension extends control
         $data->dirs   = $this->session->dirs2Created;
         $data->files  = $this->view->files;
         $data->installedTime = helper::now();
-        $this->session->set('dirs2Created', array());   // clean the session.
+        $this->session->set('dirs2Created', array(), 'admin');   // clean the session.
 
         /* Execute the install.sql. */
         if($upgrade == 'no' and $this->extension->needExecuteDB($extension, 'install'))

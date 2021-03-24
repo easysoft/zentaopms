@@ -116,7 +116,7 @@ class personnel extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set back link. */
-        $goback = $this->session->projectBrowse ? $this->session->projectBrowse : $this->createLink('program', 'whitelist', "projectID=$objectID");
+        $goback = $this->session->projectList ? $this->session->projectList : $this->createLink('program', 'whitelist', "projectID=$objectID");
         if($from == 'program')  $goback = $this->createLink('program', 'browse');
         if($from == 'programproject') $goback = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "programID=$programID");
 

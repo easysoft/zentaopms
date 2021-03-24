@@ -160,7 +160,8 @@
             <?php
               echo html::hidden('model', $project->model);
               echo html::submitButton();
-              echo html::backButton();
+              $browseLink = $this->session->projectList ? $this->session->projectList : $this->createLink('project', 'browse');
+              echo html::a($browseLink, $lang->goback, '', 'class="btn btn-back btn-wide"');
             ?>
           </td>
         </tr>

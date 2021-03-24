@@ -1019,8 +1019,6 @@ class product extends control
      */
     public function all($browseType = 'noclosed', $orderBy = 'program_asc')
     {
-        if($this->session->moreProductLink) $this->lang->product->mainMenuAction = html::a($this->session->moreProductLink, '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
-
         /* Load module and set session. */
         $this->loadModel('program');
         $this->session->set('productList', $this->app->getURI(true));

@@ -10,14 +10,6 @@
  */
 class project extends control
 {
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-        $this->loadModel('program');
-        $this->loadModel('execution');
-        $this->loadModel('group');
-    }
-
     /**
      * Project create guide.
      *
@@ -206,10 +198,9 @@ class project extends control
      */
     public function browse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        if($this->session->moreProjectLink) $this->lang->project->mainMenuAction = html::a($this->session->moreProjectLink, '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
-        $this->app->session->set('projectBrowse', $this->app->getURI(true));
         $this->loadModel('datatable');
-        $this->session->set('projectList', $this->app->getURI(true));
+        $this->loadModel('execution');
+        $this->session->set('projectList', $this->app->getURI(true), 'project');
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -217,7 +208,7 @@ class project extends control
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $projectTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=projectTitle');
-        $projectStats = $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $projectTitle);
+        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $projectTitle);
 
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;
@@ -267,6 +258,8 @@ class project extends control
      */
     public function create($model = 'waterfall', $programID = 0, $copyProjectID = 0)
     {
+        $this->loadModel('execution');
+
         if($_POST)
         {
             $projectID = $this->project->create();
@@ -361,13 +354,16 @@ class project extends control
      */
     public function edit($projectID = 0, $from = 'project')
     {
-        $this->app->loadLang('custom');
-        $this->app->loadLang('project');
-        $this->loadModel('productplan');
         $this->loadModel('action');
+        $this->loadModel('custom');
+        $this->loadModel('productplan');
+        $this->loadModel('user');
+        $this->loadModel('program');
+        $this->loadModel('execution');
 
         $project   = $this->project->getByID($projectID);
         $programID = $project->parent;
+        $this->project->setMenu($projectID);
 
         if($_POST)
         {
@@ -380,12 +376,11 @@ class project extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $locateLink = $this->session->projectBrowse ? $this->session->projectBrowse : inLink('view', "projectID=$projectID");
-            if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
+            $locateLink = $this->session->projectList ? $this->session->projectList : inLink('view', "projectID=$projectID");
+            if($from == 'program')        $locateLink = $this->createLink('program', 'browse');
             if($from == 'programProject') $locateLink = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
-
 
         $linkedBranches = array();
         $productPlans   = array(0 => '');
@@ -415,7 +410,7 @@ class project extends control
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
 
-        $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->PMUsers              = $this->user->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
         $this->view->users                = $this->user->getPairs('noclosed|nodeleted');
         $this->view->project              = $project;
         $this->view->programList          = $this->program->getParentPairs();
@@ -425,10 +420,10 @@ class project extends control
         $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
-        $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
+        $this->view->URSRPairs            = $this->custom->getURSRPairs();
         $this->view->from                 = $from;
         $this->view->parentProject        = $parentProject;
-        $this->view->parentProgram        = $this->loadModel('program')->getByID($project->parent);
+        $this->view->parentProgram        = $this->program->getByID($project->parent);
         $this->view->availableBudget      = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;
         $this->view->budgetUnitList       = $this->project->getBudgetUnitList();
 
@@ -446,6 +441,7 @@ class project extends control
     public function batchEdit($from = 'browse', $projectID = 0)
     {
         $this->loadModel('action');
+        $this->loadModel('execution');
 
         if($this->post->names)
         {
@@ -493,7 +489,7 @@ class project extends control
 
         $this->project->setMenu($projectID);
 
-        $this->app->session->set('projectBrowse', $this->app->getURI(true));
+        $this->app->session->set('projectList', $this->app->getURI(true));
 
         $products = $this->loadModel('product')->getProducts($projectID);
         $linkedBranches = array();
@@ -984,6 +980,10 @@ class project extends control
      */
     public function manageMembers($projectID, $dept = '')
     {
+        /* Load model. */
+        $this->loadModel('user');
+        $this->loadModel('dept');
+        $this->loadModel('execution');
         $this->project->setMenu($projectID);
 
         if(!empty($_POST))
@@ -992,10 +992,6 @@ class project extends control
             $link = $this->createLink('project', 'manageMembers', "projectID=$projectID");
             $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
-
-        /* Load model. */
-        $this->loadModel('user');
-        $this->loadModel('dept');
 
         $project   = $this->project->getById($projectID);
         $users     = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
@@ -1389,6 +1385,9 @@ class project extends control
      */
     public function manageProducts($projectID, $programID = 0, $from = 'project')
     {
+        $this->loadModel('product');
+        $this->loadModel('program');
+
         if(!empty($_POST))
         {
             if(!isset($_POST['products']))
@@ -1412,8 +1411,6 @@ class project extends control
             if($from == 'programproject') $locateLink = $this->session->programProject ? $this->session->programProject : inLink('programProject', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
-
-        $this->loadModel('product');
 
         $project = $this->project->getById($projectID);
         if($this->app->openApp == 'program')
