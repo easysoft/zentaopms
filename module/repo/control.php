@@ -431,6 +431,7 @@ class repo extends control
      * show repo log.
      *
      * @param  int    $repoID
+     * @param  int    $objectID
      * @param  string $entry
      * @param  string $revision
      * @param  string $type
@@ -440,7 +441,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function log($repoID = 0, $entry = '', $revision = 'HEAD', $type = 'dir', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function log($repoID = 0, $objectID = 0, $entry = '', $revision = 'HEAD', $type = 'dir', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $this->repo->setBackSession('log', $withOtherModule = true);
@@ -461,7 +462,7 @@ class repo extends control
             $this->locate($this->repo->createLink('diff', "repoID=$repoID&entry=" . $this->repo->encodePath($path) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
         }
 
-        $this->commonAction($repoID);
+        $this->commonAction($repoID, $objectID);
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);
 
@@ -474,6 +475,7 @@ class repo extends control
         $this->view->logs       = $logs;
         $this->view->revision   = $revision;
         $this->view->repoID     = $repoID;
+        $this->view->objectID   = $objectID;
         $this->view->entry      = urldecode($entry);
         $this->view->path       = urldecode($entry);
         $this->view->file       = urldecode($file);
@@ -503,7 +505,7 @@ class repo extends control
         /* Save session. */
         $this->session->set('revisionList', $this->app->getURI(true), 'repo');
 
-        $this->commonAction($repoID);
+        $this->commonAction($repoID, $objectID);
         $this->scm->setEngine($repo);
         $log = $this->scm->log('', $revision, $revision);
 
@@ -672,7 +674,6 @@ class repo extends control
             $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding"));
         }
 
-        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));

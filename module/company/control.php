@@ -203,6 +203,7 @@ class company extends control
             if($user) $account = $user->account;
         }
         $product   = $browseType  == 'product'   ? $param : 'all';
+        $project   = $browseType  == 'project'   ? $param : 'all';
         $execution = $browseType  == 'execution' ? $param : 'all';
         $period    = ($browseType == 'account' or $browseType == 'product' or $browseType == 'execution') ? 'all'  : $browseType;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
@@ -233,7 +234,7 @@ class company extends control
         /* Get actions. */
         if($browseType != 'bysearch')
         {
-            $actions = $this->action->getDynamic($account, $period, $sort, $pager, $product, $execution, $date, $direction);
+            $actions = $this->action->getDynamic($account, $period, $sort, $pager, $product, $project, $execution, $date, $direction);
         }
         else
         {

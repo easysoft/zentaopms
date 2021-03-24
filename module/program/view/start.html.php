@@ -18,7 +18,7 @@
       <span class='prefix label-id'><strong><?php echo $program->id;?></strong></span>
       <?php echo isonlybody() ? ("<span title='$program->name'>" . $program->name . '</span>') : html::a($this->createLink('project', 'view', 'project=' . $program->id), $program->name, '_blank');?>
       <?php if(!isonlybody()):?>
-      <small><?php echo $lang->arrow . $lang->project->start;?></small>
+      <small><?php echo $lang->arrow . $lang->program->start;?></small>
       <?php endif;?>
     </h2>
   </div>
@@ -26,7 +26,7 @@
     <table class='table table-form'>
       <tbody>
         <tr>
-          <th class='w-100px'><?php echo $lang->program->realBegan;?></th>
+          <th class='w-100px'><?php echo $lang->project->realBegan;?></th>
           <td><?php echo html::input('realBegan', helper::today(), "class='form-control form-date'");?></td>
           <td></td>
         </tr>
@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>
-            <?php echo html::submitButton($lang->project->start);?>
+            <?php echo html::submitButton($lang->program->start);?>
           </td>
         </tr>
       </tbody>

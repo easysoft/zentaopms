@@ -257,7 +257,7 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $changes = $this->project->start($programID);
+            $changes = $this->project->start($programID, 'program');
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))

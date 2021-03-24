@@ -932,7 +932,7 @@ class my extends control
         $this->view->position[] = $this->lang->my->dynamic;
 
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager, 'all', 'all', $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager, 'all', 'all', 'all', $date, $direction);
 
         /* Assign. */
         $this->view->type       = $type;

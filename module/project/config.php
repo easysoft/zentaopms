@@ -36,7 +36,7 @@ $config->project->datatable->fieldList['id']['required'] = 'yes';
 
 $config->project->datatable->fieldList['name']['title']    = 'name';
 $config->project->datatable->fieldList['name']['fixed']    = 'left';
-$config->project->datatable->fieldList['name']['width']    = 'auto';
+$config->project->datatable->fieldList['name']['width']    = '180';
 $config->project->datatable->fieldList['name']['required'] = 'yes';
 $config->project->datatable->fieldList['name']['sort']     = 'no';
 
@@ -75,13 +75,13 @@ $config->project->datatable->fieldList['teamCount']['sort']     = 'no';
 
 $config->project->datatable->fieldList['estimate']['title']    = 'estimate';
 $config->project->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->project->datatable->fieldList['estimate']['width']    = '60';
+$config->project->datatable->fieldList['estimate']['width']    = '50';
 $config->project->datatable->fieldList['estimate']['required'] = 'no';
 $config->project->datatable->fieldList['estimate']['sort']     = 'no';
 
 $config->project->datatable->fieldList['consume']['title']    = 'consume';
 $config->project->datatable->fieldList['consume']['fixed']    = 'no';
-$config->project->datatable->fieldList['consume']['width']    = '60';
+$config->project->datatable->fieldList['consume']['width']    = '50';
 $config->project->datatable->fieldList['consume']['required'] = 'no';
 $config->project->datatable->fieldList['consume']['sort']     = 'no';
 

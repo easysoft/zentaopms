@@ -1737,7 +1737,7 @@ class execution extends control
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->planGroups   = $this->execution->getPlans($products);
         $this->view->actions      = $this->loadModel('action')->getList('execution', $executionID);
-        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $executionID);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', 'all', $executionID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->teamMembers  = $this->execution->getTeamMembers($executionID);
         $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('execution', $executionID);
@@ -2455,7 +2455,7 @@ class execution extends control
         }
         $period  = $type == 'account' ? 'all'  : $type;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', $executionID, $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', 'all', $executionID, $date, $direction);
 
         /* The header and position. */
         $execution = $this->execution->getByID($executionID);

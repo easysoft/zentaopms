@@ -618,7 +618,7 @@ class project extends control
         }
         $period  = $type == 'account' ? 'all'  : $type;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', $projectID, $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', $projectID, 'all', $date, $direction);
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);

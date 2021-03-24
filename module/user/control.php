@@ -1081,7 +1081,7 @@ class user extends control
         $sort    = $this->loadModel('common')->appendOrder($orderBy);
         $date    = empty($date) ? '' : date('Y-m-d', $date);
 
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', 'all', $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', 'all', 'all', $date, $direction);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
         $this->view->position[] = $this->lang->user->dynamic;

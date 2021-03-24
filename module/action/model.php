@@ -58,10 +58,11 @@ class actionModel extends model
             if($autoDelete) $this->file->autoDelete($this->post->uid);
         }
 
-        /* Get product and project for this object. */
-        $productAndProject = $this->getProductAndProject($action->objectType, $objectID);
-        $action->product   = $productAndProject['product'];
-        $action->execution = $actionType == 'unlinkedfromproject' ? (int)$extra : (int)$productAndProject['project'];
+        /* Get product project and execution for this object. */
+        $relation          = $this->getRelatedFields($action->objectType, $objectID);
+        $action->product   = $relation['product'];
+        $action->project   = $relation['project'];
+        $action->execution = $actionType == 'unlinkedfromproject' ? (int)$extra : (int)$relation['execution'];
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dbh->lastInsertID();
@@ -136,25 +137,42 @@ class actionModel extends model
     }
 
     /**
-     * Get product and project of an object.
+     * Get product, project, execution of the object.
      *
      * @param  string $objectType
      * @param  int    $objectID
      * @access public
      * @return array
      */
-    public function getProductAndProject($objectType, $objectID)
+    public function getRelatedFields($objectType, $objectID)
     {
-        $emptyRecord = array('product' => ',0,', 'project' => 0);
+        $emptyRecord = array('product' => ',0,', 'project' => 0, 'execution' => 0);
 
-        /* If objectType is product or project, return the objectID. */
-        if($objectType == 'product') return array('product' => ",$objectID,", 'project' => 0);
-        if($objectType == 'program') return array('product' => "", 'project' => $objectID);
-        if($objectType == 'project')
+        /* If objectType is program, return empty record. */
+        if($objectType == 'program') return $emptyRecord;
+
+        /* If objectType is product or execution, return the objectID. */
+        if($objectType == 'product') return array('product' => ",$objectID,", 'project' => 0, 'execution' => 0);
+
+        /* If objectType is project or execution, return objectID products and project. */
+        if($objectType == 'project' or $objectType == 'execution')
         {
             $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
             $productList = ',' . join(',', array_keys($products)) . ',';
-            return array('project' => $objectID, 'product' => $productList);
+
+            $relation = array($objectType => $objectID, 'product' => $productList);
+
+            if($objectType == 'execution')
+            {
+                $project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('project');
+                $relation['project'] = $project;
+            }
+            else
+            {
+                $relation['execution'] = 0;
+            }
+
+            return $relation;
         }
 
         /* Only process these object types. */
@@ -164,9 +182,9 @@ class actionModel extends model
 
             /* Set fields to fetch. */
             if(strpos('story, productplan, case',  $objectType) !== false) $fields = 'product';
-            if(strpos('build, bug, testtask, doc', $objectType) !== false) $fields = 'product, project';
+            if(strpos('build, bug, testtask, doc', $objectType) !== false) $fields = 'product, project, execution';
             if($objectType == 'release') $fields = 'product, build';
-            if($objectType == 'task')    $fields = 'project, story';
+            if($objectType == 'task')    $fields = 'project, execution, story';
 
             $record = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
 
@@ -182,7 +200,7 @@ class actionModel extends model
                 }
                 else
                 {
-                    $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($record->project)->fetchPairs('product');
+                    $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($record->execution)->fetchPairs('product');
                     $record->product = join(',', array_keys($products));
                 }
             }
@@ -192,6 +210,7 @@ class actionModel extends model
                 $record = (array)$record;
                 $record['product'] = isset($record['product']) ? ',' . $record['product'] . ',' : ',0,';
                 if(!isset($record['project'])) $record['project'] = 0;
+                if(!isset($record['execution'])) $record['execution'] = 0;
                 return $record;
             }
 
@@ -640,13 +659,14 @@ class actionModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string|int $productID   all|int(like 123)|notzero   all => include zero, notzero, greater than 0
-     * @param  string|int $projectID same as productID
+     * @param  string|int $projectID   same as productID
+     * @param  string|int $executionID same as productID
      * @param  string $date
      * @param  string $direction
      * @access public
      * @return array
      */
-    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $productID = 'all', $projectID = 'all', $date = '', $direction = 'next')
+    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $productID = 'all', $projectID = 'all', $executionID = 'all', $date = '', $direction = 'next')
     {
         /* Computer the begin and end date of a period. */
         $beginAndEnd = $this->computeBeginAndEnd($period);
@@ -654,29 +674,29 @@ class actionModel extends model
 
         /* Build has priv condition. */
         $condition = 1;
-        if($productID == 'all') $products = $this->app->user->view->products;
-        if($projectID == 'all') $projects = $this->app->user->view->projects;
+        if($productID == 'all')   $products   = $this->app->user->view->products;
+        if($projectID == 'all')   $projects   = $this->app->user->view->projects;
+        if($executionID == 'all') $executions = $this->app->user->view->sprints;
 
         if($productID == 'all' or $projectID == 'all')
         {
-            $projectCondition = $projectID == 'all' ? "execution " . helper::dbIN($projects) : '';
-            $productCondition = $productID == 'all' ? "INSTR('," . $products . ",', product) > 0" : '';
-            if(is_numeric($productID)) $productCondition = "product like'%,$productID,%' or product='$productID'";
-            if(is_numeric($projectID)) $projectCondition = "execution='$projectID'";
+            $productCondition   = $productID   == 'all' ? "INSTR('," . $products . ",', product) > 0" : '';
+            $projectCondition   = $projectID   == 'all' ? "project " . helper::dbIN($projects) : '';
+            $executionCondition = $executionID == 'all' ? "execution " . helper::dbIN($executions) : '';
+            if(is_numeric($productID))   $productCondition = "product like '%,$productID,%' or product = '$productID'";
+            if(is_numeric($projectID))   $projectCondition = "project = '$projectID'";
+            if(is_numeric($executionID)) $executionCondition = "execution = '$executionID'";
 
-            $condition = "(product =',0,' AND execution = '0')";
-            if($projectCondition) $condition .= ' OR ' . $projectCondition;
-            if($productCondition) $condition .= ' OR ' . $productCondition;
+            $condition = "(product =',0,' AND project = '0' AND execution = 0)";
+            if($productCondition)   $condition .= ' OR ' . $productCondition;
+            if($projectCondition)   $condition .= ' OR ' . $projectCondition;
+            if($executionCondition) $condition .= ' OR ' . $executionCondition;
             if($this->app->user->admin) $condition = 1;
         }
 
         /* If is project, select its related. */
         $executions = array();
-        if(is_numeric($projectID))
-        {
-            $project = $this->loadModel('project')->getByID($projectID);
-            if(isset($project->type) and $project->type == 'project') $executions = $this->loadModel('execution')->getPairs($projectID);
-        }
+        if(is_numeric($projectID)) $executions = $this->loadModel('execution')->getPairs($projectID);
 
         $this->loadModel('doc');
         $libs = $this->doc->getLibs('all');
@@ -695,12 +715,14 @@ class actionModel extends model
             ->andWhere()
             ->markLeft(1)
             ->where(1)
-            ->beginIF(is_numeric($projectID))->orWhere('execution')->eq($projectID)->fi()
+            ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
             ->beginIF(!empty($executions))->orWhere('execution')->in(array_keys($executions))->fi()
+            ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
             ->markRight(1)
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
-            ->beginIF($projectID == 'notzero')->andWhere('execution')->gt(0)->fi()
-            ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
+            ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
+            ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
+            ->beginIF($productID == 'all' or $projectID == 'all' or $executionID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
             ->beginIF($docs and !$this->app->user->admin)->andWhere("IF(objectType != 'doc', '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
             ->beginIF($libs and !$this->app->user->admin)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()

@@ -51,6 +51,7 @@ $lang->program->endGreaterParent        = "Parent end date: %s, end date should 
 $lang->program->beginGreateChild        = "Child earliest begin: %s, parent begin date <                  = child earliest begin date.";
 $lang->program->endLetterChild          = "Child latest end: %s, parent end date >                        = child latest end date.";
 $lang->program->closeErrorMessage       = 'There are subprograms or projects that are not closed';
+$lang->program->confirmDelete           = "Do you want to delete it?";
 
 $lang->program->stakeholderTypeList['inside']  = 'Inside';
 $lang->program->stakeholderTypeList['outside'] = 'Outside';

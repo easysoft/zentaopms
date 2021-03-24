@@ -1018,12 +1018,13 @@ class projectModel extends model
      * Start project.
      *
      * @param  int    $projectID
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function start($projectID)
+    public function start($projectID, $type = 'project')
     {
-        $oldProject = $this->getById($projectID);
+        $oldProject = $this->getById($projectID, $type);
         $now        = helper::now();
 
         $project = fixer::input('post')
