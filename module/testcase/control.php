@@ -567,7 +567,7 @@ class testcase extends control
         if($isLibCase)
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
-            $this->caselib->setLibMenu($libraries, $case->lib);
+            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
 
             $this->view->title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);
@@ -577,7 +577,7 @@ class testcase extends control
         else
         {
             $productID = $case->product;
-            $this->testcase->setMenu($this->products, $productID, $case->branch);
+            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
             $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -673,7 +673,7 @@ class testcase extends control
         if($isLibCase)
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
-            $this->caselib->setLibMenu($libraries, $case->lib);
+            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
 
             $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);
@@ -1538,7 +1538,7 @@ class testcase extends control
             die(js::reload('parent'));
         }
 
-        $this->testcase->setMenu($this->products, $productID, $branch);
+        $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         $libraries = $this->loadModel('caselib')->getLibraries();
         if(empty($libraries))

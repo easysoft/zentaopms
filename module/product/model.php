@@ -70,10 +70,10 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0, $module = 0, $moduleType = '')
     {
-        $isProjectBug = isset($products[0]) ? true : false;
+        $isProject = ($this->app->openApp == 'project' and strpos('bug,testcase,testtask', $this->app->rawMethod) !== false and isset($products[0])) ? true : false;
 
         $this->app->loadLang('product');
-        if(!$isProjectBug and !$productID)
+        if(!$isProject and !$productID)
         {
             unset($this->lang->product->menu->settings['subMenu']->branch);
             return;
@@ -82,7 +82,9 @@ class productModel extends model
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         if($productID) $currentProduct = $this->getById($productID);
-        if($isProjectBug and !$productID)
+
+        if($isProject) $extra = $this->session->project;
+        if($isProject and !$productID)
         {
             $currentProduct = new stdclass();
             $currentProduct->name = $products[$productID];
@@ -93,7 +95,7 @@ class productModel extends model
         $output = '';
         if(!empty($products))
         {
-            $dropMenuLink = helper::createLink($isProjectBug ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+            $dropMenuLink = helper::createLink($isProject ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
             $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
@@ -1522,7 +1524,7 @@ class productModel extends model
     public function getProductLink($module, $method, $extra, $branch = false)
     {
         $link = '';
-        if(strpos('programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory', $module) !== false)
+        if(strpos('programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory', ',' . $module . ',') !== false)
         {
             if($module == 'product' && $method == 'project')
             {
@@ -1582,6 +1584,10 @@ class productModel extends model
         elseif($module == 'design')
         {
             return helper::createLink('design', 'browse', "productID=%s");
+        }
+        elseif($module == 'project')
+        {
+            return helper::createLink('project', $method, "projectID=$extra&productID=%s");
         }
 
         return $link;

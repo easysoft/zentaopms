@@ -1465,6 +1465,8 @@ class story extends control
         if($this->app->openApp == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
+            $this->app->rawModule = 'qa';
+            $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
         }
         else
         {

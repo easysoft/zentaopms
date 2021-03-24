@@ -67,10 +67,9 @@
           <?php foreach($caseIDList as $caseID):?>
           <?php
           if(!isset($cases[$caseID])) continue;
-          if(!$productID)
+          if(!$productID and !$cases[$caseID]->lib)
           {
-              $product = $this->product->getByID($cases[$caseID]->product);
-
+              $product  = $this->product->getByID($cases[$caseID]->product);
               $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
               if($product->type != 'normal')
               {

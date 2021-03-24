@@ -38,7 +38,7 @@ class testtask extends control
         parent::__construct($moduleName, $methodName);
 
         /* Set testtask menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if($this->app->openApp == 'qa')
         {
             $this->app->loadConfig('qa');
@@ -144,6 +144,7 @@ class testtask extends control
         if($this->app->openApp == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
         }
         else
         {
@@ -1097,7 +1098,7 @@ class testtask extends control
         /* The case of tasks of qa. */
         if($productID)
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
+            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
             $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case');
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
@@ -1105,8 +1106,15 @@ class testtask extends control
         /* The case of my. */
         else
         {
-            $this->lang->testtask->menu = $this->lang->my->menu->work;
-            $this->lang->my->menu->work['subModule'] = 'testtask';
+            if($this->app->openApp == 'project')
+            {
+                $this->loadModel('project')->setMenu($this->session->project);
+            }
+            else
+            {
+                $this->lang->testtask->menu = $this->lang->my->menu->work;
+                $this->lang->my->menu->work['subModule'] = 'testtask';
+            }
 
             $this->view->title = $this->lang->testtask->batchRun;
 

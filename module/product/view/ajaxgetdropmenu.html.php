@@ -20,12 +20,6 @@ $myProductsHtml     = '';
 $normalProductsHtml = '';
 $closedProductsHtml = '';
 
-if($this->app->openApp == 'project' and $this->app->rawModule == 'testcase')
-{
-    $linkHtml        = $this->product->setParamsForLink($module, $link, $projectID, 0);
-    $myProductsHtml .= html::a($linkHtml, $this->lang->product->all, '', "class='text-important' title='{$this->lang->product->all}' data-key='" . zget($productsPinYin, $this->lang->product->all, '') . "' data-app='project'");
-}
-
 foreach($products as $product)
 {
     $selected     = $product->id == $productID ? 'selected' : '';
