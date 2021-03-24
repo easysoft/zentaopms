@@ -448,7 +448,7 @@ class product extends control
             $param      = $programID ? "programID=$programID" : "product=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
 
-            if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param));
+            if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
@@ -677,8 +677,8 @@ class product extends control
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
         $this->product->setMenu($productID, $branch);
 
-        $this->session->set('releaseList',     $this->app->getURI(true));
-        $this->session->set('productPlanList', $this->app->getURI(true));
+        $this->session->set('releaseList',     $this->app->getURI(true), 'product');
+        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(empty($product)) $this->locate($this->createLink('product', 'showErrorNone', 'fromModule=product'));
@@ -709,16 +709,17 @@ class product extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('projectList',     $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
 
         $this->product->setMenu($productID);
 
@@ -1019,7 +1020,7 @@ class product extends control
     {
         /* Load module and set session. */
         $this->loadModel('program');
-        $this->session->set('productList', $this->app->getURI(true));
+        $this->session->set('productList', $this->app->getURI(true), 'product');
 
         /* Process product structure. */
         $productStructure = array();
@@ -1193,7 +1194,7 @@ class product extends control
     public function build($productID = 0, $branch = 0)
     {
         $this->app->loadLang('build');
-        $this->session->set('productList', $this->app->getURI(true));
+        $this->session->set('productList', $this->app->getURI(true), 'product');
 
         /* Get all product list. Locate to the create product page if there is no product. */
         $this->products = $this->product->getPairs('', $this->session->project);
@@ -1205,7 +1206,7 @@ class product extends control
         $this->product->setMenu($productID, $branch);
 
         /* Set menu.*/
-        $this->session->set('buildList', $this->app->getURI(true));
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->build;
         $this->view->position[] = $this->lang->product->build;

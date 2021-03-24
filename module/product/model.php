@@ -421,7 +421,6 @@ class productModel extends model
     {
         $currentModule = $this->app->moduleName;
         $currentMethod = $this->app->methodName;
-        $this->session->set('moreProductLink', $this->app->getURI(true));
 
         /* init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')

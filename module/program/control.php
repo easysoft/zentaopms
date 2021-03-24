@@ -392,8 +392,8 @@ class program extends control
 
         $this->program->setMenu($programID);
 
-        $this->app->session->set('programProject', $this->app->getURI(true));
-        $this->app->session->set('projectList', $this->app->getURI(true));
+        $this->app->session->set('programProject', $this->app->getURI(true), 'program');
+        $this->app->session->set('projectList', $this->app->getURI(true), 'project');
 
         $this->loadModel('datatable');
 
