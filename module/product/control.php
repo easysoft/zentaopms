@@ -920,9 +920,7 @@ class product extends control
             foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
         }
 
-        $moduleGroup = zget($this->lang->navGroup, $module);
-        $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
-        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList();
+        $products = $this->app->openApp == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList();
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
@@ -930,10 +928,10 @@ class product extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
         $this->view->products  = $products;
-        $this->view->projectID = $moduleGroup == 'project' ? $this->session->project : 0;
+        $this->view->projectID = $this->app->openApp == 'project' ? $this->session->project : 0;
         $this->view->programs  = $this->loadModel('program')->getPairs(true);
         $this->view->lines     = $this->product->getLinePairs();
-        $this->view->openApp   = $moduleGroup;
+        $this->view->openApp   = $this->app->openApp;
         $this->display();
     }
 
