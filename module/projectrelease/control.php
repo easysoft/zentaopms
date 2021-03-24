@@ -67,7 +67,7 @@ class projectrelease extends control
      */
     public function browse($projectID = 0, $executionID = 0, $type = 'all')
     {
-        $this->session->set('releaseList', $this->app->getURI(true));
+        $this->session->set('releaseList', $this->app->getURI(true), 'project');
         $project   = $this->project->getById($projectID);
         $execution = $this->loadModel('execution')->getById($executionID);
 
@@ -93,11 +93,10 @@ class projectrelease extends control
      * Create a release.
      *
      * @param  int    $projectID
-     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function create($projectID, $executionID = 0)
+    public function create($projectID)
     {
         $this->app->loadConfig('release');
         $this->config->projectrelease->create = $this->config->release->create;
@@ -120,8 +119,7 @@ class projectrelease extends control
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
-        if($projectID)   $this->project->setMenu($projectID);
-        if($executionID) $this->loadModel('execution')->setMenu($executionID);
+        $this->project->setMenu($projectID);
         $this->commonAction();
 
         $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
@@ -167,6 +165,9 @@ class projectrelease extends control
         $this->commonAction($release->product, $release->branch);
         $build = $this->build->getById($release->build);
 
+        /* Set project menu. */
+        $this->project->setMenu($release->project);
+
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
@@ -191,8 +192,8 @@ class projectrelease extends control
      */
     public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        if($type == 'story') $this->session->set('storyList', $this->app->getURI(true));
-        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true));
+        if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -428,7 +429,7 @@ class projectrelease extends control
             $this->projectrelease->linkStory($releaseID);
             die(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
         }
-        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
 
         $release = $this->projectrelease->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build);
@@ -548,7 +549,7 @@ class projectrelease extends control
             die(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
         }
 
-        $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+        $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
         /* Set menu. */
         $release = $this->projectrelease->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build);
