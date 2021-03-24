@@ -18,14 +18,14 @@
       <div class='row'>
         <div class='col-xs-6'>
           <div class='project-type text-center'>
-            <?php echo html::a($this->createLink("project", "create", "model=scrum&projectID=$projectID&from=$from"), "<img class='project-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', $group)?>
+            <?php echo html::a($this->createLink("project", "create", "model=scrum&projectID=$projectID"), "<img class='project-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', $group)?>
             <h3><?php echo $lang->project->scrum; ?></h3>
             <p><?php echo $lang->project->scrumTitle; ?></p>
           </div>
         </div>
         <div class='col-xs-6'>
           <div class='project-type text-center'>
-            <?php echo html::a($this->createLink("project", "create", "model=waterfall&projectID=$projectID&from=$from"), "<img class='project-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>", '', $group)?>
+            <?php echo html::a($this->createLink("project", "create", "model=waterfall&projectID=$projectID"), "<img class='project-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>", '', $group)?>
             <h3><?php echo $lang->project->waterfall; ?></h3>
             <p><?php echo $lang->project->waterfallTitle; ?></p>
           </div>

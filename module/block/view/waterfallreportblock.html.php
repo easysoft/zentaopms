@@ -16,7 +16,7 @@
 <div class="panel-body conatiner-fluid">
   <div class='table-row'>
     <div class="col col-left hide-in-sm">
-      <h4><?php echo $lang->program->PGMProgress;?></h4>
+      <h4><?php echo $lang->project->progress;?></h4>
       <span class='progress-num'><?php echo $progress . '%';?></span>
       <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress;?>%">
