@@ -134,7 +134,7 @@ class testtask extends control
     public function browseUnits($productID = 0, $browseType = 'newest', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        $this->session->set('testtaskList', $this->app->getURI(true));
+        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
         $this->session->set('buildList', $this->app->getURI(true), 'execution');
         $this->loadModel('testcase');
         $this->app->loadLang('tree');
@@ -388,7 +388,7 @@ class testtask extends control
         $this->loadModel('execution');
 
         /* Save the session. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -547,7 +547,7 @@ class testtask extends control
         $this->loadModel('testcase');
         $this->app->loadLang('execution');
         $this->app->loadLang('task');
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* Get task and product info, set menu. */
         $groupBy = empty($groupBy) ? 'story' : $groupBy;
@@ -882,7 +882,7 @@ class testtask extends control
         }
 
         /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* Get task and product id. */
         $task      = $this->testtask->getById($taskID);

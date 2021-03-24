@@ -60,7 +60,7 @@ class testsuite extends control
     public function browse($productID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        $this->session->set('testsuiteList', $this->app->getURI(true));
+        $this->session->set('testsuiteList', $this->app->getURI(true), 'qa');
 
         /* Set menu. */
         $this->view->products = $this->products = $this->loadModel('product')->getPairs();
@@ -169,7 +169,7 @@ class testsuite extends control
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -303,7 +303,7 @@ class testsuite extends control
     public function linkCase($suiteID, $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         if(!empty($_POST))
         {

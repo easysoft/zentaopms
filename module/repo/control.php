@@ -95,7 +95,7 @@ class repo extends control
         $this->view->orderBy  = $orderBy;
         $this->view->objectID = $objectID;
         $this->view->pager    = $pager;
-        $this->view->repoList = empty($repoList) ? $repoList: $repoList[$pageID - 1];; 
+        $this->view->repoList = empty($repoList) ? $repoList: $repoList[$pageID - 1];;
         $this->view->products = $this->loadModel('product')->getPairs();
 
         $this->display();
@@ -501,7 +501,7 @@ class repo extends control
         $repo = $this->repo->getRepoByID($repoID);
 
         /* Save session. */
-        $this->session->set('revisionList', $this->app->getURI(true));
+        $this->session->set('revisionList', $this->app->getURI(true), 'repo');
 
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);

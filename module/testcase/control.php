@@ -98,7 +98,7 @@ class testcase extends control
         /* Set menu, save session. */
         if($this->app->openApp == 'project') $this->products = array('0' => $this->lang->product->all) + $this->products;
         $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($projectID) : $this->testcase->setMenu($this->products, $productID, $branch, $moduleID, $suiteID, $orderBy);
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
@@ -191,7 +191,7 @@ class testcase extends control
         $this->app->loadLang('testtask');
 
         $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);

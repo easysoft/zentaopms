@@ -872,8 +872,8 @@ class repoModel extends model
         if($type == 'list') unset($_SESSION['repoView']);
         if($withOtherModule)
         {
-            $this->session->set('bugList', $uri);
-            $this->session->set('taskList', $uri);
+            $this->session->set('bugList', $uri, 'qa');
+            $this->session->set('taskList', $uri, 'execution');
         }
         session_write_close();
     }
