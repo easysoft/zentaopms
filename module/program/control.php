@@ -214,7 +214,7 @@ class program extends control
     public function close($programID)
     {
         $this->loadModel('action');
-        $program = $this->program->getByID($programID);
+        $program = $this->project->getByID($programID, 'program');
 
         if(!empty($_POST))
         {
@@ -269,12 +269,12 @@ class program extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->title      = $this->lang->project->start;
-        $this->view->position[] = $this->lang->project->start;
-        $this->view->program    = $this->program->getByID($programID);
+        $this->view->title      = $this->lang->program->start;
+        $this->view->position[] = $this->lang->program->start;
+        $this->view->project    = $this->project->getByID($programID, 'program');
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
-        $this->display();
+        $this->display('project', 'start');
     }
 
     /**
@@ -287,7 +287,7 @@ class program extends control
     public function activate($programID = 0)
     {
         $this->loadModel('action');
-        $program = $this->program->getByID($programID);
+        $program = $this->project->getByID($programID, 'program');
 
         if(!empty($_POST))
         {
@@ -308,12 +308,12 @@ class program extends control
 
         $this->view->title      = $this->lang->program->activate;
         $this->view->position[] = $this->lang->program->activate;
-        $this->view->program    = $program;
+        $this->view->project    = $program;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
         $this->view->newBegin   = $newBegin;
         $this->view->newEnd     = $newEnd;
-        $this->display();
+        $this->display('project', 'activate');
     }
 
     /**
@@ -341,11 +341,11 @@ class program extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->title      = $this->lang->project->suspend;
-        $this->view->position[] = $this->lang->project->suspend;
+        $this->view->title      = $this->lang->program->suspend;
+        $this->view->position[] = $this->lang->program->suspend;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
-        $this->view->project    = $this->program->getByID($programID);
+        $this->view->project    = $this->project->getByID($programID, 'program');
 
         $this->display('project', 'suspend');
     }

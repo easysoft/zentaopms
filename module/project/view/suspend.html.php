@@ -18,7 +18,7 @@
       <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
       <?php echo isonlybody() ? ("<span title='$project->name'>" . $project->name . '</span>') : html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
       <?php if(!isonlybody()):?>
-      <small><?php echo $lang->arrow . $lang->project->suspend;?></small>
+      <small><?php echo $lang->arrow . $lang->{$project->type}->suspend;?></small>
       <?php endif;?>
     </h2>
   </div>
@@ -34,7 +34,7 @@
         <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
       </tr>
       <tr>
-        <td colspan='2' class='text-center form-actions'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide'); ?></td>
+        <td colspan='2' class='text-center form-actions'><?php echo html::submitButton($lang->{$project->type}->suspend) . html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide'); ?></td>
       </tr>
     </table>
   </form>
