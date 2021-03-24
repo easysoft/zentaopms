@@ -27,16 +27,12 @@
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-stories <?php if(!$longBlock) echo 'block-sm'?>'>
     <thead>
       <tr>
-        <?php if($longBlock):?>
         <th class="c-id"><?php echo $lang->idAB?></th>
-        <?php endif;?>
         <th class="c-pri"><?php echo $lang->priAB?></th>
         <th class="c-name"><?php echo $lang->SRCommon;?></th>
         <?php if($longBlock):?>
         <th class='c-estimate'><?php echo $lang->story->estimateAB;?></th>
-        <?php endif;?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
-        <?php if($longBlock):?>
         <th class='c-stage'><?php echo $lang->story->stageAB;?></th>
         <?php endif;?>
       </tr>
@@ -47,20 +43,16 @@
       $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
       $viewLink = $this->createLink('story', 'view', "storyID={$story->id}");
       ?>
-      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <?php if($longBlock):?>
+      <tr <?php echo $appid?>>
         <td class="c-id-xs"><?php echo sprintf('%03d', $story->id);?></td>
-        <?php endif;?>
         <td class="c-pri"><span class="label-pri label-pri-<?php echo $story->pri?>" title="<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>"><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
-        <td class="c-name" style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo $story->title?></td>
+        <td class="c-name" style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo html::a($viewLink, $story->title);?></td>
         <?php if($longBlock):?>
         <td class='c-estimate text-center' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit?></td>
-        <?php endif;?>
         <?php $status = $this->processStatus('story', $story);?>
         <td class='c-status' title='<?php echo $status;?>'>
           <span class="status-story status-<?php echo $story->status?>"><?php echo $status;?></span>
         </td>
-        <?php if($longBlock):?>
         <td class='c-stage'>
           <span class='story-stage-<?php echo $story->stage?>'>
             <?php echo zget($lang->story->stageList, $story->stage, $story->stage);?>

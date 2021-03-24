@@ -562,10 +562,12 @@ class block extends control
         $limit = $this->viewType == 'json' ? 0 : (int)$this->params->count;
         $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, $pager = null, $orderBy = 'date, begin');
         $uri   = $this->app->getURI(true);
-        $this->session->set('todoList', $uri);
-        $this->session->set('bugList',  $uri);
-        $this->session->set('taskList', $uri);
-        $this->session->set('riskList', $uri);
+
+        $this->session->set('todoList',     $uri, 'my');
+        $this->session->set('bugList',      $uri, 'qa');
+        $this->session->set('taskList',     $uri, 'execution');
+        $this->session->set('storyList',    $uri, 'product');
+        $this->session->set('testtaskList', $uri, 'qa');
 
         foreach($todos as $key => $todo)
         {
@@ -583,13 +585,13 @@ class block extends control
      */
     public function printTaskBlock()
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('taskList',  $uri);
-        $this->session->set('storyList', $uri);
+        $this->session->set('taskList',  $this->app->getURI(true), 'execution');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
-        $projectID = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
-        $this->view->tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $this->params->orderBy, $projectID);
+        $account = $this->app->user->account;
+        $type    = $this->params->type;
+
+        $this->view->tasks = $this->loadModel('task')->getUserTasks($account, $type, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $this->params->orderBy);
     }
 
     /**
@@ -600,7 +602,7 @@ class block extends control
      */
     public function printBugBlock()
     {
-        $this->session->set('bugList', $this->app->getURI(true));
+        $this->session->set('bugList', $this->app->getURI(true), 'qa');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
         $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
@@ -616,7 +618,7 @@ class block extends control
      */
     public function printCaseBlock()
     {
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->app->loadLang('testcase');
         $this->app->loadLang('testtask');
 
@@ -661,19 +663,17 @@ class block extends control
     {
         $this->app->loadLang('testtask');
 
-        $this->session->set('testtaskList', $this->app->getURI(true));
+        $this->session->set('productList',  $this->app->getURI(true), 'product');
+        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
+        $this->session->set('buildList',    $this->app->getURI(true), 'execution');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
-
-        $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
-        $projectID = $this->view->block->module == 'my' ? 0 : $projectID;
 
         $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.execution=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
@@ -690,15 +690,16 @@ class block extends control
      */
     public function printStoryBlock()
     {
-        $this->session->set('storyList', $this->app->getURI(true));
+        $this->session->set('storyList', $this->app->getURI(true), 'product');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+
         $this->app->loadClass('pager', $static = true);
         $count   = isset($this->params->count) ? (int)$this->params->count : 0;
         $pager   = pager::init(0, $count , 1);
         $type    = isset($this->params->type) ? $this->params->type : 'assignedTo';
         $orderBy = isset($this->params->type) ? $this->params->orderBy : 'id_asc';
 
-        $this->view->stories  = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $this->viewType != 'json' ? $pager : '', 'story');
+        $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $this->viewType != 'json' ? $pager : '', 'story');
     }
 
     /**
@@ -709,7 +710,9 @@ class block extends control
      */
     public function printPlanBlock()
     {
-        $this->session->set('productPlanList', $this->app->getURI(true));
+        $this->session->set('productList', $this->app->getURI(true), 'product');
+        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+
         $this->app->loadLang('productplan');
         $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
@@ -728,7 +731,9 @@ class block extends control
      */
     public function printReleaseBlock()
     {
-        $this->session->set('releaseList', $this->app->getURI(true));
+        $this->session->set('releaseList', $this->app->getURI(true), 'product');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
+
         $this->app->loadLang('release');
         $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
@@ -749,7 +754,7 @@ class block extends control
      */
     public function printBuildBlock()
     {
-        $this->session->set('buildList', $this->app->getURI(true));
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
         $this->app->loadLang('build');
 
         $builds = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_BUILD)->alias('t1')
@@ -1215,7 +1220,7 @@ class block extends control
     public function printWaterfallIssueBlock()
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('issueList',  $uri);
+        $this->session->set('issueList', $uri, 'project');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
         $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
@@ -1230,7 +1235,7 @@ class block extends control
     public function printWaterfallRiskBlock()
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('riskList',  $uri);
+        $this->session->set('riskList', $uri, 'project');
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
     }
@@ -1422,8 +1427,8 @@ class block extends control
      */
     public function printScrumRoadMapBlock($productID = 0, $roadMapID = 0)
     {
-        $this->session->set('releaseList',     $this->app->getURI(true));
-        $this->session->set('productPlanList', $this->app->getURI(true));
+        $this->session->set('releaseList',     $this->app->getURI(true), 'product');
+        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
 
         $products  = $this->loadModel('product')->getPairs('', $this->session->project);
         if(!is_numeric($productID)) $productID = key($products);
@@ -1449,7 +1454,10 @@ class block extends control
      */
     public function printScrumTestBlock()
     {
-        $this->session->set('testtaskList', $this->app->getURI(true));
+        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
+        $this->session->set('productList',  $this->app->getURI(true), 'product');
+        $this->session->set('projectList',  $this->app->getURI(true), 'project');
+        $this->session->set('buildList',    $this->app->getURI(true), 'execution');
         $this->app->loadLang('testtask');
 
         $count  = zget($this->params, 'count', 10);

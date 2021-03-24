@@ -31,7 +31,7 @@ class action extends control
         $this->session->set('productList',     $uri, 'product');
         $this->session->set('productPlanList', $uri, 'product');
         $this->session->set('storyList',       $uri, 'product');
-        $this->session->set('releaseList',     $uri, 'execution');
+        $this->session->set('releaseList',     $uri, 'product');
         $this->session->set('programList',     $uri, 'program');
         $this->session->set('projectList',     $uri, 'project');
         $this->session->set('executionList',   $uri, 'execution');

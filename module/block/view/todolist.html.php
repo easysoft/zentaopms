@@ -28,10 +28,10 @@
     <tbody>
       <?php foreach($todos as $todo):?>
       <?php
-      $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+      $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
       $viewLink = $this->createLink('todo', 'view', "todo={$todo->id}");
       ?>
-      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+      <tr <?php echo $appid?>>
         <td class='c-date'>
           <?php if ($todo->date == '2030-01-01') :?>
           <?php echo $lang->todo->periods['future'];?>
@@ -40,7 +40,7 @@
           <?php endif;?>
         </td>
         <td class="c-pri"><span class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo zget($lang->todo->priList, $todo->pri);?></span></td>
-        <td class="c-name" title='<?php echo $todo->name;?>'><?php echo $todo->name;?></td>
+        <td class="c-name" title='<?php echo $todo->name;?>'><?php echo html::a($viewLink, $todo->name);?></td>
         <td class='c-status'><?php echo zget($lang->todo->statusList, $todo->status);?></td>
       </tr>
       <?php endforeach;?>

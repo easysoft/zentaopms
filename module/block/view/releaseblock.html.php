@@ -32,17 +32,19 @@
     <tbody>
       <?php foreach($releases as $release):?>
       <?php
-      $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-      $viewLink = $this->createLink('release', 'view', "releaseID={$release->id}");
+      $appid           = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+      $productViewLink = $this->createLink('product', 'browse', "productID={$release->product}");
+      $buildViewLink   = $this->createLink('build', 'view', "buildID={$release->build}");
+      $releaseViewLink = $this->createLink('release', 'view', "releaseID={$release->id}");
       ?>
-      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+      <tr <?php echo $appid?>>
         <?php if($longBlock):?>
         <td class='text-center'><?php echo sprintf('%03d', $release->id);?></td>
-        <td title='<?php echo $release->productName?>'><?php echo $release->productName?></td>
+        <td title='<?php echo $release->productName?>'><?php echo html::a($productViewLink, $release->productName);?></td>
         <?php endif;?>
-        <td title='<?php echo $release->name?>'><?php echo $release->name?></td>
+        <td title='<?php echo $release->name?>'><?php echo html::a($releaseViewLink, $release->name);?></td>
         <?php if($longBlock):?>
-        <td title='<?php echo $release->buildName?>'><?php echo $release->buildName?></td>
+        <td title='<?php echo $release->buildName?>'><?php echo html::a($buildViewLink, $release->buildName);?></td>
         <?php endif;?>
         <td class='text-center'><?php echo $release->date?></td>
         <td class='c-status' title='<?php echo zget($lang->release->statusList, $release->status);?>'>

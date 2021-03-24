@@ -6,8 +6,8 @@
 #cards {margin: 0; padding: 0 10px 10px 10px;}
 #cards > .col {width: 33.33%;}
 .col-side #cards > .col {width: 100%;}
-#cards .panel {margin: 10px 0; border: 1px solid #DCDCDC; border-radius: 2px; box-shadow: none; height: 146px; cursor: pointer;}
-#cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
+#cards .panel-content {margin: 10px 0; border: 1px solid #DCDCDC; border-radius: 2px; box-shadow: none; height: 146px; cursor: pointer;}
+#cards .panel-content:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 #cards .panel-heading {padding: 12px 24px 10px 16px;}
 #cards .panel-body {padding: 0 16px 16px;}
 #cards .panel-actions {padding: 7px 0; z-index: 0}
@@ -36,10 +36,11 @@
 <div class="panel-body">
   <div class='row' id='cards'>
     <?php foreach ($projects as $projectID => $project):?>
-    <div class='col' data-id='<?php echo $projectID?>'>
-      <div class='panel' data-url='<?php echo $this->createLink('project', 'index', "projectID=$project->id");?>'>
+    <?php $viewLink = $this->createLink('project', 'index', "projectID=$project->id");?>
+    <div class='col'>
+      <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
-          <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?> </strong>
+          <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($viewLink, $project->name);?> </strong>
           <?php if($project->model === 'waterfall'): ?>
           <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
           <?php else: ?>
