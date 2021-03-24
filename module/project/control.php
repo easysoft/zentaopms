@@ -111,6 +111,7 @@ class project extends control
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchAll('id');
 
         /* Sort project by program. */
+        $this->loadModel('program');
         $orderedProjects = array();
         foreach($programs as $programID => $programName)
         {
