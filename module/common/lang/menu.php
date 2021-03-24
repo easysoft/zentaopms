@@ -216,9 +216,7 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 $lang->waterfall->menu = new stdclass();
 $lang->waterfall->menu->index       = array('link' => "$lang->dashboard|project|index|project=%s");
 $lang->waterfall->menu->programplan = array('link' => "{$lang->productplan->shortCommon}|programplan|browse|project=%s", 'subModule' => 'programplan');
-$lang->waterfall->menu->execution   = array('link' => "$lang->executionCommon|execution|all|status=all&projectID=%s", 'subModule' => ',project,task,');
 $lang->waterfall->menu->doc         = array('link' => "{$lang->doc->common}|doc|index|project=%s");
-$lang->waterfall->menu->weekly      = array('link' => "{$lang->project->report}|weekly|index|project=%s", 'subModule' => ',milestone,');
 $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory');
 $lang->waterfall->menu->design      = array('link' => "$lang->design|design|browse|product=0&project=%s");
 $lang->waterfall->menu->repo        = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
@@ -233,7 +231,6 @@ $lang->waterfall->menu->settings    = array('link' => "$lang->settings|project|v
 /* Waterfall menu order. */
 $lang->waterfall->menuOrder[5]  = 'index';
 $lang->waterfall->menuOrder[15] = 'programplan';
-$lang->waterfall->menuOrder[10] = 'execution';
 $lang->waterfall->menuOrder[20] = 'projectstory';
 $lang->waterfall->menuOrder[25] = 'design';
 $lang->waterfall->menuOrder[30] = 'ci';
@@ -272,7 +269,6 @@ $lang->execution->menu->qa       = array('link' => "{$lang->qa->common}|executio
 $lang->execution->menu->repo     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
 $lang->execution->menu->doc      = array('link' => "{$lang->doc->common}|doc|objectLibs|type=execution&objectID=%s", 'subModule' => 'doc');
 $lang->execution->menu->build    = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
-$lang->execution->menu->release  = array('link' => "{$lang->release->common}|projectrelease|browse|projectID=0&executionID=%s", 'subModule' => 'projectrelease');
 $lang->execution->menu->action   = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
 $lang->execution->menu->settings = array('link' => "$lang->settings|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
 

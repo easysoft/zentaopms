@@ -1459,6 +1459,7 @@ class story extends control
     {
         $this->session->set('storyList', $this->app->getURI(true), 'product');
         $products = $this->product->getPairs();
+        if(empty($productID)) $productID = key($products);
 
         $this->loadModel('testcase');
         if($this->app->openApp == 'project')
@@ -1466,6 +1467,8 @@ class story extends control
             $this->loadModel('project')->setMenu($this->session->project);
             $this->app->rawModule = 'qa';
             $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
+            $products = $this->project->getProducts($this->session->project, false);
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase');
         }
         else
         {
