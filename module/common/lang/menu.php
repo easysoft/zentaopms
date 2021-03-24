@@ -43,8 +43,8 @@ $lang->mainNav->menuOrder[23] = 'qa';
 $lang->mainNav->menuOrder[25] = 'devops';
 $lang->mainNav->menuOrder[30] = 'doc';
 $lang->mainNav->menuOrder[35] = 'report';
-$lang->mainNav->menuOrder[40] = 'system';
-$lang->mainNav->menuOrder[45] = 'admin';
+$lang->mainNav->menuOrder[45] = 'system';
+$lang->mainNav->menuOrder[50] = 'admin';
 
 /* My menu. */
 $lang->my->menu = new stdclass();
