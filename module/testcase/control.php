@@ -191,6 +191,13 @@ class testcase extends control
         $this->app->loadLang('testtask');
 
         $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'project')
+        {
+            $products = array('0' => $this->lang->product->all) + $this->project->getProducts($this->session->project, false);
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', '', $branch);
+        }
+
+
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
