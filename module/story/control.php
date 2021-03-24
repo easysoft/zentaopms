@@ -51,11 +51,15 @@ class story extends control
         $this->story->replaceURLang($type);
         if($this->app->openApp == 'product')
         {
-            $this->loadModel('product')->setMenu($productID);
+            $this->product->setMenu($productID);
         }
         else if($this->app->openApp == 'project')
         {
-            $this->loadModel('project')->setMenu($objectID);
+            $this->project->setMenu($objectID);
+        }
+        else if($this->app->openApp == 'execution')
+        {
+            $this->execution->setMenu($objectID);
         }
 
         /* Whether there is a object to transfer story, for example feedback. */

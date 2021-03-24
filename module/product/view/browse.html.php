@@ -135,7 +135,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     </div>
     <?php if(common::canModify('product', $product)):?>
     <div class='btn-group dropdown'>
-      <?php echo html::a($this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID"), "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary'");?>
+      <?php echo html::a($this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID"), "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary' data-app='$openApp'");?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu'>
         <li>
