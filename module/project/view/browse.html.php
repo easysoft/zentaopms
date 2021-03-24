@@ -24,7 +24,7 @@ js::set('browseType', $browseType);
   <?php if($this->config->systemMode == 'new'):?>
   <div id="sidebarHeader">
     <div class="title">
-      <?php echo empty($project) ? $lang->project->common : $project->name;?>
+      <?php echo $programID ? $program->name : $lang->project->common;?>
       <?php if($programID) echo html::a(inLink('browse', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>
