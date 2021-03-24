@@ -62,7 +62,7 @@ class user extends control
 
         /* Set thie url to session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('todoList', $uri);
+        $this->session->set('todoList', $uri, 'my');
         $this->session->set('bugList',  $uri, 'qa');
         $this->session->set('taskList', $uri, 'execution');
 
