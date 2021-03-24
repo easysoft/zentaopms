@@ -344,6 +344,9 @@
         app.$app.remove();
         app.$bar.remove();
         delete openedApps[appCode];
+
+        var firstClass = $("#bars li:first").attr('class');
+        if(firstClass == 'divider') $("#bars li.divider:first").remove();
     }
 
     /**
