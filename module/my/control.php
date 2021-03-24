@@ -127,9 +127,11 @@ class my extends control
         $uri = $this->app->getURI(true);
         if($this->app->viewType != 'json')
         {
-            $this->session->set('todoList', $uri);
-            $this->session->set('bugList',  $uri);
-            $this->session->set('taskList', $uri);
+            $this->session->set('todoList',     $uri, 'my');
+            $this->session->set('bugList',      $uri, 'qa');
+            $this->session->set('taskList',     $uri, 'execution');
+            $this->session->set('storyList',    $uri, 'product');
+            $this->session->set('testtaskList', $uri, 'qa');
         }
 
         /* Load pager. */
@@ -182,7 +184,7 @@ class my extends control
     public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -223,7 +225,7 @@ class my extends control
     public function requirement($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -264,10 +266,7 @@ class my extends control
     public function task($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json')
-        {
-            $this->session->set('taskList', $this->app->getURI(true), 'execution');
-        }
+        if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -897,16 +896,28 @@ class my extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('projectList',     $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
+        $this->session->set('productList',     $uri );
+        $this->session->set('storyList',       $uri );
+        $this->session->set('designList',      $uri );
+        $this->session->set('productPlanList', $uri );
+        $this->session->set('releaseList',     $uri );
+        $this->session->set('programList',     $uri );
+        $this->session->set('projectList',     $uri );
+        $this->session->set('executionList',   $uri );
+        $this->session->set('taskList',        $uri );
+        $this->session->set('buildList',       $uri );
+        $this->session->set('bugList',         $uri );
+        $this->session->set('caseList',        $uri );
+        $this->session->set('caselibList',     $uri );
+        $this->session->set('testsuiteList',   $uri );
+        $this->session->set('testtaskList',    $uri );
+        $this->session->set('reportList',      $uri );
+        $this->session->set('docList',         $uri );
+        $this->session->set('todoList',        $uri );
+        $this->session->set('riskList',        $uri );
+        $this->session->set('issueList',       $uri );
+        $this->session->set('userList',        $uri );
+        $this->session->set('stakeholderList', $uri );
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);

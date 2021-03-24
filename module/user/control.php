@@ -825,7 +825,6 @@ class user extends control
                 $this->send($response);
             }
 
-
             if((!empty($this->config->safe->loginCaptcha) and strtolower($this->post->captcha) != strtolower($this->session->captcha) and $this->app->getViewType() != 'json'))
             {
                 $response['result']  = 'fail';
