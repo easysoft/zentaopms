@@ -277,15 +277,15 @@ class project extends control
                 if($model == 'waterfall')
                 {
                     $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
-                    $this->session->set('projectPlanList', $this->createLink('projectplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID));
-                    $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('projectplan', 'create', "projectID=$projectID", '', '', $projectID)));
+                    $this->session->set('programPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID));
+                    $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
                 }
 
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'create', '', '', '', $projectID)));
             }
         }
 
-        if($programID) $this->program->setMenu($programID);
+        if($programID) $this->loadModel('program')->setMenu($programID);
 
         $name      = '';
         $code      = '';

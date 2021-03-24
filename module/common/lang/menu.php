@@ -216,7 +216,6 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 $lang->waterfall->menu = new stdclass();
 $lang->waterfall->menu->index       = array('link' => "$lang->dashboard|project|index|project=%s");
 $lang->waterfall->menu->programplan = array('link' => "{$lang->productplan->shortCommon}|programplan|browse|project=%s", 'subModule' => 'programplan');
-$lang->waterfall->menu->execution   = array('link' => "$lang->executionCommon|execution|all|status=all&projectID=%s", 'subModule' => ',project,task,');
 $lang->waterfall->menu->doc         = array('link' => "{$lang->doc->common}|doc|index|project=%s");
 $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory');
 $lang->waterfall->menu->design      = array('link' => "$lang->design|design|browse|product=0&project=%s");
@@ -232,7 +231,6 @@ $lang->waterfall->menu->settings    = array('link' => "$lang->settings|project|v
 /* Waterfall menu order. */
 $lang->waterfall->menuOrder[5]  = 'index';
 $lang->waterfall->menuOrder[15] = 'programplan';
-$lang->waterfall->menuOrder[10] = 'execution';
 $lang->waterfall->menuOrder[20] = 'projectstory';
 $lang->waterfall->menuOrder[25] = 'design';
 $lang->waterfall->menuOrder[30] = 'ci';
