@@ -130,6 +130,9 @@
 <script>
 $(function()
 {
+    $('.is-nest-child span.icon-program').addClass('table-nest-toggle');
+    $('.is-nest-child span.icon-program').removeClass('table-nest-icon');
+
     /* Init orders numbers list */
     var ordersList = [];
     for(var i = 0; i < originOrders.length; ++i) ordersList.push(parseInt(originOrders[i]));

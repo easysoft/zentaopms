@@ -1594,6 +1594,28 @@ class projectModel extends model
         $this->lang->project->menu      = $this->lang->{$project->model}->menu;
         $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
 
+        foreach($this->lang->project->menu as $key => $menu)
+        {
+            if(!isset($this->lang->project->menu->{$key}['dropMenu'])) continue;
+            $dropMenu = common::createDropMenu($this->lang->project->menu->{$key}['dropMenu'], $objectID);
+            if(!empty($dropMenu))
+            {    
+                foreach($dropMenu as $menuKey => $menu)
+                {    
+                    $itemMenu = zget($projectSubMenu, $menuKey, ''); 
+                    $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
+                    $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
+                    $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
+                    if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
+                    {    
+                        $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
+                        break;
+                    }    
+                }    
+                $this->lang->project->menu->{$key}['dropMenu'] = $dropMenu;
+            }
+        }
+
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
         common::setMenuVars('project', $objectID);
     }

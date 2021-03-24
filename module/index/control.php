@@ -79,8 +79,9 @@ class index extends control
     public function ajaxClearObjectSession()
     {
         $objectType = $this->post->objectType;
+        $appGroup   = zget($this->config->index->appGroup, $objectType, '');
         if($objectType == 'testcase') $objectType = 'case';
 
-        $this->session->set($objectType . 'List', '');
+        $this->session->set($objectType . 'List', '', $appGroup);
     }
 }

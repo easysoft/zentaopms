@@ -457,51 +457,6 @@ class commonModel extends model
     }
 
     /**
-     * Init submenu for project menu.
-     *
-     * @static
-     * @access public
-     * @return array
-     */
-    public static function initProjectSubmenu()
-    {
-        global $lang, $app;
-        $moduleName = $app->getModuleName();
-        $methodName = $app->getMethodName();
-
-        foreach(array('waterfall', 'scrum') as $model)
-        {
-            foreach($lang->menu->$model as $key => $menu)
-            {
-                /* Replace for dropdown submenu. */
-                if(isset($lang->$model->dropMenu->$key))
-                {
-                    $programDropMenu = $lang->$model->dropMenu->$key;
-                    $dropMenu        = common::createDropMenu($programDropMenu, $app->session->project);
-
-                    if(!empty($dropMenu))
-                    {
-                        foreach($dropMenu as $menuKey => $menu)
-                        {
-                            $itemMenu = zget($programDropMenu, $menuKey, '');
-                            $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
-                            $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
-                            $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
-
-                            if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
-                            {
-                                $lang->menu->$model->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
-                                break;
-                            }
-                        }
-                        $lang->menu->$model->{$key}['dropMenu'] = $dropMenu;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Print admin dropMenu.
      *
      * @param  string    $dropMenu
@@ -737,12 +692,13 @@ class commonModel extends model
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
-                        $subActive = 'active';
+                        $subActive = '';
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod))
                         {
                             $activeMenu = $menuItem->name;
-                            $active = 'active';
-                            $subActive = 'active';
+                            $active     = 'active';
+                            $subActive  = 'active';
+                            $label      = $subLabel;
                         }
                         $dropMenu .= "<li class='$subActive' data-id='$dropMenuItem->name'>" . html::a($subLink, $subLabel) . $subProgram . '</li>';
                     }
@@ -2308,70 +2264,6 @@ EOD;
         /* Default, display menu. */
         $lang->menu      = $lang->$openApp->menu;
         $lang->menuOrder = $lang->$openApp->menuOrder;
-    }
-
-    /**
-     * Replace menu vars.
-     *
-     * @param  object  $menus
-     * @static
-     * @access public
-     * @return string
-     */
-    public static function processMenuVars($menus)
-    {
-        global $app, $lang;
-        if(empty($menus)) return;
-        foreach($menus as $name => $setting)
-        {
-            $link = is_array($setting) ? $setting['link'] : $setting;
-
-            if(is_array($setting))
-            {
-                $setting['link'] = $link;
-            }
-            else
-            {
-                $setting = $link;
-            }
-
-            $menus->$name = $setting;
-        }
-
-        return $menus;
-    }
-
-    /**
-     * Get project main menu by model.
-     *
-     * @param  string $moduleName
-     * @static
-     * @access public
-     * @return string
-     */
-    public static function getProjectMainMenu($moduleName)
-    {
-        global $app, $lang, $dbh, $config;
-        $project = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->project}'")->fetch();
-        if(empty($project)) return;
-
-        self::initProjectSubmenu();
-        if($project->model == 'scrum')
-        {
-            $lang->project->menuOrder = $lang->scrum->menuOrder;
-
-            /* The scrum project temporarily hides the trace matrix. */
-            unset($lang->projectstory->menu->track);
-            return self::processMenuVars($lang->menu->scrum);
-        }
-
-        if($project->model == 'waterfall')
-        {
-            $lang->project->dividerMenu = str_replace(',project,', ',', $lang->project->dividerMenu);
-            $lang->release->menu        = new stdclass();
-            $lang->project->menuOrder   = $lang->waterfall->menuOrder;
-            return self::processMenuVars($lang->menu->waterfall);
-        }
     }
 
     /**

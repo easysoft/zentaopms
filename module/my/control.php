@@ -896,28 +896,27 @@ class my extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri );
-        $this->session->set('storyList',       $uri );
-        $this->session->set('designList',      $uri );
-        $this->session->set('productPlanList', $uri );
-        $this->session->set('releaseList',     $uri );
-        $this->session->set('programList',     $uri );
-        $this->session->set('projectList',     $uri );
-        $this->session->set('executionList',   $uri );
-        $this->session->set('taskList',        $uri );
-        $this->session->set('buildList',       $uri );
-        $this->session->set('bugList',         $uri );
-        $this->session->set('caseList',        $uri );
-        $this->session->set('caselibList',     $uri );
-        $this->session->set('testsuiteList',   $uri );
-        $this->session->set('testtaskList',    $uri );
-        $this->session->set('reportList',      $uri );
-        $this->session->set('docList',         $uri );
-        $this->session->set('todoList',        $uri );
-        $this->session->set('riskList',        $uri );
-        $this->session->set('issueList',       $uri );
-        $this->session->set('userList',        $uri );
-        $this->session->set('stakeholderList', $uri );
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('designList',      $uri, 'project');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('programList',     $uri, 'program');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('caselibList',     $uri, 'qa');
+        $this->session->set('testsuiteList',   $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
+        $this->session->set('reportList',      $uri, 'qa');
+        $this->session->set('docList',         $uri, 'doc');
+        $this->session->set('todoList',        $uri, 'my');
+        $this->session->set('riskList',        $uri, 'project');
+        $this->session->set('issueList',       $uri, 'project');
+        $this->session->set('stakeholderList', $uri, 'project');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
