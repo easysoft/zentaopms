@@ -719,7 +719,7 @@ class project extends control
 
         /* Build the search form. */
         $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
-        $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
+        $this->loadModel('execution')->buildBugSearchForm($products, $queryID, $actionURL);
 
         /* Assign. */
         $this->view->title       = $title;
