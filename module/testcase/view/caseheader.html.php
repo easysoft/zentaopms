@@ -136,12 +136,12 @@
       $class = common::hasPriv('testcase', 'import') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
       $link  = common::hasPriv('testcase', 'import') ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->fileImport, '', $misc) . "</li>";
+      echo "<li $class>" . html::a($link, $lang->testcase->fileImport, '', $misc . "data-app={$this->app->openApp}") . "</li>";
 
       $class = common::hasPriv('testcase', 'importFromLib') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'importFromLib') ? "data-app='{$this->app->openApp}'" : "class=disabled";
       $link  = common::hasPriv('testcase', 'importFromLib') ?  $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->importFromLib, '', $misc) . "</li>";
+      echo "<li $class>" . html::a($link, $lang->testcase->importFromLib, '', $misc . "data-app={$this->app->openApp}") . "</li>";
       ?>
       </ul>
     </div>
