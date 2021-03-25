@@ -39,6 +39,7 @@ class testcase extends control
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
+        $this->loadModel('qa');
 
         $this->view->products = $this->products = $this->product->getPairs();
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
@@ -79,10 +80,7 @@ class testcase extends control
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->app->openApp != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
-        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
-        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true); setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true); if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['caseModule'] = 0;
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
@@ -96,8 +94,16 @@ class testcase extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
-        if($this->app->openApp == 'project') $this->products = array('0' => $this->lang->product->all) + $this->products;
-        $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($projectID) : $this->testcase->setMenu($this->products, $productID, $branch, $moduleID, $suiteID, $orderBy);
+        if($this->app->openApp == 'project')
+        {
+            $this->products = array('0' => $this->lang->product->all) + $this->products;
+            $this->loadModel('project')->setMenu($projectID);
+        }
+        else
+        {
+            $this->qa->setMenu($this->products, $productID, $branch);
+        }
+
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);
@@ -196,7 +202,6 @@ class testcase extends control
             $products = array('0' => $this->lang->product->all) + $this->project->getProducts($this->session->project, false);
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', '', $branch);
         }
-
 
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
