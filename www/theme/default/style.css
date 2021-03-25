@@ -14,16 +14,6 @@
 
 #pageNav .btn-group.angle-btn{margin-right:10px !important;}
 
-#dropMenu.show-right-col{width:502px;max-width:520px;}
-#dropMenu.has-search-text{width:250px;max-width:260px;}
-#dropMenu.has-search-text .col-right{margin-left:0px;}
-#dropMenu>.search-box{max-width:240px;}
-#dropMenu .list-group{width:250px; max-width:260px;}
-#dropMenu.show-right-col>.list-group{width:502px;max-width:520px;}
-#dropMenu.show-right-col .col-left>.list-group{width:250px;max-width:260px;}
-#dropMenu.show-right-col .col-right>.list-group{width:250px;max-width:260px;}
-#dropMenu .col-footer{width:230px;}
-
 .main-actions .btn-toolbar .divider {margin-right:8px !important; margin-left: 8px !important;}
 .main-actions .btn-toolbar .btn + .btn {margin-left: 8px !important;}
 

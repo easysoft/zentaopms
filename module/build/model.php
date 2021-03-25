@@ -352,8 +352,10 @@ class buildModel extends model
         $build->stories = '';
         $build->bugs    = '';
 
+        $execution = $this->loadModel('execution')->getByID($executionID);
+
         $build = fixer::input('post')
-            ->setDefault('project', $this->session->project)
+            ->setDefault('project', $execution->project)
             ->setDefault('product', 0)
             ->setDefault('branch', 0)
             ->cleanInt('product,branch')
@@ -368,6 +370,7 @@ class buildModel extends model
             ->batchCheck($this->config->build->create->requiredFields, 'notempty')
             ->check('name', 'unique', "product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
             ->exec();
+
         if(!dao::isError())
         {
             $buildID = $this->dao->lastInsertID();

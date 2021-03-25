@@ -37,6 +37,10 @@ class tree extends control
             $products = $this->product->getPairs('noclosed');
             $this->loadModel('qa')->setMenu($products, $rootID);;
         }
+        else if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
 
         /* According to the type, set the module root and modules. */
         if(strpos('story|bug|case', $viewType) !== false)

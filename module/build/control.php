@@ -27,6 +27,10 @@ class build extends control
 
         if(!empty($_POST))
         {
+            $executionID = empty($executionID) ? $this->post->execution : $executionID;
+            if(empty($executionID)) dao::$errors['execution'] = $this->lang->build->emptyExecution;
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $buildID = $this->build->create($executionID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
@@ -42,7 +46,7 @@ class build extends control
         {
             $this->loadModel('project')->setMenu($projectID);
             $executions  = $this->execution->getPairs($projectID);
-            $executionID = $executionID == 0 ? key($executions) : $executionID;
+            $executionID = empty($executionID) ? key($executions) : $executionID;
             $this->session->set('project', $projectID);
         }
         elseif($this->app->openApp == 'execution')
@@ -113,7 +117,7 @@ class build extends control
         }
         elseif($this->app->openApp == 'exectuion')
         {
-            $this->execution->setMenu($this->execution->getPairs($build->project), $build->execution);
+            $this->execution->setMenu($build->execution);
         }
 
         /* Get stories and bugs. */
@@ -410,10 +414,12 @@ class build extends control
             die(js::locate(inlink('view', "buildID=$buildID&type=story"), 'parent'));
         }
 
-        $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+        $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
+
         $build   = $this->build->getById($buildID);
         $product = $this->loadModel('product')->getById($build->product);
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($build->project), $build->execution);
+
+        $this->loadModel('execution')->setMenu($build->execution);
         $this->loadModel('story');
         $this->loadModel('tree');
         $this->loadModel('product');
@@ -429,9 +435,10 @@ class build extends control
         $this->config->product->search['actionURL'] = $this->createLink('build', 'view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
-        $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($build->product, $viewType = 'story', $startModuleID = 0);
+        $this->config->product->search['params']['plan']['values']   = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
+        $this->config->product->search['params']['module']['values'] = $this->tree->getOptionMenu($build->product, 'story', 0);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
+
         if($product->type == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
@@ -528,7 +535,7 @@ class build extends control
             die(js::locate(inlink('view', "buildID=$buildID&type=bug"), 'parent'));
         }
 
-        $this->session->set('bugList', inlink('view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+        $this->session->set('bugList', inlink('view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
         /* Set menu. */
         $build   = $this->build->getByID($buildID);
         $product = $this->loadModel('product')->getByID($build->product);

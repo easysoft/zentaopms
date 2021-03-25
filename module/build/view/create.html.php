@@ -29,7 +29,7 @@
           <th><?php echo $lang->build->product;?></th>
           <?php if(!empty($products)):?>
           <td>
-            <div class='input-group'>
+            <div class='input-group' id='productBox'>
               <?php echo html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>
               <?php
               if(!empty($product) and $product->type != 'normal' and isset($branches[$product->branch]))

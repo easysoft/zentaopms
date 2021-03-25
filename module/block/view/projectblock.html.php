@@ -13,7 +13,7 @@
         <th class='w-80px'><?php echo $lang->project->PM;?></th>
         <th class='w-60px'><?php echo $lang->project->status;?></th>
         <?php if($longBlock):?>
-        <th class='w-90px'><?php echo $lang->project->teamCount;?></th>
+        <th class='w-60px'><?php echo $lang->project->teamCount;?></th>
         <th class='w-90px text-right'><?php echo $lang->task->consumed;?></th>
         <th class='w-80px text-right'><?php echo $lang->project->budget;?></th>
         <th class='w-80px'><?php echo $lang->project->leftStories;?></th>

@@ -43,7 +43,7 @@ class doc extends control
         $this->from = 'doc';
         setcookie('from', 'doc', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $this->session->set('docList', $this->app->getURI(true));
+        $this->session->set('docList', $this->app->getURI(true), 'doc');
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 5, 1);
 
@@ -121,7 +121,7 @@ class doc extends control
         {
             $menuType = (!$type && (in_array($browseType, array_keys($this->lang->doc->fastMenuList)) || $browseType == 'bysearch')) ? $browseType : $type;
         }
-        $this->session->set('docList', $this->app->getURI(true));
+        $this->session->set('docList', $this->app->getURI(true), 'doc');
 
         /* Set header and position. */
         $this->view->title      = $this->lang->doc->common . ($libID ? $this->lang->colon . $this->libs[$libID] : '');
@@ -762,9 +762,9 @@ class doc extends control
     public function showFiles($type, $objectID, $from = 'doc', $viewType = '', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',  $uri);
-        $this->app->session->set('storyList', $uri);
-        $this->app->session->set('docList',   $uri);
+        $this->app->session->set('taskList',  $uri, 'execution');
+        $this->app->session->set('storyList', $uri, 'product');
+        $this->app->session->set('docList',   $uri, 'doc');
 
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'card';
         setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
@@ -852,7 +852,7 @@ class doc extends control
     public function objectLibs($type, $objectID)
     {
         // setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        $this->session->set('docList', $this->app->getURI(true));
+        $this->session->set('docList', $this->app->getURI(true), 'doc');
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();

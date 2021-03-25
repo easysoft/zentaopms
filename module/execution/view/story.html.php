@@ -22,8 +22,8 @@
 <?php js::set('workingHourError', sprintf($this->lang->error->notempty, $this->lang->workingHour))?>
 <style>
 .btn-group a i.icon-plus {font-size: 16px;}
-.btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
-.btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+.btn-group a.btn-secondary {border-right: 1px solid rgba(255,255,255,0.2);}
+.btn-group button.dropdown-toggle.btn-secondary {padding:6px;}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if(!empty($module->name) or !empty($product->name) or !empty($branch)):?>
@@ -62,8 +62,8 @@
             $storyModuleID = (int)$this->cookie->storyModuleParam;
             $createStoryLink = $this->createLink('story', 'create', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
             echo "<div class='btn-group dropdown'>";
-            echo html::a($createStoryLink, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary' data-app='execution'");
-            echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+            echo html::a($createStoryLink, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-secondary' data-app='execution'");
+            echo "<button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu pull-right'>";
             if(common::hasPriv('story', 'create')) echo '<li>' . html::a($createStoryLink, $lang->story->create, '', "data-app='execution'") . '</li>';
             if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id"), $lang->story->batchCreate, '', "data-app='execution'") . '</li>';
