@@ -1173,18 +1173,6 @@ class product extends control
     }
 
     /**
-     * Doc for compatible.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function doc($productID)
-    {
-        $this->locate($this->createLink('doc', 'objectLibs', "type=product&objectID=$productID&from=product"));
-    }
-
-    /**
      * Build of product.
      *
      * @param  int    $productID

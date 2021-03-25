@@ -144,8 +144,6 @@ if($config->systemMode == 'new')
 {
     /* Program. */
     $lang->resource->program = new stdclass();
-    $lang->resource->program->createGuide             = 'createGuide';
-    //$lang->resource->program->index                 = 'index';
     $lang->resource->program->browse                  = 'browse';
     $lang->resource->program->product                 = 'product';
     $lang->resource->program->create                  = 'create';
@@ -162,8 +160,6 @@ if($config->systemMode == 'new')
     $lang->resource->program->batchUnlinkStakeholders = 'batchUnlinkStakeholders';
     $lang->resource->program->export                  = 'export';
 
-    $lang->program->methodOrder[0]   = 'createGuide';
-    //$lang->program->methodOrder[5]   = 'index';
     $lang->program->methodOrder[10]  = 'browse';
     $lang->program->methodOrder[15]  = 'product';
     $lang->program->methodOrder[20]  = 'create';
@@ -213,6 +209,7 @@ if($config->systemMode == 'new')
     $lang->resource->project->bug               = 'bug';
     $lang->resource->project->testcase          = 'testcase';
     $lang->resource->project->testtask          = 'testtask';
+    $lang->resource->project->execution         = 'execution';
 
     $lang->project->methodOrder[0]   = 'index';
     $lang->project->methodOrder[5]   = 'browse';
@@ -246,6 +243,7 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[145] = 'bug';
     $lang->project->methodOrder[150] = 'testcase';
     $lang->project->methodOrder[155] = 'testtask';
+    $lang->project->methodOrder[160] = 'execution';
 
     /* Personnel . */
     $lang->resource->personnel = new stdclass();
@@ -517,7 +515,7 @@ $lang->release->methodOrder[70] = 'changeStatus';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
-//$lang->resource->execution->index             = 'index';
+$lang->resource->execution->index             = 'index';
 $lang->resource->execution->view              = 'view';
 $lang->resource->execution->browse            = 'browse';
 $lang->resource->execution->create            = 'createExec';
@@ -561,10 +559,10 @@ $lang->resource->execution->printKanban       = 'printKanbanAction';
 $lang->resource->execution->tree              = 'treeAction';
 $lang->resource->execution->treeTask          = 'treeOnlyTask';
 $lang->resource->execution->treeStory         = 'treeOnlyStory';
-//$lang->resource->execution->all               = 'allExecutionAB';
+$lang->resource->execution->all               = 'allExecutionAB';
 $lang->resource->execution->kanbanHideCols    = 'kanbanHideCols';
 $lang->resource->execution->kanbanColsColor   = 'kanbanColsColor';
-//$lang->resource->execution->export            = 'exportAction';
+$lang->resource->execution->export            = 'exportAction';
 $lang->resource->execution->storyKanban       = 'storyKanban';
 $lang->resource->execution->storySort         = 'storySort';
 $lang->resource->execution->whitelist         = 'whitelist';
@@ -618,8 +616,8 @@ $lang->execution->methodOrder[205] = 'kanbanColsColor';
 $lang->execution->methodOrder[210] = 'tree';
 $lang->execution->methodOrder[215] = 'treeTask';
 $lang->execution->methodOrder[220] = 'treeStory';
-//$lang->execution->methodOrder[225] = 'all';
-//$lang->execution->methodOrder[230] = 'export';
+$lang->execution->methodOrder[225] = 'all';
+$lang->execution->methodOrder[230] = 'export';
 $lang->execution->methodOrder[235] = 'storyKanban';
 $lang->execution->methodOrder[240] = 'storySort';
 $lang->execution->methodOrder[245] = 'whitelist';
