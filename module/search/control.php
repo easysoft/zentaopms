@@ -216,6 +216,7 @@ class search extends control
         $this->session->set('testsuiteList',   $uri, 'qa');
         $this->session->set('issueList',       $uri, 'project');
         $this->session->set('riskList',        $uri, 'project');
+        $this->session->set('caselibList',     $uri, 'qa');
         $this->session->set('searchIngWord',   $words);
         $this->session->set('searchIngType',   $type);
 
