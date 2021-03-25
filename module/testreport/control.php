@@ -14,6 +14,14 @@ class testreport extends control
     public $projectID = 0;
 
     /**
+     * All products.
+     *
+     * @var    array
+     * @access public
+     */
+    public $products = array();
+
+    /**
      * Construct
      *
      * @param  string $moduleName
@@ -541,7 +549,7 @@ class testreport extends control
         {
             $projectID      = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->project;
             $this->products = $this->product->getProductPairsByProject($projectID);
-            if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=testreport&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=report')));
+            if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testreport")));
             $productID      = $this->product->saveState($objectID, $this->products);
             $this->loadModel('qa')->setMenu($this->products, $productID);
             return $productID;

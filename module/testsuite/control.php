@@ -29,10 +29,13 @@ class testsuite extends control
      */
     public function __construct($moduleName = '', $methodName = '')
     {
-       parent::__construct($moduleName, $methodName);
+        parent::__construct($moduleName, $methodName);
 
-       $this->app->loadConfig('qa');
-       foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+        $this->app->loadConfig('qa');
+        foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+
+        $this->view->products = $this->products = $this->loadModel('product')->getPairs();
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testsuite")));
     }
 
     /**
@@ -63,9 +66,6 @@ class testsuite extends control
         $this->session->set('testsuiteList', $this->app->getURI(true), 'qa');
 
         /* Set menu. */
-        $this->view->products = $this->products = $this->loadModel('product')->getPairs();
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=testsuite&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=testsuite')));
-
         $productID = $this->product->saveState($productID, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
@@ -130,7 +130,6 @@ class testsuite extends control
         }
 
         /* Set menu. */
-        $this->view->products = $this->products = $this->loadModel('product')->getPairs();
         $productID  = $this->product->saveState($productID, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
@@ -164,7 +163,6 @@ class testsuite extends control
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
         /* Set product session. */
-        $this->view->products = $this->products = $this->loadModel('product')->getPairs();
         $productID = $this->product->saveState($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
@@ -235,7 +233,6 @@ class testsuite extends control
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
         /* Set product session. */
-        $this->view->products = $this->products = $this->loadModel('product')->getPairs();
         $productID = $this->product->saveState($suite->product, $this->products);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
@@ -314,7 +311,6 @@ class testsuite extends control
         $suite = $this->testsuite->getById($suiteID);
 
         /* Set product session. */
-        $this->view->products = $this->products = $this->loadModel('product')->getPairs();
         $productID = $this->product->saveState($suite->product, $this->products);
 
         /* Load pager. */
