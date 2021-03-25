@@ -1632,7 +1632,15 @@ class testcase extends control
             if($this->post->isEndPage)
             {
                 unlink($tmpFile);
-                die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+
+                if($this->app->openApp == 'project')
+                {
+                    die(js::locate($this->createLink('project', 'testcase', "projectID={$this->session->project}&productID=$productID"), 'parent'));
+                }
+                else
+                {
+                    die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+                }
             }
             else
             {
@@ -1640,7 +1648,14 @@ class testcase extends control
             }
         }
 
-        $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->testcase->setMenu($this->products, $productID, $branch);
+        }
 
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;

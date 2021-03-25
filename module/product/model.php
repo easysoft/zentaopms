@@ -448,6 +448,7 @@ class productModel extends model
 
         if(isset($currentProduct->type) && $currentProduct->type != 'normal')
         {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
             $branches     = $this->loadModel('branch')->getPairs($productID);
             $branch       = empty($branch) ? (int)$this->cookie->preBranch : $branch;
             $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
