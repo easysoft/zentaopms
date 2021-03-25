@@ -321,7 +321,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             <ul class='dropdown-menu'>
               <?php
               $class      = $canBatchClose ? '' : "class='disabled'";
-              $actionLink = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
+              $actionLink = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0&storyType=$storyType");
               $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink')\"" : '';
               echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";
 

@@ -1077,7 +1077,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchClose($productID = 0, $execution = 0)
+    public function batchClose($productID = 0, $execution = 0, $storyType = 'story')
     {
         if($this->post->comments)
         {
@@ -1163,6 +1163,7 @@ class story extends control
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
         $this->view->storyIdList      = $storyIdList;
+        $this->view->storyType        = $storyType;
         $this->view->reasonList       = $this->lang->story->reasonList;
 
         $this->display();
