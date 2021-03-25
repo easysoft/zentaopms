@@ -1124,7 +1124,7 @@ class story extends control
         /* The stories of a product. */
         if($productID)
         {
-            $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
+            $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
             $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
             $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchClose;
@@ -1134,7 +1134,7 @@ class story extends control
         {
             $this->lang->story->menu      = $this->lang->execution->menu;
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
-            $this->execution->setMenu($this->execution->getPairs($this->session->project, 'all', 'nodeleted'), $executionID);
+            $this->execution->setMenu($executionID);
             $execution = $this->execution->getByID($executionID);
             $this->view->position[] = html::a($this->createLink('execution', 'story', "executionID=$execution->id"), $execution->name);
             $this->view->title      = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
@@ -1319,7 +1319,7 @@ class story extends control
         $products = $this->product->getPairs();
 
         /* Set menu. */
-        $this->product->setMenu($products, $story->product, $story->branch);
+        $this->product->setMenu($story->product, $story->branch);
 
         $this->view->title      = zget($products, $story->product, '') . $this->lang->colon . $this->lang->story->assign;
         $this->view->position[] = $this->lang->story->assign;
@@ -1474,7 +1474,7 @@ class story extends control
         else
         {
             $this->app->rawModule = 'testcase';
-            $this->loadModel('qa')->setMenu($products, $productID);
+            $this->loadModel('qa')->setMenu($productID);
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
 
@@ -1759,7 +1759,7 @@ class story extends control
         $this->story->replaceURLang($storyType);
         $this->products = $this->product->getPairs();
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, $storyType, $branchID);
-        $this->product->setMenu($this->products, $productID, $branchID);
+        $this->product->setMenu($productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
         $this->view->position[]    = $this->products[$productID];
