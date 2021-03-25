@@ -153,7 +153,9 @@
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu'>
         <li><?php echo html::a($actionLink, $lang->testcase->create);?></li>
+        <?php if(!empty($productID)):?>
         <li><?php echo html::a($this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule"), $lang->testcase->batchCreate, '', "data-app='{$this->app->openApp}'");?></li>
+        <?php endif;?>
       </ul>
     </div>
     <?php endif;?>

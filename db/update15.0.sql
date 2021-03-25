@@ -136,6 +136,8 @@ ALTER TABLE `zt_task` ADD `designVersion` smallint(6) unsigned NOT NULL AFTER `s
 ALTER TABLE `zt_burn` ADD `storyPoint` float NOT NULL AFTER `consumed`;
 ALTER TABLE `zt_burn` ADD `product` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `execution`;
 
+ALTER TABLE `zt_projectcase` ADD `count` mediumint(8) unsigned NOT NULL DEFAULT '1' AFTER `case`;
+
 -- DROP TABLE IF EXISTS `zt_taskspec`;
 CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `task` mediumint(8) NOT NULL,

@@ -257,6 +257,10 @@ class block extends control
                 {
                     $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
                 }
+                elseif($moduleName = 'project')
+                {
+                    $block->moreLink = $this->createLink('project', 'dynamic', "projectID={$this->session->project}");
+                }
             }
             elseif($block->block == 'dynamic')
             {
