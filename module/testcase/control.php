@@ -42,6 +42,7 @@ class testcase extends control
         $this->loadModel('qa');
 
         $this->view->products = $this->products = $this->product->getPairs();
+        if($this->app->openApp == 'project') $this->view->products = $this->products = $this->loadModel('project')->getProducts($this->session->project, false);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
     }
 
