@@ -891,6 +891,7 @@ class project extends control
      */
     public function manageView($groupID, $projectID, $programID)
     {
+        $this->loadModel('group');
         if($_POST)
         {
             $this->group->updateView($groupID);
@@ -924,6 +925,7 @@ class project extends control
      */
     public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
+        $this->loadModel('group');
         if($type == 'byGroup')
         {
             $groupID = $param;
@@ -1030,6 +1032,7 @@ class project extends control
      */
     public function manageGroupMember($groupID, $deptID = 0)
     {
+        $this->loadModel('group');
         if(!empty($_POST))
         {
             $this->group->updateUser($groupID);
@@ -1065,6 +1068,7 @@ class project extends control
      */
     public function copyGroup($groupID)
     {
+        $this->loadModel('group');
         if(!empty($_POST))
          {
              $group = $this->group->getByID($groupID);
@@ -1090,7 +1094,8 @@ class project extends control
      */
     public function editGroup($groupID)
     {
-       if(!empty($_POST))
+        $this->loadModel('group');
+        if(!empty($_POST))
         {
             $this->group->update($groupID);
             die(js::closeModal('parent.parent', 'this'));

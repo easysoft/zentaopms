@@ -1336,18 +1336,17 @@ class projectModel extends model
                     }
 
                     $from    = $project->from == 'project' ? 'project' : 'pgmproject';
-                    $openApp = $this->app->openApp;
-                    common::printIcon('project', 'edit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-app=$openApp", '', $project->id);
-                    common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', '', $this->lang->execution->team, $project->id);
-                    if($this->config->systemMode == 'new') common::printIcon('project', 'group', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', '', '', $project->id);
+                    common::printIcon('project', 'edit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-app=project", '', $project->id);
+                    common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', "data-app=project", $this->lang->execution->team, $project->id);
+                    if($this->config->systemMode == 'new') common::printIcon('project', 'group', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', "data-app=project", '', $project->id);
 
                     if(common::hasPriv('project','manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
                     {
                         echo "<div class='btn-group'>";
                         echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                         echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                        common::printIcon('project', 'manageProducts', "projectID=$project->id&programID=$programID", $project, 'list', 'link', '', 'btn-action', '', "data-app=$openApp", $this->lang->project->manageProducts, $project->id);
-                        if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&programID=$programID&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-app=$openApp", '', $project->id);
+                        common::printIcon('project', 'manageProducts', "projectID=$project->id&programID=$programID", $project, 'list', 'link', '', 'btn-action', '', "data-app=project", $this->lang->project->manageProducts, $project->id);
+                        if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-app=project", '', $project->id);
                         if(common::hasPriv('project','delete')) echo html::a(inLink("delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->delete}'");
                         echo "</ul>";
                         echo "</div>";
