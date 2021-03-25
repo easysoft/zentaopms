@@ -53,7 +53,7 @@
         <?php $params = isset($testtask) ? ",testtask=$testtask->id,executionID=$testtask->execution,buildID=$testtask->build" : '';?>
         <tr class='result-detail hide' id='tr-detail_<?php echo $trCount++; ?>'>
           <td colspan='7' class='pd-0'>
-            <form data-params='<?php echo "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,resultID=$result->id,runID=$runID" . $params?>' method='post'>
+            <form data-params='<?php echo "product=$case->product&branch=$case->branch&extras=projectID={$this->session->project},caseID=$case->id,version=$case->version,resultID=$result->id,runID=$runID" . $params?>' method='post'>
               <table class='table table-condensed resultSteps'>
                 <thead>
                   <tr>

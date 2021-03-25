@@ -373,6 +373,10 @@ class bug extends control
             {
                 $location = $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
             }
+            if(isset($output['projectID']))
+            {
+                $location = $this->createLink('project', 'bug', "projectID={$output['projectID']}");
+            }
             else
             {
                 setcookie('bugModule', 0, 0, $this->config->webRoot, '', false, false);
