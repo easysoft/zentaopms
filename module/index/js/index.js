@@ -61,7 +61,7 @@
     }
 
     /**
-     * Get app app code from url
+     * Get app code from url
      * @param {String} urlOrModuleName Url string
      * @return {String}
      */
@@ -474,7 +474,7 @@
 
         window.addEventListener('popstate', function(event)
         {
-            if(lastOpenedApp !== event.state.app) openApp(event.state.app);
+            if(event.state && lastOpenedApp !== event.state.app) openApp(event.state.app);
         });
 
         /* Redirect or open default app after document load */
