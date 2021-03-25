@@ -2189,21 +2189,21 @@ class storyModel extends model
      */
     public function getBySearch($productID, $branch = 0, $queryID, $orderBy, $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
     {
-        if($executionID != '')
+        if(!empty($executionID))
         {
             $products = $this->loadModel('project')->getProducts($executionID);
         }
         else
         {
-            $products = $this->loadModel('product')->getPairs();
+            $products = $this->loadModel('product')->getProducts();
         }
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
         /* Get the sql and form status from the query. */
         if($query)
         {
-            $this->session->set('storyQuery', $query->sql);
-            $this->session->set('storyForm', $query->form);
+            $this->session->set('storyQuery', $query->sql, $this->app->openApp);
+            $this->session->set('storyForm', $query->form, $this->app->openApp);
         }
         if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
 

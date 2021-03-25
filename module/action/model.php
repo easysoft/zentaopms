@@ -209,7 +209,7 @@ class actionModel extends model
             {
                 $record = (array)$record;
                 $record['product'] = isset($record['product']) ? ',' . $record['product'] . ',' : ',0,';
-                if(!isset($record['project'])) $record['project'] = 0;
+                if(!isset($record['project']))   $record['project']   = 0;
                 if(!isset($record['execution'])) $record['execution'] = 0;
                 return $record;
             }

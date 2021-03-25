@@ -302,7 +302,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProducts($projectID, $status = 'all', $orderBy = '')
+    public function getProducts($projectID = 0, $status = 'all', $orderBy = '')
     {
         return $this->dao->select('t1.branch, t1.plan, t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
