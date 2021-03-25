@@ -403,7 +403,14 @@ class testtask extends control
         if(!$task) die(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
 
         $productID = $task->product;
-        $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        }
         setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Determines whether an object is editable. */
@@ -890,7 +897,14 @@ class testtask extends control
         $productID = $this->product->saveState($task->product, $this->products);
 
         /* Save session. */
-        $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        }
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1096,7 +1110,7 @@ class testtask extends control
         $caseIDList = array_unique($caseIDList);
 
         /* The case of tasks of qa. */
-        if($productID)
+        if($productID or ($this->app->openApp == 'project' and empty($productID)))
         {
             $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
             $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case');
@@ -1121,7 +1135,7 @@ class testtask extends control
             $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->where('t2.id')->in($caseIDList)
-                ->fetchAll('runID');
+                ->fetchAll('id');
 
             $caseIDList = array();
             foreach($cases as $case) $caseIDList[] = $case->id;

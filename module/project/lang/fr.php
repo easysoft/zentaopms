@@ -29,6 +29,7 @@ $lang->project->manageGroupMember = 'Manage Group';
 $lang->project->moduleSetting     = 'List Settings';
 $lang->project->moduleOpen        = 'Program Name';
 $lang->project->dynamic           = 'Dynamic';
+$lang->project->execution         = 'Execution';
 $lang->project->qa                = 'QA';
 $lang->project->bug               = 'Bug List';
 $lang->project->testcase          = 'Case List';

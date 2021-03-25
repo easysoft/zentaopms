@@ -599,7 +599,9 @@ class testcase extends control
         else
         {
             $productID = $case->product;
-            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $case->branch);
+            if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
+            if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($case->execution);
+            if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
             $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -1630,7 +1632,15 @@ class testcase extends control
             if($this->post->isEndPage)
             {
                 unlink($tmpFile);
-                die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+
+                if($this->app->openApp == 'project')
+                {
+                    die(js::locate($this->createLink('project', 'testcase', "projectID={$this->session->project}&productID=$productID"), 'parent'));
+                }
+                else
+                {
+                    die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+                }
             }
             else
             {
@@ -1638,7 +1648,14 @@ class testcase extends control
             }
         }
 
-        $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->testcase->setMenu($this->products, $productID, $branch);
+        }
 
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;

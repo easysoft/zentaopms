@@ -74,7 +74,7 @@
     <?php
     $checkObject = new stdclass();
     $checkObject->execution = $executionID;
-    $link = $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+    $link = $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ''));
     if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
     ?>
   </div>
@@ -85,7 +85,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->task->noTask;?></span>
       <?php if(common::hasPriv('task', 'create', $checkObject)):?>
-      <?php echo html::a($this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>

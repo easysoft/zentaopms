@@ -509,7 +509,7 @@ class testcaseModel extends model
             ->where($caseQuery)
             ->beginIF($this->app->openApp == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
             ->beginIF(!empty($productID) and $queryProductID != 'all')
-            ->beginIF($this->app->openApp == 'project')->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($this->app->openApp == 'project' and !empty($productID))->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($this->app->openApp != 'project')->andWhere('product')->eq($productID)->fi()
             ->fi()
             ->beginIF($auto != 'unit')->andWhere('auto')->ne('unit')->fi()

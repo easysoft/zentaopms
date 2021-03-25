@@ -514,9 +514,9 @@ class projectModel extends model
     public function getProducts($projectID, $withBranch = true)
     {
         $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')
-            ->on('t1.product = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.project')->eq((int)$projectID)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t2.deleted')->eq(0);
         if(!$withBranch) return $query->fetchPairs('id', 'name');
         return $query->fetchAll('id');
@@ -1608,19 +1608,19 @@ class projectModel extends model
             $projectSubMenu = $this->lang->project->menu->{$key}['dropMenu'];
             $dropMenu = common::createDropMenu($this->lang->project->menu->{$key}['dropMenu'], $objectID);
             if(!empty($dropMenu))
-            {    
+            {
                 foreach($dropMenu as $menuKey => $menu)
-                {    
-                    $itemMenu = zget($projectSubMenu, $menuKey, ''); 
+                {
+                    $itemMenu = zget($projectSubMenu, $menuKey, '');
                     $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
                     $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
                     $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
                     if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
-                    {    
+                    {
                         $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
                         break;
-                    }    
-                }    
+                    }
+                }
                 $this->lang->project->menu->{$key}['dropMenu'] = $dropMenu;
             }
         }

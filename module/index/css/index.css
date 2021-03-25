@@ -23,6 +23,13 @@ body.menu-hide {padding-left: 0;}
 .menu-hide #menu .nav > li > a {padding: 6px 4px; text-align: center;}
 .menu-hide #menu .nav > li > a > .text {display: none;}
 .menu-hide #menu .nav > li.has-avatar > a {padding: 2px 0;}
+#menuMoreNav {display: none;}
+.show-more-nav #menuMoreNav {display: block;}
+#menuMoreList {left: 100%; margin-left: -2px; top: -5px; background-color: #3c495c;}
+#menuMoreList > li {padding: 2px 6px;}
+#menuMoreList > li > a {color: #fff; padding: 4px 6px 4px 12px; border-radius: 2px; margin: 0;}
+#menuMoreList > li.divider {opacity: .2; margin: 6px; padding: 0;}
+#menu .dropdown-hover:hover > a, #menu .dropdown.open > a {background-color: rgba(0,0,0,.3);}
 
 #moreExecution {display: none; max-height: 520px; min-height: 520px; max-width: 360px; min-width: 150px; position: fixed; bottom: 40px; z-index: 999; background: white; padding: 20px 10px; border: 1px solid #efefef;}
 .more-execution-show {left: 96px;}
