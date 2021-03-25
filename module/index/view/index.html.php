@@ -36,6 +36,13 @@ js::set('defaultOpen', $open);
   <nav id='menuNav'>
     <ul class='nav nav-default' id='menuMainNav'>
     </ul>
+    <ul class='nav nav-default' id='menuMoreNav'>
+      <li class='divider'></li>
+      <li class='dropdown dropdown-hover'>
+        <a><i class='icon icon-bars-sign'></i><span class='text'><?php echo $lang->more; ?></span></a>
+        <ul id='menuMoreList' class='dropdown-menu fade'></ul>
+      </li>
+    </ul>
   </nav>
   <div class="table-col col-right">
     <div id="moreExecution" class="more-execution-show" data-ride="searchList">
@@ -79,7 +86,7 @@ js::set('defaultOpen', $open);
     </div>
     <div id='upgradeContent' class='main-table'>
       <div class='main-header' style='padding: 5px 20px 5px 15px;'>
-        <i class='version-upgrade' id='versionTitle'></i> 
+        <i class='version-upgrade' id='versionTitle'></i>
         <h2>
           <?php echo $lang->index->upgradeVersion;?>
         </h2>
