@@ -40,15 +40,15 @@ class stakeholder extends control
     /**
      * Create a stakeholder.
      *
-     * @param  int projectID
+     * @param  int objectID
      * @access public
      * @return void
      */
-    public function create($projectID = 0)
+    public function create($objectID = 0)
     {
         if($_POST)
         {
-            $stakeholderID = $this->stakeholder->create($projectID);
+            $stakeholderID = $this->stakeholder->create($objectID);
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
@@ -62,29 +62,29 @@ class stakeholder extends control
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
 
-            $moduleName = $programID ? 'program'              : $this->moduleName;
-            $methodName = $programID ? 'stakeholder'          : 'browse';
-            $param      = $programID ? "programID=$programID" : '';
+            $moduleName = $this->app->openApp == 'program' ? 'program'              : $this->moduleName;
+            $methodName = $this->app->openApp == 'program' ? 'stakeholder'          : 'browse';
+            $param      = $this->app->openApp == 'program' ? "programID=$objectID" : "projectID=$objectID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         if($this->app->openApp == 'program')
         {
-            $this->loadModel('program')->setMenu($projectID);
-            $this->view->members = $this->loadModel('program')->getTeamMemberPairs($projectID);
+            $this->loadModel('program')->setMenu($objectID);
+            $this->view->members = $this->loadModel('program')->getTeamMemberPairs($objectID);
         }
         else
         {
-            $this->loadModel('project')->setMenu($projectID);
-            $this->view->members = $this->loadModel('project')->getTeamMemberPairs($projectID);
+            $this->loadModel('project')->setMenu($objectID);
+            $this->view->members = $this->loadModel('project')->getTeamMemberPairs($objectID);
         }
 
         $this->view->title      = $this->lang->stakeholder->create;
         $this->view->position[] = $this->lang->stakeholder->create;
         $this->view->companys   = $this->loadModel('company')->getOutsideCompanies();
-        $this->view->programID  = $this->app->openApp == 'program' ? $projectID : 0;
-        $this->view->projectID  = $this->app->openApp == 'project' ? $projectID : 0;
+        $this->view->programID  = $this->app->openApp == 'program' ? $objectID : 0;
+        $this->view->projectID  = $this->app->openApp == 'project' ? $objectID : 0;
 
         $this->display();
     }
