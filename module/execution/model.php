@@ -1139,6 +1139,11 @@ class executionModel extends model
             $module = 'execution';
             $method = 'build';
         }
+        if($module == 'story')
+        {
+            $module = 'execution';
+            $method = 'story';
+        }
 
         if($module == 'execution' and $method == 'create') return;
         if($extra != '')
