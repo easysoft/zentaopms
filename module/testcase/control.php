@@ -1640,7 +1640,14 @@ class testcase extends control
             }
         }
 
-        $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->testcase->setMenu($this->products, $productID, $branch);
+        }
 
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
