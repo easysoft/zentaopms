@@ -403,7 +403,14 @@ class testtask extends control
         if(!$task) die(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
 
         $productID = $task->product;
-        $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        }
         setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Determines whether an object is editable. */
@@ -890,7 +897,14 @@ class testtask extends control
         $productID = $this->product->saveState($task->product, $this->products);
 
         /* Save session. */
-        $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        }
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
