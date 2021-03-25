@@ -69,9 +69,9 @@
           <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
           <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
           <th class='w-100px'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
-          <th class='w-60px text-center'><?php echo $lang->execution->totalEstimate;?></th>
-          <th class='w-60px text-center'><?php echo $lang->execution->totalConsumed;?></th>
-          <th class='w-60px text-center'><?php echo $lang->execution->totalLeft;?></th>
+          <th class='w-80px text-center'><?php echo $lang->execution->totalEstimate;?></th>
+          <th class='w-80px text-center'><?php echo $lang->execution->totalConsumed;?></th>
+          <th class='w-80px text-center'><?php echo $lang->execution->totalLeft;?></th>
           <th class='w-60px'><?php echo $lang->execution->progress;?></th>
           <th class='w-100px'><?php echo $lang->execution->burn;?></th>
         </tr>
