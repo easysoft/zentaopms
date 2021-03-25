@@ -31,9 +31,6 @@ class testsuite extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        $this->app->loadConfig('qa');
-        foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-
         $this->view->products = $this->products = $this->loadModel('product')->getPairs();
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testsuite")));
     }

@@ -46,7 +46,7 @@ class testtask extends control
         }
         if($this->app->openApp == 'qa')
         {
-            $products = $this->product->getPairs();
+            $products = $this->loadModel('product')->getPairs();
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }

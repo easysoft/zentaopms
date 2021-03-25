@@ -975,7 +975,7 @@ class product extends control
      */
     public function showErrorNone($moduleName = 'qa', $activeMenu = 'index', $projectID = 0)
     {
-        $this->app->rawModule = $moduleName;
+        $this->app->rawModule = $activeMenu;
         if($moduleName == 'project')
         {
             $this->loadModel('project')->setMenu($projectID);
@@ -986,12 +986,11 @@ class product extends control
 
             if($activeMenu == 'testcase') $this->lang->{$project->model}->menu->qa['subMenu']->testcase['subModule'] = 'product';
             if($activeMenu == 'bug')      $this->lang->{$project->model}->menu->qa['subMenu']->bug['subModule']      = 'product';
-            if($activeMenu == 'testcase') $this->lang->{$project->model}->menu->qa['subMenu']->testtask['subModule'] = 'product';
+            if($activeMenu == 'testtask') $this->lang->{$project->model}->menu->qa['subMenu']->testtask['subModule'] = 'product';
         }
         elseif($moduleName == 'qa')
         {
             $this->loadModel('qa')->setMenu(array(), 0);
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
 
             if($activeMenu == 'testcase')   $this->lang->qa->menu->testcase['subMenu']->case['subModule']      = 'product';
             if($activeMenu == 'testsuite')  $this->lang->qa->menu->testcase['subMenu']->testsuite['subModule'] = 'product';
