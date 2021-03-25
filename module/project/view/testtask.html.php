@@ -30,7 +30,7 @@
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('project', $project)):?>
     <?php common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag muted');?>
-    <?php common::printLink('testtask', 'create', "product=0&projectID=$projectID&build=&projectID=$project->project", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('testtask', 'create', "product=0&executionID=0&build=0&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
 </div>
@@ -40,7 +40,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span>
       <?php if(common::canModify('project', $project) and common::hasPriv('testtask', 'create')):?>
-      <?php echo html::a($this->createLink('testtask', 'create', "product=0&project=$projectID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('testtask', 'create', "product=0&executionID=0&build=0&projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>

@@ -174,25 +174,20 @@ class product extends control
         {
             setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
             $browseType = 'unclosed';
-            if($this->app->rawModule == 'projectstory' and empty($productID))
-            {
-                $moduleTree = $this->tree->getExecutionStoryTreeMenu($this->session->project, 0, array('treeModel', 'createProjectStoryLink'));
-            }
-            else
-            {
-                $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch, "&param=$param&storyType=$storyType");
-            }
         }
         else
         {
-            if($this->app->rawModule == 'projectstory' and empty($productID))
-            {
-                $moduleTree = $this->tree->getExecutionStoryTreeMenu($this->session->project, 0, array('treeModel', 'createProjectStoryLink'));
-            }
-            else
-            {
-                $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', (int)$this->cookie->treeBranch, "&param=$param&storyType=$storyType");
-            }
+            $branch = (int)$this->cookie->treeBranch;
+        }
+
+        /* If in project story and not chose product, get project story mdoules. */
+        if($this->app->rawModule == 'projectstory' and empty($productID))
+        {
+            $moduleTree = $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
+        }
+        else
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), array('projectID' => $projectID, 'productID' => $productID), $branch, "&param=$param&storyType=$storyType");
         }
 
         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
@@ -215,12 +210,12 @@ class product extends control
         if($this->app->rawModule == 'projectstory')
         {
             if(!empty($product)) $this->session->set('currentProductType', $product->type);
-            $this->products  = $this->loadModel('project')->getProducts($this->session->project, false);
-            $projectProducts = $this->product->getProducts($this->session->project);
+            $this->products  = $this->loadModel('project')->getProducts($projectID, false);
+            $projectProducts = $this->product->getProducts($projectID);
             $productPlans    = $this->execution->getPlans($projectProducts);
 
             if($browseType == 'bybranch') $param = $branch;
-            $stories = $this->story->getExecutionStories($this->session->project, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
+            $stories = $this->story->getExecutionStories($projectID, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
         }
         else
         {
