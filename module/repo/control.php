@@ -327,6 +327,7 @@ class repo extends control
      */
     public function browse($repoID = 0, $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
+        if($this->get->repoPath) $path = $this->get->repoPath;
         $repoID = $this->repo->saveState($repoID, $objectID);
 
         $this->commonAction($repoID, $objectID);
