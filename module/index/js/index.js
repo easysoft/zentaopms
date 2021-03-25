@@ -416,6 +416,52 @@
         appsMap:  appsMap
     };
 
+    /**
+     * Refresh more menu in #menuNav
+     * @return {void}
+     */
+    function refreshMoreMenu()
+    {
+        var $mainNav = $('#menuMainNav');
+        var $list = $('#menuMoreList');
+        var $menuNav = $('#menuNav');
+        var $menuItems = $mainNav.children('li');
+        var maxHeight = $menuNav.height();
+        var showMoreMenu = false;
+        var currentHeight = 40;
+        var moreMenuHeight = 13;
+
+        $menuItems.each(function()
+        {
+            var $item = $(this);
+            var isDivider = $item.hasClass('divider');
+            var height = isDivider ? 17 : 40;
+            currentHeight += height;
+            if(currentHeight > maxHeight)
+            {
+                $item.addClass('hidden');
+                if(!showMoreMenu)
+                {
+                    showMoreMenu = true;
+                    var $prevItem = $item.prev();
+                    if($prevItem.hasClass('divider')) $prevItem.addClass('hidden');
+
+                    $list.empty();
+                    if(isDivider) return;
+                }
+                moreMenuHeight += isDivider ? 13 : 31;
+                $list.append($item.clone().removeClass('hidden'));
+            }
+            else
+            {
+                $item.removeClass('hidden');
+            }
+        });
+        console.log('moreMenuHeight', moreMenuHeight);
+        $list.css('top', moreMenuHeight > 111 ? 111 - moreMenuHeight : '');
+        $menuNav.toggleClass('show-more-nav', showMoreMenu);
+    }
+
     /* Init after current page load */
     $(function()
     {
@@ -468,6 +514,13 @@
                     options.y = bounding.top;
                 }
             }
+            var $dropdown = $btn.closest('.dropdown');
+            if($dropdown.length)
+            {
+                $dropdown.addClass('open');
+                options.onHide = function(){$dropdown.removeClass('open');}
+            }
+
             $.zui.ContextMenu.show(items, options);
             event.preventDefault();
         });
@@ -485,6 +538,10 @@
         }
         if(defaultOpenUrl) openApp(defaultOpenUrl);
         else openApp(defaultApp);
+
+        /* Refresh more menu on window resize */
+        $(window).on('resize', refreshMoreMenu);
+        refreshMoreMenu();
     });
 }());
 

@@ -19,21 +19,6 @@ class program extends control
     }
 
     /**
-     * Program create guide.
-     *
-     * @param  int    $programID
-     * @param  string $from
-     * @access public
-     * @return void
-     */
-    public function createGuide($programID = 0, $from = 'PRJ')
-    {
-        $this->view->from      = $from;
-        $this->view->programID = $programID;
-        $this->display();
-    }
-
-    /**
      * Program list.
      *
      * @param  varchar $status
