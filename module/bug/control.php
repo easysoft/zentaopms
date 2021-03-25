@@ -682,6 +682,7 @@ class bug extends control
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
 
         /* Set menu. */
+        if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($bug->project);
         if($from == 'bug')
         {
             $this->qa->setMenu($this->products, $bug->product, $bug->branch);
