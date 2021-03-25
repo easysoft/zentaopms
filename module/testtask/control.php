@@ -1096,7 +1096,7 @@ class testtask extends control
         $caseIDList = array_unique($caseIDList);
 
         /* The case of tasks of qa. */
-        if($productID)
+        if($productID or ($this->app->openApp == 'project' and empty($productID)))
         {
             $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
             $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case');
