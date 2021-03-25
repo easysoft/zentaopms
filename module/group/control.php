@@ -198,11 +198,11 @@ class group extends control
             $changelog = array();
             foreach($this->lang->changelog as $currentVersion => $currentChangeLog)
             {
-                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join($currentChangeLog, ',');
+                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join(',', $currentChangeLog);
             }
 
             $this->view->group      = $group;
-            $this->view->changelogs = ',' . join($changelog, ',') . ',';
+            $this->view->changelogs = ',' . join(',', $changelog) . ',';
             $this->view->groupPrivs = $groupPrivs;
             $this->view->groupID    = $groupID;
             $this->view->menu       = $menu;
