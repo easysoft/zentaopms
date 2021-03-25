@@ -13,7 +13,7 @@ class company extends control
 {
     /**
      * Construct function, load dept and user models auto.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -25,7 +25,7 @@ class company extends control
 
     /**
      * Index page, header to browse.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -36,13 +36,13 @@ class company extends control
 
     /**
      * Browse departments and users of a company.
-     * 
-     * @param  int    $param 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $param
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -56,7 +56,7 @@ class company extends control
         $this->company->setMenu($deptID);
 
         /* Save session. */
-        $this->session->set('userList', $this->app->getURI(true));
+        $this->session->set('userList', $this->app->getURI(true), 'admin');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -112,7 +112,7 @@ class company extends control
 
     /**
      * Edit a company.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -142,7 +142,7 @@ class company extends control
 
     /**
      * View a company.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -157,12 +157,12 @@ class company extends control
 
     /**
      * Company dynamic.
-     * 
-     * @param  string $browseType 
-     * @param  string $param 
-     * @param  int    $recTotal 
-     * @param  string $date 
-     * @param  string $direction    next|pre 
+     *
+     * @param  string $browseType
+     * @param  string $param
+     * @param  int    $recTotal
+     * @param  string $date
+     * @param  string $direction    next|pre
      * @access public
      * @return void
      */
@@ -175,16 +175,17 @@ class company extends control
 
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('executionList',   $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);

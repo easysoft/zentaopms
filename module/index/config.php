@@ -20,3 +20,4 @@ $config->index->appGroup['testreport']  = 'qa';
 $config->index->appGroup['doc']         = 'doc';
 $config->index->appGroup['todo']        = 'my';
 $config->index->appGroup['effort']      = 'my';
+$config->index->appGroup['user']        = 'admin';
