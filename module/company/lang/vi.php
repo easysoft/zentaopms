@@ -29,6 +29,7 @@ $lang->company->guest    = 'Khách truy cập';
 $lang->company->admins   = 'Quản trị viên';
 
 $lang->company->product   = $lang->productCommon;
+$lang->company->project   = 'Project';
 $lang->company->execution = $lang->executionCommon;
 $lang->company->user      = 'Người dùng';
 

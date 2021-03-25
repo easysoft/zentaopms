@@ -224,7 +224,7 @@ class testcaseModel extends model
         return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.product')->eq((int)$productID)
-            ->beginIF($this->app->openApp = 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->beginIF($this->app->openApp == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()

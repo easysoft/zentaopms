@@ -834,6 +834,43 @@ class programModel extends model
         return $budgetUnitList;
     }
 
+    /**
+     * Get program team member pairs.
+     *
+     * @param  int  $programID
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberPairs($programID = 0)
+    {
+      $projectList = $this->loadModel('project')->getPairsByProgram($programID);
+      if(!$projectList) return array('' => '');
+
+      $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+          ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+          ->where('t1.root')->in(array_keys($projectList))
+          ->andWhere('t1.type')->eq('project')
+          ->andWhere('t2.deleted')->eq(0)
+          ->fetchAll('account');
+      if(!$users) return array('' => '');
+
+      foreach($users as $account => $user)
+      {
+        $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
+        if(!empty($this->config->isINT)) $firstLetter = '';
+        $users[$account] = $firstLetter . ($user->realname ? $user->realname : $user->account);
+      }
+
+      return array('' => '') + $users;
+    }
+
+    /*
+     * Set program menu.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
     public function setMenu($programID)
     {
         $this->lang->switcherMenu = $this->getSwitcher($programID);

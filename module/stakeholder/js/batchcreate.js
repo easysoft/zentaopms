@@ -1,7 +1,7 @@
 function setDeptUsers(obj)
 {
     dept = $(obj).val();//Get dept ID.
-    link = createLink('stakeholder', 'batchCreate', 'dept=' + dept);
+    link = createLink('stakeholder', 'batchCreate', 'projectID=' + projectID + '&dept=' + dept);
     location.href=link;
 }
 

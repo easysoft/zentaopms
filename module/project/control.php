@@ -470,7 +470,7 @@ class project extends control
         $this->view->position[] = $this->lang->project->batchEdit;
 
         $this->view->projects      = $projects;
-        $this->view->programList   = $this->program->getParentPairs();
+        $this->view->programList   = $this->loadModel('program')->getParentPairs();
         $this->view->PMUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $appendPMUsers);
 
         $this->display();

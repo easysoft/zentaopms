@@ -213,6 +213,8 @@ $lang->doc->project  = '项目库';
 $lang->doc->custom   = '自定义库';
 $lang->doc->wiki     = 'WIKI';
 
+$lang->product->list = $lang->productCommon . '列表';
+
 $lang->project->report = '报告';
 
 $lang->report->weekly = '周报';

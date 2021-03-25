@@ -6,7 +6,7 @@ $(function()
         {
             $('.user-info').addClass('hidden');
             $('#user').closest('tr').find('.input-group-addon').addClass('hidden');
-            var link = createLink('stakeholder', 'ajaxGetMembers', 'user=&programID=' + programID);
+            var link = createLink('stakeholder', 'ajaxGetMembers', 'user=&program=' + programID + '&projectID=' + projectID);
             $.post(link, function(data)
             {
                 $('#user').replaceWith(data);        
@@ -19,7 +19,7 @@ $(function()
         {
             $('.user-info').addClass('hidden');
             $('#user').closest('tr').find('.input-group-addon').addClass('hidden');
-            var link = createLink('stakeholder', 'ajaxGetCompanyUser', 'user=&programID=' + programID);
+            var link = createLink('stakeholder', 'ajaxGetCompanyUser', 'user=&programID=' + programID + '&projectID=' + projectID);
             $.post(link, function(data)
             {
                 $('#user').replaceWith(data);        
