@@ -117,12 +117,12 @@
       $class = common::hasPriv('testcase', 'export') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
       $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
+      echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc . "data-app={$this->app->openApp}") . "</li>";
 
       $class = common::hasPriv('testcase', 'exportTemplet') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
       $link  = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplet, '', $misc) . "</li>";
+      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplet, '', $misc . "data-app={$this->app->openApp}") . "</li>";
       ?>
       </ul>
     </div>

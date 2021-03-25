@@ -422,20 +422,20 @@
      */
     function refreshMoreMenu()
     {
-        var $mainNav = $('#menuMainNav');
-        var $list = $('#menuMoreList');
-        var $menuNav = $('#menuNav');
-        var $menuItems = $mainNav.children('li');
-        var maxHeight = $menuNav.height();
-        var showMoreMenu = false;
-        var currentHeight = 40;
+        var $mainNav       = $('#menuMainNav');
+        var $list          = $('#menuMoreList');
+        var $menuNav       = $('#menuNav');
+        var $menuItems     = $mainNav.children('li');
+        var maxHeight      = $menuNav.height();
+        var showMoreMenu   = false;
+        var currentHeight  = 40;
         var moreMenuHeight = 13;
 
         $menuItems.each(function()
         {
-            var $item = $(this);
+            var $item     = $(this);
             var isDivider = $item.hasClass('divider');
-            var height = isDivider ? 17 : 40;
+            var height    = isDivider ? 17 : 40;
             currentHeight += height;
             if(currentHeight > maxHeight)
             {
@@ -443,10 +443,11 @@
                 if(!showMoreMenu)
                 {
                     showMoreMenu = true;
+                    $list.empty();
+
                     var $prevItem = $item.prev();
                     if($prevItem.hasClass('divider')) $prevItem.addClass('hidden');
 
-                    $list.empty();
                     if(isDivider) return;
                 }
                 moreMenuHeight += isDivider ? 13 : 31;
@@ -457,7 +458,6 @@
                 $item.removeClass('hidden');
             }
         });
-        console.log('moreMenuHeight', moreMenuHeight);
         $list.css('top', moreMenuHeight > 111 ? 111 - moreMenuHeight : '');
         $menuNav.toggleClass('show-more-nav', showMoreMenu);
     }

@@ -1490,7 +1490,8 @@ EOD;
                 $id  = $object->$key;
                 $objectList[$id] = $object;
             }
-            $this->session->set($objectIdListKey, array('sql' => $sql, 'objectList' => $objectList));
+
+            $this->session->set($objectIdListKey, array('sql' => $sql, 'objectList' => $objectList), $this->app->openApp);
             $existsObjectList = $this->session->$objectIdListKey;
         }
 
@@ -1549,8 +1550,8 @@ EOD;
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
 
-        $this->session->set($objectType . 'QueryCondition', $queryCondition);
-        $this->session->set($objectType . 'OnlyCondition', $onlyCondition);
+        $this->session->set($objectType . 'QueryCondition', $queryCondition, $this->app->openApp);
+        $this->session->set($objectType . 'OnlyCondition', $onlyCondition, $this->app->openApp);
 
         /* Set the query condition session. */
         $orderBy = explode(' ORDER BY ', $sql);
@@ -1561,8 +1562,8 @@ EOD;
             $orderBy = $orderBy[0];
             if($onlyCondition) $orderBy = str_replace('t1.', '', $orderBy);
         }
-        $this->session->set($objectType . 'OrderBy', $orderBy);
-        $this->session->set($objectType . 'BrowseList', array());
+        $this->session->set($objectType . 'OrderBy', $orderBy, $this->app->openApp);
+        $this->session->set($objectType . 'BrowseList', array(), $this->app->openApp);
     }
 
     /**
