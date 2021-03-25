@@ -96,7 +96,7 @@ class testcase extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
-        if($this->app->openApp == 'project') $this->products = array('0' => $this->lang->product->all) + $this->products;
+        if($this->app->openApp == 'project') $this->products = array('0' => $this->lang->product->all) + $this->loadModel('project')->getProducts($this->session->project, false);
         $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($projectID) : $this->testcase->setMenu($this->products, $productID, $branch, $moduleID, $suiteID, $orderBy);
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->session->set('productID', $productID);
@@ -128,7 +128,10 @@ class testcase extends control
         $cases = $this->testcase->appendData($cases);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
+        $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
+        $currentMethod = $this->app->openApp == 'project' ? 'testcase' : 'browse';
+        $projectParam  = $this->app->openApp == 'project' ? "projectID={$this->session->project}&" : '';
+        $actionURL = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['onMenuBar'] = 'yes';
 
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
