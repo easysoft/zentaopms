@@ -373,7 +373,6 @@ class todo extends control
 
         /* Save the session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('todoList',     $uri, 'my');
         $this->session->set('bugList',      $uri, 'qa');
         $this->session->set('taskList',     $uri, 'execution');
         $this->session->set('storyList',    $uri, 'product');

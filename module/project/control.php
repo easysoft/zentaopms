@@ -490,8 +490,6 @@ class project extends control
 
         $this->project->setMenu($projectID);
 
-        $this->app->session->set('projectList', $this->app->getURI(true), 'project');
-
         $products = $this->loadModel('product')->getProducts($projectID);
         $linkedBranches = array();
         foreach($products as $product)
