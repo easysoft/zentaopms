@@ -1135,7 +1135,7 @@ class testtask extends control
             $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->where('t2.id')->in($caseIDList)
-                ->fetchAll('runID');
+                ->fetchAll('id');
 
             $caseIDList = array();
             foreach($cases as $case) $caseIDList[] = $case->id;
