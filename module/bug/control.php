@@ -682,12 +682,10 @@ class bug extends control
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
 
         /* Set menu. */
-        if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($bug->project);
-        if($from == 'bug')
-        {
-            $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-        }
-        elseif($from == 'repo')
+        if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($bug->project);
+        if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
+        if($this->app->openApp == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+        if($this->app->openApp == 'repo')
         {
             session_write_close();
             $repos = $this->loadModel('repo')->getRepoPairs($this->session->project);
