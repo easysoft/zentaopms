@@ -26,7 +26,8 @@ js::set('suiteID',        $suiteID);
 ?>
 <?php if($this->app->openApp == 'project'): ?>
 <style>
-#subHeader #dropMenu .col-left .list-group {margin-bottom: 0px;}
+#subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
+#subHeader #dropMenu .col-left {padding-bottom: 0px;}
 </style>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
