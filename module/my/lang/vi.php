@@ -45,7 +45,7 @@ $lang->my->myExecutions = "My Stage/Sprint/Iteration";
 $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
 $lang->my->projects     = 'Project';
-$lang->my->executions   = $lang->executionCommon;
+$lang->my->executions   = 'Executions';
 
 $lang->my->executionMenu = new stdclass();
 $lang->my->executionMenu->undone = 'Undone';

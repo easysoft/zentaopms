@@ -45,7 +45,7 @@ $lang->my->myExecutions = "我参与的阶段/冲刺/迭代";
 $lang->my->name         = '名称';
 $lang->my->code         = '代号';
 $lang->my->projects     = '所属项目';
-$lang->my->executions   = '所属' . $lang->executionCommon;
+$lang->my->executions   = '所属执行';
 
 $lang->my->executionMenu = new stdclass();
 $lang->my->executionMenu->undone = '未结束';
