@@ -302,7 +302,10 @@ class testcase extends control
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
-            $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
+            $currentMethod = $this->app->openApp == 'project' ? 'testcase' : 'browse';
+            $projectParam  = $this->app->openApp == 'project' ? "projectID={$this->session->project}&" : '';
+            $response['locate'] = $this->createLink($currentModule, $currentMethod, $projectParam . "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
             if($this->app->openApp == 'execution') $response['locate'] = $this->createLink('execution', 'testcase', "executionID={$this->session->execution}&type=all");
             $this->send($response);
         }
@@ -442,7 +445,10 @@ class testcase extends control
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
-            die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=all&param=0&orderBy=id_desc"), 'parent'));
+            $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
+            $currentMethod = $this->app->openApp == 'project' ? 'testcase' : 'browse';
+            $projectParam  = $this->app->openApp == 'project' ? "projectID={$this->session->project}&" : '';
+            die(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&orderBy=id_desc"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
