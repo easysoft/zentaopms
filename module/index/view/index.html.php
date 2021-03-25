@@ -39,7 +39,7 @@ js::set('defaultOpen', $open);
     <ul class='nav nav-default' id='menuMoreNav'>
       <li class='divider'></li>
       <li class='dropdown dropdown-hover'>
-        <a><i class='icon icon-bars-sign'></i><span class='text'><?php echo $lang->more; ?></span></a>
+        <a title='<?php echo $lang->more; ?>'><i class='icon icon-bars-sign'></i><span class='text'><?php echo $lang->more; ?></span></a>
         <ul id='menuMoreList' class='dropdown-menu fade'></ul>
       </li>
     </ul>
