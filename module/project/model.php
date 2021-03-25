@@ -628,7 +628,7 @@ class projectModel extends model
         }
 
         krsort($projectMenu);
-        $projectMenu = implode('', $projectMenu);
+        $projectMenu = array_pop($projectMenu);
         $lastMenu    = "<ul class='tree' data-ride='tree' id='projectTree' data-name='tree-project'>{$projectMenu}</ul>\n";
 
         return $lastMenu;
@@ -1600,9 +1600,12 @@ class projectModel extends model
         $this->lang->project->menu      = $this->lang->{$project->model}->menu;
         $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
 
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
         foreach($this->lang->project->menu as $key => $menu)
         {
             if(!isset($this->lang->project->menu->{$key}['dropMenu'])) continue;
+            $projectSubMenu = $this->lang->project->menu->{$key}['dropMenu'];
             $dropMenu = common::createDropMenu($this->lang->project->menu->{$key}['dropMenu'], $objectID);
             if(!empty($dropMenu))
             {    
