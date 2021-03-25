@@ -61,6 +61,8 @@ class repo extends control
             $this->repo->setMenu($this->repos, $repoID);
         }
 
+        $this->lang->modulePageNav = $this->repo->select($this->repos, $repoID, $this->app->openApp, $objectID);
+
         if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create', "objectID=$objectID")));
     }
 
@@ -120,7 +122,8 @@ class repo extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
-        $this->commonAction(0, $objectID);
+        $repoID = $this->repo->saveState(0, $objectID);
+        $this->commonAction($repoID, $objectID);
 
         $this->app->loadLang('action');
         $this->repo->setMenu($this->repos, '', false);
@@ -324,6 +327,8 @@ class repo extends control
      */
     public function browse($repoID = 0, $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
+        $repoID = $this->repo->saveState($repoID, $objectID);
+
         $this->commonAction($repoID, $objectID);
 
         if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;
@@ -331,7 +336,6 @@ class repo extends control
         /* Set menu and session. */
         $this->repo->setMenu($this->repos, $repoID);
         $this->repo->setBackSession('list', $withOtherModule = true);
-        if($repoID == 0) $repoID = $this->session->repoID;
 
         /* Get repo and synchronous commit. */
         $repo = $this->repo->getRepoByID($repoID);
@@ -1031,5 +1035,52 @@ class repo extends control
             foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
         }
         die(json_encode($dirs));
+    }
+
+    /**
+     * Ajax get drop menu.
+     *
+     * @param  int    $repoID
+     * @param  string $type
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu($repoID, $type = 'repo', $objectID = 0)
+    {
+        $repos = $this->repo->getRepoPairs($type, $objectID);
+        $reposHtml = "<div class='table-row'><div class='table-col col-left'><div class='list-group' style='margin-bottom: 0;'>";
+        foreach($repos as $id => $repoName)
+        {
+            $selected = $id == $repoID ? 'selected' : '';
+            $reposHtml .= html::a($this->createLink('repo', 'browse', "repoID=$id"), $repoName, '', "class='$selected'");
+        }
+        $reposHtml .= '</div></div></div>';
+
+        die($reposHtml);
+    }
+
+    /**
+     * Ajax get branch drop menu.
+     *
+     * @param  int    $repoID
+     * @param  int    $branchID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBranchDropMenu($repoID, $branchID)
+    {
+        $repo     = $this->repo->getRepoByID($repoID);
+        $branches = $this->repo->getBranches($repo);
+
+        $branchesHtml = "<div class='table-row'><div class='table-col col-left'><div class='list-group' style='margin-bottom: 0;'>";
+        foreach($branches as $id => $branchName)
+        {
+            $selected = $id == $branchID ? 'selected' : '';
+            $branchesHtml .= html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$branchID"), $branchName, '', "class='$selected'");
+        }
+        $branchesHtml .= '</div></div></div>';
+
+        die($branchesHtml);
     }
 }

@@ -56,6 +56,7 @@ class repoModel extends model
             }
         }
 
+        /*
         if($showSeleter && !empty($repos))
         {
             $repoIndex  = '<div class="btn-group header-btn"  id="swapper"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . ($repo->SCM == 'Subversion' ? '[SVN] ' : '[GIT] ') . $repo->name . ' <span class="caret"></span></button>';
@@ -93,6 +94,7 @@ class repoModel extends model
 
             $this->lang->switcherMenu = $repoIndex;
         }
+         */
 
         common::setMenuVars('devops', $repoID);
 
@@ -106,27 +108,51 @@ class repoModel extends model
      *
      * @param  array     $repos
      * @param  int       $repoID
-     * @param  string    $currentModule
-     * @param  string    $currentMethod
+     * @param  string    $type
+     * @param  int       $objectID
      * @access public
      * @return string
      */
-    public function select($repos, $repoID)
+    public function select($repos, $repoID, $type = 'repo', $objectID = 0)
     {
-        $selectHtml  = "<div class='dropdown-menu search-list' data-ride='searchList'>";
-        $selectHtml .= "<div class='input-control search-box has-icon-left has-icon-right search-example'>";
-        $selectHtml .= "<input id='repoSearchBox' type='search' autocomplete='off' class='form-control search-input empty'>";
-        $selectHtml .= "<label for='repoSearchBox' class='input-control-icon-left search-icon'><i class='icon icon-search'></i></label>";
-        $selectHtml .= "<a class='input-control-icon-right search-clear-btn'><i class='icon icon-close icon-sm'></i></a></div>";
-        $selectHtml .= "<div class='list-group'>";
-        foreach($repos as $id => $name)
+        $output = '';
+        if(!empty($repos))
         {
-            $class = $repoID == $id ? "class='active'" : '';
-            $selectHtml .= html::a(helper::createLink('repo', 'browse', "repoID={$id}"), $name, '', $class);
-        }
-        $selectHtml .= "</div></div>";
+            $dropMenuLink = helper::createLink('repo', 'ajaxGetDropMenu', "repoID=$repoID&type=$type&objectID=$objectID");
 
-        return $selectHtml;
+            $repo    = $this->dao->findById($repoID)->from(TABLE_REPO)->fetch();
+            $scm     = $repo->SCM == 'Subversion' ? 'svn' : 'git';
+
+            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$repo->name}'><span class='text'>[$scm] {$repo->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "</div></div>";
+
+            $branches = $this->getBranches($repo);
+            if(empty($branches))
+            {
+                $this->setRepoBranch('');
+            }
+            else
+            {
+                $branchID = 'master';
+                if($this->cookie->repoBranch) $branchID = $this->cookie->repoBranch;
+                if(!isset($branches[$branchID])) $branchID = 'master';
+
+                $branch = zget($branches, $branchID);
+                if(empty($branch)) $branchID = $branch = current($branches);
+
+                $this->setRepoBranch($branchID);
+
+                $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
+
+                $dropMenuLink = helper::createLink('repo', 'ajaxGetBranchDropMenu', "repID=$repoID&branchID=$branchID");
+                $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+                $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+                $output .= "</div></div>";
+            }
+        }
+
+        return $output;
     }
 
     /**
@@ -288,6 +314,32 @@ class repoModel extends model
             return false;
         }
         return true;
+    }
+
+    /**
+     * Save repo state.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @access public
+     * @return int
+     */
+    public function saveState($repoID = 0, $objectID = 0)
+    {
+        if($repoID > 0) $this->session->set('repoID', (int)$repoID);
+
+        $repos = $this->getRepoPairs($this->app->openApp, $objectID);
+        if($repoID == 0 and $this->session->repoID == '')
+        {
+            $this->session->set('repoID', key($repos));
+        }
+
+        if(!isset($repos[$this->session->repoID]))
+        {
+            $this->session->set('repoID', key($repos));
+        }
+
+        return $this->session->repoID;
     }
 
     /**
