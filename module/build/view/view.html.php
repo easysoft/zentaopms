@@ -99,8 +99,9 @@ tbody tr td:first-child input {display: none;}
               </tr>
             </thead>
             <tbody class='text-center'>
+              <?php $objectID = $this->app->openApp == 'execution' ? $build->execution : $build->project;?>
               <?php foreach($stories as $storyID => $story):?>
-              <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
+              <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$objectID", '', true);?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>

@@ -219,13 +219,13 @@ $lang->scrum->menu->devops['subMenu'] = new stdclass();
 $lang->waterfall->menu = new stdclass();
 $lang->waterfall->menu->index       = array('link' => "$lang->dashboard|project|index|project=%s");
 $lang->waterfall->menu->programplan = array('link' => "{$lang->productplan->shortCommon}|programplan|browse|project=%s", 'subModule' => 'programplan');
-$lang->waterfall->menu->doc         = array('link' => "{$lang->doc->common}|doc|index|project=%s");
+$lang->waterfall->menu->doc         = array('link' => "{$lang->doc->common}|doc|objectLibs|type=project&objectID=%s");
 $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory');
-$lang->waterfall->menu->design      = array('link' => "$lang->design|design|browse|product=0&project=%s");
+$lang->waterfall->menu->design      = array('link' => "$lang->design|design|browse|project=%s");
 $lang->waterfall->menu->devops      = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
 $lang->waterfall->menu->track       = array('link' => "$lang->track|projectstory|track", 'alias' => 'track');
 $lang->waterfall->menu->qa          = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
-$lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse", 'subModule' => 'projectrelease');
+$lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->waterfall->menu->build       = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->waterfall->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->waterfall->menu->other       = array('link' => "$lang->other|workestimation|index|project=%s", 'class' => 'dropdown dropdown-hover');
@@ -249,11 +249,16 @@ $lang->waterfall->menuOrder[65] = 'other';
 $lang->waterfall->menuOrder[68] = 'dynamic';
 $lang->waterfall->menuOrder[70] = 'projectsetting';
 
+$lang->waterfall->menu->qa['subMenu'] = new stdclass();
+$lang->waterfall->menu->qa['subMenu']->index    = array('link' => "$lang->dashboard|project|qa|projectID=%s");
+$lang->waterfall->menu->qa['subMenu']->bug      = array('link' => "{$lang->bug->common}|project|bug|projectID=%s", 'subModule' => 'bug');
+$lang->waterfall->menu->qa['subMenu']->testcase = array('link' => "{$lang->testcase->shortCommon}|project|testcase|projectID=%s", 'subModule' => 'testsuite,testcase,caselib');
+$lang->waterfall->menu->qa['subMenu']->testtask = array('link' => "{$lang->testtask->common}|project|testtask|projectID=%s", 'subModule' => 'testtask', 'class' => 'dropdown dropdown-hover');
+
 $lang->waterfall->menu->other['dropMenu'] = new stdclass();
-$lang->waterfall->menu->other['dropMenu']->estimation  = array('link' => "$lang->estimation|workestimation|index|program=%s", 'subModule' => 'workestimation,durationestimation,budget');
-$lang->waterfall->menu->other['dropMenu']->issue       = array('link' => "$lang->issue|issue|browse|", 'subModule' => 'issue');
-$lang->waterfall->menu->other['dropMenu']->risk        = array('link' => "$lang->risk|risk|browse|", 'subModule' => 'risk');
-$lang->waterfall->menu->other['dropMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|", 'subModule' => 'stakeholder');
+$lang->waterfall->menu->other['dropMenu']->estimation  = array('link' => "$lang->estimation|workestimation|index|projectID=%s", 'subModule' => 'workestimation,durationestimation,budget');
+$lang->waterfall->menu->other['dropMenu']->issue       = array('link' => "$lang->issue|issue|browse|projectID=%s", 'subModule' => 'issue');
+$lang->waterfall->menu->other['dropMenu']->risk        = array('link' => "$lang->risk|risk|browse|projectID=%s", 'subModule' => 'risk');
 
 $lang->waterfall->menu->devops   = $lang->scrum->menu->devops;
 $lang->waterfall->menu->settings = $lang->scrum->menu->settings;
@@ -344,8 +349,8 @@ $lang->qa->menu->testtask['subMenu'] = new stdclass();
 $lang->qa->menu->testtask['subMenu']->testtask = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
 $lang->qa->menu->testtask['subMenu']->report   = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
 
-$lang->qa->menu->automation['subMenu'] = new stdclass();
-$lang->qa->menu->automation['subMenu']->browse      = array('link' => "{$lang->intro}|automation|browse|productID=%s", 'alias' => '');
+// $lang->qa->menu->automation['subMenu'] = new stdclass();
+// $lang->qa->menu->automation['subMenu']->browse      = array('link' => "{$lang->intro}|automation|browse|productID=%s", 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->framework   = array('link' => '框架|automation|framework|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->data        = array('link' => '数据|automation|date|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->interface   = array('link' => '接口|automation|interface|productID=%s', 'alias' => '');

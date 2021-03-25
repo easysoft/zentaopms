@@ -4,7 +4,7 @@
     <?php echo html::a(inlink('testcase', "executionID=$executionID&type=$type&orderBy=$orderBy"), "<span class='text'>{$lang->execution->all}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::canModify('execution', $execution)) echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary' data-app='execution'");?>
+    <?php if(common::canModify('execution', $execution)) echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary' data-app='{$this->app->openApp}'");?>
   </div>
 </div>
 <div id="mainContent">
@@ -13,7 +13,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
       <?php if(common::canModify('execution', $execution) and common::hasPriv('testcase', 'create')):?>
-      <?php echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info' data-app='execution'");?>
+      <?php echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info' data-app='{$this->app->openApp}'");?>
       <?php endif;?>
     </p>
   </div>
@@ -49,7 +49,7 @@
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <?php $params = "testcaseID=$caseID&version=$case->version";?>
           <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
-          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', $params, '', '', $case->project), $case->title, null, "style='color: $case->color' data-group='project'");?></td>
+          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', $params, '', '', $case->project), $case->title, null, "style='color: $case->color' data-app='{$this->app->openApp}'");?></td>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>

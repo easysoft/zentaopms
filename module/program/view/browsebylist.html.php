@@ -1,5 +1,5 @@
 <?php $canOrder = (common::hasPriv('program', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
-<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false'>
+<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true'>
   <table class='table has-sort-head table-fixed table-nested' id='programList'>
     <?php $vars = "status=$status&orderBy=%s";?>
     <thead>
@@ -121,8 +121,8 @@
 #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
 #programList .c-actions {overflow: visible;}
-#programList > thead > tr > th .table-nest-toggle-global {top:5px}
-#programList > thead > tr > th .table-nest-toggle-global:before {color: #abafbc;}
+#programList > thead > tr > th .table-nest-toggle-global {top: 6px}
+#programList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
 #programTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
 #programTableList .icon-project:before {content: '\e99c'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
 </style>
@@ -130,9 +130,6 @@
 <script>
 $(function()
 {
-    $('.is-nest-child span.icon-program,.no-nest span.icon-program').addClass('table-nest-toggle');
-    $('.is-nest-child span.icon-program,.no-nest span.icon-program').removeClass('table-nest-icon');
-
     /* Init orders numbers list */
     var ordersList = [];
     for(var i = 0; i < originOrders.length; ++i) ordersList.push(parseInt(originOrders[i]));

@@ -539,7 +539,7 @@ class commonModel extends model
 
         if(!$openApp) return;
         $icon = zget($lang->navIcons, $openApp, '');
-        
+
         if(!in_array($openApp, array('program', 'product', 'project')))
         {
             $nav = $lang->mainNav->$openApp;
@@ -1300,13 +1300,16 @@ EOD;
         global $lang, $app;
         if(isonlybody()) return false;
 
+        $moduleName = ($app->getModuleName() == 'story' and $app->openApp == 'project') ? 'projectstory' : $app->getModuleName();
         echo "<nav class='container'>";
         if(isset($preAndNext->pre) and $preAndNext->pre)
         {
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->pre->case)) ? 'case' : 'id';
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
             $title = '#' . $preAndNext->pre->$id . ' ' . $title . ' ' . $lang->preShortcutKey;
-            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : inLink('view', "ID={$preAndNext->pre->$id}");
+
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->pre->$id}");
+            $link .= '#app=' . $app->openApp;
             echo html::a($link, '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}'");
         }
         if(isset($preAndNext->next) and $preAndNext->next)
@@ -1314,7 +1317,8 @@ EOD;
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title . ' ' . $lang->nextShortcutKey;
-            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : inLink('view', "ID={$preAndNext->next->$id}");
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->next->$id}");
+            $link .= '#app=' . $app->openApp;
             echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn' title='$title'");
         }
         echo '</nav>';
@@ -1486,7 +1490,8 @@ EOD;
                 $id  = $object->$key;
                 $objectList[$id] = $object;
             }
-            $this->session->set($objectIdListKey, array('sql' => $sql, 'objectList' => $objectList));
+
+            $this->session->set($objectIdListKey, array('sql' => $sql, 'objectList' => $objectList), $this->app->openApp);
             $existsObjectList = $this->session->$objectIdListKey;
         }
 
@@ -1545,8 +1550,8 @@ EOD;
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
 
-        $this->session->set($objectType . 'QueryCondition', $queryCondition);
-        $this->session->set($objectType . 'OnlyCondition', $onlyCondition);
+        $this->session->set($objectType . 'QueryCondition', $queryCondition, $this->app->openApp);
+        $this->session->set($objectType . 'OnlyCondition', $onlyCondition, $this->app->openApp);
 
         /* Set the query condition session. */
         $orderBy = explode(' ORDER BY ', $sql);
@@ -1557,8 +1562,8 @@ EOD;
             $orderBy = $orderBy[0];
             if($onlyCondition) $orderBy = str_replace('t1.', '', $orderBy);
         }
-        $this->session->set($objectType . 'OrderBy', $orderBy);
-        $this->session->set($objectType . 'BrowseList', array());
+        $this->session->set($objectType . 'OrderBy', $orderBy, $this->app->openApp);
+        $this->session->set($objectType . 'BrowseList', array(), $this->app->openApp);
     }
 
     /**

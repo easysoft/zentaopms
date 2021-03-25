@@ -56,6 +56,8 @@ $config->bug->editor->resolve    = array('id' => 'comment', 'tools' => 'bugTools
 $config->bug->editor->close      = array('id' => 'comment', 'tools' => 'bugTools');
 $config->bug->editor->activate   = array('id' => 'comment', 'tools' => 'bugTools');
 
+$config->bug->discardedTypes = array('interface', 'designchange', 'newfeature', 'trackthings');
+
 global $lang;
 $config->bug->search['module']                   = 'bug';
 $config->bug->search['fields']['title']          = $lang->bug->title;

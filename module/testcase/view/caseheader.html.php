@@ -106,6 +106,7 @@
     ?>
   </div>
   <div class='btn-toolbar pull-right'>
+    <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
         <i class='icon icon-export muted'></i> <?php echo $lang->export ?>
@@ -116,16 +117,18 @@
       $class = common::hasPriv('testcase', 'export') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
       $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
+      echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc . "data-app={$this->app->openApp}") . "</li>";
 
       $class = common::hasPriv('testcase', 'exportTemplet') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
       $link  = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplet, '', $misc) . "</li>";
+      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplet, '', $misc . "data-app={$this->app->openApp}") . "</li>";
       ?>
       </ul>
     </div>
+    <?php endif;?>
     <?php if(common::canModify('product', $product)):?>
+    <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
       <ul class='dropdown-menu' id='importActionMenu'>
@@ -142,6 +145,7 @@
       ?>
       </ul>
     </div>
+    <?php endif;?>
     <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
     <?php if(!common::checkNotCN()):?>
     <?php if(common::hasPriv('testcase', 'batchCreate') or common::hasPriv('testcase', 'create')):?>

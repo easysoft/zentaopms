@@ -287,6 +287,9 @@ class bug extends control
 
         $this->qa->setMenu($this->products, $productID);
 
+        /* Unset discarded types. */
+        foreach($this->config->bug->discardedTypes as $type) unset($this->lang->bug->typeList[$type]);
+
         /* Whether there is a object to transfer bug, for example feedback. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
@@ -369,6 +372,10 @@ class bug extends control
             if(isset($output['executionID']))
             {
                 $location = $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
+            }
+            if(isset($output['projectID']))
+            {
+                $location = $this->createLink('project', 'bug', "projectID={$output['projectID']}");
             }
             else
             {
@@ -675,11 +682,10 @@ class bug extends control
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
 
         /* Set menu. */
-        if($from == 'bug')
-        {
-            $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-        }
-        elseif($from == 'repo')
+        if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($bug->project);
+        if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
+        if($this->app->openApp == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+        if($this->app->openApp == 'repo')
         {
             session_write_close();
             $repos = $this->loadModel('repo')->getRepoPairs($this->session->project);
@@ -782,7 +788,15 @@ class bug extends control
         $this->bug->checkBugExecutionPriv($bug);
 
         /* Set the menu. */
-        $this->bug->setMenu($this->products, $productID, $bug->branch);
+        if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($bug->project);
+        if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
+        if($this->app->openApp == 'qa') $this->bug->setMenu($this->products, $productID, $bug->branch);
+
+        /* Unset discarded types. */
+        foreach($this->config->bug->discardedTypes as $type)
+        {
+            if($bug->type != $type) unset($this->lang->bug->typeList[$type]);
+        }
 
         /* Set header and position. */
         $this->view->title      = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$productID];

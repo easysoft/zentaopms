@@ -312,7 +312,7 @@ $lang->my->workMenu->testtask    = 'Test Task|my|work|mode=testtask&type=wait';
 
 $lang->my->contributeMenu = new stdclass();
 $lang->my->contributeMenu->task     = 'Task|my|contribute|mode=task';
-f($config->URAndSR) $lang->my->contributeMenu->requirement = "$lang->URCommon|my|contribute|mode=requirement";
+if($config->URAndSR) $lang->my->contributeMenu->requirement = "$lang->URCommon|my|contribute|mode=requirement";
 $lang->my->contributeMenu->story    = "$lang->SRCommon|my|contribute|mode=story";
 $lang->my->contributeMenu->bug      = 'Bug|my|contribute|mode=bug';
 $lang->my->contributeMenu->testcase = 'Test Case|my|contribute|mode=testtask&type=openedbyme';

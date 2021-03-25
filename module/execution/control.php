@@ -186,9 +186,7 @@ class execution extends control
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',      $uri, 'execution');
-        $this->app->session->set('storyList',     $uri, 'product');
-        $this->app->session->set('executionList', $uri, 'execution');
+        $this->app->session->set('taskList', $uri, 'execution');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_desc';
@@ -720,7 +718,7 @@ class execution extends control
         }
 
         /* Save session. */
-        $this->app->session->set('storyList', $this->app->getURI(true), 'product');
+        $this->app->session->set('storyList', $this->app->getURI(true), 'execution');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';
@@ -803,7 +801,7 @@ class execution extends control
         $this->view->orderBy      = $orderBy;
         $this->view->type         = $this->session->executionStoryBrowseType;
         $this->view->param        = $param;
-        $this->view->moduleTree   = $this->loadModel('tree')->getExecutionStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createExecutionStoryLink'));
+        $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createStoryLink'));
         $this->view->tabID        = 'story';
         $this->view->storyTasks   = $storyTasks;
         $this->view->storyBugs    = $storyBugs;
@@ -851,7 +849,7 @@ class execution extends control
         $this->loadModel('user');
 
         /* Save session. */
-        $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $this->session->set('bugList', $this->app->getURI(true), 'execution');
 
         $type      = strtolower($type);
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
@@ -921,6 +919,7 @@ class execution extends control
         $this->loadModel('testcase');
         $this->loadModel('testtask');
         $this->commonAction($executionID);
+        $this->session->set('caseList', $this->app->getURI(true), 'execution');
 
         $products  = $this->execution->getProducts($executionID);
         $productID = key($products);    // Get the first product for creating testcase.
@@ -930,6 +929,8 @@ class execution extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $orderBy, $pager, $type);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+
         $cases = $this->testcase->appendData($cases, 'run');
 
         $this->view->title       = $this->lang->execution->testcase;
@@ -1020,8 +1021,9 @@ class execution extends control
     public function testtask($executionID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('testtask');
+
         /* Save session. */
-        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
+        $this->session->set('testtaskList', $this->app->getURI(true), 'execution');
 
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;

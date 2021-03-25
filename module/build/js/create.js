@@ -26,14 +26,14 @@ function loadProducts(executionID)
         {
             if(data.indexOf("required") != -1)
             {
-                $('.input-group').addClass('required');
+                $('#productBox').addClass('required');
             }
             else
             {
-                $('.input-group').removeClass('required');
+                $('#productBox').removeClass('required');
             }
 
-            $('.input-group').append(data);
+            $('#productBox').append(data);
             $('#product').chosen();
         }
     });
