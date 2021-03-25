@@ -10,8 +10,3 @@ $(document).on('keyup', 'form input:text', function()
         $(preSelect).val('fail');
     }
 })
-
-$(function()
-{
-    $('#subNavbar li[data-id="testcase"]').addClass('active');
-})
