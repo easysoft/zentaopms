@@ -106,6 +106,7 @@
     ?>
   </div>
   <div class='btn-toolbar pull-right'>
+    <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
         <i class='icon icon-export muted'></i> <?php echo $lang->export ?>
@@ -125,7 +126,9 @@
       ?>
       </ul>
     </div>
+    <?php endif;?>
     <?php if(common::canModify('product', $product)):?>
+    <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
       <ul class='dropdown-menu' id='importActionMenu'>
@@ -142,6 +145,7 @@
       ?>
       </ul>
     </div>
+    <?php endif;?>
     <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
     <?php if(!common::checkNotCN()):?>
     <?php if(common::hasPriv('testcase', 'batchCreate') or common::hasPriv('testcase', 'create')):?>
