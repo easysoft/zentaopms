@@ -122,7 +122,11 @@ class product extends control
         $productID = $this->app->openApp != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
 
         if($this->app->openApp == 'product') $this->product->setMenu($productID, $branch);
-        if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($projectID);
+        if($this->app->openApp == 'project')
+        {
+            $this->session->set('storyList', $this->app->getURI(true), 'project');
+            $this->loadModel('project')->setMenu($projectID);
+        }
 
         /* Lower browse type. */
         $browseType = strtolower($browseType);

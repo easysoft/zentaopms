@@ -186,9 +186,7 @@ class execution extends control
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',      $uri, 'execution');
-        $this->app->session->set('storyList',     $uri, 'product');
-        $this->app->session->set('executionList', $uri, 'execution');
+        $this->app->session->set('taskList', $uri, 'execution');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_desc';
@@ -720,7 +718,7 @@ class execution extends control
         }
 
         /* Save session. */
-        $this->app->session->set('storyList', $this->app->getURI(true), 'product');
+        $this->app->session->set('storyList', $this->app->getURI(true), 'execution');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';

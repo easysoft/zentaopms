@@ -343,8 +343,8 @@ $lang->qa->menu->testtask['subMenu'] = new stdclass();
 $lang->qa->menu->testtask['subMenu']->testtask = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
 $lang->qa->menu->testtask['subMenu']->report   = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
 
-$lang->qa->menu->automation['subMenu'] = new stdclass();
-$lang->qa->menu->automation['subMenu']->browse      = array('link' => "{$lang->intro}|automation|browse|productID=%s", 'alias' => '');
+// $lang->qa->menu->automation['subMenu'] = new stdclass();
+// $lang->qa->menu->automation['subMenu']->browse      = array('link' => "{$lang->intro}|automation|browse|productID=%s", 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->framework   = array('link' => '框架|automation|framework|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->data        = array('link' => '数据|automation|date|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->interface   = array('link' => '接口|automation|interface|productID=%s', 'alias' => '');
