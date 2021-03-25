@@ -222,7 +222,7 @@ $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectst
 $lang->waterfall->menu->design      = array('link' => "$lang->design|design|browse|product=%s");
 $lang->waterfall->menu->repo        = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
-$lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse", 'subModule' => 'projectrelease');
+$lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->waterfall->menu->build       = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->waterfall->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->waterfall->menu->other       = array('link' => "$lang->other|workestimation|index|project=%s", 'class' => 'dropdown dropdown-hover');
@@ -256,7 +256,6 @@ $lang->waterfall->menu->other['dropMenu'] = new stdclass();
 $lang->waterfall->menu->other['dropMenu']->estimation  = array('link' => "$lang->estimation|workestimation|index|projectID=%s", 'subModule' => 'workestimation,durationestimation,budget');
 $lang->waterfall->menu->other['dropMenu']->issue       = array('link' => "$lang->issue|issue|browse|projectID=%s", 'subModule' => 'issue');
 $lang->waterfall->menu->other['dropMenu']->risk        = array('link' => "$lang->risk|risk|browse|projectID=%s", 'subModule' => 'risk');
-$lang->waterfall->menu->other['dropMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|projectID=%s", 'subModule' => 'stakeholder');
 
 $lang->waterfall->menu->settings = $lang->scrum->menu->settings;
 
