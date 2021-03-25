@@ -45,7 +45,7 @@
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php $disabled = $group->role == 'limited' ? 'disabled' : '';?>
           <?php common::printIcon('project', 'manageView', "groupID=$group->id&projectID=$projectID&programID=$project->parent", $group, 'list', 'eye', '', $disabled);?>
-          <?php common::printIcon('project', 'managePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock', '', '', '', "data-app='project'");?>
+          <?php common::printIcon('project', 'managePriv', "projectID=$projectID&type=byGroup&param=$group->id", $group, 'list', 'lock', '', '', '', "data-app='project'");?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
           <?php common::printIcon('project', 'manageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
           <?php common::printIcon('project', 'editGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>

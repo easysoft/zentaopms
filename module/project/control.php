@@ -916,6 +916,7 @@ class project extends control
     /**
      * Manage privleges of a group.
      *
+     * @param  int       $projectID
      * @param  string    $type
      * @param  int       $param
      * @param  string    $menu
@@ -923,7 +924,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function managePriv($type = 'byGroup', $param = 0, $menu = '', $version = '')
+    public function managePriv($projectID, $type = 'byGroup', $param = 0, $menu = '', $version = '')
     {
         $this->loadModel('group');
         if($type == 'byGroup')
@@ -946,6 +947,8 @@ class project extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$group->project")));
         }
 
+        $this->project->setMenu($projectID);
+
         if($type == 'byGroup')
         {
             $this->group->sortResource();
@@ -960,11 +963,11 @@ class project extends control
             $changelog = array();
             foreach($this->lang->changelog as $currentVersion => $currentChangeLog)
             {
-                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join($currentChangeLog, ',');
+                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join(',', $currentChangeLog);
             }
 
             $this->view->group      = $group;
-            $this->view->changelogs = ',' . join($changelog, ',') . ',';
+            $this->view->changelogs = ',' . join(',', $changelog) . ',';
             $this->view->groupPrivs = $groupPrivs;
             $this->view->groupID    = $groupID;
             $this->view->menu       = $menu;
