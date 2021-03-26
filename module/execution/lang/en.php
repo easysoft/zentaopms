@@ -261,7 +261,6 @@ $lang->execution->aboveAllExecution = "All the above {$lang->executionCommon}s";
 /* Page prompt. */
 $lang->execution->linkStoryByPlanTips = "This action will link all stories in this plan to the {$lang->executionCommon}.";
 $lang->execution->selectExecution     = "Select {$lang->executionCommon}";
-$lang->execution->selectExecution     = "Select Stage/Sprint/Iteration";
 $lang->execution->beginAndEnd         = 'Duration';
 $lang->execution->lblStats            = 'Efforts';
 $lang->execution->stats               = 'Available: <strong>%s</strong>(h). Estimates: <strong>%s</strong>(h). Cost: <strong>%s</strong>(h). Left: <strong>%s</strong>(h).';

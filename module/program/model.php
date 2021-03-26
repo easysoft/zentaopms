@@ -652,11 +652,11 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getParentPairs($model = '', $mode = '')
+    public function getParentPairs($model = '', $mode = 'noclosed')
     {
         $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
-            ->beginIF(strpos($mode, 'noclosed') === false)->andWhere('status')->ne('closed')->fi()
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->orderBy('grade desc, `order`')

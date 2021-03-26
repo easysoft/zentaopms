@@ -260,8 +260,7 @@ $lang->execution->aboveAllExecution = "Tất cả {$lang->executionCommon} trên
 
 /* Page prompt. */
 $lang->execution->linkStoryByPlanTips = "Hành động này sẽ liên kết tất cả câu chuyện trong kế hoạch này tới {$lang->executionCommon} này.";
-$lang->execution->selectExecution       = "Chọn {$lang->executionCommon}";
-$lang->execution->selectExecution     = "Select Execution";
+$lang->execution->selectExecution     = "Chọn {$lang->executionCommon}";
 $lang->execution->beginAndEnd         = 'Thời gian';
 $lang->execution->lblStats            = 'Chấm công';
 $lang->execution->stats               = 'Khả dụng: <strong>%s</strong>(giờ). Dự tính: <strong>%s</strong>(giờ). Đã làm: <strong>%s</strong>(giờ). Còn: <strong>%s</strong>(giờ).';

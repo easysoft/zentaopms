@@ -260,8 +260,7 @@ $lang->execution->aboveAllExecution = "Tous les {$lang->executionCommon}s dépen
 
 /* 页面提示。*/
 $lang->execution->linkStoryByPlanTips = "Cette action va lier toutes les stories incluses dans le plan à ce {$lang->executionCommon}.";
-$lang->execution->selectExecution       = "Sélectionner {$lang->executionCommon}";
-$lang->execution->selectExecution     = "Select Execution";
+$lang->execution->selectExecution     = "Sélectionner {$lang->executionCommon}";
 $lang->execution->beginAndEnd         = 'Durée';
 $lang->execution->lblStats            = 'Efforts';
 $lang->execution->stats               = 'Disponible: <strong>%s</strong>(h). Estimé: <strong>%s</strong>(h). Coût: <strong>%s</strong>(h). Reste: <strong>%s</strong>(h).';

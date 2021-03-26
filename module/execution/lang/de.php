@@ -261,7 +261,6 @@ $lang->execution->aboveAllExecution = "Alle oberen {$lang->executionCommon}";
 /* 页面提示。*/
 $lang->execution->linkStoryByPlanTips = "This action will link all stories in this plan to the {$lang->executionCommon}.";
 $lang->execution->selectExecution       = "Auswahl {$lang->executionCommon}";
-$lang->execution->selectExecution     = "Select Execution";
 $lang->execution->beginAndEnd         = 'Dauer';
 $lang->execution->lblStats            = 'Mannstunden Summe(h) : ';
 $lang->execution->stats               = '<strong>%s</strong> Verfügbar, <strong>%s</strong> geplant, <strong>%s</strong> genutzt, <strong>%s</strong> Rest.';

@@ -1474,7 +1474,6 @@ class story extends control
         else
         {
             $this->app->rawModule = 'testcase';
-            $this->loadModel('qa')->setMenu($productID);
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
 

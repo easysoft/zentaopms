@@ -437,6 +437,7 @@ class productModel extends model
         {
             $currentProduct     = $this->getById($productID);
             $currentProductName = $currentProduct->name;
+            $this->session->set('currentProductType', $currentProduct->type);
         }
 
         $fromModule   = $this->lang->navGroup->qa == 'qa' ? 'qa' : '';
