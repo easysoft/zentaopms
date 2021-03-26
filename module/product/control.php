@@ -969,17 +969,16 @@ class product extends control
      *
      * @param  string $moduleName
      * @param  string $activeMenu
-     * @param  int    $projectID
+     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function showErrorNone($moduleName = 'qa', $activeMenu = 'index', $projectID = 0)
+    public function showErrorNone($moduleName = 'qa', $activeMenu = 'index', $objectID = 0)
     {
-        $this->app->rawModule = $activeMenu;
         if($moduleName == 'project')
         {
-            $this->loadModel('project')->setMenu($projectID);
-            $project = $this->project->getByID($projectID);
+            $this->loadModel('project')->setMenu($objectID);
+            $project = $this->project->getByID($objectID);
             $this->lang->project->menu      = $this->lang->{$project->model}->menu;
             $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
             $this->app->rawModule = $activeMenu;
@@ -991,15 +990,22 @@ class product extends control
         elseif($moduleName == 'qa')
         {
             $this->loadModel('qa')->setMenu(array(), 0);
+            $this->app->rawModule = $activeMenu;
 
             if($activeMenu == 'testcase')   $this->lang->qa->menu->testcase['subMenu']->case['subModule']      = 'product';
             if($activeMenu == 'testsuite')  $this->lang->qa->menu->testcase['subMenu']->testsuite['subModule'] = 'product';
             if($activeMenu == 'testtask')   $this->lang->qa->menu->testtask['subMenu']->testtask['subModule']  = 'product';
             if($activeMenu == 'testreport') $this->lang->qa->menu->testtask['subMenu']->report['subModule']    = 'product';
         }
+        elseif($moduleName == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($objectID);
+            if($testreport == '') $this->app->rawModule = $activeMenu;
+            if($activeMenu == 'testreport') $this->lang->execution->menu->qa['subMenu']->testtask['subMenu']->testtask['subModule'] = 'product';
+        }
 
-        $this->view->title     = $this->lang->$moduleName->common;
-        $this->view->projectID = $projectID;
+        $this->view->title    = $this->lang->$moduleName->common;
+        $this->view->objectID = $objectID;
         $this->display();
     }
 
