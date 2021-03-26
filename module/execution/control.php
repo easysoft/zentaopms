@@ -2083,7 +2083,7 @@ class execution extends control
 
             if(isonlybody())
             {
-                die(js::locate($this->createLink('build', 'create', "executionID=$executionID&productID=0&projectID=$execution->project"), 'parent'));
+                die(js::reload('parent'));
             }
         }
 
