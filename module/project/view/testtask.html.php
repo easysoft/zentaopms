@@ -29,7 +29,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('project', $project)):?>
-    <?php common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag muted');?>
+    <?php //common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag muted');?>
     <?php common::printLink('testtask', 'create', "product=0&executionID=0&build=0&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
@@ -53,11 +53,6 @@
         <tr class='<?php if($total) echo 'divider'; ?>'>
           <th class='c-side text-center'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
           <th class="c-id">
-            <?php if($canTestReport):?>
-            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
-              <label></label>
-            </div>
-            <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->testtask->name);?></th>
@@ -81,11 +76,7 @@
           </td>
           <?php endif;?>
           <td class="c-id">
-            <?php if($canTestReport):?>
-            <?php echo html::checkbox('taskIdList', array($task->id => sprintf('%03d', $task->id)));?>
-            <?php else:?>
             <?php printf('%03d', $task->id);?>
-            <?php endif;?>
           </td>
           <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
           <td title="<?php echo $task->buildName?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName);?></td>
@@ -127,19 +118,6 @@
         <?php endforeach;?>
       </tbody>
     </table>
-    <div class="table-footer">
-      <?php if($canTestReport):?>
-      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar">
-      <?php
-      $actionLink = $this->createLink('testreport', 'browse', "objectID=$projectID&objctType=project");
-      $misc       = common::hasPriv('testreport', 'browse') ? "onclick=\"setFormAction('$actionLink', '', '#testtaskForm')\"" : "disabled='disabled'";
-      echo html::commonButton($lang->testreport->common, $misc);
-      ?>
-      </div>
-      <?php endif;?>
-      <?php $pager->show('right', 'pagerjs');?>
-    </div>
   </form>
   <?php endif;?>
 </div>

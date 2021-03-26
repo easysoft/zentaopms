@@ -25,14 +25,14 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
     <div class="page-title">
       <strong>
         <?php
-        echo html::a($this->repo->createLink('browse', "repoID=$repoID&objectID=$objectID"), $repo->name);
+        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $repo->name);
         $paths= explode('/', $entry);
         $fileName = array_pop($paths);
         $postPath = '';
         foreach($paths as $pathName)
         {
             $postPath .= $pathName . '/';
-            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
+            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
         }
         echo '/' . ' ' . $fileName;
         echo $version;
@@ -64,7 +64,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
             <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "id='encoding' data-toggle='dropdown'", 'btn btn-sm btn-primary dropdown-toggle')?>
             <ul class='dropdown-menu' role='menu' aria-labelledby='encoding'>
               <?php foreach($lang->repo->encodingList as $key => $val):?>
-              <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&showBug=$showBug&encoding=$key", 'html', isonlybody()), $val)?></li>
+              <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&showBug=$showBug&encoding=$key", 'html', isonlybody()), $val, '', "data-app='{$app->openApp}'")?></li>
               <?php endforeach;?>
             </ul>
           </div>

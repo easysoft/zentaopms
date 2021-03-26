@@ -999,10 +999,23 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
+        if($this->app->openApp == 'project')
+        {
+            $users = $this->project->getTeamMemberPairs($bug->project, 'nodeleted', $bug->assignedTo);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $users = $this->execution->getTeamMemberPairs($bug->execution, 'nodeleted', $bug->assignedTo);
+        }
+        else
+        {
+            $users   = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
+        }
+
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
         $this->view->position[] = $this->lang->bug->assignedTo;
 
-        $this->view->users   = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
+        $this->view->users   = $users;
         $this->view->bug     = $bug;
         $this->view->bugID   = $bugID;
         $this->view->actions = $this->action->getList('bug', $bugID);

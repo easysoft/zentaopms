@@ -97,7 +97,6 @@ class repoModel extends model
          */
 
         common::setMenuVars('devops', $repoID);
-
         session_start();
         $this->session->set('repoID', $repoID);
         session_write_close();
@@ -145,7 +144,7 @@ class repoModel extends model
 
                 $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
 
-                $dropMenuLink = helper::createLink('repo', 'ajaxGetBranchDropMenu', "repID=$repoID&branchID=$branchID");
+                $dropMenuLink = helper::createLink('repo', 'ajaxGetBranchDropMenu', "repID=$repoID&branchID=$branchID&objectID=$objectID");
                 $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
                 $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
                 $output .= "</div></div>";

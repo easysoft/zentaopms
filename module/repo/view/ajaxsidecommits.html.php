@@ -37,7 +37,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
             <label></label>
           </div>
         </td>
-        <td class='versions'><span class="revision"><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&revision={$log->revision}" . $pathInfo), $repo->SCM == 'Git' ? substr($log->revision, 0, 10) : $log->revision);?></span></td>
+        <td class='versions'><span class="revision"><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$log->revision}" . $pathInfo), $repo->SCM == 'Git' ? substr($log->revision, 0, 10) : $log->revision, '', "data-app='{$this->app->openApp}'");?></span></td>
         <?php if($repo->SCM == 'Git'):?>
         <td><?php echo $log->commit?></td>
         <?php endif;?>
