@@ -293,6 +293,7 @@ class repo extends control
         $this->view->showBug      = $showBug;
         $this->view->encoding     = str_replace('-', '_', $encoding);
         $this->view->repoID       = $repoID;
+        $this->view->branchID     = $this->cookie->repoBranch;
         $this->view->objectID     = $objectID;
         $this->view->repo         = $repo;
         $this->view->revision     = $revision;
@@ -582,6 +583,7 @@ class repo extends control
         $this->view->type        = $type;
         $this->view->changes     = $changes;
         $this->view->repoID      = $repoID;
+        $this->view->branchID    = $this->cookie->repoBranch;
         $this->view->objectID    = $objectID;
         $this->view->revision    = $log[0]->revision;
         $this->view->parentDir   = $parent;
@@ -632,6 +634,7 @@ class repo extends control
 
         $this->view->title        = $this->lang->repo->common;
         $this->view->repoID       = $repoID;
+        $this->view->branchID     = $this->cookie->repoBranch;
         $this->view->objectID     = $objectID;
         $this->view->repo         = $repo;
         $this->view->revision     = $revision;
@@ -662,9 +665,9 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
 
         if($this->get->repoPath) $entry = $this->get->repoPath;
-        $file    = $entry;
-        $repo    = $this->repo->getRepoByID($repoID);
-        $entry   = $this->repo->decodePath($entry);
+        $file  = $entry;
+        $repo  = $this->repo->getRepoByID($repoID);
+        $entry = $this->repo->decodePath($entry);
 
         $pathInfo = pathinfo($entry);
         $suffix   = '';
@@ -736,6 +739,7 @@ class repo extends control
         $this->view->suffix      = $suffix;
         $this->view->file        = $file;
         $this->view->repoID      = $repoID;
+        $this->view->branchID    = $this->cookie->repoBranch;
         $this->view->objectID    = $objectID;
         $this->view->repo        = $repo;
         $this->view->encoding    = str_replace('-', '_', $encoding);

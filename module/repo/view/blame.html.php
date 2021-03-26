@@ -31,14 +31,14 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
     <div class="page-title">
       <strong>
         <?php
-        echo html::a($this->repo->createLink('browse', "repoID=$repoID&objectID=$objectID"), $repo->name);
+        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $repo->name);
         $paths= explode('/', $entry);
         $fileName = array_pop($paths);
         $postPath = '';
         foreach($paths as $pathName)
         {
             $postPath .= $pathName . '/';
-            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
+            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
         }
         echo '/' . ' ' . $fileName;
         echo " <span class='label label-info'>" . $revisionName . '</span>';
