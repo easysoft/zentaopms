@@ -40,9 +40,9 @@
     <ul class="nav nav-default">
       <?php $encodeEntry = $this->repo->encodePath($entry);?>
       <li><a><?php echo $lang->repo->log;?></a></li>
-      <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&entry=$encodeEntry&revision=$revision"), $lang->repo->view);?></li>
+      <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&entry=$encodeEntry&revision=$revision"), $lang->repo->view, '', "data-app='{$app->openApp}'");?></li>
       <?php if($info->kind == 'file'):?>
-      <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&entry=$encodeEntry&revision=$revision"), $lang->repo->blame);?></li>
+      <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&entry=$encodeEntry&revision=$revision"), $lang->repo->blame, '', "data-app='{$app->openApp}'");?></li>
       <li><?php echo html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodeEntry&fromRevision=$revision"), $lang->repo->download, 'hiddenwin');?></li>
       <?php endif;?>
     </ul>
@@ -70,7 +70,7 @@
               <label></label>
             </div>
           </td>
-          <td class='versions'><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&revision=" . $log->revision), substr($log->revision, 0, 10));?></td>
+          <td class='versions'><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision=" . $log->revision), substr($log->revision, 0, 10), '', "data-app='{$app->openApp}'");?></td>
           <?php if($repo->SCM == 'Git'):?>
           <td><?php echo $log->commit?></td>
           <?php endif;?>
@@ -82,7 +82,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
-      <?php echo html::submitButton($lang->repo->diff, '', 'btn btn-primary')?>
+      <?php echo html::submitButton($lang->repo->diff, '', count($logs) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

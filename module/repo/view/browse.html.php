@@ -14,7 +14,7 @@
     <div class="page-title">
       <strong>
         <?php
-        echo html::a($this->repo->createLink('browse', "repoID=$repoID&objectID=$objectID"), $repo->name);
+        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $repo->name, '', "data-app={$app->openApp}");
         if(!empty($path))
         {
             $paths    = explode('/', $path);
@@ -22,7 +22,7 @@
             foreach($paths as $pathName)
             {
                 $postPath .= $pathName . '/';
-                echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&objectID=$objectID&path=" . $this->repo->encodePath($postPath) . "&revision=$revision"), trim($pathName, '/'));
+                echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath) . "&revision=$revision"), trim($pathName, '/'), '', '', "data-app={$app->openApp}");
             }
         }
         ?>
@@ -31,7 +31,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <span class='last-sync-time'><?php echo $lang->repo->notice->lastSyncTime . $cacheTime?></span>
-    <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1"), "<i class='icon icon-refresh'></i> ". $lang->refresh, '', "class='btn btn-primary'");?>
+    <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1"), "<i class='icon icon-refresh'></i> " . $lang->refresh, '', "class='btn btn-primary' data-app={$app->openApp}");?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
@@ -57,8 +57,8 @@
           <td>
           <?php
           $infoPath = trim($path . '/' . $info->name, '/');
-          $link = $info->kind == 'dir' ? $this->repo->createLink('browse', "repoID=$repoID&objectID=$objectID&path=" . $this->repo->encodePath($infoPath)) : $this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
-          echo html::a($link, $info->name, '', "title='{$info->name}'");
+          $link = $info->kind == 'dir' ? $this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($infoPath)) : $this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
+          echo html::a($link, $info->name, '', "title='{$info->name}' data-app={$app->openApp}");
           ?>
           </td>
           <td align='center'><?php echo $repo->SCM == 'Git' ? substr($info->revision, 0, 10) : $info->revision;?></td>

@@ -179,7 +179,7 @@ $lang->scrum->menu->execution = array('link' => "$lang->executionCommon|project|
 $lang->scrum->menu->story     = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory', 'alias' => 'story,track');
 $lang->scrum->menu->doc       = array('link' => "{$lang->doc->common}|doc|objectLibs|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->scrum->menu->qa        = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
-$lang->scrum->menu->devops    = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
+$lang->scrum->menu->devops    = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->scrum->menu->build     = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->scrum->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
@@ -222,7 +222,7 @@ $lang->waterfall->menu->programplan = array('link' => "{$lang->productplan->shor
 $lang->waterfall->menu->doc         = array('link' => "{$lang->doc->common}|doc|objectLibs|type=project&objectID=%s");
 $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory');
 $lang->waterfall->menu->design      = array('link' => "$lang->design|design|browse|project=%s");
-$lang->waterfall->menu->devops      = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
+$lang->waterfall->menu->devops      = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->waterfall->menu->track       = array('link' => "$lang->track|projectstory|track", 'alias' => 'track');
 $lang->waterfall->menu->qa          = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
 $lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
@@ -256,9 +256,9 @@ $lang->waterfall->menu->qa['subMenu']->testcase = array('link' => "{$lang->testc
 $lang->waterfall->menu->qa['subMenu']->testtask = array('link' => "{$lang->testtask->common}|project|testtask|projectID=%s", 'subModule' => 'testtask', 'class' => 'dropdown dropdown-hover');
 
 $lang->waterfall->menu->other['dropMenu'] = new stdclass();
-$lang->waterfall->menu->other['dropMenu']->estimation  = array('link' => "$lang->estimation|workestimation|index|projectID=%s", 'subModule' => 'workestimation,durationestimation,budget');
-$lang->waterfall->menu->other['dropMenu']->issue       = array('link' => "$lang->issue|issue|browse|projectID=%s", 'subModule' => 'issue');
-$lang->waterfall->menu->other['dropMenu']->risk        = array('link' => "$lang->risk|risk|browse|projectID=%s", 'subModule' => 'risk');
+$lang->waterfall->menu->other['dropMenu']->estimation = array('link' => "$lang->estimation|workestimation|index|projectID=%s", 'subModule' => 'workestimation,durationestimation,budget');
+$lang->waterfall->menu->other['dropMenu']->issue      = array('link' => "$lang->issue|issue|browse|projectID=%s", 'subModule' => 'issue');
+$lang->waterfall->menu->other['dropMenu']->risk       = array('link' => "$lang->risk|risk|browse|projectID=%s", 'subModule' => 'risk');
 
 $lang->waterfall->menu->devops   = $lang->scrum->menu->devops;
 $lang->waterfall->menu->settings = $lang->scrum->menu->settings;
@@ -275,7 +275,7 @@ $lang->execution->menu->burn     = array('link' => "$lang->burn|execution|burn|e
 $lang->execution->menu->view     = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban');
 $lang->execution->menu->qa       = array('link' => "{$lang->qa->common}|execution|qa|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
-$lang->execution->menu->devops   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&objectID=%s", 'subModule' => 'repo');
+$lang->execution->menu->devops   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->execution->menu->doc      = array('link' => "{$lang->doc->common}|doc|objectLibs|type=execution&objectID=%s", 'subModule' => 'doc');
 $lang->execution->menu->build    = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
 $lang->execution->menu->action   = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
