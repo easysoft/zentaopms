@@ -61,8 +61,8 @@ class actionModel extends model
         /* Get product project and execution for this object. */
         $relation          = $this->getRelatedFields($action->objectType, $objectID);
         $action->product   = $relation['product'];
-        $action->project   = $relation['project'];
-        $action->execution = $actionType == 'unlinkedfromproject' ? (int)$extra : (int)$relation['execution'];
+        $action->project   = ($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') ? (int)$extra : (int)$relation['project'];
+        $action->execution = ($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') ? (int)$extra : (int)$relation['execution'];
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dbh->lastInsertID();
