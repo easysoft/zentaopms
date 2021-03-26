@@ -54,6 +54,7 @@ $lang->doc->searchDoc      = 'Suche';
 $lang->doc->fast           = 'Schnelleintrag';
 $lang->doc->allDoc         = 'Alle Doks';
 $lang->doc->openedByMe     = 'Meine';
+$lang->doc->editedByMe     = 'Edited By Me';
 $lang->doc->orderByOpen    = 'Zuletzt hinzugefügt';
 $lang->doc->orderByEdit    = 'Zuletzt bearbeitet';
 $lang->doc->orderByVisit   = 'Zuletzt angesehen';

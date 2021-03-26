@@ -54,6 +54,7 @@ $lang->doc->searchDoc    = 'Tìm kiếm';
 $lang->doc->fast         = 'Quick Entry';
 $lang->doc->allDoc       = 'Tất cả tài liệu';
 $lang->doc->openedByMe   = 'Của bạn';
+$lang->doc->editedByMe   = 'Edited By Me';
 $lang->doc->orderByOpen  = 'Recent Added';
 $lang->doc->orderByEdit  = 'Recent Updated';
 $lang->doc->orderByVisit = 'Last Visited';
