@@ -729,6 +729,8 @@ function changeSearchObject()
     if(searchType == 'deploystep') var searchType = 'deploy-viewstep';
 
     $("#searchType").val(searchType);
+    $('#searchTypeMenu li:first').attr('class', 'search-type-all');
+
     return searchType;
 }
 
