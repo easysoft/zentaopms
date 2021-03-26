@@ -37,17 +37,21 @@ class testtask extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        /* Set testtask menu group. */
-        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
+        /* Get product data. */
+        $projectID = 0;
+        if($this->app->openApp == 'project')
+        {
+            $projectID = $this->session->project;
+            $products  = $this->loadModel('project')->getProducts($projectID, false);
+        }
         if($this->app->openApp == 'qa')
         {
+            $products = $this->loadModel('product')->getPairs();
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
-
-        $this->loadModel('product');
-        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=testtask&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=testtask')));
+        $this->view->products = $this->products = $products;
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName={$this->app->openApp}&activeMenu=testtask&projectID=$projectID")));
     }
 
     /**
@@ -1135,7 +1139,7 @@ class testtask extends control
             $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->where('t2.id')->in($caseIDList)
-                ->fetchAll('runID');
+                ->fetchAll('id');
 
             $caseIDList = array();
             foreach($cases as $case) $caseIDList[] = $case->id;

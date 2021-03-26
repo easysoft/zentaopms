@@ -41,9 +41,16 @@ class testcase extends control
         $this->loadModel('user');
         $this->loadModel('qa');
 
-        $this->view->products = $this->products = $this->product->getPairs();
-        if($this->app->openApp == 'project') $this->view->products = $this->products = $this->loadModel('project')->getProducts($this->session->project, false);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
+        /* Get product data. */
+        $projectID = 0;
+        if($this->app->openApp == 'project')
+        {
+            $projectID = $this->session->project;
+            $products  = $this->loadModel('project')->getProducts($projectID, false);
+        }
+        if($this->app->openApp == 'qa') $products = $this->product->getPairs();
+        $this->view->products = $this->products = $products;
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName={$this->app->openApp}&activeMenu=testcase&projectID=$projectID")));
     }
 
     /**
@@ -1632,7 +1639,15 @@ class testcase extends control
             if($this->post->isEndPage)
             {
                 unlink($tmpFile);
-                die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+
+                if($this->app->openApp == 'project')
+                {
+                    die(js::locate($this->createLink('project', 'testcase', "projectID={$this->session->project}&productID=$productID"), 'parent'));
+                }
+                else
+                {
+                    die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+                }
             }
             else
             {

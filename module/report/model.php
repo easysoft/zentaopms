@@ -122,7 +122,7 @@ class reportModel extends model
                 $projects[$projectID]->consumed = 0;
             }
 
-            $projects[$projectID]->name      = $task->executionName;
+            $projects[$projectID]->name      = $task->projectName;
             $projects[$projectID]->estimate += $task->estimate;
             $projects[$projectID]->consumed += $task->consumed;
         }

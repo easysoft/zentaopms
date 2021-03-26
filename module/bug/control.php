@@ -47,21 +47,21 @@ class bug extends control
         $this->loadModel('task');
         $this->loadModel('qa');
 
-        /* Set bug menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
+        /* Get product data. */
+        $projectID = 0;
+        if($this->app->openApp == 'project')
         {
+            $projectID = $this->session->project;
+            $products  = $this->loadModel('project')->getProducts($projectID, false);
+        }
+        if($this->app->openApp == 'qa')
+        {
+            $products = $this->product->getPairs();
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
         }
-        else
-        {
-            $this->lang->bug->menu    = $this->lang->projectQa->menu;
-            $this->lang->bug->subMenu = $this->lang->projectQa->subMenu;
-        }
-
-        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->projectID);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=bug&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=bug')));
+        $this->view->products = $this->products = $products;
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName={$this->app->openApp}&activeMenu=bug&projectID=$projectID")));
     }
 
     /**
@@ -999,10 +999,23 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
+        if($this->app->openApp == 'project')
+        {
+            $users = $this->project->getTeamMemberPairs($bug->project, 'nodeleted', $bug->assignedTo);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $users = $this->execution->getTeamMemberPairs($bug->execution, 'nodeleted', $bug->assignedTo);
+        }
+        else
+        {
+            $users   = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
+        }
+
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
         $this->view->position[] = $this->lang->bug->assignedTo;
 
-        $this->view->users   = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
+        $this->view->users   = $users;
         $this->view->bug     = $bug;
         $this->view->bugID   = $bugID;
         $this->view->actions = $this->action->getList('bug', $bugID);

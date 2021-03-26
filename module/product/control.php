@@ -967,43 +967,39 @@ class product extends control
     /**
      * Show error no product when visit qa.
      *
-     * @param  string $fromModule
+     * @param  string $moduleName
+     * @param  string $activeMenu
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function showErrorNone($fromModule = 'bug', $moduleGroup = 'product', $activeMenu = '')
+    public function showErrorNone($moduleName = 'qa', $activeMenu = 'index', $projectID = 0)
     {
-        /* The module in the test menu shows the created product. */
-        if($moduleGroup == 'qa')
+        $this->app->rawModule = $activeMenu;
+        if($moduleName == 'project')
+        {
+            $this->loadModel('project')->setMenu($projectID);
+            $project = $this->project->getByID($projectID);
+            $this->lang->project->menu      = $this->lang->{$project->model}->menu;
+            $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
+            $this->app->rawModule = $activeMenu;
+
+            if($activeMenu == 'testcase') $this->lang->{$project->model}->menu->qa['subMenu']->testcase['subModule'] = 'product';
+            if($activeMenu == 'bug')      $this->lang->{$project->model}->menu->qa['subMenu']->bug['subModule']      = 'product';
+            if($activeMenu == 'testtask') $this->lang->{$project->model}->menu->qa['subMenu']->testtask['subModule'] = 'product';
+        }
+        elseif($moduleName == 'qa')
         {
             $this->loadModel('qa')->setMenu(array(), 0);
 
-            $this->app->loadLang($fromModule);
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-
-            $this->lang->product->menu      = $this->lang->qa->menu;
-            $this->lang->product->menuOrder = $this->lang->qa->menuOrder;
+            if($activeMenu == 'testcase')   $this->lang->qa->menu->testcase['subMenu']->case['subModule']      = 'product';
+            if($activeMenu == 'testsuite')  $this->lang->qa->menu->testcase['subMenu']->testsuite['subModule'] = 'product';
+            if($activeMenu == 'testtask')   $this->lang->qa->menu->testtask['subMenu']->testtask['subModule']  = 'product';
+            if($activeMenu == 'testreport') $this->lang->qa->menu->testtask['subMenu']->report['subModule']    = 'product';
         }
 
-        /* The module in the project menu displays related products. */
-        if($moduleGroup == 'project')
-        {
-            $this->app->loadLang($fromModule);
-
-            /* The secondary test menu processing in the project. */
-            if(in_array($fromModule, array('qa', 'bug', 'testtask', 'testreport')))
-            {
-                $menu = $this->lang->qa->menu->$activeMenu;
-                $menu['subModule'] = 'product';
-                $this->lang->qa->menu->$activeMenu = $menu;
-                $this->app->rawModule = 'qa';
-                $this->loadModel('qa')->setMenu(array(), 0);
-            }
-        }
-
-        $this->view->title       = $this->lang->$fromModule->common;
-        $this->view->fromModule  = $fromModule;
-        $this->view->moduleGroup = $moduleGroup;
+        $this->view->title     = $this->lang->$moduleName->common;
+        $this->view->projectID = $projectID;
         $this->display();
     }
 

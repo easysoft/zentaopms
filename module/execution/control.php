@@ -1037,18 +1037,18 @@ class execution extends control
         $tasks = $this->testtask->getExecutionTasks($executionID, $orderBy, $pager);
         foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
 
-        $this->view->title        = $this->executions[$executionID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->position[]   = html::a($this->createLink('execution', 'testtask', "executionID=$executionID"), $this->executions[$executionID]);
-        $this->view->position[]   = $this->lang->testtask->common;
-        $this->view->execution      = $execution;
-        $this->view->executionID    = $executionID;
-        $this->view->executionName  = $this->executions[$executionID];
-        $this->view->pager        = $pager;
-        $this->view->orderBy      = $orderBy;
-        $this->view->tasks        = $productTasks;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products     = $this->loadModel('product')->getPairs('', 0);
-        $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->position[]    = html::a($this->createLink('execution', 'testtask', "executionID=$executionID"), $this->executions[$executionID]);
+        $this->view->position[]    = $this->lang->testtask->common;
+        $this->view->execution     = $execution;
+        $this->view->executionID   = $executionID;
+        $this->view->executionName = $this->executions[$executionID];
+        $this->view->pager         = $pager;
+        $this->view->orderBy       = $orderBy;
+        $this->view->tasks         = $productTasks;
+        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->products      = $this->loadModel('product')->getPairs('', 0);
+        $this->view->canBeChanged  = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
     }
