@@ -144,7 +144,7 @@ class testtask extends control
         $this->app->loadLang('tree');
 
         /* Set menu. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->loadModel('product')->saveState($productID, $this->products);
         if($this->app->openApp == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
@@ -1259,7 +1259,7 @@ class testtask extends control
 
         $productID  = $productID ? $productID : key($this->products);
         $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
-        $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
+        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
