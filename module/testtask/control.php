@@ -186,6 +186,7 @@ class testtask extends control
      * @param  int    $productID
      * @param  int    $executionID
      * @param  int    $build
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -217,7 +218,7 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
-        $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
+        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
         /* Set menu. */
@@ -229,9 +230,10 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->create;
 
+        $this->view->productID   = $productID;
+        $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
         $this->view->executions  = $executions;
-        $this->view->productID   = $productID;
         $this->view->builds      = $builds;
         $this->view->build       = $build;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');

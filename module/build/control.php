@@ -374,7 +374,9 @@ class build extends control
 
             if(empty($builds))
             {
-                $html  = html::a($this->createLink('build', 'create', "executionID=$executionID&productID=$productID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
+                $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+
+                $html  = html::a($this->createLink('build', 'create', "executionID=$executionID&productID=$productID&projectID=$projectID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
                 $html .= '&nbsp; ';
                 $html .= html::a("javascript:loadExecutionBuilds($executionID)", $this->lang->refresh);
                 die($html);

@@ -43,7 +43,7 @@
             <div class='input-group' id='buildBox'>
             <?php echo html::select('build', empty($builds) ? '' : $builds, $build, "class='form-control chosen'");?>
             <?php if(isset($executionID) and $executionID and empty($builds)):?>
-            <span class='input-group-addon'><?php echo html::a(helper::createLink('build', 'create', "executionID=$executionID&productID=$productID", '', true), $lang->build->create, '', "data-toggle='modal' data-type='iframe' data-width='95%'")?> </span>
+            <span class='input-group-addon'><?php echo html::a(helper::createLink('build', 'create', "executionID=$executionID&productID=$productID&projectID=$projectID", '', true), $lang->build->create, '', "data-toggle='modal' data-type='iframe' data-width='95%'")?> </span>
             </div>
             <div class='hidden'><?php echo '&nbsp; ' .  html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadExecutionBuilds($executionID)'");?></div>
             <?php endif;?>
