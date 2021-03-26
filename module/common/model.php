@@ -676,31 +676,27 @@ class commonModel extends model
                 /* Print drop menus. */
                 if(isset($menuItem->dropMenu))
                 {
-                    foreach($menuItem->dropMenu as $dropMenuItem)
+                    foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
                     {
-                        if($dropMenuItem->hidden) continue;
+                        if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
-                        $subActive  = '';
-                        $subModule  = '';
-                        $subMethod  = '';
-                        $subParams  = '';
-                        $subProgram = '';
-                        $subLabel   = $dropMenuItem->text;
-                        if(isset($dropMenuItem->link['module'])) $subModule = $dropMenuItem->link['module'];
-                        if(isset($dropMenuItem->link['method'])) $subMethod = $dropMenuItem->link['method'];
-                        if(isset($dropMenuItem->link['vars']))   $subParams = $dropMenuItem->link['vars'];
 
+                        /* Parse drop menu link. */
+                        $dropMenuLink = $dropMenuItem;
+                        if(is_array($dropMenuItem) and isset($dropMenuItem['link'])) $dropMenuLink = $dropMenuLink['link'];
+
+                        list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
                         $subActive = '';
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod))
                         {
-                            $activeMenu = $menuItem->name;
+                            $activeMenu = $dropMenuName;
                             $active     = 'active';
                             $subActive  = 'active';
                             $label      = $subLabel;
                         }
-                        $dropMenu .= "<li class='$subActive' data-id='$dropMenuItem->name'>" . html::a($subLink, $subLabel) . $subProgram . '</li>';
+                        $dropMenu .= "<li class='$subActive' data-id='$subLabel'>" . html::a($subLink, $subLabel) . '</li>';
                     }
 
                     if(empty($dropMenu)) continue;
@@ -785,12 +781,12 @@ class commonModel extends model
         /* If this is not workflow then use rawModule and rawMethod to judge highlight. */
         if($app->isFlow)
         {
-            $currentModule  = $app->rawModule;
-            $currentMethod  = $app->rawMethod;
+            $currentModule = $app->rawModule;
+            $currentMethod = $app->rawMethod;
         }
 
-        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
-        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
+        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule = WIZARD_MODULE;
+        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod = WIZARD_METHOD;
 
         /* The beginning of the menu. */
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
@@ -2320,9 +2316,23 @@ EOD;
             $lang->$moduleName->menu->$label = self::setMenuVarsEx($menu, $objectID, $params);
             if(isset($menu['subMenu']))
             {
-                foreach($menu['subMenu'] as $key => $subMenu)
+                foreach($menu['subMenu'] as $key1 => $subMenu)
                 {
-                    $lang->$moduleName->menu->{$label}['subMenu']->$key = self::setMenuVarsEx($subMenu, $objectID, $params);
+                    $lang->$moduleName->menu->{$label}['subMenu']->$key1 = self::setMenuVarsEx($subMenu, $objectID, $params);
+                }
+            }
+
+            if(!isset($menu['dropMenu'])) continue;
+
+            foreach($menu['dropMenu'] as $key2 => $dropMenu)
+            {
+                $lang->$moduleName->menu->{$label}['dropMenu']->$key2 = self::setMenuVarsEx($dropMenu, $objectID, $params);
+
+                if(!isset($dropMenu['subMenu'])) continue;
+
+                foreach($dropMenu['subMenu'] as $key3 => $subMenu)
+                {
+                    $lang->$moduleName->menu->{$label}['dropMenu']->$key3 = self::setMenuVarsEx($subMenu, $objectID, $params);
                 }
             }
         }
@@ -2341,6 +2351,8 @@ EOD;
     {
         if(is_array($menu))
         {
+            if(!isset($menu['link'])) return $menu;
+
             $link = sprintf($menu['link'], $objectID);
             $menu['link'] = vsprintf($link, $params);
         }
