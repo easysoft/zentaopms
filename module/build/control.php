@@ -115,7 +115,7 @@ class build extends control
         {
             $this->loadModel('project')->setMenu($build->project);
         }
-        elseif($this->app->openApp == 'exectuion')
+        elseif($this->app->openApp == 'execution')
         {
             $this->execution->setMenu($build->execution);
         }
