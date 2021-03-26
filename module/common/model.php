@@ -2261,8 +2261,14 @@ EOD;
 
             if($method == $app->rawMethod)
             {
-              $lang->menu = $lang->$openApp->homeMenu;
-              return;
+                $lang->menu = $lang->$openApp->homeMenu;
+                return;
+            }
+
+            if(isset($menu['alias']) and in_array(strtolower($app->rawMethod), explode(',', strtolower($menu['alias']))))
+            {
+                $lang->menu = $lang->$openApp->homeMenu;
+                return;
             }
         }
 
