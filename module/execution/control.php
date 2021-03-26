@@ -1447,8 +1447,6 @@ class execution extends control
      */
     public function batchEdit($executionID = 0)
     {
-        $this->lang->execution->menu = $this->lang->execution->homeMenu;
-
         $this->app->loadLang('stage');
 
         if($this->post->names)
@@ -1467,7 +1465,14 @@ class execution extends control
             die(js::locate($this->session->executionList, 'parent'));
         }
 
-        $this->execution->setMenu($executionID);
+        if($this->app->openApp == 'project')
+        {
+            $this->project->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->execution->setMenu($executionID);
+        }
 
         $executionIDList = $this->post->executionIDList ? $this->post->executionIDList : die(js::locate($this->session->executionList, 'parent'));
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');

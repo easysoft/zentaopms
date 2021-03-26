@@ -57,6 +57,7 @@ $lang->testtask->expandAll        = 'Mở ra';
 $lang->testtask->id             = 'ID';
 $lang->testtask->common         = 'Yêu cầu';
 $lang->testtask->product        = $lang->productCommon;
+$lang->testtask->project        = 'Project';
 $lang->testtask->execution      = $lang->executionCommon;
 $lang->testtask->build          = 'Bản dựng';
 $lang->testtask->owner          = 'Sở hữu';

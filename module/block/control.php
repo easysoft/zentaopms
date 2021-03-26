@@ -253,13 +253,13 @@ class block extends control
 
                 /* The list assigned to me jumps to the work page when click more button. */
                 $block->moreLink = $this->createLink($moduleName, $method, $vars);
-                if($moduleName = 'my' and strpos('task|story|requirement|bug|testcase|testtask|issue|risk', $method))
+                if($moduleName == 'my' and strpos('task|story|requirement|bug|testcase|testtask|issue|risk', $method))
                 {
                     $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
                 }
-                elseif($moduleName = 'project')
+                elseif($moduleName == 'project' and $method == 'dynamic')
                 {
-                    $block->moreLink = $this->createLink('project', 'dynamic', "projectID={$this->session->project}");
+                    $block->moreLink = $this->createLink('project', 'dynamic', "projectID=$projectID&type=all");
                 }
             }
             elseif($block->block == 'dynamic')
