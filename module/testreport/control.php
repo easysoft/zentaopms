@@ -44,18 +44,23 @@ class testreport extends control
         $this->loadModel('user');
         $this->app->loadLang('report');
 
-        /* Set testreport menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
+        /* Get product data. */
+        $objectID = 0;
+        if($this->app->openApp == 'project')
         {
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $objectID = $this->session->project;
+            $products = $this->loadModel('project')->getProducts($objectID, false);
         }
-        else
+
+        if($this->app->openApp == 'execution')
         {
-            $this->lang->testreport->menu    = $this->lang->projectQa->menu;
-            $this->lang->testreport->subMenu = $this->lang->projectQa->subMenu;
+            $objectID = $this->session->execution;
+            $products = $this->loadModel('execution')->getProducts($objectID, false);
         }
+
+        if($this->app->openApp == 'qa' or $this->app->openApp == 'my') $products = $this->loadModel('product')->getPairs();
+        $this->view->products = $this->products = $products;
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName={$this->app->openApp}&activeMenu=testreport&objectID=$objectID")));
     }
 
     /**
@@ -73,8 +78,8 @@ class testreport extends control
      */
     public function browse($objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if($objectType != 'product' and $objectType != 'execution') die('Type Error!');
-        $this->session->set('reportList', $this->app->getURI(true), 'qa');
+        if(strpos('product|execution|project', $objectType) === false) die('Type Error!');
+        $this->session->set('reportList', $this->app->getURI(true), $this->app->openApp);
 
         $objectID = $this->commonAction($objectID, $objectType);
         $object   = $this->$objectType->getById($objectID);
@@ -547,20 +552,23 @@ class testreport extends control
     {
         if($objectType == 'product')
         {
-            $projectID      = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->project;
-            $this->products = $this->product->getProductPairsByProject($projectID);
-            if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testreport")));
-            $productID      = $this->product->saveState($objectID, $this->products);
+            $productID = $this->product->saveState($objectID, $this->products);
             $this->loadModel('qa')->setMenu($this->products, $productID);
             return $productID;
         }
         elseif($objectType == 'execution')
         {
-            $this->executions = $this->execution->getPairs($this->session->project, 'all', 'nocode');
-            $executionID      = $this->execution->saveState($objectID, $this->executions);
-            $this->execution->setMenu($this->executions, $executionID);
-            $this->lang->testreport->menu = $this->lang->execution->menu;
+            $executions  = $this->execution->getPairs();
+            $executionID = $this->execution->saveState($objectID, $executions);
+            $this->execution->setMenu($executionID);
             return $executionID;
+        }
+        elseif($objectType == 'project')
+        {
+            $projects  = $this->project->getPairsByProgram();
+            $projectID = $this->project->saveState($objectID, $projects);
+            $this->project->setMenu($projectID);
+            return $projectID;
         }
     }
 

@@ -851,13 +851,13 @@ class execution extends control
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true), 'execution');
 
-        $type      = strtolower($type);
-        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $type        = strtolower($type);
+        $queryID     = ($type == 'bysearch') ? (int)$param : 0;
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
-        $products  = $this->execution->getProducts($execution->id);
-        $productID = key($products);    // Get the first product for creating bug.
-        $branchID  = isset($products[$productID]) ? $products[$productID]->branch : 0;
+        $products    = $this->execution->getProducts($execution->id);
+        $productID   = key($products);    // Get the first product for creating bug.
+        $branchID    = isset($products[$productID]) ? $products[$productID]->branch : 0;
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
@@ -944,6 +944,23 @@ class execution extends control
         $this->view->execution   = $this->execution->getByID($executionID);
 
         $this->display();
+    }
+
+    /**
+     * Execution case list.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function testreport($executionID = 0, $objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+
     }
 
     /**
@@ -2083,7 +2100,7 @@ class execution extends control
 
             if(isonlybody())
             {
-                die(js::locate($this->createLink('build', 'create', "executionID=$executionID&productID=0&projectID=$execution->project"), 'parent'));
+                die(js::reload('parent'));
             }
         }
 

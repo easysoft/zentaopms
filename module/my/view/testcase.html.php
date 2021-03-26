@@ -100,7 +100,7 @@
             if($canBeChanged)
             {
                 common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
-                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy');
+                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from={$app->rawMethod}&param=$caseID", $case, 'list', 'copy');
                 common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', true, "data-width='95%'", '', $case->project);
                 common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->project);
                 common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', '', '', '', '', $case->project);

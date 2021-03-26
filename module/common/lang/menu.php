@@ -306,8 +306,8 @@ $lang->execution->menu->qa['subMenu'] = new stdclass();
 $lang->execution->menu->qa['subMenu']->qa         = array('link' => "$lang->dashboard|execution|qa|executionID=%s");
 $lang->execution->menu->qa['subMenu']->bug        = array('link' => "{$lang->bug->common}|execution|bug|executionID=%s", 'subModule' => 'bug');
 $lang->execution->menu->qa['subMenu']->testcase   = array('link' => "{$lang->testcase->shortCommon}|execution|testcase|executionID=%s", 'alias' => 'create');
-$lang->execution->menu->qa['subMenu']->testtask   = array('link' => "{$lang->testtask->common}|execution|testtask|executionID=%s", 'subModule' => 'testtask,testreport');
-// $lang->execution->menu->qa['subMenu']->testreport = array('link' => "$lang->project->report|testreport|browse|exeutionID=%s&type=execution");
+$lang->execution->menu->qa['subMenu']->testtask   = array('link' => "{$lang->testtask->common}|execution|testtask|executionID=%s", 'subModule' => 'testtask');
+$lang->execution->menu->qa['subMenu']->testreport = array('link' => "{$lang->testreport->common}|execution|testreport|browse|exeutionID=%s", 'subModule' => 'testreport');
 
 $lang->execution->menu->qa['menuOrder'][5]  = 'qa';
 $lang->execution->menu->qa['menuOrder'][10] = 'bug';

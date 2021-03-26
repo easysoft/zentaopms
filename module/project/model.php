@@ -1215,7 +1215,7 @@ class projectModel extends model
             foreach($products as $productID => $product)
             {
                 $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-                $this->dao->update(TABLE_PRODUCT)->set('project')->eq((int)$newTopProgram)->where('id')->eq((int)$productID)->exec();
+                $this->dao->update(TABLE_PRODUCT)->set('program')->eq((int)$newTopProgram)->where('id')->eq((int)$productID)->exec();
                 $newProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
                 $changes    = common::createChanges($oldProduct, $newProduct);
                 $actionID   = $this->action->create('product', $productID, 'edited');
