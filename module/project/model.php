@@ -936,7 +936,7 @@ class projectModel extends model
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
-            if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
+            if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
 
             return common::createChanges($oldProject, $project);
         }
@@ -1011,7 +1011,7 @@ class projectModel extends model
                 $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
                 $this->updateProductProgram($oldProject->parent, $project->parent, $linkedProducts);
 
-                if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
+                if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
                 /* When acl is open, white list set empty. When acl is private,update user view. */
                 if($project->acl == 'open') $this->loadModel('personnel')->updateWhitelist('', 'project', $projectID);
                 if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');

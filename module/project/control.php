@@ -653,6 +653,8 @@ class project extends control
      */
     public function execution($projectID = 0)
     {
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('executionList', $uri, 'project');
         $this->locate($this->createLink('execution', 'all', "status=all&projectID=$projectID", '', false));
     }
 

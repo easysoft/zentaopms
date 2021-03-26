@@ -233,7 +233,7 @@ class actionModel extends model
         $actions   = $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')
             ->where("objectType IN('project', 'testtask', 'build')")
-            ->andWhere('execution')->eq((int)$objectID)
+            ->andWhere('project')->eq((int)$objectID)
             ->fi()
             ->beginIF($objectType != 'project')
             ->where('objectType')->eq($objectType)
