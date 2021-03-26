@@ -512,11 +512,11 @@ $lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|'
 $lang->block->modules['project']->moreLinkList->cmmiestimate   = 'workestimation|index|';
 $lang->block->modules['project']->moreLinkList->cmmiissue      = 'issue|browse|';
 $lang->block->modules['project']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['project']->moreLinkList->scrumlist      = 'project|all|';
+$lang->block->modules['project']->moreLinkList->scrumlist      = 'project|execution|';
 $lang->block->modules['project']->moreLinkList->scrumtest      = 'testtask|browse|';
 $lang->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['project']->moreLinkList->sprint         = 'project|all|';
-$lang->block->modules['project']->moreLinkList->projectdynamic = 'company|dynamic|';
+$lang->block->modules['project']->moreLinkList->sprint         = 'project|execution|';
+$lang->block->modules['project']->moreLinkList->projectdynamic = 'project|dynamic|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|';

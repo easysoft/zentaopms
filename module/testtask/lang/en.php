@@ -57,6 +57,7 @@ $lang->testtask->expandAll        = 'Expand';
 $lang->testtask->id             = 'ID';
 $lang->testtask->common         = 'Request';
 $lang->testtask->product        = $lang->productCommon;
+$lang->testtask->project        = 'Project';
 $lang->testtask->execution      = $lang->executionCommon;
 $lang->testtask->build          = 'Build';
 $lang->testtask->owner          = 'Owner';

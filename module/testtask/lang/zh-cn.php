@@ -57,6 +57,7 @@ $lang->testtask->expandAll        = '全部展开';
 $lang->testtask->id             = '编号';
 $lang->testtask->common         = '测试单';
 $lang->testtask->product        = '所属' . $lang->productCommon;
+$lang->testtask->project        = '所属项目';
 $lang->testtask->execution      = '所属' . $lang->executionCommon;
 $lang->testtask->build          = '版本';
 $lang->testtask->owner          = '负责人';
