@@ -273,7 +273,7 @@ class testcase extends control
             $this->loadModel('execution')->setMenu($this->session->execution);
         }
 
-        $testcaseID = $from == 'testcase' ? $param : 0;
+        $testcaseID = ($from and strpos('testcase|work|contribute', $from)) ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
 
         $this->loadModel('story');
@@ -324,7 +324,21 @@ class testcase extends control
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
         /* Set menu. */
-        $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        elseif($this->app->openApp == 'my')
+        {
+            $this->loadModel('my')->setMenu();
+            $this->lang->testcase->menu = $this->lang->my->menu->$from;
+            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'testcase';
+            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'testcase';
+        }
+        else
+        {
+            $this->testcase->setMenu($this->products, $productID, $branch);
+        }
 
         /* Init vars. */
         $type         = 'feature';

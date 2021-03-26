@@ -149,4 +149,6 @@ $(function()
     {
         $('#status').val(status).change();
     });
+
+    $('#subNavbar li[data-id="testcase"]').addClass('active');
 });
