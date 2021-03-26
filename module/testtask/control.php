@@ -629,7 +629,7 @@ class testtask extends control
     {
         /* Get task info. */
         $task      = $this->testtask->getById($taskID);
-        $productID = $this->product->saveState($task->product, $this->products);
+        $productID = $this->loadModel('product')->saveState($task->product, $this->products);
 
         if(!empty($_POST))
         {
@@ -643,11 +643,18 @@ class testtask extends control
 
             $this->executeHooks($taskID);
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->testtaskList));
         }
 
         /* Set menu. */
-        $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        }
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
