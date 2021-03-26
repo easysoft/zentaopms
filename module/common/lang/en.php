@@ -205,6 +205,8 @@ $lang->calendar   = 'Calendar';
 
 $lang->my->work = 'Work';
 
+$lang->project->list = 'Project List';
+
 $lang->doc->recent   = 'Recent';
 $lang->doc->my       = 'My';
 $lang->doc->favorite = 'Favorite';

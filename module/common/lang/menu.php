@@ -168,7 +168,7 @@ $lang->product->dividerMenu = $config->URAndSR ? ',requirement,set,' : ',track,s
 
 /* Project menu. */
 $lang->project->homeMenu = new stdclass();
-$lang->project->homeMenu->browse = array('link' => ($config->systemMode == 'new' ? $lang->project->common : $lang->executionCommon) . '|project|browse|');
+$lang->project->homeMenu->browse = array('link' => ($config->systemMode == 'new' ? $lang->project->list : $lang->executionCommon) . '|project|browse|', 'alias' => 'batchedit');
 
 $lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
 
