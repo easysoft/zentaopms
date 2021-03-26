@@ -566,7 +566,7 @@ class testreport extends control
         elseif($objectType == 'project')
         {
             $projects  = $this->project->getPairsByProgram();
-            $projectID = $this->project->saveState($objectID, $projects)
+            $projectID = $this->project->saveState($objectID, $projects);
             $this->project->setMenu($projectID);
             return $projectID;
         }
