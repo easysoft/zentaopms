@@ -260,8 +260,7 @@ $lang->execution->aboveAllExecution = "以上所有{$lang->executionCommon}";
 
 /* 页面提示。*/
 $lang->execution->linkStoryByPlanTips = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此{$lang->executionCommon}中";
-$lang->execution->selectExecution     = "请选择{$lang->executionCommon}";
-$lang->execution->selectExecution     = "请选择阶段/迭代/冲刺";
+$lang->execution->selectExecution     = "请选择执行";
 $lang->execution->beginAndEnd         = '起止时间';
 $lang->execution->lblStats            = '工时统计';
 $lang->execution->stats               = '可用工时 <strong>%s</strong> 工时，总共预计 <strong>%s</strong> 工时，已经消耗 <strong>%s</strong> 工时，预计剩余 <strong>%s</strong> 工时';

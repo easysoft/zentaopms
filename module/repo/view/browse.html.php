@@ -11,23 +11,30 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <div class="page-title">
-      <strong>
+    <div class='btn-group'>
+      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $repo->name;?>'><?php echo $repo->name;?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
-        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $repo->name, '', "data-app={$app->openApp}");
-        if(!empty($path))
+        foreach($repos as $id => $repoName)
         {
-            $paths    = explode('/', $path);
-            $postPath = '';
-            foreach($paths as $pathName)
-            {
-                $postPath .= $pathName . '/';
-                echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath) . "&revision=$revision"), trim($pathName, '/'), '', '', "data-app={$app->openApp}");
-            }
+            echo "<li>" . html::a($this->createLink('repo', 'browse', "repoID=$id"), $repoName, '', "title='{$repoName}' class='text-ellipsis'") . "</li>";
         }
         ?>
-      </strong>
+      </ul>
     </div>
+    <?php if(!empty($branches)):?>
+    <div class='btn-group'>
+      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $branches[$branchID];?>'><?php echo $branches[$branchID];?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+        <?php
+        foreach($branches as $id => $branchName)
+        {
+            echo "<li>" . html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$id"), $branchName, '', "title='{$branchName}' class='text-ellipsis'") . "</li>";
+        }
+        ?>
+      </ul>
+    </div>
+    <?php endif;?>
   </div>
   <div class="btn-toolbar pull-right">
     <span class='last-sync-time'><?php echo $lang->repo->notice->lastSyncTime . $cacheTime?></span>

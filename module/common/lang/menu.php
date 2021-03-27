@@ -213,8 +213,6 @@ $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->
 $lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
 $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 
-$lang->scrum->menu->devops['subMenu'] = new stdclass();
-
 /* Waterfall menu. */
 $lang->waterfall->menu = new stdclass();
 $lang->waterfall->menu->index       = array('link' => "$lang->dashboard|project|index|project=%s");
@@ -300,8 +298,6 @@ $lang->execution->menu->view['subMenu'] = new stdclass();
 $lang->execution->menu->view['subMenu']->groupTask = "$lang->groupView|execution|grouptask|executionID=%s";
 $lang->execution->menu->view['subMenu']->tree      = "$lang->treeView|execution|tree|executionID=%s";
 
-$lang->execution->menu->devops['subMenu'] = new stdclass();
-
 $lang->execution->menu->qa['subMenu'] = new stdclass();
 $lang->execution->menu->qa['subMenu']->qa         = array('link' => "$lang->dashboard|execution|qa|executionID=%s");
 $lang->execution->menu->qa['subMenu']->bug        = array('link' => "{$lang->bug->common}|execution|bug|executionID=%s", 'subModule' => 'bug');
@@ -369,8 +365,6 @@ $lang->devops->menuOrder[10] = 'compile';
 $lang->devops->menuOrder[15] = 'jenkins';
 $lang->devops->menuOrder[20] = 'maintain';
 $lang->devops->menuOrder[25] = 'rules';
-
-$lang->devops->menu->code['subMenu'] = new stdclass();
 
 /* Doc menu.*/
 $lang->doc->menu = new stdclass();

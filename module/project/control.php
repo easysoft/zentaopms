@@ -1200,7 +1200,7 @@ class project extends control
         $this->view->actions    = $this->action->getList('project', $projectID);
         $this->view->project    = $this->project->getByID($projectID);
 
-        $this->display('project', 'suspend');
+        $this->display();
     }
 
     /**
@@ -1247,6 +1247,7 @@ class project extends control
     public function activate($projectID)
     {
         $this->loadModel('action');
+        $this->app->loadLang('execution');
         $project = $this->project->getByID($projectID);
 
         if(!empty($_POST))
@@ -1275,7 +1276,7 @@ class project extends control
         $this->view->newEnd     = $newEnd;
         $this->view->project    = $project;
 
-        $this->display('project', 'activate');
+        $this->display();
     }
 
     /**

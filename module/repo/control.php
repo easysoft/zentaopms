@@ -61,8 +61,6 @@ class repo extends control
             $this->repo->setMenu($this->repos, $repoID);
         }
 
-        $this->lang->modulePageNav = $this->repo->select($this->repos, $repoID, $this->app->openApp, $objectID);
-
         if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create', "objectID=$objectID")));
     }
 
@@ -342,12 +340,11 @@ class repo extends control
         $this->session->set('revisionList', $this->app->getURI(true));
         session_write_close();
 
-        /* Use cookie to switch repo branch. */
-        setcookie('repoBranch', $branchID);
-
         /* Get repo and synchronous commit. */
         $repo = $this->repo->getRepoByID($repoID);
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID"));
+
+        $branches = $this->repo->getBranches($repo);
 
         /* Decrypt path and get cacheFile. */
         $path      = $this->repo->decodePath($path);
@@ -426,11 +423,13 @@ class repo extends control
 
         $this->view->title     = $this->lang->repo->common;
         $this->view->repo      = $repo;
+        $this->view->repos     = $this->repos;
         $this->view->revisions = $revisions;
         $this->view->revision  = $revision;
         $this->view->infos     = $infos;
         $this->view->repoID    = $repoID;
-        $this->view->branchID  = $this->cookie->branchID;
+        $this->view->branches  = $branches;
+        $this->view->branchID  = $branchID ? $branchID : key($branches);
         $this->view->objectID  = $objectID;
         $this->view->pager     = $pager;
         $this->view->path      = urldecode($path);

@@ -799,7 +799,7 @@ class doc extends control
             if($type == 'execution')
             {
                 $executionID = $objectID;
-                if(!$this->executionID->checkPriv($objectID)) $this->accessDenied();
+                if(!$this->execution->checkPriv($objectID)) $this->accessDenied();
             }
         }
 
