@@ -752,6 +752,7 @@ class reportModel extends model
     {
         /* Get changed executions in this year. */
         $executions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq(0)
+            ->andwhere('type')->eq('sprint')
             ->andWhere('LEFT(begin, 4)', true)->eq($year)
             ->orWhere('LEFT(end, 4)')->eq($year)
             ->markRight(1)
@@ -781,6 +782,7 @@ class reportModel extends model
             $executions += $this->dao->select('id,name')->from(TABLE_EXECUTION)
                 ->where('id')->in($teamExecutions + $taskExecutions)
                 ->andWhere('deleted')->eq(0)
+                ->andWhere('type')->eq('sprint')
                 ->orderBy('`order` desc')
                 ->fetchAll('id');
         }
