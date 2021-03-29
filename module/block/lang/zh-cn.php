@@ -336,7 +336,7 @@ $lang->block->availableBlocks->issue     = '我的问题';
 
 $lang->block->moduleList['project']   = '项目';
 $lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['execution'] = $lang->executionCommon;
+$lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = '测试';
 $lang->block->moduleList['todo']      = '待办';
 
@@ -376,9 +376,9 @@ $lang->block->modules['product']->availableBlocks->release   = '发布列表';
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = $lang->executionCommon . '统计';
-$lang->block->modules['execution']->availableBlocks->overview  = $lang->executionCommon . '总览';
-$lang->block->modules['execution']->availableBlocks->list      = $lang->executionCommon . '列表';
+$lang->block->modules['execution']->availableBlocks->statistic = $lang->execution->common . '统计';
+$lang->block->modules['execution']->availableBlocks->overview  = $lang->execution->common . '总览';
+$lang->block->modules['execution']->availableBlocks->list      = $lang->execution->common . '列表';
 $lang->block->modules['execution']->availableBlocks->task      = '任务列表';
 $lang->block->modules['execution']->availableBlocks->build     = '版本列表';
 

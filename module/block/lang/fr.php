@@ -336,7 +336,7 @@ $lang->block->availableBlocks->issue     = 'My Issues';
 
 $lang->block->moduleList['project']   = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['execution'] = $lang->executionCommon;
+$lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = 'Test';
 $lang->block->moduleList['todo']      = 'Todo';
 
@@ -376,9 +376,9 @@ $lang->block->modules['product']->availableBlocks->release   = 'Release';
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = $lang->executionCommon . ' Statistiques';
-$lang->block->modules['execution']->availableBlocks->overview  = $lang->executionCommon . " Vue d'ensemble";
-$lang->block->modules['execution']->availableBlocks->list      = $lang->executionCommon . ' Liste';
+$lang->block->modules['execution']->availableBlocks->statistic = $lang->execution->common . ' Statistiques';
+$lang->block->modules['execution']->availableBlocks->overview  = $lang->execution->common . " Vue d'ensemble";
+$lang->block->modules['execution']->availableBlocks->list      = $lang->execution->common . ' Liste';
 $lang->block->modules['execution']->availableBlocks->task      = 'Tâches';
 $lang->block->modules['execution']->availableBlocks->build     = 'Build';
 
