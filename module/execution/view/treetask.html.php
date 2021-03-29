@@ -32,7 +32,7 @@
       common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list', '', '', 'btn btn-info btn-icon');
       if(empty($task->team) or empty($task->children))
       {
-          common::printIcon('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'plus', '', 'btn btn-info btn-icon', '', '', $lang->task->children);
+          common::printIcon('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'split', '', 'btn btn-info btn-icon', '', '', $lang->task->children);
       }
       ?>
     </div>

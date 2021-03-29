@@ -20,7 +20,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
 <?php if(!isonlybody()):?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a($this->session->repoList, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-link'");?>
+    <?php echo html::a($this->session->repoList, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");?>
     <div class="divider"></div>
     <div class="page-title">
       <strong>
@@ -56,7 +56,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
         <div class='panel-actions'>
           <?php if($suffix != 'binary' and strpos($config->repo->images, "|$suffix|") === false):?>
           <?php 
-          if(common::hasPriv('repo', 'blame')) echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), html::icon('random') . $lang->repo->blame, '', "class='btn btn-sm btn-primary'");
+          if(common::hasPriv('repo', 'blame')) echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), html::icon('random') . $lang->repo->blame, '', "class='btn btn-sm btn-primary' data-app='{$app->openApp}'");
           if(common::hasPriv('repo', 'download')) echo html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodePath&fromRevision=$revision"), html::icon('download-alt') . $lang->repo->download, 'hiddenwin', "class='btn btn-sm btn-primary'");
           ?>
           <?php endif;?>
