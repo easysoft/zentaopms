@@ -229,7 +229,7 @@
             var $link= $('<a data-pos="bar"></a>')
                 .attr('data-app', appCode)
                 .attr('class', 'show-in-app')
-                .html(app.text);
+                .html('<span>' + app.text + '</span>');
             var barCount = $('#bars li').length;
 
             if(barCount) $bar = $('<li class="divider"></li>').appendTo($bars);
