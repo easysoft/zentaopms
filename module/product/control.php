@@ -1002,7 +1002,7 @@ class product extends control
         elseif($moduleName == 'execution')
         {
             $this->loadModel('execution')->setMenu($objectID);
-            if($testreport == '') $this->app->rawModule = $activeMenu;
+            $this->app->rawModule = $activeMenu;
             if($activeMenu == 'testreport') $this->lang->execution->menu->qa['subMenu']->testtask['subMenu']->testtask['subModule'] = 'product';
         }
 
