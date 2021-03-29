@@ -240,9 +240,9 @@ class testreport extends control
             $executionID = $this->commonAction($objectID, $objectType);
             if($executionID != $objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
-            $execution = $this->execution->getById($executionID);
-            $tasks     = $this->testtask->getExecutionTasks($executionID);
-            $owners    = array();
+            $execution     = $this->execution->getById($executionID);
+            $tasks         = $this->testtask->getExecutionTasks($executionID);
+            $owners        = array();
             $buildIdList   = array();
             $productIdList = array();
             foreach($tasks as $i => $task)

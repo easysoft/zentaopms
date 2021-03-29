@@ -47,8 +47,9 @@
     <tbody class='text-center'>
       <?php foreach($reports as $report):?>
       <tr>
-        <td><?php echo html::a(helper::createLink('testreport', 'view', "reportID=$report->id"), sprintf('%03d', $report->id));?></td>
-        <td class='text-left' title='<?php $report->title?>'><?php echo html::a(inlink('view', "reportID=$report->id"), $report->title)?></td>
+        <?php $viewLink = helper::createLink('testreport', 'view', "reportID=$report->id");?>
+        <td><?php echo html::a($viewLink, sprintf('%03d', $report->id), '', "data-app='{$this->app->openApp}'");?></td>
+        <td class='text-left' title='<?php $report->title?>'><?php echo html::a($viewLink, $report->title, '', "data-app='{$this->app->openApp}'")?></td>
         <td><?php echo zget($users, $report->createdBy);?></td>
         <td><?php echo substr($report->createdDate, 2);?></td>
         <?php $executionName = $report->execution ? '#' . $report->execution . $executions[$report->execution] : '';?>

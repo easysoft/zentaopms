@@ -15,8 +15,8 @@
 <?php include '../../common/view/chart.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php $browseLink = $this->session->reportList ? $app->session->reportList : $browseLink;?>
     <?php if(!isonlybody()):?>
-    <?php $browseLink  = $this->session->reportList != false ? $app->session->reportList : $browseLink;?>
     <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-primary'");?>
     <div class='divider'></div>
     <?php endif;?>
@@ -116,7 +116,7 @@
     <?php
     if(common::canBeChanged('report', $report))
     {
-        if(common::hasPriv('testreport', 'create')) echo html::a(inLink('create', "objectID=$report->objectID&objectType=$report->objectType&extra=$report->id"),  "<i class='icon-refresh'></i>", '', "class='btn' title='{$lang->testreport->recreate}'");
+        if(common::hasPriv('testreport', 'create')) echo html::a(inLink('create', "objectID=$report->objectID&objectType=$report->objectType&extra=$report->id"),  "<i class='icon-refresh'></i>", '', "class='btn' title='{$lang->testreport->recreate}' data-app='{$this->app->openApp}'");
         common::printIcon('testreport', 'edit', "reportID=$report->id", '', 'button');
         common::printIcon('testreport', 'delete', "reportID=$report->id", '', 'button', 'trash', 'hiddenwin');
     }

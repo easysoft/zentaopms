@@ -884,7 +884,11 @@ class testtask extends control
                 }
                 $this->send($response);
             }
-            die(js::locate(inlink('browse', "product=$task->product"), 'parent'));
+
+            $browseList = $this->createLink('testtask', 'browse', "productID=$task->product");
+            if($this->app->openApp == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
+            if($this->app->openApp == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
+            die(js::locate($browseList, 'parent'));
         }
     }
 

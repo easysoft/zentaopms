@@ -1038,6 +1038,7 @@ class execution extends control
     public function testtask($executionID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('testtask');
+        $this->app->loadLang('testreport');
 
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'execution');
