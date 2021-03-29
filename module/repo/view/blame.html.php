@@ -20,7 +20,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
     $backURI = $this->session->repoView ? $this->session->repoView : $this->session->repoList;
     if($backURI)
     {
-        echo html::a($backURI, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-link'");
+        echo html::a($backURI, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");
     }
     else
     {

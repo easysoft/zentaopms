@@ -57,7 +57,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
         <?php
         $prePage  = $pager->pageID == 1 ? 1 : $pager->pageID - 1;
         $nextPage = $pager->pageID == $pager->pageTotal ? $pager->pageID : $pager->pageID + 1;
-        $params   = "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&type=$logType&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+        $params   = "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&objectID=$objectID&type=$logType&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
         $preLink  = $this->repo->createLink('ajaxSideCommits', "$params&pageID=$prePage");
         $nextLink = $this->repo->createLink('ajaxSideCommits', "$params&pageID=$nextPage");
         echo html::a($preLink, "<i class='icon icon-angle-left'></i>", '', "class='ajaxPager btn" . ($prePage == $pager->pageID ? ' disabled' : '') . "'");
