@@ -250,6 +250,7 @@ class user extends control
 
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $this->app->loadLang('testcase');
 
