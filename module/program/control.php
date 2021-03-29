@@ -168,6 +168,8 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse')));
         }
 
+        $this->program->setMenu($programID);
+
         $program       = $this->program->getByID($programID);
         $parentProgram = $program->parent ? $this->program->getByID($program->parent) : '';
         $parents       = $this->program->getParentPairs();

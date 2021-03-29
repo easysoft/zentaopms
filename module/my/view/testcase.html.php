@@ -56,8 +56,8 @@
           <?php if($type == 'assigntome'):?>
           <th class='w-100px'>  <?php common::printOrderLink('task',     $orderBy, $vars, $lang->testtask->common);?></th>
           <?php endif;?>
-          <th class='w-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
-          <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='w-type'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
+          <th class='c-user'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='w-80px'>  <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
           <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
@@ -99,11 +99,11 @@
             <?php
             if($canBeChanged)
             {
-                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
-                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from={$app->rawMethod}&param=$caseID", $case, 'list', 'copy');
-                common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', true, "data-width='95%'", '', $case->project);
-                common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->project);
-                common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', '', '', '', '', $case->project);
+                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', '', '', "data-app='qa'");
+                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from={$app->rawMethod}&param=$caseID", $case, 'list', 'copy', '', '', '', "data-app='qa'");
+                common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', true, "data-width='95%' data-app='qa'", '', $case->project);
+                common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%' data-app='qa'", '', $case->project);
+                common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', 'iframe', "data-app='qa'", '', '', $case->project);
             }
             ?>
           </td>
