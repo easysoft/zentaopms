@@ -42,7 +42,7 @@
           </td>
           <?php else:?>
           <td>
-            <div class='input-group'>
+            <div class='input-group' id='productBox'>
               <?php printf($lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), $openApp);?>
             </div>
           </td>
