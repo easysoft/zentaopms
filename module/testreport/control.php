@@ -94,7 +94,7 @@ class testreport extends control
 
         $reports = $this->testreport->getList($objectID, $objectType, $extra, $orderBy, $pager);
 
-        if($objectType == 'execution' and isset($_POST['taskIdList']))
+        if(strpos('project|execution', $objectType) !== false and isset($_POST['taskIdList']))
         {
             $taskIdList = $_POST['taskIdList'];
             foreach($reports as $reportID => $report)
@@ -109,9 +109,9 @@ class testreport extends control
         {
             $param = '';
             if($objectType == 'product' and $extra) $param = "objectID=$extra&objectType=testtask";
-            if($objectType == 'project')
+            if(($objectType == 'project' or $objectType == 'execution') and ($extra or !empty($_POST['taskIdList'])))
             {
-                $param = "objectID=$objectID&objectType=project";
+                $param = "objectID=$objectID&objectType=$objectType";
                 if(isset($_POST['taskIdList'])) $param .= '&extra=' . join(',', $_POST['taskIdList']);
             }
             if($param) $this->locate($this->createLink('testreport', 'create', $param));
@@ -235,9 +235,9 @@ class testreport extends control
             $this->view->position[]  = $this->lang->testreport->create;
             $this->view->reportTitle = date('Y-m-d') . " TESTTASK#{$task->id} {$task->name} {$this->lang->testreport->common}";
         }
-        elseif($objectType == 'project')
+        elseif($objectType == 'execution')
         {
-            $executionID = $this->commonAction($objectID, 'execution');
+            $executionID = $this->commonAction($objectID, $objectType);
             if($executionID != $objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $execution = $this->execution->getById($executionID);
@@ -275,9 +275,9 @@ class testreport extends control
             $this->view->title       = $execution->name . $this->lang->testreport->create;
             $this->view->position[]  = html::a(inlink('browse', "objectID=$executionID&objectType=execution"), $execution->name);
             $this->view->position[]  = $this->lang->testreport->create;
-            $this->view->reportTitle = date('Y-m-d') . " PROJECT#{$execution->id} {$execution->name} {$this->lang->testreport->common}";
-
+            $this->view->reportTitle = date('Y-m-d') . " EXECUTION#{$execution->id} {$execution->name} {$this->lang->testreport->common}";
         }
+
         $cases   = $this->testreport->getTaskCases($tasks, $begin, $end);
         $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $begin, $end, $builds);
         $this->view->begin   = $begin;
@@ -316,12 +316,13 @@ class testreport extends control
     /**
      * Edit report
      *
-     * @param  int    $reportID
-     * @param  string $from
+     * @param  int       $reportID
+     * @param  string    $begin
+     * @param  string    $end
      * @access public
      * @return void
      */
-    public function edit($reportID, $from = 'product', $begin = '', $end ='')
+    public function edit($reportID, $begin = '', $end ='')
     {
         if($_POST)
         {
@@ -333,14 +334,15 @@ class testreport extends control
             $actionID   = $this->loadModel('action')->create('testreport', $reportID, 'Edited', $fileAction);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
-            die(js::locate(inlink('view', "reportID=$reportID&from=$from"), 'parent'));
+            die(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
         }
 
         $report    = $this->testreport->getById($reportID);
         $execution = $this->execution->getById($report->execution);
         $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $report->begin;
         $end       = !empty($end) ? date("Y-m-d", strtotime($end)) : $report->end;
-        if($from == 'product' and is_numeric($report->product))
+
+        if($this->app->openApp == 'qa' and !empty($report->product))
         {
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
@@ -350,12 +352,12 @@ class testreport extends control
             $this->view->position[] = html::a($browseLink, $product->name);
             $this->view->position[] = $this->lang->testreport->edit;
         }
-        else
+        elseif($this->app->openApp == 'execution')
         {
             $executionID = $this->commonAction($report->execution, 'execution');
             if($executionID != $report->objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
-            $browseLink = inlink('browse', "objectID=$executionID&objectType=project");
+            $browseLink = inlink('browse', "objectID=$executionID&objectType=execution");
             $this->view->position[] = html::a($browseLink, $execution->name);
             $this->view->position[] = $this->lang->testreport->edit;
         }
@@ -384,7 +386,7 @@ class testreport extends control
 
             $this->setChartDatas($report->objectID);
         }
-        else
+        elseif($report->objectType == 'execution')
         {
             $tasks = $this->testtask->getByList($report->tasks);
             $productIdList[$report->product] = $report->product;
@@ -402,7 +404,6 @@ class testreport extends control
         $this->view->title = $report->title . $this->lang->testreport->edit;
 
         $this->view->report        = $report;
-        $this->view->from          = $from;
         $this->view->begin         = $begin;
         $this->view->end           = $end;
         $this->view->stories       = $stories;
@@ -412,8 +413,8 @@ class testreport extends control
         $this->view->tasks         = join(',', array_keys($tasks));
         $this->view->storySummary  = $this->product->summary($stories);
 
-        $this->view->builds  = $builds;
-        $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
+        $this->view->builds = $builds;
+        $this->view->users  = $this->user->getPairs('noletter|noclosed|nodeleted');
 
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
@@ -434,7 +435,6 @@ class testreport extends control
      * View report.
      *
      * @param  int    $reportID
-     * @param  string $from
      * @param  string $tab
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -442,14 +442,14 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function view($reportID, $from = 'product', $tab = 'basic', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function view($reportID, $tab = 'basic', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $report  = $this->testreport->getById($reportID);
         if(!$report) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->session->project = $report->project;
 
         $execution = $this->execution->getById($report->execution);
-        if($from == 'product' and is_numeric($report->product))
+        if($this->app->openApp == 'qa' and !empty($report->product))
         {
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
@@ -458,12 +458,12 @@ class testreport extends control
             $browseLink = inlink('browse', "objectID=$productID&objectType=product");
             $this->view->position[] = html::a($browseLink, $product->name);
         }
-        else
+        elseif($this->app->openApp == 'execution')
         {
             $executionID = $this->commonAction($report->execution, 'execution');
             if($executionID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
-            $browseLink = inlink('browse', "objectID=$executionID&objectType=project");
+            $browseLink = inlink('browse', "objectID=$executionID&objectType=execution");
             $this->view->position[] = html::a($browseLink, $execution->name);
         }
 

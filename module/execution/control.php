@@ -958,9 +958,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testreport($executionID = 0, $objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testreport($executionID = 0, $objectType = 'execution', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-
+        echo $this->fetch('testreport', 'browse', "objectID=$executionID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -1041,6 +1041,7 @@ class execution extends control
 
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'execution');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;

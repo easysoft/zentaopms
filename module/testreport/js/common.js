@@ -52,6 +52,6 @@ function refreshPage()
     }
     else if(method == 'edit')
     {
-        location.href = createLink('testreport', 'edit', "reportID=" + reportID + "&from=" + from + "&begin=" + begin + "&end=" + end);
+        location.href = createLink('testreport', 'edit', "reportID=" + reportID + "&begin=" + begin + "&end=" + end);
     }
 }
