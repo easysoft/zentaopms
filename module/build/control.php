@@ -56,6 +56,11 @@ class build extends control
             $this->execution->setMenu($executionID);
             $this->session->set('project', $execution->project);
         }
+        elseif($this->app->openApp == 'qa')
+        {
+            $execution  = $this->execution->getByID($executionID);
+            $executions = $this->execution->getPairs($execution->project);
+        }
 
         $productGroups = $this->execution->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);

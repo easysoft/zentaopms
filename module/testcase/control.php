@@ -329,6 +329,10 @@ class testcase extends control
         {
             $this->loadModel('project')->setMenu($this->session->project);
         }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($this->session->execution);
+        }
         elseif($this->app->openApp == 'my')
         {
             $this->loadModel('my')->setMenu();

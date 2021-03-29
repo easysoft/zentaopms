@@ -2273,7 +2273,7 @@ class executionModel extends model
     public function manageMembers($executionID)
     {
         $execution = $this->getByID($executionID);
-        $data    = (array)fixer::input('post')->get();
+        $data      = (array)fixer::input('post')->get();
 
         extract($data);
         $executionType = strpos('sprint|stage', $execution->type) !== false ? 'execution' : $execution->type;
@@ -2372,7 +2372,9 @@ class executionModel extends model
     public function unlinkMember($sprintID, $account)
     {
         $sprint = $this->getByID($sprintID);
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$sprintID)->andWhere('type')->eq($sprint->type)->andWhere('account')->eq($account)->exec();
+        $type   = ($sprint->type == 'stage' || $sprint->type == 'sprint') ? 'execution' : $sprint->type;
+
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$sprintID)->andWhere('type')->eq($type)->andWhere('account')->eq($account)->exec();
         $this->updateUserView($sprintID, 'sprint', array($account));
 
         /* Remove team members from the sprint or stage, and determine whether to remove team members from the execution. */
@@ -2386,9 +2388,9 @@ class executionModel extends model
                 ->fetch();
             if(empty($teamMember))
             {
-                $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($sprint->execution)->andWhere('type')->eq('execution')->andWhere('account')->eq($account)->exec();
-                $this->loadModel('user')->updateUserView($sprint->execution, 'execution', array($account));
-                $linkedProducts = $this->loadModel('product')->getProductPairsByProject($sprint->execution);
+                $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($sprint->project)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+                $this->loadModel('user')->updateUserView($sprint->project, 'project', array($account));
+                $linkedProducts = $this->loadModel('product')->getProductPairsByProject($sprint->project);
                 if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
             }
         }

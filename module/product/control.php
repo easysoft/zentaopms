@@ -813,8 +813,10 @@ class product extends control
         {
             die(printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project'));
         }
-
-        die(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+        else
+        {
+            die(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+        }
     }
 
     /**
@@ -1000,7 +1002,7 @@ class product extends control
         elseif($moduleName == 'execution')
         {
             $this->loadModel('execution')->setMenu($objectID);
-            if($testreport == '') $this->app->rawModule = $activeMenu;
+            $this->app->rawModule = $activeMenu;
             if($activeMenu == 'testreport') $this->lang->execution->menu->qa['subMenu']->testtask['subMenu']->testtask['subModule'] = 'product';
         }
 

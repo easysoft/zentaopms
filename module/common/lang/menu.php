@@ -168,7 +168,7 @@ $lang->product->dividerMenu = $config->URAndSR ? ',requirement,set,' : ',track,s
 
 /* Project menu. */
 $lang->project->homeMenu = new stdclass();
-$lang->project->homeMenu->browse = array('link' => ($config->systemMode == 'new' ? $lang->project->list : $lang->executionCommon) . '|project|browse|', 'alias' => 'batchedit');
+$lang->project->homeMenu->browse = array('link' => ($config->systemMode == 'new' ? $lang->project->list : $lang->executionCommon) . '|project|browse|', 'alias' => 'batchedit,create');
 
 $lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
 
@@ -303,7 +303,7 @@ $lang->execution->menu->qa['subMenu']->qa         = array('link' => "$lang->dash
 $lang->execution->menu->qa['subMenu']->bug        = array('link' => "{$lang->bug->common}|execution|bug|executionID=%s", 'subModule' => 'bug');
 $lang->execution->menu->qa['subMenu']->testcase   = array('link' => "{$lang->testcase->shortCommon}|execution|testcase|executionID=%s", 'alias' => 'create');
 $lang->execution->menu->qa['subMenu']->testtask   = array('link' => "{$lang->testtask->common}|execution|testtask|executionID=%s", 'subModule' => 'testtask');
-$lang->execution->menu->qa['subMenu']->testreport = array('link' => "{$lang->testreport->common}|execution|testreport|browse|exeutionID=%s", 'subModule' => 'testreport');
+$lang->execution->menu->qa['subMenu']->testreport = array('link' => "{$lang->testreport->common}|execution|testreport|exeutionID=%s", 'subModule' => 'testreport');
 
 $lang->execution->menu->qa['menuOrder'][5]  = 'qa';
 $lang->execution->menu->qa['menuOrder'][10] = 'bug';

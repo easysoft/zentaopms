@@ -105,6 +105,11 @@ js::set('dittoNotice', $dittoNotice);
             {
                 $taskMembers = $members;
             }
+
+            if($tasks[$taskID]->assignedTo and !isset($taskMembers[$tasks[$taskID]->assignedTo]))
+            {
+                $taskMembers[$tasks[$taskID]->assignedTo] = $users[$tasks[$taskID]->assignedTo];
+            }
             ?>
             <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
             <td style='overflow:visible' title='<?php echo $tasks[$taskID]->name?>'>
@@ -119,7 +124,7 @@ js::set('dittoNotice', $dittoNotice);
                 </div>
               </div>
             </td>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$taskID]",     $modules, $tasks[$taskID]->module, "class='form-control chosen'")?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$taskID]", $modules, $tasks[$taskID]->module, "class='form-control chosen'")?></td>
             <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$taskID]", $taskMembers, $tasks[$taskID]->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></td>
             <td><?php echo html::select("types[$taskID]",    $typeList, $tasks[$taskID]->type, "class='form-control'");?></td>
             <td <?php echo zget($visibleFields, 'status',     "class='hidden'")?>><?php echo html::select("statuses[$taskID]", $statusList, $tasks[$taskID]->status, "class='form-control'");?></td>
