@@ -72,7 +72,7 @@ $lang->program->aclList['private'] = "Private (accessible to project portfolio h
 $lang->program->aclList['open']    = "Default(user who can visit the program can access it)";
 
 $lang->program->subAclList['private'] = "Private (accessible to this program set leader and stakeholders, stakeholders can follow up maintenance)";
-$lang->program->subAclList['open']    = "Default(user who can visit the program can access it)";
+$lang->program->subAclList['open']    = "Default (user who can visit the program can access it)";
 $lang->program->subAclList['program'] = "Open within the program (accessible to all higher-level program directors and affiliates, as well as to this program director and affiliates)";
 
 $lang->program->subAcls['private'] = 'Private';
