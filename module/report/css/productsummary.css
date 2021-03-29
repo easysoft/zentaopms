@@ -1,1 +1,3 @@
 td.child {padding-left: 15px;}
+#mainContent > .side-col.col-lg{width: 19%}
+.hide-sidebar #sidebar{width: 0 !important}
