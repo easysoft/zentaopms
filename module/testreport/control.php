@@ -165,6 +165,13 @@ class testreport extends control
             die(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
         }
 
+        /*
+        if($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($);
+        }
+         */
+
         if($objectType == 'testtask')
         {
             if(empty($objectID) and $extra) $productID = $extra;

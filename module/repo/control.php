@@ -80,6 +80,10 @@ class repo extends control
         $this->lang->switcherMenu = '';
         if(common::hasPriv('repo', 'create')) $this->lang->TRActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");
 
+        $repoID = $this->repo->saveState(0, $objectID);
+        $this->commonAction($repoID, $objectID);
+        $this->repo->setMenu($this->repos, $repoID, false);
+
         $repoList = $this->repo->getList(0, $orderBy);
 
         /* Pager. */
@@ -124,7 +128,7 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
 
         $this->app->loadLang('action');
-        $this->repo->setMenu($this->repos, '', false);
+        $this->repo->setMenu($this->repos, $repoID, false);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->position[] = $this->lang->repo->create;
@@ -330,6 +334,8 @@ class repo extends control
 
         $this->commonAction($repoID, $objectID);
 
+        /* Get path and refresh. */
+        if($this->get->repoPath) $path = $this->get->repoPath;
         if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;
 
         /* Set menu and session. */
@@ -617,7 +623,6 @@ class repo extends control
         $file  = $entry;
         $entry = $this->repo->decodePath($entry);
 
-        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
         $encoding  = empty($encoding) ? $repo->encoding : $encoding;
         $encoding  = strtolower(str_replace('_', '-', $encoding));
@@ -838,7 +843,7 @@ class repo extends control
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
-        $this->view->browseLink = $this->repo->createLink('browse', "repoID=$repoID&objectID=$objectID", '', false);
+        $this->view->browseLink = $this->repo->createLink('browse', "repoID=$repoID&branchID=$branch&objectID=$objectID", '', false);
         $this->display();
     }
 
@@ -990,6 +995,7 @@ class repo extends control
      *
      * @param  int    $repoID
      * @param  string $path
+     * @param  int    $objectID
      * @param  string $type
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -997,7 +1003,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxSideCommits($repoID, $path, $type = 'dir', $recTotal = 0, $recPerPage = 8, $pageID = 1)
+    public function ajaxSideCommits($repoID, $path, $objectID = 0,  $type = 'dir', $recTotal = 0, $recPerPage = 8, $pageID = 1)
     {
         if($this->get->repoPath) $path = $this->get->repoPath;
         $this->app->loadClass('pager', $static = true);
@@ -1013,6 +1019,7 @@ class repo extends control
         $this->view->revisions  = $revisions;
         $this->view->pager      = $pager;
         $this->view->repoID     = $repoID;
+        $this->view->objectID   = $objectID;
         $this->view->logType    = $type;
         $this->view->path       = urldecode($path);
         $this->display();
