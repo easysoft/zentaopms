@@ -689,7 +689,18 @@ class commonModel extends model
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
                         $subActive = '';
+                        $activeMainMenu = false;
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod))
+                        {
+                            $activeMainMenu = true;
+                        }
+                        else
+                        {
+                            $subModule = isset($dropMenuItem->subModule) ? explode(',', $dropMenuItem->subModule) : array();
+                            if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                        }
+
+                        if($activeMainMenu)
                         {
                             $activeMenu = $dropMenuName;
                             $active     = 'active';

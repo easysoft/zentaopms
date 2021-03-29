@@ -213,54 +213,6 @@ $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->
 $lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
 $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 
-/* Waterfall menu. */
-$lang->waterfall->menu = new stdclass();
-$lang->waterfall->menu->index       = array('link' => "$lang->dashboard|project|index|project=%s");
-$lang->waterfall->menu->programplan = array('link' => "{$lang->productplan->shortCommon}|programplan|browse|project=%s", 'subModule' => 'programplan');
-$lang->waterfall->menu->doc         = array('link' => "{$lang->doc->common}|doc|objectLibs|type=project&objectID=%s");
-$lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory');
-$lang->waterfall->menu->design      = array('link' => "$lang->design|design|browse|project=%s");
-$lang->waterfall->menu->devops      = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
-$lang->waterfall->menu->track       = array('link' => "$lang->track|projectstory|track", 'alias' => 'track');
-$lang->waterfall->menu->qa          = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
-$lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
-$lang->waterfall->menu->build       = array('link' => "{$lang->build->common}|project|build|project=%s");
-$lang->waterfall->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
-$lang->waterfall->menu->other       = array('link' => "$lang->other|workestimation|index|project=%s", 'class' => 'dropdown dropdown-hover');
-$lang->waterfall->menu->settings    = array('link' => "$lang->settings|project|view|project=%s", 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
-
-/* Waterfall menu order. */
-$lang->waterfall->menuOrder[5]  = 'index';
-$lang->waterfall->menuOrder[15] = 'programplan';
-$lang->waterfall->menuOrder[20] = 'projectstory';
-$lang->waterfall->menuOrder[25] = 'design';
-$lang->waterfall->menuOrder[30] = 'ci';
-$lang->waterfall->menuOrder[35] = 'track';
-$lang->waterfall->menuOrder[38] = 'review';
-$lang->waterfall->menuOrder[39] = 'cm';
-$lang->waterfall->menuOrder[40] = 'qa';
-$lang->waterfall->menuOrder[45] = 'doc';
-$lang->waterfall->menuOrder[50] = 'build';
-$lang->waterfall->menuOrder[55] = 'projectrelease';
-$lang->waterfall->menuOrder[60] = 'weekly';
-$lang->waterfall->menuOrder[65] = 'other';
-$lang->waterfall->menuOrder[68] = 'dynamic';
-$lang->waterfall->menuOrder[70] = 'projectsetting';
-
-$lang->waterfall->menu->qa['subMenu'] = new stdclass();
-$lang->waterfall->menu->qa['subMenu']->index    = array('link' => "$lang->dashboard|project|qa|projectID=%s");
-$lang->waterfall->menu->qa['subMenu']->bug      = array('link' => "{$lang->bug->common}|project|bug|projectID=%s", 'subModule' => 'bug');
-$lang->waterfall->menu->qa['subMenu']->testcase = array('link' => "{$lang->testcase->shortCommon}|project|testcase|projectID=%s", 'subModule' => 'testsuite,testcase,caselib');
-$lang->waterfall->menu->qa['subMenu']->testtask = array('link' => "{$lang->testtask->common}|project|testtask|projectID=%s", 'subModule' => 'testtask', 'class' => 'dropdown dropdown-hover');
-
-$lang->waterfall->menu->other['dropMenu'] = new stdclass();
-$lang->waterfall->menu->other['dropMenu']->estimation = array('link' => "$lang->estimation|workestimation|index|projectID=%s", 'subModule' => 'workestimation,durationestimation,budget');
-$lang->waterfall->menu->other['dropMenu']->issue      = array('link' => "$lang->issue|issue|browse|projectID=%s", 'subModule' => 'issue');
-$lang->waterfall->menu->other['dropMenu']->risk       = array('link' => "$lang->risk|risk|browse|projectID=%s", 'subModule' => 'risk');
-
-$lang->waterfall->menu->devops   = $lang->scrum->menu->devops;
-$lang->waterfall->menu->settings = $lang->scrum->menu->settings;
-
 /* Execution menu. */
 $lang->execution->homeMenu = new stdclass();
 $lang->execution->homeMenu->index = "$lang->dashboard|execution|index|";
