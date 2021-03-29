@@ -101,7 +101,7 @@
             {
                 common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
                 common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
-                common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
+                common::printIcon('testreport', 'browse',   "objectID=$task->execution&objectType=execution&extra=$task->id", $task, 'list','flag');
                 common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
                 if(common::hasPriv('testtask', 'delete', $task))
                 {

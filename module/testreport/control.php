@@ -355,7 +355,7 @@ class testreport extends control
         elseif($this->app->openApp == 'execution')
         {
             $executionID = $this->commonAction($report->execution, 'execution');
-            if($executionID != $report->objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($executionID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $browseLink = inlink('browse', "objectID=$executionID&objectType=execution");
             $this->view->position[] = html::a($browseLink, $execution->name);
