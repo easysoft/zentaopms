@@ -696,7 +696,7 @@ class commonModel extends model
                         }
                         else
                         {
-                            $subModule = isset($dropMenuItem->subModule) ? explode(',', $dropMenuItem->subModule) : array();
+                            $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
                             if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
                         }
 
