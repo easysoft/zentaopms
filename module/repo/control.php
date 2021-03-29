@@ -80,6 +80,10 @@ class repo extends control
         $this->lang->switcherMenu = '';
         if(common::hasPriv('repo', 'create')) $this->lang->TRActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");
 
+        $repoID = $this->repo->saveState(0, $objectID);
+        $this->commonAction($repoID, $objectID);
+        $this->repo->setMenu($this->repos, $repoID, false);
+
         $repoList = $this->repo->getList(0, $orderBy);
 
         /* Pager. */
@@ -124,7 +128,7 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
 
         $this->app->loadLang('action');
-        $this->repo->setMenu($this->repos, '', false);
+        $this->repo->setMenu($this->repos, $repoID, false);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->position[] = $this->lang->repo->create;
