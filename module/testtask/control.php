@@ -211,6 +211,10 @@ class testtask extends control
         {
             $this->loadModel('execution')->setMenu($executionID);
         }
+        elseif($this->app->openApp == 'qa')
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID);
+        }
 
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
@@ -219,7 +223,6 @@ class testtask extends control
 
         /* Set menu. */
         $productID  = $this->product->saveState($productID, $this->products);
-        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
