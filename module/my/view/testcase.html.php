@@ -87,7 +87,7 @@
           <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
           <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', $params), $case->title, null, "style='color: $case->color'");?></td>
           <?php if($type == 'assigntome'):?>
-          <td><?php echo $case->taskName;?></td>
+          <td class='c-name'><?php echo $case->taskName;?></td>
           <?php endif;?>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
