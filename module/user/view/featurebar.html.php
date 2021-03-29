@@ -39,9 +39,12 @@
     $active = $methodName == 'testcase' ? ' btn-active-text' : '';
     common::printLink('user', 'testcase', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
-    $label  = "<span class='text'>{$lang->user->execution}</span>";
-    $active = $methodName == 'execution' ? ' btn-active-text' : '';
-    common::printLink('user', 'execution',  "userID={$user->id}", $label, '', "class='btn btn-link $active'");
+    if($this->config->systemMode == 'new')
+    {
+        $label  = "<span class='text'>{$lang->user->execution}</span>";
+        $active = $methodName == 'execution' ? ' btn-active-text' : '';
+        common::printLink('user', 'execution',  "userID={$user->id}", $label, '', "class='btn btn-link $active'");
+    }
 
     if(isset($this->config->maxVersion))
     {
