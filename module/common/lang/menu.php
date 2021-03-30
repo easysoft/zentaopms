@@ -183,7 +183,6 @@ $lang->scrum->menu->devops    = array('link' => "{$lang->repo->common}|repo|brow
 $lang->scrum->menu->build     = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->scrum->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
-$lang->scrum->menu->other     = array('link' => "$lang->other|issue|browse|project=%s", 'class' => 'dropdown dropdown-hover');
 $lang->scrum->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
 /* Scrum menu order. */
@@ -195,7 +194,6 @@ $lang->scrum->menuOrder[25] = 'devops';
 $lang->scrum->menuOrder[30] = 'doc';
 $lang->scrum->menuOrder[35] = 'build';
 $lang->scrum->menuOrder[40] = 'release';
-$lang->scrum->menuOrder[45] = 'other';
 $lang->scrum->menuOrder[48] = 'dynamic';
 $lang->scrum->menuOrder[50] = 'settings';
 
