@@ -1452,11 +1452,21 @@ class projectModel extends model
     {
         if(empty($productID))
         {
+            $myExecutionIDList = array();
+            if($status == 'involved')
+            {
+                $myExecutionIDList = $this->dao->select('root')->from(TABLE_TEAM)
+                    ->where('account')->eq($this->app->user->account)
+                    ->andWhere('type')->eq('execution')
+                    ->fetchPairs();
+            }
+
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('type')->in('sprint,stage')
                 ->beginIF($projectID != 0)->andWhere('project')->eq($projectID)->fi()
+                ->beginIF(!empty($myExecutionIDList))->andWhere('id')->in(array_keys($myExecutionIDList))->fi()
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
-                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->eq($status)->fi()
+                ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('status')->eq($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('deleted')->eq('0')
                 ->orderBy($orderBy)
