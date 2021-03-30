@@ -55,10 +55,12 @@ class story extends control
         }
         else if($this->app->openApp == 'project')
         {
+            $objectID = empty($objectID) ? $this->session->project : $objectID;
             $this->project->setMenu($objectID);
         }
         else if($this->app->openApp == 'execution')
         {
+            $objectID = empty($objectID) ? $this->session->execution : $objectID;
             $this->execution->setMenu($objectID);
         }
 
@@ -523,7 +525,18 @@ class story extends control
 
         /* Set menu. */
         $this->lang->product->switcherMenu = $this->product->getSwitcher($product->id);
-        $this->product->setMenu($product->id, $story->branch);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        elseif($this->app->openApp == 'product')
+        {
+            $this->product->setMenu($product->id, $story->branch);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($this->session->execution);
+        }
 
         $this->story->replaceURLang($story->type);
 
@@ -957,14 +970,18 @@ class story extends control
         $this->story->replaceURLang($story->type);
 
         /* Set menu. */
-        if($from == 'project')
+        if($this->app->openApp == 'project')
         {
             $this->app->rawModule = 'projectstory';
-            $this->lang->navGroup->story = 'project';
+            $this->loadModel('project')->setMenu($this->session->project);
         }
-        else
+        elseif($this->app->openApp == 'product')
         {
             $this->product->setMenu($product->id, $story->branch);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($this->session->execution);
         }
 
         /* Set the review result options. */
