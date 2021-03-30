@@ -31,7 +31,7 @@
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('product', $product)):?>
-    <?php common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module}", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'"); ?>
+    <?php common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module},projectID={$bug->project},executionID={$bug->execution}", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'"); ?>
     <?php endif;?>
   </div>
   <?php endif;?>
@@ -67,7 +67,7 @@
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <?php
     $params        = "bugID=$bug->id";
-    $copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id";
+    $copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id,projectID={$bug->project},executionID={$bug->execution}";
     $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
     ?>
     <div class='main-actions'>
