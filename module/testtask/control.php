@@ -308,7 +308,14 @@ class testtask extends control
 
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->product->saveState($task->product, $this->products);
-        $this->loadModel('qa')->setMenu($this->products, $task->product);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $task->product);
+        }
         $this->app->rawModule = 'testcase';
 
         /* Save session. */
@@ -1259,7 +1266,14 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $this->loadModel('qa')->setMenu($this->products, $productID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID);
+        }
         $this->app->rawModule = 'testcase';
 
         $this->app->loadLang('job');
