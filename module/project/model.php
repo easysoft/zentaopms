@@ -1258,7 +1258,7 @@ class projectModel extends model
 
             if($id == 'budget')
             {
-                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->project->tenThousand : number_format((float)$project->budget, 1);
+                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? number_format((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : number_format((float)$project->budget, 2);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
 
                 $title = "title='$budgetTitle'";
