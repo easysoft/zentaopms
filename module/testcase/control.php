@@ -333,13 +333,6 @@ class testcase extends control
         {
             $this->loadModel('execution')->setMenu($this->session->execution);
         }
-        elseif($this->app->openApp == 'my')
-        {
-            $this->loadModel('my')->setMenu();
-            $this->lang->testcase->menu = $this->lang->my->menu->$from;
-            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'testcase';
-            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'testcase';
-        }
         else
         {
             $this->testcase->setMenu($this->products, $productID, $branch);
