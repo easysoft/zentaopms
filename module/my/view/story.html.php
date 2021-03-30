@@ -99,8 +99,8 @@
                 common::printIcon('story', 'change',     $vars, $story, 'list', 'alter');
                 common::printIcon('story', 'review',     $vars, $story, 'list', 'search');
                 common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-                common::printIcon('story', 'edit',       $vars, $story, 'list');
-                common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+                common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
+                common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
             }
             ?>
           </td>
