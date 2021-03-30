@@ -316,6 +316,7 @@ class programModel extends model
 
             if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $minChildBegin);
             if($maxChildEnd   and $program->end   < $maxChildEnd and $this->post->delta != 999) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild, $maxChildEnd);
+            if(dao::isError()) return false;
         }
 
         if($program->parent)
