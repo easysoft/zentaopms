@@ -16,7 +16,7 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo html::a(inlink($app->rawMethod, "mode=doc&type=openedbyme"),   "<span class='text'>{$lang->doc->openedByMe}</span>" . ($type == 'openedbyme'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'openedbyme'   ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink($app->rawMethod, "mode=doc&type=openedbyme"), "<span class='text'>{$lang->doc->openedByMe}</span>" . ($type == 'openedbyme' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedbyme' ? ' btn-active-text' : '') . "'");
     echo html::a(inlink($app->rawMethod, "mode=doc&type=editedbyme"), "<span class='text'>{$lang->doc->editedByMe}</span>" . ($type == 'editedbyme' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'editedbyme' ? ' btn-active-text' : '') . "'");
     ?>
   </div>
@@ -48,7 +48,7 @@
         <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
         <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
         <tr>
-          <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0&from={$lang->navGroup->doc}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title={$doc->title}");?></td>
+          <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0&from={$lang->navGroup->doc}", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title={$doc->title} class='iframe' data-width='90%'");?></td>
           <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
           <?php if($type != 'openedbyme'):?>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
