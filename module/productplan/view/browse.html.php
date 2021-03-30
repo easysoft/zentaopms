@@ -128,7 +128,18 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
         <td class='c-actions'>
           <?php
-          if(common::hasPriv('execution', 'create', $plan)) echo html::a('#projects', '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this)' class='btn' title='{$lang->productplan->createExecution}'");
+          if(common::hasPriv('execution', 'create', $plan))
+          {
+              $executionLink = $config->systemMode == 'new' ? '#projects' : $this->createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id");
+              if($config->systemMode == 'new')
+              {
+                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this)' class='btn' title='{$lang->productplan->createExecution}'");
+              }
+              else
+              {
+                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn' title='{$lang->productplan->createExecution}'");
+              }
+          }
           if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn' title='{$lang->productplan->linkStory}'");
           if(common::hasPriv('productplan', 'linkBug', $plan)) echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn' title='{$lang->productplan->linkBug}'");
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
