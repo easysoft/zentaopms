@@ -57,8 +57,8 @@
           <?php
           common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap', '', '', '', "data-app='qa'");
           common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt', '', 'iframe', true, "data-width='90%'");
-          common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
-          common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list', 'flag');
+          common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link', '', '', false, "data-app='qa'");
+          common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list', 'flag', '', '', false, "data-app='qa'");
           common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list', '', '', 'iframe', true, "data-width='90%'");
           if(common::hasPriv('testtask', 'delete', $task))
           {

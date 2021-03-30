@@ -96,7 +96,7 @@
             if($canBeChanged)
             {
                 $vars = "story={$story->id}";
-                common::printIcon('story', 'change',     $vars, $story, 'list', 'alter');
+                common::printIcon('story', 'change',     $vars, $story, 'list', 'alter', '', 'iframe', true);
                 common::printIcon('story', 'review',     $vars, $story, 'list', 'search');
                 common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");

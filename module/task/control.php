@@ -251,13 +251,13 @@ class task extends control
             die(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
         }
 
+        $execution = $this->execution->getById($executionID);
         if($this->config->systemMode == 'new')
         {
-            $project = $this->project->getByID($this->session->project);
+            $project = $this->project->getByID($execution->project);
             if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
         }
 
-        $execution = $this->execution->getById($executionID);
         if($this->app->openApp == 'my')
         {
             $taskLink = $this->createLink('my', 'work', 'mode=task');
