@@ -146,6 +146,13 @@ class group extends control
         $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
 
+        $navGroup = array();
+        foreach($this->lang->navGroup as $moduleName => $groupName)
+        {
+            if($groupName == $moduleName) continue;
+            $navGroup[$groupName][$moduleName] = $moduleName;
+        }
+        $this->view->navGroup = $navGroup;
 
         $this->display();
     }

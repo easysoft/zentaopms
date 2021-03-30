@@ -134,6 +134,12 @@ $(function()
     })
 
     $('#dataform .chosen').chosen();
+    $("#dataform .picker-select[data-pickertype!='remote']").picker({chosenMode: true});
+    $("#dataform [data-pickertype='remote']").each(function()
+    {
+        var pickerremote = $(this).attr('data-pickerremote');
+        $(this).picker({chosenMode: true, remote: pickerremote});
+    })
 
     // hide #parent chosen dropdown on root dropdown show
     $('#root').on('chosen:showing_dropdown', function()
@@ -144,8 +150,8 @@ $(function()
 
 /**
  * Load branches by product.
- * 
- * @param  object $obj 
+ *
+ * @param  object $obj
  * @access public
  * @return void
  */

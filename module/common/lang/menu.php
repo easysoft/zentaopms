@@ -457,22 +457,15 @@ $lang->navGroup->productplan = 'product';
 $lang->navGroup->release     = 'product';
 $lang->navGroup->branch      = 'product';
 $lang->navGroup->story       = 'product';
-$lang->navGroup->tree        = 'product';
 
 $lang->navGroup->project     = 'project';
-$lang->navGroup->testcase    = 'project';
-$lang->navGroup->testtask    = 'project';
-$lang->navGroup->testreport  = 'project';
-$lang->navGroup->testsuite   = 'project';
-$lang->navGroup->caselib     = 'project';
-$lang->navGroup->feedback    = 'project';
 $lang->navGroup->deploy      = 'project';
 $lang->navGroup->stakeholder = 'project';
 
+$lang->navGroup->projectbuild   = 'project';
 $lang->navGroup->projectstory   = 'project';
 $lang->navGroup->review         = 'project';
 $lang->navGroup->reviewissue    = 'project';
-$lang->navGroup->milestone      = 'project';
 $lang->navGroup->pssp           = 'project';
 $lang->navGroup->auditplan      = 'project';
 $lang->navGroup->cm             = 'project';
@@ -480,6 +473,7 @@ $lang->navGroup->nc             = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->build          = 'project';
 $lang->navGroup->measrecord     = 'project';
+$lang->navGroup->milestone      = 'project';
 
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
@@ -494,12 +488,20 @@ $lang->navGroup->bug        = 'qa';
 $lang->navGroup->testcase   = 'qa';
 $lang->navGroup->testtask   = 'qa';
 $lang->navGroup->automation = 'qa';
+$lang->navGroup->testreport = 'qa';
+$lang->navGroup->testcase   = 'qa';
+$lang->navGroup->testtask   = 'qa';
+$lang->navGroup->testsuite  = 'qa';
+$lang->navGroup->caselib    = 'qa';
 
 $lang->navGroup->devops  = 'devops';
 $lang->navGroup->repo    = 'devops';
 $lang->navGroup->job     = 'devops';
 $lang->navGroup->jenkins = 'devops';
 $lang->navGroup->compile = 'devops';
+$lang->navGroup->ci      = 'devops';
+$lang->navGroup->svn     = 'devops';
+$lang->navGroup->git     = 'devops';
 
 $lang->navGroup->company       = 'system';
 $lang->navGroup->sqlbuilder    = 'system';

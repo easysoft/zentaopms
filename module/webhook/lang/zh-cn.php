@@ -9,6 +9,8 @@ $lang->webhook->chooseDept = '选择同步部门';
 $lang->webhook->assigned   = '指派给';
 $lang->webhook->setting    = '设置';
 
+$lang->webhook->logAction = 'Webhook日志';
+
 $lang->webhook->browse = '浏览Webhook';
 $lang->webhook->create = '添加Webhook';
 $lang->webhook->edit   = '编辑Webhook';

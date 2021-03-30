@@ -55,7 +55,7 @@
             <?php
             if($config->systemMode == 'new')
             {
-                echo html::a($this->createLink('project', explode('-', $config->projectLink)[1], 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');
+                echo html::a($this->createLink('project', 'index', 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');
             }
             else
             {
