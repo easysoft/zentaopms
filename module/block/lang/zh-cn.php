@@ -148,6 +148,10 @@ $lang->block->default['scrum']['project']['2']['title'] = $lang->executionCommon
 $lang->block->default['scrum']['project']['2']['block'] = 'scrumlist';
 $lang->block->default['scrum']['project']['2']['grid']  = 8;
 
+$lang->block->default['scrum']['project']['2']['params']['type']    = 'undone';
+$lang->block->default['scrum']['project']['2']['params']['count']   = '20';
+$lang->block->default['scrum']['project']['2']['params']['orderBy'] = 'id_desc';
+
 $lang->block->default['scrum']['project']['3']['title'] = '待测版本';
 $lang->block->default['scrum']['project']['3']['block'] = 'scrumtest';
 $lang->block->default['scrum']['project']['3']['grid']  = 8;
