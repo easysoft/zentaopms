@@ -9,7 +9,7 @@
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        https://www.zentao.pm
  */
-$lang->release->common           = 'Release';
+$lang->release->common           = 'Product Release';
 $lang->release->create           = "Créer Release";
 $lang->release->edit             = "Editer Release";
 $lang->release->linkStory        = "Intégrer Story";

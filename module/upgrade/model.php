@@ -3998,6 +3998,46 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('story')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->module = 'projectstory';
+            $grouppriv->method = 'story';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('story')->andWhere('method')->eq('view')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->module = 'projectstory';
+            $grouppriv->method = 'view';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('linkstory')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->module = 'projectstory';
+            $grouppriv->method = 'linkstory';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('unlinkstory')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->module = 'projectstory';
+            $grouppriv->method = 'unlinkstory';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('execution')->andWhere('method')->eq('all')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->module = 'project';
+            $grouppriv->method = 'execution';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
         return true;
     }
 

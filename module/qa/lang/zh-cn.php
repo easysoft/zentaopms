@@ -10,3 +10,5 @@
  * @link        http://www.zentao.net
  */
 $lang->qa->index  = '测试主页';
+
+$lang->qa->indexAction = '测试仪表盘';

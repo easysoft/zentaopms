@@ -41,6 +41,13 @@ $lang->my->testtask        = '我的测试单';
 $lang->my->testcase        = '我的用例';
 $lang->my->storyConcept    = $config->URAndSR ? '默认需求概念组合' : '默认需求概念';
 
+$lang->my->indexAction      = '地盘仪表盘';
+$lang->my->calendarAction   = '我的日程';
+$lang->my->workAction       = '我的待处理';
+$lang->my->contributeAction = '我的贡献';
+$lang->my->profileAction    = '个人档案';
+$lang->my->dynamicAction    = '动态';
+
 $lang->my->myExecutions = "我参与的阶段/冲刺/迭代";
 $lang->my->name         = '名称';
 $lang->my->code         = '代号';

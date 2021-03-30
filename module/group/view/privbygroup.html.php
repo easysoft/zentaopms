@@ -56,14 +56,14 @@
     <?php foreach($lang->mainNav as $module => $title):?>
     <?php if(!is_string($title)) continue;?>
     <?php $active = $menu == $module ? 'btn-active-text' : '';?>
-    <?php echo html::a(inlink('managePriv', sprintf($params, $module)), "<span class='text'>" . substr($title, 0, strpos($title, '|')) . '</span>', '', "class='btn btn-link $active'")?>
+    <?php echo html::a(inlink('managePriv', sprintf($params, $module)), "<span class='text'>" . strip_tags(substr($title, 0, strpos($title, '|'))) . '</span>', '', "class='btn btn-link $active'")?>
     <?php endforeach;?>
 
     <?php $active = $menu == 'other' ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), "<span class='text'>{$lang->group->other}</span>", '', "class='btn btn-link $active'");?>
 
     <div class='input-control space w-150px'>
-    <?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control chosen'");?>
+      <?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control chosen'");?>
     </div>
   </div>
 </div>
