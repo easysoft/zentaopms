@@ -82,7 +82,7 @@
                   </tr>
                   <tr>
                     <th class="w-80px"><?php echo $lang->product->status;?></th>
-                    <td><strong><?php echo $this->processStatus('product', $product);?></strong></td>
+                    <td class="<?php echo $product->status;?>"><strong><?php echo zget($lang->product->statusList, $product->status);?></strong></td>
                     <th><?php echo $lang->product->acl;?></th>
                     <td><strong><?php echo $lang->product->aclList[$product->acl];?></strong></td>
                   </tr>
