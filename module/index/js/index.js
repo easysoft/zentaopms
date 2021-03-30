@@ -458,6 +458,9 @@
                 $item.removeClass('hidden');
             }
         });
+
+        /* The magic number "111" is the space between dropdown trigger
+           btn and the bottom of screen */
         $list.css('top', moreMenuHeight > 111 ? 111 - moreMenuHeight : '');
         $menuNav.toggleClass('show-more-nav', showMoreMenu);
 
