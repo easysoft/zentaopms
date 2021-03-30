@@ -29,7 +29,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('execution', $execution)):?>
-    <?php common::printLink('testtask', 'create', "product=0&executionID=$executionID&build=&projectID=$execution->project", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('testtask', 'create', "product=0&executionID=$executionID&build=0&projectID=$execution->project", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
 </div>

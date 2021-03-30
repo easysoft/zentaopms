@@ -20,11 +20,17 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    function create($projectID)
+    function create($projectID = 0)
     {
+        if($this->post->execution)
+        {
+            $execution = $this->loadModel('execution')->getByID($this->post->execution);
+            $projectID = $execution->project;
+        }
+
         $task = fixer::input('post')
             ->setDefault('build', '')
-            ->setIF($this->config->systemMode == 'new' and $this->app->openApp != 'qa', 'project', $projectID)
+            ->setIF($this->config->systemMode == 'new', 'project', $projectID)
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('uid,contactListMenu')

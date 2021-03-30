@@ -146,9 +146,10 @@ class testreportModel extends model
     public function getList($objectID, $objectType, $extra = '', $orderBy = 'id_desc', $pager = null)
     {
         $objectID = (int)$objectID;
-        return $this->dao->select('*')->from(TABLE_TESTREPORT)->where('deleted')->eq(0)
+        return $this->dao->select('*')->from(TABLE_TESTREPORT)
+            ->where('deleted')->eq(0)
             ->beginIF($objectType == 'execution')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('execution')->fi()
-            ->beginIF($objectType == 'project')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('project')->fi()
+            ->beginIF($objectType == 'project')->andWhere('project')->eq($objectID)->andWhere('objectType')->eq('execution')->fi()
             ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
             ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()
             ->orderBy($orderBy)

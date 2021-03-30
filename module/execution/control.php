@@ -947,10 +947,11 @@ class execution extends control
     }
 
     /**
-     * Execution case list.
+     * List of test reports for the execution.
      *
      * @param  int    $executionID
-     * @param  string $type
+     * @param  string $objectType   project|execution|product
+     * @param  string $extra
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
