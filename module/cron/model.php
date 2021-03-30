@@ -35,6 +35,7 @@ class cronModel extends model
         return $this->dao->select('*')->from(TABLE_CRON)
             ->where('1=1')
             ->beginIF(strpos($params, 'nostop') !== false)->andWhere('status')->ne('stop')->fi()
+            ->beginIF(!isset($this->config->maxVersion))->andWhere('command')->notlike("%moduleName=weekly&%")->fi()
             ->fetchAll('id');
     }
 

@@ -24,6 +24,7 @@
   </div>
 </div>
 <?php endif;?>
+
 <div id='mainContent' class='main-table'>
   <?php if(empty($reports)):?>
   <div class="table-empty-tip">
@@ -43,12 +44,12 @@
         <th class='c-actions-2'> <?php echo $lang->actions;?></th>
       </tr>
     </thead>
-    <?php if($reports):?>
     <tbody class='text-center'>
       <?php foreach($reports as $report):?>
       <tr>
-        <td><?php echo html::a(helper::createLink('testreport', 'view', "reportID=$report->id"), sprintf('%03d', $report->id));?></td>
-        <td class='text-left' title='<?php $report->title?>'><?php echo html::a(inlink('view', "reportID=$report->id&from=$objectType"), $report->title)?></td>
+        <?php $viewLink = helper::createLink('testreport', 'view', "reportID=$report->id");?>
+        <td><?php echo html::a($viewLink, sprintf('%03d', $report->id), '', "data-app='{$this->app->openApp}'");?></td>
+        <td class='text-left' title='<?php $report->title?>'><?php echo html::a($viewLink, $report->title, '', "data-app='{$this->app->openApp}'")?></td>
         <td><?php echo zget($users, $report->createdBy);?></td>
         <td><?php echo substr($report->createdDate, 2);?></td>
         <?php $executionName = $report->execution ? '#' . $report->execution . $executions[$report->execution] : '';?>
@@ -70,9 +71,6 @@
       </tr>
       <?php endforeach;?>
     </tbody>
-    <?php else:?>
-    <tbody><tr><td colspan='7'><?php echo $lang->testreport->noReport;?></td></tr></tbody>
-    <?php endif;?>
   </table>
   <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
   <?php endif;?>

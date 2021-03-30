@@ -20,11 +20,17 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    function create($projectID)
+    function create($projectID = 0)
     {
+        if($this->post->execution)
+        {
+            $execution = $this->loadModel('execution')->getByID($this->post->execution);
+            $projectID = $execution->project;
+        }
+
         $task = fixer::input('post')
             ->setDefault('build', '')
-            ->setIF($this->config->systemMode == 'new' and $this->app->openApp != 'qa', 'project', $projectID)
+            ->setIF($this->config->systemMode == 'new', 'project', $projectID)
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('uid,contactListMenu')
@@ -72,7 +78,6 @@ class testtaskModel extends model
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.execution = t5.project and t1.product = t5.product')
 
             ->where('t1.deleted')->eq(0)
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.auto')->ne('unit')
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()

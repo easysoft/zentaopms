@@ -4135,6 +4135,7 @@ class upgradeModel extends model
                 $lineID = $this->dao->lastInsertID();
                 $path   = ",$lineID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+                $this->dao->delete()->from(TABLE_MODULE)->where('`root`')->eq(0)->andWhere('`type`')->eq('line')->exec();
 
                 if(dao::isError()) return false;
             }

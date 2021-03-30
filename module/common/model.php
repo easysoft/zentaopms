@@ -689,7 +689,18 @@ class commonModel extends model
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
                         $subActive = '';
+                        $activeMainMenu = false;
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod))
+                        {
+                            $activeMainMenu = true;
+                        }
+                        else
+                        {
+                            $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                            if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                        }
+
+                        if($activeMainMenu)
                         {
                             $activeMenu = $dropMenuName;
                             $active     = 'active';
@@ -1761,6 +1772,7 @@ EOD;
             if(!commonModel::hasDBPriv($object, $module, $method)) return false;
 
             if(empty($acls['views'])) return true;
+            $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
             $menu = strtolower($menu);
             if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
             if($menu == 'my' or $menu == 'index' or $module == 'tree') return true;

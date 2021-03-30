@@ -33,6 +33,7 @@ $lang->story->subdivide          = '细分';
 $lang->story->link               = '关联';
 $lang->story->unlink             = '移除';
 $lang->story->track              = '跟踪矩阵';
+$lang->story->trackAB            = '矩阵';
 $lang->story->processStoryChange = '处理需求变更';
 $lang->story->splitRequirent     = '拆分';
 $lang->story->close              = '关闭';

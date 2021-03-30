@@ -288,8 +288,6 @@ class bug extends control
     {
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
-        $this->qa->setMenu($this->products, $productID);
-
         /* Unset discarded types. */
         foreach($this->config->bug->discardedTypes as $type) unset($this->lang->bug->typeList[$type]);
 
@@ -297,7 +295,18 @@ class bug extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
 
-        if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
+        if($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($output['executionID']);
+        }
+        else if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($output['projectID']);
+        }
+        else
+        {
+            $this->qa->setMenu($this->products, $productID);
+        }
 
         foreach($output as $paramKey => $paramValue)
         {
@@ -376,7 +385,7 @@ class bug extends control
             {
                 $location = $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
             }
-            if(isset($output['projectID']))
+            elseif(isset($output['projectID']))
             {
                 $location = $this->createLink('project', 'bug', "projectID={$output['projectID']}");
             }
@@ -496,7 +505,7 @@ class bug extends control
 
         /* Get products and projects. */
         $products = $this->products;
-        $projects = array('' => '');
+        $projects = array(0 => '');
         if($projectID)
         {
             $products    = array();

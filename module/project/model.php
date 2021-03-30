@@ -248,7 +248,8 @@ class projectModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($queryType == 'bystatus' and $param != 'all')->andWhere('status')->eq($param)->fi()
+            ->beginIF($queryType == 'bystatus' and $param == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+            ->beginIF($queryType == 'bystatus' and $param != 'all' and $param != 'undone')->andWhere('status')->eq($param)->fi()
             ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
             ->orderBy($orderBy)
             ->limit($limit)
@@ -1257,7 +1258,7 @@ class projectModel extends model
 
             if($id == 'budget')
             {
-                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->project->tenThousand : number_format((float)$project->budget, 1);
+                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? number_format((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : number_format((float)$project->budget, 2);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
 
                 $title = "title='$budgetTitle'";
@@ -1452,11 +1453,21 @@ class projectModel extends model
     {
         if(empty($productID))
         {
+            $myExecutionIDList = array();
+            if($status == 'involved')
+            {
+                $myExecutionIDList = $this->dao->select('root')->from(TABLE_TEAM)
+                    ->where('account')->eq($this->app->user->account)
+                    ->andWhere('type')->eq('execution')
+                    ->fetchPairs();
+            }
+
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('type')->in('sprint,stage')
                 ->beginIF($projectID != 0)->andWhere('project')->eq($projectID)->fi()
+                ->beginIF(!empty($myExecutionIDList))->andWhere('id')->in(array_keys($myExecutionIDList))->fi()
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
-                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->eq($status)->fi()
+                ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('status')->eq($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('deleted')->eq('0')
                 ->orderBy($orderBy)

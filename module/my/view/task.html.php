@@ -123,8 +123,8 @@
                     common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->project);
 
                     common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true, '', '', $task->project);
-                    common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list', '', '', '', '', 'data-group="execution"', '', $task->project);
-                    common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'split', '', '', '', 'data-group="project"', $this->lang->task->children, $task->project);
+                    common::printIcon('task', 'edit', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, "data-width='95%'", '', $task->project);
+                    common::printIcon('task', 'batchCreate', "executionID=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'split', '', 'iframe', true, "data-width='95%'", $this->lang->task->children, $task->project);
                 }
             }
             ?>
@@ -186,7 +186,7 @@
 
                       common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true, '', '', $child->project);
                       common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list', '', '', '', '', 'data-group="execution"', '', $child->project);
-                      common::printIcon('task', 'batchCreate', "project=$child->project&storyID=$child->story&moduleID=$child->module&taskID=$child->id&ifame=0", $child, 'list', 'split', '', '', '', 'data-group="project"', $this->lang->task->children, $child->project);
+                      common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=0", $child, 'list', 'split', '', 'iframe', true, 'data-group="execution"', $this->lang->task->children, $child->project);
                   }
               }
               ?>

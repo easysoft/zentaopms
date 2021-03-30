@@ -29,7 +29,6 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('project', $project)):?>
-    <?php //common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag muted');?>
     <?php common::printLink('testtask', 'create', "product=0&executionID=0&build=0&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
@@ -91,15 +90,14 @@
             <?php
             if($canBeChanged)
             {
-                common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-                common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
-                common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
-                common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
-                if(common::hasPriv('testtask', 'delete', $task))
+                common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
+                common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
+                if(common::hasPriv('execution', 'testreport'))
                 {
-                    $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
+                    echo html::a($this->createLink('testreport', 'browse', "objectID=$task->product&objectType=product&extra=$task->id"), '<i class="icon-testreport-browse icon-flag"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="qa"');
                 }
+                common::printIcon('testtask', 'edit',   "taskID=$task->id", $task, 'list');
+                common::printIcon('testtask', 'delete', "taskID=$task->id", $task, 'list', 'trash', 'hiddenwin');
             }
             ?>
           </td>

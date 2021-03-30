@@ -13,7 +13,7 @@ $lang->program->children  = '子项目集';
 $lang->program->parent    = '父项目集';
 $lang->program->allInput  = '项目集总投入';
 $lang->program->teamCount = '项目集成员';
-$lang->program->longTime  = '长期项目集';
+$lang->program->longTime  = '长期';
 $lang->program->view      = '项目集详情';
 
 /* Actions. */
@@ -75,7 +75,7 @@ $lang->program->aclList['open']    = "公开（有项目集视图权限，即可
 
 $lang->program->subAclList['private'] = "私有（本项目集负责人和干系人可访问，干系人可后续维护）";
 $lang->program->subAclList['open']    = "全部公开（有项目集视图权限，即可访问）";
-$lang->program->subAclList['program'] = "项目集内公开 (所有上级项目集负责人和干系人、本项目集负责人和干系人可访问）";
+$lang->program->subAclList['program'] = "项目集内公开（所有上级项目集负责人和干系人、本项目集负责人和干系人可访问）";
 
 $lang->program->subAcls['private'] = '私有';
 $lang->program->subAcls['open']    = '全部公开';

@@ -104,7 +104,7 @@
           <?php
           if($canBeChanged)
           {
-              $params = "bugID=$bug->id";
+              $params = "bugID=$bug->id,executionID={$execution->id}";
               common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true);
               common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
               common::printIcon('bug', 'close',      $params, $bug, 'list', '',        '', 'iframe', true);

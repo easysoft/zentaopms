@@ -305,7 +305,7 @@ class executionModel extends model
             ->setDefault('openedVersion', $this->config->version)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('team', substr($this->post->name,0, 30))
+            ->setDefault('team', substr($this->post->name, 0, 30))
             ->setIF($this->config->systemMode == 'new', 'parent', $this->post->project)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
@@ -1810,7 +1810,6 @@ class executionModel extends model
 
         $bugToTasks = fixer::input('post')->get();
         $bugs       = $this->bug->getByList(array_keys($bugToTasks->import));
-        $projectID  = $this->loadModel('task')->getProjectID($executionID);
         foreach($bugToTasks->import as $key => $value)
         {
             $bug = zget($bugs, $key, '');
@@ -1818,7 +1817,7 @@ class executionModel extends model
 
             $task = new stdClass();
             $task->bug          = $bug;
-            $task->project      = $projectID;
+            $task->project      = $execution->project;
             $task->execution    = $executionID;
             $task->story        = $bug->story;
             $task->storyVersion = $bug->storyVersion;
@@ -2236,7 +2235,8 @@ class executionModel extends model
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.account')->eq($account)
             ->andWhere('t1.root')->ne($currentExecution)
-            ->andWhere('t1.type')->eq($execution->type)
+            ->andWhere('t1.type')->eq('execution')
+            ->andWhere('t2.project')->eq($execution->project)
             ->andWhere('t2.deleted')->eq('0')
             ->groupBy('t1.root')
             ->orderBy('t1.root DESC')
@@ -2273,7 +2273,7 @@ class executionModel extends model
     public function manageMembers($executionID)
     {
         $execution = $this->getByID($executionID);
-        $data    = (array)fixer::input('post')->get();
+        $data      = (array)fixer::input('post')->get();
 
         extract($data);
         $executionType = strpos('sprint|stage', $execution->type) !== false ? 'execution' : $execution->type;
@@ -2372,7 +2372,9 @@ class executionModel extends model
     public function unlinkMember($sprintID, $account)
     {
         $sprint = $this->getByID($sprintID);
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$sprintID)->andWhere('type')->eq($sprint->type)->andWhere('account')->eq($account)->exec();
+        $type   = ($sprint->type == 'stage' || $sprint->type == 'sprint') ? 'execution' : $sprint->type;
+
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$sprintID)->andWhere('type')->eq($type)->andWhere('account')->eq($account)->exec();
         $this->updateUserView($sprintID, 'sprint', array($account));
 
         /* Remove team members from the sprint or stage, and determine whether to remove team members from the execution. */
@@ -2386,9 +2388,9 @@ class executionModel extends model
                 ->fetch();
             if(empty($teamMember))
             {
-                $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($sprint->execution)->andWhere('type')->eq('execution')->andWhere('account')->eq($account)->exec();
-                $this->loadModel('user')->updateUserView($sprint->execution, 'execution', array($account));
-                $linkedProducts = $this->loadModel('product')->getProductPairsByProject($sprint->execution);
+                $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($sprint->project)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+                $this->loadModel('user')->updateUserView($sprint->project, 'project', array($account));
+                $linkedProducts = $this->loadModel('product')->getProductPairsByProject($sprint->project);
                 if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
             }
         }

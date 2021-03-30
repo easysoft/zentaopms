@@ -9,17 +9,34 @@ $(function()
         var title = $titleInput.val();
         var value = $(this).find('option:selected').text();
 
-        var lang = config.clientLang;
-        if(lang.indexOf('zh') >= 0)
+        if($blocksList.find('#moduleBlock').val() == 'scrumtest' && $('#paramstype').val() != 'all')
         {
-            blockTitle = blockTitle.replace(preValue, value);
-            $titleInput.val(blockTitle);
+            console.log($('#paramstype').val());
+            $titleInput.val(value);
         }
         else
         {
-            var preIndex = blockTitle.indexOf(of + preValue);
-            if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
-            $titleInput.val(blockTitle + of + value);
+            var lang = config.clientLang;
+            if(lang.indexOf('zh') >= 0)
+            {
+                console.log(preValue, blockTitle);
+                console.log(blockTitle.indexOf(preValue));
+                if(blockTitle.indexOf(preValue) >= 0)
+                {
+                    blockTitle = blockTitle.replace(preValue, value);
+                }
+                else
+                {
+                    if(blockTitle.indexOf(preValue) < 0)  blockTitle = value + of + title;;
+                }
+                $titleInput.val(blockTitle);
+            }
+            else
+            {
+                var preIndex = blockTitle.indexOf(of + preValue);
+                if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
+                $titleInput.val(blockTitle + of + value);
+            }
         }
 
         preValue = value;
@@ -51,8 +68,15 @@ $(function()
             var preIndex = blockTitle.indexOf(' - ' + preValue);
             if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
 
-            var lang = config.clientLang;
-            if(blockTitle.indexOf(of) < 0) lang.indexOf('zh') >= 0 ? $titleInput.val(preValue + of + blockTitle) : $titleInput.val(blockTitle + of + preValue);
+            if($blocksList.find('#moduleBlock').val() == 'scrumtest')
+            {
+                $titleInput.val(preValue);
+            }
+            else
+            {
+                var lang = config.clientLang;
+                if(!title && blockTitle.indexOf(of) < 0) lang.indexOf('zh') >= 0 ? $titleInput.val(preValue + of + blockTitle) : $titleInput.val(blockTitle + of + preValue);
+            }
         }
     };
 

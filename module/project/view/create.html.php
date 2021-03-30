@@ -80,7 +80,7 @@
           <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <?php if($model == 'scrum'):?>
-        <tr>
+        <tr id='daysDiv'>
           <th><?php echo $lang->execution->days;?></th>
           <td>
             <div class='input-group'>

@@ -281,7 +281,7 @@ class project extends control
                     $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
                 }
 
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'create', '', '', '', $projectID)));
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=0&browseType=all", '', '', $projectID)));
             }
         }
 
@@ -770,6 +770,24 @@ class project extends control
     }
 
     /**
+     * List of test reports for the project.
+     *
+     * @param  int    $projectID
+     * @param  string $objectType   project|execution|product
+     * @param  string $extra
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function testreport($projectID = 0, $objectType = 'project', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        echo $this->fetch('testreport', 'browse', "objectID=$projectID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
      * Project test task list.
      *
      * @param  int    $projectID
@@ -783,9 +801,11 @@ class project extends control
     public function testtask($projectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('testtask');
+        $this->app->loadLang('testreport');
 
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $this->project->setMenu($projectID);
 

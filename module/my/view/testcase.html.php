@@ -87,7 +87,7 @@
           <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
           <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', $params), $case->title, null, "style='color: $case->color'");?></td>
           <?php if($type == 'assigntome'):?>
-          <td><?php echo $case->taskName;?></td>
+          <td class='c-name'><?php echo $case->taskName;?></td>
           <?php endif;?>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
@@ -100,10 +100,10 @@
             if($canBeChanged)
             {
                 common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', '', '', "data-app='qa'");
-                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from={$app->rawMethod}&param=$caseID", $case, 'list', 'copy', '', '', '', "data-app='qa'");
-                common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', true, "data-width='95%' data-app='qa'", '', $case->project);
-                common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%' data-app='qa'", '', $case->project);
-                common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', 'iframe', "data-app='qa'", '', '', $case->project);
+                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from={$app->rawMethod}&param=$caseID", $case, 'list', 'copy', '', 'iframe', true, "data-width='95%'");
+                common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', true, "data-width='95%'", '', $case->project);
+                common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->project);
+                common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', 'iframe', true, "data-width='95%'", '', $case->project);
             }
             ?>
           </td>

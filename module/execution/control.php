@@ -947,10 +947,11 @@ class execution extends control
     }
 
     /**
-     * Execution case list.
+     * List of test reports for the execution.
      *
      * @param  int    $executionID
-     * @param  string $type
+     * @param  string $objectType   project|execution|product
+     * @param  string $extra
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -958,9 +959,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testreport($executionID = 0, $objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testreport($executionID = 0, $objectType = 'execution', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-
+        echo $this->fetch('testreport', 'browse', "objectID=$executionID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -1038,9 +1039,11 @@ class execution extends control
     public function testtask($executionID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('testtask');
+        $this->app->loadLang('testreport');
 
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'execution');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -1191,6 +1194,7 @@ class execution extends control
     {
         if($this->app->openApp == 'project')
         {
+            if(!empty($copyExecutionID)) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch('project');
             $project = $this->project->getByID($projectID);
             $model   = $project->model;
 
@@ -2570,7 +2574,7 @@ class execution extends control
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('id')->in($this->app->user->view->sprints)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('project')->in(array_keys($projects))
+            ->beginIF($this->config->systemMode == 'new')->andWhere('project')->in(array_keys($projects))->fi()
             ->orderBy('id_desc')
             ->fetchGroup('project', 'id');
 
@@ -2579,15 +2583,29 @@ class execution extends control
             ->andWhere('type')->eq('execution')
             ->fetchGroup('root', 'account');
 
-        foreach($projects as $project)
+        if($this->config->systemMode == 'new')
         {
-            $executions = zget($executionGroups, $project->id, array());
-
-            foreach($executions as $execution)
+            foreach($projects as $project)
             {
-                if(isset($orderedExecutions[$execution->parent])) unset($orderedExecutions[$execution->parent]);
-                $execution->teams = zget($teams, $execution->id, array());
-                $orderedExecutions[$execution->id] = $execution;
+                $executions = zget($executionGroups, $project->id, array());
+
+                foreach($executions as $execution)
+                {
+                    if(isset($orderedExecutions[$execution->parent])) unset($orderedExecutions[$execution->parent]);
+                    $execution->teams = zget($teams, $execution->id, array());
+                    $orderedExecutions[$execution->id] = $execution;
+                }
+            }
+        }
+        else
+        {
+            foreach($executionGroups as $projectID => $executions)
+            {
+                foreach($executions as $execution)
+                {
+                    $execution->teams = zget($teams, $execution->id, array());
+                    $orderedExecutions[$execution->id] = $execution;
+                }
             }
         }
 

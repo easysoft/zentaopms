@@ -251,14 +251,21 @@ class task extends control
             die(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
         }
 
+        $execution = $this->execution->getById($executionID);
         if($this->config->systemMode == 'new')
         {
-            $project = $this->project->getByID($this->session->project);
+            $project = $this->project->getByID($execution->project);
             if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
         }
 
-        $execution = $this->execution->getById($executionID);
-        $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID&tab=task");
+        if($this->app->openApp == 'my')
+        {
+            $taskLink = $this->createLink('my', 'work', 'mode=task');
+        }
+        else
+        {
+            $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID");
+        }
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
@@ -279,7 +286,7 @@ class task extends control
 
             /* Locate the browser. */
             if(!empty($iframe)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $storyLink));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
         }
 
         /* Set Custom*/

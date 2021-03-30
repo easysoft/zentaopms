@@ -49,7 +49,7 @@ class testcase extends control
             $products  = $this->loadModel('project')->getProducts($projectID, false);
         }
         if($this->app->openApp == 'execution') $products = $this->loadModel('execution')->getProducts($this->session->execution, false);
-        if($this->app->openApp == 'qa' or $this->app->openApp == 'my') $products = $this->product->getPairs();
+        if($this->app->openApp == 'qa' or $this->app->openApp == 'my' or $this->app->openApp == 'product') $products = $this->product->getPairs();
         $this->view->products = $this->products = $products;
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName={$this->app->openApp}&activeMenu=testcase&projectID=$projectID")));
     }
@@ -302,7 +302,7 @@ class testcase extends control
 
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
-            if($this->app->openApp == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->PRJ);
+            if($this->app->openApp == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->project);
             if($this->app->openApp == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
 
             $this->executeHooks($caseID);
@@ -329,12 +329,9 @@ class testcase extends control
         {
             $this->loadModel('project')->setMenu($this->session->project);
         }
-        elseif($this->app->openApp == 'my')
+        elseif($this->app->openApp == 'execution')
         {
-            $this->loadModel('my')->setMenu();
-            $this->lang->testcase->menu = $this->lang->my->menu->$from;
-            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'testcase';
-            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'testcase';
+            $this->loadModel('execution')->setMenu($this->session->execution);
         }
         else
         {

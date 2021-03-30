@@ -37,6 +37,8 @@ class testtask extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        $this->loadModel('product');
+
         /* Get product data. */
         $projectID = 0;
         if($this->app->openApp == 'project')
@@ -45,7 +47,7 @@ class testtask extends control
             $products  = $this->loadModel('project')->getProducts($projectID, false);
         }
         if($this->app->openApp == 'execution') $products = $this->loadModel('execution')->getProducts($this->session->execution, false);
-        if($this->app->openApp == 'qa' or $this->app->openApp == 'my') $products = $this->loadModel('product')->getPairs();
+        if($this->app->openApp == 'qa' or $this->app->openApp == 'my') $products = $this->product->getPairs();
         $this->view->products = $this->products = $products;
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName={$this->app->openApp}&activeMenu=testtask&projectID=$projectID")));
     }
@@ -211,6 +213,10 @@ class testtask extends control
         {
             $this->loadModel('execution')->setMenu($executionID);
         }
+        elseif($this->app->openApp == 'qa')
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID);
+        }
 
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
@@ -219,7 +225,6 @@ class testtask extends control
 
         /* Set menu. */
         $productID  = $this->product->saveState($productID, $this->products);
-        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -303,7 +308,14 @@ class testtask extends control
 
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->product->saveState($task->product, $this->products);
-        $this->loadModel('qa')->setMenu($this->products, $task->product);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $task->product);
+        }
         $this->app->rawModule = 'testcase';
 
         /* Save session. */
@@ -879,7 +891,11 @@ class testtask extends control
                 }
                 $this->send($response);
             }
-            die(js::locate(inlink('browse', "product=$task->product"), 'parent'));
+
+            $browseList = $this->createLink('testtask', 'browse', "productID=$task->product");
+            if($this->app->openApp == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
+            if($this->app->openApp == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
+            die(js::locate($browseList, 'parent'));
         }
     }
 
@@ -1250,7 +1266,14 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $this->loadModel('qa')->setMenu($this->products, $productID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID);
+        }
         $this->app->rawModule = 'testcase';
 
         $this->app->loadLang('job');

@@ -29,8 +29,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('execution', $execution)):?>
-    <?php common::printIcon('testreport', 'browse', "objectID=$executionID&objectType=execution", '', 'button','flag muted');?>
-    <?php common::printLink('testtask', 'create', "product=0&executionID=$executionID&build=&projectID=$execution->project", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('testtask', 'create', "product=0&executionID=$executionID&build=0&projectID=$execution->project", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
 </div>
@@ -40,7 +39,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span>
       <?php if(common::canModify('execution', $execution) and common::hasPriv('testtask', 'create')):?>
-      <?php echo html::a($this->createLink('testtask', 'create', "product=0&execution=$executionID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('testtask', 'create', "product=0&execution=$executionID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info' data-app='execution'");?>
       <?php endif;?>
     </p>
   </div>
@@ -100,15 +99,14 @@
             <?php
             if($canBeChanged)
             {
-                common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-                common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
-                common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
-                common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
-                if(common::hasPriv('testtask', 'delete', $task))
+                common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
+                common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
+                if(common::hasPriv('execution', 'testreport'))
                 {
-                    $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
+                    echo html::a($this->createLink('testreport', 'browse', "objectID=$task->product&objectType=product&extra=$task->id"), '<i class="icon-testreport-browse icon-flag"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="qa"');
                 }
+                common::printIcon('testtask', 'edit',   "taskID=$task->id", $task, 'list');
+                common::printIcon('testtask', 'delete', "taskID=$task->id", $task, 'list', 'trash', 'hiddenwin');
             }
             ?>
           </td>
@@ -132,7 +130,7 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
       <?php
-      $actionLink = $this->createLink('testreport', 'browse', "objectID=$executionID&objctType=execution");
+      $actionLink = $this->createLink('execution', 'testreport', "objectID=$executionID&objctType=execution");
       $misc       = common::hasPriv('testreport', 'browse') ? "onclick=\"setFormAction('$actionLink', '', '#testtaskForm')\"" : "disabled='disabled'";
       echo html::commonButton($lang->testreport->common, $misc);
       ?>

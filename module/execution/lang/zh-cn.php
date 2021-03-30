@@ -198,9 +198,9 @@ $lang->execution->deleteAB          = "删除执行";
 $lang->execution->browse            = "浏览执行";
 $lang->execution->list              = "{$lang->executionCommon}列表";
 $lang->execution->edit              = "编辑{$lang->executionCommon}";
-$lang->execution->editAB            = "编辑执行";
+$lang->execution->editAction        = "编辑执行";
 $lang->execution->batchEdit         = "编辑";
-$lang->execution->batchEditAB       = "批量编辑";
+$lang->execution->batchEditAction   = "批量编辑";
 $lang->execution->manageMembers     = '团队管理';
 $lang->execution->unlinkMember      = '移除成员';
 $lang->execution->unlinkStory       = "移除{$lang->SRCommon}";
@@ -220,6 +220,7 @@ $lang->execution->importPlanStory   = '创建' . $lang->executionCommon . '成�
 $lang->execution->iteration         = '版本迭代';
 $lang->execution->iterationInfo     = '迭代%s次';
 $lang->execution->viewAll           = '查看所有';
+$lang->execution->testreport        = '测试报告';
 
 /* 分组浏览。*/
 $lang->execution->allTasks     = '所有';

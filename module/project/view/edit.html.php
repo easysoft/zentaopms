@@ -83,7 +83,7 @@
           <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <?php if($project->model == 'scrum'):?>
-        <tr>
+        <tr id='daysDiv' <?php if($project->end == LONG_TIME) echo "class='hidden'";?>>
           <th><?php echo $lang->project->days;?></th>
           <td>
             <div class='input-group'>

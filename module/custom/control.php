@@ -284,8 +284,8 @@ class custom extends control
 
         if($moduleName == 'doc')
         {
-            unset($requiredFields['createLib']);
-            unset($requiredFields['editLib']);
+            unset($requiredFields['createlib']);
+            unset($requiredFields['editlib']);
         }
 
         $this->view->title      = $this->lang->custom->required;

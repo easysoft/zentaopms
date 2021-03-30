@@ -312,7 +312,7 @@ class productModel extends model
             ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->orderBy($orderBy . 't2.order desc')
+            ->orderBy($orderBy . 't2.order asc')
             ->fetchAll('id');
     }
 
@@ -425,7 +425,7 @@ class productModel extends model
         /* init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
         {
-            $storyMethods = ",track,create,batchcreate,batchclose,";
+            $storyMethods = ",track,create,batchcreate,batchclose,zerocase,";
             if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
             if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
         }
@@ -832,7 +832,7 @@ class productModel extends model
         $projectList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
-            ->andWhere('t2.type')->eq('project')
+            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
             ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($this->cookie->involved or $involved)
@@ -1559,6 +1559,10 @@ class productModel extends model
             elseif($module == 'story' && $method == 'report')
             {
                 $link = helper::createLink($module, 'report', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&extra=$extra");
+            }
+            elseif($module == 'bug' && $method == 'view')
+            {
+                $link = helper::createLink('bug', 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&extra=$extra");
             }
             else
             {

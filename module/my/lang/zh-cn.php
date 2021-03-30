@@ -86,7 +86,8 @@ $lang->my->form->lblAccount = '帐号信息';
 $lang->my->programLink   = '项目集默认着陆页';
 $lang->my->productLink   = '产品默认着陆页';
 $lang->my->projectLink   = '项目默认着陆页';
-$lang->my->executionLink = '执行默认着陆页';
+if($config->systemMode == 'classic') $lang->my->executionLink = $lang->executionCommon . '默认着陆页';
+if($config->systemMode == 'new') $lang->my->executionLink = '执行默认着陆页';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '默认进入项目集列表，可以查看所有的项目集';
@@ -105,6 +106,10 @@ $lang->my->projectLinkList['project-execution'] = '默认进入项目下所有�
 $lang->my->projectLinkList['project-index']     = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
 
 $lang->my->executionLinkList = array();
-$lang->my->executionLinkList['execution-index'] = '默认进入执行仪表盘，可以了解所有执行的统计数据和概况';
-$lang->my->executionLinkList['execution-all']   = '默认进入执行列表，可以查看所有的执行';
-$lang->my->executionLinkList['execution-task']  = '默认进入最近一个执行的任务列表，可以查看当前迭代下的任务信息';
+if($config->systemMode == 'new')
+{
+    $lang->my->executionLinkList['execution-task']  = '默认进入最近一个执行的任务列表，可以查看当前迭代下的任务信息';
+    $lang->my->executionLinkList['execution-index'] = '默认进入执行仪表盘，可以了解所有执行的统计数据和概况';
+    $lang->my->executionLinkList['execution-all']   = '默认进入执行列表，可以查看所有的执行';
+}
+if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = "默认进入最近一个{$lang->executionCommon}的任务列表，可以查看当前{$lang->executionCommon}下的任务信息";

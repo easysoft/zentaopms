@@ -164,8 +164,8 @@ class upgrade extends control
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
 
-            if($mode == 'old') $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
-            if($mode == 'new') $this->locate(inlink('mergeTips'));
+            if($mode == 'classic') $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
+            if($mode == 'new')     $this->locate(inlink('mergeTips'));
         }
 
         $this->view->title = $this->lang->upgrade->to15Guide;

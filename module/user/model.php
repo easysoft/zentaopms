@@ -1022,15 +1022,18 @@ class userModel extends model
      * @param  string $account
      * @param  string $type project|execution
      * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
     public function getExecutions($account, $type = 'execution', $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        if($type == 'execution') $type = 'sprint,stage';
+        $projectType    = $type == 'execution' ? 'sprint,stage' : $type;
         $myProjectsList = $this->dao->select('t1. *,t2. *')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.type')->in($type)
+            ->andWhere('t2.type')->in($projectType)
             ->beginIF(strpos('doing|wait|suspended|closed', $status) !== false)->andWhere('status')->eq($status)->fi()
             ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()

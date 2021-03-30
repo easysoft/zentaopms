@@ -2,4 +2,5 @@
 .branch-list > li {float: left; list-style: none; width: 50%; margin: 5px 0;}
 .data-basic.table-data tbody > tr > th {width: 100px;}
 .col-12 .cell table td {word-wrap: break-word; word-break: normal;}
+td.normal {color: #00da88;}
 .row > .col-sm-12:first-child {padding-bottom: 20px;}

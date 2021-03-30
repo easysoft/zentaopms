@@ -1330,7 +1330,7 @@ class block extends control
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $count = isset($this->params->count) ? (int)$this->params->count : 15;
-        $type  = isset($this->params->type) ? $this->params->type : 'all';
+        $type  = isset($this->params->type) ? $this->params->type : 'undone';
 
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $count, 1);
