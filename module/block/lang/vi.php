@@ -339,7 +339,8 @@ $lang->block->availableBlocks->testtask  = 'Yêu cầu';
 $lang->block->availableBlocks->risk      = 'My Risks';
 $lang->block->availableBlocks->issue     = 'My Issues';
 
-$lang->block->moduleList['project']   = 'Project';
+global $config;
+if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = 'QA';
