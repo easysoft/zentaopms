@@ -24,7 +24,7 @@ $(function()
     {
         var projectID = $('#project').val();
         var planID    = $('#planID').val();
-        parent.location.href = createLink('execution', 'create', 'productID=' + productID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&projectID=' + projectID);
+        parent.location.href = createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID);
     });
 });
 $(document).on('click', 'td.content .more', function(e)
