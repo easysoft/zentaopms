@@ -12,7 +12,8 @@ $(function()
         var lang = config.clientLang;
         if(lang.indexOf('zh') >= 0)
         {
-            blockTitle = blockTitle.replace(preValue, value);
+            if(blockTitle.indexOf(preValue) >= 0) blockTitle = blockTitle.replace(preValue, value);
+            if(blockTitle.indexOf(preValue) < 0)  blockTitle = value + of + blockTitle;;
             $titleInput.val(blockTitle);
         }
         else

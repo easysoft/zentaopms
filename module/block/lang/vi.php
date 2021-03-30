@@ -494,7 +494,7 @@ $lang->block->typeList->execution['all']      = 'Tất cả';
 $lang->block->typeList->execution['involved'] = 'Liên đới';
 
 $lang->block->typeList->scrum['undone']   = 'Unfinished';
-$lang->block->typeList->scrum['doing']    = 'Ongoing中';
+$lang->block->typeList->scrum['doing']    = 'Ongoing';
 $lang->block->typeList->scrum['all']      = 'All';
 $lang->block->typeList->scrum['involved'] = 'Involved';
 
