@@ -279,10 +279,11 @@ $lang->block->default['full']['my']['3']['grid']            = 4;
 $lang->block->default['full']['my']['3']['source']          = 'todo';
 $lang->block->default['full']['my']['3']['params']['count'] = '20';
 
-$lang->block->default['full']['my']['4']['title']  = '项目统计';
-$lang->block->default['full']['my']['4']['block']  = 'statistic';
-$lang->block->default['full']['my']['4']['source'] = 'project';
-$lang->block->default['full']['my']['4']['grid']   = 8;
+$lang->block->default['full']['my']['4']['title']           = '项目统计';
+$lang->block->default['full']['my']['4']['block']           = 'statistic';
+$lang->block->default['full']['my']['4']['source']          = 'project';
+$lang->block->default['full']['my']['4']['grid']            = 8;
+$lang->block->default['full']['my']['4']['params']['count'] = '20';
 
 $lang->block->default['full']['my']['5']['title']  = '我的贡献';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';

@@ -148,6 +148,10 @@ $lang->block->default['scrum']['project']['2']['title'] = $lang->executionCommon
 $lang->block->default['scrum']['project']['2']['block'] = 'scrumlist';
 $lang->block->default['scrum']['project']['2']['grid']  = 8;
 
+$lang->block->default['scrum']['project']['2']['params']['type']    = 'undone';
+$lang->block->default['scrum']['project']['2']['params']['count']   = '20';
+$lang->block->default['scrum']['project']['2']['params']['orderBy'] = 'id_desc';
+
 $lang->block->default['scrum']['project']['3']['title'] = 'Test Version';
 $lang->block->default['scrum']['project']['3']['block'] = 'scrumtest';
 $lang->block->default['scrum']['project']['3']['grid']  = 8;
@@ -275,10 +279,11 @@ $lang->block->default['full']['my']['3']['grid']            = 4;
 $lang->block->default['full']['my']['3']['source']          = 'todo';
 $lang->block->default['full']['my']['3']['params']['count'] = '20';
 
-$lang->block->default['full']['my']['4']['title']  = 'Project Statistic';
-$lang->block->default['full']['my']['4']['block']  = 'statistic';
-$lang->block->default['full']['my']['4']['source'] = 'project';
-$lang->block->default['full']['my']['4']['grid']   = 8;
+$lang->block->default['full']['my']['4']['title']           = 'Project Statistic';
+$lang->block->default['full']['my']['4']['block']           = 'statistic';
+$lang->block->default['full']['my']['4']['source']          = 'project';
+$lang->block->default['full']['my']['4']['grid']            = 8;
+$lang->block->default['full']['my']['4']['params']['count'] = '20';
 
 $lang->block->default['full']['my']['5']['title']  = 'Personal Contribution';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';
