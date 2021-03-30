@@ -47,16 +47,16 @@
 
         appsMap['search'] =
         {
-            active: false,
-            code: "search",
-            group: "search",
-            icon: "icon-search",
-            methodName: "index",
-            moduleName: "search",
-            text: searchCommon,
-            title: "<i class='icon icon-search'></i> " + searchCommon,
-            url: "/index.php?m=search&f=index",
-            vars: ""
+            active:     false,
+            code:       'search',
+            group:      'search',
+            icon:       'icon-search',
+            methodName: 'index',
+            moduleName: 'search',
+            text:       searchCommon,
+            title:      '<i class="icon icon-search"></i> ' + searchCommon,
+            url:        '/index.php?m=search&f=index',
+            vars:       ''
         };
     }
 
@@ -169,7 +169,7 @@
             if(appsMap[url])
             {
                 appCode = url;
-                url = '';
+                url     = '';
             }
             else
             {
@@ -182,7 +182,7 @@
         $.cookie('openApp', appCode, {expires: config.cookieLife, path: config.webRoot});
 
         /* Highlight at main menu */
-        var $menuMainNav = $('#menuMainNav');
+        var $menuMainNav   = $('#menuMainNav');
         var $lastActiveNav = $menuMainNav.find('li.active');
         if($lastActiveNav.data('app') !== appCode)
         {
@@ -223,7 +223,7 @@
 
         /* Update task bar */
         var $bars = $('#bars');
-        var $bar = $('#appBar-' + appCode);
+        var $bar  = $('#appBar-' + appCode);
         if(!$bar.length)
         {
             var $link= $('<a data-pos="bar"></a>')
@@ -413,7 +413,7 @@
         getAppCode: getAppCodeFromUrl,
         getLastApp: getLastApp,
         openedApps: openedApps,
-        appsMap:  appsMap
+        appsMap:    appsMap
     };
 
     /**
@@ -595,7 +595,7 @@ $.extend(
             }
             else
             {
-                var types = objectType.split('-');
+                var types        = objectType.split('-');
                 var searchModule = types[0];
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
                 var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
@@ -611,12 +611,11 @@ $.extend(
 /* Initialize global search. */
 $(function()
 {
-    var reg = /[^0-9]/;
+    var reg           = /[^0-9]/;
     var $searchbox    = $('#searchbox');
     var $typeSelector = $searchbox.find('.input-group-btn');
     var $dropmenu     = $typeSelector.children('.dropdown-menu');
     var $searchQuery  = $('#globalSearchInput');
-    var searchType    = $('#searchType').val();
 
     var toggleMenu = function(show)
     {
