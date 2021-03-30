@@ -165,13 +165,6 @@ class testreport extends control
             die(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
         }
 
-        /*
-        if($this->app->openApp == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($);
-        }
-         */
-
         if($objectType == 'testtask')
         {
             if(empty($objectID) and $extra) $productID = $extra;
@@ -352,12 +345,20 @@ class testreport extends control
             $this->view->position[] = html::a($browseLink, $product->name);
             $this->view->position[] = $this->lang->testreport->edit;
         }
-        elseif($this->app->openApp == 'execution')
+        elseif($this->app->openApp == 'execution' or $this->app->openApp == 'project')
         {
-            $executionID = $this->commonAction($report->execution, 'execution');
-            if($executionID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($this->app->openApp == 'execution')
+            {
+                $objectID = $this->commonAction($report->execution, 'execution');
+                if($objectID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            }
+            else
+            {
+                $objectID = $this->commonAction($report->project, 'project');
+                if($objectID != $report->project) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            }
 
-            $browseLink = inlink('browse', "objectID=$executionID&objectType=execution");
+            $browseLink = inlink('browse', "objectID=$objectID&objectType=execution");
             $this->view->position[] = html::a($browseLink, $execution->name);
             $this->view->position[] = $this->lang->testreport->edit;
         }
@@ -458,12 +459,20 @@ class testreport extends control
             $browseLink = inlink('browse', "objectID=$productID&objectType=product");
             $this->view->position[] = html::a($browseLink, $product->name);
         }
-        elseif($this->app->openApp == 'execution')
+        elseif($this->app->openApp == 'execution' or $this->app->openApp == 'project')
         {
-            $executionID = $this->commonAction($report->execution, 'execution');
-            if($executionID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($this->app->openApp == 'execution')
+            {
+                $objectID = $this->commonAction($report->execution, 'execution');
+                if($objectID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            }
+            else
+            {
+                $objectID = $this->commonAction($report->project, 'project');
+                if($objectID != $report->project) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            }
 
-            $browseLink = inlink('browse', "objectID=$executionID&objectType=execution");
+            $browseLink = inlink('browse', "objectID=$objectID&objectType=execution");
             $this->view->position[] = html::a($browseLink, $execution->name);
         }
 

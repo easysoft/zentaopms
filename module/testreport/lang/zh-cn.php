@@ -65,7 +65,7 @@ $lang->testreport->buildSummary   = '共测试了<strong>%s</strong>个版本。
 $lang->testreport->confirmDelete  = '是否删除该报告？';
 $lang->testreport->moreNotice     = '更多功能可以参考禅道扩展机制进行扩展，也可以联系我们进行定制。';
 $lang->testreport->exportNotice   = "由<a href='https://www.zentao.net' target='_blank' style='color:grey'>禅道项目管理软件</a>导出";
-$lang->testreport->noReport       = "暂无报告，请到测试单下生成测试报告。";
+$lang->testreport->noReport       = "暂无报告，请选择测试单生成测试报告。";
 $lang->testreport->foundBugTip    = "影响版本在测试轮次内，并且创建时间在测试时间范围内产生的Bug数。";
 $lang->testreport->legacyBugTip   = "Bug状态是激活，或Bug的解决时间在测试结束时间之后。";
 $lang->testreport->fromCaseBugTip = "测试时间范围内，用例执行失败后创建的Bug。";
