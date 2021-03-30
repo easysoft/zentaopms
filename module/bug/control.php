@@ -505,7 +505,7 @@ class bug extends control
 
         /* Get products and projects. */
         $products = $this->products;
-        $projects = array('' => '');
+        $projects = array(0 => '');
         if($projectID)
         {
             $products    = array();
