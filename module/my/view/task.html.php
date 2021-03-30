@@ -124,7 +124,7 @@
 
                     common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true, '', '', $task->project);
                     common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list', '', '', '', '', 'data-group="execution"', '', $task->project);
-                    common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'split', '', '', '', 'data-group="project"', $this->lang->task->children, $task->project);
+                    common::printIcon('task', 'batchCreate', "executionID=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'split', '', '', '', 'data-group="project"', $this->lang->task->children, $task->project);
                 }
             }
             ?>
