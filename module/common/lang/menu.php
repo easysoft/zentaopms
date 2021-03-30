@@ -50,7 +50,7 @@ $lang->mainNav->menuOrder[50] = 'admin';
 $lang->my->menu = new stdclass();
 $lang->my->menu->index      = array('link' => "$lang->dashboard|my|index");
 $lang->my->menu->calendar   = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
-$lang->my->menu->work       = array('link' => "{$lang->my->work}|my|work|mode=task");
+$lang->my->menu->work       = array('link' => "{$lang->my->work}|my|work|mode=task", 'subModule' => 'task');
 if($config->systemMode == 'new') $lang->my->menu->project = array('link' => "{$lang->project->common}|my|project|");
 $lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|execution|type=undone");
 $lang->my->menu->contribute = array('link' => "$lang->contribute|my|contribute|mode=task");
@@ -71,7 +71,7 @@ $lang->my->menuOrder[45] = 'score';
 $lang->my->menuOrder[50] = 'contacts';
 
 $lang->my->menu->work['subMenu'] = new stdclass();
-$lang->my->menu->work['subMenu']->task     = "{$lang->task->common}|my|work|mode=task";
+$lang->my->menu->work['subMenu']->task     = array('link' => "{$lang->task->common}|my|work|mode=task", 'subModule' => 'task');
 if($config->URAndSR) $lang->my->menu->work['subMenu']->requirement = "$lang->URCommon|my|work|mode=requirement";
 $lang->my->menu->work['subMenu']->story    = "$lang->SRCommon|my|work|mode=story";
 $lang->my->menu->work['subMenu']->bug      = "{$lang->bug->common}|my|work|mode=bug";
