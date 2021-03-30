@@ -36,6 +36,7 @@ class actionModel extends model
 
         $actor      = $actor ? $actor : $this->app->user->account;
         $actionType = strtolower($actionType);
+        $actor      = $actionType == 'openedbysystem' ? '' : $actor;
         if($actor == 'guest' and $actionType == 'logout') return false;
 
         $objectType = str_replace('`', '', $objectType);
