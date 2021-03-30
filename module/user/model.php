@@ -1020,6 +1020,8 @@ class userModel extends model
      * @param  string $account
      * @param  string $type project|execution
      * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
