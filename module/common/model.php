@@ -1772,6 +1772,7 @@ EOD;
             if(!commonModel::hasDBPriv($object, $module, $method)) return false;
 
             if(empty($acls['views'])) return true;
+            $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
             $menu = strtolower($menu);
             if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
             if($menu == 'my' or $menu == 'index' or $module == 'tree') return true;

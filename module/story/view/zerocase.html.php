@@ -71,7 +71,7 @@
           $this->app->openApp = 'product';
           common::printIcon('story', 'change', $vars, $story, 'list', 'fork');
           common::printIcon('story', 'review', $vars, $story, 'list', 'glasses');
-          common::printIcon('story', 'close',  $vars, $story, 'list', 'off');
+          common::printIcon('story', 'close',  $vars, $story, 'list', 'off', '', 'iframe', 'yes');
           common::printIcon('story', 'edit',   $vars, $story, 'list', 'pencil');
           $this->app->openApp = 'qa';
           common::printIcon('story', 'createCase', "productID=$story->product&branch=0&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');

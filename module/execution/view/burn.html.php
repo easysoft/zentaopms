@@ -28,9 +28,11 @@
     if(common::canModify('execution', $execution)) common::printLink('execution', 'fixFirst', "execution=$execution->id", $lang->execution->fixFirst, '', "class='btn btn-link iframe' data-width='700'");
     echo $lang->execution->howToUpdateBurn;
     ?>
+    <?php if($config->systemMode == 'new'):?>
     <div class='input-control w-150px'>
       <?php echo html::select('burnBy', $lang->execution->burnByList, $burnBy, "class='form-control chosen'");?>
     </div>
+    <?php endif;?>
     <?php if($interval):?>
     <div class='input-control thWidth'>
       <?php echo html::select('interval', $dayList, $interval, "class='form-control chosen'");?>
