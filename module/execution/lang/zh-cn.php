@@ -220,6 +220,7 @@ $lang->execution->importPlanStory   = '创建' . $lang->executionCommon . '成�
 $lang->execution->iteration         = '版本迭代';
 $lang->execution->iterationInfo     = '迭代%s次';
 $lang->execution->viewAll           = '查看所有';
+$lang->execution->testreport        = '测试报告';
 
 /* 分组浏览。*/
 $lang->execution->allTasks     = '所有';

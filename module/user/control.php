@@ -966,6 +966,7 @@ class user extends control
         $denyType = 'nopriv';
         if(isset($rights[$module][$method]))
         {
+            $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
             $menu = strtolower($menu);
 
             if(!isset($acls['views'][$menu])) $denyType = 'noview';

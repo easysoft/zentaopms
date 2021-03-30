@@ -655,7 +655,6 @@ class story extends control
             $productPlans = $this->productplan->getPairs($productID, $branch, '', true);
             $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;
 
-
             $this->view->modules      = $modules;
             $this->view->branches     = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
             $this->view->productPlans = $productPlans;
@@ -683,9 +682,9 @@ class story extends control
             $this->view->title       = $execution->name . $this->lang->colon . $this->lang->story->batchEdit;
             $this->view->resetActive = true;
         }
-        /* The stories of my. */
         else
         {
+            /* The stories of my. */
             $this->lang->story->menu = $this->lang->my->menu;
             $this->lang->story->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
@@ -708,7 +707,7 @@ class story extends control
         }
 
         /* Set ditto option for users. */
-        $users          = $this->loadModel('user')->getPairs('nodeleted');
+        $users = $this->loadModel('user')->getPairs('nodeleted');
         $users = array('' => '', 'ditto' => $this->lang->story->ditto) + $users;
 
         /* Set Custom*/
@@ -1468,16 +1467,14 @@ class story extends control
      * Show zero case story.
      *
      * @param  int    $productID
+     * @param  int    $branchID
      * @param  string $orderBy
-     * @param  string $from      qa|project
      * @access public
      * @return void
      */
-    public function zeroCase($productID, $orderBy = 'id_desc', $from = 'project')
+    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc')
     {
         $this->session->set('storyList', $this->app->getURI(true), 'product');
-        $products = $this->product->getPairs();
-        if(empty($productID)) $productID = key($products);
 
         $this->loadModel('testcase');
         if($this->app->openApp == 'project')
@@ -1485,13 +1482,18 @@ class story extends control
             $this->loadModel('project')->setMenu($this->session->project);
             $this->app->rawModule = 'qa';
             $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
-            $products = $this->project->getProducts($this->session->project, false);
+            $products  = $this->project->getProducts($this->session->project, false);
+            $productID = $this->product->saveState($productID, $products);
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase');
         }
         else
         {
+            $products  = $this->product->getPairs();
+            $productID = $this->product->saveState($productID, $products);
+            $this->loadModel('qa');
             $this->app->rawModule = 'testcase';
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $this->qa->setMenu($products, $productID, $branchID);
         }
 
         /* Append id for secend sort. */
@@ -1501,7 +1503,7 @@ class story extends control
         $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $products[$productID]);
         $this->view->position[] = $this->lang->story->zeroCase;
 
-        $this->view->stories    = $this->story->getZeroCase($productID, $sort);
+        $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->productID  = $productID;
         $this->view->orderBy    = $orderBy;

@@ -425,7 +425,7 @@ class productModel extends model
         /* init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
         {
-            $storyMethods = ",track,create,batchcreate,batchclose,";
+            $storyMethods = ",track,create,batchcreate,batchclose,zerocase,";
             if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
             if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
         }
