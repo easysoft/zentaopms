@@ -182,7 +182,7 @@
         $.cookie('openApp', appCode, {expires: config.cookieLife, path: config.webRoot});
 
         /* Highlight at main menu */
-        var $menuMainNav   = $('#menuMainNav');
+        var $menuMainNav   = $('#menuMainNav,#menuMoreNav');
         var $lastActiveNav = $menuMainNav.find('li.active');
         if($lastActiveNav.data('app') !== appCode)
         {
