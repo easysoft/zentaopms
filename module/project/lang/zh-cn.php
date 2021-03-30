@@ -49,6 +49,7 @@ $lang->project->searchByName      = '输入项目名称进行检索';
 $lang->project->deleted           = '已删除';
 $lang->project->linkedProducts    = '已关联';
 $lang->project->unlinkedProducts  = '未关联';
+$lang->project->testreport        = '测试报告';
 
 /* Fields. */
 $lang->project->common             = '项目';
