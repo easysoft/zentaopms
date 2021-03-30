@@ -171,7 +171,7 @@ class router extends baseRouter
             $commonSettings = array();
             try
             {
-                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR')")->fetchAll();
+                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -190,11 +190,15 @@ class router extends baseRouter
             if($setting->key == 'URSR')          $URSR       = $setting->value;
             if($setting->key == 'URAndSR')       $URAndSR    = $setting->value;
             if($setting->key == 'mode' and $setting->section == 'global') $mode = $setting->value;
+            if($setting->key == 'scoreStatus' and $setting->section == 'global') $score = $setting->value;
         }
 
         /* Record system mode. */
         $config->systemMode = $mode;
         if($config->systemMode == 'classic') $this->config->executionCommonList = $this->config->projectCommonList;
+
+        /* Record system score.*/
+        $config->systemScore = $score;
 
         /* Record hour unit. */
         $config->hourUnit = 'H';

@@ -55,7 +55,7 @@ if($config->systemMode == 'new') $lang->my->menu->project = array('link' => "{$l
 $lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|execution|type=undone");
 $lang->my->menu->contribute = array('link' => "$lang->contribute|my|contribute|mode=task");
 $lang->my->menu->dynamic    = array('link' => "$lang->dynamic|my|dynamic|");
-$lang->my->menu->score      = array('link' => "{$lang->score->shortCommon}|my|score|", 'subModule' => 'score');
+if($config->systemScore) $lang->my->menu->score = array('link' => "{$lang->score->shortCommon}|my|score|", 'subModule' => 'score');
 $lang->my->menu->contacts   = array('link' => "$lang->contact|my|managecontacts|");
 
 /* My menu order. */
