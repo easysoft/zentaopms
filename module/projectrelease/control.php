@@ -80,7 +80,7 @@ class projectrelease extends control
         $this->view->position[]  = $this->lang->release->browse;
         $this->view->execution   = $execution;
         $this->view->project     = $project;
-        $this->view->products    = $this->loadModel('product')->getProducts($this->session->PRJ);
+        $this->view->products    = $this->loadModel('product')->getProducts($this->session->project);
         $this->view->releases    = $this->projectrelease->getList($projectID, $type);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;

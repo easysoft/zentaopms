@@ -202,7 +202,7 @@ class testcaseModel extends model
 
             $this->loadModel('score')->create('testcase', 'create', $caseID);
             $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
-            if($this->app->openApp == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->PRJ);
+            if($this->app->openApp == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->project);
             if($this->app->openApp == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
