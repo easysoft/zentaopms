@@ -460,6 +460,15 @@
         });
         $list.css('top', moreMenuHeight > 111 ? 111 - moreMenuHeight : '');
         $menuNav.toggleClass('show-more-nav', showMoreMenu);
+
+        if(showMoreMenu && !$list.data('listened-click'))
+        {
+            $list.data('listened-click', true).on('click', function()
+            {
+                $list.addClass('hidden');
+                setTimeout(function(){$list.removeClass('hidden')}, 200);
+            });
+        }
     }
 
     /* Init after current page load */
