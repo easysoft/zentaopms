@@ -210,6 +210,7 @@ if($config->systemMode == 'new')
     $lang->resource->project->testcase          = 'testcase';
     $lang->resource->project->testtask          = 'testtask';
     $lang->resource->project->execution         = 'execution';
+    $lang->resource->project->testreport        = 'testreport';
 
     $lang->project->methodOrder[0]   = 'index';
     $lang->project->methodOrder[5]   = 'browse';
@@ -244,6 +245,7 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[150] = 'testcase';
     $lang->project->methodOrder[155] = 'testtask';
     $lang->project->methodOrder[160] = 'execution';
+    $lang->project->methodOrder[165] = 'testreport';
 
     /* Personnel . */
     $lang->resource->personnel = new stdclass();
@@ -535,10 +537,10 @@ $lang->resource->execution->importBug         = 'importBug';
 $lang->resource->execution->story             = 'story';
 $lang->resource->execution->build             = 'build';
 $lang->resource->execution->qa                = 'qa';
-$lang->resource->execution->testtask          = 'testtaskAction';
+$lang->resource->execution->testtask          = 'testtask';
 $lang->resource->execution->testcase          = 'testcase';
 $lang->resource->execution->bug               = 'bug';
-//$lang->resource->execution->testreport        = 'testreport';
+$lang->resource->execution->testreport        = 'testreport';
 $lang->resource->execution->burn              = 'burn';
 $lang->resource->execution->computeBurn       = 'computeBurnAction';
 $lang->resource->execution->fixFirst          = 'fixFirst';
@@ -567,7 +569,7 @@ $lang->resource->execution->storyKanban       = 'storyKanban';
 $lang->resource->execution->storySort         = 'storySort';
 $lang->resource->execution->whitelist         = 'whitelist';
 $lang->resource->execution->addWhitelist      = 'addWhitelist';
-$lang->resource->execution->unbindWhitelist    = 'unbindWhitelist';
+$lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 //$lang->execution->methodOrder[0]   = 'index';

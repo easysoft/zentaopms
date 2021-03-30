@@ -62,15 +62,7 @@ include '../../common/view/header.lite.html.php';
 /* Click my site to modify the left navigation. */
 function changeLeftNavigation()
 {
-    if(window.parent && window.parent.$.apps && isOnlybody)
-    {
-        window.parent.$.apps.close();
-        window.parent.$.apps.open('my');
-    }
-    else
-    {
-        window.location.href = indexLink;
-    }
+    window.parent.$.apps.open('my');
 }
 </script>
 </html>
