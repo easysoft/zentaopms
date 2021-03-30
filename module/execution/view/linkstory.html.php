@@ -18,7 +18,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->linkStory;?></span></span>
-    <?php if($this->app->rawModule == 'execution'):?>
+    <?php if($this->app->rawModule == 'execution' and $config->systemMode == 'new'):?>
     <span class='btn btn-link'><span class='text'><?php echo $lang->execution->linkAllStoryTip;?></span></span>
     <?php endif;?>
   </div>
