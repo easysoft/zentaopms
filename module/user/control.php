@@ -77,7 +77,7 @@ class user extends control
         $account = $user->account;
         $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
+        $users   = $this->loadModel('user')->getPairs('useid|noletter|noclosed');
 
         /* set menus. */
         $this->view->userList = $this->user->setUserList($users, $userID);
