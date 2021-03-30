@@ -178,7 +178,7 @@ $lang->scrum->menu->index     = array('link' => "{$lang->dashboard}|project|inde
 $lang->scrum->menu->execution = array('link' => "$lang->executionCommon|project|execution|projectID=%s");
 $lang->scrum->menu->story     = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory', 'alias' => 'story,track');
 $lang->scrum->menu->doc       = array('link' => "{$lang->doc->common}|doc|objectLibs|type=project&objectID=%s", 'subModule' => 'doc');
-$lang->scrum->menu->qa        = array('link' => "{$lang->qa->common}|project|qa|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
+$lang->scrum->menu->qa        = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
 $lang->scrum->menu->devops    = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->scrum->menu->build     = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
@@ -198,7 +198,6 @@ $lang->scrum->menuOrder[48] = 'dynamic';
 $lang->scrum->menuOrder[50] = 'settings';
 
 $lang->scrum->menu->qa['subMenu'] = new stdclass();
-$lang->scrum->menu->qa['subMenu']->index      = array('link' => "$lang->dashboard|project|qa|projectID=%s");
 $lang->scrum->menu->qa['subMenu']->bug        = array('link' => "{$lang->bug->common}|project|bug|projectID=%s", 'subModule' => 'bug');
 $lang->scrum->menu->qa['subMenu']->testcase   = array('link' => "{$lang->testcase->shortCommon}|project|testcase|projectID=%s", 'subModule' => 'testsuite,testcase,caselib,tree');
 $lang->scrum->menu->qa['subMenu']->testtask   = array('link' => "{$lang->testtask->common}|project|testtask|projectID=%s", 'subModule' => 'testtask', 'class' => 'dropdown dropdown-hover');
