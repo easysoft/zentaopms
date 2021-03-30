@@ -52,7 +52,7 @@ $(function()
             if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
 
             var lang = config.clientLang;
-            if(blockTitle.indexOf(of) < 0) lang.indexOf('zh') >= 0 ? $titleInput.val(preValue + of + blockTitle) : $titleInput.val(blockTitle + of + preValue);
+            if(!title && blockTitle.indexOf(of) < 0) lang.indexOf('zh') >= 0 ? $titleInput.val(preValue + of + blockTitle) : $titleInput.val(blockTitle + of + preValue);
         }
     };
 
