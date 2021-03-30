@@ -21,7 +21,7 @@ $executionsPinYin = common::convert2Pinyin($executionNames);
 foreach($executions as $execution)
 {
     $selected      = $execution->id == $executionID ? 'selected' : '';
-    $executionName = zget($projects, $execution->project) . '/' . $execution->name;
+    $executionName = $config->systemMode == 'new' ? zget($projects, $execution->project) . '/' . $execution->name : $execution->name;
     if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
     {
         $myProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='text-important $selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");

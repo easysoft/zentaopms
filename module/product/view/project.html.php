@@ -33,7 +33,9 @@
         <tr>
           <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->project->name;?></th>
+          <?php if($config->systemMode == 'new'):?>
           <th class='w-150px'><?php echo $lang->project->common;?></th>
+          <?php endif;?>
           <th class='w-100px'><?php echo $lang->project->PM;?></th>
           <th class='w-80px'><?php echo $lang->project->begin;?></th>
           <th class='w-80px'><?php echo $lang->project->end;?></th>
@@ -49,8 +51,21 @@
         <?php foreach($projectStats as $project):?>
         <tr>
           <td><?php printf('%03d', $project->id);?></td>
-          <td class='text-left'><?php echo html::a($this->createLink('project', explode('-', $config->projectLink)[1], 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');?></td>
+          <td class='text-left'>
+            <?php
+            if($config->systemMode == 'new')
+            {
+                echo html::a($this->createLink('project', explode('-', $config->projectLink)[1], 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');
+            }
+            else
+            {
+                echo html::a($this->createLink('execution', 'task', 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');
+            }
+            ?>
+          </td>
+          <?php if($config->systemMode == 'new'):?>
           <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
+          <?php endif;?>
           <td>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
             <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='800'");?>

@@ -2574,7 +2574,7 @@ class execution extends control
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('id')->in($this->app->user->view->sprints)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('project')->in(array_keys($projects))
+            ->beginIF($this->config->systemMode == 'new')->andWhere('project')->in(array_keys($projects))->fi()
             ->orderBy('id_desc')
             ->fetchGroup('project', 'id');
 
@@ -2583,15 +2583,29 @@ class execution extends control
             ->andWhere('type')->eq('execution')
             ->fetchGroup('root', 'account');
 
-        foreach($projects as $project)
+        if($this->config->systemMode == 'new')
         {
-            $executions = zget($executionGroups, $project->id, array());
-
-            foreach($executions as $execution)
+            foreach($projects as $project)
             {
-                if(isset($orderedExecutions[$execution->parent])) unset($orderedExecutions[$execution->parent]);
-                $execution->teams = zget($teams, $execution->id, array());
-                $orderedExecutions[$execution->id] = $execution;
+                $executions = zget($executionGroups, $project->id, array());
+
+                foreach($executions as $execution)
+                {
+                    if(isset($orderedExecutions[$execution->parent])) unset($orderedExecutions[$execution->parent]);
+                    $execution->teams = zget($teams, $execution->id, array());
+                    $orderedExecutions[$execution->id] = $execution;
+                }
+            }
+        }
+        else
+        {
+            foreach($executionGroups as $projectID => $executions)
+            {
+                foreach($executions as $execution)
+                {
+                    $execution->teams = zget($teams, $execution->id, array());
+                    $orderedExecutions[$execution->id] = $execution;
+                }
             }
         }
 
