@@ -445,7 +445,7 @@ class testreport extends control
      */
     public function view($reportID, $tab = 'basic', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $report  = $this->testreport->getById($reportID);
+        $report = $this->testreport->getById($reportID);
         if(!$report) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->session->project = $report->project;
 
