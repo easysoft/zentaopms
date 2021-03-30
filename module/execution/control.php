@@ -1193,6 +1193,7 @@ class execution extends control
     {
         if($this->app->openApp == 'project')
         {
+            if(!empty($copyExecutionID)) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch('project');
             $project = $this->project->getByID($projectID);
             $model   = $project->model;
 

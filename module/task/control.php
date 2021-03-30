@@ -258,7 +258,14 @@ class task extends control
         }
 
         $execution = $this->execution->getById($executionID);
-        $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID&tab=task");
+        if($this->app->openApp == 'my')
+        {
+            $taskLink = $this->createLink('my', 'work', 'mode=task');
+        }
+        else
+        {
+            $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID");
+        }
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
@@ -279,7 +286,7 @@ class task extends control
 
             /* Locate the browser. */
             if(!empty($iframe)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $storyLink));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
         }
 
         /* Set Custom*/

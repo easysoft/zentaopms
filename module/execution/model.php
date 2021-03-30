@@ -1810,7 +1810,6 @@ class executionModel extends model
 
         $bugToTasks = fixer::input('post')->get();
         $bugs       = $this->bug->getByList(array_keys($bugToTasks->import));
-        $projectID  = $this->loadModel('task')->getProjectID($executionID);
         foreach($bugToTasks->import as $key => $value)
         {
             $bug = zget($bugs, $key, '');
@@ -1818,7 +1817,7 @@ class executionModel extends model
 
             $task = new stdClass();
             $task->bug          = $bug;
-            $task->project      = $projectID;
+            $task->project      = $execution->project;
             $task->execution    = $executionID;
             $task->story        = $bug->story;
             $task->storyVersion = $bug->storyVersion;
