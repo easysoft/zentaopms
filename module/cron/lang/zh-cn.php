@@ -1,5 +1,5 @@
 <?php
-$lang->cron->common       = '计划任务';
+$lang->cron->common       = '定时任务';
 $lang->cron->index        = '首页';
 $lang->cron->list         = '任务列表';
 $lang->cron->create       = '添加';

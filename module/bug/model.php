@@ -1150,9 +1150,10 @@ class bugModel extends model
         $openedBuilds = $this->post->openedBuild;
         if($openedBuilds)
         {
+            $this->loadModel('build');
             foreach($openedBuilds as $openedBuild)
             {
-                $build = $this->getByID($openedBuild);
+                $build = $this->build->getByID($openedBuild);
                 $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
                 $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$openedBuild)->exec();
             }
