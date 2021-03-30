@@ -79,7 +79,8 @@ $lang->my->form->lblAccount = 'Account Info';
 $lang->my->programLink   = 'Program Default Page';
 $lang->my->productLink   = 'Product Default Page';
 $lang->my->projectLink   = 'Project Default Page';
-$lang->my->executionLink = 'Execution Default Page';
+if($config->systemMode == 'classic') $lang->my->executionLink = $lang->executionCommon . ' Default Page';
+if($config->systemMode == 'new') $lang->my->executionLink = 'Execution Default Page';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'By default, you go to the program list, where you can view all of the programs';
@@ -98,6 +99,10 @@ $lang->my->projectLinkList['project-execution'] = 'Go to Project-Exection by def
 $lang->my->projectLinkList['project-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
 
 $lang->my->executionLinkList = array();
+if($config->systemMode == 'new')
+{
 $lang->my->executionLinkList['execution-index'] = 'Enter the execution dashboard by default, you can understand all the execution statistics and overview';
 $lang->my->executionLinkList['execution-all']   = 'Enter the execution list by default, you can view all executions';
 $lang->my->executionLinkList['execution-task']  = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
+}
+if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = "By default, enter the list of the most recently {$lang->executionCommon} task, and you can view the task information under the current {$lang->executionCommon}";

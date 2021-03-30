@@ -54,6 +54,11 @@ html,body {height: 100%;}
         <th><?php echo $lang->my->projectLink;?></th>
         <td><?php echo html::select('projectLink', $lang->my->projectLinkList, $projectLink, "class='form-control chosen'");?></td>
       </tr>
+      <?php else:?>
+      <tr>
+        <th><?php echo $lang->my->executionLink;?></th>
+        <td><?php echo html::select('executionLink', $lang->my->executionLinkList, 'execution-task', "class='form-control chosen'");?></td>
+      </tr>
       <?php endif;?>
 <!--
       <tr>
