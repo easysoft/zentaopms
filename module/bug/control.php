@@ -385,7 +385,7 @@ class bug extends control
             {
                 $location = $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
             }
-            if(isset($output['projectID']))
+            elseif(isset($output['projectID']))
             {
                 $location = $this->createLink('project', 'bug', "projectID={$output['projectID']}");
             }
