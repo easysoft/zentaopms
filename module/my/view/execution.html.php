@@ -34,7 +34,7 @@
       <tr class='text-left'>
         <th class='w-id'><?php echo $lang->idAB;?></th>
         <th class='c-name text-left'><?php echo $lang->my->name;?></th>
-        <th class='c-name text-left'><?php echo $lang->my->project;?></th>
+        <th class='c-name text-left'><?php echo $lang->my->projects;?></th>
         <th class='c-date'><?php echo $lang->execution->begin;?></th>
         <th class='c-date'><?php echo $lang->execution->end;?></th>
         <th class='c-status'><?php echo $lang->statusAB;?></th>

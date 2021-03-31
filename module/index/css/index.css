@@ -18,7 +18,6 @@ body.menu-hide {padding-left: 0;}
 .menu-toggle .is-unfold, .menu-hide .menu-toggle .is-collapse {display: none;}
 .menu-hide .menu-toggle .is-unfold {display: inline;}
 #menuToggleItem,
-.menu-hide #menuToggleMenu {display: none;}
 .menu-hide #menuToggleItem {display: list-item;}
 .menu-hide #menu .nav > li {padding: 4px;}
 .menu-hide #menu .nav > li > a {padding: 6px 4px; text-align: center;}
@@ -60,16 +59,16 @@ body.menu-hide {padding-left: 0;}
 #bars > li.active:after {content: ' '; display: block; position: absolute; height: 3px; left: 5px; right: 5px; bottom: 0; border-radius: 2px;}
 #bars > li.divider{margin-right: 5px; margin-top: 10px; height: 20px; border-right: 1px solid #d9d9d9;}
 
-#userNav {float: none; margin: 0;}
-#userNav>li {text-align: center;}
-#userNav>li>.dropdown-menu {left: 100%; bottom: 0; top: auto; width: 140px; text-align: left; background: #3c495c;}
-#userNav>li>.dropdown-menu a {color: #fff;}
-#userNav>li>.dropdown-menu .dropdown-menu {left: 100%; text-align: left; background: #3c495c;}
-#userNav>li .top .dropdown-menu {top: -60px;}
-#userNav .dropdown-menu>li>a>.icon {position: relative; top: 0; display: inline;}
-#userNav li.open>a {background: #0c64eb;}
-#userNav li.divider {opacity: .24; border-top: 1px solid; height: 2px;}
-#userNav .dropdown-submenu:focus > a, #userNav .dropdown-submenu:hover > a {background-color: rgba(0,0,0,.2);}
+#flodNav {float: none; margin: 0;}
+#flodNav>li {text-align: center;}
+#flodNav>li>.dropdown-menu {left: 100%; bottom: 0; top: auto; width: 140px; text-align: left; background: #3c495c;}
+#flodNav>li>.dropdown-menu a {color: #fff;}
+#flodNav>li>.dropdown-menu .dropdown-menu {left: 100%; text-align: left; background: #3c495c;}
+#flodNav>li .top .dropdown-menu {top: -60px;}
+#flodNav .dropdown-menu>li>a>.icon {position: relative; top: 0; display: inline;}
+#flodNav li.open>a {background: #0c64eb;}
+#flodNav li.divider {opacity: .24; border-top: 1px solid; height: 2px;}
+#flodNav .dropdown-submenu:focus > a, #flodNav .dropdown-submenu:hover > a {background-color: rgba(0,0,0,.2);}
 #poweredBy {width: 40%; position: absolute; top: 4px; right: 0; padding: 0;}
 
 #globalSearchDiv {width: 52%; float: right; margin-right: 4px;}

@@ -11,10 +11,17 @@ include 'chosen.html.php';
   <div id='mainHeader'>
     <div class='container'>
       <div id='heading'>
-        <?php common::printHomeButton($app->openApp);?> 
+        <?php common::printHomeButton($app->openApp);?>
         <?php echo isset($lang->switcherMenu) ? $lang->switcherMenu : '';?>
       </div>
       <nav id='navbar'><?php $activeMenu = commonModel::printMainMenu();?></nav>
+      <div id='toolbar'>
+        <div id='userMenu'>
+          <ul id="userNav" class="nav nav-default">
+            <li class='dropdown dropdown-hover has-avatar'><?php common::printUserBar();?></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
   <?php if(isset($lang->{$app->openApp}->menu->$activeMenu) and isset($lang->{$app->openApp}->menu->{$activeMenu}['subMenu'])):?>

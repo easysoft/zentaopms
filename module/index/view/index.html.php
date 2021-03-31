@@ -55,9 +55,13 @@ js::set('defaultOpen', $open);
     </div>
   </div>
   <div id='menuFooter'>
-    <ul id="userNav" class="nav">
-      <li id='menuToggleMenu'><a type='button' class='menu-toggle'><i class='icon icon-sm icon-menu-collapse'></i></a></li>
-      <li class='dropdown dropdown-hover has-avatar'><?php common::printUserBar();?></li>
+    <ul id="flodNav" class="nav">
+      <li id='menuToggleMenu'>
+        <a type='button' class='menu-toggle'>
+          <i class='icon icon-sm icon-menu-collapse'></i>
+          <i class='icon icon-sm icon-menu-unfold'></i>
+        </a>
+      </li>
     </ul>
   </div>
 </div>
