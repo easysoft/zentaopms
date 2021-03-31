@@ -45,7 +45,7 @@
             <td class='text-left'><?php echo $URSR['SRName'];?></td>
             <td class='c-actions'>
               <?php $disabled = $key == $config->custom->URSR ? "disabled=disabled" : '';?>
-              <?php if(common::hasPriv('custom', 'editStoryConcept'))   echo html::a($this->createLink('custom', 'editStoryConcept', "id=$key", '', true), "<i class='icon icon-edit'></i>", '', "class='btn iframe' title={$lang->edit}");?>
+              <?php if(common::hasPriv('custom', 'editStoryConcept'))   echo html::a($this->createLink('custom', 'editStoryConcept', "id=$key", '', true), "<i class='icon icon-edit'></i>", '', "class='btn iframe' data-width=50% title={$lang->edit}");?>
               <?php if(common::hasPriv('custom', 'deleteStoryConcept')) echo html::a($this->createLink('custom', 'deleteStoryConcept', "id=$key"), "<i class='icon icon-trash'></i>", 'hiddenwin', "class='btn' $disabled title={$lang->delete} data-group='admin'");?>
             </td>
           </tr>

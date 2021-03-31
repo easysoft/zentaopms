@@ -1018,7 +1018,7 @@ class treeModel extends model
      */
     public function createStoryLink($type, $module, $extra = array())
     {
-        if(isset($extra['projectID']))
+        if(isset($extra['projectID']) and !empty($extra['projectID']))
         {
             $productID = zget($extra , 'productID', 0);
             $projectID = $extra['projectID'];

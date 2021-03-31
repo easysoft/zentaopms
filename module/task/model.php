@@ -2972,13 +2972,13 @@ class taskModel extends model
                 $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");
                 break;
             case 'estimate':
-                echo round($task->estimate, 1) . ' ' . $this->lang->execution->workHourUnit;
+                echo round($task->estimate, 1) . $this->lang->execution->workHourUnit;
                 break;
             case 'consumed':
-                echo round($task->consumed, 1) . ' ' . $this->lang->execution->workHourUnit;
+                echo round($task->consumed, 1) . $this->lang->execution->workHourUnit;
                 break;
             case 'left':
-                echo round($task->left, 1)     . ' ' . $this->lang->execution->workHourUnit;
+                echo round($task->left, 1)     . $this->lang->execution->workHourUnit;
                 break;
             case 'progress':
                 echo round($task->progress, 2) . '%';
