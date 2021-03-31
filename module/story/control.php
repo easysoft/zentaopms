@@ -863,6 +863,11 @@ class story extends control
         {
             $this->product->setMenu($story->product, $story->branch);
         }
+        elseif($from == 'qa')
+        {
+            $products = $this->product->getProductPairsByProject(0, 'noclosed');
+            $this->loadModel('qa')->setMenu($products, $story->product);
+        }
 
         $this->executeHooks($storyID);
 
