@@ -10,8 +10,6 @@
  * @link  http://www.zentao.net
  */
 /* Fields. */
-$lang->executionCommon           = $lang->executionCommon;
-$lang->execution->common         = $lang->executionCommon;
 $lang->execution->allExecutions  = 'Tất cả ' . $lang->executionCommon;
 $lang->execution->allExecutionAB = 'All Executions';
 $lang->execution->id             = 'ID '.$lang->executionCommon;
