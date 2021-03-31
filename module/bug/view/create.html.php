@@ -317,7 +317,7 @@ js::set('blockID', $blockID);
               <?php echo html::submitButton();?>
               <?php if($caseID == 0) echo html::backButton();?>
               <?php echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);?>
-              <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', $testtask ? (int)$testtask : 0);?>
+              <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', empty($testtask) ? 0 : $testtask->id);?>
             </td>
           </tr>
         </tfoot>

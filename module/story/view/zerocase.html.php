@@ -45,6 +45,7 @@
       <tbody>
       <?php foreach($stories as $key => $story):?>
       <?php
+      $param = 0;
       if($this->app->openApp == 'project')   $param = $this->session->project;
       if($this->app->openApp == 'execution') $param = $this->session->execution;
       $viewLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$param");
