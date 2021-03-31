@@ -645,11 +645,10 @@ class projectModel extends model
     public function createManageLink($project)
     {
         $link = $project->type == 'program' ? helper::createLink('project', 'browse', "projectID={$project->id}&status=all") : helper::createLink('project', 'index', "projectID={$project->id}", '', '', $project->id);
-        $icon = $project->type == 'program' ? "<i class='icon icon-program'></i> " : "<i class='icon icon-project'></i> ";
 
         if($this->app->rawModule == 'execution') $link = helper::createLink('execution', 'all', "status=all&projectID={$project->id}");
 
-        return html::a($link, $icon . $project->name, '_self', "id=program{$project->id} title='{$project->name}' class='text-ellipsis'");
+        return html::a($link, $project->name, '_self', "id=program{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
     /**
