@@ -993,6 +993,7 @@ class project extends control
             $this->view->changelogs = ',' . join(',', $changelog) . ',';
             $this->view->groupPrivs = $groupPrivs;
             $this->view->groupID    = $groupID;
+            $this->view->projectID  = $projectID;
             $this->view->menu       = $menu;
             $this->view->version    = $version;
 
