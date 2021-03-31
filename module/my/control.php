@@ -872,7 +872,7 @@ class my extends control
         $this->view->position[] = $this->lang->my->preference;
 
         $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
-        $this->view->URSR             = isset($this->config->URSR) ? $this->config->URSR : $this->setting->getItem('owner=system&module=custom&key=URSR');
+        $this->view->URSR             = $this->setting->getURSR();
         $this->view->programLink      = isset($this->config->programLink) ? $this->config->programLink : 'program-browse';
         $this->view->productLink      = isset($this->config->productLink) ? $this->config->productLink : 'product-all';
         $this->view->projectLink      = isset($this->config->projectLink) ? $this->config->projectLink : 'project-browse';

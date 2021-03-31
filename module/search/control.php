@@ -12,6 +12,18 @@
 class search extends control
 {
     /**
+     * Determine whether to display the effort object.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct($module = '', $method = '')
+    {
+        parent::__construct($module, $method);
+        if(!isset($this->config->maxVersion)) unset($this->lang->search->modules['effort']);
+    }
+
+    /**
      * Build search form.
      *
      * @param  string  $module
@@ -186,7 +198,6 @@ class search extends control
         if(empty($type)) $type = $this->post->type;
         if(empty($type) and ($recTotal != 0 or $pageID != 1)) $type = $this->session->searchIngType;
         $type = (empty($type) or $type[0] == 'all') ? 'all' : $type;
-        //if($objectType != 'all') $type = explode('', $objectType);
 
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $this->config->search->recPerPage, $pageID);

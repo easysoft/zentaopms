@@ -208,7 +208,7 @@ class router extends baseRouter
 
         $model = new stdclass();
         $model->model = 'scrum';
-        if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
+        //if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
 
         $iterationKey = $projectKey;
         if(isset($model->model) && $model->model == 'waterfall') $projectKey = STAGE_KEY;
@@ -244,7 +244,7 @@ class router extends baseRouter
         if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
         {
             /* Get story concept in project and product. */
-            $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and lang = \"{$this->clientLang}\"")->fetchAll();
+            $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$config->URSR}\"")->fetchAll();
 
             /* Get UR pairs and SR pairs. */
             $URPairs  = array();
