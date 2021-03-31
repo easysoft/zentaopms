@@ -354,3 +354,5 @@ update zt_block set source='project', block='project' where block='program' and 
 update zt_team set type='execution' where type='project';
 update zt_action set objectType='execution' where objectType='project';
 update zt_file set objectType='execution' where objectType='project';
+
+ALTER TABLE `zt_todo` ADD `deleted` ENUM( "0", "1" ) NOT NULL DEFAULT '0';

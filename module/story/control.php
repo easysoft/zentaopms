@@ -685,8 +685,6 @@ class story extends control
         else
         {
             /* The stories of my. */
-            $this->lang->story->menu = $this->lang->my->menu;
-            $this->lang->story->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
 
             $branchProduct = false;

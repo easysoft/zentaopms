@@ -1701,6 +1701,7 @@ class block extends control
             $stmt = $this->dao->select('*')->from(TABLE_TODO)
                 ->where("(assignedTo = '{$this->app->user->account}' or (account='{$this->app->user->account}'))")
                 ->andWhere('cycle')->eq(0)
+                ->andWhere('deleted')->eq(0)
                 ->andWhere('status')->eq('wait')
                 ->orderBy('`date` desc');
             if(isset($params->todoNum)) $stmt->limit($params->todoNum);
