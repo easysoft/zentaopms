@@ -45,7 +45,7 @@ a.showMoreImage:hover {opacity: 1;}
 .table-footer .checked+div .btn, .table-actions .btn:hover {background: #16a8f8; border-color: #16a8f8}
 
 #header #toolbar a {color: #3c4353; font-size: 13px;}
-#header #toolbar a:hover {color: #fff;}
+#header #toolbar a:hover, .selected a {color: #fff!important;}
 #header #toolbar i {font-size: 16px;}
 
 #navbar .nav>li.divider {margin: 15px 8px 15px 8px;}
