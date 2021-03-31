@@ -119,6 +119,7 @@ $lang->statusAB     = 'Tình trạng';
 $lang->openedByAB   = 'Người tạo';
 $lang->assignedToAB = 'Giao cho';
 $lang->typeAB       = 'Loại';
+$lang->nameAB       = 'Name';
 
 $lang->common = new stdclass();
 $lang->common->common = 'Module chung';

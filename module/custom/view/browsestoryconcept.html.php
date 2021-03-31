@@ -15,7 +15,7 @@
 </style>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-right'>
-    <?php if(common::hasPriv('custom', 'setstoryconcept')) echo html::a($this->createLink('custom', 'setstoryconcept', '', '', true), $lang->custom->setStoryConcept, '', "class='btn btn-primary iframe'");?>
+    <?php if(common::hasPriv('custom', 'setstoryconcept')) echo html::a($this->createLink('custom', 'setstoryconcept', '', '', true), $lang->custom->setStoryConcept, '', "class='btn btn-primary iframe' data-width=50%");?>
   </div>
 </div>
 <div id='mainContent' class='main-row'>

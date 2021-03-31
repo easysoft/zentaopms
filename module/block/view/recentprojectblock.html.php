@@ -41,10 +41,12 @@
       <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
           <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($viewLink, $project->name);?> </strong>
+          <?php if($config->systemMode == 'new'):?>
           <?php if($project->model === 'waterfall'): ?>
           <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
           <?php else: ?>
           <span class='project-type-label label label-info label-outline'><?php echo $lang->project->scrum; ?></span>
+          <?php endif; ?>
           <?php endif; ?>
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
@@ -67,6 +69,7 @@
             <span><i class='icon icon-group'></i> <?php printf($lang->project->membersUnit, $project->teamCount); ?></span>
             <span><i class='icon icon-clock'></i> <?php printf($lang->project->hoursUnit, $project->estimate); ?></span>
           </div>
+          <?php if($config->systemMode == 'new'):?>
           <?php if($project->model === 'waterfall'): ?>
           <div class='project-detail project-stages'>
             <p class='text-muted'><?php echo $lang->project->ongoingStage;?></p>
@@ -108,6 +111,7 @@
             </div>
             <?php endif; ?>
           </div>
+          <?php endif; ?>
           <?php endif; ?>
         </div>
       </div>

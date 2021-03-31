@@ -124,6 +124,7 @@ $lang->statusAB     = 'Status';
 $lang->openedByAB   = 'CreatedBy';
 $lang->assignedToAB = 'AssignedTo';
 $lang->typeAB       = 'Type';
+$lang->nameAB       = 'Name';
 
 $lang->common->common     = 'Common Module';
 $lang->my->common         = 'Dashboard';

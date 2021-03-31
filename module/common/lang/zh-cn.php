@@ -124,6 +124,7 @@ $lang->statusAB     = '状态';
 $lang->openedByAB   = '创建';
 $lang->assignedToAB = '指派';
 $lang->typeAB       = '类型';
+$lang->nameAB       = '名称';
 
 $lang->common->common     = '公有模块';
 $lang->my->common         = '地盘';
