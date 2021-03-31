@@ -208,8 +208,8 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-        $projectTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=projectTitle');
-        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $projectTitle);
+        $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
+        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;
@@ -233,17 +233,17 @@ class project extends control
      * @access public
      * @return void
      */
-    public function projectTitle()
+    public function programTitle()
     {
         $this->loadModel('setting');
         if($_POST)
         {
-            $projectTitle = $this->post->projectTitle;
-            $this->setting->setItem($this->app->user->account . '.project.projectTitle', $projectTitle);
+            $programTitle = $this->post->programTitle;
+            $this->setting->setItem($this->app->user->account . '.project.programTitle', $programTitle);
             die(js::reload('parent.parent'));
         }
 
-        $status = $this->setting->getItem('owner=' . $this->app->user->account . '&module=project&key=projectTitle');
+        $status = $this->setting->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
         $this->view->status = empty($status) ? '0' : $status;
         $this->display();
     }
@@ -629,7 +629,7 @@ class project extends control
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->project->dynamic;
 
-        $this->view->userIdPairs  = $this->project->getTeamMemberPairs($project->parent);
+        $this->view->userIdPairs  = $this->project->getTeamMemberPairs($projectID);
         $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         /* Assign. */

@@ -1150,9 +1150,13 @@ class executionModel extends model
         {
             $link = helper::createLink($module, $method, "executionID=%s&type=$extra");
         }
-        elseif($module == 'execution' && ($method == 'index' or $method == 'all'))
+        elseif($module == 'execution' and ($method == 'index' or $method == 'all'))
         {
             $link = helper::createLink($module, 'task', "executionID=%s");
+        }
+        elseif($module == 'bug' and $method == 'create' and $this->app->openApp == 'execution')
+        {
+            $link = helper::createLink($module, $method, "productID=0&branch=0&extra=executionID=%s");
         }
         else
         {
