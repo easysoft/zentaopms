@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<style>.table .c-progress {width: 60px;}</style>
 <?php if(empty($executionStats)): ?>
 <div class='empty-tip'><?php common::printLink('execution', 'create', '', "<i class='icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
@@ -56,10 +57,8 @@
         <td class="c-hours" title="<?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHourUnit;?></td>
         <?php endif;?>
         <td class="c-progress">
-          <div class="progress progress-text-left">
-            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
-            <span class="progress-text"><?php echo $execution->hours->progress;?>%</span>
-            </div>
+          <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo $execution->hours->progress;?></div>
           </div>
         </td>
         <?php if($longBlock):?>

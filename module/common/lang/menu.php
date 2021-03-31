@@ -540,4 +540,5 @@ $lang->navGroup->entry     = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';
 
-$lang->navGroup->tree = 'tree';
+$lang->navGroup->tree  = 'tree';
+$lang->navGroup->block = 'block';
