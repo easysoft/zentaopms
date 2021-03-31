@@ -52,14 +52,12 @@ class projectStory extends control
      * @access public
      * @return void
      */
-    public function track($productID = 0, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function track($projectID = 0, $productID = 0, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if(empty($productID)) $productID = key($this->products);
+        $products = $this->loadModel('product')->getProductPairsByProject($projectID);
+        if(empty($productID)) $productID = key($products);
 
-        $this->lang->story->requirement = str_replace($this->lang->URCommon, $this->lang->URCommon, $this->lang->story->requirement);
-        $this->lang->story->story       = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->story);
-
-        echo $this->fetch('story', 'track', "productID=$productID&branch=$branch&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('story', 'track', "productID=$productID&branch=$branch&projectID=$projectID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**

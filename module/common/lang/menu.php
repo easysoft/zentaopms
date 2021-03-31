@@ -170,8 +170,6 @@ $lang->product->dividerMenu = $config->URAndSR ? ',requirement,set,' : ',track,s
 $lang->project->homeMenu = new stdclass();
 $lang->project->homeMenu->browse = array('link' => ($config->systemMode == 'new' ? $lang->project->list : $lang->executionCommon) . '|project|browse|', 'alias' => 'batchedit,create');
 
-$lang->project->dividerMenu = ',execution,programplan,doc,dynamic,';
-
 /* Scrum menu. */
 $lang->scrum->menu = new stdclass();
 $lang->scrum->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
@@ -184,6 +182,8 @@ $lang->scrum->menu->build     = array('link' => "{$lang->build->common}|project|
 $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->scrum->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->scrum->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
+
+$lang->scrum->dividerMenu = ',execution,programplan,doc,dynamic,';
 
 /* Scrum menu order. */
 $lang->scrum->menuOrder[5]  = 'index';
