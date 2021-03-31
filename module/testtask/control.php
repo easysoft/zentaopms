@@ -1274,12 +1274,12 @@ class testtask extends control
         {
             $this->loadModel('qa')->setMenu($this->products, $productID);
         }
-        $this->app->rawModule = 'testcase';
 
         $this->app->loadLang('job');
+        $this->app->rawModule = 'testcase';
 
         $productID  = $productID ? $productID : key($this->products);
-        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
+        $projectID  = $this->app->openApp == 'qa' ? 0 : $this->session->project;
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
 
