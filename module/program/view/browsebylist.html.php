@@ -6,7 +6,7 @@
       <tr>
         <th class='table-nest-title'>
           <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
-          <?php echo $lang->program->name;?>
+          <?php echo $lang->nameAB;?>
         </th>
         <th class='w-100px'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
         <th class='text-right w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>

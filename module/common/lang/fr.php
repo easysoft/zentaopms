@@ -119,6 +119,7 @@ $lang->statusAB     = 'Statut';
 $lang->openedByAB   = 'Créé par';
 $lang->assignedToAB = 'Affecté à';
 $lang->typeAB       = 'Type';
+$lang->nameAB       = 'Name';
 
 $lang->common = new stdclass();
 $lang->common->common = 'Module Commun';
