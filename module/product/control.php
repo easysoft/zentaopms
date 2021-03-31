@@ -159,7 +159,7 @@ class product extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu. The projectstory module does not execute. */
-        if($this->app->rawModule == 'product')
+        if($this->app->openApp == 'product')
         {
             /* Save session. */
             $this->session->set('storyList',   $this->app->getURI(true), 'product');
