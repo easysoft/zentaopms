@@ -1,4 +1,6 @@
 <?php
+global $config;
+
 $lang->custom->common               = '自定义';
 $lang->custom->index                = '首页';
 $lang->custom->set                  = '自定义配置';
@@ -19,7 +21,6 @@ $lang->custom->score                = '积分';
 $lang->custom->timezone             = '时区';
 $lang->custom->scoreReset           = '重置积分';
 $lang->custom->scoreTitle           = '积分功能';
-$lang->custom->execution            = '执行';
 $lang->custom->product              = $lang->productCommon;
 $lang->custom->convertFactor        = '换算系数';
 $lang->custom->region               = '区间';
@@ -46,6 +47,9 @@ $lang->custom->switch               = "切换";
 $lang->custom->oneUnit              = "一个{$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "请先设置{$lang->hourCommon}转换为%s的换算系数";
 
+if($config->systemMode == 'new') $lang->custom->execution = '执行';
+if($config->systemMode == 'classic') $lang->custom->execution = $lang->executionCommon;
+
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
 $lang->custom->unitList['cost']       = '元/小时';
@@ -71,12 +75,12 @@ $lang->custom->saveTips            = '点击保存后，则以当前%s为默认�
 
 $lang->custom->numberError = '区间必须大于零';
 
-$lang->custom->closedExecution = '已关闭执行';
+$lang->custom->closedExecution = '已关闭' . $lang->custom->execution;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
 
-$lang->custom->object['project']   = '项目';
+if($config->systemMode == 'new') $lang->custom->object['project']   = '项目';
 $lang->custom->object['product']   = $lang->productCommon;
-$lang->custom->object['execution'] = '执行';
+$lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['story']     = $lang->SRCommon;
 $lang->custom->object['task']      = '任务';
 $lang->custom->object['bug']       = 'Bug';
@@ -151,26 +155,26 @@ $lang->custom->allLang     = '适用所有语言';
 $lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userFieldNotice             = '控制以上字段在用户相关页面是否显示，留空则全部显示';
-$lang->custom->notice->canNotAdd                   = '该项参与运算，不提供自定义添加功能';
-$lang->custom->notice->forceReview                 = "指定人提交的%s必须评审。";
-$lang->custom->notice->forceNotReview              = "指定人提交的%s不需要评审。";
-$lang->custom->notice->longlife                    = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
-$lang->custom->notice->invalidNumberKey            = '键值应为不大于255的数字';
-$lang->custom->notice->invalidStringKey            = '键值应当为小写英文字母、数字或下划线的组合';
-$lang->custom->notice->cannotSetTimezone           = 'date_default_timezone_set方法不存在或禁用，不能设置时区。';
-$lang->custom->notice->noClosedBlock               = '没有永久关闭的区块';
-$lang->custom->notice->required                    = '页面提交时，选中的字段必填';
-$lang->custom->notice->conceptResult               = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
-$lang->custom->notice->conceptPath                 = '您可以在：后台 -> 自定义 -> 流程页面修改。';
-$lang->custom->notice->readOnlyOfProduct           = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
-$lang->custom->notice->readOnlyOfExecution         = '禁止修改后，已关闭执行下的任务、版本、日志以及关联需求都禁止修改。';
-$lang->custom->notice->URSREmpty                   = '自定义需求名称不能为空！';
-$lang->custom->notice->confirmDelete               = '您确定要删除吗？';
+$lang->custom->notice->userFieldNotice     = '控制以上字段在用户相关页面是否显示，留空则全部显示';
+$lang->custom->notice->canNotAdd           = '该项参与运算，不提供自定义添加功能';
+$lang->custom->notice->forceReview         = "指定人提交的%s必须评审。";
+$lang->custom->notice->forceNotReview      = "指定人提交的%s不需要评审。";
+$lang->custom->notice->longlife            = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
+$lang->custom->notice->invalidNumberKey    = '键值应为不大于255的数字';
+$lang->custom->notice->invalidStringKey    = '键值应当为小写英文字母、数字或下划线的组合';
+$lang->custom->notice->cannotSetTimezone   = 'date_default_timezone_set方法不存在或禁用，不能设置时区。';
+$lang->custom->notice->noClosedBlock       = '没有永久关闭的区块';
+$lang->custom->notice->required            = '页面提交时，选中的字段必填';
+$lang->custom->notice->conceptResult       = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
+$lang->custom->notice->conceptPath         = '您可以在：后台 -> 自定义 -> 流程页面修改。';
+$lang->custom->notice->readOnlyOfProduct   = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
+$lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->execution}下的任务、版本、日志以及关联需求都禁止修改。";
+$lang->custom->notice->URSREmpty           = '自定义需求名称不能为空！';
+$lang->custom->notice->confirmDelete       = '您确定要删除吗？';
 
-$lang->custom->notice->indexPage['product']        = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
-$lang->custom->notice->indexPage['project']        = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
-$lang->custom->notice->indexPage['qa']             = "从8.2版本起增加了测试主页视图，是否默认进入测试主页？";
+$lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
+$lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
+$lang->custom->notice->indexPage['qa']      = "从8.2版本起增加了测试主页视图，是否默认进入测试主页？";
 
 $lang->custom->notice->invalidStrlen['ten']        = '键的长度必须小于10个字符！';
 $lang->custom->notice->invalidStrlen['twenty']     = '键的长度必须小于20个字符！';
@@ -221,7 +225,7 @@ $lang->custom->CRExecution[0] = '禁止修改';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
-$lang->custom->moduleName['execution']   = '执行';
+$lang->custom->moduleName['execution']   = $lang->custom->execution;
 
 $lang->custom->conceptQuestions['overview'] = "1. 下述哪种组合方式更适合您公司的管理现状？";
 $lang->custom->conceptQuestions['URAndSR']  = "2. 是否启用{$lang->URCommon}和{$lang->SRCommon}概念？";

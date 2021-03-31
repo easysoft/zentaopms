@@ -189,7 +189,7 @@ if($config->systemMode == 'new')
     $lang->resource->project = new stdclass();
     $lang->resource->project->index               = 'index';
     $lang->resource->project->browse              = 'browse';
-    $lang->resource->project->projectTitle        = 'moduleOpen';
+    $lang->resource->project->programTitle        = 'moduleOpen';
     $lang->resource->project->create              = 'create';
     $lang->resource->project->edit                = 'edit';
     $lang->resource->project->batchEdit           = 'batchEdit';
