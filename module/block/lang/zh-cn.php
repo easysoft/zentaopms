@@ -9,6 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+global $config;
 $lang->block = new stdclass();
 $lang->block->common = '区块';
 $lang->block->name   = '区块名称';
@@ -307,10 +308,13 @@ $lang->block->default['full']['my']['7']['params']['riskNum']  = '20';
 $lang->block->default['full']['my']['7']['params']['issueNum'] = '20';
 $lang->block->default['full']['my']['7']['params']['storyNum'] = '20';
 
-$lang->block->default['full']['my']['8']['title']  = '项目人力投入';
-$lang->block->default['full']['my']['8']['block']  = 'projectteam';
-$lang->block->default['full']['my']['8']['source'] = 'project';
-$lang->block->default['full']['my']['8']['grid']   = 8;
+if($config->systemMode == 'new')
+{
+    $lang->block->default['full']['my']['8']['title']  = '项目人力投入';
+    $lang->block->default['full']['my']['8']['block']  = 'projectteam';
+    $lang->block->default['full']['my']['8']['source'] = 'project';
+    $lang->block->default['full']['my']['8']['grid']   = 8;
+}
 
 $lang->block->default['full']['my']['9']['title']  = '项目列表';
 $lang->block->default['full']['my']['9']['block']  = 'project';
@@ -351,7 +355,7 @@ $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->project       = '项目列表';
 $lang->block->modules['project']->availableBlocks->recentproject = '近期项目';
 $lang->block->modules['project']->availableBlocks->statistic     = '项目统计';
-$lang->block->modules['project']->availableBlocks->projectteam   = '项目人力投入';
+if($config->systemMode == 'new') $lang->block->modules['project']->availableBlocks->projectteam = '项目人力投入';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();

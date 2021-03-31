@@ -126,6 +126,7 @@ $lang->statusAB     = '狀態';
 $lang->openedByAB   = '創建';
 $lang->assignedToAB = '指派';
 $lang->typeAB       = '類型';
+$lang->nameAB       = '名稱';
 
 $lang->common = new stdclass();
 $lang->common->common = '公有模組';
