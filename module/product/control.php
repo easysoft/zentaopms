@@ -420,10 +420,13 @@ class product extends control
         {
             $changes = $this->product->update($productID);
 
-            /* Change the projects set of the program. */
-            if(($_POST['program'] != $product->program) and $singleLinkProjects or $multipleLinkProjects)
+            if($this->config->systemMode == 'new')
             {
-                $this->product->updateProjects($productID, $singleLinkProjects, $multipleLinkProjects);
+                /* Change the projects set of the program. */
+                if(($_POST['program'] != $product->program) and $singleLinkProjects or $multipleLinkProjects)
+                {
+                    $this->product->updateProjects($productID, $singleLinkProjects, $multipleLinkProjects);
+                }
             }
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
