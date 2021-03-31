@@ -21,6 +21,7 @@
 .table td.has-child > .plan-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform:rotate(-90deg); -moz-transform:rotate(-90deg); -o-transform:rotate(-90deg); -webkit-transform:rotate(-90deg); transform: rotate(-90deg);}
 .table td.has-child > .plan-toggle > .icon:before {text-align: left;}
 .table td.has-child > .plan-toggle.collapsed > .icon {-ms-transform:rotate(90deg); -moz-transform:rotate(90deg); -o-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform: rotate(90deg);}
+.table td.hours {padding-right: 12px;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 .hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
@@ -103,9 +104,9 @@
           <td class='c-status' title='<?php echo $executionStatus;?>'>
             <span class="status-execution status-<?php echo $execution->status?>"><?php echo $executionStatus;?></span>
           </td>
-          <td class='hours' title='<?php echo $execution->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalEstimate . ' ' . $this->lang->execution->workHourUnit;?></td>
-          <td class='hours' title='<?php echo $execution->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalConsumed . ' ' . $this->lang->execution->workHourUnit;?></td>
-          <td class='hours' title='<?php echo $execution->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $execution->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalEstimate . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $execution->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalConsumed . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $execution->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalLeft     . $this->lang->execution->workHourUnit;?></td>
           <td class="c-progress">
             <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
               <div class='progress-info'><?php echo $execution->hours->progress;?></div>

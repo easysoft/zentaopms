@@ -13,6 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
+<style>
+.table td.estimate {padding-right: 12px;}
+</style>
 <div id='mainContent'>
   <nav id='contentNav'>
     <ul class='nav nav-default'>
@@ -59,7 +62,7 @@
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
           <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
           <td><?php echo zget($users, $story->openedBy);?></td>
-          <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+          <td class='estimate text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
           <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
         </tr>

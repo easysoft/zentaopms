@@ -202,7 +202,7 @@ class router extends baseRouter
         $config->systemScore = $score;
 
         /* Record hour unit. */
-        $config->hourUnit = 'H';
+        $config->hourUnit = 'h';
         if($hourKey == STORYPOINT_KEY)    $config->hourUnit = 'SP';
         if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'FP';
 

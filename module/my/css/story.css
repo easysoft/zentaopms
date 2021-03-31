@@ -7,5 +7,6 @@
 .table td.has-child > .story-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform: rotate(-90deg); -moz-transform: rotate(-90deg); -o-transform: rotate(-90deg); -webkit-transform: rotate(-90deg); transform: rotate(-90deg);}
 .table td.has-child > .story-toggle > .icon:before {text-align: left;}
 .table td.has-child > .story-toggle.collapsed > .icon {-ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -o-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);}
+.table td.c-hours {padding-right: 12px;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}

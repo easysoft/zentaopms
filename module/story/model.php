@@ -3389,7 +3389,7 @@ class storyModel extends model
                 echo '</span>';
                 break;
             case 'estimate':
-                echo $story->estimate . ' ' . $this->config->hourUnit;
+                echo $story->estimate . $this->config->hourUnit;
                 break;
             case 'stage':
                 if(isset($storyStages[$story->id]) and !empty($branches))
