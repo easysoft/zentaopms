@@ -208,7 +208,7 @@ class router extends baseRouter
 
         $model = new stdclass();
         $model->model = 'scrum';
-        if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
+        //if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
 
         $iterationKey = $projectKey;
         if(isset($model->model) && $model->model == 'waterfall') $projectKey = STAGE_KEY;
