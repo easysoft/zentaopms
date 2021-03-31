@@ -159,7 +159,7 @@ class product extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu. The projectstory module does not execute. */
-        if($this->app->rawModule == 'product')
+        if($this->app->openApp == 'product')
         {
             /* Save session. */
             $this->session->set('storyList',   $this->app->getURI(true), 'product');
@@ -245,6 +245,7 @@ class product extends control
             $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
             $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
+            unset($this->config->product->search['fields']['plan']);
         }
 
         /* Build search form. */
