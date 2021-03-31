@@ -423,7 +423,6 @@ class todo extends control
         else
         {
             $this->todo->delete(TABLE_TODO, $todoID);
-            $this->loadModel('action')->create('todo', $todoID, 'erased');
 
             /* if ajax request, send result. */
             if($this->server->ajax)

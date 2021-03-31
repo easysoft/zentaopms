@@ -1380,10 +1380,10 @@ class story extends control
      * @access public
      * @return void
      */
-    public function track($productID, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function track($productID, $branch = 0, $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set menu. The projectstory module does not execute. */
-        if($this->app->rawModule == 'story')
+        if(!$projectID)
         {
             $products  = $this->product->getPairs();
             $productID = $this->product->saveState($productID, $products);
@@ -1403,7 +1403,11 @@ class story extends control
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $tracks = $this->story->getTracks($productID, $branch, $pager);
 
-        if($this->app->rawModule == 'projectstory') $projectProducts = $this->product->getProducts($this->session->project);
+        if($projectID) 
+        {
+            $this->loadModel('project')->setMenu($projectID);
+            $projectProducts = $this->product->getProducts($projectID);
+        }
 
         $this->view->title      = $this->lang->story->track;
         $this->view->position[] = $this->lang->story->track;

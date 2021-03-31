@@ -22,13 +22,6 @@
             <h2 class="detail-title"><span class="label-id"><?php echo $product->id;?></span> <span class="label label-light label-outline"><?php echo $product->code;?></span> <?php echo $product->name;?></h2>
             <div class="detail-content article-content">
               <p><?php echo $product->desc;?></p>
-              <p>
-                <span class="label label-primary label-outline"><?php echo $lang->product->typeAB . ':' . zget($lang->product->typeList, $product->type);?></span>
-                <span class="label label-success label-outline"><?php echo $lang->product->status . ':' . $this->processStatus('product', $product);?></span>
-                <?php if($product->deleted):?>
-                <span class='label label-danger label-outline'><?php echo $lang->product->deleted;?></span>
-                <?php endif; ?>
-              </p>
             </div>
           </div>
           <?php if($product->type == 'platform'):?>
@@ -81,7 +74,7 @@
                     <td><strong><?php echo formatTime($product->createdDate, DT_DATE1);?></strong></td>
                   </tr>
                   <tr>
-                    <th class="w-80px"><?php echo $lang->product->status;?></th>
+                    <th class="w-80px"><?php echo $lang->productCommon . $lang->product->status;?></th>
                     <td class="<?php echo $product->status;?>"><strong><?php echo zget($lang->product->statusList, $product->status);?></strong></td>
                     <th><?php echo $lang->product->acl;?></th>
                     <td><strong><?php echo $lang->product->aclList[$product->acl];?></strong></td>

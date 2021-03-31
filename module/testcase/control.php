@@ -273,6 +273,10 @@ class testcase extends control
         {
             $this->loadModel('execution')->setMenu($this->session->execution);
         }
+        else
+        {
+            $this->qa->setMenu($this->products, $productID, $branch);
+        }
 
         $testcaseID = ($from and strpos('testcase|work|contribute', $from)) ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;

@@ -484,7 +484,7 @@ class customModel extends model
      * Get UR and SR pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getURSRPairs()
     {
@@ -494,6 +494,11 @@ class customModel extends model
             ->andWhere('module')->eq('custom')
             ->andWhere('section')->eq('URSRList')
             ->fetchAll();
+        if(empty($langData))
+        {
+            $URSR     = $this->loadModel('setting')->getURSR();
+            $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)->where('`key`')->eq($URSR)->andWhere('module')->eq('custom')->andWhere('section')->eq('URSRList')->fetchAll();
+        }
 
         $URSRPairs = array();
         foreach($langData as $id => $content)
@@ -509,11 +514,16 @@ class customModel extends model
      * Get UR pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getURPairs()
     {
         $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
+        if(empty($URSRList))
+        {
+            $URSR     = $this->loadModel('setting')->getURSR();
+            $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('`key`')->eq($URSR)->fetchPairs();
+        }
 
         $URPairs = array();
         foreach($URSRList as $key => $value)
@@ -529,11 +539,16 @@ class customModel extends model
      * Get SR pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getSRPairs()
     {
         $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
+        if(empty($URSRList))
+        {
+            $URSR     = $this->loadModel('setting')->getURSR();
+            $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('`key`')->eq($URSR)->fetchPairs();
+        }
 
         $SRPairs = array();
         foreach($URSRList as $key => $value)
@@ -549,7 +564,7 @@ class customModel extends model
      * Get UR and SR list.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getURSRList()
     {
@@ -561,6 +576,11 @@ class customModel extends model
             ->andWhere('module')->eq('custom')
             ->andWhere('section')->eq('URSRList')
             ->fetchAll();
+        if(empty($langData))
+        {
+            $URSR     = $this->loadModel('setting')->getURSR();
+            $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)->where('`key`')->eq($URSR)->andWhere('module')->eq('custom')->andWhere('section')->eq('URSRList')->fetchAll();
+        }
 
         $URSRList = array();
         foreach($langData as $id => $content)

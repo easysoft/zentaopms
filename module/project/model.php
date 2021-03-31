@@ -1607,8 +1607,9 @@ class projectModel extends model
     public function setMenu($objectID)
     {
         $project = $this->getByID($objectID);
-        $this->lang->project->menu      = $this->lang->{$project->model}->menu;
-        $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
+        $this->lang->project->menu        = $this->lang->{$project->model}->menu;
+        $this->lang->project->menuOrder   = $this->lang->{$project->model}->menuOrder;
+        $this->lang->project->dividerMenu = $this->lang->{$project->model}->dividerMenu;
 
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
         common::setMenuVars('project', $objectID);
