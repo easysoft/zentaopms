@@ -35,8 +35,8 @@ js::set('deptID', $deptID);
   </div>
   <?php endif;?>
   <div class="main-col">
-  <?php if(!empty($personnelList)):?>
-    <div id="queryBox" class="cell" data-module="accessible"></div>
+    <div id="queryBox" class="cell <?php if($browseType == 'bysearch') echo ' show';?>" data-module="accessible"></div>
+    <?php if(!empty($personnelList)):?>
     <form class="main-table table-personnel" action="" data-ride="table">
       <table id="accessibleList" class="table has-sort-head">
         <thead>

@@ -685,8 +685,6 @@ class story extends control
         else
         {
             /* The stories of my. */
-            $this->lang->story->menu = $this->lang->my->menu;
-            $this->lang->story->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
 
             $branchProduct = false;
@@ -1473,7 +1471,7 @@ class story extends control
      */
     public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc')
     {
-        $this->session->set('storyList', $this->app->getURI(true), 'product');
+        $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->openApp, 'product');
 
         $this->loadModel('testcase');
         if($this->app->openApp == 'project')

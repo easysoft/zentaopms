@@ -10,8 +10,6 @@
  * @link        http://www.zentao.net
  */
 /* 字段列表。*/
-$lang->executionCommon           = $lang->executionCommon;
-$lang->execution->common         = '执行';
 $lang->execution->allExecutions  = '所有' . $lang->executionCommon;
 $lang->execution->allExecutionAB = '所有执行';
 $lang->execution->id             = $lang->executionCommon . '编号';
@@ -37,7 +35,7 @@ $lang->execution->to             = '至';
 $lang->execution->days           = '可用工作日';
 $lang->execution->day            = '天';
 $lang->execution->workHour       = '工时';
-$lang->execution->workHourUnit   = 'H';
+$lang->execution->workHourUnit   = 'h';
 $lang->execution->totalHours     = '可用工时';
 $lang->execution->totalDays      = '可用工日';
 $lang->execution->status         = $lang->executionCommon . '状态';
@@ -296,7 +294,7 @@ $lang->execution->noExecution         = "暂时没有{$lang->executionCommon}。
 $lang->execution->noMembers           = '暂时没有团队成员。';
 $lang->execution->workloadTotal       = "工作量占比累计不应当超过100, 当前产品下的工作量之和为%s";
 // $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
-$lang->execution->linkAllStoryTip     = "(项目下还未关联{$lang->SRCommon}，可直接关联该迭代/阶段/冲刺所关联产品的{$lang->SRCommon})";
+$lang->execution->linkAllStoryTip     = "(项目下还未关联{$lang->SRCommon}，可直接关联该执行所关联产品的{$lang->SRCommon})";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete             = "您确定删除{$lang->executionCommon}[%s]吗？";

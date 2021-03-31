@@ -645,11 +645,10 @@ class projectModel extends model
     public function createManageLink($project)
     {
         $link = $project->type == 'program' ? helper::createLink('project', 'browse', "projectID={$project->id}&status=all") : helper::createLink('project', 'index', "projectID={$project->id}", '', '', $project->id);
-        $icon = $project->type == 'program' ? "<i class='icon icon-program'></i> " : "<i class='icon icon-project'></i> ";
 
         if($this->app->rawModule == 'execution') $link = helper::createLink('execution', 'all', "status=all&projectID={$project->id}");
 
-        return html::a($link, $icon . $project->name, '_self', "id=program{$project->id} title='{$project->name}' class='text-ellipsis'");
+        return html::a($link, $project->name, '_self', "id=program{$project->id} title='{$project->name}' class='text-ellipsis'");
     }
 
     /**
@@ -1308,13 +1307,13 @@ class projectModel extends model
                     echo $project->teamCount;
                     break;
                 case 'estimate':
-                    echo $project->hours->totalEstimate . ' ' . $this->lang->execution->workHourUnit;
+                    echo $project->hours->totalEstimate . $this->lang->execution->workHourUnit;
                     break;
                 case 'consume':
-                    echo $project->hours->totalConsumed . ' ' . $this->lang->execution->workHourUnit;
+                    echo $project->hours->totalConsumed . $this->lang->execution->workHourUnit;
                     break;
                 case 'surplus':
-                    echo $project->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;
+                    echo $project->hours->totalLeft     . $this->lang->execution->workHourUnit;
                     break;
                 case 'progress':
                     echo "<div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}</div></div>";

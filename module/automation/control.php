@@ -36,16 +36,7 @@ class automation extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-
-        /* Set testtask menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
-        {
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-        }
-
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->projectID);
+        $this->view->products = $this->products = $products = $this->loadModel('product')->getPairs();
     }
 
     /**

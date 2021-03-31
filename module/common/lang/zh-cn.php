@@ -109,7 +109,7 @@ $lang->select        = '选择';
 $lang->selectAll     = '全选';
 $lang->selectReverse = '反选';
 $lang->loading       = '稍候...';
-$lang->notFound      = '抱歉，您访问的对象并不存在！';
+$lang->notFound      = '抱歉，您访问的对象不存在！';
 $lang->notPage       =  '抱歉，您访问的功能正在开发中！';
 $lang->showAll       = '[[全部显示]]';
 $lang->selectedItems = '已选择 <strong>{0}</strong> 项';
@@ -124,6 +124,7 @@ $lang->statusAB     = '状态';
 $lang->openedByAB   = '创建';
 $lang->assignedToAB = '指派';
 $lang->typeAB       = '类型';
+$lang->nameAB       = '名称';
 
 $lang->common->common     = '公有模块';
 $lang->my->common         = '地盘';

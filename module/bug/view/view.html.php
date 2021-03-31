@@ -67,7 +67,10 @@
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <?php
     $params        = "bugID=$bug->id";
-    $copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id,projectID={$bug->project},executionID={$bug->execution}";
+    $extraParams   = "extras=bugID=$bug->id";
+    if($this->app->openApp == 'project')   $extraParams .= ",projectID={$bug->project}";
+    if($this->app->openApp == 'execution') $extraParams .= ",executionID={$bug->execution}";
+    $copyParams    = "productID=$productID&branch=$bug->branch&$extraParams";
     $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
     ?>
     <div class='main-actions'>

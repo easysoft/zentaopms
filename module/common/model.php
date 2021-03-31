@@ -314,7 +314,6 @@ class commonModel extends model
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='650'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
-                echo "<li id='menuToggleItem'><a type='button' class='menu-toggle'><i class='icon icon-sm icon-menu-collapse'></i> <span class='is-unfold'>$lang->unfoldMenu</span><span class='is-collapse'>$lang->collapseMenu</span></a></li>";
 
                 echo "<li class='divider'></li>";
             }

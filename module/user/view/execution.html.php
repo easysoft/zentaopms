@@ -22,11 +22,11 @@
           <th class='w-id'>     <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
           <th class="text-left"><?php common::printOrderLink('name', $orderBy, $vars, $lang->user->name);?></th>
           <th class='w-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-user'>   <?php $lang->team->role;?></th>
+          <th class='w-user'>   <?php echo $lang->team->role;?></th>
           <th class='w-date'>   <?php common::printOrderLink('begin', $orderBy, $vars, $lang->execution->begin);?></th>
           <th class='w-date'>   <?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
-          <th class='w-date'>   <?php $lang->team->join;?></th>
-          <th class='w-110px'>  <?php $lang->team->hours;?></th>
+          <th class='w-date'>   <?php echo $lang->team->join;?></th>
+          <th class='w-110px'>  <?php echo $lang->team->hours;?></th>
         </tr>
       </thead>
       <tbody>

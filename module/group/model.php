@@ -475,6 +475,8 @@ class groupModel extends model
         ksort($this->lang->moduleOrder, SORT_ASC);
         foreach($this->lang->moduleOrder as $moduleName)
         {
+            if(!isset($resources->$moduleName)) continue;
+
             $resource = $resources->$moduleName;
             unset($resources->$moduleName);
             $this->lang->resource->$moduleName = $resource;
