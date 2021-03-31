@@ -422,7 +422,7 @@ class todo extends control
         }
         else
         {
-            $this->dao->delete()->from(TABLE_TODO)->where('id')->eq($todoID)->exec();
+            $this->todo->delete(TABLE_TODO, $todoID);
             $this->loadModel('action')->create('todo', $todoID, 'erased');
 
             /* if ajax request, send result. */
@@ -679,7 +679,7 @@ class todo extends control
      */
     public function createCycle()
     {
-        $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->fetchAll('id');
+        $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id');
         $this->todo->createByCycle($todoList);
     }
 }

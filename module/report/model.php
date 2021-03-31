@@ -91,8 +91,8 @@ class reportModel extends model
     /**
      * Get executions.
      *
-     * @param  string $begin 
-     * @param  string $end 
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return void
      */
@@ -496,6 +496,7 @@ class reportModel extends model
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.account = t2.account')
             ->where('t1.cycle')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.status')->in('wait,doing')
             ->query();
 
@@ -616,6 +617,7 @@ class reportModel extends model
     {
         return $this->dao->select("count(*) as count, sum(if((`status` != 'done'), 1, 0)) AS `undone`, sum(if((`status` = 'done'), 1, 0)) AS `done`")->from(TABLE_TODO)
             ->where('LEFT(date, 4)')->eq($year)
+            ->andWhere('deleted')->eq('0')
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetch();
     }
@@ -632,6 +634,7 @@ class reportModel extends model
     {
         $effort = $this->dao->select('count(*) as count, sum(consumed) as consumed')->from(TABLE_TASKESTIMATE)
             ->where('LEFT(date, 4)')->eq($year)
+            ->andWhere('deleted')->eq('0')
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetch();
 

@@ -245,6 +245,7 @@ class product extends control
             $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
             $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
+            unset($this->config->product->search['fields']['plan']);
         }
 
         /* Build search form. */
