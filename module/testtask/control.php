@@ -137,7 +137,7 @@ class testtask extends control
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
-        $this->session->set('buildList', $this->app->getURI(true), 'execution');
+        $this->session->set('buildList', $this->app->getURI(true) . '#app=' . $this->app->openApp, 'execution');
         $this->loadModel('testcase');
         $this->app->loadLang('tree');
 
@@ -145,6 +145,8 @@ class testtask extends control
         $productID = $this->loadModel('product')->saveState($productID, $this->products);
         if($this->app->openApp == 'project')
         {
+            $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
+            $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
             $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
         }

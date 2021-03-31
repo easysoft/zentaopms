@@ -96,7 +96,6 @@ $(function()
 {
     $('#<?php echo $browseType?>UnitTab').addClass('selected');
     $('#browseunitsTab').addClass('btn-active-text');
-    $('#subNavbar li[data-id="case"]').addClass('active');
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>
