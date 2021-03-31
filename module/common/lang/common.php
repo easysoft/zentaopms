@@ -72,6 +72,7 @@ $lang->api         = new stdclass();
 $lang->file        = new stdclass();
 $lang->misc        = new stdclass();
 
+$lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();
 $lang->projectstory   = new stdclass();
 
