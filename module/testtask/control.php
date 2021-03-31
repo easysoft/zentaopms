@@ -145,6 +145,8 @@ class testtask extends control
         $productID = $this->loadModel('product')->saveState($productID, $this->products);
         if($this->app->openApp == 'project')
         {
+            $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
+            $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
             $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
         }
