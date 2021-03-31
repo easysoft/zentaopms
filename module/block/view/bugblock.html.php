@@ -30,7 +30,7 @@
         <?php if($longBlock):?>
         <th class='c-level'><?php echo $lang->bug->severityAB?></th>
         <th class='c-pri'><?php echo $lang->priAB?></th>
-        <th class='c-date'><?php echo $lang->bug->openedDate;?></th>
+        <th class='c-date'><?php echo $lang->bug->deadline;?></th>
         <?php endif;?>
         <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
       </tr>
@@ -63,7 +63,7 @@
           <?php endif;?>
         </td>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
-        <td class='c-date'><?php echo $bug->openedDate;?></td>
+        <td class='c-date'><?php echo helper::isZeroDate($bug->deadline) ? '' : $bug->deadline;?></td>
         <?php endif;?>
         <?php $status = $this->processStatus('bug', $bug);?>
         <td class='c-status' title='<?php echo $status;?>'>
