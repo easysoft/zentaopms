@@ -1032,7 +1032,7 @@ class userModel extends model
         $projectType    = $type == 'execution' ? 'sprint,stage' : $type;
         $myProjectsList = $this->dao->select('t1. *,t2. *')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
-            ->where('t1.type')->in($type)
+            ->where('t1.type')->eq($type)
             ->andWhere('t2.type')->in($projectType)
             ->beginIF(strpos('doing|wait|suspended|closed', $status) !== false)->andWhere('status')->eq($status)->fi()
             ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
