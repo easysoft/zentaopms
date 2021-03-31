@@ -97,7 +97,9 @@
             <tr>
               <td class='text-center form-actions' colspan='4'>
                 <?php echo html::submitButton();?>
-                <?php echo html::backButton();?>
+                <?php $browseLink = 'javascript:history.go(-1);';?>
+                <?php if($objectType == 'testtask' and $this->session->reportList) $browseLink = $this->session->reportList;?>
+                <?php echo html::a($browseLink, $lang->goback, '', 'class="btn btn-back btn-wide"');?>
               </td>
             </tr>
           </table>

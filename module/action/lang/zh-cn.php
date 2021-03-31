@@ -32,6 +32,9 @@ $lang->action->editComment = '修改备注';
 $lang->action->create      = '添加备注';
 $lang->action->comment     = '备注';
 
+$lang->action->undeleteAction = '还原数据';
+$lang->action->hideOneAction  = '隐藏数据';
+
 $lang->action->trashTips      = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
 $lang->action->textDiff       = '文本格式';
 $lang->action->original       = '原始格式';

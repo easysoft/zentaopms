@@ -26,7 +26,7 @@ common:
 	cp -fr sdk zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload
 	mkdir zentaopms/tmp
-	mkdir zentaopms/tmp/cache/ 
+	mkdir zentaopms/tmp/cache/
 	mkdir zentaopms/tmp/extension/
 	mkdir zentaopms/tmp/log/
 	mkdir zentaopms/tmp/model/
@@ -141,8 +141,8 @@ package:
 	#rm -r zentaopms/module/misc/ext
 	rm -rf zentaopms/tools
 pms:
-	make common 
-	make zentaoxx 
+	make common
+	make zentaoxx
 	unzip zentaoxx.*.zip
 	cp zentaoxx/* zentaopms/ -r
 	cat zentaoxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql

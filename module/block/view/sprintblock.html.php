@@ -20,7 +20,7 @@
   <div class="col-4 text-middle text-center">
     <div class="tile">
       <div class="tile-title"><?php echo $lang->block->allExecutions;?></div>
-      <?php $projectLink = $this->createLink('execution', 'all', 'status=all')?>
+      <?php $projectLink = $this->createLink('project', 'execution')?>
       <div class="tile-amount"><?php echo $summary->total ? html::a($projectLink, $summary->total) : 0;?></div>
     </div>
   </div>

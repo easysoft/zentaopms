@@ -9,29 +9,33 @@
  * @version     $Id: zh-cn.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->index         = $lang->productCommon . '主页';
-$lang->product->browse        = "{$lang->SRCommon}列表";
-$lang->product->dynamic       = $lang->productCommon . '动态';
-$lang->product->view          = "{$lang->productCommon}概况";
-$lang->product->edit          = "编辑{$lang->productCommon}";
-$lang->product->batchEdit     = '批量编辑';
-$lang->product->create        = "添加{$lang->productCommon}";
-$lang->product->delete        = "删除{$lang->productCommon}";
-$lang->product->deleted       = '已删除';
-$lang->product->close         = '关闭';
+$lang->product->index           = $lang->productCommon . '主页';
+$lang->product->browse          = "{$lang->SRCommon}列表";
+$lang->product->dynamic         = $lang->productCommon . '动态';
+$lang->product->view            = "{$lang->productCommon}概况";
+$lang->product->edit            = "编辑{$lang->productCommon}";
+$lang->product->batchEdit       = '批量编辑';
+$lang->product->create          = "添加{$lang->productCommon}";
+$lang->product->delete          = "删除{$lang->productCommon}";
+$lang->product->deleted         = '已删除';
+$lang->product->close           = '关闭';
+$lang->product->select          = "请选择{$lang->productCommon}";
+$lang->product->mine            = '我负责：';
+$lang->product->other           = '其他：';
+$lang->product->closed          = '已关闭';
+$lang->product->updateOrder     = '排序';
+$lang->product->all             = "所有{$lang->productCommon}";
+$lang->product->manageLine      = "维护{$lang->productCommon}线";
+$lang->product->export          = '导出数据';
+$lang->product->dashboard       = "{$lang->productCommon}仪表盘";
+$lang->product->changeProgram   = "{$lang->productCommon}调整所属项目集影响范围确认";
+$lang->product->addWhitelist    = '添加白名单';
+$lang->product->unbindWhitelist = '移除白名单';
+
+$lang->product->indexAction   = "所有{$lang->productCommon}仪表盘";
 $lang->product->closeAction   = "关闭{$lang->productCommon}";
-$lang->product->select        = "请选择{$lang->productCommon}";
-$lang->product->mine          = '我负责：';
-$lang->product->other         = '其他：';
-$lang->product->closed        = '已关闭';
-$lang->product->updateOrder   = '排序';
 $lang->product->orderAction   = "{$lang->productCommon}排序";
-$lang->product->all           = "所有{$lang->productCommon}";
-$lang->product->manageLine    = "维护{$lang->productCommon}线";
-$lang->product->export        = '导出数据';
 $lang->product->exportAction  = "导出{$lang->productCommon}";
-$lang->product->dashboard     = "{$lang->productCommon}仪表盘";
-$lang->product->changeProgram = "{$lang->productCommon}调整所属项目集影响范围确认";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
@@ -90,8 +94,6 @@ $lang->product->QD             = '测试负责人';
 $lang->product->RD             = '发布负责人';
 $lang->product->acl            = '访问控制';
 $lang->product->whitelist      = '白名单';
-$lang->product->addWhitelist   = '添加白名单';
-$lang->product->unbindWhitelist = '删除白名单';
 $lang->product->branch         = '所属%s';
 $lang->product->qa             = '测试';
 $lang->product->release        = '发布';

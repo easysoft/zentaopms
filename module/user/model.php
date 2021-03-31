@@ -814,6 +814,7 @@ class userModel extends model
 
         $user->rights = $this->authorize($account);
         $user->groups = $this->getGroups($account);
+        $user->view   = $this->grantUserView($user->account, $user->rights['acls']);
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
@@ -836,6 +837,7 @@ class userModel extends model
 
         $user->rights = $this->authorize($account);
         $user->groups = $this->getGroups($account);
+        $user->view   = $this->grantUserView($user->account, $user->rights['acls']);
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');

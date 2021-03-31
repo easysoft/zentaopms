@@ -1,5 +1,5 @@
 <?php
-$lang->backup->common      = '备份';
+$lang->backup->common      = '系统备份';
 $lang->backup->index       = '备份首页';
 $lang->backup->history     = '备份历史';
 $lang->backup->delete      = '删除备份';
@@ -8,6 +8,9 @@ $lang->backup->restore     = '还原';
 $lang->backup->change      = '保留时间';
 $lang->backup->changeAB    = '修改';
 $lang->backup->rmPHPHeader = '去除安全设置';
+$lang->backup->setting     = '设置';
+
+$lang->backup->settingAction = '备份设置';
 
 $lang->backup->time     = '备份时间';
 $lang->backup->files    = '备份文件';
@@ -19,7 +22,6 @@ $lang->backup->status   = '状态';
 $lang->backup->statusList['success'] = '成功';
 $lang->backup->statusList['fail']    = '失败';
 
-$lang->backup->setting    = '设置';
 $lang->backup->settingDir = '备份目录';
 $lang->backup->settingList['nofile'] = '不备份附件和代码';
 $lang->backup->settingList['nosafe'] = '不需要防下载PHP文件头';

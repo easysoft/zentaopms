@@ -82,6 +82,8 @@ $lang->doc->collect          = '收藏';
 $lang->doc->cancelCollection = '取消收藏';
 $lang->doc->deleteFile       = '删除附件';
 
+$lang->doc->collectAction = '收藏文档';
+
 $lang->doc->libName        = '文档库名称';
 $lang->doc->libType        = '文档库类型';
 $lang->doc->custom         = '自定义文档库';

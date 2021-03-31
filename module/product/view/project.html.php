@@ -55,7 +55,7 @@
             <?php
             if($config->systemMode == 'new')
             {
-                echo html::a($this->createLink('project', explode('-', $config->projectLink)[1], 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');
+                echo html::a($this->createLink('project', 'index', 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');
             }
             else
             {
@@ -76,7 +76,7 @@
           <td class='c-status' title='<?php echo $status;?>'>
             <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
           </td>
-          <?php $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->project->tenThousand : number_format((float)$project->budget, 1);?>
+          <?php $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? number_format((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : number_format((float)$project->budget, 2);?>
           <?php $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;?>
           <td title='<?php echo $budgetTitle;?>' class='text-ellipsis'><?php echo $budgetTitle;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHourUnit;?></td>

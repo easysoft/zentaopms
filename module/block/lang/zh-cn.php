@@ -339,7 +339,8 @@ $lang->block->availableBlocks->testtask  = '测试版本列表';
 $lang->block->availableBlocks->risk      = '我的风险';
 $lang->block->availableBlocks->issue     = '我的问题';
 
-$lang->block->moduleList['project']   = '项目';
+global $config;
+if($config->systemMode == 'new') $lang->block->moduleList['project'] = '项目';
 $lang->block->moduleList['product']   = $lang->productCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = '测试';

@@ -1672,8 +1672,7 @@ class testcaseModel extends model
     {
         if(!empty($case->story))
         {
-            $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
-            $projects = array_keys($projects);
+            $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchPairs();
         }
         elseif($this->app->openApp == 'project' and empty($case->story))
         {

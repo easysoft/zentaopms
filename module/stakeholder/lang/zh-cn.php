@@ -26,6 +26,9 @@ $lang->stakeholder->issue        = '问题管理';
 $lang->stakeholder->viewIssue    = '活动问题列表';
 $lang->stakeholder->userIssue    = '干系人问题列表';
 
+$lang->stakeholder->viewAction      = '干系人详情';
+$lang->stakeholder->viewIssueAction = '问题列表';
+
 /* Fields. */
 $lang->stakeholder->id          = '编号';
 $lang->stakeholder->user        = '用户';
