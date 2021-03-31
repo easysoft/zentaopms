@@ -19,7 +19,11 @@ class custom extends control
      */
     public function index()
     {
-        if(common::hasPriv('custom', 'set')) die(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
+        if(($this->config->systemMode == 'new') and common::hasPriv('custom', 'set'))
+        {
+            die(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
+        }
+
         if(common::hasPriv('custom', 'product'))   die(js::locate(inlink('product')));
         if(common::hasPriv('custom', 'execution')) die(js::locate(inlink('execution')));
 
