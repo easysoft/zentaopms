@@ -629,7 +629,7 @@ class project extends control
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->project->dynamic;
 
-        $this->view->userIdPairs  = $this->project->getTeamMemberPairs($project->parent);
+        $this->view->userIdPairs  = $this->project->getTeamMemberPairs($projectID);
         $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         /* Assign. */
