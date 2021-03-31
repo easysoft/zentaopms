@@ -33,7 +33,7 @@
         </td>
         <?php if($longBlock):?>
         <td class='text-center'><?php echo $project->teamCount;?></td>
-        <td class='text-right' title="<?php echo $project->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->consumed . ' ' . $lang->execution->workHourUnit;?></td>
+        <td class='text-right' title="<?php echo $project->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->consumed . $lang->execution->workHourUnit;?></td>
         <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? number_format((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : number_format((float)$project->budget, 2);?>
         <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td class='text-center'><?php echo $project->leftStories;?></td>

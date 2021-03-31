@@ -203,8 +203,8 @@ class router extends baseRouter
 
         /* Record hour unit. */
         $config->hourUnit = 'h';
-        if($hourKey == STORYPOINT_KEY)    $config->hourUnit = 'SP';
-        if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'FP';
+        if($hourKey == STORYPOINT_KEY)    $config->hourUnit = 'sp';
+        if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'fp';
 
         $model = new stdclass();
         $model->model = 'scrum';

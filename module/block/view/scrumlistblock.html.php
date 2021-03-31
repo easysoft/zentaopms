@@ -52,9 +52,9 @@
           <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
           <?php endif;?>
         </td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalEstimate . ' ' . $lang->execution->workHourUnit;?></td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalConsumed . ' ' . $lang->execution->workHourUnit;?></td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalLeft     . $lang->execution->workHourUnit;?></td>
         <?php endif;?>
         <td class="c-progress">
           <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
