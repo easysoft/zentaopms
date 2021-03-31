@@ -2818,7 +2818,7 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function buildBugSearchForm($products, $queryID, $actionURL)
+    public function buildBugSearchForm($products, $queryID, $actionURL, $type = 'execution')
     {
         $modules = array();
         $builds  = array('' => '', 'trunk' => $this->lang->trunk);
@@ -2863,7 +2863,7 @@ class executionModel extends model
             }
         }
 
-        $this->config->bug->search['module']    = 'executionBug';
+        $this->config->bug->search['module']    = $type == 'execution' ? 'executionBug' : 'projectBug';
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
         unset($this->config->bug->search['fields']['execution']);
