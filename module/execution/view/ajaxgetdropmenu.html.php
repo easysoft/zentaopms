@@ -24,13 +24,13 @@ foreach($executions as $execution)
     $executionName = $config->systemMode == 'new' ? zget($projects, $execution->project) . '/' . $execution->name : $execution->name;
     if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
     {
-        $myProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='text-important $selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
+        $myProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='text-important $selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
     }
     else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
     {
-        $normalProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='$selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
+        $normalProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='$selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
     }
-    else if($execution->status == 'done' or $execution->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='$selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "'");
+    else if($execution->status == 'done' or $execution->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $execution->id), "<i class='icon icon-{$lang->icons[$execution->type]}'></i> " . $executionName, '', "class='$selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
 }
 ?>
 <div class="table-row">

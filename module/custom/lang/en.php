@@ -1,4 +1,6 @@
 <?php
+global $config;
+
 $lang->custom->common               = 'Custom';
 $lang->custom->index                = 'Home';
 $lang->custom->set                  = 'Customize';
@@ -19,7 +21,6 @@ $lang->custom->score                = 'Point';
 $lang->custom->timezone             = 'Timezone';
 $lang->custom->scoreReset           = 'Reset Points';
 $lang->custom->scoreTitle           = 'Point Feature';
-$lang->custom->execution            = 'Execution';
 $lang->custom->product              = $lang->productCommon;
 $lang->custom->convertFactor        = 'Convert factor';
 $lang->custom->region               = 'Interval';
@@ -46,6 +47,9 @@ $lang->custom->switch               = "Switch";
 $lang->custom->oneUnit              = "One {$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "Please set the conversion factor of {$lang->hourCommon} to %s first";
 
+if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
+if($config->systemMode == 'classic') $lang->custom->execution = $lang->executionCommon;
+
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
 $lang->custom->unitList['cost']       = 'Yuan/Hour';
@@ -71,12 +75,12 @@ $lang->custom->saveTips            = 'After clicking save, the current %s will b
 
 $lang->custom->numberError = 'The interval must be greater than zero!';
 
-$lang->custom->closedExecution = 'Closed Executions'; 
+$lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
-$lang->custom->object['project']   = 'Project';
+if($config->systemMode == 'new') $lang->custom->object['project']   = 'Project';
 $lang->custom->object['product']   = $lang->productCommon;
-$lang->custom->object['execution'] = 'Execution';
+$lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['story']     = 'Story';
 $lang->custom->object['task']      = 'Task';
 $lang->custom->object['bug']       = 'Bug';
@@ -164,7 +168,7 @@ $lang->custom->notice->required            = 'The selected field is required.';
 $lang->custom->notice->conceptResult       = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>.';
 $lang->custom->notice->conceptPath         = 'Go to Admin -> Custom -> Concept to set it.';
 $lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
-$lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed execution is also forbidden.";
+$lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->executionCommon} is also forbidden.";
 $lang->custom->notice->URSREmpty           = 'Custom requirement name can not be empty!';
 $lang->custom->notice->confirmDelete       = 'Are you sure you want to delete it?';
 
@@ -221,7 +225,7 @@ $lang->custom->CRExecution[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
-$lang->custom->moduleName['execution']   = 'Execution';
+$lang->custom->moduleName['execution']   = $lang->custom->execution;
 
 $lang->custom->conceptQuestions['overview'] = "1. Which combination of management fits your company?";
 $lang->custom->conceptQuestions['URAndSR']  = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";

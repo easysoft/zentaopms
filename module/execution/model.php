@@ -1150,9 +1150,13 @@ class executionModel extends model
         {
             $link = helper::createLink($module, $method, "executionID=%s&type=$extra");
         }
-        elseif($module == 'execution' && ($method == 'index' or $method == 'all'))
+        elseif($module == 'execution' and ($method == 'index' or $method == 'all'))
         {
             $link = helper::createLink($module, 'task', "executionID=%s");
+        }
+        elseif($module == 'bug' and $method == 'create' and $this->app->openApp == 'execution')
+        {
+            $link = helper::createLink($module, $method, "productID=0&branch=0&extra=executionID=%s");
         }
         else
         {
@@ -2818,7 +2822,7 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function buildBugSearchForm($products, $queryID, $actionURL)
+    public function buildBugSearchForm($products, $queryID, $actionURL, $type = 'execution')
     {
         $modules = array();
         $builds  = array('' => '', 'trunk' => $this->lang->trunk);
@@ -2863,7 +2867,7 @@ class executionModel extends model
             }
         }
 
-        $this->config->bug->search['module']    = 'executionBug';
+        $this->config->bug->search['module']    = $type == 'execution' ? 'executionBug' : 'projectBug';
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
         unset($this->config->bug->search['fields']['execution']);

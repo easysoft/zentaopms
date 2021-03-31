@@ -24,7 +24,7 @@ js::set('browseType', $browseType);
   <?php if($this->config->systemMode == 'new'):?>
   <div id="sidebarHeader">
     <div class="title">
-      <?php echo $programID ? $program->name : $lang->project->common;?>
+      <?php echo $programID ? $program->name : $lang->project->parent;?>
       <?php if($programID) echo html::a(inLink('browse', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>
@@ -55,7 +55,7 @@ js::set('browseType', $browseType);
     <div class="cell">
       <?php echo $programTree;?>
       <div class="text-center">
-        <?php common::printLink('project', 'projectProgramTitle', '', $lang->project->moduleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
+        <?php common::printLink('project', 'programTitle', '', $lang->project->moduleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
       </div>
     </div>
   </div>
