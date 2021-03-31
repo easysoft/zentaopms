@@ -376,7 +376,6 @@ class baseRouter
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);
 
-        $this->setOpenApp();
         $this->setSuperVars();
         $this->setDebug();
         $this->setErrorHandler();
@@ -862,7 +861,16 @@ class baseRouter
      */
     public function setOpenApp()
     {
-        if(isset($_COOKIE['openApp'])) $this->openApp = $_COOKIE['openApp'];
+        if(isset($_COOKIE['openApp']) and $_COOKIE['openApp'])
+        {
+            $this->openApp = $_COOKIE['openApp'];
+            setCookie('openApp', '');
+        }
+        else
+        {
+            $module = $this->rawModule;
+            $this->openApp = $this->lang->navGroup->$module;
+        }
     }
 
     /**

@@ -539,3 +539,5 @@ $lang->navGroup->dev       = 'admin';
 $lang->navGroup->entry     = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';
+
+$lang->navGroup->tree = 'tree';

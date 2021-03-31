@@ -961,6 +961,13 @@ class baseControl
      */
     public function locate($url)
     {
+        /* If openApp is set, use it next visit. */
+        $module = $this->app->rawModule;
+        if(isset($this->lang->navGroup->$module) and $this->lang->navGroup->$module != $this->app->openApp)
+        {
+            setCookie('openApp', $this->app->openApp);
+        }
+
         header("location: $url");
         exit;
     }

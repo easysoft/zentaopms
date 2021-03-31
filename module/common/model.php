@@ -33,7 +33,6 @@ class commonModel extends model
             $this->loadCustomFromDB();
             if(!$this->checkIP()) die($this->lang->ipLimited);
             $this->app->loadLang('company');
-            $this->setOpenApp();
         }
     }
 
@@ -113,21 +112,6 @@ class commonModel extends model
             if(!defined('IN_UPGRADE')) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
-        }
-    }
-
-    /**
-     * Set openApp.
-     *
-     * @access public
-     * @return void
-     */
-    public function setOpenApp()
-    {
-        $openApp = $this->app->openApp;
-        if(isset($this->lang->navGroup->$openApp))
-        {
-            $this->app->openApp = $this->lang->navGroup->$openApp;
         }
     }
 
@@ -829,7 +813,7 @@ class commonModel extends model
                 }
                 if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
 
-                $label   = $menuItem->text;
+                $label    = $menuItem->text;
                 $dropMenu = '';
                 /* Print sub menus. */
                 if(isset($menuItem->dropMenu))
@@ -851,7 +835,8 @@ class commonModel extends model
 
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
 
-                        $dropMenu .= "<li class='$subActive' data-id='$dropMenuItem->name'>" . html::a($subLink, $subLabel) . '</li>';
+                        $misc = (isset($lang->navGroup->$subModule) and $openApp != $lang->navGroup->$subModule) ? "data-app='$openApp'" : '';
+                        $dropMenu .= "<li class='$subActive' data-id='$dropMenuItem->name'>" . html::a($subLink, $subLabel, '', $misc) . '</li>';
                     }
 
                     if(empty($dropMenu)) continue;
@@ -860,8 +845,10 @@ class commonModel extends model
                     $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
                 }
 
-                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $dropMenu . "</li>\n";
-                if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, "class='$class $active'") . "\n";
+                $misc = (isset($lang->navGroup->$module) and $openApp != $lang->navGroup->$module) ? "data-app='$openApp'" : '';
+                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
+
+                if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, $misc . " class='$class $active'") . "\n";
                 echo $menuItemHtml;
             }
             else

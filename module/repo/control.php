@@ -61,7 +61,7 @@ class repo extends control
             $this->repo->setMenu($this->repos, $repoID);
         }
 
-        if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create', "objectID=$objectID")));
+        if(empty($this->repos) and $this->methodName != 'create') die($this->locate($this->repo->createLink('create', "objectID=$objectID")));
     }
 
     /**

@@ -548,8 +548,8 @@
         {
             defaultOpenUrl = decodeURIComponent(location.hash.substr(5));
         }
-        if(defaultOpenUrl) openApp(defaultOpenUrl);
-        else openApp(defaultApp);
+
+        openApp(defaultOpenUrl ? defaultOpenUrl : defaultApp);
 
         /* Refresh more menu on window resize */
         $(window).on('resize', refreshMoreMenu);

@@ -655,7 +655,8 @@ class project extends control
     {
         $uri = $this->app->getURI(true);
         $this->app->session->set('executionList', $uri, 'project');
-        $this->locate($this->createLink('execution', 'all', "status=all&projectID=$projectID", '', false));
+
+        echo $this->fetch('execution', 'all', "status=all&projectID=$projectID");
     }
 
     /**
