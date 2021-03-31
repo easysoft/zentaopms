@@ -1238,7 +1238,10 @@ class storyModel extends model
             }
 
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(helper::createLink('product', 'browse', "productID=$oldStory->product&branch=0&browseType=unclosed&queryID=0&type=story"), 'parent.parent'));
+
+            $isonlybody = isonlybody();
+            unset($_GET['onlybody']);
+            die(js::locate(helper::createLink('product', 'browse', "productID=$oldStory->product&branch=0&browseType=unclosed&queryID=0&type=story"), $isonlybody ? 'parent.parent' : 'parent'));
         }
         else
         {
