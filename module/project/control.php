@@ -921,6 +921,8 @@ class project extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$projectID&programID=$programID")));
         }
 
+        $this->project->setMenu($projectID);
+
         $group = $this->group->getById($groupID);
 
         $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->manageView;
