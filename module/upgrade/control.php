@@ -265,6 +265,9 @@ class upgrade extends control
                 list($programID, $projectID, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
 
+                /* Process productline. */
+                $this->dao->delete()->from(TABLE_MODULE)->where('`root`')->eq(0)->andWhere('`type`')->eq('line')->exec();
+
                 /* Process merged products and projects. */
                 $this->upgrade->processMergedData($programID, $projectID, $lineID, $linkedProducts, $linkedSprints);
             }
