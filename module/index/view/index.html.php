@@ -130,4 +130,5 @@ js::set('defaultOpen', $open);
 <?php js::set('searchAB', $lang->searchAB);?>
 <?php js::set('searchObjectList', ',' . implode(',', array_keys($lang->searchObjects)) . ',');?>
 <?php js::set('searchCommon', $lang->index->search);?>
+<?php $config->noHiddenwin = true;?>
 <?php include '../../common/view/footer.lite.html.php';?>
