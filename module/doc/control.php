@@ -47,10 +47,6 @@ class doc extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 5, 1);
 
-        $this->lang->TRActions  = $this->doc->setFastMenu($this->lang->doc->fast);
-        $this->lang->TRActions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
-        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc() : '';
-
         $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
         $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'index');
 
@@ -859,12 +855,37 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function objectLibs($type, $objectID = 0)
+    public function objectLibs($type, $objectID = 0, $libID = 0)
     {
         // setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $this->session->set('docList', $this->app->getURI(true), 'doc');
 
-        $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        if($type == 'product')
+        {
+            $objects  = $this->loadModel('product')->getPairs('nocode');
+            $objectID = $this->product->saveState($objectID, $objects);
+            $table    = TABLE_PRODUCT;
+
+            $libs = $this->doc->getLibsByObject('product', $objectID);
+            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID == 0 ? key($libs) : $libID);
+
+            $this->app->rawMethod = 'product';
+        }
+        else
+        {
+            $objects  = $this->loadModel('project')->getPairsByProgram();
+            $objectID = $this->project->saveState($objectID, $objects);
+            $table    = TABLE_PROJECT;
+
+            $libs = $this->doc->getLibsByObject('project', $objectID);
+            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID == 0 ? key($libs) : $libID);
+
+            $this->app->rawMethod = 'project';
+        }
+
+        $this->lang->TRActions  = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
+        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc() : '';
+
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
         if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->project));
 

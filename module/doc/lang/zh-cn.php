@@ -13,6 +13,7 @@
 $lang->doc->common         = '文档';
 $lang->doc->id             = '文档编号';
 $lang->doc->product        = '所属' . $lang->productCommon;
+$lang->doc->project        = '所属项目';
 $lang->doc->execution      = '所属' . $lang->executionCommon;
 $lang->doc->lib            = '所属文档库';
 $lang->doc->module         = '所属分类';
@@ -214,6 +215,7 @@ $lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档
 $lang->doclib->create['custom']    = '创建自定义文档库';
 
 $lang->doclib->main['product']   = $lang->productCommon . '主库';
+$lang->doclib->main['project']   = '项目主库';
 $lang->doclib->main['execution'] = $lang->executionCommon . '主库';
 
 $lang->doclib->tabList['product']   = $lang->productCommon;

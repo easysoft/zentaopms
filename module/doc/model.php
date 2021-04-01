@@ -1117,6 +1117,7 @@ class docModel extends model
     public function getLibsByObject($type, $objectID, $mode = '')
     {
         if($type != 'product' and $type != 'project' and $type != 'execution') return false;
+
         $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
 
         if($type == 'product')
@@ -1139,12 +1140,14 @@ class docModel extends model
         $itemCounts = $this->statLibCounts(array_keys($libs));
         foreach($libs as $libID => $lib) $libs[$libID]->allCount = $itemCounts[$libID];
 
+        /*
         if(common::hasPriv('doc', 'showFiles'))
         {
             $libs['files'] = new stdclass();
             $libs['files']->name = $this->lang->doclib->files;
             $libs['files']->allCount = count($this->getLibFiles($type, $objectID, 'id_desc'));
         }
+         */
 
         return $libs;
     }
@@ -1203,6 +1206,7 @@ class docModel extends model
     public function getLibFiles($type, $objectID, $orderBy, $pager = null)
     {
         if($type != 'execution' and $type != 'project' and $type != 'product') return true;
+
         $this->loadModel('file');
         $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->fetchAll('id');
         foreach($docs as $id => $doc)
@@ -1289,7 +1293,8 @@ class docModel extends model
             $executionIdList = join(',', $executionIdList);
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
                 ->where('size')->gt('0')
-                ->andWhere("(objectType = 'execution' and objectID in ($executionIdList))", true)
+                ->andWhere("(objectType = 'project' and objectID = $objectID)", true)
+                ->orWhere("(objectType = 'execution' and objectID in ($executionIdList))")
                 ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
                 ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
                 ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
@@ -1766,5 +1771,45 @@ EOF;
             if($this->app->rawMethod != 'index') $navCSS .= '.header-btn+.header-btn::after, .header-btn+.header-btn::before {top: -50px;}';
         }
         return $navCSS;
+    }
+
+    /**
+     * Create the select code of doc.
+     *
+     * @param  string $type
+     * @param  array  $objects
+     * @param  int    $objectID
+     * @param  array  $libs
+     * @param  int    $libID
+     * @access public
+     * @return string
+     */
+    public function select($type, $objects, $objectID, $libs, $libID = 0)
+    {
+        if(empty($objects)) return '';
+
+        $output = '';
+        $dropMenuLink = helper::createLink('repo', 'ajaxGetDropMenu');
+
+        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "<div class='table-col'><div class='list-group'>";
+        foreach($objects as $key => $object)
+        {
+            $output .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object);
+        }
+        $output .= "</div></div></div></div></div>";
+
+        $dropMenuLink = helper::createLink('repo', 'ajaxGetBranchDropMenu');
+        $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libs[$libID]->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "<div class='table-col'><div class='list-group'>";
+        foreach($libs as $key => $lib)
+        {
+            $output .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name);
+        }
+        $output .= "</div></div></div></div></div>";
+
+        return $output;
     }
 }

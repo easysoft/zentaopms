@@ -13,6 +13,7 @@
 $lang->doc->common         = 'Document';
 $lang->doc->id             = 'ID';
 $lang->doc->product        = $lang->productCommon;
+$lang->doc->project        = 'Project';
 $lang->doc->execution      = $lang->executionCommon;
 $lang->doc->lib            = 'Library';
 $lang->doc->module         = 'Category';
@@ -81,6 +82,8 @@ $lang->doc->childType        = 'Categories';
 $lang->doc->collect          = 'Add Favorite';
 $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Delete File';
+
+$lang->doc->collectAction = 'Add Favorite';
 
 $lang->doc->libName        = 'Document Library';
 $lang->doc->libType        = 'Category';
@@ -212,6 +215,7 @@ $lang->doclib->create['execution'] = 'Create ' . $lang->executionCommon . ' Libr
 $lang->doclib->create['custom']    = 'Create Custom Library';
 
 $lang->doclib->main['product']   = 'Primary Library';
+$lang->doclib->main['project']   = 'Primary Library';
 $lang->doclib->main['execution'] = 'Primary Library';
 
 $lang->doclib->tabList['product']   = $lang->productCommon;

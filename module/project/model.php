@@ -842,6 +842,16 @@ class projectModel extends model
                 $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
+            /* Create doc lib. */
+            $this->app->loadLang('doc');
+            $lib = new stdclass();
+            $lib->project = $projectID;
+            $lib->name    = $this->lang->doclib->main['project'];
+            $lib->type    = 'project';
+            $lib->main    = '1';
+            $lib->acl     = 'default';
+            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
             return $projectID;
         }
     }
