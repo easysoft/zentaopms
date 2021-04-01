@@ -51,7 +51,6 @@
           <?php endif; ?>
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
-              <a href='javascript:;' data-toggle='context-dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right cards-menu'>
                 <li><?php common::printIcon('project', 'group', "projectID=$project->id", $project, 'button', 'group', '', '', '', '', '', $project->id);?></li>
                 <li><?php common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'button', 'persons', '', '', '', '', '', $project->id);?></li>
