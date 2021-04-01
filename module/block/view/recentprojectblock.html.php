@@ -72,7 +72,6 @@
           <?php if($config->systemMode == 'new'):?>
           <?php if($project->model === 'waterfall'): ?>
           <div class='project-detail project-stages'>
-            <p class='text-muted'><?php echo $lang->project->ongoingStage;?></p>
             <?php
             $projectProjects = array();
             foreach($project->executions as $project)
@@ -83,6 +82,7 @@
             <?php if(empty($projectProjects)): ?>
             <div class='label label-outline'><?php echo zget($lang->project->statusList, $project->status);?></div>
             <?php else: ?>
+            <p class='text-muted'><?php echo $lang->project->ongoingStage;?></p>
             <div class='project-stages-container scrollbar-hover'>
               <div class='project-stages-row'>
                 <?php foreach ($projectProjects as $project): ?>
