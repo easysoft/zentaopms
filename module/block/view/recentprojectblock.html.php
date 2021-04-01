@@ -41,7 +41,6 @@
     <div class='col'>
       <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
-          <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($viewLink, $project->name);?> </strong>
           <?php if($config->systemMode == 'new'):?>
           <?php if($project->model === 'waterfall'): ?>
           <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
@@ -49,6 +48,7 @@
           <span class='project-type-label label label-info label-outline'><?php echo $lang->project->scrum; ?></span>
           <?php endif; ?>
           <?php endif; ?>
+          <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($viewLink, $project->name);?> </strong>
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
               <ul class='dropdown-menu pull-right cards-menu'>
