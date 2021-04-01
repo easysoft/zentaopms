@@ -68,6 +68,7 @@ $lang->todo->finishedDate = '完成时间';
 $lang->todo->closedBy     = '由谁关闭';
 $lang->todo->closedDate   = '关闭时间';
 $lang->todo->deadline     = '过期时间';
+$lang->todo->deleted      = '已删除';
 
 $lang->todo->every        = '间隔';
 $lang->todo->specify      = '指定';
