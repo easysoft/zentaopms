@@ -1416,7 +1416,7 @@ class story extends control
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $tracks = $this->story->getTracks($productID, $branch, $pager);
 
-        if($projectID) 
+        if($projectID)
         {
             $this->loadModel('project')->setMenu($projectID);
             $projectProducts = $this->product->getProducts($projectID);

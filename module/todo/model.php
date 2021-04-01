@@ -141,6 +141,14 @@ class todoModel extends model
                 if($todo->type == 'review')   $todo->idvalue = isset($todos->reviews[$i + 1])   ? $todos->reviews[$i + 1] : 0;
                 if($todo->type == 'testtask') $todo->idvalue = isset($todos->testtasks[$i + 1]) ? $todos->testtasks[$i + 1] : 0;
 
+                if($todo->type != 'custom' and $todo->idvalue)
+                {
+                    $type   = $todo->type;
+                    $object = $this->loadModel($type)->getByID($todo->idvalue);
+                    if(isset($object->name))  $todo->name = $object->name;
+                    if(isset($object->title)) $todo->name = $object->title;
+                }
+
                 if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $validTodos[] = $todo;
