@@ -92,8 +92,23 @@
           <table class='table table-form'>
             <?php foreach($lang->mainNav as $module => $title):?>
             <?php if(!is_string($title)) continue;?>
-            <?php if(!isset($lang->action->dynamicAction->$module) and !isset($navGroup[$module])) continue;?>
-            <?php if($module == 'admin') continue;?>
+            <?php
+            /* Ignore null actions menus. */
+            $isNullActions = true;
+            if(isset($lang->action->dynamicAction->$module)) $isNullActions = false;
+            if(isset($navGroup[$module]) and $isNullActions)
+            {
+                foreach($navGroup[$module] as $subModule)
+                {
+                    if(isset($lang->action->dynamicAction->$subModule))
+                    {
+                        $isNullActions = false;
+                        break;
+                    }
+                }
+            }
+            if($isNullActions) continue;
+            ?>
             <tr id='<?php echo "{$module}ActionBox";?>'>
               <th class='w-100px text-left text-top'>
                 <div class='action-item'>
