@@ -53,7 +53,6 @@
       <tr class='text-left'>
         <td><?php echo html::a($link, sprintf('%03d', $execution->id));?></td>
         <td class='c-name text-left'>
-          <span class='project-type-label label label-info label-outline'><?php echo zget($lang->execution->typeList, $execution->type);?></span>
           <?php echo html::a($link, $execution->name, '', "title='$execution->name'");?>
         </td>
         <?php if($config->systemMode == 'new'):?>
