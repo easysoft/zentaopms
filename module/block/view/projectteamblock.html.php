@@ -8,7 +8,6 @@ $maxConsumed  = 0;
 <div class='panel-body'>
   <div class='table-row'>
     <div class='table-col chart-titles'>
-      <div class='chart-col-title strong'><span><?php echo $lang->project->name;?></span></div>
       <?php foreach($projects as $project):?>
       <?php
       $maxTeamCount = max($maxTeamCount, $project->teamCount);
@@ -48,24 +47,22 @@ $maxConsumed  = 0;
   </div>
   <style>
   .block-projectteam .panel-body {margin-top: -10px}
-  .chart-titles {width: 110px; padding-right: 10px; position: relative; z-index: 1}
+  .chart-titles {top: 30px; width: 110px; padding-right: 10px; position: relative; z-index: 1}
   .chart-rows {position: relative; z-index: 0}
   .chart-title {width: 100px; line-height: 20px; padding: 5px 0; height: 30px}
   .chart-title > span {background: #fff}
   .chart-col-title {line-height: 20px; margin-bottom: 10px; padding: 0 10px}
-  .project-team, .project-consumed {padding: 0}
-  .project-team {border-right: 1px solid #e5e8ec}
-  .project-team > .chart-col-title {text-align: right}
+  .project-team, .project-consumed {padding: 0; border-left: 1px solid #e5e8ec}
   .chart-col-item {height: 30px; padding: 5px 0}
   .chart-col-text {width: 50px; position: absolute; top: 5px; line-height: 20px; left: 0}
-  .project-team .chart-col-item {padding-left: 50px}
+  .project-team .chart-col-item {padding-right: 50px}
   .project-team .chart-col-item:before {content: ' '; z-index: 0; left: -100px; top: 14px; right: 0; border-top: 1px dotted #e5e8ec}
   .project-consumed .chart-col-item {padding-right: 50px}
   .chart-col-item .progress {background: none; border-radius: 0; overflow: visible; margin: 6px 0 0 0; position: relative; z-index: 1}
   .chart-col-item .progress > .progress-bar {border-radius: 0; position: relative; min-width: 1px}
-  .project-team .chart-col-item .progress > .progress-bar {float: right; background-color: #39cfff}
+  .project-team .chart-col-item .progress > .progress-bar {background-color: #39cfff}
   .chart-col-item .progress .progress-text {position: absolute; top: -6px; color: #333; width: 50px; line-height: 20px; white-space: nowrap; overflow: visible}
-  .project-team .progress .progress-text {text-align: right; left: -50px; padding-right: 5px}
+  .project-team .progress .progress-text {text-align: left; right: -55px; padding-right: 5px}
   .project-consumed .progress .progress-text {text-align: left; right: -50px; padding-left: 5px}
   </style>
 </div>
