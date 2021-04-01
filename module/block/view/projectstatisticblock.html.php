@@ -60,6 +60,13 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .project-info .col-xs-5, .block-statistic .project-info .col-xs-7 {margin-top: 8px;}
 .block-statistic .project-info .col-xs-5 {padding-left: 0;}
 
+.block-statistic .data {width: 40%; text-align: left; padding: 10px 0px; font-size: 14px; font-weight: 700;}
+.block-statistic .dataTitle {width: 60%; text-align: right; padding: 10px 0px; font-size: 14px;}
+.block-statistic .executionName {padding-top: 2px; font-size: 14px;}
+.block-statistic .lastIteration {padding-top: 6px;}
+.block-statistic .progress-text-left {margin-right: 90px}
+.block-statistic .progress-text-left .progress-text {padding-top: 2px; font-size: 14px;}
+
 .status-count {margin: auto;}
 .status-count tr:first-child td:last-child {color: #000; font-weight: bold;}
 
@@ -127,57 +134,66 @@ $(function()
       <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
         <div class="table-row">
         <?php if($project->model == 'scrum'):?>
-          <div class="col-5 text-middle text-center">
-            <div class="progress-pie inline-block space" data-value="<?php echo $project->progress;?>" data-doughnut-size="84">
-              <canvas width="120" height="120"></canvas>
-              <div class="progress-info">
-                <small><?php echo $lang->story->common . $lang->project->doneStories;?></small>
-                <strong><?php echo $project->doneStories;?></strong>
-              </div>
+        <div class='table-row'>
+          <div class="col-4 text-center">
+            <div><h4><?php echo $lang->block->story;?></h4></div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->project->allStories . "：";?></div>
+              <div class="col data"><?php echo $project->allStories;?></div>
             </div>
-            <div class="table-row text-center small text-muted with-padding">
-              <div class="col-4 text-bottom">
-                <div><?php echo $lang->project->allStories;?></div>
-                <div><?php echo $project->allStories;?></div>
-              </div>
-              <div class="col-4">
-                <span class="label label-dot label-primary"></span>
-                <div><?php echo $lang->project->doneStories;?></div>
-                <div><?php echo $project->doneStories;?></div>
-              </div>
-              <div class="col-4">
-                <span class="label label-dot label-pale"></span>
-                <div><?php echo $lang->project->leftStories;?></div>
-                <div><?php echo $project->leftStories;?></div>
-              </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->project->doneStories . "：";?></div>
+              <div class="col data"><?php echo $project->doneStories;?></div>
+            </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->left . "：";?></div>
+              <div class="col data"><?php echo $project->leftStories;?></div>
             </div>
           </div>
-          <div class="col-7">
-            <div class="project-info">
-              <h4><?php echo $lang->project->allInput;?></h4>
-              <div class='info'>
-                <span><i class='icon icon-group'></i> <?php echo sprintf($lang->project->membersUnit, $project->teamCount);?></span>
-                <span><i class='icon icon-clock'></i> <?php echo sprintf($lang->project->hoursUnit, $project->estimate);?></span>
-                <span><i class='icon icon-cost'></i> <?php echo $project->budget . ' ' . zget($lang->project->unitList, $project->budgetUnit);?></span>
-              </div>
+          <div class="col-4 text-center">
+            <div><h4><?php echo $lang->block->investment;?></h4></div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->totalPeople . "：";?></div>
+              <div class="col data"><?php echo $project->teamCount;?></div>
             </div>
-            <div class="project-info">
-              <?php $i = 0;?>
-              <h4><?php echo $lang->project->lastIteration;?></h4>
-              <?php foreach($project->executions as $execution):?>
-              <?php $i ++;?>
-              <?php if($i > 3) break;?>
-              <div class='col-xs-5'><?php echo $execution->name;?></div>
-              <div class='col-xs-7'>
-                <div class='progress progress-text-left'>
-                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
-                    <span class='progress-text'><?php echo $execution->hours->progress . '%';?></span>
-                  </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->estimate . "：";?></div>
+              <div class="col data"><?php echo $project->estimate;?></div>
+            </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->consumedHours . "：";?></div>
+              <div class="col data"><?php echo $project->consumed;?></div>
+            </div>
+          </div>
+          <div class="col-4 text-center">
+            <div><h4><?php echo $lang->block->bug;?></h4></div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->totalBug . "：";?></div>
+              <div class="col data"><?php echo $project->allBugs;?></div>
+            </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->doneBugs . "：";?></div>
+              <div class="col data"><?php echo $project->doneBugs;?></div>
+            </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->leftBugs . "：";?></div>
+              <div class="col data"><?php echo $project->leftBugs;?></div>
+            </div>
+          </div>
+        </div>
+        <div class="table-row project-info">
+          <div class="col-3 text-center"><h4><?php echo $lang->block->last;?></h4></div>
+          <div class="table-row lastIteration">
+            <div class='col-3 text-center executionName'><?php echo $project->executions[0]->name;?></div>
+            <div class='col-8'>
+              <div class='progress progress-text-left'>
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->executions[0]->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->executions[0]->hours->progress;?>%">
+                  <span class='progress-text'><?php echo $project->executions[0]->hours->progress . '%';?></span>
                 </div>
               </div>
-              <?php endforeach;?>
             </div>
           </div>
+        </div>
         <?php else:?>
           <div class="col-12">
             <div class='table-row text-left weekly-row with-padding'>
