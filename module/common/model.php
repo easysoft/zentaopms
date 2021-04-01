@@ -2101,20 +2101,30 @@ EOD;
     public static function canBeChanged($module, $object = null)
     {
         global $app, $config;
+        static $productsStatus   = array();
+        static $executionsStatus = array();
 
         /* Check the product is closed. */
         if(!empty($object->product) and is_numeric($object->product) and empty($config->CRProduct))
         {
-            $product = $app->control->loadModel('product')->getByID($object->product);
-            if($product->status == 'closed') return false;
+            if(!isset($productsStatus[$object->product]))
+            {
+                $product = $app->control->loadModel('product')->getByID($object->product);
+                $productsStatus[$object->product] = $product ? $product->status : '';
+            }
+            if($productsStatus[$object->product] == 'closed') return false;
         }
 
         /* Check the execution is closed. */
         $productModuleList = array('story', 'bug', 'testtask');
         if(!in_array($module, $productModuleList) and !empty($object->execution) and is_numeric($object->execution) and empty($config->CRExecution))
         {
-            $execution = $app->control->loadModel('execution')->getByID($object->execution);
-            if($execution->status == 'closed') return false;
+            if(!isset($executionsStatus[$object->execution]))
+            {
+                $execution = $app->control->loadModel('execution')->getByID($object->execution);
+                $executionsStatus[$object->execution] = $execution ? $execution->status : '';
+            }
+            if($executionsStatus[$object->execution] == 'closed') return false;
         }
 
         return true;

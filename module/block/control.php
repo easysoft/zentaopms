@@ -599,6 +599,7 @@ class block extends control
         $account = $this->app->user->account;
         $type    = $this->params->type;
 
+        $this->app->loadLang('execution');
         $this->view->tasks = $this->loadModel('task')->getUserTasks($account, $type, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $this->params->orderBy);
     }
 
