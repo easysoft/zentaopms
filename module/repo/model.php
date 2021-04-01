@@ -233,8 +233,10 @@ class repoModel extends model
     {
         if(!$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
+
         $data = fixer::input('post')
             ->skipSpecial('path,client,account,password')
+            ->setDefault('product', '')
             ->join('product', ',')
             ->get();
 
@@ -275,6 +277,7 @@ class repoModel extends model
         $data = fixer::input('post')
             ->setDefault('client', 'svn')
             ->setDefault('prefix', $repo->prefix)
+            ->setDefault('product', '')
             ->setIF($this->post->path != $repo->path, 'synced', 0)
             ->skipSpecial('path,client,account,password')
             ->join('product', ',')
