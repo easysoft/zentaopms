@@ -636,6 +636,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_0');
             $this->execSQL($this->getUpgradeFile('15.0'));
             $this->adjustWhitelistOfProject();
+            $this->adjustWhitelistOfProduct();
             $this->appendExec('15_0');
         case '15_0_beta1':
             $this->saveLogs('Execute 15_0_beta1');
@@ -4403,6 +4404,10 @@ class upgradeModel extends model
 
             $groups        = explode(',', $product->whitelist);
             $groupAccounts = $this->group->getGroupAccounts($groups);
+
+            /* Get the whitelist data from the classic version mode upgrade. */
+            $groupAccounts += $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->eq($product->id)->andWhere('objectType')->eq('product')->andWhere('type')->eq('whitelist')->fetchPairs('account');
+
             $whiteList    += $groupAccounts;
             $this->personnel->updateWhitelist($groupAccounts, 'product', $product->id, 'whitelist', 'upgrade');
         }
@@ -4413,10 +4418,12 @@ class upgradeModel extends model
         {
             if($sprint->acl != 'private') continue;
 
-            $groups         = explode(',', $sprint->whitelist);
-            $groupAccounts  = $this->group->getGroupAccounts($groups);
+            $groups        = explode(',', $sprint->whitelist);
+            $groupAccounts = $this->group->getGroupAccounts($groups);
+
             /* Get the whitelist data from the classic version mode upgrade. */
             $groupAccounts += $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->eq($sprint->id)->andWhere('objectType')->eq('sprint')->andWhere('type')->eq('whitelist')->fetchPairs('account');
+
             $this->personnel->updateWhitelist($groupAccounts, 'sprint', $sprint->id, 'whitelist', 'upgrade');
         }
     }
@@ -4719,6 +4726,37 @@ class upgradeModel extends model
             }
 
             $this->dao->update(TABLE_PROJECT)->set('acl')->eq('private')->where('id')->eq($project->id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Adjust the whitelist of projects.
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustWhitelistOfProduct()
+    {
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('acl')->eq('custom')->fetchAll();
+        foreach($products as $product)
+        {
+            $groups   = explode(',', $product->whitelist);
+            $accounts = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            foreach($accounts as $account)
+            {
+                $acl = new stdclass();
+                $acl->account    = $account;
+                $acl->objectType = 'product';
+                $acl->objectID   = $product->id;
+                $acl->type       = 'whitelist';
+                $acl->source     = 'upgrade';
+
+                $this->dao->insert(TABLE_ACL)->data($acl)->exec();
+            }
+
+            $this->dao->update(TABLE_PRODUCT)->set('acl')->eq('private')->where('id')->eq($product->id)->exec();
         }
 
         return true;
