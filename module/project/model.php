@@ -261,8 +261,8 @@ class projectModel extends model
         $teams = $this->dao->select('root, count(*) as teams')->from(TABLE_TEAM)->where('root')->in($projectIdList)->groupBy('root')->fetchPairs();
 
         $hours = $this->dao->select('project,
-            cast(sum(consumed) as decimal(10,2)) as consumed,
-            cast(sum(estimate) as decimal(10,2)) as estimate')
+            sum(consumed) as consumed,
+            sum(estimate) as estimate')
             ->from(TABLE_TASK)
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
@@ -293,8 +293,8 @@ class projectModel extends model
 
         foreach($projects as $projectID => $project)
         {
-            $project->consumed    = isset($hours[$projectID]) ? $hours[$projectID]->consumed : 0;
-            $project->estimate    = isset($hours[$projectID]) ? $hours[$projectID]->estimate : 0;
+            $project->consumed    = isset($hours[$projectID]) ? (float)$hours[$projectID]->consumed : 0;
+            $project->estimate    = isset($hours[$projectID]) ? (float)$hours[$projectID]->estimate : 0;
             $project->teamCount   = isset($teams[$projectID]) ? $teams[$projectID] : 0;
             $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID] : 0;
             $project->leftBugs    = isset($leftBugs[$projectID])  ? $leftBugs[$projectID]  : 0;
@@ -303,6 +303,9 @@ class projectModel extends model
             $project->allStories  = $allStories[$projectID];
             $project->doneStories = $doneStories[$projectID];
             $project->leftStories = $leftStories[$projectID];
+
+            if(is_float($project->consumed)) $project->consumed = round($project->consumed, 1);
+            if(is_float($project->estimate)) $project->estimate = round($project->estimate, 1);
         }
 
         return $projects;
