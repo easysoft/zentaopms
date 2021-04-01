@@ -588,7 +588,8 @@ class testcase extends control
      */
     public function view($caseID, $version = 0, $from = 'testcase', $taskID = 0)
     {
-        $case = $this->testcase->getById($caseID, $version);
+        $caseID = (int)$caseID;
+        $case   = $this->testcase->getById($caseID, $version);
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
         if($case->auto == 'unit')
         {

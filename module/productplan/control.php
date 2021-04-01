@@ -246,7 +246,8 @@ class productplan extends control
      */
     public function view($planID = 0, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $plan = $this->productplan->getByID($planID, true);
+        $planID = (int)$planID;
+        $plan   = $this->productplan->getByID($planID, true);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story', 'product');

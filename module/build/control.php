@@ -183,7 +183,8 @@ class build extends control
      */
     public function view($buildID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $build = $this->build->getByID((int)$buildID, true);
+        $buildID = (int)$buildID;
+        $build   = $this->build->getByID($buildID, true);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->session->project = $build->project;
 

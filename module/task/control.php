@@ -646,7 +646,8 @@ class task extends control
      */
     public function view($taskID)
     {
-        $task = $this->task->getById($taskID, true);
+        $taskID = (int)$taskID;
+        $task   = $this->task->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->session->project = $task->project;
 

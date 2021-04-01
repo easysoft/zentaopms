@@ -146,7 +146,8 @@ class release extends control
      */
     public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $release = $this->release->getByID((int)$releaseID, true);
+        $releaseID = (int)$releaseID;
+        $release   = $this->release->getByID($releaseID, true);
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
 
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
