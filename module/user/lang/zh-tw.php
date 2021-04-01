@@ -56,6 +56,7 @@ $lang->user->type             = '用戶類型';
 $lang->user->cropAvatar       = '剪切頭像';
 $lang->user->cropAvatarTip    = '拖拽選框來選擇頭像剪切範圍';
 $lang->user->cropImageTip     = '所使用的頭像圖片過小，建議圖片大小至少為 48x48，當前圖片大小為 %s';
+$lang->user->captcha          = '驗證碼';
 
 $lang->user->legendBasic        = '基本資料';
 $lang->user->legendContribution = '個人貢獻';
@@ -128,6 +129,7 @@ $lang->user->lockWarning  = "您還有%s次嘗試機會。";
 $lang->user->loginLocked  = "密碼嘗試次數太多，請聯繫管理員解鎖，或%s分鐘後重試。";
 $lang->user->weakPassword = "您的密碼強度小於系統設定。";
 $lang->user->errorWeak    = "密碼不能使用【%s】這些常用弱口令。";
+$lang->user->errorCaptcha = "驗證碼不正確！";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研發';
@@ -204,6 +206,7 @@ $lang->user->error->dangerPassword = "【ID %s】的密碼不能使用【%s】�
 
 $lang->user->error->verifyPassword   = "驗證失敗，請檢查您的系統登錄密碼是否正確";
 $lang->user->error->originalPassword = "原密碼不正確";
+$lang->user->error->companyEmpty     = "公司名稱不能為空！";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;

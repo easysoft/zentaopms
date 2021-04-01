@@ -10,6 +10,8 @@ $lang->job->confirmDelete = '確認刪除該構建任務';
 $lang->job->dirChange     = '目錄改動';
 $lang->job->buildTag      = '打標籤';
 
+$lang->job->browseAction = '構建任務列表';
+
 $lang->job->id          = 'ID';
 $lang->job->name        = '名稱';
 $lang->job->repo        = '代碼庫';

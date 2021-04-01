@@ -665,7 +665,8 @@ class testtask extends control
 
             $this->executeHooks($taskID);
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->testtaskList));
+            $link = isonlybody() ? 'parent' : $this->session->testtaskList;
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         /* Set menu. */

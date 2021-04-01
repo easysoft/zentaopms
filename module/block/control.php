@@ -885,7 +885,7 @@ class block extends control
                 $this->app->loadClass('pager', $static = true);
                 $pager = pager::init(0, 3, 1);
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
-                $project->executions = $this->project->getStats($projectID, 'all', 0, 0, 30, 'id_asc', $pager);
+                $project->executions = $this->project->getStats($projectID, 'all', 0, 0, 30, 'id_desc', $pager);
             }
             elseif($project->model == 'waterfall' and isset($this->config->maxVersion))
             {

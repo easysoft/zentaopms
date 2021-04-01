@@ -1,8 +1,6 @@
 <?php
 global $config;
 
-$lang->my->common = '我的地盤';
-
 /* 方法列表。*/
 $lang->my->index           = '首頁';
 $lang->my->todo            = '我的待辦';
@@ -14,6 +12,7 @@ $lang->my->bug             = '我的Bug';
 $lang->my->testTask        = '我的版本';
 $lang->my->testCase        = '我的用例';
 $lang->my->story           = "我的{$lang->SRCommon}";
+$lang->my->doc             = "我的文檔";
 $lang->my->createProgram   = '添加項目';
 $lang->my->project         = "我的項目";
 $lang->my->execution       = "我的{$lang->executionCommon}";
@@ -41,6 +40,13 @@ $lang->my->requirement     = "我的{$lang->URCommon}";
 $lang->my->testtask        = '我的測試單';
 $lang->my->testcase        = '我的用例';
 $lang->my->storyConcept    = $config->URAndSR ? '預設需求概念組合' : '預設需求概念';
+
+$lang->my->indexAction      = '地盤儀表盤';
+$lang->my->calendarAction   = '我的日程';
+$lang->my->workAction       = '我的待處理';
+$lang->my->contributeAction = '我的貢獻';
+$lang->my->profileAction    = '個人檔案';
+$lang->my->dynamicAction    = '動態';
 
 $lang->my->myExecutions = "我參與的階段/衝刺/迭代";
 $lang->my->name         = '名稱';
@@ -80,7 +86,8 @@ $lang->my->form->lblAccount = '帳號信息';
 $lang->my->programLink   = '項目集預設着陸頁';
 $lang->my->productLink   = '產品預設着陸頁';
 $lang->my->projectLink   = '項目預設着陸頁';
-$lang->my->executionLink = '執行預設着陸頁';
+if($config->systemMode == 'classic') $lang->my->executionLink = $lang->executionCommon . '預設着陸頁';
+if($config->systemMode == 'new') $lang->my->executionLink = '執行預設着陸頁';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '預設進入項目集列表，可以查看所有的項目集';
@@ -94,11 +101,15 @@ $lang->my->productLinkList['product-browse']    = '預設進入最近一個產�
 
 global $config;
 $lang->my->projectLinkList = array();
-$lang->my->projectLinkList['project-browse'] = '預設進入項目列表，可以查看所有的項目';
-$lang->my->projectLinkList['project-task']   = '預設進入最近一個項目迭代的任務列表，可以查看當前迭代下的任務信息';
-$lang->my->projectLinkList['project-index']  = '預設進入最近一個項目儀表盤，可以查看當前項目概況';
+$lang->my->projectLinkList['project-browse']    = '預設進入項目列表，可以查看所有的項目';
+$lang->my->projectLinkList['project-execution'] = '預設進入項目下所有執行列表，查看所有執行信息';
+$lang->my->projectLinkList['project-index']     = '預設進入最近一個項目儀表盤，可以查看當前項目概況';
 
 $lang->my->executionLinkList = array();
-$lang->my->executionLinkList['execution-index'] = '預設進入執行儀表盤，可以瞭解所有執行的統計數據和概況';
-$lang->my->executionLinkList['execution-all']   = '預設進入執行列表，可以查看所有的執行';
-$lang->my->executionLinkList['execution-task']  = '預設進入最近一個執行的任務列表，可以查看當前迭代下的任務信息';
+if($config->systemMode == 'new')
+{
+    $lang->my->executionLinkList['execution-task']  = '預設進入最近一個執行的任務列表，可以查看當前迭代下的任務信息';
+    $lang->my->executionLinkList['execution-index'] = '預設進入執行儀表盤，可以瞭解所有執行的統計數據和概況';
+    $lang->my->executionLinkList['execution-all']   = '預設進入執行列表，可以查看所有的執行';
+}
+if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = "預設進入最近一個{$lang->executionCommon}的任務列表，可以查看當前{$lang->executionCommon}下的任務信息";

@@ -9,6 +9,8 @@ $lang->webhook->chooseDept = '選擇同步部門';
 $lang->webhook->assigned   = '指派給';
 $lang->webhook->setting    = '設置';
 
+$lang->webhook->logAction = 'Webhook日誌';
+
 $lang->webhook->browse = '瀏覽Webhook';
 $lang->webhook->create = '添加Webhook';
 $lang->webhook->edit   = '編輯Webhook';
@@ -40,6 +42,8 @@ $lang->webhook->typeList['dinggroup']   = '釘釘群通知機器人';
 $lang->webhook->typeList['dinguser']    = '釘釘工作消息通知';
 $lang->webhook->typeList['wechatgroup'] = '企業微信群機器人';
 $lang->webhook->typeList['wechatuser']  = '企業微信應用消息';
+$lang->webhook->typeList['feishugroup'] = '飛書群通知機器人';
+$lang->webhook->typeList['feishuuser']  = '飛書工作消息通知';
 $lang->webhook->typeList['default']     = '其他';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
@@ -57,6 +61,11 @@ $lang->webhook->wechatCorpSecret = '應用的憑證密鑰';
 $lang->webhook->wechatAgentId    = '企業應用的ID';
 $lang->webhook->wechatUserid     = '微信用戶';
 $lang->webhook->wechatBindStatus = '微信綁定狀態';
+
+$lang->webhook->feishuAppId       = '飛書App ID';
+$lang->webhook->feishuAppSecret   = '飛書App Secret';
+$lang->webhook->feishuUserid      = '飛書用戶';
+$lang->webhook->feishuBindStatus  = '飛書綁定狀態';
 
 $lang->webhook->zentaoUser  = '禪道用戶';
 

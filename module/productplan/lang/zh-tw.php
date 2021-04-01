@@ -30,7 +30,7 @@ $lang->productplan->linkedStories    = $lang->SRCommon;
 $lang->productplan->unlinkedStories  = "未關聯{$lang->SRCommon}";
 $lang->productplan->updateOrder      = '排序';
 $lang->productplan->createChildren   = "創建子計劃";
-$lang->productplan->createExecution  = "創建{$lang->sprintCommon}";
+$lang->productplan->createExecution  = "創建{$lang->executionCommon}";
 
 $lang->productplan->linkBug          = "關聯Bug";
 $lang->productplan->unlinkBug        = "移除Bug";
@@ -60,7 +60,7 @@ $lang->productplan->future     = '待定';
 $lang->productplan->stories    = "{$lang->SRCommon}數";
 $lang->productplan->bugs       = 'Bug數';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->execution  = $lang->sprintCommon;
+$lang->productplan->execution  = $lang->executionCommon;
 $lang->productplan->parent     = "父計劃";
 $lang->productplan->parentAB   = "父";
 $lang->productplan->children   = "子計劃";

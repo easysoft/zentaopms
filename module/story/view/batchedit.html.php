@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('dittoNotice', $this->lang->story->dittoNotice);?>
 <?php js::set('storyType', $storyType);?>
+<?php js::set('app', $this->app->openApp);?>
 <?php if(isset($resetActive)) js::set('resetActive', true);?>
 <div class='main-content' id='mainContent'>
 <div class='main-header'>

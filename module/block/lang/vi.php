@@ -11,12 +11,20 @@
  */
 global $config;
 $lang->block = new stdclass();
-$lang->block->common = 'Block';
-$lang->block->name   = 'Tên';
-$lang->block->style  = 'Kiểu';
-$lang->block->grid   = 'Vị trí';
-$lang->block->color  = 'Màu';
-$lang->block->reset  = 'Thiết lập lại giao diện';
+$lang->block->common     = 'Block';
+$lang->block->name       = 'Tên';
+$lang->block->style      = 'Kiểu';
+$lang->block->grid       = 'Vị trí';
+$lang->block->color      = 'Màu';
+$lang->block->reset      = 'Thiết lập lại giao diện';
+$lang->block->story      = 'Story';
+$lang->block->bug        = 'Bug';
+$lang->block->investment = 'Investment';
+$lang->block->left       = 'Left';
+$lang->block->estimate   = 'Estimate';
+$lang->block->doneBugs   = 'Done';
+$lang->block->leftBugs   = 'Left';
+$lang->block->last       = 'Last';
 
 $lang->block->account = 'Tài khoản';
 $lang->block->module  = 'Module';

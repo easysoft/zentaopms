@@ -9,13 +9,22 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+global $config;
 $lang->block = new stdclass();
-$lang->block->common = '區塊';
-$lang->block->name   = '區塊名稱';
-$lang->block->style  = '外觀';
-$lang->block->grid   = '位置';
-$lang->block->color  = '顏色';
-$lang->block->reset  = '恢復預設';
+$lang->block->common     = '區塊';
+$lang->block->name       = '區塊名稱';
+$lang->block->style      = '外觀';
+$lang->block->grid       = '位置';
+$lang->block->color      = '顏色';
+$lang->block->reset      = '恢復預設';
+$lang->block->story      = '需求';
+$lang->block->bug        = 'Bug';
+$lang->block->investment = '投入';
+$lang->block->left       = '剩餘';
+$lang->block->estimate   = '預計工時';
+$lang->block->doneBugs   = '已解決';
+$lang->block->leftBugs   = '未解決';
+$lang->block->last       = '近期';
 
 $lang->block->account = '所屬用戶';
 $lang->block->module  = '所屬模組';
@@ -280,11 +289,14 @@ $lang->block->default['full']['my']['3']['grid']            = 4;
 $lang->block->default['full']['my']['3']['source']          = 'todo';
 $lang->block->default['full']['my']['3']['params']['count'] = '20';
 
+if($config->systemMode == 'new')
+{
 $lang->block->default['full']['my']['4']['title']           = '項目統計';
 $lang->block->default['full']['my']['4']['block']           = 'statistic';
 $lang->block->default['full']['my']['4']['source']          = 'project';
 $lang->block->default['full']['my']['4']['grid']            = 8;
 $lang->block->default['full']['my']['4']['params']['count'] = '20';
+}
 
 $lang->block->default['full']['my']['5']['title']  = '我的貢獻';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';
@@ -308,10 +320,13 @@ $lang->block->default['full']['my']['7']['params']['riskNum']  = '20';
 $lang->block->default['full']['my']['7']['params']['issueNum'] = '20';
 $lang->block->default['full']['my']['7']['params']['storyNum'] = '20';
 
-$lang->block->default['full']['my']['8']['title']  = '項目人力投入';
-$lang->block->default['full']['my']['8']['block']  = 'projectteam';
-$lang->block->default['full']['my']['8']['source'] = 'project';
-$lang->block->default['full']['my']['8']['grid']   = 8;
+if($config->systemMode == 'new')
+{
+    $lang->block->default['full']['my']['8']['title']  = '項目人力投入';
+    $lang->block->default['full']['my']['8']['block']  = 'projectteam';
+    $lang->block->default['full']['my']['8']['source'] = 'project';
+    $lang->block->default['full']['my']['8']['grid']   = 8;
+}
 
 $lang->block->default['full']['my']['9']['title']  = '項目列表';
 $lang->block->default['full']['my']['9']['block']  = 'project';
@@ -340,7 +355,8 @@ $lang->block->availableBlocks->testtask  = '測試版本列表';
 $lang->block->availableBlocks->risk      = '我的風險';
 $lang->block->availableBlocks->issue     = '我的問題';
 
-$lang->block->moduleList['project']   = '項目';
+global $config;
+if($config->systemMode == 'new') $lang->block->moduleList['project'] = '項目';
 $lang->block->moduleList['product']   = $lang->productCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = '測試';
@@ -351,7 +367,7 @@ $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->project       = '項目列表';
 $lang->block->modules['project']->availableBlocks->recentproject = '近期項目';
 $lang->block->modules['project']->availableBlocks->statistic     = '項目統計';
-$lang->block->modules['project']->availableBlocks->projectteam   = '項目人力投入';
+if($config->systemMode == 'new') $lang->block->modules['project']->availableBlocks->projectteam = '項目人力投入';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
@@ -518,11 +534,11 @@ $lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|'
 $lang->block->modules['project']->moreLinkList->cmmiestimate   = 'workestimation|index|';
 $lang->block->modules['project']->moreLinkList->cmmiissue      = 'issue|browse|';
 $lang->block->modules['project']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['project']->moreLinkList->scrumlist      = 'project|all|';
-$lang->block->modules['project']->moreLinkList->scrumtest      = 'testtask|browse|';
+$lang->block->modules['project']->moreLinkList->scrumlist      = 'project|execution|';
+$lang->block->modules['project']->moreLinkList->scrumtest      = 'project|testtask|';
 $lang->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['project']->moreLinkList->sprint         = 'project|all|';
-$lang->block->modules['project']->moreLinkList->projectdynamic = 'company|dynamic|';
+$lang->block->modules['project']->moreLinkList->sprint         = 'project|execution|';
+$lang->block->modules['project']->moreLinkList->projectdynamic = 'project|dynamic|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|';

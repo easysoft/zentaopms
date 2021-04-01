@@ -52,10 +52,11 @@ a.showMoreImage:hover {opacity: 1;}
 #navbar .nav>li>a {padding: 10px 10px;}
 #toolbar {top: 0px; height: 50px;}
 #userNav {float: none; margin: 0;}
-#userNav>li {text-align: center}
+#userNav>li {text-align: center;}
 #userNav>li>a {padding: 10px 5px; color: #000; opacity: .9; margin-left: 0px}
 #userNav>li>a:hover {height: 50px;}
 #userNav>li>.dropdown-menu {margin: 0; text-align: left;}
-#userNav>li>.dropdown-menu a {color: #fff}
-#userNav>li .lang .dropdown-menu, #userNav>li .theme .dropdown-menu {top: -60px}
+#userNav>li>.dropdown-menu a {color: #fff;}
+#userNav>li .pull-right {right: -1px;}
+#userNav>li .lang .dropdown-menu, #userNav>li .theme .dropdown-menu {top: -60px;}
 #userNav .dropdown-menu>li>a>.icon { position: initial; display: inline;}

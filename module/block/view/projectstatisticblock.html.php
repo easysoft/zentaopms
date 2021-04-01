@@ -22,7 +22,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .tile {margin-bottom: 30px;}
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
-.block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 260px; padding: 0;}
+.block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 210px; padding: 0;}
 .block-statistic .nav-secondary > li {position: relative;}
 .block-statistic .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
 .block-statistic .nav-secondary > li > a:first-child {padding-right: 36px;}
@@ -60,24 +60,32 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .project-info .col-xs-5, .block-statistic .project-info .col-xs-7 {margin-top: 8px;}
 .block-statistic .project-info .col-xs-5 {padding-left: 0;}
 
+.block-statistic .data {width: 40%; text-align: left; padding: 10px 0px; font-size: 14px; font-weight: 700;}
+.block-statistic .dataTitle {width: 60%; text-align: right; padding: 10px 0px; font-size: 14px;}
+.block-statistic .executionName {padding-top: 2px; font-size: 14px;}
+.block-statistic .lastIteration {padding-top: 6px;}
+.block-statistic .progress-text-left {margin-right: 90px}
+.block-statistic .progress-text-left .progress-text {padding-top: 2px; font-size: 14px;}
+
 .status-count {margin: auto;}
 .status-count tr:first-child td:last-child {color: #000; font-weight: bold;}
 
 .block-statistic .project-info {margin-left: 3px;}
+.block-statistic .project-budget {white-space: nowrap;}
 .block-statistic .progress-group {margin-top: 10px;}
 .block-statistic .progress-group .col {padding-left: 0;}
-.block-statistic .progress-percent {top: 4px;}
+.block-statistic .progress-percent {margin-top: 4px;}
 .block-statistic .weekly-title {font-weight: bold; color: #3C4253;}
 .block-statistic .weekly-small {font-size:12px; color: #838A9D;}
 .block-statistic .weekly-progress {font-weight: bold; font-size:24px;}
 .block-statistic .weekly-name {font-size: 14px; color: #838A9D;}
 .block-statistic .weekly-value {font-size: 14px;}
 .block-statistic .col-12 .stage {margin-left: 10px;}
-.block-statistic .col-12 .waterfall-title {padding-top: 5px;}
+.block-statistic .col-12 .waterfall-title {padding-top: 3px;}
 .block-statistic .col-12 .waterfall-value {padding-top: 10px; font-size: 18px; font-weight: 600;}
 .block-statistic .col-12 .waterfall-title .col {padding-right: 0px; padding-left: 0px;}
 
-.twenty-percent {width: 20%;}
+.forty-percent {width: 40%;}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -127,94 +135,111 @@ $(function()
       <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
         <div class="table-row">
         <?php if($project->model == 'scrum'):?>
-          <div class="col-5 text-middle text-center">
-            <div class="progress-pie inline-block space" data-value="<?php echo $project->progress;?>" data-doughnut-size="84">
-              <canvas width="120" height="120"></canvas>
-              <div class="progress-info">
-                <small><?php echo $lang->story->common . $lang->project->doneStories;?></small>
-                <strong><?php echo $project->doneStories;?></strong>
-              </div>
+        <div class='table-row'>
+          <div class="col-4 text-center">
+            <div><h4><?php echo $lang->block->story;?></h4></div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->project->allStories . "：";?></div>
+              <div class="col data"><?php echo $project->allStories;?></div>
             </div>
-            <div class="table-row text-center small text-muted with-padding">
-              <div class="col-4 text-bottom">
-                <div><?php echo $lang->project->allStories;?></div>
-                <div><?php echo $project->allStories;?></div>
-              </div>
-              <div class="col-4">
-                <span class="label label-dot label-primary"></span>
-                <div><?php echo $lang->project->doneStories;?></div>
-                <div><?php echo $project->doneStories;?></div>
-              </div>
-              <div class="col-4">
-                <span class="label label-dot label-pale"></span>
-                <div><?php echo $lang->project->leftStories;?></div>
-                <div><?php echo $project->leftStories;?></div>
-              </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->project->doneStories . "：";?></div>
+              <div class="col data"><?php echo $project->doneStories;?></div>
+            </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->left . "：";?></div>
+              <div class="col data"><?php echo $project->leftStories;?></div>
             </div>
           </div>
-          <div class="col-7">
-            <div class="project-info">
-              <h4><?php echo $lang->project->allInput;?></h4>
-              <div class='info'>
-                <span><i class='icon icon-group'></i> <?php echo sprintf($lang->project->membersUnit, $project->teamCount);?></span>
-                <span><i class='icon icon-clock'></i> <?php echo sprintf($lang->project->hoursUnit, $project->estimate);?></span>
-                <span><i class='icon icon-cost'></i> <?php echo $project->budget . ' ' . zget($lang->project->unitList, $project->budgetUnit);?></span>
-              </div>
+          <div class="col-4 text-center">
+            <div><h4><?php echo $lang->block->investment;?></h4></div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->totalPeople . "：";?></div>
+              <div class="col data"><?php echo $project->teamCount;?></div>
             </div>
-            <div class="project-info">
-              <?php $i = 0;?>
-              <h4><?php echo $lang->project->lastIteration;?></h4>
-              <?php foreach($project->executions as $execution):?>
-              <?php $i ++;?>
-              <?php if($i > 3) break;?>
-              <div class='col-xs-5'><?php echo $execution->name;?></div>
-              <div class='col-xs-7'>
-                <div class='progress progress-text-left'>
-                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
-                    <span class='progress-text'><?php echo $execution->hours->progress . '%';?></span>
-                  </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->estimate . "：";?></div>
+              <div class="col data"><?php echo $project->estimate;?></div>
+            </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->consumedHours . "：";?></div>
+              <div class="col data"><?php echo $project->consumed;?></div>
+            </div>
+          </div>
+          <div class="col-4 text-center">
+            <div><h4><?php echo $lang->block->bug;?></h4></div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->totalBug . "：";?></div>
+              <div class="col data"><?php echo $project->allBugs;?></div>
+            </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->doneBugs . "：";?></div>
+              <div class="col data"><?php echo $project->doneBugs;?></div>
+            </div>
+            <div>
+              <div class="col dataTitle"><?php echo $lang->block->leftBugs . "：";?></div>
+              <div class="col data"><?php echo $project->leftBugs;?></div>
+            </div>
+          </div>
+        </div>
+        <div class="table-row project-info">
+          <div class="col-3 text-center"><h4><?php echo $lang->block->last;?></h4></div>
+          <div class="table-row lastIteration">
+            <div class='col-3 text-center executionName'><?php echo $project->executions[0]->name;?></div>
+            <div class='col-8'>
+              <div class='progress progress-text-left'>
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->executions[0]->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->executions[0]->hours->progress;?>%">
+                  <span class='progress-text'><?php echo $project->executions[0]->hours->progress . '%';?></span>
                 </div>
               </div>
-              <?php endforeach;?>
             </div>
           </div>
+        </div>
         <?php else:?>
           <div class="col-12">
             <div class='table-row text-left weekly-row with-padding'>
               <span class='weekly-title'><?php echo $lang->project->weekly;?></span>
               <span class='stage text-muted'><?php echo $project->current;?></span>
             </div>
-            <div class='text-center progress-group col-12 with-padding center-block'>
-              <div class='progress-num col'>
-                <span><?php echo $lang->project->progress . ':';?></span>
-                <span class='project-info'><?php echo $project->progress . '%';?></span>
+            <div class='table-row text-center progress-group col-12 with-padding center-block'>
+              <div class='forty-percent col'>
+                <div class='progress-num col'>
+                  <span><?php echo $lang->project->progress . ':';?></span>
+                  <span class='project-info'><?php echo $project->progress . '%';?></span>
+                </div>
+                <div class='progress progress-percent col-1-8'>
+                  <div class="progress-bar" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->progress;?>%"></div>
+                </div>
               </div>
-              <div class='progress progress-percent twenty-percent col'>
-                <div class="progress-bar" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->progress;?>%"></div>
-              </div>
-              <div class="twenty-percent col">
+              <div class="col-1-5">
                 <span><?php echo $lang->project->teamCount . ':';?></span>
                 <span class='project-info'><?php echo $project->teamCount;?></span>
               </div>
-              <div class="twenty-percent col">
+              <div class="col-1-5 project-budget">
                 <span><?php echo $lang->project->budget . ':';?></span>
-                <span class='project-info'><?php echo $project->budget;?></span>
+                <span class='project-info'>
+                <?php
+                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
+                echo $project->budget != 0 ? $projectBudget : $this->lang->project->future;
+                ?>
+                </span>
               </div>
+              <div class="col-1-5"></div>
             </div>
             <div class="table-row text-center waterfall-title small col-12 center-block">
               <?php $isChineseLang = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']);?>
-              <div class="twenty-percent col"><?php echo $isChineseLang ? $lang->project->pv . '(' . $lang->project->pvTitle . ')' : $lang->project->pv; ?></div>
-              <div class="twenty-percent col"><?php echo $isChineseLang ? $lang->project->ev . '(' . $lang->project->evTitle . ')' : $lang->project->ev;?></div>
-              <div class="twenty-percent col"><?php echo $isChineseLang ? $lang->project->ac . '(' . $lang->project->acTitle . ')' : $lang->project->ac;?></div>
-              <div class="twenty-percent col"><?php echo $isChineseLang ? $lang->project->sv . '(' . $lang->project->svTitle . ')' : $lang->project->sv;?></div>
-              <div class="twenty-percent col"><?php echo $isChineseLang ? $lang->project->cv . '(' . $lang->project->cvTitle . ')' : $lang->project->cv;?></div>
+              <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->pv . '(' . $lang->project->pvTitle . ')' : $lang->project->pv; ?></div>
+              <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->ev . '(' . $lang->project->evTitle . ')' : $lang->project->ev;?></div>
+              <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->ac . '(' . $lang->project->acTitle . ')' : $lang->project->ac;?></div>
+              <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->sv . '(' . $lang->project->svTitle . ')' : $lang->project->sv;?></div>
+              <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->cv . '(' . $lang->project->cvTitle . ')' : $lang->project->cv;?></div>
             </div>
             <div class="table-row text-center waterfall-value small col-12 center-block">
-              <div class="twenty-percent col"><?php echo $project->pv;?></div>
-              <div class="twenty-percent col"><?php echo $project->ev;?></div>
-              <div class="twenty-percent col"><?php echo $project->ac;?></div>
-              <div class="twenty-percent col"><?php echo $project->sv;?></div>
-              <div class="twenty-percent col"><?php echo $project->cv;?></div>
+              <div class="col-1-5"><?php echo $project->pv;?></div>
+              <div class="col-1-5"><?php echo $project->ev;?></div>
+              <div class="col-1-5"><?php echo $project->ac;?></div>
+              <div class="col-1-5"><?php echo $project->sv;?></div>
+              <div class="col-1-5"><?php echo $project->cv;?></div>
             </div>
           </div>
         <?php endif;?>

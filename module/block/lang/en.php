@@ -11,12 +11,20 @@
  */
 global $config;
 $lang->block = new stdclass();
-$lang->block->common = 'Block';
-$lang->block->name   = 'Name';
-$lang->block->style  = 'Style';
-$lang->block->grid   = 'Position';
-$lang->block->color  = 'Color';
-$lang->block->reset  = 'Reset Layout';
+$lang->block->common     = 'Block';
+$lang->block->name       = 'Name';
+$lang->block->style      = 'Style';
+$lang->block->grid       = 'Position';
+$lang->block->color      = 'Color';
+$lang->block->reset      = 'Reset Layout';
+$lang->block->story      = 'Story';
+$lang->block->bug        = 'Bug';
+$lang->block->investment = 'Investment';
+$lang->block->left       = 'Left';
+$lang->block->estimate   = 'Estimate';
+$lang->block->doneBugs   = 'Done';
+$lang->block->leftBugs   = 'Left';
+$lang->block->last       = 'Last';
 
 $lang->block->account = 'Account';
 $lang->block->module  = 'Module';
