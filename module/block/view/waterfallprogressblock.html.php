@@ -112,7 +112,7 @@
               scaleFontColor: '#838A9D',
               tooltipXPadding: 10,
               tooltipYPadding: 10,
-              multiTooltipTitleTemplate: '<%= label %> <?php echo $lang->project->workHour;?> /h',
+              multiTooltipTitleTemplate: '<%= label %> <?php echo $lang->execution->workHour;?> /h',
               multiTooltipTemplate: '<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>',
           });
       }
