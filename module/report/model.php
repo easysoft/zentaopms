@@ -634,7 +634,6 @@ class reportModel extends model
     {
         $effort = $this->dao->select('count(*) as count, sum(consumed) as consumed')->from(TABLE_TASKESTIMATE)
             ->where('LEFT(date, 4)')->eq($year)
-            ->andWhere('deleted')->eq('0')
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetch();
 
