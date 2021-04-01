@@ -651,16 +651,22 @@ class project extends control
     /**
      * Execution list.
      *
+     * @param  string $status
      * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $productID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function execution($projectID = 0)
+    public function execution($status = 'all', $projectID = 0, $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
         $this->app->session->set('executionList', $uri, 'project');
 
-        echo $this->fetch('execution', 'all', "status=all&projectID=$projectID");
+        echo $this->fetch('execution', 'all', "status=$status&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -1030,7 +1036,7 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $this->execution->manageMembers($projectID);
+            $this->project->manageMembers($projectID);
             $link = $this->createLink('project', 'manageMembers', "projectID=$projectID");
             $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }

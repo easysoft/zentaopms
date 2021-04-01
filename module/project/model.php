@@ -1228,6 +1228,60 @@ class projectModel extends model
     }
 
     /**
+     * Manage team members.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function manageMembers($projectID)
+    {
+        $project = $this->getByID($projectID);
+        $data    = (array)fixer::input('post')->get();
+
+        extract($data);
+        $projectID   = (int)$projectID;
+        $projectType = 'project';
+        $accounts    = array_unique($accounts);
+        $limited     = array_values($limited);
+        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
+
+        $projectMember = array();
+        foreach($accounts as $key => $account)
+        {
+            if(empty($account)) continue;
+
+            $member = new stdclass();
+            $member->role    = $roles[$key];
+            $member->days    = $days[$key];
+            $member->hours   = $hours[$key];
+            $member->limited = $limited[$key];
+
+            $member->root    = $projectID;
+            $member->account = $account;
+            $member->join    = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
+            $member->type    = $projectType;
+
+            $projectMember[$account] = $member;
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+        }
+
+        /* Only changed account update userview. */
+        $oldAccounts     = array_keys($oldJoin);
+        $changedAccounts = array_diff($accounts, $oldAccounts);
+        $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
+        $changedAccounts = array_unique($changedAccounts);
+
+        $childSprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
+        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
+
+        $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
+        if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
+        if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+    }
+
+    /**
      * Print datatable cell.
      *
      * @param  object $col

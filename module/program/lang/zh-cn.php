@@ -12,7 +12,7 @@ $lang->program->progress  = '项目进度';
 $lang->program->children  = '子项目集';
 $lang->program->parent    = '父项目集';
 $lang->program->allInput  = '项目集总投入';
-$lang->program->teamCount = '项目集成员';
+$lang->program->teamCount = '总人数';
 $lang->program->longTime  = '长期';
 $lang->program->view      = '项目集详情';
 

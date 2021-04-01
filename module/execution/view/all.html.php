@@ -31,13 +31,13 @@
   <div id="sidebarHeader">
     <div class="title">
       <?php echo empty($projectID) ? $lang->project->common : zget($projects, $projectID);?>
-      <?php if($projectID) echo html::a(inLink('all'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
+      <?php if($projectID) echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>
   <?php endif;?>
   <div class='btn-toolbar pull-left'>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
-    <?php echo html::a(inlink("all", "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
+    <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -55,7 +55,7 @@
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
   <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table'>
     <table class='table has-sort-head table-fixed' id='executionList'>
-      <?php $vars = "status=$status&projectID=$projectID&from=$from&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <?php $vars = "status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='c-id'>

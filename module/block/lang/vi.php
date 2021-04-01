@@ -9,6 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+global $config;
 $lang->block = new stdclass();
 $lang->block->common = 'Block';
 $lang->block->name   = 'Tên';
@@ -68,6 +69,7 @@ $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->selectProduct       = 'Product selection';
 $lang->block->of                  = ' thực ';
+$lang->block->leftHour            = 'Left';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Tên';
@@ -279,11 +281,14 @@ $lang->block->default['full']['my']['3']['grid']            = 4;
 $lang->block->default['full']['my']['3']['source']          = 'todo';
 $lang->block->default['full']['my']['3']['params']['count'] = '20';
 
-$lang->block->default['full']['my']['4']['title']           = 'Project Statistic';
-$lang->block->default['full']['my']['4']['block']           = 'statistic';
-$lang->block->default['full']['my']['4']['source']          = 'project';
-$lang->block->default['full']['my']['4']['grid']            = 8;
-$lang->block->default['full']['my']['4']['params']['count'] = '20';
+if($config->systemMode == 'new')
+{
+    $lang->block->default['full']['my']['4']['title']           = 'Project Statistic';
+    $lang->block->default['full']['my']['4']['block']           = 'statistic';
+    $lang->block->default['full']['my']['4']['source']          = 'project';
+    $lang->block->default['full']['my']['4']['grid']            = 8;
+    $lang->block->default['full']['my']['4']['params']['count'] = '20';
+}
 
 $lang->block->default['full']['my']['5']['title']  = 'Personal Contribution';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';
@@ -307,10 +312,13 @@ $lang->block->default['full']['my']['7']['params']['riskNum']  = '20';
 $lang->block->default['full']['my']['7']['params']['issueNum'] = '20';
 $lang->block->default['full']['my']['7']['params']['storyNum'] = '20';
 
-$lang->block->default['full']['my']['8']['title']  = 'Human Input';
-$lang->block->default['full']['my']['8']['block']  = 'projectteam';
-$lang->block->default['full']['my']['8']['source'] = 'project';
-$lang->block->default['full']['my']['8']['grid']   = 8;
+if($config->systemMode == 'new')
+{
+    $lang->block->default['full']['my']['8']['title']  = 'Human Input';
+    $lang->block->default['full']['my']['8']['block']  = 'projectteam';
+    $lang->block->default['full']['my']['8']['source'] = 'project';
+    $lang->block->default['full']['my']['8']['grid']   = 8;
+}
 
 $lang->block->default['full']['my']['9']['title']  = 'Project List';
 $lang->block->default['full']['my']['9']['block']  = 'project';
