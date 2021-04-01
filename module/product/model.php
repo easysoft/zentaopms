@@ -261,14 +261,14 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
-        $products = $this->dao->select('*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed, t1.id AS id, t1.name AS name')
-            ->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
-            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
+        $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
+        $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
+            ->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->orderBy($orderBy)
             ->fetchPairs('id', 'name');
         return $products;
     }

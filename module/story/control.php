@@ -585,6 +585,18 @@ class story extends control
 
         $this->commonAction($storyID);
 
+        /* Sort products. */
+        $myProducts     = array();
+        $othersProducts = array();
+        $products       = $this->loadModel('product')->getList();
+
+        foreach($products as $product)
+        {
+            if($product->status == 'normal' and $product->PO == $this->app->user->account) $myProducts[$product->id] = $product->name;
+            if($product->status == 'normal' and !($product->PO == $this->app->user->account)) $othersProducts[$product->id] = $product->name;
+            if($product->status == 'closed') continue;
+        }
+
         /* Assign. */
         $story   = $this->story->getById($storyID, 0, true);
         $product = $this->product->getById($story->product);
@@ -599,6 +611,7 @@ class story extends control
         $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $this->view->product    = $product;
+        $this->view->products   = $myProducts + $othersProducts;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
         $this->display();
     }
