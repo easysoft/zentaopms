@@ -45,15 +45,16 @@ class testreport extends control
         $this->app->loadLang('report');
 
         /* Get product data. */
-        $projectID = 0;
+        $objectID = 0;
         if($this->app->openApp == 'project')
         {
-            $projectID = $this->session->project;
-            $products  = $this->loadModel('project')->getProducts($projectID, false);
+            $objectID = $this->session->project;
+            $products  = $this->loadModel('project')->getProducts($objectID, false);
         }
         elseif($this->app->openApp == 'execution')
         {
-            $products = $this->loadModel('execution')->getProducts($this->session->execution, false);
+            $objectID = $this->session->execution;
+            $products = $this->loadModel('execution')->getProducts($objectID, false);
         }
         else
         {
@@ -62,7 +63,7 @@ class testreport extends control
 
         $this->view->products = $this->products = $products;
         $openApp = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testreport&projectID=$projectID")));
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testreport&objectID=$objectID")));
     }
 
     /**

@@ -57,7 +57,7 @@
           <?php $userID = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : ''?>
           <?php if(!empty($program->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $program->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
         </td>
-        <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? number_format((float)$program->budget / 10000, 2) . $lang->project->tenThousand : number_format((float)$program->budget, 2);?>
+        <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$program->budget / 10000, 2) . $lang->project->tenThousand : round((float)$program->budget, 2);?>
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td><?php echo $program->begin;?></td>

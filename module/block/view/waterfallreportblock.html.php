@@ -1,6 +1,6 @@
 <style>
 .block-waterfallreport .col-left {width: 25%; text-align: center;}
-.block-waterfallreport .col-right {width: 75%;}
+.block-waterfallreport .col-right {width: 87%;}
 .block-waterfallreport .panel-body {padding-top: 0;}
 .block-waterfallreport .table-row {margin-bottom: 20px;}
 .block-waterfallreport .stage {position: absolute; top: 14px; left: 90px;}
@@ -26,23 +26,23 @@
     <div class='col-right'>
       <div class='row tiles'>
         <div class="col tile">
-          <div class="tile-title">PV</div>
+          <div class="tile-title"><?php echo 'PV(' . $lang->programplan->end . ')';?></div>
           <div class="tile-amount"><?php echo $pv == 0 ? 0 : $pv;?></div>
         </div>
         <div class="col tile">
-          <div class="tile-title">EV</div>
+          <div class="tile-title"><?php echo 'EV(' . $lang->programplan->realEnd . ')';?></div>
           <div class="tile-amount"><?php echo $ev == 0 ? 0 : $ev;?></div>
         </div>
         <div class="col tile">
-          <div class="tile-title">AC</div>
+          <div class="tile-title"><?php echo 'AC(' . $lang->programplan->ac . ')';?></div>
           <div class="tile-amount"><?php echo $ac == 0 ? 0 : $ac;?></div>
         </div>
         <div class="col tile">
-          <div class="tile-title">SV%</div>
+          <div class="tile-title"><?php echo 'SV(' . $lang->programplan->sv . ')';?></div>
           <div class="tile-amount"><?php echo $sv . '%';?></div>
         </div>
         <div class="col tile">
-          <div class="tile-title">CV%</div>
+          <div class="tile-title"><?php echo 'CV(' . $lang->programplan->cv . ')';?></div>
           <div class="tile-amount"><?php echo $cv . '%';?></div>
         </div>
       </div>
