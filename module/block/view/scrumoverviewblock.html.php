@@ -14,80 +14,57 @@
 <div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
 <style>
-#totalInvestment {padding-bottom: 5px;}
-.overview-title {font-size: 14px; color: #838a9d;}
-.extra-tips {font-size: 12px; color: #a1a7b7;}
-.progress {margin-bottom: 8px;}
-.total-block {padding: 0px 25px;}
-.hours-statistics {position: relative; padding: 0px 5px 5px; display: table-cell;text-align: center;}
-.hours-statistics > small {display: block; color: #A6AAB8;}
-.hours-statistics > span {display: block; color: #3c4353; font-weight: bold;}
-.tile-amount {font-size: 20px;}
+.table {margin-bottom: 12px;}
+.table thead tr th {padding-left: 0; text-align: right; border-bottom: unset;}
+.table tbody tr td {padding-left: 0;}
+.table tbody tr th {text-align: right;}
 </style>
-<div class="panel-body conatiner-fluid">
-  <div class="table-row">
-    <div class="col-6 tile">
-      <div class="text-left" id="totalInvestment"><strong><?php echo $lang->block->totalInvestment;?></strong></div>
-      <div class="table-row">
-        <div class="col-4 tile">
-          <div class="overview-title"><i class="icon-program-group icon-group"></i> <?php echo $lang->block->totalPeople;?></div>
-          <div class="tile-amount">
-          <?php echo $totalData[$projectID]->teamCount ? html::a($this->createLink('project', 'manageMembers', 'projectID=' . $projectID), $totalData[$projectID]->teamCount) : 0;?>
-          </div>
-        </div>
-        <div class="col-4 tile">
-          <div class="overview-title"><i class="icon icon-clock"></i> <?php echo $lang->block->consumedHours;?></div>
-          <div class="tile-amount" title="<?php echo $totalData[$projectID]->consumed . $lang->execution->workHour;?>">
-          <?php echo $totalData[$projectID]->consumed ? html::a($this->createLink('project', 'index', 'locate=no'), $totalData[$projectID]->consumed . $lang->execution->workHourUnit) : 0;?>
-          </div>
-          <div class="tile-info">
-          <span class="extra-tips"><?php echo $lang->block->estimatedHours . ' ' . $totalData[$projectID]->estimate . $lang->execution->workHour;?></span>
-          </div>
-        </div>
-        <div class="col-4 tile">
-          <div class="overview-title"><i class="icon icon-cost"></i> <?php echo $lang->block->spent;?></div>
-          <div class="tile-amount">￥0</div>
-          <div class="tile-info">
-            <?php $budget = $totalData[$projectID]->budget != 0 ? zget($lang->project->currencySymbol, $totalData[$projectID]->budgetUnit) . number_format($totalData[$projectID]->budget, 2) : $lang->project->future;?>
-            <span class="extra-tips"><?php echo $lang->block->budget . ' ' . $budget;?></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-3 total-block hide-in-sm">
-      <div><strong><?php echo $lang->block->totalStory;?></strong></div>
-      <div class="tile-amount">
-      <?php echo $totalData[$projectID]->allStories;?>
-      </div>
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalData[$projectID]->doneStories;?>" aria-valuemin="0" aria-valuemax="<?php echo $totalData[$projectID]->allStories;?>" style="width: <?php echo floor(($totalData[$projectID]->doneStories/$totalData[$projectID]->allStories)*100).'%';?>"></div>
-      </div>
-      <div class="hours-statistics">
-        <small><?php echo $lang->block->done;?></small>
-        <span><?php echo $totalData[$projectID]->doneStories;?></span>
-      </div>
-      <div class="hours-statistics">
-        <small><?php echo $lang->block->left;?></small>
-        <span><?php echo $totalData[$projectID]->leftStories;?></span>
-      </div>
-    </div>
-    <div class="col-3 total-block hide-in-sm">
-      <div><strong><?php echo $lang->block->totalBug;?></strong></div>
-      <div class="tile-amount">
-      <?php echo $totalData[$projectID]->allBugs;?>
-      </div>
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalData[$projectID]->doneBugs;?>" aria-valuemin="0" aria-valuemax="<?php echo $totalData[$projectID]->allBugs;?>" style="width: <?php echo floor(($totalData[$projectID]->doneBugs/$totalData[$projectID]->allBugs)*100).'%';?>"></div>
-      </div>
-      <div class="hours-statistics">
-        <small><?php echo $lang->block->done;?></small>
-        <span><?php echo $totalData[$projectID]->doneBugs;?></span>
-      </div>
-      <div class="hours-statistics">
-        <small><?php echo $lang->block->left;?></small>
-        <span><?php echo $totalData[$projectID]->leftBugs;?></span>
-      </div>
-    </div>
-  </div>
-</div>
+<table class="table table-data">
+  <thead>
+    <tr>
+      <th><?php echo $lang->block->storyNum;?></th>
+      <th></th>
+      <th><?php echo $lang->personnel->invest;?></th>
+      <th></th>
+      <th><?php echo $lang->workingHour;?></th>
+      <th></th>
+      <th><?php echo $lang->block->bugNum;?></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th><?php echo $lang->block->totalStory . ':';?></th>
+      <td><?php echo $totalData[$projectID]->allStories;?></td>
+      <th><?php echo $lang->block->totalPeople . ':';?></th>
+      <td><?php echo  $totalData[$projectID]->teamCount ? html::a($this->createLink('project', 'manageMembers', 'projectID=' . $projectID), $totalData[$projectID]->teamCount) : 0;?></td>
+      <th><?php echo $lang->block->estimatedHours . ':';?></th>
+      <td><?php echo $totalData[$projectID]->estimate . $lang->execution->workHour;?></td>
+      <th><?php echo $lang->block->totalBug. ':';?></th>
+      <td><?php echo $totalData[$projectID]->allBugs;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->block->done . ':';?></th>
+      <td><?php echo $totalData[$projectID]->doneStories;?></td>
+      <th></th>
+      <td></td>
+      <th><?php echo $lang->block->consumedHours . ':';?></th>
+      <td><?php echo $totalData[$projectID]->consumed . $lang->execution->workHour;?></td>
+      <th><?php echo $lang->block->done . ':';?></th>
+      <td><?php echo $totalData[$projectID]->doneBugs;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->block->left . ':';?></th>
+      <td><?php echo $totalData[$projectID]->leftStories;?></td>
+      <th></th>
+      <td></td>
+      <th></th>
+      <td></td>
+      <th><?php echo $lang->bug->unResolved . ':';?></th>
+      <td><?php echo $totalData[$projectID]->leftBugs;?></td>
+    </tr>
+
+  </tbody>
+</table>
+
 <?php endif;?>

@@ -455,7 +455,7 @@ class upgrade extends control
                     if($project) $sprint->projects[$project->id] = $project->name;
                 }
 
-                if(!isset($sprint->projects)) $sprint->projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchPairs();
+                if(!isset($sprint->projects)) $sprint->projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs();
             }
 
             $this->view->noMergedSprints = $noMergedSprints;

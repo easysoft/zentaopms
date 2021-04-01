@@ -378,7 +378,7 @@ class executionModel extends model
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
-                $this->addExecutionMembers($sprint->project, array($member));
+                $this->addProjectMembers($sprint->project, array($member));
             }
 
             /* Create doc lib. */

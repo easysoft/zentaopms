@@ -149,7 +149,7 @@ $lang->block->default['waterfall']['project']['7']['params']['type']    = 'all';
 $lang->block->default['waterfall']['project']['7']['params']['count']   = '15';
 $lang->block->default['waterfall']['project']['7']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['scrum']['project']['1']['title'] =  '項目整體情況';
+$lang->block->default['scrum']['project']['1']['title'] =  '項目概況';
 $lang->block->default['scrum']['project']['1']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['project']['1']['grid']  = 8;
 
@@ -363,7 +363,7 @@ $lang->block->modules['project']->availableBlocks->projectteam   = '項目人力
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = '項目整體情況';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = '項目概況';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->executionCommon . '列表';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->executionCommon . '總覽';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = '待測版本';

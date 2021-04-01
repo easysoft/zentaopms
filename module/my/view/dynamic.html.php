@@ -20,7 +20,7 @@
     if($period == $type)
     {
         $active = 'btn-active-text';
-        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        $label .= " <span class='label label-light label-badge'>{$originTotal}</span>";
     }
     echo html::a(inlink('dynamic', "type=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
@@ -76,8 +76,8 @@ $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
 $lastDate  = substr($action->originalDate, 0, 10);
 $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
 $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-$preLink   = $hasPre ? inlink('dynamic', "type=$type&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
-$nextLink  = $hasNext ? inlink('dynamic', "type=$type&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+$preLink   = $hasPre ? inlink('dynamic', "type=$type&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre&originTotal=' . $originTotal) : 'javascript:;';
+$nextLink  = $hasNext ? inlink('dynamic', "type=$type&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next&originTotal=' . $originTotal) : 'javascript:;';
 ?>
 <?php if($hasPre or $hasNext):?>
 <div id="mainActions" class='main-actions'>
