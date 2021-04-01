@@ -851,8 +851,6 @@ class repo extends control
      */
     public function ajaxSyncCommit($repoID = 0, $type = 'batch')
     {
-        $this->commonAction($repoID);
-
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) die();
