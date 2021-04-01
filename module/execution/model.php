@@ -2280,11 +2280,12 @@ class executionModel extends model
         $data      = (array)fixer::input('post')->get();
 
         extract($data);
-        $executionType = strpos('sprint|stage', $execution->type) !== false ? 'execution' : $execution->type;
+        $executionID   = (int)$executionID;
+        $executionType = 'execution';
         $accounts      = array_unique($accounts);
         $limited       = array_values($limited);
-        $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq($executionType)->fetchPairs();
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq($executionType)->exec();
+        $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->fetchPairs();
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->exec();
 
         $executionMember = array();
         foreach($accounts as $key => $account)
@@ -2297,13 +2298,13 @@ class executionModel extends model
             $member->hours   = $hours[$key];
             $member->limited = $limited[$key];
 
-            $member->root    = (int)$executionID;
+            $member->root    = $executionID;
             $member->account = $account;
             $member->join    = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
             $member->type    = $executionType;
 
             $executionMember[$account] = $member;
-            $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
 
         /* Only changed account update userview. */
@@ -2312,36 +2313,23 @@ class executionModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        if($executionType == 'execution')
-        {
-            $childSprints   = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($execution->id)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
-            $linkedProducts = $this->loadModel('product')->getProductPairsByProject($execution->id);
-
-            $this->loadModel('user')->updateUserView(array($executionID), 'execution', $changedAccounts);
-            if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
-            if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
-        }
-
-        /* Add iteration or phase team members to the execution team. */
-        if($executionType == 'stage' || $executionType == 'sprint')
-        {
-            $this->addExecutionMembers($execution->project, $executionMember);
-            if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
-        }
+        /* Add the execution team members to the project. */
+        $this->addProjectMembers($execution->project, $executionMember);
+        if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
     }
 
     /**
-     * Add iteration or phase team members to the execution team.
+     * Add the execution team members to the project.
      *
-     * @param  int    $executionID
+     * @param  int    $projectID
      * @param  array  $members
      * @access public
      * @return void
      */
-    public function addExecutionMembers($executionID = 0, $members = array())
+    public function addProjectMembers($projectID = 0, $members = array())
     {
-        $executionType = 'execution';
-        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->fetchPairs();
+        $projectType = 'project';
+        $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
 
         $accounts = array();
         foreach($members as $account => $member)
@@ -2349,9 +2337,9 @@ class executionModel extends model
             if(isset($oldJoin[$member->account])) continue;
 
             $accounts[]   = $member->account;
-            $member->root = $executionID;
-            $member->type = $executionType;
-            $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+            $member->root = $projectID;
+            $member->type = $projectType;
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
 
         /* Only changed account update userview. */
@@ -2360,8 +2348,8 @@ class executionModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $this->loadModel('user')->updateUserView($executionID, $executionType, $changedAccounts);
-        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($executionID);
+        $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
+        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
     }
 
