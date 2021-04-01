@@ -54,7 +54,7 @@ class bug extends control
             $projectID = $this->session->project;
             $products  = $this->loadModel('project')->getProducts($projectID, false);
         }
-        else if($this->app->openApp == 'execution')
+        elseif($this->app->openApp == 'execution')
         {
             $products = $this->loadModel('execution')->getProducts($this->session->execution, false);
         }
@@ -62,9 +62,10 @@ class bug extends control
         {
             $products = $this->product->getPairs();
         }
-        $this->view->products = $this->products = $products;
 
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName={$this->app->openApp}&activeMenu=bug&projectID=$projectID")));
+        $this->view->products = $this->products = $products;
+        $openApp = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=bug&projectID=$projectID")));
     }
 
     /**

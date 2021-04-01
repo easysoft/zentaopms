@@ -35,7 +35,7 @@ adjustMenuWidth();
         <div class='item'>
           <div class='item-heading'>
             <div class="pull-right">
-              <span><?php echo html::a($object->url . (strpos($object->url, '?') !== false ? '&onlybody=yes' : '?onlybody=yes'), "<i class='icon-eye-open'></i>" . $lang->search->preview, '', "class='iframe' data-width='90%' data-title=\"<a href='$object->url' target='_blank' class='btn'><i class='icon-eye-open'></i>$lang->preview</a>\"")?></span>
+              <span><?php echo html::a($object->url . (strpos($object->url, '?') !== false ? '&onlybody=yes' : '?onlybody=yes'), $lang->search->preview, '', "class='iframe' data-width='90%'")?></span>
             </div>
             <h4>
               <?php
