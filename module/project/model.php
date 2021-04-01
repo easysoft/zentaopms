@@ -1618,7 +1618,8 @@ class projectModel extends model
         /* Replace waterfall lang. */
         if($project->model == 'waterfall')
         {
-            $lang->scrum->menu->execution['link'] = str_replace($lang->executionCommon, $lang->project->stage, $lang->scrum->menu->execution['link']); 
+            $this->loadModel('execution');
+            $lang->scrum->menu->execution['link'] = str_replace($lang->executionCommon, $lang->project->stage, $lang->scrum->menu->execution['link']);
             $lang->execution->create = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->create);
             $lang->execution->name   = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->name);
             $lang->execution->status = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->status);
