@@ -5,13 +5,13 @@ class GitRepo
     public $root;
 
     /**
-     * Construct 
-     * 
-     * @param  string $client 
-     * @param  string $root 
-     * @param  string $username 
-     * @param  string $password 
-     * @param  string $encoding 
+     * Construct
+     *
+     * @param  string $client
+     * @param  string $root
+     * @param  string $username
+     * @param  string $password
+     * @param  string $encoding
      * @access public
      * @return void
      */
@@ -29,9 +29,9 @@ class GitRepo
 
     /**
      * List files.
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
@@ -40,7 +40,7 @@ class GitRepo
         if(!scm::checkRevision($revision)) return array();
 
         $path = ltrim($path, DIRECTORY_SEPARATOR);
-        $sub  = ''; 
+        $sub  = '';
         chdir($this->root);
         if(!empty($path)) $sub = ":$path";
         if(!empty($this->branch))$revision = $this->branch;
@@ -69,7 +69,7 @@ class GitRepo
             }
             else
             {
-                $size .= 'Bytes'; 
+                $size .= 'Bytes';
             }
 
             $info = new stdClass();
@@ -92,10 +92,10 @@ class GitRepo
     }
 
     /**
-     * Get tags 
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     * Get tags
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
@@ -111,8 +111,8 @@ class GitRepo
     }
 
     /**
-     * Get branch 
-     * 
+     * Get branch
+     *
      * @access public
      * @return array
      */
@@ -139,10 +139,10 @@ class GitRepo
     }
 
     /**
-     * Get last log. 
-     * 
-     * @param  string $path 
-     * @param  int    $count 
+     * Get last log.
+     *
+     * @param  string $path
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -160,11 +160,11 @@ class GitRepo
 
     /**
      * Get logs
-     * 
-     * @param  string $path 
-     * @param  string $fromRevision 
-     * @param  string $toRevision 
-     * @param  int    $count 
+     *
+     * @param  string $path
+     * @param  string $fromRevision
+     * @param  string $toRevision
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -194,7 +194,7 @@ class GitRepo
         }
         else
         {
-            $revisions = "$fromRevision..$toRevision"; 
+            $revisions = "$fromRevision..$toRevision";
         }
         chdir($this->root);
         $list = execCmd(escapeCmd("$this->client log  --stat=1024 --name-status --stat-name-width=1000 $count $revisions -- $path"), 'array');
@@ -205,9 +205,9 @@ class GitRepo
 
     /**
      * Blame file
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
@@ -257,10 +257,10 @@ class GitRepo
 
     /**
      * Diff file.
-     * 
-     * @param  string $path 
-     * @param  string $fromRevision 
-     * @param  string $toRevision 
+     *
+     * @param  string $path
+     * @param  string $fromRevision
+     * @param  string $toRevision
      * @access public
      * @return array
      */
@@ -284,9 +284,9 @@ class GitRepo
 
     /**
      * Cat file.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return string
      */
@@ -304,9 +304,9 @@ class GitRepo
 
     /**
      * Get info.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return object
      */
@@ -337,17 +337,17 @@ class GitRepo
         $list = execCmd(escapeCmd("$this->client log -1 $revision --pretty=format:%H -- $path"), 'array');
         $revision = $list[0];
         $info     = new stdclass();
-        $info->kind     = $kind; 
-        $info->path     = $entry; 
-        $info->revision = $revision; 
-        $info->root     = $this->root; 
+        $info->kind     = $kind;
+        $info->path     = $entry;
+        $info->revision = $revision;
+        $info->root     = $this->root;
         return $info;
     }
 
     /**
      * Exec git cmd.
-     * 
-     * @param  string $cmd 
+     *
+     * @param  string $cmd
      * @access public
      * @return array
      */
@@ -359,8 +359,8 @@ class GitRepo
 
     /**
      * Parse diff.
-     * 
-     * @param  array $lines 
+     *
+     * @param  array $lines
      * @access public
      * @return array
      */
@@ -454,9 +454,9 @@ class GitRepo
 
     /**
      * Get commit count.
-     * 
-     * @param  int    $commits 
-     * @param  string $lastVersion 
+     *
+     * @param  int    $commits
+     * @param  string $lastVersion
      * @access public
      * @return int
      */
@@ -471,7 +471,7 @@ class GitRepo
 
     /**
      * Get first revision.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -483,8 +483,8 @@ class GitRepo
     }
 
     /**
-     * Get latest revision 
-     * 
+     * Get latest revision
+     *
      * @access public
      * @return string
      */
@@ -498,10 +498,10 @@ class GitRepo
 
     /**
      * Get commits.
-     * 
-     * @param  string $version 
-     * @param  int    $count 
-     * @param  string $branch 
+     *
+     * @param  string $version
+     * @param  int    $count
+     * @param  string $branch
      * @access public
      * @return array
      */
@@ -543,7 +543,7 @@ class GitRepo
             {
                 list($account, $date, $hash, $comment) = $parsedCommit;
             }
-            else 
+            else
             {
                 $file = explode(' ', $commit);
                 $file = end($file);
@@ -561,8 +561,8 @@ class GitRepo
 
     /**
      * Parse log.
-     * 
-     * @param  array  $logs 
+     *
+     * @param  array  $logs
      * @access public
      * @return array
      */
@@ -596,7 +596,7 @@ class GitRepo
             elseif(strpos($line, 'Date:') === 0)
             {
                 $date      = trim(preg_replace('/^Date:/', '', $line));
-                $log->time = date('Y-m-d H:i:s', strtotime($date)); 
+                $log->time = date('Y-m-d H:i:s', strtotime($date));
             }
             elseif(preg_match('/^\s{2,}/', $line))
             {

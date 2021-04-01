@@ -3,7 +3,7 @@
  * The diff view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong 
+ * @author      Wang Yidong, Zhu Jinyong
  * @package     repo
  * @version     $Id: browse.html.php $
  */
@@ -18,7 +18,7 @@
     $backURI = $this->session->repoView ? $this->session->repoView : $this->session->repoList;
     if($backURI)
     {
-        echo html::a($backURI, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-link'");
+        echo html::a($backURI, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");
     }
     else
     {
@@ -28,14 +28,14 @@
     <div class="divider"></div>
     <div class="page-title">
       <?php
-      echo html::a($this->repo->createLink('browse', "repoID=$repoID"), $repo->name);
+      echo html::a($this->repo->createLink('browse', "repoID=$repoID"), $repo->name, '', "data-app='{$app->openApp}'");
       $paths= explode('/', $entry);
       $fileName = array_pop($paths);
       $postPath = '';
       foreach($paths as $pathName)
       {
           $postPath .= $pathName . '/';
-          echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
+          echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
       }
       echo '/' . ' ' . $fileName;
       if($repo->SCM == 'Git')
@@ -120,7 +120,7 @@
             {
                 $newlc = $line->oldlc;
                 $line->type = 'custom';
-            } 
+            }
         }
         else
         {

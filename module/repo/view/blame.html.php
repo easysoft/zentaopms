@@ -3,12 +3,12 @@
  * The create view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong 
+ * @author      Wang Yidong, Zhu Jinyong
  * @package     repo
  * @version     $Id: blame.html.php $
  */
 ?>
-<?php 
+<?php
 include '../../common/view/header.html.php';
 js::import($jsRoot  . 'misc/highlight/highlight.pack.js');
 css::import($jsRoot . 'misc/highlight/styles/github.css');
@@ -31,14 +31,14 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
     <div class="page-title">
       <strong>
         <?php
-        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $repo->name);
+        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}");
         $paths= explode('/', $entry);
         $fileName = array_pop($paths);
         $postPath = '';
         foreach($paths as $pathName)
         {
             $postPath .= $pathName . '/';
-            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
+            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
         }
         echo '/' . ' ' . $fileName;
         echo " <span class='label label-info'>" . $revisionName . '</span>';
@@ -58,7 +58,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
         <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "id='encoding' data-toggle='dropdown'", 'btn dropdown-toggle')?>
         <ul class='dropdown-menu' role='menu' aria-labelledby='encoding'>
           <?php foreach($lang->repo->encodingList as $key => $val):?>
-          <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$key"), $val)?></li>
+          <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$key"), $val, '', "data-app='{$app->openApp}'")?></li>
           <?php endforeach;?>
         </ul>
       </div>
@@ -80,7 +80,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
       <tbody>
         <?php foreach($blames as $blame):?>
         <tr<?php if(isset($blame['lines'])) echo " class='topLine'";?>>
-          <?php 
+          <?php
           if(isset($blame['lines']))
           {
               $rowspan = $blame['lines'];
@@ -88,14 +88,14 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
               echo $repo->SCM == 'Git' ? substr($blame['revision'], 0, 10) : $blame['revision'];
               echo '</td>';
               if($repo->SCM == 'Git') echo '<td rowspan="' . $rowspan . '" class="info">' . zget($historys, $blame['revision'], '') . '</td>';
-              echo '<td rowspan="' . $rowspan . '" class="info">' . $blame['committer'] . '</td>'; 
+              echo '<td rowspan="' . $rowspan . '" class="info">' . $blame['committer'] . '</td>';
           }
           ?>
           <td class="line"><?php echo $blame['line'];?></td>
           <td><pre><?php echo htmlspecialchars($blame['content']);?></pre></td>
         </tr>
         <?php endforeach?>
-      </tbody> 
+      </tbody>
     </table>
   </div>
 </div>

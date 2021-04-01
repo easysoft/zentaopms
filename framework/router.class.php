@@ -259,7 +259,7 @@ class router extends baseRouter
 
             /* Set default story concept and init UR and SR concept. */
             $lang->URCommon = isset($URPairs[$config->URSR]) ? $URPairs[$config->URSR] : reset($URPairs);
-            $lang->SRCommon = isset($SRPairs[$config->URSR]) ? $URPairs[$config->URSR] : reset($SRPairs);
+            $lang->SRCommon = isset($SRPairs[$config->URSR]) ? $SRPairs[$config->URSR] : reset($SRPairs);
         }
     }
 

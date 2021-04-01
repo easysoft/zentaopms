@@ -3,7 +3,7 @@
  * The browse view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong 
+ * @author      Wang Yidong, Zhu Jinyong
  * @package     repo
  * @version     $Id: browse.html.php $
  */
@@ -17,7 +17,7 @@
         <?php
         foreach($repos as $id => $repoName)
         {
-            echo "<li>" . html::a($this->createLink('repo', 'browse', "repoID=$id"), $repoName, '', "title='{$repoName}' class='text-ellipsis'") . "</li>";
+            echo "<li>" . html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "title='{$repoName}' class='text-ellipsis' data-app='{$app->openApp}'") . "</li>";
         }
         ?>
       </ul>
@@ -29,12 +29,28 @@
         <?php
         foreach($branches as $id => $branchName)
         {
-            echo "<li>" . html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$id"), $branchName, '', "title='{$branchName}' class='text-ellipsis'") . "</li>";
+            echo "<li>" . html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$id&objectID=$objectID"), $branchName, '', "title='{$branchName}' class='text-ellipsis' data-app='{$app->openApp}'") . "</li>";
         }
         ?>
       </ul>
     </div>
     <?php endif;?>
+    <div class="page-title">
+      <strong>
+        <?php
+        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}'");
+        $paths= explode('/', $path);
+        $fileName = array_pop($paths);
+        $postPath = '';
+        foreach($paths as $pathName)
+        {
+            $postPath .= $pathName . '/';
+            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
+        }
+        echo '/' . ' ' . $fileName;
+        ?>
+      </strong>
+    </div>
   </div>
   <div class="btn-toolbar pull-right">
     <span class='last-sync-time'><?php echo $lang->repo->notice->lastSyncTime . $cacheTime?></span>

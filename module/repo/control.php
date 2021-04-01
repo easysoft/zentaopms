@@ -413,10 +413,12 @@ class repo extends control
         }
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot);
 
-        /* Set logType and revisions and synchronous commit. */
+        /* Set logType and revisions. */
         $logType   = 'dir';
         $revisions = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
-        if($repo->SCM == 'Git' and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&branch=" . base64_encode($this->cookie->repoBranch)));
+
+        /* Synchronous commit only in root path. */
+        if($repo->SCM == 'Git' and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
 
         /* Set committers. */
         $commiters = $this->loadModel('user')->getCommiters();
@@ -490,6 +492,7 @@ class repo extends control
         $this->view->revision   = $revision;
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
+        $this->view->branchID   = $this->cookie->repoBranch;
         $this->view->entry      = urldecode($entry);
         $this->view->path       = urldecode($entry);
         $this->view->file       = urldecode($file);
@@ -949,7 +952,6 @@ class repo extends control
         if($repo->SCM != 'Git') die('finish');
         if($branch) $branch = base64_decode($branch);
 
-        $this->commonAction($repoID);
         $this->scm->setEngine($repo);
 
         $this->repo->setRepoBranch($branch);
