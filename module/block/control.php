@@ -1174,6 +1174,7 @@ class block extends control
      */
     public function printWaterfallReportBlock()
     {
+        $this->app->loadLang('programplan');
         $project = $this->loadModel('project')->getByID($this->session->project);
         $today   = helper::today();
         $date    = date('Ymd', strtotime('this week Monday'));
