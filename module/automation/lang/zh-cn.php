@@ -12,7 +12,7 @@
 $lang->automation->common = '自动化测试';
 $lang->automation->browse = '首页';
 
-$lang->automation->title = '自动化测试解决方案——两款工具';
+$lang->automation->title = '自动化测试解决方案';
 
 $lang->automation->ztfSite     = '禅道ZTF官网';
 $lang->automation->ztfDownload = 'ZTF框架下载';
