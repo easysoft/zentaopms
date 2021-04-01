@@ -159,7 +159,7 @@
                 </td>
                 <td class='text-left' title='<?php echo $child->title;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('story', 'view', "storyID=$child->id", '', true); ?>"><?php echo $child->title;?></a></td>
                 <td><?php echo zget($users, $child->assignedTo);?></td>
-                <td title="<?php echo $child->estimate . ' ' . $lang->hourCommon;?>"><?php echo $child->estimate . ' ' . $config->hourUnit;?></td>
+                <td title="<?php echo $child->estimate . ' ' . $lang->hourCommon;?>"><?php echo $child->estimate . $config->hourUnit;?></td>
                 <td><?php echo $this->processStatus('story', $child);?></td>
                 <td class='c-actions'>
                   <?php
@@ -337,7 +337,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->estimate;?></th>
-                  <td title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+                  <td title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->keywords;?></th>

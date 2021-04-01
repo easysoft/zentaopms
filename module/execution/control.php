@@ -1192,6 +1192,7 @@ class execution extends control
      */
     public function create($projectID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0)
     {
+        /* Set menu. */
         if($this->app->openApp == 'project')
         {
             if(!empty($copyExecutionID)) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch('project');
@@ -1199,6 +1200,11 @@ class execution extends control
             $model   = $project->model;
 
             $this->project->setMenu($projectID);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $executionID = key($this->executions);
+            $this->execution->setMenu($executionID);
         }
 
         $this->app->loadLang('program');
@@ -1290,9 +1296,6 @@ class execution extends control
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID")));
             }
         }
-
-        $executionID = key($this->executions);
-        $this->execution->setMenu($executionID);
 
         $this->view->title           = $this->lang->execution->create;
         $this->view->position[]      = $this->view->title;

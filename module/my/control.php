@@ -893,7 +893,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next', $originTotal = 0)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -933,13 +933,15 @@ class my extends control
 
         $date    = empty($date) ? '' : date('Y-m-d', $date);
         $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager, 'all', 'all', 'all', $date, $direction);
+        if(empty($recTotal)) $originTotal = $pager->recTotal;
 
         /* Assign. */
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction  = $direction;
+        $this->view->type        = $type;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction, $type);
+        $this->view->direction   = $direction;
+        $this->view->originTotal = $originTotal;
         $this->display();
     }
 
