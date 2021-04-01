@@ -173,7 +173,7 @@ $lang->project->homeMenu->browse = array('link' => ($config->systemMode == 'new'
 /* Scrum menu. */
 $lang->scrum->menu = new stdclass();
 $lang->scrum->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
-$lang->scrum->menu->execution = array('link' => "$lang->executionCommon|project|execution|projectID=%s");
+$lang->scrum->menu->execution = array('link' => "$lang->executionCommon|project|execution|status=all&projectID=%s");
 $lang->scrum->menu->story     = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory', 'alias' => 'story,track');
 $lang->scrum->menu->doc       = array('link' => "{$lang->doc->common}|doc|objectLibs|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->scrum->menu->qa        = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
@@ -214,8 +214,8 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 
 /* Execution menu. */
 $lang->execution->homeMenu = new stdclass();
-$lang->execution->homeMenu->index = "$lang->dashboard|execution|index|";
-$lang->execution->homeMenu->list  = array('link' => "{$lang->execution->common}|execution|all|", 'alias' => 'create,batchedit');
+if($config->systemMode == 'new') $lang->execution->homeMenu->index = "$lang->dashboard|execution|index|";
+$lang->execution->homeMenu->list  = array('link' => "{$lang->executionCommon}|execution|all|", 'alias' => 'create,batchedit');
 
 $lang->execution->menu = new stdclass();
 $lang->execution->menu->task     = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
@@ -316,24 +316,24 @@ $lang->devops->menuOrder[25] = 'rules';
 
 /* Doc menu.*/
 $lang->doc->menu = new stdclass();
-$lang->doc->menu->recent   = array('link' => "{$lang->doc->recent}|doc|recent");
-$lang->doc->menu->my       = array('link' => "{$lang->doc->my}|doc|my");
-$lang->doc->menu->favorite = array('link' => "{$lang->doc->favorite}|doc|favorite");
-$lang->doc->menu->product  = array('link' => "{$lang->doc->product}|doc|product");
-$lang->doc->menu->project  = array('link' => "{$lang->doc->project}|doc|project");
-$lang->doc->menu->custom   = array('link' => "{$lang->doc->custom}|doc|project");
-$lang->doc->menu->wiki     = array('link' => "{$lang->doc->wiki}|doc|project");
+$lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
+$lang->doc->menu->recent    = array('link' => "{$lang->doc->recent}|doc|browse|libID=0&browseTyp=byediteddate", 'alias' => 'recent');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|libID=0&browseTyp=openedbyme", 'alias' => 'my');
+$lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|libID=0&browseTyp=collectedbyme", 'alias' => 'collect');
+$lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|objectLibs|type=product");
+$lang->doc->menu->project   = array('link' => "{$lang->doc->project}|doc|objectLibs|type=project");
+$lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|objectLibs|libID=0");
 
 $lang->doc->dividerMenu = ',product,';
 
 /* Doc menu order. */
-$lang->doc->menuOrder[5]  = 'recent';
-$lang->doc->menuOrder[10] = 'my';
-$lang->doc->menuOrder[15] = 'favorite';
-$lang->doc->menuOrder[20] = 'product';
-$lang->doc->menuOrder[25] = 'project';
-$lang->doc->menuOrder[30] = 'custom';
-$lang->doc->menuOrder[35] = 'wiki';
+$lang->doc->menuOrder[5]  = 'dashboard';
+$lang->doc->menuOrder[10] = 'recent';
+$lang->doc->menuOrder[15] = 'my';
+$lang->doc->menuOrder[20] = 'collect';
+$lang->doc->menuOrder[25] = 'product';
+$lang->doc->menuOrder[30] = 'project';
+$lang->doc->menuOrder[35] = 'custom';
 
 /* Report menu.*/
 $lang->report->menu = new stdclass();

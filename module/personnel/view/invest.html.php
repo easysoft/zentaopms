@@ -15,7 +15,7 @@
 .table.has-sort-head thead>tr>th {padding-right: 8px;}
 </style>
 <div id="mainContent" class="main-row fade">
-  <?php if(!empty($inputPersonnel)):?>
+  <?php if(!empty($investList)):?>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" method="post" action="">
       <table class="table has-sort-head table-fixed table-bordered text-center">
@@ -56,7 +56,7 @@
           </tr>
         </thead>
         <tbody class="sortable">
-          <?php foreach($invest as $personnel):?>
+          <?php foreach($investList as $personnel):?>
           <tr>
             <td title='<?php echo $personnel['realname'];?>'><?php echo $personnel['realname'];?></td>
             <td title='<?php echo $personnel['role'];?>'><?php echo $personnel['role'];?></td>

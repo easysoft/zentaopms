@@ -519,6 +519,7 @@ class commonModel extends model
     public static function printHomeButton($openApp)
     {
         global $lang;
+        global $config;
 
         if(!$openApp) return;
         $icon = zget($lang->navIcons, $openApp, '');
@@ -527,6 +528,7 @@ class commonModel extends model
         {
             $nav = $lang->mainNav->$openApp;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
+            if($openApp == 'execution') $currentMethod = 'all';
         }
         else
         {
@@ -535,7 +537,7 @@ class commonModel extends model
             if($openApp == 'product') $currentMethod = 'all';
         }
 
-        $link = $openApp != 'execution' ? helper::createLink($currentModule, $currentMethod) : '';
+        $link = ($openApp != 'execution' or ($config->systemMode == 'classic')) ? helper::createLink($currentModule, $currentMethod) : '';
         $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='btn'") : "$icon {$lang->$openApp->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
