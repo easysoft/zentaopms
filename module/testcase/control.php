@@ -278,7 +278,7 @@ class testcase extends control
             $this->qa->setMenu($this->products, $productID, $branch);
         }
 
-        $testcaseID = ($from and strpos('testcase|work|contribute', $from)) ? $param : 0;
+        $testcaseID = ($from and strpos('testcase|work|contribute', $from) !== false) ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
 
         $this->loadModel('story');
@@ -339,7 +339,7 @@ class testcase extends control
         }
         else
         {
-            $this->testcase->setMenu($this->products, $productID, $branch);
+            $this->qa->setMenu($this->products, $productID, $branch);
         }
 
         /* Init vars. */
