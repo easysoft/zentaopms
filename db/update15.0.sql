@@ -356,3 +356,6 @@ update zt_action set objectType='execution' where objectType='project';
 update zt_file set objectType='execution' where objectType='project';
 
 ALTER TABLE `zt_todo` ADD `deleted` ENUM( "0", "1" ) NOT NULL DEFAULT '0';
+
+TRUNCATE `zt_block`;
+DELETE FROM `zt_config` WHERE `key` = 'blockInited';
