@@ -69,6 +69,7 @@ $lang->block->time                = '第';
 $lang->block->week                = '周';
 $lang->block->selectProduct       = '选择产品';
 $lang->block->of                  = '的';
+$lang->block->leftHour            = '剩余工时';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';

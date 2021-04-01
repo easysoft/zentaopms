@@ -69,6 +69,7 @@ $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->selectProduct       = 'Product selection';
 $lang->block->of                  = ' thực ';
+$lang->block->leftHour            = 'Left';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Tên';
