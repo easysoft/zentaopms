@@ -110,6 +110,7 @@ class project extends control
         $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchPairs();
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('order_asc')
             ->fetchAll('id');
