@@ -104,6 +104,7 @@ $lang->doc->allProduct    = '所有' . $lang->productCommon;
 $lang->doc->allExecutions = '所有' . $lang->executionCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
+$lang->doc->libTypeList['project']   = '项目文档库';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . '文档库';
 $lang->doc->libTypeList['custom']    = '自定义文档库';
 

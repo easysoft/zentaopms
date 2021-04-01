@@ -104,6 +104,7 @@ $lang->doc->allProduct    = 'All' . $lang->productCommon . 's';
 $lang->doc->allExecutions = 'All' . $lang->executionCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';
+$lang->doc->libTypeList['project']   = 'Project Library';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . ' Library';
 $lang->doc->libTypeList['custom']    = 'Custom Library';
 

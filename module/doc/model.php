@@ -1596,10 +1596,12 @@ class docModel extends model
     /**
      * Build document module index page create document button.
      *
+     * @param  string $type
+     * @param  int    $objectID
      * @access public
      * @return string
      */
-    public function buildCreateButton4Doc()
+    public function buildCreateButton4Doc($type, $objectID)
     {
         $libs  = $this->getLibs('all', strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '');
         $html  = "";
@@ -1613,7 +1615,7 @@ class docModel extends model
             {
                 $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
                 $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "libID=$libID&moduleID=0&type=$typeKey"), $typeName, '', "class='$class'");
+                $html .= html::a(helper::createLink('doc', 'create', "type=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey"), $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
                 $html .= "</li>";
             }
             $html .="</ul></div>";
