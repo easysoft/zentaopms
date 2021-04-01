@@ -641,6 +641,7 @@ class upgradeModel extends model
         case '15_0_beta1':
             $this->saveLogs('Execute 15_0_beta1');
             $this->adjustBugOfProject();
+            $this->adjustPriv15_0();
             $this->appendExec('15_0_beta1');
         }
 

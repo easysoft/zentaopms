@@ -74,11 +74,11 @@ class personnelModel extends model
             ->orderBy('id_desc')
             ->fetchAll('id');
         if(empty($projects)) return $personnelList;
-
         $accountPairs = $this->getInvolvedProjects($projects);
+
         if(empty($accountPairs)) return $personnelList;
 
-        $executionPairs   = $this->getInvolvedExecutions($projects);
+        $executionPairs    = $this->getInvolvedExecutions($projects);
         $taskInvest        = $this->getProjectTaskInvest($projects, $accountPairs);
         $bugAndStoryInvest = $this->getBugAndStoryInvest($accountPairs, $programID);
         if(isset($this->config->maxVersion))
@@ -267,7 +267,7 @@ class personnelModel extends model
 
         return $this->dao->select('account, count(root) as executions')->from(TABLE_TEAM)
             ->where('root')->in(array_keys($executions))
-            ->andWhere('type')->in('stage,sprint')
+            ->andWhere('type')->in('execution')
             ->groupBy('account')
             ->fetchPairs('account');
     }

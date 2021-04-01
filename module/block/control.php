@@ -1258,12 +1258,14 @@ class block extends control
         $projectID = $this->session->project;
         $members   = $this->loadModel('project')->getTeamMemberPairs($projectID);
         $budget    = $this->loadModel('workestimation')->getBudget($projectID);
+        $workhour  = $this->project->getWorkhour($projectID);
         if(empty($budget)) $budget = new stdclass();
 
-        $this->view->people   = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('project')->eq($this->session->project)->fetch('people');
-        $this->view->members  = count($members) ? count($members) - 1 : 0;
-        $this->view->consumed = $this->dao->select('sum(cast(consumed as decimal(10,2))) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
-        $this->view->budget   = $budget;
+        $this->view->people    = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('project')->eq($this->session->project)->fetch('people');
+        $this->view->members   = count($members) ? count($members) - 1 : 0;
+        $this->view->consumed  = $this->dao->select('sum(cast(consumed as decimal(10,2))) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
+        $this->view->budget    = $budget;
+        $this->view->totalLeft = (float)$workhour->totalLeft;
     }
 
     /**
