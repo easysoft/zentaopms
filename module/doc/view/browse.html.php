@@ -20,7 +20,7 @@
 
 <?php $spliter = (empty($this->app->user->feedback) && !$this->cookie->feedbackView && $this->from == 'doc') ? true : false;?>
 <div class="main-row fade <?php if($spliter) echo 'split-row';?>" id="mainRow">
-  <div class="main-col" data-min-width="400">
+  <div id="mainContent">
     <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='doc'></div>
     <div class="panel block-files block-sm no-margin">
       <?php if(empty($docs) and $browseType == 'bysearch'):?>
