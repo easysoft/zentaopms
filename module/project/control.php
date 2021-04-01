@@ -108,7 +108,11 @@ class project extends control
     public function ajaxGetDropMenu($projectID = 0, $module, $method)
     {
         $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchPairs();
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($this->app->user->view->projects)->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchAll('id');
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->orderBy('order_asc')
+            ->fetchAll('id');
 
         /* Sort project by program. */
         $this->loadModel('program');

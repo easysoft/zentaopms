@@ -989,9 +989,10 @@ class product extends control
             $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
             $this->app->rawModule = $activeMenu;
 
-            if($activeMenu == 'testcase') $this->lang->{$project->model}->menu->qa['subMenu']->testcase['subModule'] = 'product';
-            if($activeMenu == 'bug')      $this->lang->{$project->model}->menu->qa['subMenu']->bug['subModule']      = 'product';
-            if($activeMenu == 'testtask') $this->lang->{$project->model}->menu->qa['subMenu']->testtask['subModule'] = 'product';
+            if($activeMenu == 'bug')        $this->lang->{$project->model}->menu->qa['subMenu']->bug['subModule']      = 'product';
+            if($activeMenu == 'testcase')   $this->lang->{$project->model}->menu->qa['subMenu']->testcase['subModule'] = 'product';
+            if($activeMenu == 'testtask')   $this->lang->{$project->model}->menu->qa['subMenu']->testtask['subModule'] = 'product';
+            if($activeMenu == 'testreport') $this->lang->{$project->model}->menu->qa['subMenu']->testreport['subModule'] = 'product';
         }
         elseif($moduleName == 'qa')
         {
@@ -1007,7 +1008,10 @@ class product extends control
         {
             $this->loadModel('execution')->setMenu($objectID);
             $this->app->rawModule = $activeMenu;
-            if($activeMenu == 'testreport') $this->lang->execution->menu->qa['subMenu']->testtask['subMenu']->testtask['subModule'] = 'product';
+            if($activeMenu == 'bug')        $this->lang->execution->menu->qa['subMenu']->bug['subModule']        = 'product';
+            if($activeMenu == 'testcase')   $this->lang->execution->menu->qa['subMenu']->testcase['subModule']   = 'product';
+            if($activeMenu == 'testtask')   $this->lang->execution->menu->qa['subMenu']->testtask['subModule']   = 'product';
+            if($activeMenu == 'testreport') $this->lang->execution->menu->qa['subMenu']->testreport['subModule'] = 'product';
         }
 
         $this->view->title    = $this->lang->$moduleName->common;

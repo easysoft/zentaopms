@@ -64,7 +64,7 @@
           <?php endif;?>
           <td class='text-left'><?php echo $project->begin;?></td>
           <td class='text-left'><?php echo $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;?></td>
-          <?php $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? number_format((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : number_format((float)$project->budget, 2);?>
+          <?php $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
           <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->future;?></td>
           <td>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>

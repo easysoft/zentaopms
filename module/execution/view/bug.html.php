@@ -32,7 +32,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
       <?php if(common::canModify('execution', $execution) and common::hasPriv('bug', 'create')):?>
-      <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=executionID=$execution->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=executionID=$execution->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info' data-app='execution'");?>
       <?php endif;?>
     </p>
   </div>

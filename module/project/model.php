@@ -1260,7 +1260,7 @@ class projectModel extends model
 
             if($id == 'budget')
             {
-                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? number_format((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : number_format((float)$project->budget, 2);
+                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
 
                 $title = "title='$budgetTitle'";
@@ -1618,7 +1618,8 @@ class projectModel extends model
         /* Replace waterfall lang. */
         if($project->model == 'waterfall')
         {
-            $lang->scrum->menu->execution['link'] = str_replace($lang->executionCommon, $lang->project->stage, $lang->scrum->menu->execution['link']); 
+            $this->loadModel('execution');
+            $lang->scrum->menu->execution['link'] = str_replace($lang->executionCommon, $lang->project->stage, $lang->scrum->menu->execution['link']);
             $lang->execution->create = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->create);
             $lang->execution->name   = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->name);
             $lang->execution->status = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->status);
