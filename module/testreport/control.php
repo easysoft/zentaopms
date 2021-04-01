@@ -45,22 +45,24 @@ class testreport extends control
         $this->app->loadLang('report');
 
         /* Get product data. */
-        $objectID = 0;
+        $projectID = 0;
         if($this->app->openApp == 'project')
         {
-            $objectID = $this->session->project;
-            $products = $this->loadModel('project')->getProducts($objectID, false);
+            $projectID = $this->session->project;
+            $products  = $this->loadModel('project')->getProducts($projectID, false);
         }
-
-        if($this->app->openApp == 'execution')
+        elseif($this->app->openApp == 'execution')
         {
-            $objectID = $this->session->execution;
-            $products = $this->loadModel('execution')->getProducts($objectID, false);
+            $products = $this->loadModel('execution')->getProducts($this->session->execution, false);
+        }
+        else
+        {
+            $products = $this->product->getPairs();
         }
 
-        if($this->app->openApp == 'qa' or $this->app->openApp == 'my') $products = $this->loadModel('product')->getPairs();
         $this->view->products = $this->products = $products;
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName={$this->app->openApp}&activeMenu=testreport&objectID=$objectID")));
+        $openApp = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testreport&projectID=$projectID")));
     }
 
     /**
