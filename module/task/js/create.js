@@ -35,6 +35,13 @@ function loadExecutionMembers(executionID)
             $(this).find('#team').replaceWith(data);
             $(this).find('#assignedTo').attr('id', 'team').attr('name', 'team[]').chosen();
         });
+
+        $('#testStoryBox table tbody tr').each(function(i)
+        {
+            $td = $(this).find('#testAssignedTo').closest('td');
+            $td.html(data);
+            $td.find('#assignedTo').val('').attr('id', 'testAssignedTo').attr('name', 'testAssignedTo[]').chosen();
+        });
     });
 }
 
@@ -53,6 +60,29 @@ function loadExecutionStories(executionID)
         $('#story').next('.picker').remove();
         $('#story').replaceWith(data);
         $('#story').addClass('filled').chosen();
+
+        if($('#testStoryBox table tbody tr').length == 0)
+        {
+            var trHtml  = $('#testStoryTemplate tr').prop("outerHTML");
+            $('#testStoryBox table tbody').append(trHtml);
+
+            $td = $('#testStoryBox table tbody tr:first').find('#testStory').closest('td');
+            $td.html(data);
+            $td.find('#story').val($td.find('#story option').eq(i).val()).attr('id', 'testStory').attr('name', 'testStory[]').addClass('filled').chosen();
+
+            $td = $('#testStoryBox table tbody tr:first').find('#testPri_chosen').closest('td');
+            $td.find('#testPri_chosen').remove();
+            $td.find('#testPri').chosen();
+        }
+        else
+        {
+            $('#testStoryBox table tbody tr').each(function(i)
+            {
+                $td = $(this).find('#testStory').closest('td');
+                $td.html(data);
+                $td.find('#story').val($td.find('#story option').eq(i).val()).attr('id', 'testStory').attr('name', 'testStory[]').addClass('filled').chosen();
+            });
+        }
     });
 }
 

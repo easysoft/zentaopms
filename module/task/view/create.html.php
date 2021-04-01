@@ -293,6 +293,27 @@
     </form>
   </div>
 </div>
+<table class='hidden' id='testStoryTemplate'>
+  <tr>
+    <td><?php echo html::select("testStory[]", array(0 => ''), 0, "class='form-control chosen'");?></td>
+    <td><?php echo html::select("testPri[]", $lang->task->priList, '', "class='form-control chosen'");?></td>
+    <td>
+      <div class='input-group'>
+        <?php echo html::input("testEstStarted[]", '', "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
+        <span class='input-group-addon fix-border'>~</span>
+        <?php echo html::input("testDeadline[]", '', "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
+      </div>
+    </td>
+    <td><?php echo html::select("testAssignedTo[]", array('' => ''), '', "class='form-control chosen'");?></td>
+    <td><?php echo html::input("testEstimate[]", '', "class='form-control'");?></td>
+    <td class='text-center'>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm" tabindex="-1" onclick='addItem(this)'><i class="icon icon-plus"></i></button>
+        <button type="button" class="btn btn-sm" tabindex="-1" onclick='removeItem(this)'><i class="icon icon-close"></i></button>
+      </div>
+    </td>
+  </tr>
+</table>
 <?php js::set('stories', $stories);?>
 <?php js::set('storyPinYin', (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($stories) : array());?>
 <?php js::set('testStoryIdList', $testStoryIdList);?>
