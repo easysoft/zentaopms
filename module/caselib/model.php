@@ -21,97 +21,24 @@ class caselibModel extends model
      * @access public
      * @return void
      */
-    public function setLibMenu($libraries, $libID, $moduleID = 0)
+    public function setLibMenu($libraries, $libID)
     {
         /* Set case lib menu. */
-        $this->loadModel('qa')->setMenu($this->loadModel('product')->getPairs(), $this->session->product);
+        $products =$this->loadModel('product')->getPairs();
+        if(!empty($products) and $this->session->product) $this->loadModel('qa')->setMenu($products, $this->session->product);
 
-        $currentLibName = zget($libraries, $libID, '');
-
-        $isMobile   = $this->app->viewType == 'mhtml';
-        $selectHtml = '';
-        if(!empty($libraries))
+        if($libraries)
         {
-            if($isMobile)
-            {
-                $selectHtml = "<a id='currentItem' href=\"javascript:showSearchMenu('caselib', '$libID', 'caselib', 'browse', '')\"><span class='text'>{$currentLibName}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-            }
-            else
-            {
-                $dropMenuLink = helper::createLink('caselib', 'ajaxGetDropMenu', "objectID=$libID&module=caselib&method=browse");
-                $selectHtml  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'><span class='text'>{$currentLibName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-                $selectHtml .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-                $selectHtml .= "</div></div></div>";
-            }
-        }
+            $currentLibName = zget($libraries, $libID, '');
+            setCookie("lastCaseLib", $libID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        setCookie("lastCaseLib", $libID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
-        $pageNav     = '';
-        $pageActions = '';
-        $isMobile    = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $this->app->loadLang('qa');
-            $pageNav = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-        }
-        else
-        {
-            if($this->config->global->flow == 'full')
-            {
-                $this->app->loadLang('qa');
-                $pageNav .= '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $this->lang->qa->index . ' <span class="caret"></span></button>';
-                $pageNav .= '<ul class="dropdown-menu">';
-                if(common::hasPriv('caselib', 'create')) $pageNav .= '<li>' . html::a(helper::createLink('caselib', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->caselib->create) . '</li>';
-                $pageNav .= '</ul></div></div>';
-            }
-            else
-            {
-                $this->app->loadLang('testcase');
-                $pageActions .= "<div class='btn-group'>";
-                if(common::hasPriv('caselib', 'exportTemplet'))
-                {
-                    $link = helper::createLink('caselib', 'exportTemplet', "libID=$libID");
-                    $pageActions .= html::a($link, "<i class='icon icon-export muted'> </i>" . $this->lang->caselib->exportTemplet, '', "class='btn btn-link export'");
-                }
-                if(common::hasPriv('caselib', 'import'))
-                {
-                    $link = helper::createLink('caselib', 'import', "libID=$libID");
-                    $pageActions .= html::a($link, "<i class='icon muted icon-import'> </i>" . $this->lang->testcase->fileImport, '', "class='btn btn-link export'");
-                }
-                $pageActions .= '</div>';
-                $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);
-                if(common::hasPriv('caselib', 'batchCreateCase'))
-                {
-                    $link = helper::createLink('caselib', 'batchCreateCase', $params);
-                    $pageActions .= html::a($link, "<i class='icon-plus'></i>" . $this->lang->testcase->batchCreate, '', "class='btn btn-secondary'");
-                }
-                if(common::hasPriv('caselib', 'createCase'))
-                {
-                    $link = helper::createLink('caselib', 'createCase', $params);
-                    $pageActions .= html::a($link, "<i class='icon-plus'></i>" . $this->lang->testcase->create, '', "class='btn btn-primary'");
-                }
-                if(common::hasPriv('caselib', 'create'))
-                {
-                    $link = helper::createLink('caselib', 'create');
-                    $pageActions .= html::a($link, "<i class='icon-plus'></i>" . $this->lang->caselib->create, '', "class='btn btn-primary'");
-                }
-            }
-        }
-        $pageNav .= $selectHtml;
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
-
-        if($this->config->global->flow != 'full' && $this->app->getMethodName() != 'view') $this->lang->caselib->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->testcase->bySearch}</a>";
-        if(!empty($libraries))
-        {
             $dropMenuLink = helper::createLink('caselib', 'ajaxGetDropMenu', "objectID=$libID&module=caselib&method=browse");
 
-            $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentLibName}'><span class='text'><i class='icon icon-product'></i> {$currentLibName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentLibName}'><span class='text'>{$currentLibName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
-            $this->lang->qa->switcherMenu = $output;
+
+            $this->lang->switcherMenu = $output;
         }
     }
 

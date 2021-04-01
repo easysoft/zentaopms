@@ -57,8 +57,8 @@ js::set('flow',          $config->global->flow);
   </div>
   <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
-     <?php common::printLink('caselib', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->caselib->exportTemplet, '', "class='btn btn-link export' data-width='35%'");?>
-     <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i>" . $lang->testcase->fileImport, '', "class='btn btn-link export'");?>
+     <?php common::printLink('caselib', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->caselib->exportTemplet, '', "class='btn btn-link export iframe' data-width='35%'");?>
+     <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i>" . $lang->testcase->fileImport, '', "class='btn btn-link export iframe'");?>
     </div>
     <?php echo html::a($this->createLink('caselib', 'create'), "<i class='icon icon-plus'> </i>" . $lang->caselib->create, '', 'class="btn btn-secondary"');?>
     <div class='btn-group dropdown'>
