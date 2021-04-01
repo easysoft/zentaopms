@@ -208,6 +208,8 @@ $lang->my->work = '待处理';
 
 $lang->project->list = '项目列表';
 
+$lang->execution->list = "{$lang->executionCommon}列表";
+
 $lang->doc->recent   = '最近文档';
 $lang->doc->my       = '我的文档';
 $lang->doc->favorite = '我的收藏';

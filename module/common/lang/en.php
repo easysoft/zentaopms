@@ -208,6 +208,8 @@ $lang->my->work = 'Work';
 
 $lang->project->list = 'Project List';
 
+$lang->execution->list = "{$lang->executionCommon} List";
+
 $lang->doc->recent   = 'Recent';
 $lang->doc->my       = 'My';
 $lang->doc->favorite = 'Favorite';

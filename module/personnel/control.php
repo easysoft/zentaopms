@@ -76,7 +76,7 @@ class personnel extends control
 
         $this->view->title      = $this->lang->personnel->invest;
         $this->view->position[] = $this->lang->personnel->invest;
-        $this->view->invest     = $this->personnel->getInvest($programID);
+        $this->view->investList = $this->personnel->getInvest($programID);
 
         $this->display();
     }
