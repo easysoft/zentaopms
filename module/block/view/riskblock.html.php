@@ -4,7 +4,7 @@
 <style>
 .block-risks .c-id {width: 50px;}
 .block-risks .c-pri {width: 50px;text-align: center;}
-.block-risks .c-identifiedDate {width: 95px;}
+.block-risks .c-plannedClosedDate {width: 100px;}
 .block-risks .c-category {width: 80px;}
 .block-risks .c-status {width: 80px;}
 .block-risks.block-sm .c-status {text-align: center;}
@@ -21,7 +21,7 @@
         <?php if($longBlock):?>
         <th class='c-pri'><?php echo $lang->priAB?></th>
         <th class='c-category'><?php echo $lang->risk->category;?></th>
-        <th class='c-identifiedDate'><?php echo $lang->risk->identifiedDate;?></th>
+        <th class='c-plannedClosedDate'><?php echo $lang->risk->plannedClosedDate;?></th>
         <?php endif;?>
         <th class='c-status'><?php echo $lang->risk->status;?></th>
       </tr>
@@ -37,7 +37,7 @@
         <?php if($longBlock):?>
         <td class='c-pri'><?php echo "<span class='pri-{$risk->pri}'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
         <td class='c-category'><?php echo zget($lang->risk->categoryList, $risk->category)?></td>
-        <td class='c-identifiedDate'><?php echo $risk->identifiedDate == '0000-00-00' ? '' : $risk->identifiedDate;?></td>
+        <td class='c-plannedClosedDate'><?php echo $risk->plannedClosedDate == '0000-00-00' ? '' : $risk->plannedClosedDate;?></td>
         <?php endif;?>
         <?php $status = $this->processStatus('risk', $risk);?>
         <td class='c-status' title='<?php echo $status;?>'>

@@ -39,7 +39,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span>
       <?php if(common::canModify('execution', $execution) and common::hasPriv('testtask', 'create')):?>
-      <?php echo html::a($this->createLink('testtask', 'create', "product=0&execution=$executionID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info' data-app='execution'");?>
+      <?php echo html::a($this->createLink('testtask', 'create', "product=0&executionID=$executionID&build=0&projectID=$execution->project"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info' data-app='execution'");?>
       <?php endif;?>
     </p>
   </div>

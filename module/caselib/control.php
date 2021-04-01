@@ -12,36 +12,6 @@
 class caselib extends control
 {
     /**
-     * All products.
-     *
-     * @var    array
-     * @access public
-     */
-    public $products = array();
-
-    /**
-     * Construct function.
-     *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @access public
-     * @return void
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-
-        /* Set testtask menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
-        {
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-        }
-    }
-
-
-    /**
      * Index page, header to browse.
      *
      * @access public
@@ -213,7 +183,7 @@ class caselib extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set lib menu. */
-        $this->caselib->setLibMenu($libraries, $libID, $moduleID);
+        $this->caselib->setLibMenu($libraries, $libID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -397,7 +367,8 @@ class caselib extends control
      */
     public function view($libID)
     {
-        $lib = $this->caselib->getById($libID, true);
+        $libID = (int)$libID;
+        $lib   = $this->caselib->getById($libID, true);
         if(!isset($lib->id)) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Set lib menu. */

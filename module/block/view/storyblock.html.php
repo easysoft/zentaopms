@@ -48,7 +48,7 @@
         <td class="c-pri"><span class="label-pri label-pri-<?php echo $story->pri?>" title="<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>"><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td class="c-name" style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo html::a($viewLink, $story->title);?></td>
         <?php if($longBlock):?>
-        <td class='c-estimate text-center' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit?></td>
+        <td class='c-estimate text-center' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit?></td>
         <?php $status = $this->processStatus('story', $story);?>
         <td class='c-status' title='<?php echo $status;?>'>
           <span class="status-story status-<?php echo $story->status?>"><?php echo $status;?></span>

@@ -454,7 +454,8 @@ class doc extends control
     public function view($docID, $version = 0)
     {
         /* Get doc. */
-        $doc = $this->doc->getById($docID, $version, true);
+        $docID = (int)$docID;
+        $doc   = $this->doc->getById($docID, $version, true);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
 
         if($doc->contentType == 'markdown')

@@ -588,7 +588,8 @@ class testcase extends control
      */
     public function view($caseID, $version = 0, $from = 'testcase', $taskID = 0)
     {
-        $case = $this->testcase->getById($caseID, $version);
+        $caseID = (int)$caseID;
+        $case   = $this->testcase->getById($caseID, $version);
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
         if($case->auto == 'unit')
         {
@@ -814,6 +815,7 @@ class testcase extends control
         $branchProduct = false;
 
         if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($this->session->project);
+
         /* The cases of a product. */
         if($productID)
         {
@@ -824,8 +826,6 @@ class testcase extends control
             {
                 $libID     = $productID;
                 $libraries = $this->loadModel('caselib')->getLibraries();
-                $this->caselib->setLibMenu($libraries, $libID);
-                $this->lang->testcase->menu = $this->lang->caselib->menu;
 
                 /* Set modules. */
                 $modules = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0, $branch);
@@ -838,7 +838,7 @@ class testcase extends control
             else
             {
                 $product = $this->product->getByID($productID);
-                $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+                $this->testcase->setMenu($this->products, $productID, $branch);
 
                 if($product->type != 'normal') $branchProduct = true;
 
@@ -893,8 +893,7 @@ class testcase extends control
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
-        $this->loadModel('story');
-        $stories = $this->story->getProductStoryPairs($productID, $branch);
+        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $this->view->stories = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $stories;
 
         /* Set custom. */

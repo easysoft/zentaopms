@@ -60,8 +60,8 @@ if(isset($entry)) $pathInfo .= '&type=file';
         $params   = "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&objectID=$objectID&type=$logType&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
         $preLink  = $this->repo->createLink('ajaxSideCommits', "$params&pageID=$prePage");
         $nextLink = $this->repo->createLink('ajaxSideCommits', "$params&pageID=$nextPage");
-        echo html::a($preLink, "<i class='icon icon-angle-left'></i>", '', "class='ajaxPager btn" . ($prePage == $pager->pageID ? ' disabled' : '') . "'");
-        echo html::a($nextLink, "<i class='icon icon-angle-right'></i>", '', "class='ajaxPager btn" . ($nextPage == $pager->pageID ? ' disabled' : '') . "'");
+        echo html::commonButton("<i class='icon icon-angle-left'></i>",  "data-href='$preLink'",  "ajaxPager btn" . ($prePage == $pager->pageID ? ' disabled' : ''));
+        echo html::commonButton("<i class='icon icon-angle-right'></i>", "data-href='$nextLink'", "ajaxPager btn" . ($nextPage == $pager->pageID ? ' disabled' : ''));
         ?>
       </div>
     </div>
@@ -75,10 +75,10 @@ if($("input:checkbox[name='revision[]']:checked").length < 2)
 $("input:checkbox[name='revision[]']").each(function(){ if(!$(this).is(':checked')) $(this).attr("disabled","disabled")});
 $("input:checkbox[name='revision[]']").click(function(){
     var checkNum = $("input:checkbox[name='revision[]']:checked").length;
-    if (checkNum >= 2) 
+    if (checkNum >= 2)
     {
         $("input:checkbox[name='revision[]']").each(function(){ if(!$(this).is(':checked')) $(this).attr("disabled","disabled")});
-    } 
+    }
     else
     {
         $('#diffRepo').remove();

@@ -4,7 +4,7 @@
 <style>
 .block-issues .c-id {width: 50px;}
 .block-issues .c-pri {width: 50px;text-align: center;}
-.block-issues .c-createdDate {width: 95px;}
+.block-issues .c-deadline {width: 95px;}
 .block-issues .c-severity {width: 80px;}
 .block-issues .c-status {width: 80px;}
 .block-issues.block-sm .c-status {text-align: center;}
@@ -18,7 +18,7 @@
         <?php if($longBlock):?>
         <th class='c-pri'><?php echo $lang->priAB?></th>
         <th class='c-category'><?php echo $lang->issue->severity;?></th>
-        <th class='c-identifiedDate'><?php echo $lang->issue->createdDate;?></th>
+        <th class='c-identifiedDate'><?php echo $lang->issue->deadline;?></th>
         <?php endif;?>
         <th class='c-status'><?php echo $lang->issue->status;?></th>
       </tr>
@@ -34,7 +34,7 @@
         <?php if($longBlock):?>
         <td class='c-pri'><?php echo zget($lang->issue->priList, $issue->pri)?></td>
         <td class='c-severity'><?php echo zget($lang->issue->severityList, $issue->severity)?></td>
-        <td class='c-createdDate'><?php echo $issue->createdDate == '0000-00-00' ? '' : $issue->createdDate;?></td>
+        <td class='c-deadline'><?php echo $issue->deadline == '0000-00-00' ? '' : $issue->deadline;?></td>
         <?php endif;?>
         <?php $status = $this->processStatus('issue', $issue);?>
         <td class='c-status' title='<?php echo $status;?>'>

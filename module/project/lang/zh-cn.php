@@ -94,9 +94,14 @@ $lang->project->allInput           = '项目总投入';
 $lang->project->weekly             = '项目周报';
 $lang->project->pv                 = 'PV';
 $lang->project->ev                 = 'EV';
-$lang->project->sv                 = 'SV%';
+$lang->project->sv                 = 'SV';
 $lang->project->ac                 = 'AC';
-$lang->project->cv                 = 'CV%';
+$lang->project->cv                 = 'CV';
+$lang->project->pvTitle            = '计划完成';
+$lang->project->evTitle            = '实际完成';
+$lang->project->svTitle            = '进度偏差';
+$lang->project->acTitle            = '实际花费';
+$lang->project->cvTitle            = '成本偏差';
 $lang->project->teamCount          = '人数';
 $lang->project->longTime           = '长期';
 $lang->project->future             = '待定';
@@ -165,8 +170,8 @@ $lang->project->aclList['open']    = "公开 (有项目视图权限即可访问)
 $lang->project->acls['private'] = '私有';
 $lang->project->acls['open']    = '公开';
 
-$lang->project->authList['extend'] = '继承(取系统权限与项目权限的合集)';
-$lang->project->authList['reset']  = '重新定义(只取项目权限)';
+$lang->project->authList['extend'] = '继承 (取系统权限与项目权限的合集)';
+$lang->project->authList['reset']  = '重新定义 (只取项目权限)';
 
 $lang->project->statusList['wait']      = '未开始';
 $lang->project->statusList['doing']     = '进行中';

@@ -688,7 +688,8 @@ class bug extends control
     public function view($bugID, $from = 'bug')
     {
         /* Judge bug exits or not. */
-        $bug = $this->bug->getById($bugID, true);
+        $bugID = (int)$bugID;
+        $bug   = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
         if($bug->project) $this->session->project = $bug->project;
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->project);
