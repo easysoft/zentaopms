@@ -258,7 +258,10 @@ class projectModel extends model
         if(empty($projects)) return array();
         $projectIdList = array_keys($projects);
 
-        $teams = $this->dao->select('root, count(*) as teams')->from(TABLE_TEAM)->where('root')->in($projectIdList)->groupBy('root')->fetchPairs();
+        $teams = $this->dao->select('root, count(*) as teams')->from(TABLE_TEAM)
+            ->where('root')->in($projectIdList)
+            ->andWhere('type')->in('project')
+            ->groupBy('root')->fetchPairs();
 
         $hours = $this->dao->select('project,
             sum(consumed) as consumed,

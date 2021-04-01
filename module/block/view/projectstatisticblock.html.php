@@ -22,7 +22,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .tile {margin-bottom: 30px;}
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
-.block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 260px; padding: 0;}
+.block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 210px; padding: 0;}
 .block-statistic .nav-secondary > li {position: relative;}
 .block-statistic .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
 .block-statistic .nav-secondary > li > a:first-child {padding-right: 36px;}
@@ -64,20 +64,21 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .status-count tr:first-child td:last-child {color: #000; font-weight: bold;}
 
 .block-statistic .project-info {margin-left: 3px;}
+.block-statistic .project-budget {white-space: nowrap;}
 .block-statistic .progress-group {margin-top: 10px;}
 .block-statistic .progress-group .col {padding-left: 0;}
-.block-statistic .progress-percent {top: 4px;}
+.block-statistic .progress-percent {margin-top: 4px;}
 .block-statistic .weekly-title {font-weight: bold; color: #3C4253;}
 .block-statistic .weekly-small {font-size:12px; color: #838A9D;}
 .block-statistic .weekly-progress {font-weight: bold; font-size:24px;}
 .block-statistic .weekly-name {font-size: 14px; color: #838A9D;}
 .block-statistic .weekly-value {font-size: 14px;}
 .block-statistic .col-12 .stage {margin-left: 10px;}
-.block-statistic .col-12 .waterfall-title {padding-top: 5px;}
+.block-statistic .col-12 .waterfall-title {padding-top: 3px;}
 .block-statistic .col-12 .waterfall-value {padding-top: 10px; font-size: 18px; font-weight: 600;}
 .block-statistic .col-12 .waterfall-title .col {padding-right: 0px; padding-left: 0px;}
 
-.twenty-percent {width: 20%;}
+.forty-percent {width: 40%;}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -184,37 +185,45 @@ $(function()
               <span class='weekly-title'><?php echo $lang->project->weekly;?></span>
               <span class='stage text-muted'><?php echo $project->current;?></span>
             </div>
-            <div class='text-center progress-group col-12 with-padding center-block'>
-              <div class='progress-num col'>
-                <span><?php echo $lang->project->progress . ':';?></span>
-                <span class='project-info'><?php echo $project->progress . '%';?></span>
+            <div class='table-row text-center progress-group col-12 with-padding center-block'>
+              <div class='forty-percent col'>
+                <div class='progress-num col'>
+                  <span><?php echo $lang->project->progress . ':';?></span>
+                  <span class='project-info'><?php echo $project->progress . '%';?></span>
+                </div>
+                <div class='progress progress-percent col-1-8'>
+                  <div class="progress-bar" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->progress;?>%"></div>
+                </div>
               </div>
-              <div class='progress progress-percent twenty-percent col'>
-                <div class="progress-bar" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->progress;?>%"></div>
-              </div>
-              <div class="twenty-percent col">
+              <div class="col-1-5">
                 <span><?php echo $lang->project->teamCount . ':';?></span>
                 <span class='project-info'><?php echo $project->teamCount;?></span>
               </div>
-              <div class="twenty-percent col">
+              <div class="col-1-5 project-budget">
                 <span><?php echo $lang->project->budget . ':';?></span>
-                <span class='project-info'><?php echo $project->budget;?></span>
+                <span class='project-info'>
+                <?php
+                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
+                echo $project->budget != 0 ? $projectBudget : $this->lang->project->future;
+                ?>
+                </span>
               </div>
+              <div class="col-1-5"></div>
             </div>
             <div class="table-row text-center waterfall-title small col-12 center-block">
               <?php $isChineseLang = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']);?>
-              <div class="twenty-percent col"><?php echo $isChineseLang ? $lang->project->pv . '(' . $lang->project->pvTitle . ')' : $lang->project->pv; ?></div>
-              <div class="twenty-percent col"><?php echo $isChineseLang ? $lang->project->ev . '(' . $lang->project->evTitle . ')' : $lang->project->ev;?></div>
-              <div class="twenty-percent col"><?php echo $isChineseLang ? $lang->project->ac . '(' . $lang->project->acTitle . ')' : $lang->project->ac;?></div>
-              <div class="twenty-percent col"><?php echo $isChineseLang ? $lang->project->sv . '(' . $lang->project->svTitle . ')' : $lang->project->sv;?></div>
-              <div class="twenty-percent col"><?php echo $isChineseLang ? $lang->project->cv . '(' . $lang->project->cvTitle . ')' : $lang->project->cv;?></div>
+              <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->pv . '(' . $lang->project->pvTitle . ')' : $lang->project->pv; ?></div>
+              <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->ev . '(' . $lang->project->evTitle . ')' : $lang->project->ev;?></div>
+              <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->ac . '(' . $lang->project->acTitle . ')' : $lang->project->ac;?></div>
+              <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->sv . '(' . $lang->project->svTitle . ')' : $lang->project->sv;?></div>
+              <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->cv . '(' . $lang->project->cvTitle . ')' : $lang->project->cv;?></div>
             </div>
             <div class="table-row text-center waterfall-value small col-12 center-block">
-              <div class="twenty-percent col"><?php echo $project->pv;?></div>
-              <div class="twenty-percent col"><?php echo $project->ev;?></div>
-              <div class="twenty-percent col"><?php echo $project->ac;?></div>
-              <div class="twenty-percent col"><?php echo $project->sv;?></div>
-              <div class="twenty-percent col"><?php echo $project->cv;?></div>
+              <div class="col-1-5"><?php echo $project->pv;?></div>
+              <div class="col-1-5"><?php echo $project->ev;?></div>
+              <div class="col-1-5"><?php echo $project->ac;?></div>
+              <div class="col-1-5"><?php echo $project->sv;?></div>
+              <div class="col-1-5"><?php echo $project->cv;?></div>
             </div>
           </div>
         <?php endif;?>
