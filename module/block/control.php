@@ -1317,6 +1317,7 @@ class block extends control
     {
         $projectID = $this->session->project;
         $this->app->loadLang('execution');
+        $this->app->loadLang('bug');
         $totalData = $this->loadModel('project')->getOverviewList('byId', $projectID, 'id_desc', 1);
 
         $this->view->totalData = $totalData;
