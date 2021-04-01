@@ -414,7 +414,7 @@ class my extends control
     /**
      * My test case.
      *
-     * @param  string $type assigntome|openedbyme
+     * @param  string $type      assigntome|openedbyme
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -424,10 +424,11 @@ class my extends control
      */
     public function testcase($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* Save session, load lang. */
-        if($this->app->viewType != 'json') $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->loadModel('testcase');
         $this->loadModel('testtask');
+
+        /* Save session. */
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

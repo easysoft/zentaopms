@@ -165,8 +165,8 @@ $lang->project->aclList['open']    = "公开 (有项目视图权限即可访问)
 $lang->project->acls['private'] = '私有';
 $lang->project->acls['open']    = '公开';
 
-$lang->project->authList['extend'] = '继承(取系统权限与项目权限的合集)';
-$lang->project->authList['reset']  = '重新定义(只取项目权限)';
+$lang->project->authList['extend'] = '继承 (取系统权限与项目权限的合集)';
+$lang->project->authList['reset']  = '重新定义 (只取项目权限)';
 
 $lang->project->statusList['wait']      = '未开始';
 $lang->project->statusList['doing']     = '进行中';

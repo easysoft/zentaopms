@@ -39,6 +39,7 @@ class user extends control
      */
     public function view($userID)
     {
+        $userID = (int)$userID;
         $this->locate($this->createLink('user', 'todo', "userID=$userID&type=all"));
     }
 
