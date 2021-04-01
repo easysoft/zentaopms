@@ -367,7 +367,8 @@ class caselib extends control
      */
     public function view($libID)
     {
-        $lib = $this->caselib->getById($libID, true);
+        $libID = (int)$libID;
+        $lib   = $this->caselib->getById($libID, true);
         if(!isset($lib->id)) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Set lib menu. */

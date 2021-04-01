@@ -58,7 +58,8 @@ class user extends control
      */
     public function todo($userID, $type = 'today', $status = 'all', $orderBy = 'date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $user = $this->user->getById($userID, 'id');
+        $userID = (int)$userID;
+        $user   = $this->user->getById($userID, 'id');
         if(empty($user)) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Set thie url to session. */
@@ -79,6 +80,7 @@ class user extends control
         $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
         $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        if(!isset($users[$userID])) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* set menus. */
         $this->view->userList = $this->user->setUserList($users, $userID);

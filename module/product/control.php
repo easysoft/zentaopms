@@ -619,7 +619,8 @@ class product extends control
      */
     public function view($productID)
     {
-        $product = $this->product->getStatByID($productID);
+        $productID = (int)$productID;
+        $product   = $this->product->getStatByID($productID);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);

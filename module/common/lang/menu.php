@@ -369,7 +369,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
 $lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'subModule' => 'holiday');
-$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-timezone');
+$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-timezone,custom-estimate');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
@@ -504,18 +504,7 @@ $lang->navGroup->svn     = 'devops';
 $lang->navGroup->git     = 'devops';
 
 $lang->navGroup->company       = 'system';
-$lang->navGroup->sqlbuilder    = 'system';
-$lang->navGroup->auditcl       = 'system';
-$lang->navGroup->cmcl          = 'system';
 $lang->navGroup->ldap          = 'system';
-$lang->navGroup->process       = 'system';
-$lang->navGroup->activity      = 'system';
-$lang->navGroup->zoutput       = 'system';
-$lang->navGroup->classify      = 'system';
-$lang->navGroup->subject       = 'system';
-$lang->navGroup->baseline      = 'system';
-$lang->navGroup->reviewcl      = 'system';
-$lang->navGroup->reviewsetting = 'system';
 
 $lang->navGroup->attend   = 'attend';
 $lang->navGroup->leave    = 'attend';

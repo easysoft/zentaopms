@@ -701,7 +701,8 @@ class program extends control
      */
     public function view($programID)
     {
-        $program = $this->program->getByID($programID);
+        $programID = (int)$programID;
+        $program   = $this->program->getByID($programID);
         if(!$program) die(js::error($this->lang->notFound) . js::locate('back'));
 
         echo $this->fetch('program', 'product', "programID=$programID");
