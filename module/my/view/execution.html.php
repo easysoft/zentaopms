@@ -57,7 +57,7 @@
           <?php echo html::a($link, $execution->name, '', "title='$execution->name'");?>
         </td>
         <?php if($config->systemMode == 'new'):?>
-        <td class='c-name text-left'><?php echo html::a($this->createLink('project', 'browse', "id=$execution->project", '', '', $execution->project), $execution->projectName, '', "title='$execution->projectName'");?></td>
+        <td class='c-name text-left'><?php echo html::a($this->createLink('project', 'view', "id=$execution->project", '', '', $execution->project), $execution->projectName, '', "title='$execution->projectName'");?></td>
         <?php endif;?>
         <td><?php echo $execution->begin;?></td>
         <td><?php echo $execution->end;?></td>
