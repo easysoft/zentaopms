@@ -103,7 +103,8 @@ class story extends control
                 $this->send($response);
             }
 
-            $storyID = $storyResult['id'];
+            $storyID   = $storyResult['id'];
+            $productID = $this->post->product ? $this->post->product : $productID;
             if($storyResult['status'] == 'exists')
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
@@ -159,7 +160,6 @@ class story extends control
             if($objectID == 0)
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
-                $productID = $this->post->product ? $this->post->product : $productID;
                 $branchID  = $this->post->branch  ? $this->post->branch  : $branch;
                 $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=unclosed&param=0&type=$type&orderBy=id_desc");
                 if($this->session->storyList) $response['locate'] = $this->session->storyList;

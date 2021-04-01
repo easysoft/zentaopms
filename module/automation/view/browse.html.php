@@ -41,14 +41,14 @@
 .block-zendata {width: 96%; display: inline-block; padding: 30px 40px; margin-top: 20px; box-shadow: 2px 2px 5px #e2dede;}
 .block-zendata p {font-size: 18px; font-weight:bold; margin: 0 0 10px 20px;}
 .block-zendata li {width: 100%; float: left; padding: 6px 0px; font-size: 14px; font-weight:bold; color: #666666; text-align: left; list-style:none;}
-.qr-code {margin-top: 20px; padding: 20px 0px 20px 60px; box-shadow: 2px 2px 5px #e2dede;}
+.qr-code {margin-top: 20px; padding: 20px 0px 20px 58px; box-shadow: 2px 2px 5px #e2dede;}
 .qr-code-img {width: 90px; height: 90px; display: inline-block; float: left;}
 .qr-code-details {display: inline-block; margin: 10px 0px 0px 10px;}
 .qr-code-details div{margin: 5px 0px;}
 .qr-code-group {color: #898989;}
 @media screen and (max-height: 768px)
 {
-  .qr-code {padding: 20px 0px 20px 45px;}
+  .qr-code {padding: 20px 0px 20px 43px;}
   .block-details li {width: 50%;}
   .block-details-line li {width: 100%;}
   .ztf-download-trait div {width: 47%;}

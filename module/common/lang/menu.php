@@ -543,3 +543,4 @@ $lang->navGroup->action    = 'admin';
 $lang->navGroup->search = 'search';
 $lang->navGroup->index  = 'index';
 $lang->navGroup->tree   = 'tree';
+$lang->navGroup->misc   = 'misc';
