@@ -10,7 +10,7 @@
 
     $label  = "<span class='text'>{$lang->user->schedule}</span>";
     $active = $methodName == 'todo' ? ' btn-active-text' : '';
-    common::printLink('user', 'todo', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'todo', "userID={$user->id}&type=all", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->task}</span>";
     $active = $methodName == 'task' ? ' btn-active-text' : '';
