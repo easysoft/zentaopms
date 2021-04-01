@@ -82,9 +82,9 @@ function addNewProduct(obj)
  * @access public
  * @return void
  */
-function setAclList(projectID)
+function setAclList(programID)
 {
-    if(projectID != 0)
+    if(programID != 0)
     {
         $('.aclBox').html($('#programAcl').html());
     }

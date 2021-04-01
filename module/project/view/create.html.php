@@ -200,6 +200,6 @@
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div id='programAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->program->subAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
