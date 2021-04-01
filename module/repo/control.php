@@ -82,7 +82,6 @@ class repo extends control
 
         $repoID = $this->repo->saveState(0, $objectID);
         $this->commonAction($repoID, $objectID);
-        $this->repo->setMenu($this->repos, $repoID, false);
 
         $repoList = $this->repo->getList(0, $orderBy);
 
@@ -128,7 +127,6 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
 
         $this->app->loadLang('action');
-        $this->repo->setMenu($this->repos, $repoID, false);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->position[] = $this->lang->repo->create;
@@ -332,14 +330,12 @@ class repo extends control
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
 
-        $this->commonAction($repoID, $objectID);
-
         /* Get path and refresh. */
         if($this->get->repoPath) $path = $this->get->repoPath;
         if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;
 
         /* Set menu and session. */
-        $this->repo->setMenu($this->repos, $repoID);
+        $this->commonAction($repoID, $objectID);
         $this->repo->setBackSession('list', $withOtherModule = true);
 
         session_start();
@@ -829,8 +825,6 @@ class repo extends control
     public function showSyncCommit($repoID = 0, $objectID = 0, $branch = '')
     {
         $this->commonAction($repoID, $objectID);
-
-        $this->repo->setMenu($this->repos, $repoID);
 
         if($repoID == 0) $repoID = $this->session->repoID;
         if($branch) $branch = base64_decode($branch);
