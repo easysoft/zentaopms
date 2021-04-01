@@ -519,6 +519,7 @@ class commonModel extends model
     public static function printHomeButton($openApp)
     {
         global $lang;
+        global $config;
 
         if(!$openApp) return;
         $icon = zget($lang->navIcons, $openApp, '');
@@ -527,6 +528,7 @@ class commonModel extends model
         {
             $nav = $lang->mainNav->$openApp;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
+            if($openApp == 'execution') $currentMethod = 'all';
         }
         else
         {
@@ -535,7 +537,7 @@ class commonModel extends model
             if($openApp == 'product') $currentMethod = 'all';
         }
 
-        $link = $openApp != 'execution' ? helper::createLink($currentModule, $currentMethod) : '';
+        $link = ($openApp != 'execution' or ($config->systemMode == 'classic')) ? helper::createLink($currentModule, $currentMethod) : '';
         $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='btn'") : "$icon {$lang->$openApp->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
@@ -2099,20 +2101,30 @@ EOD;
     public static function canBeChanged($module, $object = null)
     {
         global $app, $config;
+        static $productsStatus   = array();
+        static $executionsStatus = array();
 
         /* Check the product is closed. */
         if(!empty($object->product) and is_numeric($object->product) and empty($config->CRProduct))
         {
-            $product = $app->control->loadModel('product')->getByID($object->product);
-            if($product->status == 'closed') return false;
+            if(!isset($productsStatus[$object->product]))
+            {
+                $product = $app->control->loadModel('product')->getByID($object->product);
+                $productsStatus[$object->product] = $product ? $product->status : '';
+            }
+            if($productsStatus[$object->product] == 'closed') return false;
         }
 
         /* Check the execution is closed. */
         $productModuleList = array('story', 'bug', 'testtask');
         if(!in_array($module, $productModuleList) and !empty($object->execution) and is_numeric($object->execution) and empty($config->CRExecution))
         {
-            $execution = $app->control->loadModel('execution')->getByID($object->execution);
-            if($execution->status == 'closed') return false;
+            if(!isset($executionsStatus[$object->execution]))
+            {
+                $execution = $app->control->loadModel('execution')->getByID($object->execution);
+                $executionsStatus[$object->execution] = $execution ? $execution->status : '';
+            }
+            if($executionsStatus[$object->execution] == 'closed') return false;
         }
 
         return true;

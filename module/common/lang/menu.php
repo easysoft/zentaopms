@@ -214,8 +214,8 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 
 /* Execution menu. */
 $lang->execution->homeMenu = new stdclass();
-$lang->execution->homeMenu->index = "$lang->dashboard|execution|index|";
-$lang->execution->homeMenu->list  = array('link' => "{$lang->execution->common}|execution|all|", 'alias' => 'create,batchedit');
+if($config->systemMode == 'new') $lang->execution->homeMenu->index = "$lang->dashboard|execution|index|";
+$lang->execution->homeMenu->list  = array('link' => "{$lang->executionCommon}|execution|all|", 'alias' => 'create,batchedit');
 
 $lang->execution->menu = new stdclass();
 $lang->execution->menu->task     = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
@@ -316,24 +316,24 @@ $lang->devops->menuOrder[25] = 'rules';
 
 /* Doc menu.*/
 $lang->doc->menu = new stdclass();
-$lang->doc->menu->recent   = array('link' => "{$lang->doc->recent}|doc|recent");
-$lang->doc->menu->my       = array('link' => "{$lang->doc->my}|doc|my");
-$lang->doc->menu->favorite = array('link' => "{$lang->doc->favorite}|doc|favorite");
-$lang->doc->menu->product  = array('link' => "{$lang->doc->product}|doc|product");
-$lang->doc->menu->project  = array('link' => "{$lang->doc->project}|doc|project");
-$lang->doc->menu->custom   = array('link' => "{$lang->doc->custom}|doc|project");
-$lang->doc->menu->wiki     = array('link' => "{$lang->doc->wiki}|doc|project");
+$lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
+$lang->doc->menu->recent    = array('link' => "{$lang->doc->recent}|doc|browse|libID=0&browseTyp=byediteddate", 'alias' => 'recent');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|libID=0&browseTyp=openedbyme", 'alias' => 'my');
+$lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|libID=0&browseTyp=collectedbyme", 'alias' => 'collect');
+$lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|objectLibs|type=product");
+$lang->doc->menu->project   = array('link' => "{$lang->doc->project}|doc|objectLibs|type=project");
+$lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|objectLibs|libID=0");
 
 $lang->doc->dividerMenu = ',product,';
 
 /* Doc menu order. */
-$lang->doc->menuOrder[5]  = 'recent';
-$lang->doc->menuOrder[10] = 'my';
-$lang->doc->menuOrder[15] = 'favorite';
-$lang->doc->menuOrder[20] = 'product';
-$lang->doc->menuOrder[25] = 'project';
-$lang->doc->menuOrder[30] = 'custom';
-$lang->doc->menuOrder[35] = 'wiki';
+$lang->doc->menuOrder[5]  = 'dashboard';
+$lang->doc->menuOrder[10] = 'recent';
+$lang->doc->menuOrder[15] = 'my';
+$lang->doc->menuOrder[20] = 'collect';
+$lang->doc->menuOrder[25] = 'product';
+$lang->doc->menuOrder[30] = 'project';
+$lang->doc->menuOrder[35] = 'custom';
 
 /* Report menu.*/
 $lang->report->menu = new stdclass();
@@ -369,7 +369,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
 $lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'subModule' => 'holiday');
-$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-timezone');
+$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-timezone,custom-estimate');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
@@ -504,18 +504,7 @@ $lang->navGroup->svn     = 'devops';
 $lang->navGroup->git     = 'devops';
 
 $lang->navGroup->company       = 'system';
-$lang->navGroup->sqlbuilder    = 'system';
-$lang->navGroup->auditcl       = 'system';
-$lang->navGroup->cmcl          = 'system';
 $lang->navGroup->ldap          = 'system';
-$lang->navGroup->process       = 'system';
-$lang->navGroup->activity      = 'system';
-$lang->navGroup->zoutput       = 'system';
-$lang->navGroup->classify      = 'system';
-$lang->navGroup->subject       = 'system';
-$lang->navGroup->baseline      = 'system';
-$lang->navGroup->reviewcl      = 'system';
-$lang->navGroup->reviewsetting = 'system';
 
 $lang->navGroup->attend   = 'attend';
 $lang->navGroup->leave    = 'attend';

@@ -70,9 +70,8 @@ class doc extends control
      * Browse docs.
      *
      * @param  string|int $libID    product|execution or the int id of custom library
-     * @param  int    $moduleID
-     * @param  int    $productID
-     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  int    $param
      * @param  string $orderBy
      * @param  string $from  doc|project|product
      * @param  int    $recTotal
@@ -160,6 +159,16 @@ class doc extends control
         {
             $libs = $this->doc->getAllLibsByType('collector');
             $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
+
+            $this->app->rawMethod = 'collect';
+        }
+        elseif($browseType == 'openedbyme')
+        {
+            $this->app->rawMethod = 'my';
+        }
+        elseif($browseType == 'byediteddate')
+        {
+            $this->app->rawMethod = 'recent';
         }
 
         $attachLibs = array();
@@ -445,7 +454,8 @@ class doc extends control
     public function view($docID, $version = 0)
     {
         /* Get doc. */
-        $doc = $this->doc->getById($docID, $version, true);
+        $docID = (int)$docID;
+        $doc   = $this->doc->getById($docID, $version, true);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
 
         if($doc->contentType == 'markdown')
@@ -842,14 +852,14 @@ class doc extends control
     }
 
     /**
-     * Show libs for product or execution.
+     * Show libs for product or project.
      *
      * @param  string $type
-     * @param  int    $objectID
+     * @param  int    $objectID  projectID|productID
      * @access public
      * @return void
      */
-    public function objectLibs($type, $objectID)
+    public function objectLibs($type, $objectID = 0)
     {
         // setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $this->session->set('docList', $this->app->getURI(true), 'doc');

@@ -21,7 +21,6 @@
 #cards .project-detail > p {margin-bottom: 8px;}
 #cards .project-detail .progress {height: 4px;}
 #cards .project-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
-#cards .project-detail .col-xs-5 {top: 4px;}
 #cards .panel-heading {cursor: pointer;}
 #cards .project-stages-container {margin: 0 -16px -16px -16px; padding: 0 4px; height: 46px; overflow-x: auto; position: relative;}
 #cards .project-stages:after {content: ' '; width: 30px; display: block; right: -16px; top: 16px; bottom: -6px; z-index: 1; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); position: absolute;}
@@ -72,7 +71,6 @@
           <?php if($config->systemMode == 'new'):?>
           <?php if($project->model === 'waterfall'): ?>
           <div class='project-detail project-stages'>
-            <p class='text-muted'><?php echo $lang->project->ongoingStage;?></p>
             <?php
             $projectProjects = array();
             foreach($project->executions as $project)
@@ -83,6 +81,7 @@
             <?php if(empty($projectProjects)): ?>
             <div class='label label-outline'><?php echo zget($lang->project->statusList, $project->status);?></div>
             <?php else: ?>
+            <p class='text-muted'><?php echo $lang->project->ongoingStage;?></p>
             <div class='project-stages-container scrollbar-hover'>
               <div class='project-stages-row'>
                 <?php foreach ($projectProjects as $project): ?>
@@ -102,9 +101,11 @@
             <div class='row'>
               <div class='col-xs-5'><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->id}"), $project->name);?></div>
               <div class='col-xs-7'>
-              <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value="<?php echo $project->hours->progress;?>" data-width='24' data-height='24' data-back-color='#e8edf3'>
-                <div class='progress-info'><?php echo $project->hours->progress;?></div>
+                <div class="progress progress-text-left">
+                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
+                  <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
                 </div>
+              </div>
               </div>
             </div>
             <?php endif; ?>

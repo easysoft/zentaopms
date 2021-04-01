@@ -79,8 +79,8 @@ $lang->program->subAcls['private'] = 'Private';
 $lang->program->subAcls['open']    = 'Default';
 $lang->program->subAcls['program'] = 'Open within the program';
 
-$lang->program->authList['extend'] = 'Inherit(program privileges and company privileges)';
-$lang->program->authList['reset']  = 'Reset(program privileges only)';
+$lang->program->authList['extend'] = 'Inherit (program privileges and company privileges)';
+$lang->program->authList['reset']  = 'Reset (program privileges only)';
 
 $lang->program->statusList['wait']      = 'Waiting';
 $lang->program->statusList['doing']     = 'Doing';

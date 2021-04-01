@@ -1,4 +1,4 @@
-<div class='list-group'>
+<div class='list-group' style='max-height: 248px; padding: 5px 10px; margin: 5px 0;'>
   <?php
   $currentLibID = $libID;
   foreach($libraries as $libID => $libName)

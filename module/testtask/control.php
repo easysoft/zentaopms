@@ -263,7 +263,8 @@ class testtask extends control
     public function view($taskID)
     {
         /* Get test task, and set menu. */
-        $task = $this->testtask->getById($taskID, true);
+        $taskID = (int)$taskID;
+        $task   = $this->testtask->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* When the session changes, you need to query the related products again. */

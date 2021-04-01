@@ -81,8 +81,8 @@ $lang->program->subAcls['private'] = '私有';
 $lang->program->subAcls['open']    = '全部公开';
 $lang->program->subAcls['program'] = '项目集内公开';
 
-$lang->program->authList['extend'] = '继承(取项目权限与组织权限的并集)';
-$lang->program->authList['reset']  = '重新定义(只取项目权限)';
+$lang->program->authList['extend'] = '继承 (取项目权限与组织权限的并集)';
+$lang->program->authList['reset']  = '重新定义 (只取项目权限)';
 
 $lang->program->statusList['wait']      = '未开始';
 $lang->program->statusList['doing']     = '进行中';

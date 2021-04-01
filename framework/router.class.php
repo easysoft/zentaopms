@@ -244,7 +244,8 @@ class router extends baseRouter
         if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
         {
             /* Get story concept in project and product. */
-            $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$config->URSR}\"")->fetchAll();
+            $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$this->clientLang}\"")->fetchAll();
+            if(empty($URSRList)) $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$config->URSR}\"")->fetchAll();
 
             /* Get UR pairs and SR pairs. */
             $URPairs  = array();
@@ -257,8 +258,8 @@ class router extends baseRouter
             }
 
             /* Set default story concept and init UR and SR concept. */
-            $lang->URCommon = zget($URPairs, $config->URSR);
-            $lang->SRCommon = zget($SRPairs, $config->URSR);
+            $lang->URCommon = isset($URPairs[$config->URSR]) ? $URPairs[$config->URSR] : reset($URPairs);
+            $lang->SRCommon = isset($SRPairs[$config->URSR]) ? $URPairs[$config->URSR] : reset($SRPairs);
         }
     }
 
