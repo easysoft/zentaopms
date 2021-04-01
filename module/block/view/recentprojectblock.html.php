@@ -101,7 +101,7 @@
             <p class='text-muted'><?php echo $lang->project->lastIteration; ?></p>
             <?php if($project):?>
             <div class='row'>
-              <div class='col-xs-5'><?php echo $project->name;?></div>
+              <div class='col-xs-5'><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->id}"), $project->name);?></div>
               <div class='col-xs-7'>
               <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value="<?php echo $project->hours->progress;?>" data-width='24' data-height='24' data-back-color='#e8edf3'>
                 <div class='progress-info'><?php echo $project->hours->progress;?></div>
