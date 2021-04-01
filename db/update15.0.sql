@@ -344,15 +344,14 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) V
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct', '1');
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRExecution', '1');
 
-update zt_block set source='execution' where block='statistic' and source='project';
-update zt_block set source='project' where block='statistic' and source='program';
 update zt_config set `value`='project-browse' where `key`='projectLink';
 update zt_config set `value`='program-browse' where `key`='programLink';
-update zt_block set source='project', block='projectteam' where block='programteam' and source='program';
-update zt_block set source='project', block='project' where block='program' and source='program';
 
 update zt_team set type='execution' where type='project';
 update zt_action set objectType='execution' where objectType='project';
 update zt_file set objectType='execution' where objectType='project';
 
 ALTER TABLE `zt_todo` ADD `deleted` ENUM( "0", "1" ) NOT NULL DEFAULT '0';
+
+TRUNCATE `zt_block`;
+DELETE FROM `zt_config` WHERE `key` = 'blockInited';
