@@ -154,7 +154,7 @@
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
                 <td><?php echo zget($users, $story->assignedTo);?></td>
-                <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+                <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                 <td>
                   <span class='status-story status-<?php echo $story->status?>'>
                     <?php echo $this->processStatus('story', $story);?>
