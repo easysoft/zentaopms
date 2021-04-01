@@ -9,7 +9,7 @@
  * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->release->common           = '發佈';
+$lang->release->common           = '產品發佈';
 $lang->release->create           = "創建發佈";
 $lang->release->edit             = "編輯發佈";
 $lang->release->linkStory        = "關聯{$lang->SRCommon}";

@@ -1,7 +1,7 @@
 <?php
-$lang->index->common      = '首页';
-$lang->index->index       = '首页';
-$lang->index->pleaseInput = '请输入';
+$lang->index->common      = '首頁';
+$lang->index->index       = '首頁';
+$lang->index->pleaseInput = '請輸入';
 $lang->index->search      = '搜索';
 
 $lang->index->app = new stdClass();

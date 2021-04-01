@@ -9,7 +9,6 @@
  * @version     $Id: zh-tw.php 4767 2013-05-05 06:10:13Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->admin->common        = '後台管理';
 $lang->admin->index         = '後台管理首頁';
 $lang->admin->checkDB       = '檢查資料庫';
 $lang->admin->sso           = 'ZDOO整合';
@@ -54,13 +53,14 @@ $lang->admin->bind->caption = '關聯社區帳號';
 $lang->admin->bind->success = "關聯賬戶成功";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common     = '安全策略';
-$lang->admin->safe->set        = '密碼安全設置';
-$lang->admin->safe->password   = '密碼安全';
-$lang->admin->safe->weak       = '常用弱口令';
-$lang->admin->safe->reason     = '類型';
-$lang->admin->safe->checkWeak  = '弱口令掃瞄';
-$lang->admin->safe->changeWeak = '修改弱口令密碼';
+$lang->admin->safe->common       = '安全策略';
+$lang->admin->safe->set          = '密碼安全設置';
+$lang->admin->safe->password     = '密碼安全';
+$lang->admin->safe->weak         = '常用弱口令';
+$lang->admin->safe->reason       = '類型';
+$lang->admin->safe->checkWeak    = '弱口令掃瞄';
+$lang->admin->safe->changeWeak   = '修改弱口令密碼';
+$lang->admin->safe->loginCaptcha = '登錄使用驗證碼';
 $lang->admin->safe->modifyPasswordFirstLogin = '首次登錄修改密碼';
 
 $lang->admin->safe->modeList[0] = '不檢查';
@@ -78,6 +78,9 @@ $lang->admin->safe->reasonList['birthday'] = '與生日相同';
 
 $lang->admin->safe->modifyPasswordList[1] = '必須修改';
 $lang->admin->safe->modifyPasswordList[0] = '不強制';
+
+$lang->admin->safe->loginCaptchaList[1] = '是';
+$lang->admin->safe->loginCaptchaList[0] = '否';
 
 $lang->admin->safe->noticeMode   = '系統會在登錄、創建和修改用戶、修改密碼的時候檢查用戶口令。';
 $lang->admin->safe->noticeStrong = '密碼長度越長，含有大寫字母或數字或特殊符號越多，密碼字母越不重複，安全度越強！';

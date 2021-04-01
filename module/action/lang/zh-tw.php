@@ -9,6 +9,8 @@
  * @version     $Id: zh-tw.php 4955 2013-07-02 01:47:21Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
+global $config;
+
 $lang->action->common     = '系統日誌';
 $lang->action->product    = $lang->productCommon;
 $lang->action->project    = '項目';
@@ -29,6 +31,9 @@ $lang->action->hideAll     = '全部隱藏';
 $lang->action->editComment = '修改備註';
 $lang->action->create      = '添加備註';
 $lang->action->comment     = '備註';
+
+$lang->action->undeleteAction = '還原數據';
+$lang->action->hideOneAction  = '隱藏數據';
 
 $lang->action->trashTips      = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
 $lang->action->textDiff       = '文本格式';
@@ -73,7 +78,7 @@ $lang->action->objectTypes['productplan'] = '計劃';
 $lang->action->objectTypes['release']     = '發佈';
 $lang->action->objectTypes['program']     = '項目集';
 $lang->action->objectTypes['project']     = '項目';
-$lang->action->objectTypes['execution']   = $lang->executionCommon;
+$lang->action->objectTypes['execution']   = $config->systemMode == 'new' ? '執行' : $lang->executionCommon;
 $lang->action->objectTypes['task']        = '任務';
 $lang->action->objectTypes['build']       = '版本';
 $lang->action->objectTypes['job']         = '構建';
@@ -96,7 +101,6 @@ $lang->action->objectTypes['stakeholder'] = '干係人';
 $lang->action->objectTypes['budget']      = '費用估算';
 $lang->action->objectTypes['entry']       = '應用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
-$lang->action->objectTypes['job']         = '構建';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -427,12 +431,11 @@ $lang->action->dynamicAction->entry['created'] = '添加應用';
 $lang->action->dynamicAction->entry['edited']  = '編輯應用';
 
 /* 用來生成相應對象的連結。*/
-global $config;
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = "計劃|productplan|view|productID=%s";
 $lang->action->label->release     = '發佈|release|view|productID=%s';
 $lang->action->label->story       = "{$lang->SRCommon}|story|view|storyID=%s";
-$lang->action->label->program     = "項目集|program|pgmproduct|programID=%s";
+$lang->action->label->program     = "項目集|program|product|programID=%s";
 $lang->action->label->project     = "項目|project|index|projectID=%s";
 if($config->systemMode == 'new')
 {
@@ -468,12 +471,12 @@ $lang->action->search->objectTypeList['']            = '';
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
 $lang->action->search->objectTypeList['program']     = '項目集';
 $lang->action->search->objectTypeList['project']     = '項目';
-$lang->action->search->objectTypeList['execution']   = $lang->sprintCommon;
+$lang->action->search->objectTypeList['execution']   = '執行';
 $lang->action->search->objectTypeList['bug']         = 'Bug';
 $lang->action->search->objectTypeList['case']        = '用例';
 $lang->action->search->objectTypeList['caseresult']  = '用例結果';
 $lang->action->search->objectTypeList['stepresult']  = '用例步驟';
-$lang->action->search->objectTypeList['story']       = '用需/軟需';
+$lang->action->search->objectTypeList['story']       = "$lang->SRCommon/$lang->URCommon";
 $lang->action->search->objectTypeList['task']        = '任務';
 $lang->action->search->objectTypeList['testtask']    = '測試單';
 $lang->action->search->objectTypeList['user']        = '用戶';
