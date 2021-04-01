@@ -202,7 +202,7 @@ $(function()
           </div>
           <div class='col-6'>
             <div class='table-row weekly-row with-padding'>
-              <div class='col-4 text-center'>
+              <div class='col-4 text-center w-70px'>
                 <span class='weekly-title'><?php echo $lang->project->allInput;?></span>
               </div>
               <div class='col-8'></div>
