@@ -290,9 +290,10 @@ class executionModel extends model
 
             /* Determine whether to add a sprint or a stage according to the model of the execution. */
             $project    = $this->getByID($_POST['project']);
-            $sprintType = zget($this->config->execution->modelList, $project->model, '');
+            $sprintType = zget($this->config->execution->modelList, $project->model, 'sprint');
+
+            $this->config->execution->create->requiredFields .= ',project';
         }
-        if($this->config->systemMode == 'classic') $sprintType = 'sprint';
 
         /* If the execution model is a stage, determine whether the product is linked. */
         if($sprintType == 'stage' and empty($this->post->products[0]))
