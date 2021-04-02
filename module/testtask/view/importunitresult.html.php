@@ -92,7 +92,6 @@
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
             <?php echo html::hidden('product', $productID);?>
-            <?php echo html::hidden('status', 'done');?>
           </td>
         </tr>
       </table>
