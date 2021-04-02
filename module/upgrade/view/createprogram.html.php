@@ -89,7 +89,7 @@
   </tr>
   <tr class='programParams'>
     <th><?php echo $lang->project->acl;?></th>
-    <td><?php echo nl2br(html::radio('acl', $lang->project->aclList, 'open', '', 'block'));?></td>
+    <td><?php echo nl2br(html::radio('acl', $lang->program->subAclList, 'open', '', 'block'));?></td>
   </tr>
 </table>
 <div class='table-foot text-center'><?php echo html::submitButton();?></div>
