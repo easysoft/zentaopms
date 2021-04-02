@@ -133,7 +133,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         <?php
         $openApp = $isProjectStory ? 'project' : 'product';
         $class = common::hasPriv('story', 'export') ? '' : "class=disabled";
-        $misc  = common::hasPriv('story', 'export') ? "class='export' data-group='$openApp'" : "class=disabled";
+        $misc  = common::hasPriv('story', 'export') ? "data-toggle='modal' data-type='iframe' class='export' data-app='$openApp'" : "class=disabled";
         $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&projectID=0&browseType=$browseType&type=$storyType") : '#';
         echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
@@ -144,7 +144,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <?php $buttonType = $from == 'project' ? 'btn-secondary' : 'btn-primary';?>
       <?php $extraParam = $from == 'project' ? '' : "&bugID=0&planID=0&todoID=0&extra=&type=$storyType";?>
       <?php echo html::a($this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0$extraParam"), "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn $buttonType' data-app='$openApp'");?>
-        <button type='button' class="btn <?php echo $buttonType?> dropdown-toggle" data-toggle='dropdown'><span class='caret'></span></button>
+      <?php if(!empty($productID)): ?>
+      <button type='button' class="btn <?php echo $buttonType?> dropdown-toggle" data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
         <li>
         <?php
@@ -175,7 +176,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         }
         ?>
         </li>
-        <?php if(!empty($productID)): ?>
         <?php $batchDisabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
         <li <?php echo $batchDisabled;?>>
         <?php
@@ -184,8 +184,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           echo html::a($batchLink, $lang->story->batchCreate, '', "data-group='$openApp'");
         ?>
         </li>
-        <?php endif;?>
       </ul>
+      <?php endif;?>
     </div>
     <?php $isShow = $isProjectStory ? '' : "style='display: none;'";?>
     <div class='btn-group dropdown-hover' <?php echo $isShow;?>>
@@ -197,13 +197,20 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     }
     else
     {
-        echo "<button type='button' class='btn btn-primary' id='linkButton'>";
-        echo "<i class='icon-link'></i> {$lang->execution->linkStory} <span class='caret'></span>";
-        echo '</button>';
-        echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
-        if(common::hasPriv('projectstory', 'linkStory')) echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project=$projectID"), $lang->execution->linkStory). "</li>";
-        if(common::hasPriv('projectstory', 'importPlanStories') and !empty($productID)) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
-        echo '</ul>';
+        if(empty($productID))
+        {
+            echo html::a($this->createLink('projectstory', 'linkStory', "project=$projectID"), "<i class='icon-link'></i> {$lang->execution->linkStory}", '', "class='btn btn-primary'");
+        }
+        else
+        {
+            echo "<button type='button' class='btn btn-primary' id='linkButton'>";
+            echo "<i class='icon-link'></i> {$lang->execution->linkStory} <span class='caret'></span>";
+            echo '</button>';
+            echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
+            if(common::hasPriv('projectstory', 'linkStory')) echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project=$projectID"), $lang->execution->linkStory). "</li>";
+            if(common::hasPriv('projectstory', 'importPlanStories')) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
+            echo '</ul>';
+        }
     }
     ?>
     </div>

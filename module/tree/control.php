@@ -164,7 +164,7 @@ class tree extends control
             }
 
             if($from == 'doc') $this->lang->navGroup->doc = 'doc';
-            $type = $lib->product ? 'product' : ($lib->execution ? 'project' : 'custom');
+            $type = $lib->product ? 'product' : ($lib->project ? 'project' : ($lib->execution ? 'execution' : 'custom'));
             $this->lang->tree->menu      = $this->lang->doc->menu;
             $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
 
@@ -374,6 +374,7 @@ class tree extends control
         {
             $this->tree->manageChild($rootID, $viewType);
 
+            if($viewType == 'doc' and isonlybody()) die(js::reload('parent.parent'));
             if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.$('a.refresh').click()}"));
 
             die(js::reload('parent'));

@@ -17,10 +17,10 @@
     <div class='main-header'>
     <h2>
       <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
-      <?php echo $lang->doc->editlib;?>
+      <?php echo $lang->doc->editLib;?>
     </h2>
   </div>
-  <form method='post' target='hiddenwin'>
+  <form method='post' class='form-ajax'>
     <table class='table table-form'>
       <?php if(!empty($lib->product)):?>
       <tr>

@@ -1857,7 +1857,6 @@ EOF;
         if(empty($objects)) return '';
 
         $output = '';
-        $dropMenuLink = helper::createLink('repo', 'ajaxGetDropMenu');
 
         $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
@@ -1868,15 +1867,17 @@ EOF;
         }
         $output .= "</div></div></div></div></div>";
 
-        $dropMenuLink = helper::createLink('repo', 'ajaxGetBranchDropMenu');
-        $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libs[$libID]->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "<div class='table-col'><div class='list-group'>";
-        foreach($libs as $key => $lib)
+        if(!empty($libs))
         {
-            $output .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name);
+            $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libs[$libID]->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "<div class='table-col'><div class='list-group'>";
+            foreach($libs as $key => $lib)
+            {
+                $output .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name);
+            }
+            $output .= "</div></div></div></div></div>";
         }
-        $output .= "</div></div></div></div></div>";
 
         return $output;
     }
@@ -1884,79 +1885,92 @@ EOF;
     /**
      * Get doc tree menu.
      *
-     * @param  string $rootID
+     * @param  string $type
+     * @param  int    $objectID
      * @param  int    $rootID
      * @param  int    $startModule
      * @access public
      * @return string
      */
-    public function getTreeMenu($type, $rootID, $startModule = 0)
+    public function getTreeMenu($type, $objectID, $rootID, $startModule = 0, & $docID = 0)
     {
-        return '';
-
-        $extra['projectID'] = $rootID;
-        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-story'>";
         $startModulePath = '';
         if($startModule > 0)
         {
-            $startModule = $this->getById($startModule);
+            $startModule = $this->tree->getById($startModule);
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
-        $executionModules  = $this->getTaskTreeModules($rootID, true);
-        $executionBranches = $this->dao->select('DISTINCT t2.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->where('t1.project')->eq($rootID)
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetchPairs();
-
-        /* Get module according to product. */
-        $products     = $this->loadModel('product')->getProductPairsByProject($rootID);
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $productNum   = count($products);
-        foreach($products as $id => $product)
+        $docs = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($rootID)->andWhere('deleted')->eq(0)->fetchAll();
+        $moduleDocs = array();
+        foreach($docs as $doc)
         {
-            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id");
-            $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&ordery=&status=byProduct&praram=$id");
-            $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
-            if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
-
-            /* tree menu. */
-            $tree = '';
-            if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
-            foreach($branchGroups[$id] as $branch => $branchName)
-            {
-                $treeMenu = array();
-                $query = $this->dao->select('*')->from(TABLE_MODULE)
-                    ->where('root')->eq((int)$id)
-                    ->andWhere('type')->eq('story')
-                    ->beginIF(count($branchGroups[$id]) > 1)->andWhere('branch')->eq($branch)->fi()
-                    ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-                    ->andWhere('deleted')->eq(0)
-                    ->orderBy('grade desc, branch, `order`, type')
-                    ->get();
-                $stmt = $this->dbh->query($query);
-                while($module = $stmt->fetch())
-                {
-                    /* If not manage, ignore unused modules. */
-                    if(isset($executionModules[$module->id]) and $this->app->rawModule == 'execution') $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
-                    if($this->app->rawModule == 'projectstory') $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
-                }
-                if((isset($treeMenu[0]) and $branch) or isset($executionBranches[$branch]))
-                {
-                    $childMenu = isset($treeMenu[0]) ? "<ul>{$treeMenu[0]}</ul>" : '';
-                    $projectBranchLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=" . (empty($branch) ? 0 : $branch) . "&browseType=byBranch");
-                    $executionBranchLink = helper::createLink('execution', 'story', "executionID=$rootID&ordery=&status=byBranch&praram=" . (empty($branch) ? "{$id},0" : $branch));
-                    $link = $this->app->rawModule == 'projectstory' ? $projectBranchLink : $executionBranchLink;
-                    if($branchName) $treeMenu[0] = "<li>" . html::a($link, $branchName, '_self', "id='branch" . (empty($branch) ? "{$id}_0" : $branch) . "'") . "{$childMenu}</li>";
-                }
-                $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
-            }
-            if($productNum > 1) $tree = "<ul>" . $tree . "</ul>\n</li>";
-            $menu .= $tree;
+            if(!isset($moduleDocs[$doc->module])) $moduleDocs[$doc->module] = array();
+            $moduleDocs[$doc->module][] = $doc;
         }
 
-        $menu .= '</ul>';
+        $treeMenu = array();
+        $query = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('root')->eq((int)$rootID)
+            ->andWhere('type')->eq('doc')
+            ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('grade desc, `order`')
+            ->get();
+        $stmt = $this->dbh->query($query);
+        while($module = $stmt->fetch())
+        {
+            $this->buildTree($treeMenu, $type, $objectID, $rootID, $module, $moduleDocs, $docID);
+        }
+
+        if(isset($moduleDocs[0]))
+        {
+            foreach($moduleDocs[0] as $doc)
+            {
+                if(!$docID) $docID = $doc->id;
+                $treeMenu[0] .= '<li>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), $doc->title) . '</li>';
+            }
+        }
+
+        if(empty($treeMenu)) return '';
+
+        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>" . $treeMenu[0] . '</ul>';
         return $menu;
+    }
+
+    /**
+     * Build doc tree menu.
+     *
+     * @param  pointer $treeMenu
+     * @param  string  $type
+     * @param  int     $objectID
+     * @param  int     $libID
+     * @param  object  $module
+     * @param  array   $moduleDocs
+     * @param  int     $docID
+     * @access public
+     * @return string
+     */
+    private function buildTree(& $treeMenu, $type, $objectID, $libID, $module, $moduleDocs, & $docID)
+    {
+        if(!isset($treeMenu[$module->id])) $treeMenu[$module->id] = '';
+
+        if(isset($moduleDocs[$module->id]))
+        {
+            foreach($moduleDocs[$module->id] as $doc)
+            {
+                if(!$docID) $docID = $doc->id;
+                $treeMenu[$module->id] .= '<li>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), $doc->title) . '</li>';
+            }
+        }
+
+        $li = '<a>' . $module->name . '</a>';
+        if($treeMenu[$module->id])
+        {
+            $li .= '<ul>' . $treeMenu[$module->id] . '</ul>';
+        }
+
+        if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
+        $treeMenu[$module->parent] .= '<li' . ($treeMenu[$module->id] ? ' class="closed"' : '') . '>' . $li . '</li>';
     }
 }
