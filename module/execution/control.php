@@ -727,7 +727,7 @@ class execution extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID     = ($type == 'bysearch') ? (int)$param : 0;
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -768,7 +768,7 @@ class execution extends control
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-        $plans = $this->execution->getPlans($products);
+        $plans    = $this->execution->getPlans($products);
         $allPlans = array('' => '');
         if(!empty($plans))
         {
