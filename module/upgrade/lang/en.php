@@ -30,6 +30,7 @@ $lang->upgrade->warnningContent = <<<EOT
    e.g. mysqldump -u root -p zentao >zentao.bak
 </pre>
 EOT;
+
 $lang->upgrade->createFileWinCMD   = 'Open command line and execute <strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = 'Execute command line: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions</h4>
@@ -66,27 +67,6 @@ $lang->upgrade->to15Desc      = <<<EOD
 <p><strong>How do you plan to use the new version of ZenTao?</strong></p>
 EOD;
 
-$lang->upgrade->to15Mode['classic'] = 'Keep the old version';
-$lang->upgrade->to15Mode['new']     = 'New program management mode';
-
-$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program set management mode in the background-Customize in the future.';
-$lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
-
-$lang->upgrade->demoURL       = 'http://zentao20.demo.zentao.net';
-$lang->upgrade->videoURL      = 'https://qc.zentao.net/zentao20.mp4';
-$lang->upgrade->to20Tips      = 'Zentao 20 upgrade tips';
-$lang->upgrade->to20Button    = 'I have done the backup, start the upgrade!！';
-$lang->upgrade->to20TipsHeader= "<p>Dear user, thank you for your support of ZenTao。Since version 20, Zendo has been fully upgraded to a universal project management platform. Please see the following video for more information(If the video can not play properly, please visit directly <a href='http://zentao20.demo.zentao.net/zentao20.mp4' target='_blank'><u>Zentao20</u></a>)：</p><br />";
-$lang->upgrade->to20Desc      = <<<EOD
-<div class='text-warning'>
-  <p>Friendly reminder：</p>
-  <ol>
-    <li>You can start by installing a version 20 of ZenTao to experience the concepts and processes inside.</li>
-    <li>Version 20 of Zendo has made some major changes, please make a backup before upgrading.</li>
-    <li>Please feel free to upgrade, even if the first upgrade is not in place, subsequent adjustments can be made without affecting system data.</li>
-  </ol>
-</div>
-EOD;
 $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>Next, we will migrate the previous historical product and iteration data to the project set and under the project, with the following scenario for migration.</p><br />
 <h4>Option 1: Product and iteration organized by product line </h4>
@@ -98,6 +78,12 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <h4>Option 4: Iterations linked to multiple products.</h4>
 <p>These iterations can be selected to fall under a new project.</p>
 EOD;
+
+$lang->upgrade->to15Mode['classic'] = 'Keep the old version';
+$lang->upgrade->to15Mode['new']     = 'New program management mode';
+
+$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program set management mode in the background-Customize in the future.';
+$lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
 
 $lang->upgrade->line         = 'Product Line';
 $lang->upgrade->program      = 'Merge Project';

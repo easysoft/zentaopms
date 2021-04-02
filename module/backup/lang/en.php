@@ -8,6 +8,9 @@ $lang->backup->restore     = 'Restore';
 $lang->backup->change      = 'Edit Expiration';
 $lang->backup->changeAB    = 'Edit';
 $lang->backup->rmPHPHeader = 'Remove PHP header';
+$lang->backup->setting     = 'Setting';
+
+$lang->backup->settingAction = 'Backup Setting';
 
 $lang->backup->time     = 'Date';
 $lang->backup->files    = 'Files';
@@ -19,7 +22,6 @@ $lang->backup->status   = 'Status';
 $lang->backup->statusList['success'] = 'Success';
 $lang->backup->statusList['fail']    = 'Fail';
 
-$lang->backup->setting    = 'Settings';
 $lang->backup->settingDir = 'Backup Directory';
 $lang->backup->settingList['nofile'] = 'Do not back up files or codes.';
 $lang->backup->settingList['nosafe'] = 'Do not prevent downloading PHP file header.';

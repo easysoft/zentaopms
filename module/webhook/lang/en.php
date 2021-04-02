@@ -62,6 +62,11 @@ $lang->webhook->wechatAgentId    = 'Agent ID';
 $lang->webhook->wechatUserid     = 'Wechat Userid';
 $lang->webhook->wechatBindStatus = 'Bind Status';
 
+$lang->webhook->feishuAppId       = 'Feishu App ID';
+$lang->webhook->feishuAppSecret   = 'Feishu App Secret';
+$lang->webhook->feishuUserid      = 'Feishu Users';
+$lang->webhook->feishuBindStatus  = 'Feishu Bind Status';
+
 $lang->webhook->zentaoUser  = 'Zentao User';
 
 $lang->webhook->dingBindStatusList['0'] = 'No';

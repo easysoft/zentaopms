@@ -32,6 +32,9 @@ $lang->action->editComment = 'Edit Comment';
 $lang->action->create      = 'Add Comment';
 $lang->action->comment     = 'Comment';
 
+$lang->action->undeleteAction = 'Reset Data';
+$lang->action->hideOneAction  = 'Hide Data';
+
 $lang->action->trashTips      = 'Note: Delete in ZenTao is logic.';
 $lang->action->textDiff       = 'Text Format';
 $lang->action->original       = 'Original Format';
@@ -98,7 +101,6 @@ $lang->action->objectTypes['stakeholder'] = 'Stakeholder';
 $lang->action->objectTypes['budget']      = 'Cost Estimate';
 $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['webhook']     = 'Webhook';
-$lang->action->objectTypes['job']         = 'Job';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
