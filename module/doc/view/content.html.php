@@ -55,7 +55,7 @@
           }
           else
           {
-              echo $doc->content ? $doc->content : '空';
+              echo $doc->content;
           }
           ?>
           <?php foreach($doc->files as $file):?>
