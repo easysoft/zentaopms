@@ -30,12 +30,12 @@ class tree extends control
 
         if($this->app->openApp == 'product')
         {
-            $this->product->setMenu($rootID);;
+            $this->product->setMenu($rootID, 0, 0, '', $viewType);;
         }
         else if($this->app->openApp == 'qa')
         {
             $products = $this->product->getPairs('noclosed');
-            $this->loadModel('qa')->setMenu($products, $rootID);;
+            $this->loadModel('qa')->setMenu($products, $rootID, 0, $viewType);;
         }
         else if($this->app->openApp == 'project')
         {
@@ -83,7 +83,7 @@ class tree extends control
             /* Set menu.*/
             $products = $this->product->getPairs();
             $this->product->saveState($rootID, $products);
-            $this->product->setMenu($rootID);
+            $this->product->setMenu($rootID, 0, 0, '', $viewType);
 
             unset($products[$rootID]);
             $currentProduct = key($products);

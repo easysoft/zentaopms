@@ -37,10 +37,10 @@ $config->themes['default'] = 'default';
 $config->langs['zh-cn']    = '简体';
 $config->langs['zh-tw']    = '繁體';
 $config->langs['en']       = 'English';
-$config->langs['de']       = 'Deutsch';
-$config->langs['fr']       = 'Français';
-$config->langs['vi']       = 'Tiếng Việt';
-$config->langs['ja']       = '日本語';
+//$config->langs['de']       = 'Deutsch';
+//$config->langs['fr']       = 'Français';
+//$config->langs['vi']       = 'Tiếng Việt';
+//$config->langs['ja']       = '日本語';
 
 /* 设备类型视图文件前缀。The prefix for view file for different device. */
 $config->devicePrefix['mhtml'] = '';

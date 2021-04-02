@@ -53,7 +53,7 @@ $lang->upgrade->noticeSQL      = '检查到你的数据库跟标准不一致，�
 $lang->upgrade->afterDeleted   = '以上文件未能删除， 删除后刷新！';
 $lang->upgrade->mergeProgram   = '数据迁移';
 $lang->upgrade->mergeTips      = '数据迁移提示';
-$lang->upgrade->to15Guide      = '禅道开源版15.0.beta1升级';
+$lang->upgrade->to15Guide      = '禅道开源版15版本升级';
 $lang->upgrade->to15Desc       = <<<EOD
 <p>尊敬的用户，禅道从15版本开始对导航和概念做了调整，主要改动如下：</p>
 <ol>

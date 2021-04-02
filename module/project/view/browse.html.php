@@ -85,11 +85,12 @@ js::set('browseType', $browseType);
         <thead>
           <tr>
             <?php
-              foreach($setting as $value)
-              {
-                if($value->id == 'status' and $browseType !== 'all') $value->show = false;
-                if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
-              }
+            foreach($setting as $value)
+            {
+              if($value->id == 'status' and $browseType !== 'all') $value->show = false;
+              if($value->id == 'teamCount' and $browseType == 'all') $value->show = false;
+              if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
+            }
             ?>
           </tr>
         </thead>

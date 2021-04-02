@@ -218,6 +218,7 @@ if($config->systemMode == 'new')
     $lang->resource->project->bug                 = 'bug';
     $lang->resource->project->testcase            = 'testcase';
     $lang->resource->project->testtask            = 'testtask';
+    $lang->resource->project->testreport          = 'testreport';
     $lang->resource->project->execution           = 'execution';
     $lang->resource->project->export              = 'export';
     $lang->resource->project->createGuide         = 'createGuide';
@@ -254,8 +255,8 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[145] = 'bug';
     $lang->project->methodOrder[150] = 'testcase';
     $lang->project->methodOrder[155] = 'testtask';
-    $lang->project->methodOrder[160] = 'execution';
-    $lang->project->methodOrder[165] = 'testreport';
+    $lang->project->methodOrder[160] = 'testreport';
+    $lang->project->methodOrder[165] = 'execution';
     $lang->project->methodOrder[170] = 'export';
     $lang->project->methodOrder[175] = 'createGuide';
 

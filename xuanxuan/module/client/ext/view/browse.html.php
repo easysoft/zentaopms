@@ -14,9 +14,6 @@ $position[] = html::a($this->createLink('admin', 'xuanxuan'), $this->lang->im->c
 $position[] = $this->lang->client->browse;
 ?>
 <?php include '../../../common/view/header.html.php';?>
-<div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left"><?php common::printAdminSubMenu('xuanxuan');?></div>
-</div>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <div class='pull-right'>

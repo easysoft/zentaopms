@@ -258,7 +258,7 @@ $lang->execution->menu->view['subMenu']->tree      = "$lang->treeView|execution|
 $lang->execution->menu->qa['subMenu'] = new stdclass();
 //$lang->execution->menu->qa['subMenu']->qa         = array('link' => "$lang->dashboard|execution|qa|executionID=%s");
 $lang->execution->menu->qa['subMenu']->bug        = array('link' => "{$lang->bug->common}|execution|bug|executionID=%s", 'subModule' => 'bug');
-$lang->execution->menu->qa['subMenu']->testcase   = array('link' => "{$lang->testcase->shortCommon}|execution|testcase|executionID=%s", 'alias' => 'create');
+$lang->execution->menu->qa['subMenu']->testcase   = array('link' => "{$lang->testcase->shortCommon}|execution|testcase|executionID=%s", 'subModule' => 'testcase');
 $lang->execution->menu->qa['subMenu']->testtask   = array('link' => "{$lang->testtask->common}|execution|testtask|executionID=%s", 'subModule' => 'testtask');
 $lang->execution->menu->qa['subMenu']->testreport = array('link' => "{$lang->testreport->common}|execution|testreport|exeutionID=%s", 'subModule' => 'testreport');
 
@@ -382,7 +382,7 @@ $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search', 'exclude' => 'admin-index');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search', 'exclude' => 'admin-index,admin-xuanxuan');
 
 /* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
@@ -538,7 +538,8 @@ $lang->navGroup->entry     = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';
 
-$lang->navGroup->search = 'search';
-$lang->navGroup->index  = 'index';
-$lang->navGroup->tree   = 'tree';
-$lang->navGroup->misc   = 'misc';
+$lang->navGroup->search  = 'search';
+$lang->navGroup->index   = 'index';
+$lang->navGroup->tree    = 'tree';
+$lang->navGroup->misc    = 'misc';
+$lang->navGroup->upgrade = 'upgrade';

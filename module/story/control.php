@@ -348,17 +348,17 @@ class story extends control
 
         if($executionID)
         {
-            $this->execution->setMenu($executionID);
-
             $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
             if($execution->type == 'project')
             {
+                $this->project->setMenu($executionID);
                 $this->app->rawModule = 'projectstory';
                 $this->lang->navGroup->story = 'project';
-                $this->lang->product->menu = $this->lang->menu->{$execution->model};
+                $this->lang->product->menu = $this->lang->{$execution->model}->menu;
             }
             else
             {
+                $this->execution->setMenu($executionID);
                 $this->app->rawModule = 'execution';
                 $this->lang->navGroup->story = 'execution';
             }
@@ -1406,6 +1406,7 @@ class story extends control
 
         /* Save session. */
         $this->session->set('storyList',    $this->app->getURI(true), 'product');
+        $this->session->set('taskList',     $this->app->getURI(true), 'execution');
         $this->session->set('designList',   $this->app->getURI(true), 'project');
         $this->session->set('bugList',      $this->app->getURI(true), 'qa');
         $this->session->set('caseList',     $this->app->getURI(true), 'qa');
@@ -1776,7 +1777,7 @@ class story extends control
     public function report($productID, $branchID, $storyType = 'story', $browseType = 'unclosed', $moduleID = 0, $chartType = 'pie')
     {
         $this->loadModel('report');
-        $this->view->charts   = array();
+        $this->view->charts = array();
 
         if(!empty($_POST))
         {

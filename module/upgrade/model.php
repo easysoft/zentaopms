@@ -4054,6 +4054,20 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('createlib')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->method = 'createLib';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('editlib')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->method = 'editLib';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
         return true;
     }
 
@@ -4204,6 +4218,16 @@ class upgradeModel extends model
                 ->where('id')->eq($projectID)
                 ->exec();
 
+            /* Create doc lib. */
+            $this->app->loadLang('doc');
+            $lib = new stdclass();
+            $lib->project = $projectID;
+            $lib->name    = $this->lang->doclib->main['project'];
+            $lib->type    = 'project';
+            $lib->main    = '1';
+            $lib->acl     = 'default';
+            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
             $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
             if($data->projectStatus == 'closed') $this->loadModel('action')->create('project', $projectID, 'closedbysystem');
         }
@@ -4302,7 +4326,7 @@ class upgradeModel extends model
             $data->path     = ",{$projectID},{$sprint->id},";
             $data->type     = 'sprint';
             $data->acl      = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
-            $data->lifetime = $sprint->type;
+            $data->lifetime = empty($sprint->lifetime) ? $sprint->type : $sprint->lifetime;
 
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
         }
