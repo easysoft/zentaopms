@@ -632,17 +632,15 @@ class upgradeModel extends model
         case '12_5_2':
             $this->saveLogs('Execute 12_5_2');
             $this->appendExec('12_5_2');
+        case '12_5_3':
+            $this->saveLogs('Execute 12_5_3');
+            $this->appendExec('12_5_3');
         case '15_0':
             $this->saveLogs('Execute 15_0');
             $this->execSQL($this->getUpgradeFile('15.0'));
             $this->adjustWhitelistOfProject();
             $this->adjustWhitelistOfProduct();
             $this->appendExec('15_0');
-        case '15_0_beta1':
-            $this->saveLogs('Execute 15_0_beta1');
-            $this->adjustBugOfProject();
-            $this->adjustPriv15_0();
-            $this->appendExec('15_0_beta1');
         }
 
         $this->deletePatch();
@@ -826,6 +824,7 @@ class upgradeModel extends model
             case '12_5':
             case '12_5_1':
             case '12_5_2':
+            case '12_5_3':
             case '15_0'  : $confirmContent .= file_get_contents($this->getUpgradeFile('15.0'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
@@ -4327,7 +4326,7 @@ class upgradeModel extends model
             $data->path     = ",{$projectID},{$sprint->id},";
             $data->type     = 'sprint';
             $data->acl      = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
-            $data->lifetime = $sprint->type;
+            $data->lifetime = empty($sprint->lifetime) ? $sprint->type : $sprint->lifetime;
 
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
         }

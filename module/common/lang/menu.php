@@ -158,6 +158,8 @@ $lang->product->menuOrder[55] = 'setting';
 $lang->product->menuOrder[60] = 'create';
 $lang->product->menuOrder[65] = 'all';
 
+$lang->product->menu->doc['subMenu'] = new stdclass();
+
 $lang->product->menu->settings['subMenu'] = new stdclass();
 $lang->product->menu->settings['subMenu']->view      = array('link' => "{$lang->overview}|product|view|productID=%s", 'alias' => 'edit');
 $lang->product->menu->settings['subMenu']->module    = array('link' => "{$lang->module}|tree|browse|product=%s&view=story", 'subModule' => 'tree');
@@ -196,6 +198,8 @@ $lang->scrum->menuOrder[35] = 'build';
 $lang->scrum->menuOrder[40] = 'release';
 $lang->scrum->menuOrder[48] = 'dynamic';
 $lang->scrum->menuOrder[50] = 'settings';
+
+$lang->scrum->menu->doc['subMenu'] = new stdclass();
 
 $lang->scrum->menu->qa['subMenu'] = new stdclass();
 //$lang->scrum->menu->qa['subMenu']->index      = array('link' => "$lang->dashboard|project|qa|projectID=%s");
@@ -245,6 +249,8 @@ $lang->execution->menuOrder[55] = 'release';
 $lang->execution->menuOrder[60] = 'action';
 $lang->execution->menuOrder[65] = 'setting';
 
+$lang->execution->menu->doc['subMenu'] = new stdclass();
+
 $lang->execution->menu->view['subMenu'] = new stdclass();
 $lang->execution->menu->view['subMenu']->groupTask = "$lang->groupView|execution|grouptask|executionID=%s";
 $lang->execution->menu->view['subMenu']->tree      = "$lang->treeView|execution|tree|executionID=%s";
@@ -252,7 +258,7 @@ $lang->execution->menu->view['subMenu']->tree      = "$lang->treeView|execution|
 $lang->execution->menu->qa['subMenu'] = new stdclass();
 //$lang->execution->menu->qa['subMenu']->qa         = array('link' => "$lang->dashboard|execution|qa|executionID=%s");
 $lang->execution->menu->qa['subMenu']->bug        = array('link' => "{$lang->bug->common}|execution|bug|executionID=%s", 'subModule' => 'bug');
-$lang->execution->menu->qa['subMenu']->testcase   = array('link' => "{$lang->testcase->shortCommon}|execution|testcase|executionID=%s", 'alias' => 'create');
+$lang->execution->menu->qa['subMenu']->testcase   = array('link' => "{$lang->testcase->shortCommon}|execution|testcase|executionID=%s", 'subModule' => 'testcase');
 $lang->execution->menu->qa['subMenu']->testtask   = array('link' => "{$lang->testtask->common}|execution|testtask|executionID=%s", 'subModule' => 'testtask');
 $lang->execution->menu->qa['subMenu']->testreport = array('link' => "{$lang->testreport->common}|execution|testreport|exeutionID=%s", 'subModule' => 'testreport');
 
@@ -320,8 +326,8 @@ $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
 $lang->doc->menu->recent    = array('link' => "{$lang->doc->recent}|doc|browse|libID=0&browseTyp=byediteddate", 'alias' => 'recent');
 $lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|libID=0&browseTyp=openedbyme", 'alias' => 'my');
 $lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|libID=0&browseTyp=collectedbyme", 'alias' => 'collect');
-$lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|objectLibs|type=product");
-$lang->doc->menu->project   = array('link' => "{$lang->doc->project}|doc|objectLibs|type=project");
+$lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|objectLibs|type=product", 'alias' => 'product');
+$lang->doc->menu->project   = array('link' => "{$lang->doc->project}|doc|objectLibs|type=project", 'alias' => 'project');
 $lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|objectLibs|libID=0");
 
 $lang->doc->dividerMenu = ',product,';
@@ -334,6 +340,9 @@ $lang->doc->menuOrder[20] = 'collect';
 $lang->doc->menuOrder[25] = 'product';
 $lang->doc->menuOrder[30] = 'project';
 $lang->doc->menuOrder[35] = 'custom';
+
+$lang->doc->menu->product['subMenu'] = new stdclass();
+$lang->doc->menu->project['subMenu'] = new stdclass();
 
 /* Report menu.*/
 $lang->report->menu = new stdclass();
@@ -373,7 +382,7 @@ $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search', 'exclude' => 'admin-index');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search', 'exclude' => 'admin-index,admin-xuanxuan');
 
 /* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
@@ -529,7 +538,8 @@ $lang->navGroup->entry     = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';
 
-$lang->navGroup->search = 'search';
-$lang->navGroup->index  = 'index';
-$lang->navGroup->tree   = 'tree';
-$lang->navGroup->misc   = 'misc';
+$lang->navGroup->search  = 'search';
+$lang->navGroup->index   = 'index';
+$lang->navGroup->tree    = 'tree';
+$lang->navGroup->misc    = 'misc';
+$lang->navGroup->upgrade = 'upgrade';

@@ -852,6 +852,16 @@ class projectModel extends model
                 $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
+            /* Create doc lib. */
+            $this->app->loadLang('doc');
+            $lib = new stdclass();
+            $lib->project = $projectID;
+            $lib->name    = $this->lang->doclib->main['project'];
+            $lib->type    = 'project';
+            $lib->main    = '1';
+            $lib->acl     = 'default';
+            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
             return $projectID;
         }
     }
@@ -905,7 +915,7 @@ class projectModel extends model
             if($project->budget != 0 and $program->budget != 0)
             {
                 $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
-                if($project->budget > $availableBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->project->beyondParentBudget;
+                if($project->budget > $availableBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
 
@@ -1686,7 +1696,6 @@ class projectModel extends model
         if($project->model == 'waterfall')
         {
             $this->loadModel('execution');
-            $lang->scrum->menu->execution['link'] = str_replace($lang->executionCommon, $lang->project->stage, $lang->scrum->menu->execution['link']);
             $lang->execution->create = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->create);
             $lang->execution->name   = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->name);
             $lang->execution->status = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->status);

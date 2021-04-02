@@ -727,7 +727,7 @@ class execution extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID     = ($type == 'bysearch') ? (int)$param : 0;
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -768,7 +768,7 @@ class execution extends control
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-        $plans = $this->execution->getPlans($products);
+        $plans    = $this->execution->getPlans($products);
         $allPlans = array('' => '');
         if(!empty($plans))
         {
@@ -802,6 +802,7 @@ class execution extends control
         $this->view->type         = $this->session->executionStoryBrowseType;
         $this->view->param        = $param;
         $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createStoryLink'));
+        $this->view->modulePairs  = $this->tree->getModulePairs($productID, 'story', true);
         $this->view->tabID        = 'story';
         $this->view->storyTasks   = $storyTasks;
         $this->view->storyBugs    = $storyBugs;
@@ -1203,7 +1204,7 @@ class execution extends control
         }
         elseif($this->app->openApp == 'execution')
         {
-            $executionID = key($this->executions);
+            if($this->config->systemMode == 'new') $executionID = key($this->executions);
             $this->execution->setMenu($executionID);
         }
 
@@ -1297,7 +1298,7 @@ class execution extends control
             }
         }
 
-        $this->view->title           = $this->lang->execution->create;
+        $this->view->title           = (($this->app->openApp == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]      = $this->view->title;
         $this->view->executions      = array('' => '') + $this->execution->getList();
         $this->view->groups          = $this->loadModel('group')->getPairs();
@@ -1923,7 +1924,7 @@ class execution extends control
             unset($this->lang->story->stageList['']);
             unset($this->lang->story->stageList['wait']);
             unset($this->lang->story->stageList['planned']);
-            unset($this->lang->story->stageList['executioned']);
+            unset($this->lang->story->stageList['projected']);
             unset($this->lang->story->stageList['released']);
             unset($this->lang->task->statusList['']);
             unset($this->lang->task->statusList['wait']);

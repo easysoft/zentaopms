@@ -1788,7 +1788,7 @@ class storyModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('type');
 
-        /* No tasks, then the stage is executioned. */
+        /* No tasks, then the stage is projected. */
         if(!$tasks and $executions)
         {
             foreach($stages as $branch => $stage)

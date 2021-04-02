@@ -11,6 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('jenkins', 'create')) common::printLink('jenkins', 'create', "", "<i class='icon icon-plus'></i> " . $lang->jenkins->create, '', "class='btn btn-primary'");?>
+  </div>
+</div>
 <div id='mainContent' class='main-row'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='jenkinsList' class='table has-sort-head table-fixed'>

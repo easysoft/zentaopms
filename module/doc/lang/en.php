@@ -13,6 +13,7 @@
 $lang->doc->common         = 'Document';
 $lang->doc->id             = 'ID';
 $lang->doc->product        = $lang->productCommon;
+$lang->doc->project        = 'Project';
 $lang->doc->execution      = $lang->executionCommon;
 $lang->doc->lib            = 'Library';
 $lang->doc->module         = 'Category';
@@ -48,6 +49,7 @@ $lang->doc->item           = ' Items';
 $lang->doc->num            = 'Documents';
 $lang->doc->searchResult   = 'Search Result';
 $lang->doc->mailto         = 'Mailto';
+$lang->doc->noModule       = 'No document in this lib, please create it';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
@@ -82,6 +84,8 @@ $lang->doc->collect          = 'Add Favorite';
 $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Delete File';
 
+$lang->doc->collectAction = 'Add Favorite';
+
 $lang->doc->libName        = 'Document Library';
 $lang->doc->libType        = 'Category';
 $lang->doc->custom         = 'Custom Document Library';
@@ -90,7 +94,7 @@ $lang->doc->createlib      = 'Create Document Library';
 $lang->doc->allLibs        = 'Library List';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
 $lang->doc->showFiles      = 'Attachments';
-$lang->doc->editlib        = 'Edit Document Library';
+$lang->doc->editLib        = 'Edit Document Library';
 $lang->doc->deleteLib      = 'Delete Document Library';
 $lang->doc->fixedMenu      = 'Fix to Menu';
 $lang->doc->removeMenu     = 'Remove from Menu';
@@ -101,6 +105,7 @@ $lang->doc->allProduct    = 'All' . $lang->productCommon . 's';
 $lang->doc->allExecutions = 'All' . $lang->executionCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';
+$lang->doc->libTypeList['project']   = 'Project Library';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . ' Library';
 $lang->doc->libTypeList['custom']    = 'Custom Library';
 
@@ -212,6 +217,7 @@ $lang->doclib->create['execution'] = 'Create ' . $lang->executionCommon . ' Libr
 $lang->doclib->create['custom']    = 'Create Custom Library';
 
 $lang->doclib->main['product']   = 'Primary Library';
+$lang->doclib->main['project']   = 'Primary Library';
 $lang->doclib->main['execution'] = 'Primary Library';
 
 $lang->doclib->tabList['product']   = $lang->productCommon;

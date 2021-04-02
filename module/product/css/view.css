@@ -3,4 +3,5 @@
 .data-basic.table-data tbody > tr > th {width: 100px;}
 .col-12 .cell table td {word-wrap: break-word; word-break: normal;}
 td.normal {color: #00da88;}
+td.acl {white-space: nowrap;}
 .row > .col-sm-12:first-child {padding-bottom: 20px;}

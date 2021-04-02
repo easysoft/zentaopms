@@ -13,6 +13,7 @@
 $lang->doc->common         = '文档';
 $lang->doc->id             = '文档编号';
 $lang->doc->product        = '所属' . $lang->productCommon;
+$lang->doc->project        = '所属项目';
 $lang->doc->execution      = '所属' . $lang->executionCommon;
 $lang->doc->lib            = '所属文档库';
 $lang->doc->module         = '所属分类';
@@ -48,6 +49,7 @@ $lang->doc->item           = '项';
 $lang->doc->num            = '文档数量';
 $lang->doc->searchResult   = '搜索结果';
 $lang->doc->mailto         = '抄送给';
+$lang->doc->noModule       = '文档库下没有目录和文档，请维护目录或者创建文档';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -73,10 +75,10 @@ $lang->doc->view             = '文档详情';
 $lang->doc->diff             = '对比';
 $lang->doc->diffAction       = '对比文档';
 $lang->doc->sort             = '文档排序';
-$lang->doc->manageType       = '维护分类';
-$lang->doc->editType         = '编辑分类';
-$lang->doc->deleteType       = '删除分类';
-$lang->doc->addType          = '增加分类';
+$lang->doc->manageType       = '维护目录';
+$lang->doc->editType         = '编辑目录';
+$lang->doc->deleteType       = '删除目录';
+$lang->doc->addType          = '增加目录';
 $lang->doc->childType        = '子分类';
 $lang->doc->collect          = '收藏';
 $lang->doc->cancelCollection = '取消收藏';
@@ -92,7 +94,7 @@ $lang->doc->createlib      = '创建文档库';
 $lang->doc->allLibs        = '文档库列表';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon}库列表";
 $lang->doc->showFiles      = '附件库';
-$lang->doc->editlib        = '编辑文档库';
+$lang->doc->editLib        = '编辑文档库';
 $lang->doc->deleteLib      = '删除文档库';
 $lang->doc->fixedMenu      = '固定到菜单栏';
 $lang->doc->removeMenu     = '从菜单栏移除';
@@ -103,6 +105,7 @@ $lang->doc->allProduct    = '所有' . $lang->productCommon;
 $lang->doc->allExecutions = '所有' . $lang->executionCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
+$lang->doc->libTypeList['project']   = '项目文档库';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . '文档库';
 $lang->doc->libTypeList['custom']    = '自定义文档库';
 

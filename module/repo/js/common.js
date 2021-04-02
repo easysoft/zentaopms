@@ -12,7 +12,7 @@ function switchRepo(repoID, module, method)
     if(typeof(eventKeyCode) == 'undefined') eventKeyCode = 0;
     if(eventKeyCode > 0 && eventKeyCode != 13) return false;
 
-    /* The projec id is a string, use it as the project model. */
+    /* The project id is a string, use it as the project model. */
     if(isNaN(repoID))
     {
         $.cookie('projectMode', repoID, {expires:config.cookieLife, path:config.webRoot});

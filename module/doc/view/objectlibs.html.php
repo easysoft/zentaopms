@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php $pageCSS .= $this->doc->appendNavCSS();?>
 <?php include '../../common/view/header.html.php';?>
 <?php if($app->openApp == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>

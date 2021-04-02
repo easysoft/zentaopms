@@ -667,7 +667,7 @@ class todo extends control
         $this->session->set('project', $projectID);
 
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        die(html::select('product', $products, '', "class='form-control chosen'"));
+        die(html::select('bugProduct', $products, '', "class='form-control chosen'"));
     }
 
     /**

@@ -154,7 +154,6 @@ class router extends baseRouter
     {
         if(!defined('ITERATION_KEY'))     define('ITERATION_KEY', 0);
         if(!defined('SPRINT_KEY'))        define('SPRINT_KEY', 1);
-        if(!defined('STAGE_KEY'))         define('STAGE_KEY', 2);
         if(!defined('PRODUCT_KEY'))       define('PRODUCT_KEY', 0);
         if(!defined('STORYPOINT_KEY'))    define('STORYPOINT_KEY', 1);
         if(!defined('FUNCTIONPOINT_KEY')) define('FUNCTIONPOINT_KEY', 2);
@@ -206,12 +205,7 @@ class router extends baseRouter
         if($hourKey == STORYPOINT_KEY)    $config->hourUnit = 'sp';
         if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'fp';
 
-        $model = new stdclass();
-        $model->model = 'scrum';
-        //if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
-
         $iterationKey = $projectKey;
-        if(isset($model->model) && $model->model == 'waterfall') $projectKey = STAGE_KEY;
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
         $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
@@ -244,7 +238,7 @@ class router extends baseRouter
         if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
         {
             /* Get story concept in project and product. */
-            $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$this->clientLang}\"")->fetchAll();
+            $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `lang` = \"{$this->clientLang}\"")->fetchAll();
             if(empty($URSRList)) $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$config->URSR}\"")->fetchAll();
 
             /* Get UR pairs and SR pairs. */

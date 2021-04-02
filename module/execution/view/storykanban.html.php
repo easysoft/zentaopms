@@ -41,7 +41,7 @@
   </div>
 </div>
 <?php
-$cols    = array('executioned', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
+$cols    = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
 $account = $this->app->user->account;
 ?>
 <div id="kanban" class="main-table" data-ride="table" data-checkable="false" data-group="true">
