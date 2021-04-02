@@ -1039,7 +1039,8 @@ class productModel extends model
                 $executionPairs = $executionPairs + $execution->children;
                 continue;
             }
-            $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
+           if($this->config->systemMode == 'new') $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
+           if($this->config->systemMode == 'classic') $executionPairs[$execution->id] = $execution->name;
         }
 
         return $executionPairs;
