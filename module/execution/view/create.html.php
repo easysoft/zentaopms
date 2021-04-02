@@ -45,11 +45,13 @@
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
+        <?php if($config->systemMode == 'new'):?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->project;?></th>
           <td class="col-main"><?php echo html::select("project", $allProjects, $projectID, "class='form-control chosen' required onchange='refreshPage(this.value)'");?></td>
           <td></td><td></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th class='w-120px'><?php echo $from == 'execution' ? $lang->execution->execName : $lang->execution->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
