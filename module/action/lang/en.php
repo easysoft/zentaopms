@@ -9,6 +9,8 @@
  * @version     $Id: en.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
+global $config;
+
 $lang->action->common     = 'Log';
 $lang->action->product    = $lang->productCommon;
 $lang->action->project    = 'Project';
