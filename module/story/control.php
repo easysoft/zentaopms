@@ -348,17 +348,17 @@ class story extends control
 
         if($executionID)
         {
-            $this->execution->setMenu($executionID);
-
             $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
             if($execution->type == 'project')
             {
+                $this->project->setMenu($executionID);
                 $this->app->rawModule = 'projectstory';
                 $this->lang->navGroup->story = 'project';
-                $this->lang->product->menu = $this->lang->menu->{$execution->model};
+                $this->lang->product->menu = $this->lang->{$execution->model}->menu;
             }
             else
             {
+                $this->execution->setMenu($executionID);
                 $this->app->rawModule = 'execution';
                 $this->lang->navGroup->story = 'execution';
             }

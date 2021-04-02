@@ -778,6 +778,16 @@ class projectModel extends model
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
+            /* Create doc lib. */
+            $this->app->loadLang('doc');
+            $lib = new stdclass();
+            $lib->project = $projectID;
+            $lib->name    = $this->lang->doclib->main['project'];
+            $lib->type    = 'project';
+            $lib->main    = '1';
+            $lib->acl     = 'default';
+            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
             $this->updateProducts($projectID);
 
             if(isset($_POST['newProduct']) || (!$project->parent && empty($linkedProductsCount)))
@@ -1315,7 +1325,7 @@ class projectModel extends model
         if($col->show)
         {
             $title = '';
-            $class = "c-$id" . (in_array($id, ['budget', 'teamCount']) ? ' c-number' : ' c-name');
+            $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
 
             if($id == 'id') $class .= ' cell-id';
 

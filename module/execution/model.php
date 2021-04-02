@@ -351,7 +351,7 @@ class executionModel extends model
             $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
 
             /* Update the path. */
-            $this->setTreePath($executionID);
+            if($this->config->systemMode == 'new') $this->setTreePath($executionID);
 
             /* Copy team of execution. */
             if($copyExecutionID != '')
@@ -383,7 +383,7 @@ class executionModel extends model
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
-                $this->addProjectMembers($sprint->project, array($member));
+                if($this->config->systemMode == 'new') $this->addProjectMembers($sprint->project, array($member));
             }
 
             /* Create doc lib. */

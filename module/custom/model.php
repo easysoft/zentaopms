@@ -328,7 +328,8 @@ class customModel extends model
         if(empty($module)) $module = 'main';
 
         global $app, $lang, $config;
-        if($module == 'main') $allMenu = $lang->menu;
+        $allMenu = new stdclass();
+        if($module == 'main' and !empty($lang->menu)) $allMenu = $lang->menu;
         if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
         $flowModule = $config->global->flow . '_' . $module;

@@ -4054,6 +4054,20 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('createlib')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->method = 'createLib';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('editlib')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->method = 'editLib';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
         return true;
     }
 
@@ -4203,6 +4217,16 @@ class upgradeModel extends model
                 ->set('`order`')->eq($projectID * 5)
                 ->where('id')->eq($projectID)
                 ->exec();
+
+            /* Create doc lib. */
+            $this->app->loadLang('doc');
+            $lib = new stdclass();
+            $lib->project = $projectID;
+            $lib->name    = $this->lang->doclib->main['project'];
+            $lib->type    = 'project';
+            $lib->main    = '1';
+            $lib->acl     = 'default';
+            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
             if($data->projectStatus == 'closed') $this->loadModel('action')->create('project', $projectID, 'closedbysystem');

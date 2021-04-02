@@ -58,7 +58,7 @@ class bugModel extends model
         $bug = fixer::input('post')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setDefault('execution,story,task', 0)
+            ->setDefault('project,execution,story,task', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('deadline', '0000-00-00')
             ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
