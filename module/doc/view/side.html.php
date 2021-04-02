@@ -18,16 +18,16 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
     <div class="cell">
       <?php if(!$moduleTree):?>
       <hr class="space">
-      <div class="text-center text-muted">
+      <div class="text-center text-muted tips">
         <?php echo $lang->doc->noModule;?>
       </div>
       <hr class="space">
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class="text-center action">
-        <?php common::printLink('tree', 'browse', "rootID=0&view=story", $lang->doc->manageType, '', "class='btn btn-info btn-wide'");?>
-        <?php common::printLink('tree', 'browse', "rootID=0&view=story", $lang->doc->editLib, '', "class='btn btn-info btn-wide'");?>
-        <?php common::printLink('tree', 'browse', "rootID=0&view=story", $lang->doc->deleteLib, '', "class='btn btn-info btn-wide'");?>
+        <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide'");?>
+        <?php common::printLink('tree', 'browse', "rootID=0&view=doc", $lang->doc->editLib, '', "class='btn btn-info btn-wide'");?>
+        <?php common::printLink('tree', 'browse', "rootID=0&view=doc", $lang->doc->deleteLib, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>

@@ -869,12 +869,13 @@ class doc extends control
      *
      * @param  string $type
      * @param  int    $objectID  projectID|productID
+     * @param  int    $libID
+     * @param  int    $docID
      * @access public
      * @return void
      */
-    public function objectLibs($type, $objectID = 0, $libID = 0)
+    public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0)
     {
-        // setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $this->session->set('docList', $this->app->getURI(true), 'doc');
 
         if($type == 'product')
@@ -884,7 +885,9 @@ class doc extends control
             $table    = TABLE_PRODUCT;
 
             $libs = $this->doc->getLibsByObject('product', $objectID);
-            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID == 0 ? key($libs) : $libID);
+
+            if($libID == 0) $libID = key($libs);
+            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
 
             $this->app->rawMethod = 'product';
         }
@@ -895,7 +898,9 @@ class doc extends control
             $table    = TABLE_PROJECT;
 
             $libs = $this->doc->getLibsByObject('project', $objectID);
-            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID == 0 ? key($libs) : $libID);
+
+            if($libID == 0) $libID = key($libs);
+            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
 
             $this->app->rawMethod = 'project';
         }
@@ -912,8 +917,24 @@ class doc extends control
         $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
         $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'objectLibs');
 
-        $this->lang->TRActions  = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
+        $this->lang->TRActions  = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
         $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
+
+        $moduleTree = $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
+
+        /* Get doc. */
+        if($docID)
+        {
+            $doc = $this->doc->getById($docID, 0, true);
+            if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
+
+            if($doc->contentType == 'markdown')
+            {
+                $hyperdown    = $this->app->loadClass('hyperdown');
+                $doc->content = $hyperdown->makeHtml($doc->content);
+                $doc->digest  = $hyperdown->makeHtml($doc->digest);
+            }
+        }
 
         $this->view->customObjectLibs = $customObjectLibs;
         $this->view->showLibs         = $this->config->doc->custom->objectLibs;
@@ -921,11 +942,17 @@ class doc extends control
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;
 
+        $this->view->docID        = $docID;
+        $this->view->doc          = $docID ? $doc : '';
         $this->view->type         = $type;
         $this->view->object       = $object;
+        $this->view->libID        = $libID;
+        $this->view->lib          = $libs[$libID];
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
-        $this->view->moduleTree   = $this->doc->getTreeMenu($type, $objectID, 0);
+        $this->view->moduleTree   = $moduleTree;
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->actions      = $docID ? $this->action->getList('doc', $docID) : array();
+        $this->view->users        = $this->user->getPairs('noclosed,noletter');
         $this->display();
     }
 }

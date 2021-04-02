@@ -164,7 +164,7 @@ class tree extends control
             }
 
             if($from == 'doc') $this->lang->navGroup->doc = 'doc';
-            $type = $lib->product ? 'product' : ($lib->execution ? 'project' : 'custom');
+            $type = $lib->product ? 'product' : ($lib->project ? 'project' : ($lib->execution ? 'execution' : 'custom'));
             $this->lang->tree->menu      = $this->lang->doc->menu;
             $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
 
