@@ -1406,6 +1406,7 @@ class story extends control
 
         /* Save session. */
         $this->session->set('storyList',    $this->app->getURI(true), 'product');
+        $this->session->set('taskList',     $this->app->getURI(true), 'execution');
         $this->session->set('designList',   $this->app->getURI(true), 'project');
         $this->session->set('bugList',      $this->app->getURI(true), 'qa');
         $this->session->set('caseList',     $this->app->getURI(true), 'qa');
