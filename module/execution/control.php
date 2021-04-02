@@ -802,6 +802,7 @@ class execution extends control
         $this->view->type         = $this->session->executionStoryBrowseType;
         $this->view->param        = $param;
         $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createStoryLink'));
+        $this->view->modulePairs  = $this->tree->getModulePairs($productID, 'story', true);
         $this->view->tabID        = 'story';
         $this->view->storyTasks   = $storyTasks;
         $this->view->storyBugs    = $storyBugs;

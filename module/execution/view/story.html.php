@@ -174,6 +174,7 @@
             <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
             <td class='c-name' title="<?php echo $story->title?>">
               <?php if(isset($branchGroups[$story->product][$story->branch])) echo "<span class='label label-outline label-badge'>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
+              <?php if(!empty($story->module)) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";?>
               <?php if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";?>
               <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color' data-app='execution'");?>
             </td>
