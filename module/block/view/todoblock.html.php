@@ -96,7 +96,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
       ?>
       <li data-id='<?php echo $todo->id?>'>
         <span class="todo-check icon icon-check-circle"></span>
-        <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' <?php echo $appid?>>
+        <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' data-toggle='modal' <?php echo $appid?>>
           <?php if ($todo->date == '2030-01-01') :?>
           <span class="todo-time"><?php echo $lang->todo->periods['future'] ?></span>
           <?php else:?>
