@@ -272,11 +272,11 @@
         <table align='center' class='table table-form'>
           <tr>
             <th><?php echo $lang->todo->project;?></th>
-            <td><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getProductByProject(this.value);");?></td>
+            <td><?php echo html::select('bugProject', $projects, '', "class='form-control chosen' onchange=getProductByProject(this.value);");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->todo->product;?></th>
-            <td id='productIdBox'><?php echo html::select('product', $projectProducts, '', "class='form-control chosen'");?></td>
+            <td id='productIdBox'><?php echo html::select('bugProduct', $projectProducts, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <td colspan='2' class='text-center'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></td>
