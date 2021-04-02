@@ -185,7 +185,7 @@ $(function()
         <div class="table-row project-info">
           <div class="col-3 text-center"><h4><?php echo $lang->block->last;?></h4></div>
           <div class="table-row lastIteration">
-            <div class='col-3 text-center executionName'><?php echo $project->executions[0]->name;?></div>
+            <div class='col-3 text-center executionName'><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->executions[0]->id}"), $project->executions[0]->name);?></div>
             <div class='col-8'>
               <div class='progress progress-text-left'>
                 <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->executions[0]->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->executions[0]->hours->progress;?>%">
