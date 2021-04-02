@@ -95,7 +95,7 @@
           <?php endif;?>
         </td>
         <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-        <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->openApp}");?></td>
+        <td class='text-left c-name' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->openApp}");?></td>
         <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
         <td class='c-assignedTo has-btn text-left'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
         <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
