@@ -213,7 +213,7 @@
                   if(commonModel::isTutorialMode())
                   {
                       $wizardParams = helper::safe64Encode($param);
-                      echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$lang->execution->wbs}'");
+                      echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$lang->execution->wbs}' data-app='execution'");
                   }
                   else
                   {
@@ -224,7 +224,10 @@
                   if($hasDBPriv) common::printIcon('task', 'batchCreate', "executionID={$execution->id}&story={$story->id}", '', 'list', 'pluses');
 
                   $lang->testcase->batchCreate = $lang->testcase->create;
-                  if($productID && $hasDBPriv) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
+                  if($productID and $hasDBPriv and common::hasPriv('testcase', 'create'))
+                  {
+                      echo html::a($this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id"), '<i class="icon-testcase-create icon-sitemap"></i>', '', "title='{$lang->testcase->create}' data-app='qa'");
+                  }
 
                   if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))
                   {

@@ -877,9 +877,9 @@ class doc extends control
         // setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $this->session->set('docList', $this->app->getURI(true), 'doc');
 
+        $objects = $this->doc->getOrderedObjects($type);
         if($type == 'product')
         {
-            $objects  = $this->loadModel('product')->getPairs('nocode');
             $objectID = $this->product->saveState($objectID, $objects);
             $table    = TABLE_PRODUCT;
 
@@ -890,7 +890,6 @@ class doc extends control
         }
         else
         {
-            $objects  = $this->loadModel('project')->getPairsByProgram();
             $objectID = $this->project->saveState($objectID, $objects);
             $table    = TABLE_PROJECT;
 
@@ -900,6 +899,7 @@ class doc extends control
             $this->app->rawMethod = 'project';
         }
 
+        if(!$libID) $libID = key($libs);
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
         if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->project));
 
@@ -913,7 +913,7 @@ class doc extends control
         $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'objectLibs');
 
         $this->lang->TRActions  = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
-        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID) : '';
+        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
 
         $this->view->customObjectLibs = $customObjectLibs;
         $this->view->showLibs         = $this->config->doc->custom->objectLibs;
@@ -924,6 +924,7 @@ class doc extends control
         $this->view->type         = $type;
         $this->view->object       = $object;
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->moduleTree   = $this->doc->getTreeMenu($type, $objectID, 0);
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
         $this->display();
     }

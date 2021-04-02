@@ -1153,6 +1153,76 @@ class docModel extends model
     }
 
     /**
+     * Get ordered objects for dic.
+     * 
+     * @param  string $objectType 
+     * @access public
+     * @return array 
+     */
+    public function getOrderedObjects($objectType = 'product')
+    {
+        $myObjects = $normalObjects = $closedObjects = array();
+        if($objectType == 'product')
+        {
+            $products = $this->loadModel('product')->getList();
+            foreach($products as $id => $product)
+            {   
+                if($product->status == 'normal' and $product->PO == $this->app->user->account)
+                {   
+                    $myObjects[$id] = $product->name;     
+                }
+                elseif($product->status == 'normal' and !($product->PO == $this->app->user->account))
+                {   
+                    $normalObjects[$id] = $product->name;
+                }
+                elseif($product->status == 'closed')
+                {   
+                    $closedObjects[$id] = $product->name;
+                }
+            }
+        }
+        elseif($objectType == 'project')
+        {
+            $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchPairs();
+            $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->eq('project')
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+                ->orderBy('order_asc')
+                ->fetchAll('id');
+
+            $orderedProjects = array();
+            foreach($programs as $programID => $programName)
+            {    
+                foreach($projects as $id => $project)
+                {    
+                    if($project->parent and $project->parent != $programID) continue;
+                    $orderedProjects[$id] = $project;
+                    unset($projects[$project->id]);
+                }
+            }
+
+            foreach($orderedProjects as $id => $project)
+            {
+                if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
+                {
+                    $myObjects[$id] = $project->name;
+                }
+                else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
+                {
+                    $normalObjects[$id] = $project->name;
+                }
+                else if($project->status == 'done' or $project->status == 'closed')
+                {
+                    $closedObjects[$id] = $project->name;
+                }
+            }
+        }
+
+        return $myObjects + $normalObjects + $closedObjects;
+    }
+
+    /**
      * Stat module and document counts of lib.
      *
      * @param  array    $idList
@@ -1598,28 +1668,24 @@ class docModel extends model
      *
      * @param  string $type
      * @param  int    $objectID
+     * @param  int    $libID
      * @access public
      * @return string
      */
-    public function buildCreateButton4Doc($type, $objectID)
+    public function buildCreateButton4Doc($type, $objectID, $libID)
     {
-        $libs  = $this->getLibs('all', strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '');
-        $html  = "";
-        if($libs)
+        $html  = "<div class='dropdown' id='createDropdown'>";
+        $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . " <span class='caret'></span></button>";
+        $html .= "<ul class='dropdown-menu' style='left:0px'>";
+        foreach($this->lang->doc->typeList as $typeKey => $typeName)
         {
-            $libID = key($libs);
-            $html .= "<div class='dropdown' id='createDropdown'>";
-            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . " <span class='caret'></span></button>";
-            $html .= "<ul class='dropdown-menu' style='left:0px'>";
-            foreach($this->lang->doc->typeList as $typeKey => $typeName)
-            {
-                $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-                $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "type=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey"), $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
-                $html .= "</li>";
-            }
-            $html .="</ul></div>";
+            $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+            $html .= "<li>";
+            $html .= html::a(helper::createLink('doc', 'create', "type=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey"), $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
+            $html .= "</li>";
         }
+        $html .= "</ul></div>";
+
         return $html;
     }
 
@@ -1813,5 +1879,84 @@ EOF;
         $output .= "</div></div></div></div></div>";
 
         return $output;
+    }
+
+    /**
+     * Get doc tree menu.
+     *
+     * @param  string $rootID
+     * @param  int    $rootID
+     * @param  int    $startModule
+     * @access public
+     * @return string
+     */
+    public function getTreeMenu($type, $rootID, $startModule = 0)
+    {
+        return '';
+
+        $extra['projectID'] = $rootID;
+        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-story'>";
+        $startModulePath = '';
+        if($startModule > 0)
+        {
+            $startModule = $this->getById($startModule);
+            if($startModule) $startModulePath = $startModule->path . '%';
+        }
+
+        $executionModules  = $this->getTaskTreeModules($rootID, true);
+        $executionBranches = $this->dao->select('DISTINCT t2.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.project')->eq($rootID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchPairs();
+
+        /* Get module according to product. */
+        $products     = $this->loadModel('product')->getProductPairsByProject($rootID);
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $productNum   = count($products);
+        foreach($products as $id => $product)
+        {
+            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id");
+            $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&ordery=&status=byProduct&praram=$id");
+            $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
+            if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
+
+            /* tree menu. */
+            $tree = '';
+            if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
+            foreach($branchGroups[$id] as $branch => $branchName)
+            {
+                $treeMenu = array();
+                $query = $this->dao->select('*')->from(TABLE_MODULE)
+                    ->where('root')->eq((int)$id)
+                    ->andWhere('type')->eq('story')
+                    ->beginIF(count($branchGroups[$id]) > 1)->andWhere('branch')->eq($branch)->fi()
+                    ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                    ->andWhere('deleted')->eq(0)
+                    ->orderBy('grade desc, branch, `order`, type')
+                    ->get();
+                $stmt = $this->dbh->query($query);
+                while($module = $stmt->fetch())
+                {
+                    /* If not manage, ignore unused modules. */
+                    if(isset($executionModules[$module->id]) and $this->app->rawModule == 'execution') $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
+                    if($this->app->rawModule == 'projectstory') $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
+                }
+                if((isset($treeMenu[0]) and $branch) or isset($executionBranches[$branch]))
+                {
+                    $childMenu = isset($treeMenu[0]) ? "<ul>{$treeMenu[0]}</ul>" : '';
+                    $projectBranchLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=" . (empty($branch) ? 0 : $branch) . "&browseType=byBranch");
+                    $executionBranchLink = helper::createLink('execution', 'story', "executionID=$rootID&ordery=&status=byBranch&praram=" . (empty($branch) ? "{$id},0" : $branch));
+                    $link = $this->app->rawModule == 'projectstory' ? $projectBranchLink : $executionBranchLink;
+                    if($branchName) $treeMenu[0] = "<li>" . html::a($link, $branchName, '_self', "id='branch" . (empty($branch) ? "{$id}_0" : $branch) . "'") . "{$childMenu}</li>";
+                }
+                $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
+            }
+            if($productNum > 1) $tree = "<ul>" . $tree . "</ul>\n</li>";
+            $menu .= $tree;
+        }
+
+        $menu .= '</ul>';
+        return $menu;
     }
 }

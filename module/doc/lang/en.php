@@ -49,6 +49,7 @@ $lang->doc->item           = ' Items';
 $lang->doc->num            = 'Documents';
 $lang->doc->searchResult   = 'Search Result';
 $lang->doc->mailto         = 'Mailto';
+$lang->doc->noModule       = 'No document in this lib, please create it';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
@@ -93,7 +94,7 @@ $lang->doc->createlib      = 'Create Document Library';
 $lang->doc->allLibs        = 'Library List';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
 $lang->doc->showFiles      = 'Attachments';
-$lang->doc->editlib        = 'Edit Document Library';
+$lang->doc->editLib        = 'Edit Document Library';
 $lang->doc->deleteLib      = 'Delete Document Library';
 $lang->doc->fixedMenu      = 'Fix to Menu';
 $lang->doc->removeMenu     = 'Remove from Menu';
