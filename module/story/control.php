@@ -1524,6 +1524,7 @@ class story extends control
         $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->productID  = $productID;
+        $this->view->branchID   = $branchID;
         $this->view->orderBy    = $orderBy;
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->browseType = '';

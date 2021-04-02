@@ -1003,7 +1003,7 @@ class commonModel extends model
             $className = 'header';
         }
         $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
-        echo $isMobile ? html::a($link, $label, '', "class='$className'") : html::a($link, $label, '', "class='$className'");
+        echo $isMobile ? html::a($link, $label, '', "class='$className' data-app={$app->openApp}") : html::a($link, $label, '', "class='$className' data-app={$app->openApp}");
     }
 
     /**
