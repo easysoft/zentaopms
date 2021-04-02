@@ -182,7 +182,7 @@ $(function()
             </div>
           </div>
         </div>
-        <?php if(!empty($project->exeuctions)):?>
+        <?php if(!empty($project->executions)):?>
         <div class="table-row project-info">
           <div class="col-3 text-center"><h4><?php echo $lang->block->last;?></h4></div>
           <div class="table-row lastIteration">
