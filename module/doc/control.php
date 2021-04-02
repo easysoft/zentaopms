@@ -911,10 +911,16 @@ class doc extends control
 
         if($type == 'custom')
         {
-            $libs = $this->doc->getLibs('custom');
+            $libs = $this->doc->getLibsByObject('custom', 0);
             $this->app->rawMethod = 'custom';
+            if($libID == 0) $libID = key($libs);
+            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
+
+            $object = new stdclass();
+            $object->id = 0;
         }
-        else{
+        else
+        {
             if($type == 'product')
             {
                 $objectID = $this->product->saveState($objectID, $objects);
@@ -947,7 +953,7 @@ class doc extends control
                 if($libID == 0) $libID = key($libs);
                 $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
 
-                $this->app->rawMethod = 'project';
+                $this->app->rawMethod = 'execution';
             }
 
             $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
@@ -986,8 +992,8 @@ class doc extends control
         $this->view->customObjectLibs = $customObjectLibs;
         $this->view->showLibs         = $this->config->doc->custom->objectLibs;
 
-        $this->view->title      = $object->name;
-        $this->view->position[] = $object->name;
+        $this->view->title      = $type == 'custom' ? $this->lang->doc->customAB : $object->name;
+        $this->view->position[] = $type == 'custom' ? $this->lang->doc->customAB : $object->name;
 
         $this->view->docID        = $docID;
         $this->view->doc          = $docID ? $doc : '';
@@ -995,7 +1001,8 @@ class doc extends control
         $this->view->object       = $object;
         $this->view->objectType   = $type;
         $this->view->libID        = $libID;
-        $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : array();
+        $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
+
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
         $this->view->moduleTree   = $moduleTree;
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.

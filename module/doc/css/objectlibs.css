@@ -16,3 +16,4 @@
 #sidebar>.cell {width: 265px;}
 #sidebar>.sidebar-toggle {left: 5px; right: auto;}
 .hide-sidebar #sidebar>.sidebar-toggle>.icon:before {content: "\e314";}
+.detail.empty {line-height: 200px;}
