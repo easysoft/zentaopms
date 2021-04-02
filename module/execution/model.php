@@ -2435,7 +2435,7 @@ class executionModel extends model
             ->where('t1.project')->in(array_keys($executions))
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.status')->ne('closed')
-            ->andWhere('t2.stage')->in('wait,planned,executioned,developing')
+            ->andWhere('t2.stage')->in('wait,planned,projected,developing')
             ->groupBy('project')
             ->fetchAll('project');
 

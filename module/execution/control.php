@@ -1923,7 +1923,7 @@ class execution extends control
             unset($this->lang->story->stageList['']);
             unset($this->lang->story->stageList['wait']);
             unset($this->lang->story->stageList['planned']);
-            unset($this->lang->story->stageList['executioned']);
+            unset($this->lang->story->stageList['projected']);
             unset($this->lang->story->stageList['released']);
             unset($this->lang->task->statusList['']);
             unset($this->lang->task->statusList['wait']);

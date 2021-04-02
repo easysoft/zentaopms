@@ -272,7 +272,7 @@
             foreach($lang->story->stageList as $key => $stage)
             {
                 if(empty($key)) continue;
-                if(strpos('wait|planned|executioned', $key) !== false) continue;
+                if(strpos('wait|planned|projected', $key) !== false) continue;
                 $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
                 echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
             }
