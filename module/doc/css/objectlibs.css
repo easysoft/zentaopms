@@ -8,3 +8,10 @@
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
 .side-col .action a {margin: 0 auto 3px; display: block; max-width: 200px;}
 .side-col .tips {padding: 0 10px;}
+.main-col .detail-title {display: flex;}
+.main-col .detail-title .title {margin-right: 10px;}
+.main-col .detail-title .info {flex: 1 1 0;}
+.main-col .detail-title .actions i {font-size: 15px; color: #8c8c8c; margin-left: 2px;}
+#sidebar {width: 250px;}
+#sidebar>.cell {width: 220px;}
+#sidebar>.sidebar-toggle {left: 5px; right: auto;}

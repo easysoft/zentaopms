@@ -40,7 +40,7 @@
     <div class='col'>
       <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
-          <?php if($config->systemMode == 'new'):?>
+          <?php if(isset($config->maxVersion)):?>
           <?php if($project->model === 'waterfall'): ?>
           <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
           <?php else: ?>

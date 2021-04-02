@@ -196,9 +196,6 @@ class story extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
-        /* Set menu. */
-        $this->product->setMenu($product->id, $branch);
-
         /* Init vars. */
         $source     = '';
         $sourceNote = '';

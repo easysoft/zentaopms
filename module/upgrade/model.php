@@ -640,6 +640,7 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('15.0'));
             $this->adjustWhitelistOfProject();
             $this->adjustWhitelistOfProduct();
+            $this->adjustPriv15_0();
             $this->appendExec('15_0');
         }
 
