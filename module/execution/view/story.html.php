@@ -52,7 +52,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php
-    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export' data-app='execution'");
+    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export iframe' data-app='execution'");
 
     if(common::canModify('execution', $execution))
     {
@@ -120,14 +120,13 @@
         <thead>
           <tr>
           <?php
-          $totalEstimate = 0;
-          $canBatchEdit         = common::hasPriv('story', 'batchEdit');
-          $canBatchClose        = common::hasPriv('story', 'batchClose');
-          $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
-          $canBatchUnlink       = common::hasPriv('execution', 'batchUnlinkStory');
-          $canBatchToTask       = common::hasPriv('story', 'batchToTask');
-
-          $canBatchAction       = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
+          $totalEstimate       = 0;
+          $canBatchEdit        = common::hasPriv('story', 'batchEdit');
+          $canBatchClose       = common::hasPriv('story', 'batchClose');
+          $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
+          $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
+          $canBatchToTask      = common::hasPriv('story', 'batchToTask');
+          $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
           ?>
           <?php $vars = "executionID={$execution->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
             <th class='c-id {sorter:false}'>

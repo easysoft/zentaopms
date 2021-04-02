@@ -920,8 +920,7 @@ class doc extends control
         $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
         $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'objectLibs');
 
-        $this->lang->TRActions  = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
-        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
+        $this->lang->TRActions = common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
 
         $moduleTree = $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
 

@@ -676,7 +676,9 @@ class execution extends control
         $this->loadModel('user');
         $this->app->loadLang('testcase');
 
-        $type = strtolower($type);
+        $type      = strtolower($type);
+        $param     = $param;
+        $productID = 0;
         setcookie('storyPreExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         if($this->cookie->storyPreExecutionID != $executionID)
         {
@@ -687,20 +689,21 @@ class execution extends control
         }
         if($type == 'bymodule')
         {
-            $_COOKIE['storyModuleParam']  = (int)$param;
+            $_COOKIE['storyModuleParam']  = $param;
             $_COOKIE['storyProductParam'] = 0;
             $_COOKIE['storyBranchParam']  = 0;
-            setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot, '', false, true);
+            setcookie('storyModuleParam', $param, 0, $this->config->webRoot, '', false, true);
             setcookie('storyProductParam', 0, 0, $this->config->webRoot, '', false, true);
             setcookie('storyBranchParam',  0, 0, $this->config->webRoot, '', false, true);
         }
         elseif($type == 'byproduct')
         {
+            $productID = $param;
             $_COOKIE['storyModuleParam']  = 0;
-            $_COOKIE['storyProductParam'] = (int)$param;
+            $_COOKIE['storyProductParam'] = $param;
             $_COOKIE['storyBranchParam']  = 0;
             setcookie('storyModuleParam',  0, 0, $this->config->webRoot, '', false, true);
-            setcookie('storyProductParam', (int)$param, 0, $this->config->webRoot, '', false, true);
+            setcookie('storyProductParam', $param, 0, $this->config->webRoot, '', false, true);
             setcookie('storyBranchParam',  0, 0, $this->config->webRoot, '', false, true);
         }
         elseif($type == 'bybranch')
@@ -727,7 +730,7 @@ class execution extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        $queryID     = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID     = ($type == 'bysearch') ? $param : 0;
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -738,10 +741,10 @@ class execution extends control
         $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, 'story', '', $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
-        $users   = $this->user->getPairs('noletter');
+        $users = $this->user->getPairs('noletter');
 
         /* Build the search form. */
-        $modules  = array();
+        $modules = array();
         $executionModules = $this->loadModel('tree')->getTaskTreeModules($executionID, true);
         $products = $this->execution->getProducts($executionID);
         foreach($products as $product)
@@ -772,23 +775,23 @@ class execution extends control
         $allPlans = array('' => '');
         if(!empty($plans))
         {
-            foreach($plans as $productID => $plan) $allPlans += $plan;
+            foreach($plans as $plan) $allPlans += $plan;
         }
 
         if($this->cookie->storyModuleParam)  $this->view->module  = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
         if($this->cookie->storyProductParam) $this->view->product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
         if($this->cookie->storyBranchParam)
         {
-            $productID = 0;
-            $branchID  = $this->cookie->storyBranchParam;
+            $branchID = $this->cookie->storyBranchParam;
             if(strpos($branchID, ',') !== false) list($productID, $branchID) = explode(',', $branchID);
             $this->view->branch  = $this->loadModel('branch')->getById($branchID, $productID);
         }
 
         /* Get execution's product. */
-        $productID    = 0;
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
-        if($productPairs) $productID = key($productPairs);
+
+        if(empty($productID)) $productID = key($productPairs);
+        $modulePairs = $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', true);
 
         /* Assign. */
         $this->view->title        = $title;
@@ -802,7 +805,7 @@ class execution extends control
         $this->view->type         = $this->session->executionStoryBrowseType;
         $this->view->param        = $param;
         $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createStoryLink'));
-        $this->view->modulePairs  = $this->tree->getModulePairs($productID, 'story', true);
+        $this->view->modulePairs  = $modulePairs;
         $this->view->tabID        = 'story';
         $this->view->storyTasks   = $storyTasks;
         $this->view->storyBugs    = $storyBugs;

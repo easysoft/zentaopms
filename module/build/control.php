@@ -215,8 +215,9 @@ class build extends control
             ->beginIF($type == 'story')->orderBy($orderBy)->fi()
             ->page($storyPager)
             ->fetchAll('id');
-        $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
-        foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
+
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
+        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         /* Set menu. */
         if($this->app->openApp == 'project')

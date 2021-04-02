@@ -196,9 +196,6 @@ class story extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
-        /* Set menu. */
-        $this->product->setMenu($product->id, $branch);
-
         /* Init vars. */
         $source     = '';
         $sourceNote = '';
@@ -864,6 +861,8 @@ class story extends control
 
         /* Set the menu. */
         $from = $this->app->openApp;
+        $this->product->setMenu($story->product, $story->branch);
+
         if($from == 'execution')
         {
             $this->execution->setMenu($param);
@@ -871,10 +870,6 @@ class story extends control
         elseif($from == 'project')
         {
             $this->loadModel('project')->setMenu($param);
-        }
-        elseif($from == 'product')
-        {
-            $this->product->setMenu($story->product, $story->branch);
         }
         elseif($from == 'qa')
         {

@@ -143,7 +143,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <div class='btn-group dropdown'>
       <?php $buttonType = $from == 'project' ? 'btn-secondary' : 'btn-primary';?>
       <?php $extraParam = $from == 'project' ? '' : "&bugID=0&planID=0&todoID=0&extra=&type=$storyType";?>
-      <?php echo html::a($this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0$extraParam"), "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn $buttonType' data-app='$openApp'");?>
+      <?php echo html::a($this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID={$this->session->project}$extraParam"), "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn $buttonType' data-app='$openApp'");?>
       <?php if(!empty($productID)): ?>
       <button type='button' class="btn <?php echo $buttonType?> dropdown-toggle" data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
