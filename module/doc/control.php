@@ -913,7 +913,7 @@ class doc extends control
         $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'objectLibs');
 
         $this->lang->TRActions  = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createlib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
-        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID) : '';
+        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
 
         $this->view->customObjectLibs = $customObjectLibs;
         $this->view->showLibs         = $this->config->doc->custom->objectLibs;
@@ -924,6 +924,7 @@ class doc extends control
         $this->view->type         = $type;
         $this->view->object       = $object;
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->moduleTree   = $this->doc->getTreeMenu($type, $objectID, 0);
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
         $this->display();
     }
