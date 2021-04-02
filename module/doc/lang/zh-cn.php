@@ -214,6 +214,7 @@ $lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档
 $lang->doclib->create['custom']    = '创建自定义文档库';
 
 $lang->doclib->main['product']   = $lang->productCommon . '主库';
+$lang->doclib->main['project']   = '项目主库';
 $lang->doclib->main['execution'] = $lang->executionCommon . '主库';
 
 $lang->doclib->tabList['product']   = $lang->productCommon;

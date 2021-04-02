@@ -4205,6 +4205,16 @@ class upgradeModel extends model
                 ->where('id')->eq($projectID)
                 ->exec();
 
+            /* Create doc lib. */
+            $this->app->loadLang('doc');
+            $lib = new stdclass();
+            $lib->project = $projectID;
+            $lib->name    = $this->lang->doclib->main['project'];
+            $lib->type    = 'project';
+            $lib->main    = '1';
+            $lib->acl     = 'default';
+            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
             $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
             if($data->projectStatus == 'closed') $this->loadModel('action')->create('project', $projectID, 'closedbysystem');
         }
