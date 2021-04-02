@@ -796,7 +796,8 @@ class treeModel extends model
      */
     public function getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc)
     {
-        $extra['projectID'] = $rootID;
+        if($this->app->rawModule == 'projectstory') $extra['projectID'] = $rootID;
+        if($this->app->rawModule == 'execution') $extra['executionID'] = $rootID;
         $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-story'>";
         $startModulePath = '';
         if($startModule > 0)
@@ -1024,6 +1025,11 @@ class treeModel extends model
             $productID = zget($extra , 'productID', 0);
             $projectID = $extra['projectID'];
             return html::a(helper::createLink('projectstory', 'story', "projectID=$projectID&productID=$productID&branch=&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        }
+        elseif(isset($extra['executionID']) and !empty($extra['executionID']))
+        {
+            $executionID = $extra['executionID'];
+            return html::a(helper::createLink('execution', 'story', "executionID=$executionID&orderBy=order_desc&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         }
         else
         {
