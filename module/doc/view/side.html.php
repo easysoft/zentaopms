@@ -25,9 +25,9 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class="text-center action">
-        <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide'");?>
-        <?php common::printLink('tree', 'browse', "rootID=0&view=doc", $lang->doc->editLib, '', "class='btn btn-info btn-wide'");?>
-        <?php common::printLink('tree', 'browse', "rootID=0&view=doc", $lang->doc->deleteLib, '', "class='btn btn-info btn-wide'");?>
+        <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);?>
+        <?php common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editLib, '', "class='btn btn-info btn-wide iframe'", '', true);?>
+        <?php common::printLink('doc', 'deleteLib', "rootID=$libID", $lang->doc->deleteLib, 'hiddenwin', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>

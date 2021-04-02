@@ -374,6 +374,7 @@ class tree extends control
         {
             $this->tree->manageChild($rootID, $viewType);
 
+            if($viewType == 'doc' and isonlybody()) die(js::reload('parent.parent'));
             if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.$('a.refresh').click()}"));
 
             die(js::reload('parent'));

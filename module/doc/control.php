@@ -259,7 +259,10 @@ class doc extends control
                 $actionID = $this->action->create('docLib', $libID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent.parent'));
+            $response['message'] = $this->lang->saveSuccess;
+            $response['result']  = 'success';
+            $response['locate']  = 'parent';
+            $this->send($response);
         }
 
         $lib = $this->doc->getLibByID($libID);
@@ -294,7 +297,7 @@ class doc extends control
             if(!empty($lib->main)) die(js::alert($this->lang->doc->errorMainSysLib));
 
             $this->doc->delete(TABLE_DOCLIB, $libID);
-            die(js::locate($this->createLink('doc', 'browse'), 'parent'));
+            die(js::locate($this->createLink('doc', 'index'), 'parent'));
         }
     }
 
@@ -947,7 +950,7 @@ class doc extends control
         $this->view->type         = $type;
         $this->view->object       = $object;
         $this->view->libID        = $libID;
-        $this->view->lib          = $libs[$libID];
+        $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : array();
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
         $this->view->moduleTree   = $moduleTree;
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
