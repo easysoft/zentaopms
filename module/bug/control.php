@@ -1098,11 +1098,12 @@ class bug extends control
     /**
      * Batch update assign of bug.
      *
-     * @param  int    $executionID
+     * @param  int     $objectID  projectID|executionID
+     * @param  string  $type      execution|project|product|my
      * @access public
      * @return void
      */
-    public function batchAssignTo($executionID, $type = 'execution')
+    public function batchAssignTo($objectID, $type = 'execution')
     {
         if(!empty($_POST) && isset($_POST['bugIDList']))
         {
@@ -1119,8 +1120,10 @@ class bug extends control
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
+
         if($type == 'product' || $type == 'my') die(js::locate($this->session->bugList, 'parent'));
-        die(js::locate($this->createLink('execution', 'bug', "executionID=$executionID")));
+        if($type == 'execution') die(js::locate($this->createLink('execution', 'bug', "executionID=$objectID")));
+        if($type == 'project')   die(js::locate($this->createLink('project', 'bug', "projectID=$objectID")));
     }
 
     /**
