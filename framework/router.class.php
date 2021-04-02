@@ -154,7 +154,6 @@ class router extends baseRouter
     {
         if(!defined('ITERATION_KEY'))     define('ITERATION_KEY', 0);
         if(!defined('SPRINT_KEY'))        define('SPRINT_KEY', 1);
-        if(!defined('STAGE_KEY'))         define('STAGE_KEY', 2);
         if(!defined('PRODUCT_KEY'))       define('PRODUCT_KEY', 0);
         if(!defined('STORYPOINT_KEY'))    define('STORYPOINT_KEY', 1);
         if(!defined('FUNCTIONPOINT_KEY')) define('FUNCTIONPOINT_KEY', 2);
