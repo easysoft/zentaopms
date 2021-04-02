@@ -4,7 +4,7 @@ $(function()
     if(typeof(storyType) == 'undefined') storyType = '';
     if(typeof(rawModule) == 'undefined') rawModule = 'product';
     if(typeof(execution) != 'undefined') rawModule = 'projectstory';
-    if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa')
+    if(['project', 'projectstory'].indexOf(rawModule) === -1)
     {
         $('#navbar .nav li').removeClass('active');
         $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
