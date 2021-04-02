@@ -182,6 +182,7 @@ $(function()
             </div>
           </div>
         </div>
+        <?php if(!empty($project->exeuctions)):?>
         <div class="table-row project-info">
           <div class="col-3 text-center"><h4><?php echo $lang->block->last;?></h4></div>
           <div class="table-row lastIteration">
@@ -195,6 +196,7 @@ $(function()
             </div>
           </div>
         </div>
+        <?php endif;?>
         <?php else:?>
           <div class="col-12">
             <div class='table-row text-left weekly-row with-padding'>
