@@ -493,8 +493,6 @@ class upgrade extends control
         if(empty($repos))
         {
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
-
-            if($this->config->version == $this->config->installedVersion) die(js::alert($this->lang->upgrade->successTip) . js::locate($this->createLink('user', 'logout')));
             die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
         }
 
