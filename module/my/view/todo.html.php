@@ -173,5 +173,5 @@
   </form>
   <?php endif;?>
 </div>
-<?php js::set('listName', 'todoList')?>
+<?php js::set('listName', 'todoList');?>
 <?php include '../../common/view/footer.html.php';?>

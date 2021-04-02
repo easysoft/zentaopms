@@ -861,6 +861,8 @@ class story extends control
 
         /* Set the menu. */
         $from = $this->app->openApp;
+        $this->product->setMenu($story->product, $story->branch);
+
         if($from == 'execution')
         {
             $this->execution->setMenu($param);
@@ -868,10 +870,6 @@ class story extends control
         elseif($from == 'project')
         {
             $this->loadModel('project')->setMenu($param);
-        }
-        elseif($from == 'product')
-        {
-            $this->product->setMenu($story->product, $story->branch);
         }
         elseif($from == 'qa')
         {

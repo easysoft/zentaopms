@@ -1,9 +1,27 @@
+<?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell">
       <div class="detail no-padding">
         <div class="detail-title no-margin no-padding">
-        <?php echo $doc->title;?>
+          <div class="title"><?php echo $doc->title;?></div>
+          <div class="info">
+            <div class="version"></div>
+            <div class="user"></div>
+            <div class="time"></div>
+          </div>
+          <div class="actions">
+            <?php
+            if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}'");
+            if(common::hasPriv('doc', 'delete'))
+            {
+                $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"docList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->doc->delete}'");
+            }
+            ?>
+            <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+          </div>
         </div>
         <div class="detail-content article-content no-margin no-padding">
           <?php
@@ -40,7 +58,6 @@
               echo $doc->content ? $doc->content : '空';
           }
           ?>
-
           <?php foreach($doc->files as $file):?>
           <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
           <div class='file-image'>
@@ -67,7 +84,8 @@
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
-  <div class="side-col col-4">
+  <div class="side-col col-4" id="sidebar">
+    <div class="sidebar-toggle"><i class="icon icon-angle-right"></i></div>
     <?php if(!empty($doc->digest)):?>
     <div class="cell">
       <details class="detail" open>

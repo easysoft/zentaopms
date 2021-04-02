@@ -3989,9 +3989,12 @@ class upgradeModel extends model
 
             $groupPriv->method = 'contribute';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+
+            $groupPriv->method = 'team';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('program')->andWhere('method')->like('PGM%')->query();
+        $stmt = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('program')->andWhere('method')->like('PGM%')->query();
         while($grouppriv = $stmt->fetch())
         {
             $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq($grouppriv->module)->andWhere('method')->eq($grouppriv->method)->exec();
@@ -4002,7 +4005,7 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('program')->andWhere('method')->like('PRJ%')->query();
+        $stmt = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('program')->andWhere('method')->like('PRJ%')->query();
         while($grouppriv = $stmt->fetch())
         {
             $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq($grouppriv->module)->andWhere('method')->eq($grouppriv->method)->exec();
@@ -4014,7 +4017,7 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('story')->query();
+        $stmt = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('story')->query();
         while($grouppriv = $stmt->fetch())
         {
             $grouppriv->module = 'projectstory';
@@ -4022,7 +4025,7 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('story')->andWhere('method')->eq('view')->query();
+        $stmt = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('story')->andWhere('method')->eq('view')->query();
         while($grouppriv = $stmt->fetch())
         {
             $grouppriv->module = 'projectstory';
@@ -4030,7 +4033,7 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('linkstory')->query();
+        $stmt = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('linkstory')->query();
         while($grouppriv = $stmt->fetch())
         {
             $grouppriv->module = 'projectstory';
@@ -4038,7 +4041,7 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('unlinkstory')->query();
+        $stmt = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('unlinkstory')->query();
         while($grouppriv = $stmt->fetch())
         {
             $grouppriv->module = 'projectstory';
@@ -4046,22 +4049,30 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('execution')->andWhere('method')->eq('all')->query();
+        $stmt = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('execution')->andWhere('method')->eq('all')->query();
         while($grouppriv = $stmt->fetch())
         {
             $grouppriv->module = 'project';
             $grouppriv->method = 'execution';
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+
+            $grouppriv->module = 'project';
+            $grouppriv->method = 'browse';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+
+            $grouppriv->module = 'project';
+            $grouppriv->method = 'index';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('createlib')->query();
+        $stmt = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('createlib')->query();
         while($grouppriv = $stmt->fetch())
         {
             $grouppriv->method = 'createLib';
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('editlib')->query();
+        $stmt = $this->dao->select('group,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('editlib')->query();
         while($grouppriv = $stmt->fetch())
         {
             $grouppriv->method = 'editLib';

@@ -1683,6 +1683,12 @@ class docModel extends model
             $html .= "<li>";
             $html .= html::a(helper::createLink('doc', 'create', "type=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey"), $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
             $html .= "</li>";
+
+        }
+        if(common::hasPriv('doc', 'createLib'))
+        {
+            $html .= '<li class="divider"></li>';
+            $html .= '<li>' . html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), $this->lang->doc->createLib, '', "class='iframe' data-width='70%'") . '</li>';
         }
         $html .= "</ul></div>";
 
@@ -1928,7 +1934,7 @@ EOF;
             foreach($moduleDocs[0] as $doc)
             {
                 if(!$docID) $docID = $doc->id;
-                $treeMenu[0] .= '<li>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), $doc->title) . '</li>';
+                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), $doc->title) . '</li>';
             }
         }
 
@@ -1960,7 +1966,7 @@ EOF;
             foreach($moduleDocs[$module->id] as $doc)
             {
                 if(!$docID) $docID = $doc->id;
-                $treeMenu[$module->id] .= '<li>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), $doc->title) . '</li>';
+                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), $doc->title) . '</li>';
             }
         }
 
