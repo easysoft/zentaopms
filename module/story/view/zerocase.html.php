@@ -23,7 +23,10 @@
     <table class='table has-sort-head table-fixed' id='storyList'>
       <thead>
       <tr>
-        <?php $vars = "productID=$productID&orderBy=%s";?>
+        <?php
+        $this->app->rawModule = 'story';
+        $vars = "productID=$productID&branchID=$branchID&orderBy=%s";
+        ?>
         <th class='c-id'>
           <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
             <label></label>

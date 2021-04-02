@@ -143,7 +143,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <div class='btn-group dropdown'>
       <?php $buttonType = $from == 'project' ? 'btn-secondary' : 'btn-primary';?>
       <?php $extraParam = $from == 'project' ? '' : "&bugID=0&planID=0&todoID=0&extra=&type=$storyType";?>
-      <?php echo html::a($this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=0$extraParam"), "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn $buttonType' data-app='$openApp'");?>
+      <?php echo html::a($this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID={$this->session->project}$extraParam"), "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn $buttonType' data-app='$openApp'");?>
       <?php if(!empty($productID)): ?>
       <button type='button' class="btn <?php echo $buttonType?> dropdown-toggle" data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
@@ -254,7 +254,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
       $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      if($from == 'product') $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      if($from == 'project') $vars = "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
       $setting = $this->datatable->getSetting('product');

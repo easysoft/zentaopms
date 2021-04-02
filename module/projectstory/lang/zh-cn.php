@@ -17,4 +17,3 @@ $lang->projectstory->featureBar['story']['allstory'] = $lang->product->allStory;
 $lang->projectstory->featureBar['story']['unclosed'] = $lang->product->unclosed;
 $lang->projectstory->featureBar['story']['changed']  = $lang->product->changedStory;
 $lang->projectstory->featureBar['story']['closed']   = $lang->product->closedStory;
-

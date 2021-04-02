@@ -131,6 +131,8 @@ $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Tested';
 
+$lang->task->recordEstimateAction = 'Record Estimate';
+
 $lang->task->ditto             = 'Ditto';
 $lang->task->dittoNotice       = "This Task is not linked to the %s as the previous one is!";
 $lang->task->selectTestStory   = 'Select Story Testd';

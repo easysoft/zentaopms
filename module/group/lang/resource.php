@@ -93,8 +93,6 @@ $lang->resource->my->story           = 'story';
 $lang->resource->my->task            = 'task';
 $lang->resource->my->bug             = 'bug';
 $lang->resource->my->doc             = 'doc';
-$lang->resource->my->issue           = 'issue';
-$lang->resource->my->risk            = 'risk';
 $lang->resource->my->testtask        = 'testtask';
 $lang->resource->my->testcase        = 'testcase';
 $lang->resource->my->execution       = 'execution';
@@ -122,8 +120,6 @@ $lang->my->methodOrder[95]  = 'testtask';
 $lang->my->methodOrder[100] = 'testcase';
 $lang->my->methodOrder[105] = 'execution';
 $lang->my->methodOrder[110] = 'doc';
-$lang->my->methodOrder[115] = 'issue';
-$lang->my->methodOrder[120] = 'risk';
 
 /* Todo. */
 $lang->resource->todo = new stdclass();
@@ -1199,8 +1195,6 @@ $lang->resource->user->cropAvatar     = 'cropAvatar';
 $lang->resource->user->profile        = 'profile';
 $lang->resource->user->batchEdit      = 'batchEdit';
 $lang->resource->user->unbind         = 'unbind';
-$lang->resource->user->issue          = 'issue';
-$lang->resource->user->risk           = 'risk';
 $lang->resource->user->setPublicTemplate = 'setPublicTemplate';
 
 $lang->user->methodOrder[5]  = 'create';
@@ -1213,8 +1207,6 @@ $lang->user->methodOrder[30] = 'todo';
 $lang->user->methodOrder[35] = 'task';
 $lang->user->methodOrder[40] = 'bug';
 $lang->user->methodOrder[45] = 'project';
-$lang->user->methodOrder[50] = 'issue';
-$lang->user->methodOrder[55] = 'risk';
 $lang->user->methodOrder[60] = 'dynamic';
 $lang->user->methodOrder[65] = 'cropAvatar';
 $lang->user->methodOrder[70] = 'profile';

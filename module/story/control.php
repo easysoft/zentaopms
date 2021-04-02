@@ -196,9 +196,6 @@ class story extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
-        /* Set menu. */
-        $this->product->setMenu($product->id, $branch);
-
         /* Init vars. */
         $source     = '';
         $sourceNote = '';
@@ -1524,6 +1521,7 @@ class story extends control
         $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->productID  = $productID;
+        $this->view->branchID   = $branchID;
         $this->view->orderBy    = $orderBy;
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->browseType = '';
