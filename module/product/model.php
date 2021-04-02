@@ -1286,7 +1286,7 @@ class productModel extends model
             $products = $this->dao->select('t1.id as id, t1.*')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
                 ->where('t1.id')->in($productKeys)
-                ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
+                ->orderBy('t2.order_asc, t1.line_desc, t1.order_desc')
                 ->page($pager)
                 ->fetchAll('id');
         }

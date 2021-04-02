@@ -877,9 +877,9 @@ class doc extends control
         // setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $this->session->set('docList', $this->app->getURI(true), 'doc');
 
+        $objects = $this->doc->getOrderedObjects($type);
         if($type == 'product')
         {
-            $objects  = $this->loadModel('product')->getPairs('nocode');
             $objectID = $this->product->saveState($objectID, $objects);
             $table    = TABLE_PRODUCT;
 
@@ -890,7 +890,6 @@ class doc extends control
         }
         else
         {
-            $objects  = $this->loadModel('project')->getPairsByProgram();
             $objectID = $this->project->saveState($objectID, $objects);
             $table    = TABLE_PROJECT;
 
@@ -900,6 +899,7 @@ class doc extends control
             $this->app->rawMethod = 'project';
         }
 
+        if(!$libID) $libID = key($libs);
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
         if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->project));
 

@@ -1153,6 +1153,76 @@ class docModel extends model
     }
 
     /**
+     * Get ordered objects for dic.
+     * 
+     * @param  string $objectType 
+     * @access public
+     * @return array 
+     */
+    public function getOrderedObjects($objectType = 'product')
+    {
+        $myObjects = $normalObjects = $closedObjects = array();
+        if($objectType == 'product')
+        {
+            $products = $this->loadModel('product')->getList();
+            foreach($products as $id => $product)
+            {   
+                if($product->status == 'normal' and $product->PO == $this->app->user->account)
+                {   
+                    $myObjects[$id] = $product->name;     
+                }
+                elseif($product->status == 'normal' and !($product->PO == $this->app->user->account))
+                {   
+                    $normalObjects[$id] = $product->name;
+                }
+                elseif($product->status == 'closed')
+                {   
+                    $closedObjects[$id] = $product->name;
+                }
+            }
+        }
+        elseif($objectType == 'project')
+        {
+            $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchPairs();
+            $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->eq('project')
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+                ->orderBy('order_asc')
+                ->fetchAll('id');
+
+            $orderedProjects = array();
+            foreach($programs as $programID => $programName)
+            {    
+                foreach($projects as $id => $project)
+                {    
+                    if($project->parent and $project->parent != $programID) continue;
+                    $orderedProjects[$id] = $project;
+                    unset($projects[$project->id]);
+                }
+            }
+
+            foreach($orderedProjects as $id => $project)
+            {
+                if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
+                {
+                    $myObjects[$id] = $project->name;
+                }
+                else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
+                {
+                    $normalObjects[$id] = $project->name;
+                }
+                else if($project->status == 'done' or $project->status == 'closed')
+                {
+                    $closedObjects[$id] = $project->name;
+                }
+            }
+        }
+
+        return $myObjects + $normalObjects + $closedObjects;
+    }
+
+    /**
      * Stat module and document counts of lib.
      *
      * @param  array    $idList

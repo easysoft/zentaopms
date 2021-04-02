@@ -80,7 +80,7 @@
                     <th class="w-80px"><?php echo $lang->productCommon . $lang->product->status;?></th>
                     <td class="<?php echo $product->status;?>"><strong><?php echo zget($lang->product->statusList, $product->status);?></strong></td>
                     <th><?php echo $lang->product->acl;?></th>
-                    <td><strong><?php echo $lang->product->aclList[$product->acl];?></strong></td>
+                    <td class='acl'><strong><?php echo $lang->product->aclList[$product->acl];?></strong></td>
                     <td></td>
                   </tr>
                   <?php if($product->acl == 'custom'):?>
