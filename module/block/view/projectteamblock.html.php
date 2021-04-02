@@ -47,7 +47,7 @@ $maxConsumed  = 0;
   </div>
   <style>
   .block-projectteam .panel-body {margin-top: -10px}
-  .chart-titles {top: 30px; width: 110px; padding-right: 10px; position: relative; z-index: 1}
+  .chart-titles {top: 30px; width: 150px; padding-right: 10px; position: relative; z-index: 1}
   .chart-rows {position: relative; z-index: 0}
   .chart-title {width: 100px; line-height: 20px; padding: 5px 0; height: 30px}
   .chart-title > span {background: #fff}
