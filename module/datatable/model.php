@@ -88,6 +88,11 @@ class datatableModel extends model
                 $set->title = $fieldList[$id]['title'];
                 $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
                 $set->name  = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
+
+                if(isset($fieldList[$id]['minWidth'])) $set->minWidth = $fieldList[$id]['minWidth'];
+                if(isset($fieldList[$id]['maxWidth'])) $set->maxWidth = $fieldList[$id]['maxWidth'];
+                if(isset($fieldList[$id]['pri']))      $set->pri = $fieldList[$id]['pri'];
+
                 $setting[$key] = $set;
             }
         }
@@ -152,10 +157,25 @@ class datatableModel extends model
             $title = isset($col->title) ? "title='$col->title'" : '';
             $title = (isset($col->name) and $col->name) ? "title='$col->name'" : $title;
             if($id == 'id' and (int)$width < 90) $width = '90px';
-            $width = "data-width='$width' style='width:$width'";
             $align = $id == 'actions' ? 'text-center' : '';
 
-            echo "<th data-flex='$fixed' $width class='c-$id $align' $title>";
+            $style  = '';
+            $data   = '';
+            $data  .= "data-width='$width'";
+            $style .= "width:$width;";
+            if(isset($col->minWidth))
+            {
+                $data  .= "data-minWidth='{$col->minWidth}px'";
+                $style .= "min-width:{$col->minWidth}px;";
+            }
+            if(isset($col->maxWidth))
+            {
+                $data  .= "data-maxWidth='{$col->maxWidth}px'";
+                $style .= "max-width:{$col->maxWidth}px;";
+            }
+            if(isset($col->pri)) $data .= "data-pri='{$col->pri}'";
+
+            echo "<th data-flex='$fixed' $data style='$style' class='c-$id $align' $title>";
             if($id == 'actions')
             {
                 echo $this->lang->actions;

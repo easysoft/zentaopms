@@ -1315,7 +1315,7 @@ class projectModel extends model
         if($col->show)
         {
             $title = '';
-            $class = "c-$id" . (in_array($id, ['budget', 'teamCount']) ? ' c-number' : ' c-name');
+            $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
 
             if($id == 'id') $class .= ' cell-id';
 

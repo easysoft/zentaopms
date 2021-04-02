@@ -4055,6 +4055,20 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('createlib')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->method = 'createLib';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
+        $stmt = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('editlib')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->method = 'editLib';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
         return true;
     }
 
