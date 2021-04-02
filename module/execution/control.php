@@ -1203,7 +1203,7 @@ class execution extends control
         }
         elseif($this->app->openApp == 'execution')
         {
-            $executionID = key($this->executions);
+            if($this->config->systemMode == 'new') $executionID = key($this->executions);
             $this->execution->setMenu($executionID);
         }
 
@@ -1297,7 +1297,7 @@ class execution extends control
             }
         }
 
-        $this->view->title           = $this->lang->execution->create;
+        $this->view->title           = (($this->app->openApp == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]      = $this->view->title;
         $this->view->executions      = array('' => '') + $this->execution->getList();
         $this->view->groups          = $this->loadModel('group')->getPairs();

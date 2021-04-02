@@ -280,15 +280,19 @@ class executionModel extends model
     {
         $this->lang->execution->team = $this->lang->execution->teamname;
 
-        if(empty($_POST['project']))
+        if($this->config->systemMode == 'new')
         {
-            dao::$errors['message'][] = $this->lang->execution->projectNotEmpty;
-            return false;
-        }
+            if(empty($_POST['project']))
+            {
+                dao::$errors['message'][] = $this->lang->execution->projectNotEmpty;
+                return false;
+            }
 
-        /* Determine whether to add a sprint or a stage according to the model of the execution. */
-        $project    = $this->getByID($_POST['project']);
-        $sprintType = $this->config->systemMode == 'new' ? zget($this->config->execution->modelList, $project->model, '') : 'sprint';
+            /* Determine whether to add a sprint or a stage according to the model of the execution. */
+            $project    = $this->getByID($_POST['project']);
+            $sprintType = zget($this->config->execution->modelList, $project->model, '');
+        }
+        if($this->config->systemMode == 'classic') $sprintType = 'sprint';
 
         /* If the execution model is a stage, determine whether the product is linked. */
         if($sprintType == 'stage' and empty($this->post->products[0]))
@@ -346,7 +350,7 @@ class executionModel extends model
             $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
 
             /* Update the path. */
-            $this->setTreePath($executionID);
+            if($this->config->systemMode == 'new') $this->setTreePath($executionID);
 
             /* Copy team of execution. */
             if($copyExecutionID != '')
@@ -378,7 +382,7 @@ class executionModel extends model
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
 
-                $this->addProjectMembers($sprint->project, array($member));
+                if($this->config->systemMode == 'new') $this->addProjectMembers($sprint->project, array($member));
             }
 
             /* Create doc lib. */

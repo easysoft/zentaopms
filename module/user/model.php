@@ -2291,7 +2291,7 @@ class userModel extends model
         }
 
         /* Judge sprint auth. */
-        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private')
+        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private' && $this->config->systemMode == 'new')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             $users[$parent->openedBy] = $parent->openedBy;
