@@ -588,6 +588,8 @@ class my extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $this->app->session->set('issueList', $this->app->getURI(true), 'project');
+
         $this->view->title      = $this->lang->my->issue;
         $this->view->position[] = $this->lang->my->issue;
         $this->view->mode       = 'issue';
@@ -615,6 +617,8 @@ class my extends control
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->app->session->set('riskList', $this->app->getURI(true), 'project');
 
         $this->view->title      = $this->lang->my->risk;
         $this->view->position[] = $this->lang->my->risk;
