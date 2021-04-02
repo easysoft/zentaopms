@@ -206,12 +206,7 @@ class router extends baseRouter
         if($hourKey == STORYPOINT_KEY)    $config->hourUnit = 'sp';
         if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'fp';
 
-        $model = new stdclass();
-        $model->model = 'scrum';
-        //if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
-
         $iterationKey = $projectKey;
-        if(isset($model->model) && $model->model == 'waterfall') $projectKey = STAGE_KEY;
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
         $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
