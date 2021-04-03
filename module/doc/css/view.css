@@ -15,7 +15,7 @@
 
 .main-row > .side-col {transition: width .2s;}
 .main-row > .main-col .article-content {transition: max-width; margin: 0 auto !important;}
-.main-row > .side-col > .cell {transition: opacity .2s;}
+.main-row > .side-col > .cell {transition: opacity .2s; margin-bottom: 10px;}
 .doc-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden;}
 .doc-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972';}
 .right-icon a {color: #1183fb;}

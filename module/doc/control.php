@@ -352,6 +352,10 @@ class doc extends control
             $this->execution->setMenu($objectID);
             unset($this->lang->exectuion->menu->doc['subMenu']);
         }
+        else
+        {
+            $this->app->rawMethod = $objectType;
+        }
 
         $lib  = $this->doc->getLibByID($libID);
         $type = $lib->type;

@@ -1975,7 +1975,7 @@ EOF;
             foreach($moduleDocs[0] as $doc)
             {
                 if(!$docID) $docID = $doc->id;
-                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), $doc->title) . '</li>';
+                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
             }
         }
 
@@ -2007,7 +2007,7 @@ EOF;
             foreach($moduleDocs[$module->id] as $doc)
             {
                 if(!$docID) $docID = $doc->id;
-                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), $doc->title) . '</li>';
+                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
             }
         }
 
