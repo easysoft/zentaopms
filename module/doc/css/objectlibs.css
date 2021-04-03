@@ -9,7 +9,7 @@
 .side-col .action a {margin: 0 auto 3px; display: block; max-width: 200px;}
 .side-col .tips {padding: 0 10px;}
 .main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 15px;}
-.main-col .doc-title .title {margin-right: 10px;}
+.main-col .doc-title .title {margin-right: 10px; line-height: 32px;}
 .main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .actions a {margin-right: 8px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
