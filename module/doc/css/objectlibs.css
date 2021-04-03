@@ -8,12 +8,16 @@
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
 .side-col .action a {margin: 0 auto 3px; display: block; max-width: 200px;}
 .side-col .tips {padding: 0 10px;}
-.main-col .detail-title {display: flex;}
-.main-col .detail-title .title {margin-right: 10px;}
-.main-col .detail-title .info {flex: 1 1 0;}
-.main-col .detail-title .actions i {font-size: 15px; color: #8c8c8c; margin-left: 5px;}
-#sidebar {width: 280px;}
+.main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 15px;}
+.main-col .doc-title .title {margin-right: 10px;}
+.main-col .doc-title .info {flex: 1 1 0;}
+.main-col .doc-title .actions a {margin-right: 8px;}
+.main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
+#sidebar {width: 275px;}
 #sidebar>.cell {width: 265px;}
-#sidebar>.sidebar-toggle {left: 5px; right: auto;}
+#sidebar>.sidebar-toggle {left: 3px; right: auto;}
+.hide-sidebar #sidebar>.cell {left: -270px;}
 .hide-sidebar #sidebar>.sidebar-toggle>.icon:before {content: "\e314";}
 .detail.empty {line-height: 200px;}
+.main-col+.side-col {padding-left: 16px;}
+.main-col iframe {min-height: 380px;}

@@ -55,9 +55,9 @@ class doc extends control
 
         $this->view->latestEditedDocs = $this->doc->getDocsByBrowseType(0, 'byediteddate', 0, 0, 'editedDate_desc, id_desc', $pager);
         $this->view->myDocs           = $this->doc->getDocsByBrowseType(0, 'openedbyme', 0, 0, 'addedDate_desc', $pager);
+        $this->view->collectedDocs    = $this->doc->getDocsByBrowseType(0, 'collectedbyme', 0, 0, 'addedDate_desc', $pager);
         $this->view->statisticInfo    = $this->doc->getStatisticInfo();
         $this->view->users            = $this->user->getPairs('noletter');
-        $this->view->doingExecutions  = $this->execution->getByProject($this->projectID, 'undone', 5);
 
         $this->display();
     }

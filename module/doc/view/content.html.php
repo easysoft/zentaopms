@@ -3,7 +3,7 @@
   <div class="main-col col-8">
     <div class="cell">
       <div class="detail no-padding">
-        <div class="detail-title no-margin no-padding">
+        <div class="detail-title no-padding doc-title">
           <div class="title"><?php echo $doc->title;?></div>
           <div class="info">
             <div class="version"></div>
@@ -12,15 +12,15 @@
           </div>
           <div class="actions">
             <?php
-            if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}'");
+            if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}' class='btn btn-link'");
             if(common::hasPriv('doc', 'delete'))
             {
                 $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes&from=lib");
-                echo html::a("javascript:ajaxDeleteDoc(\"$deleteURL\", \"docList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->doc->delete}'");
+                echo html::a("javascript:ajaxDeleteDoc(\"$deleteURL\", \"docList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->doc->delete}' class='btn btn-link'");
             }
             ?>
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
-            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><i class='icon <?php echo $star;?>'></i></a>
           </div>
         </div>
         <div class="detail-content article-content">
