@@ -6,7 +6,22 @@
         <div class="detail-title no-padding doc-title">
           <div class="title"><?php echo $doc->title;?></div>
           <div class="info">
-            <div class="version"></div>
+            <div class="version">
+              <div class='btn-group'>
+              <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
+                #<?php echo $version ? $version : $doc->version;?>
+                <span class="caret"></span>
+              </a>
+                <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+                <?php
+                for($version = $doc->version; $version > 0; $version--)
+                {
+                    echo "<li>" . html::a($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"), '#' . $version) . "</li>";
+                }
+                ?>
+                </ul>
+              </div>
+            </div>
             <div class="user"></div>
             <div class="time"></div>
           </div>

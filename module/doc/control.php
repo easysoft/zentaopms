@@ -904,10 +904,11 @@ class doc extends control
      * @param  int    $objectID  projectID|productID
      * @param  int    $libID
      * @param  int    $docID
+     * @param  int    $version
      * @access public
      * @return void
      */
-    public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0)
+    public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0, $version = 0)
     {
         $this->session->set('docList', $this->app->getURI(true), 'doc');
 
@@ -982,7 +983,7 @@ class doc extends control
         /* Get doc. */
         if($docID)
         {
-            $doc = $this->doc->getById($docID, 0, true);
+            $doc = $this->doc->getById($docID, $version, true);
             if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
 
             if($doc->contentType == 'markdown')
@@ -1002,6 +1003,7 @@ class doc extends control
         $this->view->docID        = $docID;
         $this->view->doc          = $docID ? $doc : '';
         $this->view->type         = $type;
+        $this->view->version      = $version;
         $this->view->object       = $object;
         $this->view->objectType   = $type;
         $this->view->libID        = $libID;

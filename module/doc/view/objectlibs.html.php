@@ -14,7 +14,7 @@
 <?php if($app->openApp == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
-<div class="fade main-row <?php if($app->openApp == 'doc') echo 'split-row';?>" id="mainRow">
+<div class="fade main-row split-row" id="mainRow">
   <?php if($libID):?>
     <?php include './side.html.php';?>
     <div class="main-col" data-min-width="400">
