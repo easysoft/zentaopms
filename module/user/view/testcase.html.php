@@ -49,9 +49,9 @@
         <?php foreach($cases as $case):?>
         <?php $caseID = $type == 'case2Him' ? $case->case : $case->id?>
         <tr class='text-left'>
-          <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version", '', false, $case->project), sprintf('%03d', $caseID));?></td>
+          <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version", '', false, '', true), sprintf('%03d', $caseID));?></td>
           <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
-          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version", '', false, $case->project), $case->title);?></td>
+          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version", '', false, '', true), $case->title);?></td>
           <td><?php echo $lang->testcase->typeList[$case->type];?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>

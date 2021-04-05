@@ -39,8 +39,8 @@
       <tbody>
         <?php foreach($tasks as $task):?>
         <tr>
-          <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', false, $task->project), sprintf('%03d', $task->id));?></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', false, $task->project), $task->name);?></td>
+          <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', false, '', true), sprintf('%03d', $task->id));?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id", '', false, '', true), $task->name);?></td>
           <td class='nobr'><?php echo $task->executionName?></td>
           <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build", '', false, $task->project), $task->buildName));?></td>
           <td><?php echo $task->begin?></td>

@@ -19,9 +19,19 @@ js::set('appsLang', $lang->index->app);
 js::set('appsMenuItems', commonModel::getMainNavList($app->rawModule));
 js::set('defaultOpen', $open);
 ?>
+<style>
+#versionTitle {margin: 8px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-upgrade.svg';?>);}
+.icon-version {width: 20px; height: 24px; margin: -4px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-new.svg';?>);}
+.version-hr {margin-top: 15px; margin-bottom: 15px;}
 <?php if(isset($this->config->bizVersion)):?>
-<style>#searchbox .dropdown-menu.show-quick-go.with-active {top: -468px; max-height: 465px;}</style>
+#searchbox .dropdown-menu.show-quick-go.with-active {top: -468px; max-height: 465px;}
 <?php endif;?>
+
+<?php if(empty($latestVersionList)):?>
+#upgradeContent {top: -272px; height: 262px;}
+#latestVersionList {height: 200px;}
+<?php endif;?>
+</style>
 <div id='menu'>
   <nav id='menuNav'>
     <ul class='nav nav-default' id='menuMainNav'>
@@ -72,47 +82,35 @@ js::set('defaultOpen', $open);
     </div>
     <div id='upgradeContent' class='main-table'>
       <div class='main-header' style='padding: 5px 20px 5px 15px;'>
+        <i class='version-upgrade' id='versionTitle'></i> 
         <h2>
           <?php echo $lang->index->upgradeVersion;?>
-          <span class="label label-badge label-primary label-outline"><?php echo $lang->index->currentVersion . ': ' . $lang->zentaoPMS . $config->version;?></span>
         </h2>
       </div>
-      <table class='table has-sort-head'>
-        <thead>
-          <tr>
-            <th class='version-name'><?php echo $lang->index->versionName;?></th>
-            <th class='version-date'><?php echo $lang->index->releaseDate;?></th>
-            <th class='version-explain'><?php echo $lang->index->explain;?></th>
-            <th class='version-actions text-center'><?php echo $lang->index->actions;?></th>
-          </tr>
-        </thead>
-      </table>
       <div id="latestVersionList">
         <?php if(empty($latestVersionList)):?>
-        <div class="table-empty-tip" style='padding: 66px 10px;'>
-          <div style='display: inline-block'>
-            <span id='empty-tip'><?php echo $lang->noData;?></span>
-            <a href='<?php echo $lang->website;?>' target='_blank'>
-              <span class="label label-badge label-info label-outline"><?php echo $lang->index->website . ': '. $lang->website;?></span>
-            </a>
-          </div>
+        <div class="table-empty-tip">
+          <a href='<?php echo $lang->website;?>' target='_blank'>
+            <span class="label label-badge label-info label-outline"><?php echo $lang->index->website . ': '. $lang->website;?></span>
+          </a>
         </div>
         <?php else:?>
-        <table class='table has-sort-head'>
-          <tbody>
-            <?php foreach($latestVersionList as $version):?>
-            <tr>
-              <td class='version-name' title='<?php echo $lang->zentaoPMS . $version->name;?>'><?php echo $lang->zentaoPMS . $version->name;?></td>
-              <td class='version-date'><?php echo $version->date;?></td>
-              <td class='version-explain' title='<?php echo $version->explain;?>'><?php echo $version->explain;?></td>
-              <td class='version-actions text-center'>
-                <a href="<?php echo $version->link;?>" class='btn btn-link' target='_blank' style='color: #16a8f8;'><?php echo $lang->index->upgrade;?></a>
-                <a href="<?php echo inLink('changeLog', 'version=' . $version->name);?>" class="btn btn-link iframe" data-width="800"><?php echo $lang->index->log;?></strong></a>
-              </td>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-        </table>
+        <div class='version-content'>
+          <?php foreach($latestVersionList as $version):?>
+          <div class="version-list">
+            <div>
+              <i class='version-upgrade icon-version'></i>
+              <h4><?php echo $version->name;?></h4>
+            </div>
+            <div class="version-detail"><?php echo $version->explain;?></div>
+            <div class="version-footer">
+              <a href="<?php echo inLink('changeLog', 'version=' . $version->name);?>" class="btn btn-link iframe" data-width="800"><?php echo $lang->index->log;?></strong></a>
+              <a href='<?php echo $version->link?>' class='btn btn-primary upgrade-now' style='color: white;' target='_blank'><?php echo $lang->index->upgrade;?></a>
+            </div>
+          </div>
+          <hr class='version-hr'>
+          <?php endforeach;?>
+        </div>
         <?php endif;?>
       </div>
     </div>

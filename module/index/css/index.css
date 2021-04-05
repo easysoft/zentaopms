@@ -93,17 +93,19 @@ body.menu-hide {padding-left: 0;}
 #searchbox .dropdown-menu>li.active>a, #searchbox .dropdown-menu>li.selected>a {position: relative; color: #fff; background-color: #16a8f8;}
 #searchbox .dropdown-menu>li.selected>a:after {position: absolute; top: 2px; right: 4px; display: block; font-family: ZentaoIcon; font-size: 18px; font-size: 14px; font-style: normal; font-weight: 400; font-variant: normal; line-height: 1; line-height: 20px; text-transform: none; content: "\e5ca"; speak: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
 
-#upgradeContent {display: none; position: absolute; right: 10px; top: -290px; height: 282px; background-color: #fff; left: 0px; padding: 5px 0; border: 1px solid rgba(0,0,0,.15); border-color: rgba(0,0,0,.1); opacity: 1; border-radius: 4px; box-shadow: 0 6px 12px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.1);}
-#latestVersionList {height: 190px; overflow: auto;}
-#empty-tip {top: 1px; position: relative;}
+#upgradeContent {display: none; position: absolute; top: -330px; right: 10px; width: 65%; height: 322px; background-color: #fff; padding: 5px 0; border: 1px solid rgba(0,0,0,.15); border-color: rgba(0,0,0,.1); opacity: 1; border-radius: 4px; box-shadow: 0 6px 12px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.1);}
+#latestVersionList {height: 270px; overflow: auto;}
 
-.version-name {width: 20%;}
-.version-date {width: 15%; color: #8a8a8a;}
-.version-explain {width: 45%; color: #8a8a8a;}
-.version-actions {width: 20%;}
+.version-upgrade {width: 14px; height: 16px; float: left; background-repeat: no-repeat; background-position: center ; background-size: cover; display: block;}
+.version-content {padding: 10px 15px;}
+.version-footer {padding-top: 5px;}
+.version-detail {color: #8a8a8a;}
+.upgrade-now {float: right;}
+.color-primary {color: #3280fc;}
 
 @media screen and (max-height: 768px)
 {
+  #upgradeContent{width: 85%;}
   .version-name {width: 25%; text-overflow: ellipsis; white-space: nowrap;}
   .version-date {width: 20%; color: #8a8a8a;}
   .version-explain {width: 25%; color: #8a8a8a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

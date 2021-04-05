@@ -927,13 +927,16 @@ class baseControl
      * @param   string         $methodName    method name
      * @param   string|array   $vars          the params passed, can be array(key=>value) or key1=value1&key2=value2
      * @param   string         $viewType      the view type
+     * @param   string         $onlybody      remove header and footer or not in iframe
+     * @param   string         $PRJID         the project id 
+     * @param   string         $removePRJ     if remove PRJ param 
      * @access  public
      * @return  string the link string.
      */
-    public function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '', $onlybody = false, $PRJID = 0)
+    public function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '', $onlybody = false, $PRJID = 0, $removePRJ = false)
     {
         if(empty($moduleName)) $moduleName = $this->moduleName;
-        return helper::createLink($moduleName, $methodName, $vars, $viewType, $onlybody, $PRJID);
+        return helper::createLink($moduleName, $methodName, $vars, $viewType, $onlybody, $PRJID, $removePRJ);
     }
 
     /**
