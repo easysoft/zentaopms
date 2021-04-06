@@ -277,6 +277,10 @@ class project extends control
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
             }
+            elseif($this->app->openApp == 'doc')
+            {
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', 'type=project')));
+            }
             else
             {
                 if($model == 'waterfall')
