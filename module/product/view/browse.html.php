@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datatable.fix.html.php';?>
+<style>
+body {margin-bottom: 25px;}
+</style>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('projectID', $projectID);?>
