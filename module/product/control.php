@@ -322,6 +322,7 @@ class product extends control
             $methodName = $openApp == 'program'? 'product' : 'browse';
             $param      = $openApp == 'program' ? "programID=$programID" : "productID=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
+            if($openApp == 'doc') $locate = $this->createLink('doc', 'objectLibs', 'type=product');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 

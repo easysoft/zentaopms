@@ -262,7 +262,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function create($model = 'waterfall', $programID = 0, $copyProjectID = 0)
+    public function create($model = 'scrum', $programID = 0, $copyProjectID = 0)
     {
         $this->loadModel('execution');
 
