@@ -93,7 +93,7 @@
         <?php
         $canBatchEdit  = common::hasPriv('story', 'batchEdit');
         $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
-        $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&executionID=0&branch=$branch");
+        $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=$projectID&branch=$branch");
         ?>
         <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
         <?php
