@@ -1,1 +1,2 @@
 th.required:after {position: relative; right: 10px;}
+td .passwordBox {border-left-width: 0px!important;}

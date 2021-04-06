@@ -3,27 +3,42 @@
   <div class="main-col col-8">
     <div class="cell">
       <div class="detail no-padding">
-        <div class="detail-title no-margin no-padding">
+        <div class="detail-title no-padding doc-title">
           <div class="title"><?php echo $doc->title;?></div>
           <div class="info">
-            <div class="version"></div>
+            <div class="version">
+              <div class='btn-group'>
+              <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
+                #<?php echo $version ? $version : $doc->version;?>
+                <span class="caret"></span>
+              </a>
+                <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+                <?php
+                for($version = $doc->version; $version > 0; $version--)
+                {
+                    echo "<li>" . html::a($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"), '#' . $version) . "</li>";
+                }
+                ?>
+                </ul>
+              </div>
+            </div>
             <div class="user"></div>
             <div class="time"></div>
           </div>
           <div class="actions">
             <?php
-            if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}'");
+            if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}' class='btn btn-link'");
             if(common::hasPriv('doc', 'delete'))
             {
-                $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"docList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->doc->delete}'");
+                $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes&from=lib");
+                echo html::a("javascript:ajaxDeleteDoc(\"$deleteURL\", \"docList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->doc->delete}' class='btn btn-link'");
             }
             ?>
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
-            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><i class='icon <?php echo $star;?>'></i></a>
           </div>
         </div>
-        <div class="detail-content article-content no-margin no-padding">
+        <div class="detail-content article-content">
           <?php
           if($doc->type == 'url')
           {
@@ -55,7 +70,7 @@
           }
           else
           {
-              echo $doc->content ? $doc->content : '空';
+              echo $doc->content;
           }
           ?>
           <?php foreach($doc->files as $file):?>

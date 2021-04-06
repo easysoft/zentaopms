@@ -29,6 +29,8 @@ $lang->extension->eraseAction      = 'Erase Extension';
 $lang->extension->upgrade          = 'Upgrade Extension';
 $lang->extension->agreeLicense     = 'I agree to the license.';
 
+$lang->extension->browseAction = 'Extension List';
+
 $lang->extension->structure        = 'Structure';
 $lang->extension->structureAction  = 'Extension Structure';
 $lang->extension->installed        = 'Installed';

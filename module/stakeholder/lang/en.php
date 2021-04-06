@@ -26,6 +26,9 @@ $lang->stakeholder->issue        = 'Issue Management';
 $lang->stakeholder->viewIssue    = 'Active Issues';
 $lang->stakeholder->userIssue    = 'Stakeholder Issues';
 
+$lang->stakeholder->viewAction      = 'View Stakeholder';
+$lang->stakeholder->viewIssueAction = 'Issue List';
+
 /* Fields. */
 $lang->stakeholder->id          = 'ID';
 $lang->stakeholder->user        = 'User';

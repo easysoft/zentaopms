@@ -55,9 +55,9 @@ class doc extends control
 
         $this->view->latestEditedDocs = $this->doc->getDocsByBrowseType(0, 'byediteddate', 0, 0, 'editedDate_desc, id_desc', $pager);
         $this->view->myDocs           = $this->doc->getDocsByBrowseType(0, 'openedbyme', 0, 0, 'addedDate_desc', $pager);
+        $this->view->collectedDocs    = $this->doc->getDocsByBrowseType(0, 'collectedbyme', 0, 0, 'addedDate_desc', $pager);
         $this->view->statisticInfo    = $this->doc->getStatisticInfo();
         $this->view->users            = $this->user->getPairs('noletter');
-        $this->view->doingExecutions  = $this->execution->getByProject($this->projectID, 'undone', 5);
 
         $this->display();
     }
@@ -304,13 +304,15 @@ class doc extends control
     /**
      * Create a doc.
      *
+     * @param  string       $objectType
+     * @param  int          $objectID
      * @param  int|string   $libID
      * @param  int          $moduleID
      * @param  string       $docType
      * @access public
      * @return void
      */
-    public function create($type, $objectID, $libID, $moduleID = 0, $docType = '')
+    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '')
     {
         if(!empty($_POST))
         {
@@ -330,9 +332,8 @@ class doc extends control
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
-            $vars = "libID=" . (int)$this->post->lib . "&browseType=byModule&moduleID=" . (int)$this->post->module . "&orderBy=id_desc&from=$this->from";
-            $link = $this->createLink('doc', 'browse', $vars);
-            if($this->app->getViewType() == 'xhtml') $link = $this->createLink('doc', 'view', "docID=$docID");
+            $params = "type=$objectType&objectID=$objectID&libID=$libID&docID=" . $docResult['id'];
+            $link = $this->createLink('doc', 'objectLibs', $params);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
@@ -350,6 +351,10 @@ class doc extends control
         {
             $this->execution->setMenu($objectID);
             unset($this->lang->exectuion->menu->doc['subMenu']);
+        }
+        else
+        {
+            $this->app->rawMethod = $objectType;
         }
 
         $lib  = $this->doc->getLibByID($libID);
@@ -393,10 +398,13 @@ class doc extends control
      *
      * @param  int    $docID
      * @param  bool   $comment
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function edit($docID, $comment = false)
+    public function edit($docID, $comment = false, $objectType = '', $objectID = 0, $libID = 0)
     {
         if(!empty($_POST))
         {
@@ -415,7 +423,16 @@ class doc extends control
                 $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
+
+            if($objectType)
+            {
+                $link = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID&docID=$docID");
+            }
+            else
+            {
+                $link = $this->createLink('doc', 'view', "docID=$docID");
+            }
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         /* Get doc and set menu. */
@@ -435,6 +452,10 @@ class doc extends control
         elseif($this->from == 'project')
         {
             $this->project->setMenu($lib->project);
+        }
+        else
+        {
+            $this->app->rawMethod = $objectType;
         }
 
         /* Set my menu. */
@@ -517,10 +538,11 @@ class doc extends control
      *
      * @param  int    $docID
      * @param  string $confirm  yes|no
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function delete($docID, $confirm = 'no')
+    public function delete($docID, $confirm = 'no', $from = 'list')
     {
         if($confirm == 'no')
         {
@@ -542,9 +564,17 @@ class doc extends control
                 {
                     $response['result']  = 'success';
                     $response['message'] = '';
+
+                    if($from == 'lib')
+                    {
+                        $pos  = strpos($this->session->docList, 'docID');
+                        $link = $pos !== false ? substr($this->session->docList, 0, $pos - 1) : $this->session->docList;
+                        $response['locate']  = $link;
+                    }
                 }
                 $this->send($response);
             }
+
             die(js::locate($this->session->docList, 'parent'));
         }
     }
@@ -874,42 +904,68 @@ class doc extends control
      * @param  int    $objectID  projectID|productID
      * @param  int    $libID
      * @param  int    $docID
+     * @param  int    $version
      * @access public
      * @return void
      */
-    public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0)
+    public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0, $version = 0)
     {
         $this->session->set('docList', $this->app->getURI(true), 'doc');
 
         $objects = $this->doc->getOrderedObjects($type);
-        if($type == 'product')
+
+        if($type == 'custom')
         {
-            $objectID = $this->product->saveState($objectID, $objects);
-            $table    = TABLE_PRODUCT;
-
-            $libs = $this->doc->getLibsByObject('product', $objectID);
-
+            $libs = $this->doc->getLibsByObject('custom', 0);
+            $this->app->rawMethod = 'custom';
             if($libID == 0) $libID = key($libs);
             $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
 
-            $this->app->rawMethod = 'product';
+            $object = new stdclass();
+            $object->id = 0;
         }
         else
         {
-            $objectID = $this->project->saveState($objectID, $objects);
-            $table    = TABLE_PROJECT;
+            if($type == 'product')
+            {
+                $objectID = $this->product->saveState($objectID, $objects);
+                $table    = TABLE_PRODUCT;
 
-            $libs = $this->doc->getLibsByObject('project', $objectID);
+                $libs = $this->doc->getLibsByObject('product', $objectID);
 
-            if($libID == 0) $libID = key($libs);
-            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
+                if($libID == 0) $libID = key($libs);
+                $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
 
-            $this->app->rawMethod = 'project';
+                $this->app->rawMethod = 'product';
+            }
+            else if($type == 'project')
+            {
+                $objectID = $this->project->saveState($objectID, $objects);
+                $table    = TABLE_PROJECT;
+
+                $libs = $this->doc->getLibsByObject('project', $objectID);
+
+                if($libID == 0) $libID = key($libs);
+                $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
+
+                $this->app->rawMethod = 'project';
+            }
+            else if($type == 'execution')
+            {
+                $table = TABLE_EXECUTION;
+                $libs  = $this->doc->getLibsByObject('execution', $objectID);
+
+                if($libID == 0) $libID = key($libs);
+                $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
+
+                $this->app->rawMethod = 'execution';
+            }
+
+            $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
+            if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->project));
         }
 
         if(!$libID) $libID = key($libs);
-        $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-        if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->project));
 
         $openApp = $this->app->openApp;
         if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
@@ -927,7 +983,7 @@ class doc extends control
         /* Get doc. */
         if($docID)
         {
-            $doc = $this->doc->getById($docID, 0, true);
+            $doc = $this->doc->getById($docID, $version, true);
             if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
 
             if($doc->contentType == 'markdown')
@@ -941,15 +997,18 @@ class doc extends control
         $this->view->customObjectLibs = $customObjectLibs;
         $this->view->showLibs         = $this->config->doc->custom->objectLibs;
 
-        $this->view->title      = $object->name;
-        $this->view->position[] = $object->name;
+        $this->view->title      = $type == 'custom' ? $this->lang->doc->customAB : $object->name;
+        $this->view->position[] = $type == 'custom' ? $this->lang->doc->customAB : $object->name;
 
         $this->view->docID        = $docID;
         $this->view->doc          = $docID ? $doc : '';
         $this->view->type         = $type;
+        $this->view->version      = $version;
         $this->view->object       = $object;
+        $this->view->objectType   = $type;
         $this->view->libID        = $libID;
-        $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : array();
+        $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
+
         $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
         $this->view->moduleTree   = $moduleTree;
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.

@@ -171,6 +171,7 @@ $lang->doc->errorMainSysLib    = "该系统文档库不能删除！";
 $lang->doc->accessDenied       = "您没有权限访问！";
 $lang->doc->versionNotFount    = '该版本文档不存在';
 $lang->doc->noDoc              = '暂时没有文档。';
+$lang->doc->noLib              = '暂时没有文档库。';
 $lang->doc->cannotCreateOffice = '<p>对不起，企业版才能创建%s文档。<p><p>试用企业版，请联系我们：4006-8899-23 &nbsp; 0532-86893032。</p>';
 $lang->doc->notSetOffice       = "<p>创建%s文档，需要配置<a href='%s' target='_parent'>Office转换设置</a>。<p>";
 $lang->doc->noSearchedDoc      = '没有搜索到任何文档。';

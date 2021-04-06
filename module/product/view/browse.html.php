@@ -254,7 +254,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
       $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      if($from == 'product') $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      if($from == 'project') $vars = "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
       $setting = $this->datatable->getSetting('product');
@@ -321,7 +322,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <div class='btn-group dropup'>
             <?php
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
-            $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0&branch=$branch&storyType=$storyType");
+            $projectID  = $isProjectStory ? $this->session->project : 0;
+            $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=$projectID&branch=$branch&storyType=$storyType");
             ?>
             <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>

@@ -171,6 +171,7 @@ $lang->doc->errorMainSysLib    = "This library cannot be deleted.";
 $lang->doc->accessDenied       = "Access is denied!";
 $lang->doc->versionNotFount    = 'It does not exist in this build.';
 $lang->doc->noDoc              = 'No documents. ';
+$lang->doc->noLib              = 'No libraries. ';
 $lang->doc->cannotCreateOffice = 'Sorry, %s can only be created in ZenTao Enterprise. Contact us at renee@easysoft.ltd to try ZenTao Enterprise.';
 $lang->doc->notSetOffice       = "<p>To create a %s document, you need to configure <a href='%s' target='_parent'>office convert</a>.<p>";
 $lang->doc->noSearchedDoc      = 'No documents found.';

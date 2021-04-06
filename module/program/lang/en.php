@@ -43,6 +43,8 @@ $lang->program->confirmBatchUnlink      = "Do you want to batch unlink these sta
 $lang->program->stakeholderType         = 'Stakeholder type';
 $lang->program->isStakeholderKey        = 'Key stakeholder';
 $lang->program->importStakeholder       = 'Import program';
+$lang->program->unbindWhitelist         = 'Unbind Whitelist';
+$lang->program->importStakeholder       = 'Import from program';
 $lang->program->manageMembers           = 'Program Team';
 $lang->program->beyondParentBudget      = 'The remaining budget of the owned program has been exceeded.';
 $lang->program->parentBudget            = 'Parent program surplus budget：';
@@ -51,8 +53,8 @@ $lang->program->endGreaterParent        = "Parent end date: %s, end date should 
 $lang->program->beginGreateChild        = "Child earliest begin: %s, parent begin date <                  = child earliest begin date.";
 $lang->program->endLetterChild          = "Child latest end: %s, parent end date >                        = child latest end date.";
 $lang->program->closeErrorMessage       = 'There are subprograms or projects that are not closed';
+$lang->program->hasChildren             = 'The program has a child program or the project exists and can not be deleted.';
 $lang->program->confirmDelete           = "Do you want to delete it?";
-$lang->program->hasChildren             = 'It has child programs or projects. You cannot delete it.';
 $lang->program->readjustTime            = 'Change the program begin&end date.';
 
 $lang->program->stakeholderTypeList['inside']  = 'Inside';

@@ -55,7 +55,7 @@ function loadProductBranches(productID)
         if(data)
         {
             $('#product').closest('.input-group').append(data);
-            $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px');
+            $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '95px');
         }
     })
 }

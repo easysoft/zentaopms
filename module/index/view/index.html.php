@@ -23,8 +23,12 @@ js::set('defaultOpen', $open);
 #versionTitle {margin: 8px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-upgrade.svg';?>);}
 .icon-version {width: 20px; height: 24px; margin: -4px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-new.svg';?>);}
 .version-hr {margin-top: 15px; margin-bottom: 15px;}
-<?php if(isset($this->config->bizVersion)):?>
+<?php if((isset($config->bizVersion) or isset($config->maxVersion)) and $config->systemMode == 'new'):?>
 #searchbox .dropdown-menu.show-quick-go.with-active {top: -468px; max-height: 465px;}
+<?php elseif((isset($config->bizVersion) or isset($config->maxVersion)) and $config->systemMode != 'new'):?>
+#searchbox .dropdown-menu.show-quick-go.with-active {top: -436px; max-height: 440px;}
+<?php elseif($config->systemMode != 'new'):?>
+#searchbox .dropdown-menu.show-quick-go.with-active {top: -330px; max-height: 350px;}
 <?php endif;?>
 
 <?php if(empty($latestVersionList)):?>

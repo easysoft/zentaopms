@@ -9,6 +9,8 @@
  * @version     $Id: en.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
+global $config;
+
 $lang->action->common     = 'Log';
 $lang->action->product    = $lang->productCommon;
 $lang->action->project    = 'Project';
@@ -29,6 +31,9 @@ $lang->action->hideAll     = 'Hide All';
 $lang->action->editComment = 'Edit Comment';
 $lang->action->create      = 'Add Comment';
 $lang->action->comment     = 'Comment';
+
+$lang->action->undeleteAction = 'Reset Data';
+$lang->action->hideOneAction  = 'Hide Data';
 
 $lang->action->trashTips      = 'Note: Delete in ZenTao is logic.';
 $lang->action->textDiff       = 'Text Format';
@@ -96,7 +101,6 @@ $lang->action->objectTypes['stakeholder'] = 'Stakeholder';
 $lang->action->objectTypes['budget']      = 'Cost Estimate';
 $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['webhook']     = 'Webhook';
-$lang->action->objectTypes['job']         = 'Job';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

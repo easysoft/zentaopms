@@ -1,7 +1,7 @@
 /**
  * Set duplicate field.
- * 
- * @param  string $resolution 
+ *
+ * @param  string $resolution
  * @param  int    $storyID
  * @access public
  * @return void

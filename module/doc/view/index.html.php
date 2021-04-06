@@ -36,8 +36,8 @@
               </thead>
               <tbody>
                 <?php foreach($latestEditedDocs as $doc):?>
-                <tr data-url="<?php echo $this->createLink('doc', 'view', "docID={$doc->id}");?>">
-                  <td class="c-name" title="<?php echo $doc->title?>"><?php echo $doc->title;?></td>
+                <tr>
+                  <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID={$doc->id}", '', true), $doc->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'")?></a></td>
                   <td class="c-num text-right"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
                   <td class="c-datetime"><?php echo helper::isZeroDate($doc->editedDate) ? formatTime($doc->addedDate, 'Y-m-d') : formatTime($doc->editedDate, 'Y-m-d');?></td>
@@ -125,26 +125,28 @@
       <div class="col-sm-7">
         <div class="panel block-files block-sm" style="height: 290px;">
           <div class="panel-heading">
-            <div class="panel-title"><?php echo $lang->execution->undone . (common::checkNotCN() ? "{$lang->executionCommon}s" : "$lang->executionCommon");?></div>
+          <div class="panel-title"><?php echo $lang->doc->myDoc;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'allLibs', 'type=execution'), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=openedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <div class="panel-body has-table">
             <table class="table table-borderless table-fixed-head table-hover">
               <thead>
                 <tr>
-                  <th class="c-name"><?php echo $lang->execution->name;?></th>
-                  <th class="c-date"><?php echo $lang->execution->begin;?></th>
-                  <th class="c-date"><?php echo $lang->execution->end;?></th>
+                  <th class="c-name"><?php echo $lang->doc->title;?></th>
+                  <th class="c-num text-right"><?php echo $lang->doc->size;?></th>
+                  <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
+                  <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
                 </tr>
               </thead>
               <tbody>
-                <?php foreach($doingExecutions as $execution):?>
-                <tr data-url="<?php echo $this->createLink('doc', 'objectLibs', "type=execution&objectID={$execution->id}")?>">
-                  <td class="c-name"><i class="icon icon-folder text-yellow"></i> <?php echo $execution->name;?></td>
-                  <td class="c-datetime"><?php echo formatTime($execution->begin);?></td>
-                  <td class="c-datetime"><?php echo formatTime($execution->end);?></td>
+                <?php foreach($myDocs as $doc):?>
+                <tr>
+                  <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID={$doc->id}", '', true), $doc->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'")?></a></td>
+                  <td class="c-num text-right"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
+                  <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
+                  <td class="c-datetime"><?php echo formatTime($doc->editedDate) ? formatTime($doc->editedDate, 'Y-m-d') : formatTime($doc->addedDate, 'y-m-d');?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>
@@ -155,9 +157,9 @@
       <div class="col-sm-5">
         <div class="panel block-files block-sm" style="height: 290px;">
           <div class="panel-heading">
-          <div class="panel-title"><?php echo $lang->doc->myDoc;?></div>
+          <div class="panel-title"><?php echo $lang->doc->myCollection;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=openedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=collectedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <div class="panel-body has-table">
@@ -170,9 +172,9 @@
                 </tr>
               </thead>
               <tbody>
-                <?php foreach($myDocs as $doc):?>
-                <tr data-url="<?php echo $this->createLink('doc', 'view', "docID={$doc->id}");?>">
-                  <td class="c-name" title="<?php echo $doc->title;?>"><?php echo $doc->title;?></td>
+                <?php foreach($collectedDocs as $doc):?>
+                <tr>
+                  <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID={$doc->id}", '', true), $doc->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'")?></a></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
                   <td class="c-datetime"><?php echo formatTime($doc->editedDate) ? formatTime($doc->editedDate, 'Y-m-d') : formatTime($doc->addedDate, 'y-m-d');?></td>
                 </tr>

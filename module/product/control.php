@@ -322,6 +322,7 @@ class product extends control
             $methodName = $openApp == 'program'? 'product' : 'browse';
             $param      = $openApp == 'program' ? "programID=$programID" : "productID=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
+            if($openApp == 'doc') $locate = $this->createLink('doc', 'objectLibs', 'type=product');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
@@ -368,7 +369,9 @@ class product extends control
         $this->app->loadLang('custom');
 
         /* Init vars. */
-        $product              = $this->product->getById($productID);
+        $product = $this->product->getById($productID);
+        if($product->bind) $this->config->product->edit->requiredFields = 'name';
+
         $unmodifiableProjects = array();
         $canChangeProgram     = true;
         $singleLinkProjects   = array();

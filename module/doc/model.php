@@ -535,10 +535,13 @@ class docModel extends model
         /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
         $doc->contentMarkdown = $this->post->contentMarkdown;
         if($doc->acl == 'private') $doc->users = $this->app->user->account;
-        $condition = "lib = '$doc->lib' AND module = $doc->module";
 
-        $result = $this->loadModel('common')->removeDuplicate('doc', $doc, $condition);
-        if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        if($doc->title)
+        {
+            $condition = "lib = '$doc->lib' AND module = $doc->module";
+            $result = $this->loadModel('common')->removeDuplicate('doc', $doc, $condition);
+            if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        }
 
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
@@ -1116,9 +1119,18 @@ class docModel extends model
      */
     public function getLibsByObject($type, $objectID, $mode = '')
     {
-        if($type != 'product' and $type != 'project' and $type != 'execution') return false;
-
-        $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
+        if($type == 'custom')
+        {
+            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq('custom')->orderBy('`order`, id')->fetchAll('id');
+        }
+        else if($type != 'product' and $type != 'project' and $type != 'execution')
+        {
+            return false;
+        }
+        else
+        {
+            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
+        }
 
         if($type == 'product')
         {
@@ -1139,15 +1151,6 @@ class docModel extends model
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
         foreach($libs as $libID => $lib) $libs[$libID]->allCount = $itemCounts[$libID];
-
-        /*
-        if(common::hasPriv('doc', 'showFiles'))
-        {
-            $libs['files'] = new stdclass();
-            $libs['files']->name = $this->lang->doclib->files;
-            $libs['files']->allCount = count($this->getLibFiles($type, $objectID, 'id_desc'));
-        }
-         */
 
         return $libs;
     }
@@ -1215,6 +1218,32 @@ class docModel extends model
                 else if($project->status == 'done' or $project->status == 'closed')
                 {
                     $closedObjects[$id] = $project->name;
+                }
+            }
+        }
+        elseif($objectType == 'execution')
+        {
+            $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->in('sprint,stage')
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+                ->orderBy('order_asc')
+                ->fetchAll('id');
+
+            $orderedExecutions = array();
+            foreach($executions as $id => $execution)
+            {
+                if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
+                {
+                    $myObjects[$id] = $execution->name;
+                }
+                else if($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account))
+                {
+                    $normalObjects[$id] = $execution->name;
+                }
+                else if($execution->status == 'done' or $execution->status == 'closed')
+                {
+                    $closedObjects[$id] = $execution->name;
                 }
             }
         }
@@ -1666,31 +1695,38 @@ class docModel extends model
     /**
      * Build document module index page create document button.
      *
-     * @param  string $type
+     * @param  string $objectType
      * @param  int    $objectID
      * @param  int    $libID
      * @access public
      * @return string
      */
-    public function buildCreateButton4Doc($type, $objectID, $libID)
+    public function buildCreateButton4Doc($objectType, $objectID, $libID)
     {
-        $html  = "<div class='dropdown' id='createDropdown'>";
-        $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . " <span class='caret'></span></button>";
-        $html .= "<ul class='dropdown-menu' style='left:0px'>";
-        foreach($this->lang->doc->typeList as $typeKey => $typeName)
+        if($libID)
         {
-            $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-            $html .= "<li>";
-            $html .= html::a(helper::createLink('doc', 'create', "type=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey"), $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
-            $html .= "</li>";
+            $html  = "<div class='dropdown' id='createDropdown'>";
+            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . " <span class='caret'></span></button>";
+            $html .= "<ul class='dropdown-menu' style='left:0px'>";
+            foreach($this->lang->doc->typeList as $typeKey => $typeName)
+            {
+                $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+                $html .= "<li>";
+                $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey"), $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
+                $html .= "</li>";
 
+            }
+            if(common::hasPriv('doc', 'createLib'))
+            {
+                $html .= '<li class="divider"></li>';
+                $html .= '<li>' . html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), $this->lang->doc->createLib, '', "class='iframe' data-width='70%'") . '</li>';
+            }
+            $html .= "</ul></div>";
         }
-        if(common::hasPriv('doc', 'createLib'))
+        else
         {
-            $html .= '<li class="divider"></li>';
-            $html .= '<li>' . html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), $this->lang->doc->createLib, '', "class='iframe' data-width='70%'") . '</li>';
+            $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i>' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe"');
         }
-        $html .= "</ul></div>";
 
         return $html;
     }
@@ -1860,18 +1896,21 @@ EOF;
      */
     public function select($type, $objects, $objectID, $libs, $libID = 0)
     {
-        if(empty($objects)) return '';
+        if($type != 'custom' and empty($objects)) return '';
 
         $output = '';
 
-        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "<div class='table-col'><div class='list-group'>";
-        foreach($objects as $key => $object)
+        if($this->app->openApp == 'doc' and $type != 'custom')
         {
-            $output .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object);
+            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "<div class='table-col'><div class='list-group'>";
+            foreach($objects as $key => $object)
+            {
+                $output .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "data-app='{$this->app->openApp}'");
+            }
+            $output .= "</div></div></div></div></div>";
         }
-        $output .= "</div></div></div></div></div>";
 
         if(!empty($libs))
         {
@@ -1880,7 +1919,7 @@ EOF;
             $output .= "<div class='table-col'><div class='list-group'>";
             foreach($libs as $key => $lib)
             {
-                $output .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name);
+                $output .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "data-app='{$this->app->openApp}'");
             }
             $output .= "</div></div></div></div></div>";
         }
@@ -1931,10 +1970,12 @@ EOF;
 
         if(isset($moduleDocs[0]))
         {
+            if(!isset($treeMenu[0])) $treeMenu[0] = '';
+
             foreach($moduleDocs[0] as $doc)
             {
                 if(!$docID) $docID = $doc->id;
-                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), $doc->title) . '</li>';
+                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
             }
         }
 
@@ -1966,7 +2007,7 @@ EOF;
             foreach($moduleDocs[$module->id] as $doc)
             {
                 if(!$docID) $docID = $doc->id;
-                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), $doc->title) . '</li>';
+                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
             }
         }
 

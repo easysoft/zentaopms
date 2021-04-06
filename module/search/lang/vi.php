@@ -87,7 +87,7 @@ $lang->search->modules['testreport']  = 'Báo cáo Test';
 $lang->search->modules['productplan'] = 'Kế hoạch';
 $lang->search->modules['program']     = 'Program';
 $lang->search->modules['project']     = 'Project';
-$lang->search->modules['execution']   = 'Execution';
+$lang->search->modules['execution']   = $lang->executionCommon;
 $lang->search->modules['story']       = 'Story';
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;

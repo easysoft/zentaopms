@@ -726,11 +726,17 @@ class commonModel extends model
     public static function printSearchBox()
     {
         global $lang;
+        global $config;
+
         $searchObject = 'bug';
         echo "<div class='input-group-btn'>";
         echo html::hidden('searchType', $searchObject);
         echo "<ul id='searchTypeMenu' class='dropdown-menu'>";
-        foreach ($lang->searchObjects as $key => $value)
+
+        $searchObjects = $lang->searchObjects;
+        if($config->systemMode != 'new') unset($searchObjects['program'], $searchObjects['project']);
+
+        foreach ($searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
             if($key == 'program')    $key = 'program-product';
@@ -1003,7 +1009,7 @@ class commonModel extends model
             $className = 'header';
         }
         $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
-        echo $isMobile ? html::a($link, $label, '', "class='$className'") : html::a($link, $label, '', "class='$className'");
+        echo $isMobile ? html::a($link, $label, '', "class='$className' data-app={$app->openApp}") : html::a($link, $label, '', "class='$className' data-app={$app->openApp}");
     }
 
     /**

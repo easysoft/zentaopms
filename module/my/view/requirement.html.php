@@ -156,7 +156,7 @@
         <?php
         if($canBatchEdit)
         {
-            $actionLink = $this->createLink('story', 'batchEdit');
+            $actionLink = $this->createLink('story', 'batchEdit', 'productID=0&executionID=0&branch=0&storyType=requirement');
             $misc       = "data-form-action='$actionLink'";
             echo html::commonButton($lang->edit, $misc);
         }

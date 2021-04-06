@@ -626,6 +626,29 @@ class story extends control
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
         $this->story->replaceURLang($storyType);
 
+        if($this->app->openApp == 'product')
+        {
+            $this->product->setMenu($productID);
+        }
+        else if($this->app->openApp == 'project')
+        {
+            $this->project->setMenu($executionID);
+        }
+        else if($this->app->openApp == 'execution')
+        {
+            $this->execution->setMenu($executionID);
+        }
+        else if($this->app->openApp == 'qa')
+        {
+            $this->loadModel('qa')->setMenu('', $productID);
+        }
+        else if($this->app->openApp == 'my')
+        {
+            $this->loadModel('my')->setMenu();
+            $this->lang->my->menu->work['subModule']       = 'story';
+            $this->lang->my->menu->contribute['subModule'] = 'story';
+        }
+
         /* Load model. */
         $this->loadModel('productplan');
 
@@ -655,7 +678,6 @@ class story extends control
         /* The stories of a product. */
         if($productID)
         {
-            $this->product->setMenu($productID, $branch);
             $product = $this->product->getByID($productID);
             $branchProduct = $product->type == 'normal' ? false : true;
 
@@ -674,7 +696,6 @@ class story extends control
         elseif($executionID)
         {
             /* The stories of a execution. */
-            $this->execution->setMenu($executionID);
             $execution = $this->execution->getByID($executionID);
 
             $branchProduct  = false;
@@ -695,8 +716,6 @@ class story extends control
         else
         {
             /* The stories of my. */
-            $this->loadModel('my')->setMenu();
-
             $branchProduct = false;
             $productIdList = array();
             foreach($stories as $story) $productIdList[$story->product] = $story->product;
@@ -748,6 +767,7 @@ class story extends control
         $this->view->storyType         = $storyType;
         $this->view->stories           = $stories;
         $this->view->productName       = isset($product) ? $product->name : '';
+        $this->view->executionID       = $executionID;
         $this->display();
     }
 
@@ -1521,6 +1541,7 @@ class story extends control
         $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->productID  = $productID;
+        $this->view->branchID   = $branchID;
         $this->view->orderBy    = $orderBy;
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->browseType = '';

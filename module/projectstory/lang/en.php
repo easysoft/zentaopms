@@ -9,6 +9,8 @@ $lang->projectstory->unlinkStory       = 'Unlinked' . $lang->SRCommon;
 $lang->projectstory->importplanstories = 'Linked by plan' . $lang->SRCommon;
 $lang->projectstory->whyNoStories      = "No story can be linked. Please check whether there is any story in project which is linked to {$lang->productCommon} and make sure it has been reviewed.";
 
+$lang->projectstory->trackAction = 'Matrix';
+
 global $app;
 $app->loadLang('product');
 $lang->projectstory->featureBar['story']['allstory'] = $lang->product->allStory;

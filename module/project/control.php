@@ -262,7 +262,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function create($model = 'waterfall', $programID = 0, $copyProjectID = 0)
+    public function create($model = 'scrum', $programID = 0, $copyProjectID = 0)
     {
         $this->loadModel('execution');
 
@@ -276,6 +276,10 @@ class project extends control
             if($this->app->openApp == 'program')
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
+            }
+            elseif($this->app->openApp == 'doc')
+            {
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', 'type=project')));
             }
             else
             {
