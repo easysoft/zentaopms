@@ -9,6 +9,7 @@ $(function()
     {
         $('#navbar .nav li').removeClass('active');
         $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
+        $('#subNavbar li[data-id="' + storyType + '"]').addClass('active');
     }
 })
 

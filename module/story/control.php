@@ -696,6 +696,8 @@ class story extends control
         {
             /* The stories of my. */
             $this->loadModel('my')->setMenu();
+            $this->lang->my->menu->work['subModule']       = 'story';
+            $this->lang->my->menu->contribute['subModule'] = 'story';
 
             $branchProduct = false;
             $productIdList = array();

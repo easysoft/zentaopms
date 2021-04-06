@@ -747,7 +747,9 @@ class testcase extends control
             $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             /* Set menu. */
-            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $case->branch);
+            if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
+            if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
+            if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
             if($case->lib and $case->fromCaseID)
