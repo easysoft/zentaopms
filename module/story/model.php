@@ -1013,7 +1013,7 @@ class storyModel extends model
                 $story->assignedDate   = $oldStory == $data->assignedTo[$storyID] ? $oldStory->assignedDate : $now;
                 $story->branch         = isset($data->branches[$storyID]) ? $data->branches[$storyID] : 0;
                 $story->module         = $data->modules[$storyID];
-                $story->plan           = $data->plans[$storyID];
+                $story->plan           = $oldStories[$storyID]->parent < 0 ? '' : $data->plans[$storyID];
                 $story->source         = $data->sources[$storyID];
                 $story->keywords       = $data->keywords[$storyID];
                 $story->stage          = isset($data->stages[$storyID])             ? $data->stages[$storyID]             : $oldStory->stage;
