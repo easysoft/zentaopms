@@ -1,6 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php if(isset($config->maxVersion)):?>
+<?php if(isset($config->maxVersion) or isset($config->proVersion) or isset($config->bizVersion)):?>
 <style>#mainContent > .side-col.col-lg{width: 235px}</style>
 <style>.hide-sidebar #sidebar{width: 0 !important}</style>
 <?php endif;?>
