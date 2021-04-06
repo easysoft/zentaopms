@@ -1157,10 +1157,10 @@ class docModel extends model
 
     /**
      * Get ordered objects for dic.
-     * 
-     * @param  string $objectType 
+     *
+     * @param  string $objectType
      * @access public
-     * @return array 
+     * @return array
      */
     public function getOrderedObjects($objectType = 'product')
     {
@@ -1169,17 +1169,17 @@ class docModel extends model
         {
             $products = $this->loadModel('product')->getList();
             foreach($products as $id => $product)
-            {   
+            {
                 if($product->status == 'normal' and $product->PO == $this->app->user->account)
-                {   
-                    $myObjects[$id] = $product->name;     
+                {
+                    $myObjects[$id] = $product->name;
                 }
                 elseif($product->status == 'normal' and !($product->PO == $this->app->user->account))
-                {   
+                {
                     $normalObjects[$id] = $product->name;
                 }
                 elseif($product->status == 'closed')
-                {   
+                {
                     $closedObjects[$id] = $product->name;
                 }
             }
@@ -1196,9 +1196,9 @@ class docModel extends model
 
             $orderedProjects = array();
             foreach($programs as $programID => $programName)
-            {    
+            {
                 foreach($projects as $id => $project)
-                {    
+                {
                     if($project->parent and $project->parent != $programID) continue;
                     $orderedProjects[$id] = $project;
                     unset($projects[$project->id]);
