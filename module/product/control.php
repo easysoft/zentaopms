@@ -368,7 +368,9 @@ class product extends control
         $this->app->loadLang('custom');
 
         /* Init vars. */
-        $product              = $this->product->getById($productID);
+        $product = $this->product->getById($productID);
+        if($product->bind) $this->config->product->edit->requiredFields = 'name';
+
         $unmodifiableProjects = array();
         $canChangeProgram     = true;
         $singleLinkProjects   = array();
