@@ -2063,7 +2063,7 @@ class execution extends control
 
             $this->session->set('execution', '');
             $this->executeHooks($executionID);
-            die(js::locate(inlink('index'), 'parent'));
+            die(js::reload('parent'));
         }
     }
 

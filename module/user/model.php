@@ -1559,7 +1559,7 @@ class userModel extends model
             /* Get teams. */
             if($teams === null)
             {
-                $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,sprint,stage')->query();
+                $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,execution')->query();
                 while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
             }
 
@@ -2075,7 +2075,7 @@ class userModel extends model
         /* Get team group. */
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
-            ->where('type')->in('project,sprint,stage')
+            ->where('type')->in('project,execution')
             ->andWhere('root')->in(array_merge($sprintIdList, $parentIdList))
             ->query();
 

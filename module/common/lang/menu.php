@@ -25,7 +25,14 @@ if($config->systemMode == 'new') $lang->mainNav->program = "{$lang->navIcons['pr
 $lang->mainNav->product = "{$lang->navIcons['product']} {$lang->product->common}|$productModule|$productMethod|";
 if($config->systemMode == 'new') $lang->mainNav->project = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
 
-$lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
+if($config->systemMode == 'new')
+{
+    $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
+}
+else
+{
+    $lang->mainNav->execution = "{$lang->navIcons['project']} {$lang->execution->common}|$executionModule|$executionMethod|";
+}
 $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
 $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|browse|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";

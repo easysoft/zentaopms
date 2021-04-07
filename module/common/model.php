@@ -692,7 +692,7 @@ class commonModel extends model
                             $subActive  = 'active';
                             $label      = $subLabel;
                         }
-                        $dropMenu .= "<li class='$subActive' data-id='$subLabel'>" . html::a($subLink, $subLabel) . '</li>';
+                        $dropMenu .= "<li class='$subActive' data-id='$subLabel'>" . html::a($subLink, $subLabel, '', "data-app='$openApp'") . '</li>';
                     }
 
                     if(empty($dropMenu)) continue;
