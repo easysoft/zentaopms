@@ -214,7 +214,7 @@ class doc extends control
             if(!dao::isError())
             {
                 $this->action->create('docLib', $libID, 'Created');
-                die(js::locate($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$libID"), 'parent.parent'));
+                die(js::locate($this->createLink('doc', 'objectLibs', "type={$this->post->type}&objectID=$objectID&libID=$libID"), 'parent.parent'));
             }
             else
             {
@@ -297,6 +297,11 @@ class doc extends control
             if(!empty($lib->main)) die(js::alert($this->lang->doc->errorMainSysLib));
 
             $this->doc->delete(TABLE_DOCLIB, $libID);
+            if(isonlybody())
+            {
+                unset($_GET['onlybody']);
+                die(js::locate($this->createLink('doc', 'objectLibs', 'type=book'), 'parent.parent'));
+            }
             die(js::locate($this->createLink('doc', 'index'), 'parent'));
         }
     }
@@ -924,6 +929,22 @@ class doc extends control
             $object = new stdclass();
             $object->id = 0;
         }
+        elseif($type == 'book')
+        {
+            $libs = $this->doc->getLibsByObject('book', 0);
+            $this->app->rawMethod = 'book';
+            if($libID == 0) $libID = key($libs);
+            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
+
+            if(!$docID) $docID = $this->dao->select('id')->from(TABLE_DOC)
+                ->where('lib')->eq($libID)
+                ->andWhere('type')->eq('article')
+                ->andWhere('deleted')->eq(0)
+                ->fetch('id');
+
+            $object = new stdclass();
+            $object->id = 0;
+        }
         else
         {
             if($type == 'product')
@@ -978,7 +999,7 @@ class doc extends control
 
         $this->lang->TRActions = common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
 
-        $moduleTree = $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
+        $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
 
         /* Get doc. */
         if($docID)
@@ -997,8 +1018,8 @@ class doc extends control
         $this->view->customObjectLibs = $customObjectLibs;
         $this->view->showLibs         = $this->config->doc->custom->objectLibs;
 
-        $this->view->title      = $type == 'custom' ? $this->lang->doc->customAB : $object->name;
-        $this->view->position[] = $type == 'custom' ? $this->lang->doc->customAB : $object->name;
+        $this->view->title      = ($type == 'book' or $type == 'custom') ? $this->lang->doc->customAB : $object->name;
+        $this->view->position[] = ($type == 'book' or $type == 'custom') ? $this->lang->doc->customAB : $object->name;
 
         $this->view->docID        = $docID;
         $this->view->doc          = $docID ? $doc : '';

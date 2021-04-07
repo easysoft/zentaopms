@@ -653,7 +653,7 @@ class docModel extends model
             if(isset($doc->digest)) $docContent->digest  = $doc->digest;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
             $docContent->files   = trim($docContent->files, ',');
-            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+            $this->dao->replace(TABLE_DOCCONTENT)->data($docContent)->exec();
         }
         unset($doc->contentType);
 
@@ -1119,9 +1119,9 @@ class docModel extends model
      */
     public function getLibsByObject($type, $objectID, $mode = '')
     {
-        if($type == 'custom')
+        if($type == 'custom' or $type == 'book')
         {
-            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq('custom')->orderBy('`order`, id')->fetchAll('id');
+            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq($type)->orderBy('`order`, id')->fetchAll('id');
         }
         else if($type != 'product' and $type != 'project' and $type != 'execution')
         {
@@ -1896,11 +1896,11 @@ EOF;
      */
     public function select($type, $objects, $objectID, $libs, $libID = 0)
     {
-        if($type != 'custom' and empty($objects)) return '';
+        if($type != 'custom' and $type != 'book' and empty($objects)) return '';
 
         $output = '';
 
-        if($this->app->openApp == 'doc' and $type != 'custom')
+        if($this->app->openApp == 'doc' and $type != 'custom' and $type != 'book')
         {
             $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';

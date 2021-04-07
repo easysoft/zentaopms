@@ -15,7 +15,7 @@ if(empty($type)) $type = 'product';
 $sideWidth = common::checkNotCN() ? '270' : '238';
 ?>
 <div class="side-col" style="width:<?php echo $sideWidth;?>px" data-min-width="<?php echo $sideWidth;?>">
-    <div class="cell">
+    <div class="cell" id="<?php echo $type;?>">
       <?php if(!$moduleTree):?>
       <hr class="space">
       <div class="text-center text-muted tips">
@@ -23,11 +23,25 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
       </div>
       <hr class="space">
       <?php endif;?>
+      <?php if($type == 'book'):?>
+      <?php include './bookside.html.php';?>
+      <?php else:?>
       <?php echo $moduleTree;?>
+      <?php endif;?>
       <div class="text-center action">
-        <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);?>
-        <?php common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editLib, '', "class='btn btn-info btn-wide iframe'", '', true);?>
-        <?php common::printLink('doc', 'deleteLib', "rootID=$libID", $lang->doc->deleteLib, 'hiddenwin', "class='btn btn-info btn-wide'");?>
+        <?php
+        if($type == 'book')
+        {
+            common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide iframe'", '', true);
+            common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editBook, '', "class='btn btn-info btn-wide iframe'", '', true);
+        }
+        else
+        {
+            common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
+            common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editLib, '', "class='btn btn-info btn-wide iframe'", '', true);
+            common::printLink('doc', 'deleteLib', "rootID=$libID", $lang->doc->deleteLib, 'hiddenwin', "class='btn btn-info btn-wide'");
+        }
+        ?>
         <hr class="space-sm" />
       </div>
     </div>
