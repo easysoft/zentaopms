@@ -551,7 +551,9 @@ class doc extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->doc->confirmDelete, inlink('delete', "docID=$docID&confirm=yes")));
+            $type = $this->dao->select('type')->from(TABLE_DOC)->where('id')->eq($docID)->fetch('type');
+            $tips = $type == 'chapter' ? $this->lang->doc->confirmDeleteChapter : $this->lang->doc->confirmDelete;
+            die(js::confirm($tips, inlink('delete', "docID=$docID&confirm=yes")));
         }
         else
         {

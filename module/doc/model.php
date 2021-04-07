@@ -1703,7 +1703,11 @@ class docModel extends model
      */
     public function buildCreateButton4Doc($objectType, $objectID, $libID)
     {
-        if($libID)
+        if($objectType == 'book')
+        {
+            $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i>' . $this->lang->doc->createBook, '', 'class="btn btn-secondary iframe"');
+        }
+        elseif($libID)
         {
             $html  = "<div class='dropdown' id='createDropdown'>";
             $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . " <span class='caret'></span></button>";

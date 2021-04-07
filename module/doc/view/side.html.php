@@ -19,7 +19,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
       <?php if(!$moduleTree):?>
       <hr class="space">
       <div class="text-center text-muted tips">
-        <?php echo $lang->doc->noModule;?>
+        <?php echo $type == 'book' ? $lang->doc->noChapter : $lang->doc->noModule;?>
       </div>
       <hr class="space">
       <?php endif;?>
