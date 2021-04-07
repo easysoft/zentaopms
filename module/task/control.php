@@ -90,7 +90,7 @@ class task extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
-            setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+            setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             if($this->post->execution) $executionID = (int)$this->post->execution;
             $tasksID = $this->task->create($executionID);
             if(dao::isError())
@@ -150,7 +150,7 @@ class task extends control
             }
             elseif($this->post->after == 'toTaskList')
             {
-                setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, false);
+                setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=unclosed&param=0&orderBy=id_desc");
                 $response['locate'] = $taskLink;
                 $this->send($response);

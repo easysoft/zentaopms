@@ -411,7 +411,7 @@ class repo extends control
         {
             $infos = unserialize(file_get_contents($cacheFile));
         }
-        if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot);
+        if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Set logType and revisions. */
         $logType   = 'dir';
@@ -885,7 +885,7 @@ class repo extends control
                 }
 
                 $this->repo->setRepoBranch($branchID);
-                setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
+                setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             }
         }
 
@@ -919,7 +919,7 @@ class repo extends control
                     if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
 
                     $branchID = reset($branches);
-                    setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
+                    setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
                     if($branchID) $this->repo->fixCommit($repoID);
                 }
@@ -955,7 +955,7 @@ class repo extends control
         $this->scm->setEngine($repo);
 
         $this->repo->setRepoBranch($branch);
-        setcookie("syncBranch", $branch, 0, $this->config->webRoot);
+        setcookie("syncBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $latestInDB = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
@@ -975,7 +975,7 @@ class repo extends control
         {
             if($branch) $this->repo->saveExistCommits4Branch($repo->id, $branch);
 
-            setcookie("syncBranch", $branch, 0, $this->config->webRoot);
+            setcookie("syncBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $this->repo->markSynced($repoID);
             die('finish');
         }

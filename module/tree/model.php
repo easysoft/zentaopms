@@ -1763,7 +1763,7 @@ class treeModel extends model
                 break;
         }
         if(strpos($this->session->{$module->type . 'List'}, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $this->session->{$module->type . 'List'}));
-        if($cookieName) setcookie($cookieName, 0, time() - 3600, $this->config->webRoot, '', false, false);
+        if($cookieName) setcookie($cookieName, 0, time() - 3600, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
         return true;
     }

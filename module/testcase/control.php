@@ -98,13 +98,16 @@ class testcase extends control
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->app->openApp != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
-        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true); setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true); if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
+        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['caseModule'] = 0;
-            setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
+            setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
-        if($browseType == 'bymodule') setcookie('caseModule', (int)$param, 0, $this->config->webRoot, '', false, false);
-        if($browseType == 'bysuite')  setcookie('caseSuite', (int)$param, 0, $this->config->webRoot, '', false, true);
+        if($browseType == 'bymodule') setcookie('caseModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        if($browseType == 'bysuite')  setcookie('caseSuite', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
@@ -296,7 +299,7 @@ class testcase extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
-            setcookie('lastCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+            setcookie('lastCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $caseResult = $this->testcase->create($bugID);
             if(!$caseResult or dao::isError())
             {
@@ -323,12 +326,8 @@ class testcase extends control
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
-            setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
-            $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
-            $currentMethod = $this->app->openApp == 'project' ? 'testcase' : 'browse';
-            $projectParam  = $this->app->openApp == 'project' ? "projectID={$this->session->project}&" : '';
-            $response['locate'] = $this->createLink($currentModule, $currentMethod, $projectParam . "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
-            if($this->app->openApp == 'execution') $response['locate'] = $this->createLink('execution', 'testcase', "executionID={$this->session->execution}&type=all");
+            setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
             $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -477,7 +476,7 @@ class testcase extends control
             if(dao::isError()) die(js::error(dao::getError()));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
 
-            setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
+            setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
             $currentMethod = $this->app->openApp == 'project' ? 'testcase' : 'browse';
             $projectParam  = $this->app->openApp == 'project' ? "projectID={$this->session->project}&" : '';

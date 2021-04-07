@@ -376,6 +376,7 @@ class baseRouter
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);
 
+        $this->setCookieSecure();
         $this->setSuperVars();
         $this->setDebug();
         $this->setErrorHandler();
@@ -618,6 +619,18 @@ class baseRouter
     }
 
     /**
+     * Set cookieSecure config.
+     *
+     * @access public
+     * @return void
+     */
+    public function setCookieSecure()
+    {
+        $this->config->cookieSecure = false;
+        if($this->config->framework->setCookieSecure and isHttps()) $this->config->cookieSecure = true;
+    }
+
+    /**
      * 设置Debug模式。
      * set Debug.
      *
@@ -839,7 +852,7 @@ class baseRouter
         {
             $sessionName = $this->config->sessionVar;
             session_name($sessionName);
-            session_set_cookie_params(0, $this->config->webRoot);
+            session_set_cookie_params(0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
             session_start();
 
@@ -916,7 +929,7 @@ class baseRouter
             $this->clientLang = $this->config->default->lang;
         }
 
-        setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+        setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
         if(!isset($_COOKIE['lang'])) $_COOKIE['lang'] = $this->clientLang;
 
         return true;
@@ -970,7 +983,7 @@ class baseRouter
             $this->clientTheme = $this->config->default->theme;
         }
 
-        setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+        setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
         if(!isset($_COOKIE['theme'])) $_COOKIE['theme'] = $this->clientTheme;
 
         return true;
@@ -996,7 +1009,7 @@ class baseRouter
             $this->clientDevice = ($mobile->isMobile() and !$mobile->isTablet()) ? 'mobile' : 'desktop';
         }
 
-        setcookie('device', $this->clientDevice, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('device', $this->clientDevice, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if(!isset($_COOKIE['device'])) $_COOKIE['device'] = $this->clientDevice;
 
         return $this->clientDevice;

@@ -137,23 +137,23 @@ class product extends control
 
         /* Set product, module and query. */
         $branch = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
-        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
             $_COOKIE['storyModule'] = 0;
-            setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
+            setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
 
         if($browseType == 'bymodule' or $browseType == '')
         {
-            setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', false, false);
+            setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $_COOKIE['storyBranch'] = 0;
-            setcookie('storyBranch', 0, 0, $this->config->webRoot, '', false, false);
-            if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+            setcookie('storyBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
-        if($browseType == 'bybranch') setcookie('storyBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+        if($browseType == 'bybranch') setcookie('storyBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->storyModule ? $this->cookie->storyModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
@@ -172,7 +172,7 @@ class product extends control
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
         if($browseType == '')
         {
-            setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+            setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $browseType = 'unclosed';
         }
         else
@@ -195,7 +195,7 @@ class product extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
-        setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', false, true);
+        setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);

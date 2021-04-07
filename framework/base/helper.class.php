@@ -868,3 +868,17 @@ function zget($var, $key, $valueWhenNone = false, $valueWhenExists = false)
     if($valueWhenNone !== false) return $valueWhenNone;
     return $key;
 }
+
+/**
+ * Is https.
+ *
+ * @access public
+ * @return bool
+ */
+function isHttps()
+{
+    if(!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') return true;
+    if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') return true;
+    if(!empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off') return true;
+    return false;
+}

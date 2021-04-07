@@ -11,6 +11,10 @@
  */
 ?>
 <?php include './header.html.php';?>
+<style>
+#product_chosen {border-right:1px solid #dcdcdc;}
+#branch_chosen>a {border-left:0px;}
+</style>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>
 <?php if(common::checkNotCN()):?>
@@ -37,15 +41,11 @@
           <tr>
             <th><?php echo $lang->story->product;?></th>
             <td colspan="2">
-              <?php if($product->type != 'normal'):?>
               <div class='input-group'>
-              <?php endif;?>
               <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
-              <?php if($product->type != 'normal'):?>
               <span class='input-group-addon fix-border fix-padding'></span>
               <?php echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
               </div>
-              <?php endif;?>
             </td>
             <td colspan="2">
               <div class='input-group' id='moduleIdBox'>

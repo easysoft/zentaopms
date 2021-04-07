@@ -94,7 +94,7 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
-            setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+            setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
             if(!$storyResult or dao::isError())
             {
@@ -159,14 +159,14 @@ class story extends control
             $moduleID = $this->post->module ? $this->post->module : 0;
             if($objectID == 0)
             {
-                setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
+                setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $branchID  = $this->post->branch  ? $this->post->branch  : $branch;
                 $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=unclosed&param=0&type=$type&orderBy=id_desc");
                 if($this->session->storyList) $response['locate'] = $this->session->storyList;
             }
             else
             {
-                setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, true);
+                setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
                 $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
                 $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
                 $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID&orderBy=id_desc&browseType=unclosed";
@@ -364,7 +364,7 @@ class story extends control
 
         /* Clear title when switching products and set the session for the current product. */
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
-        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $this->story->replaceURLang($type);
 
@@ -407,7 +407,7 @@ class story extends control
             }
             elseif($executionID)
             {
-                setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, false);
+                setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $moduleName = $execution->type == 'project' ? 'projectstory' : 'execution';
                 $param      = $execution->type == 'project' ? "projectID=$executionID&productID=$productID" : "executionID=$executionID&orderBy=id_desc&browseType=unclosed";
                 $link       = $this->createLink($moduleName, 'story', $param);
@@ -415,7 +415,7 @@ class story extends control
             }
             else
             {
-                setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
+                setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&type=$type");
                 die(js::locate($locateLink, 'parent'));
             }

@@ -1553,7 +1553,7 @@ class docModel extends model
             $executionProduct = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->andWhere('project')->eq($executionID)->fetch();
             if(empty($executionProduct))
             {
-                setcookie('product', 0, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+                setcookie('product', 0, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
                 return html::a(helper::createLink('doc', 'allLibs', "type=execution"), $this->lang->executionCommon) . $this->lang->doc->separator;
             }
         }

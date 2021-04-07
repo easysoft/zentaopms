@@ -933,7 +933,7 @@ class fileModel extends model
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
         /* Set the downloading cookie, thus the export form page can use it to judge whether to close the window or not. */
-        setcookie('downloading', 1, 0, $this->config->webRoot, '', false, false);
+        setcookie('downloading', 1, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
         /* Only download upload file that is in zentao. */
         if($type == 'file' and stripos($content, $this->savePath) !== 0) die();

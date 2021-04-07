@@ -80,7 +80,7 @@ class productModel extends model
         }
         $isMobile = $this->app->viewType == 'mhtml';
 
-        setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($productID) $currentProduct = $this->getById($productID);
 
         if($isProject) $extra = $this->session->project;
@@ -149,7 +149,7 @@ class productModel extends model
         if($this->cookie->preProductID != $productID)
         {
             $this->cookie->set('preBranch', 0);
-            setcookie('preBranch', 0, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+            setcookie('preBranch', 0, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
 
         return $this->session->product;

@@ -106,6 +106,7 @@ $config->framework->logDays         = 14;    // 日志文件保存的天数。  
 $config->framework->autoRepairTable = true;
 $config->framework->autoLang        = false;
 $config->framework->filterCSRF      = false;
+$config->framework->setCookieSecure = true;
 
 $config->framework->detectDevice['zh-cn'] = true; // 在zh-cn语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
 $config->framework->detectDevice['zh-tw'] = true; // 在zh-tw语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
@@ -150,6 +151,10 @@ if(file_exists($filterConfig)) include $filterConfig;
 $dbConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'db.php';
 if(file_exists($dbConfig)) include $dbConfig;
 
+/* 引用自定义的配置。 Include the custom config file. */
+$myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
+if(file_exists($myConfig)) include $myConfig;
+
 /* 禅道配置文件。zentaopms settings. */
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
 if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
@@ -157,7 +162,3 @@ if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
-
-/* 引用自定义的配置。 Include the custom config file. */
-$myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
-if(file_exists($myConfig)) include $myConfig;

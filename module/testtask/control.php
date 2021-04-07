@@ -440,7 +440,7 @@ class testtask extends control
         {
             $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
         }
-        setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canBeChanged('testtask', $task);
@@ -448,10 +448,10 @@ class testtask extends control
         if($this->cookie->preTaskID != $taskID)
         {
             $_COOKIE['taskCaseModule'] = 0;
-            setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', false, true);
+            setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
 
-        if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, 0, $this->config->webRoot, '', false, true);
+        if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
 
         /* Set the browseType, moduleID and queryID. */
@@ -1084,7 +1084,7 @@ class testtask extends control
             else
             {
                 /* set cookie for ajax load caselist when close colorbox. */
-                setcookie('selfClose', 1, 0, $this->config->webRoot, '', false, false);
+                setcookie('selfClose', 1, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
                 if($preAndNext->next)
                 {

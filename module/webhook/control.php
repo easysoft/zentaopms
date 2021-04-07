@@ -41,7 +41,7 @@ class webhook extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Unset selectedDepts cookie. */
-        setcookie('selectedDepts', '', 0, $this->config->webRoot, '', false, true);
+        setcookie('selectedDepts', '', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
         $this->view->webhooks   = $this->webhook->getList($orderBy, $pager);
@@ -196,7 +196,7 @@ class webhook extends control
         /* Get selected depts. */
         if($this->get->selectedDepts)
         {
-            setcookie('selectedDepts', $this->get->selectedDepts, 0, $this->config->webRoot, '', false, true);
+            setcookie('selectedDepts', $this->get->selectedDepts, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $_COOKIE['selectedDepts'] = $this->get->selectedDepts;
         }
         $selectedDepts = $this->cookie->selectedDepts ? $this->cookie->selectedDepts : '';

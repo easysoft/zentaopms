@@ -41,7 +41,7 @@ class doc extends control
     public function index()
     {
         $this->from = 'doc';
-        setcookie('from', 'doc', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('from', 'doc', $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $this->session->set('docList', $this->app->getURI(true), 'doc');
         $this->app->loadClass('pager', $static = true);
@@ -79,7 +79,7 @@ class doc extends control
     public function browse($libID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $from = 'doc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->from = $from;
-        setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $this->loadModel('search');
 
@@ -321,7 +321,7 @@ class doc extends control
     {
         if(!empty($_POST))
         {
-            setcookie('lastDocModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+            setcookie('lastDocModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $docResult = $this->doc->create();
             if(!$docResult or dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -802,7 +802,7 @@ class doc extends control
      */
     public function allLibs($type, $product = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        setcookie('product', $product, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('product', $product, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $libName = $this->lang->doc->libTypeList[$type];
         $crumb   = html::a(inlink('allLibs', "type=$type&product=$product"), $libName);
@@ -858,7 +858,7 @@ class doc extends control
         $this->app->session->set('docList',   $uri, 'doc');
 
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'card';
-        setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
