@@ -838,14 +838,14 @@ class productModel extends model
             ->where('t1.product')->eq($productID)
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
             ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->systemMode != 'new')->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->cookie->involved or $involved)
             ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t2.PM')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->fetchAll('id');
 

@@ -634,14 +634,10 @@ class upgradeModel extends model
             $this->appendExec('12_5_2');
         case '12_5_3':
             $this->saveLogs('Execute 12_5_3');
-            $this->appendExec('12_5_3');
-        case '15_0':
-            $this->saveLogs('Execute 15_0');
-            $this->execSQL($this->getUpgradeFile('15.0'));
+            $this->execSQL($this->getUpgradeFile('12.5.3'));
             $this->adjustWhitelistOfProject();
             $this->adjustWhitelistOfProduct();
-            $this->adjustPriv15_0();
-            $this->appendExec('15_0');
+            $this->appendExec('12_5_3');
         }
 
         $this->deletePatch();
@@ -825,8 +821,7 @@ class upgradeModel extends model
             case '12_5':
             case '12_5_1':
             case '12_5_2':
-            case '12_5_3':
-            case '15_0'  : $confirmContent .= file_get_contents($this->getUpgradeFile('15.0'));
+            case '12_5_3': $confirmContent .= file_get_contents($this->getUpgradeFile('12.5.3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -3994,6 +3989,29 @@ class upgradeModel extends model
 
             $groupPriv->method = 'team';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+        }
+
+        $stmt = $this->dao->select('`group`,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('program')->andWhere('method')->like('PGM%')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq($grouppriv->module)->andWhere('method')->eq($grouppriv->method)->exec();
+            $grouppriv->method = strtolower(str_ireplace('PGM', '', $grouppriv->method));
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+
+            $grouppriv->method = 'index';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
+        $stmt = $this->dao->select('`group`,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('program')->andWhere('method')->like('PRJ%')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq($grouppriv->module)->andWhere('method')->eq($grouppriv->method)->exec();
+            $grouppriv->module = 'project';
+            $grouppriv->method = strtolower(str_ireplace('PRJ', '', $grouppriv->method));
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+
+            $grouppriv->method = 'index';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
         }
 
         $stmt = $this->dao->select('`group`,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('story')->query();

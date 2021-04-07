@@ -1202,7 +1202,7 @@ class block extends control
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
         $this->view->current  = $current;
-        $this->view->progress = ($task->totalConsumed + $task->totalLeft) ? round($task->totalConsumed / ($task->totalConsumed + $task->totalLeft), 3) * 100 : 0;
+        $this->view->progress = ($task->totalConsumed + $task->totalLeft) ? floor($task->totalConsumed / ($task->totalConsumed + $task->totalLeft) * 1000) / 1000 * 100 : 0;
     }
 
     /**
