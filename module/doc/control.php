@@ -355,7 +355,7 @@ class doc extends control
         else if($this->app->openApp == 'execution')
         {
             $this->execution->setMenu($objectID);
-            unset($this->lang->exectuion->menu->doc['subMenu']);
+            unset($this->lang->execution->menu->doc['subMenu']);
         }
         else
         {
@@ -516,7 +516,17 @@ class doc extends control
                 $type     = $docLib->type;
                 $objectID = $docLib->$type;
             }
-            $this->locate(inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID"));
+
+            $openApp = $type == 'execution' ? 'execution' : 'doc';
+            $browseLink = inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID#app=$openApp");
+            if($type == 'execution')
+            {
+                die(js::locate($browseLink, 'parent'));
+            }
+            else
+            {
+                $this->locate($browseLink);
+            }
         }
 
         if($doc->contentType == 'markdown')
@@ -1047,6 +1057,7 @@ class doc extends control
         $this->view->type         = $type;
         $this->view->version      = $version;
         $this->view->object       = $object;
+        $this->view->objectID     = $objectID;
         $this->view->objectType   = $type;
         $this->view->libID        = $libID;
         $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
