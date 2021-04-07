@@ -24,6 +24,7 @@ js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
+js::set('systemMode'             , $config->systemMode);
 ?>
 
 <div class='main-content' id='mainContent'>

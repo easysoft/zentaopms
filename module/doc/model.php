@@ -1121,7 +1121,12 @@ class docModel extends model
     {
         if($type == 'custom' or $type == 'book')
         {
-            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('type')->eq($type)->orderBy('`order`, id')->fetchAll('id');
+            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->eq($type)
+                ->beginIF($type == 'custom')->orderBy('`order`, id')->fi()
+                ->beginIF($type == 'book')->orderBy('id_desc')->fi()
+                ->fetchAll('id');
         }
         else if($type != 'product' and $type != 'project' and $type != 'execution')
         {

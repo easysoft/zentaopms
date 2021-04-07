@@ -355,7 +355,7 @@ class doc extends control
         else if($this->app->openApp == 'execution')
         {
             $this->execution->setMenu($objectID);
-            unset($this->lang->exectuion->menu->doc['subMenu']);
+            unset($this->lang->execution->menu->doc['subMenu']);
         }
         else
         {
@@ -516,7 +516,17 @@ class doc extends control
                 $type     = $docLib->type;
                 $objectID = $docLib->$type;
             }
-            $this->locate(inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID"));
+
+            $openApp = $type == 'execution' ? 'execution' : 'doc';
+            $browseLink = inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID#app=$openApp");
+            if($type == 'execution')
+            {
+                die(js::locate($browseLink, 'parent'));
+            }
+            else
+            {
+                $this->locate($browseLink);
+            }
         }
 
         if($doc->contentType == 'markdown')
@@ -953,13 +963,14 @@ class doc extends control
         {
             $libs = $this->doc->getLibsByObject('book', 0);
             $this->app->rawMethod = 'book';
-            if($libID == 0) $libID = key($libs);
+            if($libID == 0) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
 
             if(!$docID) $docID = $this->dao->select('id')->from(TABLE_DOC)
                 ->where('lib')->eq($libID)
                 ->andWhere('type')->eq('article')
                 ->andWhere('deleted')->eq(0)
+                ->orderBy('editedDate_desc,id_desc')
                 ->fetch('id');
 
             $object = new stdclass();
@@ -1046,6 +1057,7 @@ class doc extends control
         $this->view->type         = $type;
         $this->view->version      = $version;
         $this->view->object       = $object;
+        $this->view->objectID     = $objectID;
         $this->view->objectType   = $type;
         $this->view->libID        = $libID;
         $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : new stdclass();

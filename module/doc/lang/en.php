@@ -187,13 +187,13 @@ $lang->doc->noOpenedDoc          = 'You have not created any documents.';
 $lang->doc->noCollectedDoc       = 'You have not favorited any documents.';
 $lang->doc->errorEmptyLib        = 'No data in document library.';
 
-$lang->doc->noticeAcl['lib']['product']['default']   = 'Users who can access the selected product can access it.';
-$lang->doc->noticeAcl['lib']['product']['custom']    = 'Users who can access the selected product or users in the whiltelist can access it.';
-$lang->doc->noticeAcl['lib']['execution']['default'] = 'Users who can access the selected execution can access it.';
-$lang->doc->noticeAcl['lib']['execution']['custom']  = 'Users who can access the selected execution or users in the whiltelist can access it.';
-$lang->doc->noticeAcl['lib']['custom']['open']       = 'All users can access it.';
-$lang->doc->noticeAcl['lib']['custom']['custom']     = 'Users in the whitelist can access it.';
-$lang->doc->noticeAcl['lib']['custom']['private']    = 'Only the one who created it can access it.';
+$lang->doc->noticeAcl['lib']['product']['default'] = 'Users who can access the selected product can access it.';
+$lang->doc->noticeAcl['lib']['product']['custom']  = 'Users who can access the selected product or users in the whiltelist can access it.';
+$lang->doc->noticeAcl['lib']['project']['default'] = 'Users who can access the selected project can access it.';
+$lang->doc->noticeAcl['lib']['project']['custom']  = 'Users who can access the selected project or users in the whiltelist can access it.';
+$lang->doc->noticeAcl['lib']['custom']['open']     = 'All users can access it.';
+$lang->doc->noticeAcl['lib']['custom']['custom']   = 'Users in the whitelist can access it.';
+$lang->doc->noticeAcl['lib']['custom']['private']  = 'Only the one who created it can access it.';
 
 $lang->doc->noticeAcl['doc']['open']    = 'Users who can access the document library which the document belongs can access it.';
 $lang->doc->noticeAcl['doc']['custom']  = 'Users in the whiltelist can access it.';

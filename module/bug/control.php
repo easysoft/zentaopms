@@ -542,7 +542,7 @@ class bug extends control
 
         /* Get executions. */
         $executions = array('' => '');
-        if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
+        if(isset($projects[$projectID]) or $this->config->systemMode == 'classic') $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
 
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
