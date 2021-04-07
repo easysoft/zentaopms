@@ -500,11 +500,29 @@ class doc extends control
         $doc   = $this->doc->getById($docID, $version, true);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        /* The global search opens in the document library. */
+        if(!isonlybody())
+        {
+            $docLib = $this->doc->getLibById($doc->lib);
+            if($docLib->type == 'custom')
+            {
+                $libID    = $doc->lib;
+                $objectID = 0;
+                $type     = 'custom';
+            }
+            else
+            {
+                $libID    = $docLib->id;
+                $type     = $docLib->type;
+                $objectID = $docLib->$type;
+            }
+            $this->locate(inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID"));
+        }
+
         if($doc->contentType == 'markdown')
         {
             $hyperdown    = $this->app->loadClass('hyperdown');
             $doc->content = $hyperdown->makeHtml($doc->content);
-
             $doc->digest  = $hyperdown->makeHtml($doc->digest);
         }
 
