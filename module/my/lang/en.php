@@ -41,10 +41,17 @@ $lang->my->testtask        = 'My Test Task';
 $lang->my->testcase        = 'My Case';
 $lang->my->storyConcept    = 'Story Concept';
 
-$lang->my->myExecutions = "My Stage/Sprint/Iteration";
+$lang->my->indexAction      = 'My Index';
+$lang->my->calendarAction   = 'My Calendar';
+$lang->my->workAction       = 'My Work';
+$lang->my->contributeAction = 'My Contribute';
+$lang->my->profileAction    = 'Profile';
+$lang->my->dynamicAction    = 'Dynamic';
+
+$lang->my->myExecutions = "My Executions";
 $lang->my->name         = 'Name';
 $lang->my->code         = 'Code';
-$lang->my->projects     = 'Project';
+$lang->my->projects     = 'Projects';
 $lang->my->executions   = 'Executions';
 
 $lang->my->executionMenu = new stdclass();

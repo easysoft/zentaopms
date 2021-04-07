@@ -6,6 +6,9 @@ $lang->jenkins->edit          = 'Edit Jenkins';
 $lang->jenkins->delete        = 'Delete';
 $lang->jenkins->confirmDelete = 'Do you want to delete this Jenkins server?';
 
+$lang->jenkins->browseAction = 'Jenkins List';
+$lang->jenkins->deleteAction = 'Delete Jenkins';
+
 $lang->jenkins->id       = 'ID';
 $lang->jenkins->name     = 'Name';
 $lang->jenkins->url      = 'URL';

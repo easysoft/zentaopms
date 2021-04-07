@@ -10,6 +10,8 @@ $lang->job->confirmDelete = 'Do you want to delete this job?';
 $lang->job->dirChange     = 'Directory Changed';
 $lang->job->buildTag      = 'Build Tag';
 
+$lang->job->browseAction = 'Job List';
+
 $lang->job->id          = 'ID';
 $lang->job->name        = 'Name';
 $lang->job->repo        = 'Repo';

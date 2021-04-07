@@ -56,6 +56,7 @@ $lang->user->type             = 'User Type';
 $lang->user->cropAvatar       = 'Crop Avatar';
 $lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
 $lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
+$lang->user->captcha          = 'Captcha';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
@@ -128,6 +129,7 @@ $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s minutes later.";
 $lang->user->weakPassword = "Your password does not meet the requirements.";
 $lang->user->errorWeak    = "Passwords cannot use [%s] these commonly used weak passwords.";
+$lang->user->errorCaptcha = "Captcha Error";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';

@@ -66,22 +66,19 @@
                     <th class="w-80px"><?php echo $lang->product->code;?></th>
                     <td><strong><?php echo $product->code;?></strong></td>
                     <th class="w-80px"><?php echo $lang->story->openedBy?></th>
-                    <td><strong><?php echo zget($users, $product->createdBy);?></strong></td>
-                    <td></td>
+                    <td colspan="2"><strong><?php echo zget($users, $product->createdBy);?></strong></td>
                   </tr>
                   <tr>
                     <th class="w-80px"><?php echo $lang->product->type;?></th>
                     <td><strong><?php echo zget($lang->product->typeList, $product->type);?></strong></td>
                     <th><?php echo $lang->story->openedDate?></th>
-                    <td><strong><?php echo formatTime($product->createdDate, DT_DATE1);?></strong></td>
-                    <td></td>
+                    <td colspan="2"><strong><?php echo formatTime($product->createdDate, DT_DATE1);?></strong></td>
                   </tr>
                   <tr>
                     <th class="w-80px"><?php echo $lang->productCommon . $lang->product->status;?></th>
                     <td class="<?php echo $product->status;?>"><strong><?php echo zget($lang->product->statusList, $product->status);?></strong></td>
                     <th><?php echo $lang->product->acl;?></th>
-                    <td class='acl'><strong><?php echo $lang->product->aclList[$product->acl];?></strong></td>
-                    <td></td>
+                    <td colspan="2"><strong><?php echo $lang->product->aclList[$product->acl];?></strong></td>
                   </tr>
                   <?php if($product->acl == 'custom'):?>
                   <tr>

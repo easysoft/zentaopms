@@ -110,7 +110,7 @@ zentaoxx:
 	sed -i '/deviceToken/d' zentaoxx/db/*.sql
 	sed -i '/deviceType/d' zentaoxx/db/*.sql
 	sed -i "/fetch('push', 'pushMessage');/d" zentaoxx/module/im/control.php
-	sed -i "s/marked\.html\.php';?>/marked\.html\.php';?>\n<div id='mainMenu' class='clearfix'><div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('xuanxuan');?><\/div><\/div>/g" zentaoxx/module/client/view/checkupgrade.html.php
+	#sed -i "s/marked\.html\.php';?>/marked\.html\.php';?>\n<div id='mainMenu' class='clearfix'><div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('xuanxuan');?><\/div><\/div>/g" zentaoxx/module/client/view/checkupgrade.html.php
 	sed -i '/var serverVersions/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/var currentVersion/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/setRequiredFields(/d' zentaoxx/module/common/view/header.modal.html.php

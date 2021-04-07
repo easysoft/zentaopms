@@ -28,6 +28,7 @@ js::set('unfoldAll',   $lang->execution->treeLevel['all']);
 js::set('foldAll',     $lang->execution->treeLevel['root']);
 ?>
 <style>
+body {margin-bottom: 25px;}
 .btn-group a i.icon-plus {font-size: 16px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
@@ -116,7 +117,7 @@ js::set('foldAll',     $lang->execution->treeLevel['root']);
       <ul class="dropdown-menu pull-right" id='exportActionMenu'>
         <?php
         $class = common::hasPriv('task', 'export') ? '' : "class=disabled";
-        $misc  = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
+        $misc  = common::hasPriv('task', 'export') ? "class='export iframe'" : "class=disabled";
         $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=$browseType") : '#';
         echo "<li $class>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
         ?>

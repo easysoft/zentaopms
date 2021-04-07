@@ -35,12 +35,12 @@ foreach(explode(',', $showFields) as $field)
     if($field)$visibleFields[$field] = '';
 }
 ?>
-<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "from=storyBatchEdit")?>" id="batchEditForm">
+<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "productID=$productID&executionID=$executionID")?>" id="batchEditForm">
   <div class="table-responsive">
     <table class='table table-form'>
       <thead>
         <tr>
-          <th class='w-40px'> <?php echo $lang->idAB;?></th> 
+          <th class='w-40px'> <?php echo $lang->idAB;?></th>
           <?php if($branchProduct):?>
           <th class='w-120px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->story->branch;?></th>
           <?php endif;?>
@@ -121,7 +121,7 @@ foreach(explode(',', $showFields) as $field)
               </div>
             </div>
           </td>
-          
+
           <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimates[$storyID]", $story->estimate, "class='form-control'"); ?></td>
           <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$storyID]",     $priList, $story->pri, 'class=form-control');?></td>
           <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo html::select("assignedTo[$storyID]",     $users, $story->assignedTo, "class='form-control chosen'");?></td>

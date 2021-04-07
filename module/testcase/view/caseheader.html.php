@@ -93,7 +93,8 @@
     }
     elseif($hasZeroPriv and $menuType == 'zerocase')
     {
-        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->openApp}'");
+        $projectID = $isProjectApp ? $this->session->project : 0;
+        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->openApp}'");
     }
     elseif($hasUnitPriv and $menuType == 'browseunits')
     {

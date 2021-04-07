@@ -25,7 +25,14 @@ if($config->systemMode == 'new') $lang->mainNav->program = "{$lang->navIcons['pr
 $lang->mainNav->product = "{$lang->navIcons['product']} {$lang->product->common}|$productModule|$productMethod|";
 if($config->systemMode == 'new') $lang->mainNav->project = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
 
-$lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
+if($config->systemMode == 'new')
+{
+    $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
+}
+else
+{
+    $lang->mainNav->execution = "{$lang->navIcons['project']} {$lang->execution->common}|$executionModule|$executionMethod|";
+}
 $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
 $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|browse|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
@@ -328,7 +335,7 @@ $lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|libID
 $lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|libID=0&browseTyp=collectedbyme", 'alias' => 'collect');
 $lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|objectLibs|type=product", 'alias' => 'product');
 $lang->doc->menu->project   = array('link' => "{$lang->doc->project}|doc|objectLibs|type=project", 'alias' => 'project');
-$lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|objectLibs|libID=0");
+$lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|objectLibs|type=custom", 'alias' => 'custom');
 
 $lang->doc->dividerMenu = ',product,';
 
@@ -343,6 +350,7 @@ $lang->doc->menuOrder[35] = 'custom';
 
 $lang->doc->menu->product['subMenu'] = new stdclass();
 $lang->doc->menu->project['subMenu'] = new stdclass();
+$lang->doc->menu->custom['subMenu']  = new stdclass();
 
 /* Report menu.*/
 $lang->report->menu = new stdclass();

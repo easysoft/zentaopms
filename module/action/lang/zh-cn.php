@@ -431,6 +431,7 @@ $lang->action->dynamicAction->entry['created'] = '添加应用';
 $lang->action->dynamicAction->entry['edited']  = '编辑应用';
 
 /* 用来生成相应对象的链接。*/
+global $config;
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = "计划|productplan|view|productID=%s";
 $lang->action->label->release     = '发布|release|view|productID=%s';

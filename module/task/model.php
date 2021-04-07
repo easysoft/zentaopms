@@ -1358,7 +1358,7 @@ class taskModel extends model
 
         if($this->post->left == 0)
         {
-            if($task->consumed == 0)
+            if(isset($task->consumed) and $task->consumed == 0)
             {
                 dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->task->consumed);
                 return false;

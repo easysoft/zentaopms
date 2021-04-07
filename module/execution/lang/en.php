@@ -196,9 +196,9 @@ $lang->execution->deleteAB          = "Delete Execution";
 $lang->execution->browse            = "{$lang->executionCommon} List";
 $lang->execution->list              = "{$lang->executionCommon} List";
 $lang->execution->edit              = "Edit {$lang->executionCommon}";
-$lang->execution->editAB            = "Edit Execution";
+$lang->execution->editAction        = "Edit Execution";
 $lang->execution->batchEdit         = "Edit";
-$lang->execution->batchEditAB       = "Batch Edit";
+$lang->execution->batchEditAction   = "Batch Edit";
 $lang->execution->manageMembers     = 'Manage Team';
 $lang->execution->unlinkMember      = 'Remove Member';
 $lang->execution->unlinkStory       = 'Unlink Story';
@@ -218,6 +218,7 @@ $lang->execution->importPlanStory   = $lang->executionCommon . ' is created!\nDo
 $lang->execution->iteration         = 'Iterations';
 $lang->execution->iterationInfo     = '%s Iterations';
 $lang->execution->viewAll           = 'View All';
+$lang->execution->testreport        = 'Test Report';
 
 /* Group browsing. */
 $lang->execution->allTasks     = 'All';

@@ -322,13 +322,16 @@ class testtask extends control
         $productID = $this->product->saveState($task->product, $this->products);
         if($this->app->openApp == 'project')
         {
+            $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
+            $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $task->product);
+            $this->loadModel('qa')->setMenu($this->products, $productID);
+            $this->app->rawModule = 'testcase';
         }
-        $this->app->rawModule = 'testcase';
 
         /* Save session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
@@ -672,11 +675,15 @@ class testtask extends control
         /* Set menu. */
         if($this->app->openApp == 'project')
         {
+            $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
+            $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
         }
         else
         {
             $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->app->rawModule = 'testcase';
         }
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
@@ -1279,19 +1286,23 @@ class testtask extends control
         }
 
         /* Set menu. */
+        $productID = $this->loadModel('product')->saveState($productID, $this->products);
         if($this->app->openApp == 'project')
         {
+            $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
+            $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
         }
         else
         {
             $this->loadModel('qa')->setMenu($this->products, $productID);
+            $this->app->rawModule = 'testcase';
         }
 
         $this->app->loadLang('job');
         $this->app->rawModule = 'testcase';
 
-        $productID  = $productID ? $productID : key($this->products);
         $projectID  = $this->app->openApp == 'qa' ? 0 : $this->session->project;
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
