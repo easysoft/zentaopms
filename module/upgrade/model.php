@@ -2761,6 +2761,7 @@ class upgradeModel extends model
         $fromVersion = $this->config->installedVersion;
         $needProcess = array();
         if(strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = true;
+        if(strpos($fromVersion, 'max') === false and version_compare($fromVersion, '15.0', '<')) $needProcess['search'] = true;
         return $needProcess;
     }
 

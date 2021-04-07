@@ -23,7 +23,7 @@
       <?php else:?>
       <div class="cell">
         <div class="detail empty text-center">
-        <?php echo $lang->doc->noDoc;?>
+        <?php echo $type == 'book' ? $lang->doc->noArticle : $lang->doc->noDoc;?>
         </div>
       </div>
       <?php endif;?>
@@ -31,8 +31,8 @@
   <?php else:?>
     <div class="cell">
       <div class="detail empty text-center">
-        <?php echo $lang->doc->noLib;?>
-        <?php echo html::a($this->createLink('doc', 'createLib', "type={$objectType}&objectID=$object->id"), "<i class='icon icon-plus'></i> " . $lang->doc->createLib, '', "class='btn btn-info iframe'");?>
+        <?php echo $type == 'book' ? $lang->doc->noBook : $lang->doc->noLib;?>
+        <?php if($type != 'book') echo html::a($this->createLink('doc', 'createLib', "type={$objectType}&objectID=$object->id"), "<i class='icon icon-plus'></i> " . $lang->doc->createLib, '', "class='btn btn-info iframe'");?>
       </div>
     </div>
   <?php endif;?>

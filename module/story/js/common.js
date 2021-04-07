@@ -7,7 +7,7 @@ $(function()
     if(typeof(execution) != 'undefined') rawModule = 'projectstory';
     if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa')
     {
-        $('#navbar .nav li').removeClass('active');
+        if(app != 'my') $('#navbar .nav li').removeClass('active');
         $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
         $('#subNavbar li[data-id="' + storyType + '"]').addClass('active');
     }

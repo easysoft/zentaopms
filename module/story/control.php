@@ -618,10 +618,13 @@ class story extends control
      *
      * @param  int    $productID
      * @param  int    $executionID
+     * @param  int    $branch
+     * @param  string $storyType
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function batchEdit($productID = 0, $executionID = 0, $branch = 0, $storyType = 'story')
+    public function batchEdit($productID = 0, $executionID = 0, $branch = 0, $storyType = 'story', $from = '')
     {
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
         $this->story->replaceURLang($storyType);
@@ -645,8 +648,8 @@ class story extends control
         else if($this->app->openApp == 'my')
         {
             $this->loadModel('my')->setMenu();
-            $this->lang->my->menu->work['subModule']       = 'story';
-            $this->lang->my->menu->contribute['subModule'] = 'story';
+            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
+            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
         }
 
         /* Load model. */

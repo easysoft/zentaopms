@@ -1423,7 +1423,7 @@ class task extends control
 
             /* Get users and executions. */
             $users      = $this->loadModel('user')->getPairs('noletter');
-            $executions = $this->execution->getPairs($this->session->execution, 'all', 'all|nocode');
+            $executions = $this->execution->getPairs($execution->project, 'all', 'all|nocode');
 
             /* Get related objects id lists. */
             $relatedStoryIdList  = array();
