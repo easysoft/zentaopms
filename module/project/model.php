@@ -354,7 +354,7 @@ class projectModel extends model
             ROUND(SUM(consumed), 2) AS totalConsumed,
             ROUND(SUM(`left`), 2) AS totalLeft')
             ->from(TABLE_TASK)
-            ->where('project')->in(array_keys($executions))
+            ->where('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
