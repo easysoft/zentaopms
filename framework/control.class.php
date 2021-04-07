@@ -21,11 +21,11 @@ include dirname(__FILE__) . '/base/control.class.php';
 class control extends baseControl
 {
     /**
-     * Check requiredFields and set exportFields for workflow. 
-     * 
-     * @param  string $moduleName 
-     * @param  string $methodName 
-     * @param  string $appName 
+     * Check requiredFields and set exportFields for workflow.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $appName
      * @access public
      * @return void
      */
@@ -80,7 +80,7 @@ class control extends baseControl
 
     /**
      * Go to preference setting page if preference not setted.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -91,7 +91,7 @@ class control extends baseControl
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'changepassword') return true;
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'preference') return true;
 
-        if(!isset($this->config->preferenceSetted)) 
+        if(!isset($this->config->preferenceSetted))
         {
             $this->locate(helper::createLink('my', 'preference'));
         }
@@ -295,7 +295,7 @@ class control extends baseControl
 
     /**
      * Check require with flow field when post data.
-     * 
+     *
      * @access public
      * @return void
      */

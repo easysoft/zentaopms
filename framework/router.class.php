@@ -498,6 +498,18 @@ class router extends baseRouter
             /* Prepend other params. */
             if($methodName == 'operate')      array_unshift($params, $this->rawMethod); // $params = array('close', 1);
             if($methodName == 'batchOperate') array_unshift($params, $this->rawMethod); // $params = array('close', 1);
+            if($methodName == 'browse')
+            {
+                if(isset($params[0]) and $params[0] == 'bysearch')
+                {
+                    $params[0] = '';
+                    array_unshift($params, 'bysearch');
+                }
+                else
+                {
+                    array_unshift($params, 'browse');
+                }
+            }
             array_unshift($params, $this->rawModule);                                   // $params = array($module, 'close', 1);
             array_unshift($params, $methodName);                                        // $params = array('operate', $module, 'close', 1);
             array_unshift($params, $moduleName);                                        // $params = array('flow', 'operate', $module, 'close', 1);
@@ -519,6 +531,18 @@ class router extends baseRouter
             $params = array_reverse($params);           // $params = array('label' => 1, 'mode' => 'search');
 
             /* Prepend other params. */
+            if($methodName == 'browse')
+            {
+                if(isset($params['label']) and $params['label'] == 'bysearch')
+                {
+                    $params['label'] = '';
+                    $params['mode'] = 'bysearch';
+                }
+                else
+                {
+                    $params['mode'] = 'browse';
+                }
+            }
             $params['module']                 = $this->rawModule;   // $param = array('label' => 1, 'mode' => 'search', 'module' => $module);
             $params[$this->config->methodVar] = $methodName;        // $param = array('label' => 1, 'mode' => 'search', 'module' => $module, 'f' => 'browse');
             $params[$this->config->moduleVar] = $moduleName;        // $param = array('label' => 1, 'mode' => 'search', 'module' => $module, 'f' => 'browse', 'm' => 'flow');
