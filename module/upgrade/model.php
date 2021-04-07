@@ -38,7 +38,6 @@ class upgradeModel extends model
     {
         set_time_limit(0);
         $executeXuanxuan = false;
-        $execute15SQL    = false;
         switch($fromVersion)
         {
         case '0_3beta':
@@ -635,22 +634,10 @@ class upgradeModel extends model
             $this->appendExec('12_5_2');
         case '12_5_3':
             $this->saveLogs('Execute 12_5_3');
-            $this->execSQL($this->getUpgradeFile('15.0'));
+            $this->execSQL($this->getUpgradeFile('12.5.3'));
             $this->adjustWhitelistOfProject();
             $this->adjustWhitelistOfProduct();
-            $this->adjustPriv15_0();
             $this->appendExec('12_5_3');
-            $execute15SQL = true;
-        case '15_0':
-            $this->saveLogs('Execute 15_0');
-            if(!$execute15SQL)
-            {
-                $this->execSQL($this->getUpgradeFile('15.0'));
-                $this->adjustWhitelistOfProject();
-                $this->adjustWhitelistOfProduct();
-                $this->adjustPriv15_0();
-            }
-            $this->appendExec('15_0');
         }
 
         $this->deletePatch();
@@ -834,8 +821,7 @@ class upgradeModel extends model
             case '12_5':
             case '12_5_1':
             case '12_5_2':
-            case '12_5_3':
-            case '15_0'  : $confirmContent .= file_get_contents($this->getUpgradeFile('15.0'));
+            case '12_5_3': $confirmContent .= file_get_contents($this->getUpgradeFile('12.5.3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
