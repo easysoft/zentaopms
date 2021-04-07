@@ -53,7 +53,7 @@ $lang->upgrade->noticeSQL      = '檢查到你的資料庫跟標準不一致，�
 $lang->upgrade->afterDeleted   = '以上檔案未能刪除， 刪除後刷新！';
 $lang->upgrade->mergeProgram   = '數據遷移';
 $lang->upgrade->mergeTips      = '數據遷移提示';
-$lang->upgrade->to15Guide      = '禪道開源版15.0.beta1升級';
+$lang->upgrade->to15Guide      = '禪道開源版15版本升級';
 $lang->upgrade->to15Desc       = <<<EOD
 <p>尊敬的用戶，禪道從15版本開始對導航和概念做了調整，主要改動如下：</p>
 <ol>
@@ -103,5 +103,9 @@ $lang->upgrade->mergeByProduct     = "以產品組織的迭代：可以選擇多
 $lang->upgrade->mergeByProject     = "獨立的迭代：可以選擇若干迭代歸併到一個項目中，也可以獨立歸併。";
 $lang->upgrade->mergeByMoreLink    = "關聯多個產品的迭代：選擇這個迭代歸屬於哪一個產品。";
 $lang->upgrade->mergeRepoTips      = "將選中的版本庫歸併到所選產品下。";
+
+$lang->upgrade->needBuild4Add    = '本次升級新增全文檢索功能，需要創建索引。';
+$lang->upgrade->needBuild4Adjust = '本次升級全文檢索功能有調整，需要創建索引。';
+$lang->upgrade->buildIndex       = '創建索引';
 
 include dirname(__FILE__) . '/version.php';

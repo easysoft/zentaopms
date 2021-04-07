@@ -104,4 +104,8 @@ $lang->upgrade->mergeByProject     = "独立的迭代：可以选择若干迭代
 $lang->upgrade->mergeByMoreLink    = "关联多个产品的迭代：选择这个迭代归属于哪一个产品。";
 $lang->upgrade->mergeRepoTips      = "将选中的版本库归并到所选产品下。";
 
+$lang->upgrade->needBuild4Add    = '本次升级新增全文检索功能，需要创建索引。';
+$lang->upgrade->needBuild4Adjust = '本次升级全文检索功能有调整，需要创建索引。';
+$lang->upgrade->buildIndex       = '创建索引';
+
 include dirname(__FILE__) . '/version.php';
