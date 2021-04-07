@@ -32,8 +32,8 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
         <?php
         if($type == 'book')
         {
-            common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide iframe'", '', true);
             common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editBook, '', "class='btn btn-info btn-wide iframe'", '', true);
+            common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide iframe'", '', true);
         }
         else
         {
