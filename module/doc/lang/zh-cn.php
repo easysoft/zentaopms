@@ -187,13 +187,13 @@ $lang->doc->noOpenedDoc          = '您还没有创建任何文档。';
 $lang->doc->noCollectedDoc       = '您还没有收藏任何文档。';
 $lang->doc->errorEmptyLib        = '文档库暂无数据。';
 
-$lang->doc->noticeAcl['lib']['product']['default']   = '有所选产品访问权限的用户可以访问。';
-$lang->doc->noticeAcl['lib']['product']['custom']    = '有所选产品访问权限或白名单里的用户可以访问。';
-$lang->doc->noticeAcl['lib']['execution']['default'] = "有所选{$lang->executionCommon}访问权限的用户可以访问。";
-$lang->doc->noticeAcl['lib']['execution']['custom']  = "有所选{$lang->executionCommon}访问权限或白名单里的用户可以访问。";
-$lang->doc->noticeAcl['lib']['custom']['open']       = '所有人都可以访问。';
-$lang->doc->noticeAcl['lib']['custom']['custom']     = '白名单的用户可以访问。';
-$lang->doc->noticeAcl['lib']['custom']['private']    = '只有创建者自己可以访问。';
+$lang->doc->noticeAcl['lib']['product']['default'] = '有所选产品访问权限的用户可以访问。';
+$lang->doc->noticeAcl['lib']['product']['custom']  = '有所选产品访问权限或白名单里的用户可以访问。';
+$lang->doc->noticeAcl['lib']['project']['default'] = "有所选项目访问权限的用户可以访问。";
+$lang->doc->noticeAcl['lib']['project']['custom']  = "有所选项目访问权限或白名单里的用户可以访问。";
+$lang->doc->noticeAcl['lib']['custom']['open']     = '所有人都可以访问。';
+$lang->doc->noticeAcl['lib']['custom']['custom']   = '白名单的用户可以访问。';
+$lang->doc->noticeAcl['lib']['custom']['private']  = '只有创建者自己可以访问。';
 
 $lang->doc->noticeAcl['doc']['open']    = '有文档所属文档库访问权限的，都可以访问。';
 $lang->doc->noticeAcl['doc']['custom']  = '白名单的用户可以访问。';
