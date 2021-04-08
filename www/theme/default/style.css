@@ -48,8 +48,6 @@ a.showMoreImage:hover {opacity: 1;}
 #header #toolbar a:hover, .selected a {color: #fff!important;}
 #header #toolbar i {font-size: 16px;}
 
-#navbar .nav>li.divider {margin: 15px 8px 15px 8px;}
-#navbar .nav>li>a {padding: 10px 10px;}
 #toolbar {top: 0px; height: 50px;}
 #userNav {float: none; margin: 0;}
 #userNav>li {text-align: center;}
