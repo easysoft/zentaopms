@@ -851,7 +851,11 @@ class productModel extends model
 
         /* Determine how to display the name of the program. */
         $programList = $this->loadModel('program')->getParentPairs('', 'noclosed');
-        foreach($projectList as $id => $project) $projectList[$id]->programName = $programList[$project->parent];
+        foreach($projectList as $id => $project)
+        {
+            $projectList[$id]->programName = $project->parent ? $programList[$project->parent] : '';
+            $projectList[$id]->programName = preg_replace('/\//', '', $projectList[$id]->programName, 1);
+        }
 
         return $projectList;
     }
