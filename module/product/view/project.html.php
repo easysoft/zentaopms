@@ -34,16 +34,16 @@
           <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->project->name;?></th>
           <?php if($config->systemMode == 'new'):?>
-          <th class='w-150px'><?php echo $lang->project->common;?></th>
+          <th class='w-150px'><?php echo $lang->program->common;?></th>
           <?php endif;?>
-          <th class='w-100px'><?php echo $lang->project->PM;?></th>
+          <th class='w-80px text-left'><?php echo $lang->project->PM;?></th>
           <th class='w-80px'><?php echo $lang->project->begin;?></th>
           <th class='w-80px'><?php echo $lang->project->end;?></th>
           <th class='w-70px'><?php echo $lang->project->status;?></th>
-          <th class='w-90px'><?php echo $lang->project->budget;?></th>
-          <th class='w-60px text-right'><?php echo $lang->project->estimate;?></th>
-          <th class='w-60px text-right'><?php echo $lang->project->consume;?></th>
-          <th class='w-60px'><?php echo $lang->project->progress;?></th>
+          <th class="w-70px"><?php echo $lang->project->budget;?></th>
+          <th class="w-60px text-center"><?php echo $lang->project->estimate;?></th>
+          <th class="w-60px text-center"><?php echo $lang->project->consume;?></th>
+          <th class='w-50px'><?php echo $lang->project->progress;?></th>
         </tr>
       </thead>
       <tbody>
@@ -66,22 +66,22 @@
           <?php if($config->systemMode == 'new'):?>
           <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
           <?php endif;?>
-          <td>
+          <td class='padding-right'>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
             <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='800'");?>
           </td>
-          <td><?php echo $project->begin;?></td>
-          <td><?php echo $project->end;?></td>
+          <td class='padding-right text-left'><?php echo $project->begin;?></td>
+          <td class='padding-right text-left'><?php echo $project->end;?></td>
           <?php $status = $this->processStatus('project', $project);?>
           <td class='c-status' title='<?php echo $status;?>'>
             <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
           </td>
           <?php $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
           <?php $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;?>
-          <td title='<?php echo $budgetTitle;?>' class='text-ellipsis'><?php echo $budgetTitle;?></td>
-          <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
-          <td class="text-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->project->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
-          <td>
+          <td title='<?php echo $budgetTitle;?>' class='text-ellipsis text-right padding-right'><?php echo $budgetTitle;?></td>
+          <td class="text-right padding-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
+          <td class="text-right padding-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
+          <td class='padding-right text-center'>
             <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $project->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
               <div class='progress-info'><?php echo $project->hours->progress;?></div>
             </div>
