@@ -10,7 +10,27 @@ $(function()
     });
 
     toggleFold('#projectTaskForm', unfoldTasks, executionID, 'project');
+
+    adjustTableFooter();
+    $('body').on('click', '#toggleFold', adjustTableFooter);
+    $('body').on('click', '.icon.icon-angle-double-right', adjustTableFooter);
 });
 
 $('#module' + moduleID).closest('li').addClass('active');
 $('#product' + productID).closest('li').addClass('active');
+
+/**
+ * Adjust the table footer style.
+ *
+ * @access public
+ * @return void
+ */
+function adjustTableFooter()
+{
+    if($('.main-col').height() < $(window).height())
+    {
+        $('.table.with-footer-fixed').css('margin-bottom', '0');
+        $('.table-footer').removeClass('fixed-footer');
+        $('.table-footer').css({"left":"0", "bottom":"0", "width":"unset"});
+    }
+}
