@@ -3992,6 +3992,13 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
         }
 
+        $stmt = $this->dao->select('`group`,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('my')->andWhere('method')->eq('project')->query();
+        while($grouppriv = $stmt->fetch())
+        {
+            $grouppriv->method = 'execution';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
         $stmt = $this->dao->select('`group`,module,method')->from(TABLE_GROUPPRIV)->where('module')->eq('program')->andWhere('method')->like('PGM%')->query();
         while($grouppriv = $stmt->fetch())
         {

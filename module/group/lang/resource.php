@@ -78,7 +78,6 @@ $lang->resource->my->todo            = 'todo';
 $lang->resource->my->calendar        = 'calendarAction';
 $lang->resource->my->work            = 'workAction';
 $lang->resource->my->contribute      = 'contributeAction';
-$lang->resource->my->project         = 'project';
 $lang->resource->my->profile         = 'profileAction';
 $lang->resource->my->uploadAvatar    = 'uploadAvatar';
 $lang->resource->my->preference      = 'preference';
@@ -143,6 +142,8 @@ $lang->resource->todo->batchClose   = 'batchClose';
 global $config;
 if($config->systemMode == 'new')
 {
+    $lang->resource->my->project = 'project';
+
     /* Program. */
     $lang->resource->program = new stdclass();
     $lang->resource->program->browse                  = 'browse';
