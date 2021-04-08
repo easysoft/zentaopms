@@ -47,6 +47,20 @@ class commonModel extends model
         header("Content-Type: text/html; Language={$this->config->charset}");
         header("Cache-control: private");
 
+        /* Send HTTP header. */
+        if($this->config->framework->sendXCTO)  header("X-Content-Type-Options: nosniff");
+        if($this->config->framework->sendXXP)   header("X-XSS-Protection: 1; mode=block");
+        if($this->config->framework->sendHSTS)  header("Strict-Transport-Security: max-age=3600; includeSubDomains");
+        if($this->config->framework->sendRP)    header("Referrer-Policy: no-referrer-when-downgrade");
+        if($this->config->framework->sendXPCDP) header("X-Permitted-Cross-Domain-Policies: master-only");
+        if($this->config->framework->sendXDO)   header("X-Download-Options: noopen");
+
+        /* Set Content-Security-Policy header. */
+        if($this->config->CSPs)
+        {
+            foreach($this->config->CSPs as $CSP) header("Content-Security-Policy: $CSP;");
+        }
+
         if($this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon'))
         {
             if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on')
