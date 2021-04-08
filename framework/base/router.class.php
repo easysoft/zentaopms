@@ -882,7 +882,7 @@ class baseRouter
         else
         {
             $module = $this->rawModule;
-            $this->openApp = $this->lang->navGroup->$module;
+            $this->openApp = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : 'my';
         }
     }
 
