@@ -16,7 +16,7 @@
                 <?php
                 for($version = $doc->version; $version > 0; $version--)
                 {
-                    echo "<li>" . html::a($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"), '#' . $version) . "</li>";
+                    echo "<li>" . html::a($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"), '#' . $version, '', "data-app='{$this->app->openApp}'") . "</li>";
                 }
                 ?>
                 </ul>
