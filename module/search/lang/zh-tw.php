@@ -87,7 +87,7 @@ $lang->search->modules['testreport']  = '報告';
 $lang->search->modules['productplan'] = '計劃';
 $lang->search->modules['program']     = '項目集';
 $lang->search->modules['project']     = '項目';
-$lang->search->modules['execution']   = '執行';
+$lang->search->modules['execution']   = $lang->executionCommon;
 $lang->search->modules['story']       = '需求';
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;

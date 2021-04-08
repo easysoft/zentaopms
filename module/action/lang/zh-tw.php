@@ -431,6 +431,7 @@ $lang->action->dynamicAction->entry['created'] = '添加應用';
 $lang->action->dynamicAction->entry['edited']  = '編輯應用';
 
 /* 用來生成相應對象的連結。*/
+global $config;
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = "計劃|productplan|view|productID=%s";
 $lang->action->label->release     = '發佈|release|view|productID=%s';
