@@ -547,6 +547,8 @@ class upgrade extends control
             die($this->display('upgrade', 'consistency'));
         }
 
+        unset($_SESSION['user']);
+
         if($processed == 'no')
         {
             $this->app->loadLang('install');
