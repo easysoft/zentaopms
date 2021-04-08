@@ -55,7 +55,7 @@ $lang->task->allModule           = '所有模块';
 
 $lang->task->common           = '任务';
 $lang->task->id               = '编号';
-$lang->task->project          = '所属执行';
+$lang->task->project          = '所属项目';
 $lang->task->execution        = '所属' . $lang->execution->common;
 $lang->task->module           = '所属模块';
 $lang->task->moduleAB         = '模块';

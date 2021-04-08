@@ -40,7 +40,7 @@ function downloadBurn()
         var $canvas  = $('#cloneCanvas #burnCanvas');
         var imgSrc   = $canvas.get(0).toDataURL("image/png");
         var imgData  = imgSrc.replace(type,'image/octet-stream');
-        var filename = projectName + '.' + type;
+        var filename = executionName + '.' + type;
         saveFile(imgData,filename);
         $('#burnWrapper #cloneCanvas').remove();
     }, 500);

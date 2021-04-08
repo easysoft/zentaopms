@@ -16,7 +16,7 @@
                 <?php
                 for($version = $doc->version; $version > 0; $version--)
                 {
-                    echo "<li>" . html::a($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"), '#' . $version) . "</li>";
+                    echo "<li>" . html::a($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"), '#' . $version, '', "data-app='{$this->app->openApp}'") . "</li>";
                 }
                 ?>
                 </ul>
@@ -27,7 +27,7 @@
           </div>
           <div class="actions">
             <?php
-            if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}' class='btn btn-link'");
+            if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}' class='btn btn-link' data-app='{$this->app->openApp}'");
             if(common::hasPriv('doc', 'delete'))
             {
                 $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes&from=lib");
