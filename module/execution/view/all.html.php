@@ -21,7 +21,7 @@
 .table td.has-child > .plan-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform:rotate(-90deg); -moz-transform:rotate(-90deg); -o-transform:rotate(-90deg); -webkit-transform:rotate(-90deg); transform: rotate(-90deg);}
 .table td.has-child > .plan-toggle > .icon:before {text-align: left;}
 .table td.has-child > .plan-toggle.collapsed > .icon {-ms-transform:rotate(90deg); -moz-transform:rotate(90deg); -o-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform: rotate(90deg);}
-.table td.hours {padding-right: 12px;}
+.table td.hours {padding-right: 20px;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 .hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
