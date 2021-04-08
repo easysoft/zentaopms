@@ -956,7 +956,7 @@ class doc extends control
         {
             $libs = $this->doc->getLibsByObject('book', 0);
             $this->app->rawMethod = 'book';
-            if($libID == 0) $libID = reset($libs)->id;
+            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
 
             if(!$docID) $docID = $this->dao->select('id')->from(TABLE_DOC)
