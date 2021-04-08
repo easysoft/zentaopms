@@ -83,6 +83,7 @@ $lang->doc->editType         = 'Bearbeiten';
 $lang->doc->deleteType       = 'Löschen';
 $lang->doc->addType          = 'Hinzufügen';
 $lang->doc->childType        = 'Child';
+$lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Favorit hinzufügen';
 $lang->doc->cancelCollection = 'Favorit entfernen';
 $lang->doc->deleteFile       = 'Delete File';

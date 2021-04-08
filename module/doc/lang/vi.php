@@ -83,6 +83,7 @@ $lang->doc->editType         = 'Sửa';
 $lang->doc->deleteType       = 'Xóa';
 $lang->doc->addType          = 'Thêm';
 $lang->doc->childType        = 'Categories';
+$lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Thêm Favorite';
 $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Xóa File';
