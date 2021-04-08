@@ -517,16 +517,9 @@ class doc extends control
                 $objectID = $docLib->$type;
             }
 
-            $openApp = $type == 'execution' ? 'execution' : 'doc';
+            $openApp    = $type == 'execution' ? 'execution' : 'doc';
             $browseLink = inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID#app=$openApp");
-            if($type == 'execution')
-            {
-                die(js::locate($browseLink, 'parent'));
-            }
-            else
-            {
-                $this->locate($browseLink);
-            }
+            $this->locate($browseLink);
         }
 
         if($doc->contentType == 'markdown')
