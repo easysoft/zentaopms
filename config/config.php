@@ -89,6 +89,10 @@ $config->domainPostfix .= "|villas|foundation|expert|works|tools|watch|zone|barg
 $config->domainPostfix .= "|farm|pics|photo|marketing|holiday|gift|buzz|guitars|trade|construction|";
 $config->domainPostfix .= "|international|house|coffee|florist|rich|ceo|camp|education|repair|win|site|";
 
+/* Config for Content-Security-Policy. */
+$config->CSPs = array();
+$config->CSPs[] = "form-action 'self';connect-src 'self'";
+
 /* 系统框架配置。Framework settings. */
 $config->framework = new stdclass();
 $config->framework->autoConnectDB   = true;  // 是否自动连接数据库。              Whether auto connect database or not.
@@ -107,6 +111,12 @@ $config->framework->autoRepairTable = true;
 $config->framework->autoLang        = false;
 $config->framework->filterCSRF      = false;
 $config->framework->setCookieSecure = true;
+$config->framework->sendXCTO        = true;   // Send X-Content-Type-Options header.
+$config->framework->sendXXP         = true;   // Send X-XSS-Protection header.
+$config->framework->sendHSTS        = true;   // Send HTTP Strict Transport Security header.
+$config->framework->sendRP          = true;   // Send Referrer-Policy header.
+$config->framework->sendXPCDP       = true;   // Send X-Permitted-Cross-Domain-Policies header.
+$config->framework->sendXDO         = true;   // Send X-Download-Options header.
 
 $config->framework->detectDevice['zh-cn'] = true; // 在zh-cn语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
 $config->framework->detectDevice['zh-tw'] = true; // 在zh-tw语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
