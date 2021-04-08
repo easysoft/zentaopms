@@ -174,6 +174,7 @@ $config->bug->datatable->fieldList['title']['title']    = 'title';
 $config->bug->datatable->fieldList['title']['fixed']    = 'left';
 $config->bug->datatable->fieldList['title']['width']    = 'auto';
 $config->bug->datatable->fieldList['title']['required'] = 'yes';
+$config->bug->datatable->fieldList['title']['minWidth'] = '200';
 
 $config->bug->datatable->fieldList['branch']['title']    = 'branch';
 $config->bug->datatable->fieldList['branch']['fixed']    = 'left';
