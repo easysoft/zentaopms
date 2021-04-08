@@ -36,7 +36,7 @@
 <div class="panel-body">
   <div class='row' id='cards'>
     <?php foreach ($projects as $projectID => $project):?>
-    <?php $viewLink = $this->createLink('project', 'index', "projectID=$project->id");?>
+    <?php $viewLink = $config->systemMode == 'new' ? $this->createLink('project', 'index', "projectID=$project->id") : $this->createLink('execution', 'task', "projectID=$project->id");?>
     <div class='col'>
       <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
