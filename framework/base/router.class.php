@@ -377,6 +377,7 @@ class baseRouter
         $this->loadClass('mobile', $static = true);
 
         $this->setCookieSecure();
+        $this->setOpenApp();
         $this->setSuperVars();
         $this->setDebug();
         $this->setErrorHandler();
