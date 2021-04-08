@@ -214,8 +214,15 @@ class doc extends control
             $libID = $this->doc->createlib();
             if(!dao::isError())
             {
+                $objectType = $this->post->type;
+                if($objectType == 'execution' and $this->post->execution)
+                {
+                    $execution  = $this->execution->getByID($this->post->execution);
+                    $objectType = 'project';
+                    $objectID   = $execution->project;
+                }
                 $this->action->create('docLib', $libID, 'Created');
-                die(js::locate($this->createLink('doc', 'objectLibs', "type={$this->post->type}&objectID=$objectID&libID=$libID"), 'parent.parent'));
+                die(js::locate($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID"), 'parent.parent'));
             }
             else
             {
