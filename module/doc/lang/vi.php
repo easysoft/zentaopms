@@ -185,8 +185,10 @@ $lang->doc->errorEmptyLib        = 'No data in document library.';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = 'Users who can access the selected product có thể truy cập nó.';
 $lang->doc->noticeAcl['lib']['product']['custom']    = 'Users who can access the selected product or users in the whiltelist có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['project']['default'] = 'Users who can access the selected project có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['project']['custom']  = 'Users who can access the selected project or users in the whiltelist có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['project']['default']   = 'Users who can access the selected project có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['project']['custom']    = 'Users who can access the selected project or users in the whiltelist có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['execution']['default'] = "Users who can access the selected {$lang->executionCommon} có thể truy cập nó.";
+$lang->doc->noticeAcl['lib']['execution']['custom']  = "Users who can access the selected {$lang->executionCommon} or users in the whiltelist có thể truy cập nó.";
 $lang->doc->noticeAcl['lib']['custom']['open']       = 'Tất cả users có thể truy cập nó.';
 $lang->doc->noticeAcl['lib']['custom']['custom']     = 'Users in the whitelist có thể truy cập nó.';
 $lang->doc->noticeAcl['lib']['custom']['private']    = 'Chỉ the one who created it có thể truy cập nó.';

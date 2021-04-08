@@ -183,13 +183,15 @@ $lang->doc->noOpenedDoc          = "Vous n'avez pas ajouté de documents.";
 $lang->doc->noCollectedDoc       = "Vous avez aucun document dans vos favoris.";
 $lang->doc->errorEmptyLib        = 'No data in document library.';
 
-$lang->doc->noticeAcl['lib']['product']['default'] = 'Les utilisateurs qui ont accès au Product peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['product']['custom']  = 'Les utilisateurs qui ont accès au Product ou les utilisateurs de la Liste Blanche peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['project']['default'] = 'Les utilisateurs qui ont accès au Projet peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['project']['custom']  = 'Les utilisateurs qui ont accès au Projet ou les utilisateurs de la Liste Blanche peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['custom']['open']     = 'Tous les utilisateurs peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['custom']['custom']   = 'Les utilisateurs de la Liste Blanche peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['custom']['private']  = 'Seulement le créateur de la Bibliothèque peut y accéder.';
+$lang->doc->noticeAcl['lib']['product']['default']   = 'Les utilisateurs qui ont accès au Product peuvent y accéder.';
+$lang->doc->noticeAcl['lib']['product']['custom']    = 'Les utilisateurs qui ont accès au Product ou les utilisateurs de la Liste Blanche peuvent y accéder.';
+$lang->doc->noticeAcl['lib']['project']['default']   = 'Les utilisateurs qui ont accès au Projet peuvent y accéder.';
+$lang->doc->noticeAcl['lib']['project']['custom']    = 'Les utilisateurs qui ont accès au Projet ou les utilisateurs de la Liste Blanche peuvent y accéder.';
+$lang->doc->noticeAcl['lib']['execution']['default'] = "Les utilisateurs qui ont accès au {$lang->executionCommon} peuvent y accéder.";
+$lang->doc->noticeAcl['lib']['execution']['custom']  = "Les utilisateurs qui ont accès au {$lang->executionCommon} ou les utilisateurs de la Liste Blanche peuvent y accéder.";
+$lang->doc->noticeAcl['lib']['custom']['open']       = 'Tous les utilisateurs peuvent y accéder.';
+$lang->doc->noticeAcl['lib']['custom']['custom']     = 'Les utilisateurs de la Liste Blanche peuvent y accéder.';
+$lang->doc->noticeAcl['lib']['custom']['private']    = 'Seulement le créateur de la Bibliothèque peut y accéder.';
 
 $lang->doc->noticeAcl['doc']['open']    = 'Les utilisateurs qui ont accès à la Bibliothèque à laquelle le document appartient peuvent y accéder.';
 $lang->doc->noticeAcl['doc']['custom']  = 'Les utilisateurs de la Liste Blanche peuvent y accéder.';
