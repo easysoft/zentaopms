@@ -9,34 +9,65 @@ $(function()
     toggleAcl($('form [name=acl]:checked').val(), 'lib');
 });
 
+/**
+ * Change form by lib type.
+ *
+ * @param  string  libType
+ * @access public
+ * @return void
+ */
 function changeByLibType(libType)
 {
     if(libType == 'product')
     {
         $('table tr.product').removeClass('hidden');
+        $('#product').attr('disabled', false);
+
         $('table tr.project').addClass('hidden');
+        $('#project').attr('disabled', true);
+
         $('table tr.execution').addClass('hidden');
+        $('#execution').attr('disabled', true);
+
         changeDoclibAcl(libType);
     }
     else if(libType == 'project')
     {
-        $('table tr.product').addClass('hidden');
         $('table tr.project').removeClass('hidden');
+        $('#project').attr('disabled', false);
+
+        $('table tr.product').addClass('hidden');
+        $('#product').attr('disabled', true);
+
         $('table tr.execution').addClass('hidden');
+        $('#execution').attr('disabled', true);
+
         changeDoclibAcl(libType);
     }
     else if(libType == 'execution')
     {
-        $('table tr.product').addClass('hidden');
-        $('table tr.project').addClass('hidden');
         $('table tr.execution').removeClass('hidden');
+        $('#execution').attr('disabled', false);
+
+        $('table tr.product').addClass('hidden');
+        $('#product').attr('disabled', true);
+
+        $('table tr.project').addClass('hidden');
+        $('#project').attr('disabled', true);
+
         changeDoclibAcl(libType);
     }
     else
     {
         $('table tr.product').addClass('hidden');
+        $('#product').attr('disabled', true);
+
         $('table tr.project').addClass('hidden');
+        $('#project').attr('disabled', true);
+
         $('table tr.execution').addClass('hidden');
+        $('#execution').attr('disabled', true);
+
         changeDoclibAcl(libType);
     }
 

@@ -72,7 +72,7 @@ $config->task->datatable->fieldList['type']['required'] = 'no';
 
 $config->task->datatable->fieldList['status']['title']    = 'statusAB';
 $config->task->datatable->fieldList['status']['fixed']    = 'no';
-$config->task->datatable->fieldList['status']['width']    = '80';
+$config->task->datatable->fieldList['status']['width']    = '60';
 $config->task->datatable->fieldList['status']['required'] = 'no';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
@@ -99,7 +99,7 @@ $config->task->datatable->fieldList['progress']['name']     = $lang->task->progr
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
-$config->task->datatable->fieldList['deadline']['width']    = '100';
+$config->task->datatable->fieldList['deadline']['width']    = '60';
 $config->task->datatable->fieldList['deadline']['required'] = 'no';
 
 $config->task->datatable->fieldList['openedBy']['title']    = 'openedByAB';

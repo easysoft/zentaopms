@@ -994,10 +994,11 @@ class product extends control
             $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
             $this->app->rawModule = $activeMenu;
 
-            if($activeMenu == 'bug')        $this->lang->{$project->model}->menu->qa['subMenu']->bug['subModule']      = 'product';
-            if($activeMenu == 'testcase')   $this->lang->{$project->model}->menu->qa['subMenu']->testcase['subModule'] = 'product';
-            if($activeMenu == 'testtask')   $this->lang->{$project->model}->menu->qa['subMenu']->testtask['subModule'] = 'product';
-            if($activeMenu == 'testreport') $this->lang->{$project->model}->menu->qa['subMenu']->testreport['subModule'] = 'product';
+            if($activeMenu == 'bug')            $this->lang->{$project->model}->menu->qa['subMenu']->bug['subModule']        = 'product';
+            if($activeMenu == 'testcase')       $this->lang->{$project->model}->menu->qa['subMenu']->testcase['subModule']   = 'product';
+            if($activeMenu == 'testtask')       $this->lang->{$project->model}->menu->qa['subMenu']->testtask['subModule']   = 'product';
+            if($activeMenu == 'testreport')     $this->lang->{$project->model}->menu->qa['subMenu']->testreport['subModule'] = 'product';
+            if($activeMenu == 'projectrelease') $this->lang->{$project->model}->menu->release['subModule']                   = 'projectrelease';
         }
         elseif($moduleName == 'qa')
         {
