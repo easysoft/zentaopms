@@ -32,6 +32,7 @@
 #cards .project-stage-item.is-going {color: #333;}
 #cards .project-stage-item.is-going::before {background-color: #0C64EB;}
 #dashboard .block-recentproject .panel-body {padding: 0;}
+.execution-name {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 </style>
 <div class="panel-body">
   <div class='row' id='cards'>
@@ -99,7 +100,7 @@
             <p class='text-muted'><?php echo $lang->project->lastIteration; ?></p>
             <?php if($project):?>
             <div class='row'>
-              <div class='col-xs-5'><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->id}"), $project->name);?></div>
+              <div class='col-xs-5 execution-name' title="<?php echo $project->name;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->id}"), $project->name);?></div>
               <div class='col-xs-7'>
                 <div class="progress progress-text-left">
                   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
