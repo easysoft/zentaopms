@@ -68,11 +68,11 @@
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name);?></th>
           <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
-          <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
-          <th class='w-100px'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
-          <th class='w-80px hours text-right'><?php echo $lang->execution->totalEstimate;?></th>
-          <th class='w-80px hours text-right'><?php echo $lang->execution->totalConsumed;?></th>
-          <th class='w-80px hours text-right'><?php echo $lang->execution->totalLeft;?></th>
+          <th class='w-80px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
+          <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
+          <th class='w-70px text-center'><?php echo $lang->execution->totalEstimate;?></th>
+          <th class='w-70px text-center'><?php echo $lang->execution->totalConsumed;?></th>
+          <th class='w-70px text-center'><?php echo $lang->execution->totalLeft;?></th>
           <th class='w-60px'><?php echo $lang->execution->progress;?></th>
           <th class='w-100px'><?php echo $lang->execution->burn;?></th>
         </tr>
@@ -101,7 +101,7 @@
           <td><?php echo zget($users, $execution->PM);?></td>
           <td><?php echo $execution->end;?></td>
           <?php $executionStatus = $this->processStatus('execution', $execution);?>
-          <td class='c-status' title='<?php echo $executionStatus;?>'>
+          <td class='c-status text-center' title='<?php echo $executionStatus;?>'>
             <span class="status-execution status-<?php echo $execution->status?>"><?php echo $executionStatus;?></span>
           </td>
           <td class='hours' title='<?php echo $execution->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalEstimate . $this->lang->execution->workHourUnit;?></td>
