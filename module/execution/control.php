@@ -836,6 +836,7 @@ class execution extends control
      * Browse bugs of a execution.
      *
      * @param  int    $executionID
+     * @param  int    $productID
      * @param  string $orderBy
      * @param  int    $build
      * @param  string $type
@@ -846,11 +847,12 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function bug($executionID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($executionID = 0, $productID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
         $this->loadModel('user');
+        $this->loadModel('product');
 
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true), 'execution');
@@ -860,8 +862,11 @@ class execution extends control
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
         $products    = $this->execution->getProducts($execution->id);
-        $productID   = key($products);    // Get the first product for creating bug.
         $branchID    = isset($products[$productID]) ? $products[$productID]->branch : 0;
+
+        $productPairs = array('0' => $this->lang->product->all);
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', '', $branchID);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
@@ -872,7 +877,7 @@ class execution extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
-        $bugs  = $this->bug->getExecutionBugs($executionID, $build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $build, $type, $param, $sort, '', $pager);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -884,7 +889,7 @@ class execution extends control
         }
 
         /* Build the search form. */
-        $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
 
         /* Assign. */
