@@ -1287,6 +1287,11 @@ class execution extends control
 
             $this->executeHooks($executionID);
 
+            if($this->app->openApp == 'doc')
+            {
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=execution")));
+            }
+
             $planID = '';
             if(isset($_POST['plans']))
             {
