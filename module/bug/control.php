@@ -1874,15 +1874,10 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($productID, $module, $method, $extra = '', $from = '')
+    public function ajaxGetDropMenu($productID, $module, $method, $extra = '')
     {
-        if($from == 'qa')
-        {
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
-        }
-
-        $products = $this->product->getProducts($this->session->project, $this->config->CRProduct ? 'all' : 'noclosed', 'program desc, line desc, ');
+        $products = array();
+        if(!empty($extra)) $products = $this->product->getProducts($extra, $this->config->CRProduct ? 'all' : 'noclosed', 'program desc, line desc, ');
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;

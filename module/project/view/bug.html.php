@@ -11,12 +11,16 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+#subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
+#subHeader #dropMenu .col-left {padding-bottom: 0px;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
     $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
-    echo html::a($this->inlink('bug', "projectID={$project->id}&orderBy=status,id_desc&build=$buildID&type=all"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a($this->inlink('bug', "projectID={$project->id}&orderBy=status,id_desc&build=$buildID&type=unresolved"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&orderBy=status,id_desc&build=$buildID&type=all"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&orderBy=status,id_desc&build=$buildID&type=unresolved"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
     ?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>
   </div>
@@ -40,7 +44,7 @@
   <form class='main-table' method='post' id='projectBugForm' data-ride="table">
     <table class='table has-sort-head' id='bugList'>
       <?php $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');?>
-      <?php $vars = "projectID={$project->id}&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <?php $vars = "projectID={$project->id}&productID=$productID&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr>
           <th class='c-id'>

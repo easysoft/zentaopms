@@ -1401,6 +1401,7 @@ class bugModel extends model
      * Get bugs of a project.
      *
      * @param  int    $projectID
+     * @param  int    $productID
      * @param  int    $build
      * @param  string $type
      * @param  int    $param
@@ -1410,14 +1411,12 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getProjectBugs($projectID, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
+    public function getProjectBugs($projectID, $productID = 0, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
     {
         $type = strtolower($type);
         if($type == 'bysearch')
         {
-            $queryID  = (int)$param;
-            $products = $this->loadModel('project')->getProducts($projectID);
-
+            $queryID = (int)$param;
             if($this->session->projectBugQuery == false) $this->session->set('projectBugQuery', ' 1 = 1');
             if($queryID)
             {
@@ -1450,6 +1449,7 @@ class bugModel extends model
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where('deleted')->eq(0)
                 ->beginIF(empty($build))->andWhere('project')->eq($projectID)->fi()
+                ->beginIF(!empty($productID))->andWhere('product')->eq($productID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('status')->eq('active')->fi()
                 ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
@@ -1466,6 +1466,7 @@ class bugModel extends model
      * Get bugs of a execution.
      *
      * @param  int    $executionID
+     * @param  int    $productID
      * @param  int    $build
      * @param  string $type
      * @param  int    $param
@@ -1475,14 +1476,12 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionBugs($executionID, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
+    public function getExecutionBugs($executionID, $productID = 0, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
     {
         $type = strtolower($type);
         if($type == 'bysearch')
         {
-            $queryID  = (int)$param;
-            $products = $this->loadModel('execution')->getProducts($executionID);
-
+            $queryID = (int)$param;
             if($this->session->executionBugQuery == false) $this->session->set('executionBugQuery', ' 1 = 1');
             if($queryID)
             {
@@ -1515,6 +1514,7 @@ class bugModel extends model
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where('deleted')->eq(0)
                 ->beginIF(empty($build))->andWhere('execution')->eq($executionID)->fi()
+                ->beginIF(!empty($productID))->andWhere('product')->eq($productID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('status')->eq('active')->fi()
                 ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()

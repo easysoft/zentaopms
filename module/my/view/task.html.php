@@ -148,7 +148,6 @@
               <?php if($child->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
               <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color' data-group='project'");?>
             </td>
-            <td class='c-project'><?php echo zget($projects, $child->project, '');?></td>
             <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project", '', '', $child->project), $child->executionName, '', "data-group='execution'");?></td>
             <?php if($type != 'openedBy'): ?>
             <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
