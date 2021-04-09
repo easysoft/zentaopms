@@ -859,7 +859,7 @@ class taskModel extends model
         $teams = array();
         if($this->post->multiple)
         {
-            if(strpos(',done,closed,cancel,', ",{$task->status},") === false && !in_array($this->post->assignedTo, $this->post->team))
+            if(strpos(',done,closed,cancel,', ",{$task->status},") === false && $this->post->assignedTo && !in_array($this->post->assignedTo, $this->post->team))
             {
                 dao::$errors[] = $this->lang->task->error->assignedTo;
                 return false;
