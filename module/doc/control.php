@@ -243,6 +243,7 @@ class doc extends control
 
         $libTypeList = $this->lang->doc->libTypeList;
         if(empty($products))   unset($libTypeList['product']);
+        if(empty($projects))   unset($libTypeList['project']);
         if(empty($executions)) unset($libTypeList['execution']);
 
         $this->view->groups      = $this->loadModel('group')->getPairs();
@@ -622,6 +623,7 @@ class doc extends control
         {
             $doc        = $this->doc->getByID($docID);
             $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
+            if($this->config->systemMode == 'classic' and $objectType == 'project') $objectType = 'execution'; 
             $this->doc->delete(TABLE_DOC, $docID);
 
             /* if ajax request, send result. */

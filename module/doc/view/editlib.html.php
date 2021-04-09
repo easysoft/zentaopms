@@ -43,7 +43,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->doclib->control;?></th>
-        <?php if($lib->type == 'product' or $lib->type == 'execution' or $config->systemMode == 'classic'):?>
+        <?php if($lib->type == 'product' or $lib->type == 'execution' or ($config->systemMode == 'classic' and $lib->type != 'custom' )):?>
         <td>
           <?php echo html::radio('acl', $lang->doclib->aclListA, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
           <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
