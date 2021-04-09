@@ -258,6 +258,7 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  string $groupBy    the field to group by
+     * @param  string $filter
      * @access public
      * @return void
      */
@@ -268,7 +269,6 @@ class execution extends control
 
         /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
-        $this->app->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Header and session. */
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->task;
@@ -491,7 +491,6 @@ class execution extends control
 
         /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
-        $this->app->session->set('storyList', $this->app->getURI(true), 'product');
 
         $this->view->title            = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
         $this->view->position[]       = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
@@ -529,12 +528,6 @@ class execution extends control
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
-
-        /* Save to session. */
-        $uri = $this->app->getURI(true);
-        $this->app->session->set('bugList',    $uri, 'qa');
-        $this->app->session->set('storyList',   $uri, 'product');
-        $this->app->session->set('executionList', $uri, 'execution');
 
         $this->loadModel('bug');
         $executions = $this->execution->getPairs(0, 'all', 'nocode');
@@ -819,7 +812,7 @@ class execution extends control
     }
 
     /**
-     * Exectuion qa dashboard.
+     * Execution qa dashboard.
      *
      * @param  int $executionID
      * @access public
@@ -1808,7 +1801,6 @@ class execution extends control
         /* Save to session. */
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList',  $uri, 'execution');
-        $this->app->session->set('storyList', $uri, 'product');
         $this->app->session->set('bugList',   $uri, 'qa');
 
         /* Compatibility IE8*/
@@ -1833,9 +1825,9 @@ class execution extends control
         $this->view->realnames     = $this->loadModel('user')->getPairs('noletter');
         $this->view->storyOrder    = $orderBy;
         $this->view->orderBy       = 'id_asc';
-        $this->view->executionID     = $executionID;
+        $this->view->executionID   = $executionID;
         $this->view->browseType    = '';
-        $this->view->execution       = $execution;
+        $this->view->execution     = $execution;
         $this->view->type          = $type;
         $this->view->kanbanGroup   = $kanbanGroup;
         $this->view->kanbanColumns = $this->execution->getKanbanColumns($kanbanSetting);
@@ -1865,8 +1857,8 @@ class execution extends control
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',    $uri, 'execution');
-        $this->app->session->set('storyList',   $uri, 'product');
+        $this->app->session->set('taskList', $uri, 'execution');
+        $this->app->session->set('storyList', $uri, 'execution');
         $this->app->session->set('executionList', $uri, 'execution');
         $this->app->session->set('caseList', $uri, 'qa');
         $this->app->session->set('bugList', $uri, 'qa');
@@ -2001,10 +1993,6 @@ class execution extends control
      */
     public function storyKanban($executionID)
     {
-        /* Save to session. */
-        $uri = $this->app->getURI(true);
-        $this->app->session->set('storyList', $uri, 'product');
-
         /* Compatibility IE8*/
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
@@ -2023,8 +2011,8 @@ class execution extends control
         $this->view->position[]   = $this->lang->execution->storyKanban;
         $this->view->stories      = $this->story->getKanbanGroupData($stories);
         $this->view->realnames    = $this->loadModel('user')->getPairs('noletter');
-        $this->view->executionID    = $executionID;
-        $this->view->execution      = $execution;
+        $this->view->executionID  = $executionID;
+        $this->view->execution    = $execution;
         $this->view->productID    = $productID;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
@@ -2367,15 +2355,15 @@ class execution extends control
         $this->view->position[] = html::a($browseLink, $object->name);
         $this->view->position[] = $this->lang->execution->linkStory;
 
-        $this->view->object           = $object;
-        $this->view->products         = $products;
-        $this->view->allStories       = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
-        $this->view->pager            = $pager;
-        $this->view->browseType       = $browseType;
-        $this->view->productType      = $productType;
-        $this->view->modules          = $modules;
-        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
-        $this->view->branchGroups     = $branchGroups;
+        $this->view->object       = $object;
+        $this->view->products     = $products;
+        $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
+        $this->view->pager        = $pager;
+        $this->view->browseType   = $browseType;
+        $this->view->productType  = $productType;
+        $this->view->modules      = $modules;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->branchGroups = $branchGroups;
 
         $this->display();
     }

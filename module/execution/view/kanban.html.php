@@ -124,9 +124,9 @@
                   <ul class='dropdown-menu pull-right'>
                     <?php
                     $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
-                    echo (common::hasPriv('task', 'create'))         ? '<li>' . html::a($this->createLink('task', 'create', "executionID=$story->execution&storyID=$story->id&moduleID=$story->module", '', true), $lang->execution->wbs, '', $misc) : '' . '</li>';
-                    echo (common::hasPriv('task', 'batchCreate'))    ? '<li>' . html::a($this->createLink('task', 'batchCreate', "executionID=$story->execution&storyID=$story->id&moduleID=0&taskID=0&iframe=true", '', true), $lang->execution->batchWBS, '', $misc) : '' . '</li>';
-                    echo (common::hasPriv('execution', 'unlinkStory')) ? '<li>' . html::a($this->createLink('execution', 'unlinkStory', "executionID=$story->execution&storyID=$story->story&confirm=no", '', true), $lang->execution->unlinkStory, 'hiddenwin') : '' . '</li>';
+                    echo (common::hasPriv('task', 'create'))         ? '<li>' . html::a($this->createLink('task', 'create', "executionID=$executionID&storyID=$story->id&moduleID=$story->module", '', true), $lang->execution->wbs, '', $misc) : '' . '</li>';
+                    echo (common::hasPriv('task', 'batchCreate'))    ? '<li>' . html::a($this->createLink('task', 'batchCreate', "executionID=$executionID&storyID=$story->id&moduleID=0&taskID=0&iframe=true", '', true), $lang->execution->batchWBS, '', $misc) : '' . '</li>';
+                    echo (common::hasPriv('execution', 'unlinkStory')) ? '<li>' . html::a($this->createLink('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->story&confirm=no", '', true), $lang->execution->unlinkStory, 'hiddenwin') : '' . '</li>';
                     $misc = "data-toggle='modal' data-type='iframe'";
                     echo (common::hasPriv('story', 'close'))         ? '<li>' . html::a($this->createLink('story', 'close', "storyID=$story->id", '', true), $lang->story->close, '', $misc) : '' . '</li>';
                     ?>

@@ -872,7 +872,7 @@ class project extends control
         $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
-        $this->session->set('buildList', $this->app->getURI(true), 'execution');
+        $this->session->set('buildList', $this->app->getURI(true), 'project');
 
         /* Get products' list. */
         $products = $this->project->getProducts($projectID, false);
