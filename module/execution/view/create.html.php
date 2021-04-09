@@ -11,7 +11,7 @@
  */
 ?>
 <?php if(isset($tips)):?>
-<?php $defaultURL = $config->systemMode == 'new' ? $this->createLink('project', 'execution', "status=all&projectID=$projectID") : $this-> createLink('execution', 'task', 'executionID=' . $executionID);?>
+<?php $defaultURL = $config->systemMode == 'new' ? $this->createLink('project', 'execution', "status=all&projectID=$projectID") : $this->createLink('execution', 'task', 'executionID=' . $executionID);?>
 <?php include '../../common/view/header.lite.html.php';?>
 <body>
   <div class='modal-dialog mw-500px' id='tipsModal'>

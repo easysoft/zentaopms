@@ -210,13 +210,14 @@ $lang->project->list = '項目列表';
 
 $lang->execution->list = "{$lang->executionCommon}列表";
 
-$lang->doc->recent   = '最近文檔';
-$lang->doc->my       = '我的文檔';
-$lang->doc->favorite = '我的收藏';
-$lang->doc->product  = '產品庫';
-$lang->doc->project  = '項目庫';
-$lang->doc->custom   = '自定義庫';
-$lang->doc->wiki     = 'WIKI';
+$lang->doc->recent    = '最近文檔';
+$lang->doc->my        = '我的文檔';
+$lang->doc->favorite  = '我的收藏';
+$lang->doc->product   = '產品庫';
+$lang->doc->project   = '項目庫';
+$lang->doc->execution = "{$lang->executionCommon}庫";
+$lang->doc->custom    = '自定義庫';
+$lang->doc->wiki      = 'WIKI';
 
 $lang->product->list = $lang->productCommon . '列表';
 

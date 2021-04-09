@@ -278,6 +278,7 @@ class executionModel extends model
      */
     public function create($copyExecutionID = '')
     {
+        $sprintType = 'sprint';
         $this->lang->execution->team = $this->lang->execution->teamname;
 
         if($this->config->systemMode == 'new')
