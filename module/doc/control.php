@@ -215,15 +215,18 @@ class doc extends control
             if(!dao::isError())
             {
                 $objectType = $this->post->type;
-                if($objectType == 'execution' and $this->post->execution)
+
+                if($objectType == 'project' and $this->post->project)     $objectID = $this->post->project;
+                if($objectType == 'product' and $this->post->product)     $objectID = $this->post->product;
+                if($objectType == 'execution' and $this->post->execution) $objectID = $this->post->execution;
+                if($objectType == 'custom' or $objectType == 'book')      $objectID = 0;
+
+                if($objectType == 'execution' and $this->config->systemMode == 'new')
                 {
                     $execution  = $this->execution->getByID($this->post->execution);
                     $objectType = 'project';
                     $objectID   = $execution->project;
                 }
-                if($objectType == 'project' and $this->post->project) $objectID = $this->post->project;
-                if($objectType == 'product' and $this->post->product) $objectID = $this->post->product;
-                if($objectType == 'custom' or $objectType == 'book') $objectID = 0;
 
                 $this->action->create('docLib', $libID, 'Created');
 

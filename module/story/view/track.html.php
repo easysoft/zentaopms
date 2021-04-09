@@ -17,9 +17,9 @@
       </p>
     </div>
     <?php else:?>
-    <?php $style     = $this->app->rawModule == 'projectstory' ? "style='overflow: unset; text-align: left'" : '';?>
-    <?php $openApp   = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
-    <?php $module    = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';?>
+    <?php $style   = $this->app->rawModule == 'projectstory' ? "style='overflow: unset; text-align: left'" : '';?>
+    <?php $openApp = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
+    <?php $module  = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';?>
     <div class='main-table' data-ride="table">
       <table class='table table-bordered' id="trackList">
         <thead>

@@ -1668,8 +1668,8 @@ class userModel extends model
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('1=1')
-            ->beginIF($this->config->systemMode == 'new')->where('type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'classic')->where('type')->eq('execution')->fi()
+            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
+            ->beginIF($this->config->systemMode == 'classic')->andWhere('type')->eq('execution')->fi()
             ->andWhere('root')->in(array_keys($projectProducts))
             ->query();
 
