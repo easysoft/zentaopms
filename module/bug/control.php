@@ -264,7 +264,7 @@ class bug extends control
             }
         }
 
-        $this->bug->setMenu($this->products, $productID, $branchID);
+        $this->qa->setMenu($this->products, $productID, $branchID);
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->bug->reportChart;
@@ -809,7 +809,7 @@ class bug extends control
         /* Set the menu. */
         if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($bug->project);
         if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
-        if($this->app->openApp == 'qa') $this->bug->setMenu($this->products, $productID, $bug->branch);
+        if($this->app->openApp == 'qa') $this->qa->setMenu($this->products, $productID, $bug->branch);
 
         /* Unset discarded types. */
         foreach($this->config->bug->discardedTypes as $type)
@@ -920,7 +920,7 @@ class bug extends control
             $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
             /* Set product menu. */
-            $this->bug->setMenu($this->products, $productID, $branch);
+            $this->qa->setMenu($this->products, $productID, $branch);
             $this->view->title      = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
             $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
             $this->view->plans      = $plans;
@@ -1002,7 +1002,7 @@ class bug extends control
         $this->bug->checkBugExecutionPriv($bug);
 
         /* Set menu. */
-        $this->bug->setMenu($this->products, $bug->product, $bug->branch);
+        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
 
         if(!empty($_POST))
         {
@@ -1151,7 +1151,7 @@ class bug extends control
         $bug       = $this->bug->getById($bugID);
         $productID = $bug->product;
         $this->bug->checkBugExecutionPriv($bug);
-        $this->bug->setMenu($this->products, $productID, $bug->branch);
+        $this->qa->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->confirmBug;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -1235,7 +1235,7 @@ class bug extends control
         unset($this->lang->bug->resolutionList['tostory']);
 
         $this->bug->checkBugExecutionPriv($bug);
-        $this->bug->setMenu($this->products, $productID, $bug->branch);
+        $this->qa->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -1304,7 +1304,7 @@ class bug extends control
         $bug       = $this->bug->getById($bugID);
         $productID = $bug->product;
         $this->bug->checkBugExecutionPriv($bug);
-        $this->bug->setMenu($this->products, $productID, $bug->branch);
+        $this->qa->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -1351,7 +1351,7 @@ class bug extends control
         $bug       = $this->bug->getById($bugID);
         $productID = $bug->product;
         $this->bug->checkBugExecutionPriv($bug);
-        $this->bug->setMenu($this->products, $productID, $bug->branch);
+        $this->qa->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->close;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -1380,7 +1380,7 @@ class bug extends control
         $this->bug->checkBugExecutionPriv($bug);
 
         /* Set the menu. */
-        $this->bug->setMenu($this->products, $bug->product, $bug->branch);
+        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
 
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'linkBugs', "bugID=$bugID&browseType=bySearch&queryID=myQueryID", '', true);
@@ -1457,7 +1457,7 @@ class bug extends control
         $bugIDList = array_unique($bugIDList);
         $bugs = $this->dao->select('id, title, status, resolvedBy, openedBuild')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
-        $this->bug->setMenu($this->products, $productID, $branch);
+        $this->qa->setMenu($this->products, $productID, $branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
