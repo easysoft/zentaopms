@@ -29,7 +29,7 @@ class projectrelease extends control
         $this->loadModel('release');
         $this->loadModel('project');
         $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->project);
-        if(empty($this->view->products)) $this->locate($this->createLink('product', 'create'));
+        if(empty($this->products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=projectrelease&projectID=' . $this->session->project)));
     }
 
     /**
