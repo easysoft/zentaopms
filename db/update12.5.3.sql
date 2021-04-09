@@ -58,8 +58,9 @@ INSERT INTO `zt_group` (`name`, `role`, `desc`) VALUES ('项目管理员', 'proj
 
 ALTER TABLE `zt_usergroup` ADD `project` text NOT NULL;
 
+ALTER TABLE `zt_userview` CHANGE `projects` `sprints` mediumtext NOT NULL;
 ALTER TABLE `zt_userview` ADD `programs` mediumtext NOT NULL AFTER `account`;
-ALTER TABLE `zt_userview` ADD `sprints` mediumtext NOT NULL AFTER `programs`;
+ALTER TABLE `zt_userview` ADD `projects` mediumtext NOT NULL AFTER `programs`;
 
 ALTER TABLE `zt_user` ADD `company` mediumint unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_user` ADD `type` char(30) NOT NULL default 'inside' AFTER `account`;

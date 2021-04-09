@@ -61,10 +61,10 @@ class report extends control
         $this->view->title      = $this->lang->report->projectDeviation;
         $this->view->position[] = $this->lang->report->projectDeviation;
 
-        $this->view->projects = $this->report->getProjects($begin, $end);
-        $this->view->begin    = $begin;
-        $this->view->end      = $end;
-        $this->view->submenu  = 'project';
+        $this->view->executions = $this->report->getExecutions($begin, $end);
+        $this->view->begin      = $begin;
+        $this->view->end        = $end;
+        $this->view->submenu    = 'project';
         $this->display();
     }
 

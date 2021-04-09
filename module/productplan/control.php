@@ -502,10 +502,10 @@ class productplan extends control
         $this->session->set('bugList', inlink('view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
 
         /* Init vars. */
-        $projects  = $this->app->user->view->projects . ',0';
-        $plan      = $this->productplan->getByID($planID);
-        $productID = $plan->product;
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $executions = $this->app->user->view->sprints . ',0';
+        $plan       = $this->productplan->getByID($planID);
+        $productID  = $plan->product;
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set drop menu. */
         $this->commonAction($productID, $plan->branch);
@@ -547,7 +547,7 @@ class productplan extends control
         }
         else
         {
-            $allBugs = $this->bug->getActiveBugs($this->view->product->id, $plan->branch, $projects, array_keys($planBugs), $pager);
+            $allBugs = $this->bug->getActiveBugs($this->view->product->id, $plan->branch, $executions, array_keys($planBugs), $pager);
         }
 
         $this->view->allBugs    = $allBugs;

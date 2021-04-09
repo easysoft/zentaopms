@@ -639,6 +639,10 @@ class upgradeModel extends model
             $this->adjustWhitelistOfProduct();
             $this->adjustPriv15_0();
             $this->appendExec('12_5_3');
+        case '15_0_rc1':
+            $this->saveLogs('Execute 15_0_rc1');
+            $this->adjustUserView();
+            $this->appendExec('15_0_rc1');
         }
 
         $this->deletePatch();
@@ -4082,6 +4086,61 @@ class upgradeModel extends model
         {
             $grouppriv->method = 'editLib';
             $this->dao->replace(TABLE_GROUPPRIV)->data($grouppriv)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Adjust userview.
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustUserView()
+    {
+        $userViews = $this->dao->select('`account`,`sprints`,`projects`')->from(TABLE_USERVIEW)->where('projects')->ne('')->fetchAll('account');
+
+        $projectIdList     = array();
+        $accountProjects   = array();
+        $accountExecutions = array();
+        foreach($userViews as $account => $userView)
+        {
+            $projects = explode(',', trim($userView->projects, ','));
+            foreach($projects as $projectID)
+            {
+                if(empty($projectID)) continue;
+                $accountProjects[$account][$projectID] = $projectID;
+
+                if(isset($projectIdList[$projectID])) continue;
+                $projectIdList[$projectID] = $projectID;
+            }
+
+            $executions = explode(',', trim($userView->sprints, ','));
+            foreach($executions as $executionID)
+            {
+                if(empty($executionID)) continue;
+                $accountExecutions[$account][$executionID] = $executionID;
+            }
+        }
+
+        $executionPairs = $this->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('type')->in('sprint,stage')->fetchAll('id', 'id');
+        foreach($userViews as $account => $userView)
+        {
+            $projects = zget($accountProjects, $account, array());
+            if(empty($projects)) continue;
+
+            $executions = zget($accountExecutions, $account, array());
+            foreach($projects as $projectID)
+            {
+                if(isset($executionPairs[$projectID]))
+                {
+                    $executions[$projectID] = $projectID;
+                    unset($projects[$projectID]);
+                }
+            }
+
+            $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq(join(',', $executions))->set('projects')->eq(join(',', $projects))->where('account')->eq($account)->exec();
         }
 
         return true;

@@ -15,19 +15,19 @@
       <div class="row" id='conditions'>
         <div class='w-220px col-md-3 col-sm-6'>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->report->project . $lang->report->begin;?></span>
+            <span class='input-group-addon'><?php echo $lang->report->execution . $lang->report->begin;?></span>
             <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
           </div>
         </div>
         <div class='w-220px col-md-3 col-sm-6'>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->report->project . $lang->report->end;?></span>
+            <span class='input-group-addon'><?php echo $lang->report->execution . $lang->report->end;?></span>
             <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
           </div>
         </div>
       </div>
     </div>
-    <?php if(empty($projects)):?>
+    <?php if(empty($executions)):?>
     <div class="cell">
       <div class="table-empty-tip">
         <p><span class="text-muted"><?php echo $lang->error->noData;?></span></p>
@@ -41,11 +41,11 @@
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
         <div data-ride='table'>
-          <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id='projectList'>
+          <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id='executionList'>
             <thead>
               <tr class='colhead'>
                 <th class='w-id'><?php echo $lang->report->id;?></th>
-                <th><?php echo $lang->report->project;?></th>
+                <th><?php echo $lang->report->execution;?></th>
                 <th class="w-100px"><?php echo $lang->report->estimate;?></th>
                 <th class="w-100px"><?php echo $lang->report->consumed;?></th>
                 <th class="w-100px"><?php echo $lang->report->deviation;?></th>
@@ -53,13 +53,13 @@
               </tr>
             </thead>
             <tbody>
-              <?php foreach($projects as $id  =>$project):?>
+              <?php foreach($executions as $id  =>$execution):?>
               <tr class="text-center">
                 <td><?php echo $id;?></td>
-                <td class="text-left" title="<?php echo $project->name;?>"><?php echo html::a($this->createLink('project', 'view', "projectID=$id"), $project->name);?></td>
-                <td><?php echo $project->estimate;?></td>
-                <td><?php echo $project->consumed;?></td>
-                <?php $deviation = $project->consumed - $project->estimate;?>
+                <td class="text-left" title="<?php echo $execution->name;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID=$id"), $execution->name);?></td>
+                <td><?php echo $execution->estimate;?></td>
+                <td><?php echo $execution->consumed;?></td>
+                <?php $deviation = $execution->consumed - $execution->estimate;?>
                 <td class="deviation">
                 <?php
                     if($deviation > 0)
@@ -78,7 +78,7 @@
                 </td>
                 <td class="deviation">
                   <?php
-                  $num = $project->estimate ? round($deviation / $project->estimate * 100, 2) : 'n/a';
+                  $num = $execution->estimate ? round($deviation / $execution->estimate * 100, 2) : 'n/a';
                   if($num >= 50)
                   {
                       echo '<span class="u50">' . $num . '%</span>';
@@ -112,7 +112,7 @@
                       echo '<span class="zero">' . abs($num) . '%</span>';
                   }
 
-                  $chartData['labels'][] = $project->name;
+                  $chartData['labels'][] = $execution->name;
                   $chartData['data'][]   = $deviation;
                   ?>
                 </td>
