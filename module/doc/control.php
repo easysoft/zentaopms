@@ -491,7 +491,21 @@ class doc extends control
         else
         {
             $this->app->rawMethod = $objectType;
+
+            /* High light menu. */
+            if($objectType)
+            {
+                $menu = $this->lang->doc->menu->$objectType;
+                $menu['alias']    .= ',edit';
+                $menu['subModule'] = 'doc';
+                $this->lang->doc->menu->$objectType = $menu;
+            }
         }
+
+        $objects = $this->doc->getOrderedObjects($objectType);
+        $libs    = $this->doc->getLibsByObject($objectType, $objectID);
+        $this->lang->modulePageNav = $this->doc->select($objectType, $objects, $objectID, $libs, $libID);
+        $this->lang->TRActions     = common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($objectType, $objectID, $libID) : '';
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);
