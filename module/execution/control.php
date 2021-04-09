@@ -1234,6 +1234,7 @@ class execution extends control
             $this->view->title       = $this->lang->execution->tips;
             $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
             $this->view->executionID = $executionID;
+            $this->view->projectID   = $projectID;
             $this->display();
             exit;
         }
