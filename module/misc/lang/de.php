@@ -84,6 +84,8 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Letzte Version';
 $lang->misc->feature->detailed = 'Details';
 
+$lang->misc->releaseDate['15.0.rc2']    = '2021-04-09';
+$lang->misc->releaseDate['15.0.rc1']    = '2021-04-05';
 $lang->misc->releaseDate['12.5.3']      = '2021-01-06';
 $lang->misc->releaseDate['12.5.2']      = '2020-12-18';
 $lang->misc->releaseDate['12.5.1']      = '2020-11-30';
@@ -138,6 +140,8 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['15.0.rc2'][]    = array('title' => 'Fix Bug.', 'desc' => '');
+$lang->misc->feature->all['15.0.rc1'][]    = array('title' => 'Upgrade to 15,reframe menu, add program.', 'desc' => '');
 $lang->misc->feature->all['12.5.3'][]      = array('title' => 'Adjust annual data.', 'desc' => '');
 $lang->misc->feature->all['12.5.2'][]      = array('title' => 'Fix Bug', 'desc' => '');
 $lang->misc->feature->all['12.5.1'][]      = array('title' => 'Fix Bug', 'desc' => '');
