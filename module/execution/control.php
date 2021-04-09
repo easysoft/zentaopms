@@ -2723,7 +2723,6 @@ class execution extends control
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
         $this->view->from           = $from;
-        $this->view->projectTree    = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
 
         $this->display();
     }
