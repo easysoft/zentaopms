@@ -982,7 +982,7 @@ class doc extends control
      */
     public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0, $version = 0)
     {
-        $this->session->set('docList', $this->app->getURI(true), 'doc');
+        $this->session->set('docList', $this->app->getURI(true), $this->app->openApp);
 
         $objects = $this->doc->getOrderedObjects($type);
 
