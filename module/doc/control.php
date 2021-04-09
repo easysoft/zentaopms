@@ -215,7 +215,7 @@ class doc extends control
             if(!dao::isError())
             {
                 $objectType = $this->post->type;
-                if($objectType == 'execution' and $this->post->execution)
+                if($objectType == 'execution' and $this->post->execution and $this->config->systemMode == 'new')
                 {
                     $execution  = $this->execution->getByID($this->post->execution);
                     $objectType = 'project';
@@ -1037,6 +1037,7 @@ class doc extends control
             }
             else if($type == 'execution')
             {
+                $objectID = $this->execution->saveState($objectID, $objects);
                 $table = TABLE_EXECUTION;
                 $libs  = $this->doc->getLibsByObject('execution', $objectID);
 
