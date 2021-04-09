@@ -12,6 +12,8 @@ $config->productLink   = '-';
 $config->projectLink   = '-';
 $config->executionLink = '-';
 $config->systemMode    = 'new';
+$config->URAndSR       = true;
+$config->systemScore   = true;
 
 /* set module root path and included the resource of group module. */
 $moduleRoot = '../module/';
