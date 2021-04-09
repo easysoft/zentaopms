@@ -1,4 +1,8 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
+<?php
+$sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
+$sessionString .= session_name() . '=' . session_id();
+?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell">
