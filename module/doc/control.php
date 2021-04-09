@@ -243,6 +243,7 @@ class doc extends control
 
         $libTypeList = $this->lang->doc->libTypeList;
         if(empty($products))   unset($libTypeList['product']);
+        if(empty($projects))   unset($libTypeList['project']);
         if(empty($executions)) unset($libTypeList['execution']);
 
         $this->view->groups      = $this->loadModel('group')->getPairs();
