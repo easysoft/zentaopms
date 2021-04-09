@@ -1,4 +1,4 @@
-#copyButton {width: 56px; background-color: #f1f1f1; opacity: 1;} /* Adjust for task #4151; */
+#copyButton {width: 80px; background-color: #f1f1f1; opacity: 1;} /* Adjust for task #4151; */
 
 .title-group.required:after {display: none;}
 .title-group.required > .required:after {display: block; right: 29px; top: 5px;}

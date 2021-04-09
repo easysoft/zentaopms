@@ -693,6 +693,7 @@ class project extends control
      * Project bug list.
      *
      * @param  int    $projectID
+     * @param  int    $productID
      * @param  string $orderBy
      * @param  int    $build
      * @param  string $type
@@ -703,22 +704,26 @@ class project extends control
      * @access public
      * @return void
      */
-    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($projectID = 0, $productID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
         $this->loadModel('user');
+        $this->loadModel('product');
 
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true), 'qa');
         $this->project->setMenu($projectID);
 
-        $project   = $this->project->getByID($projectID);
-        $type      = strtolower($type);
-        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
-        $products  = $this->project->getProducts($projectID);
-        $productID = key($products);    // Get the first product for creating bug.
-        $branchID  = isset($products[$productID]) ? $products[$productID]->branch : 0;
+        $project  = $this->project->getByID($projectID);
+        $type     = strtolower($type);
+        $queryID  = ($type == 'bysearch') ? (int)$param : 0;
+        $products = $this->project->getProducts($projectID);
+        $branchID = isset($products[$productID]) ? $products[$productID]->branch : 0;
+
+        $productPairs = array('0' => $this->lang->product->all);
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', '', $branchID);
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->bug->common;
@@ -729,7 +734,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
-        $bugs  = $this->bug->getProjectBugs($projectID, $build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->getProjectBugs($projectID, $productID, $build, $type, $param, $sort, '', $pager);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -739,7 +744,7 @@ class project extends control
         foreach($teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
 
         /* Build the search form. */
-        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->loadModel('execution')->buildBugSearchForm($products, $queryID, $actionURL, 'project');
 
         /* Assign. */

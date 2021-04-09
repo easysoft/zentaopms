@@ -12,39 +12,6 @@
 class testreportModel extends model
 {
     /**
-     * Set menu.
-     *
-     * @param  array  $products
-     * @param  int    $productID
-     * @param  int    $branch
-     * @access public
-     * @return void
-     */
-    public function setMenu($products, $productID, $branch = 0)
-    {
-        $this->loadModel('product')->setMenu($products, $productID, $branch);
-
-        foreach($this->lang->testtask->menu as $key => $value)
-        {
-            if($this->lang->navGroup->testreport != 'qa') $this->loadModel('qa')->setSubMenu('testreport', $key, $productID);
-            $replace = $productID;
-            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->testreport->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->testreport == 'qa')
-        {
-            foreach($this->lang->qa->subMenu->testtask as $key => $menu)
-            {
-                common::setMenuVars($this->lang->qa->subMenu->testtask, $key, $productID);
-            }
-            $this->lang->qa->menu         = $this->lang->testreport->menu;
-            $this->lang->testreport->menu = $this->lang->qa->subMenu->testtask;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        }
-    }
-
-    /**
      * Create report.
      *
      * @access public

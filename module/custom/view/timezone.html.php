@@ -11,9 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'><?php // common::printAdminSubMenu('system');?></div>
-</div>
 <div id='mainContent' class='main-content'>
   <div class='mw-500px'>
     <?php if(!function_exists('date_default_timezone_set')):?>
@@ -35,4 +32,11 @@
     <?php endif;?>
   </div>
 </div>
+<script>
+$(function()
+{
+    $('#mainHeader #navbar li[data-id=model]').removeClass('active');
+})
+</script>
+
 <?php include '../../common/view/footer.html.php';?>

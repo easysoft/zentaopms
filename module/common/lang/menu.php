@@ -520,8 +520,7 @@ $lang->navGroup->ci      = 'devops';
 $lang->navGroup->svn     = 'devops';
 $lang->navGroup->git     = 'devops';
 
-$lang->navGroup->company       = 'system';
-$lang->navGroup->ldap          = 'system';
+$lang->navGroup->company = 'system';
 
 $lang->navGroup->attend   = 'attend';
 $lang->navGroup->leave    = 'attend';
