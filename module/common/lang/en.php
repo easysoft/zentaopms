@@ -210,13 +210,14 @@ $lang->project->list = 'Project List';
 
 $lang->execution->list = "{$lang->executionCommon} List";
 
-$lang->doc->recent   = 'Recent';
-$lang->doc->my       = 'My';
-$lang->doc->favorite = 'Favorite';
-$lang->doc->product  = 'Product';
-$lang->doc->project  = 'Project';
-$lang->doc->custom   = 'Custom';
-$lang->doc->wiki     = 'WIKI';
+$lang->doc->recent    = 'Recent';
+$lang->doc->my        = 'My';
+$lang->doc->favorite  = 'Favorite';
+$lang->doc->product   = 'Product';
+$lang->doc->project   = 'Project';
+$lang->doc->execution = $lang->executionCommon;
+$lang->doc->custom    = 'Custom';
+$lang->doc->wiki      = 'WIKI';
 
 $lang->product->list = $lang->productCommon . ' List';
 
