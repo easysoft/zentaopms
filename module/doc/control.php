@@ -221,7 +221,12 @@ class doc extends control
                     $objectType = 'project';
                     $objectID   = $execution->project;
                 }
+                if($objectType == 'project' and $this->post->project) $objectID = $this->post->project;
+                if($objectType == 'product' and $this->post->product) $objectID = $this->post->product;
+                if($objectType == 'custom' or $objectType == 'book') $objectID = 0;
+
                 $this->action->create('docLib', $libID, 'Created');
+
                 die(js::locate($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID"), 'parent.parent'));
             }
             else
