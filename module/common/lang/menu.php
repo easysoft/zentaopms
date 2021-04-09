@@ -334,7 +334,8 @@ $lang->doc->menu->recent    = array('link' => "{$lang->doc->recent}|doc|browse|l
 $lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|libID=0&browseTyp=openedbyme", 'alias' => 'my');
 $lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|libID=0&browseTyp=collectedbyme", 'alias' => 'collect');
 $lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|objectLibs|type=product", 'alias' => 'product');
-$lang->doc->menu->project   = array('link' => "{$lang->doc->project}|doc|objectLibs|type=project", 'alias' => 'project');
+if($config->systemMode == 'new') $lang->doc->menu->project = array('link' => "{$lang->doc->project}|doc|objectLibs|type=project", 'alias' => 'project');
+if($config->systemMode == 'classic') $lang->doc->menu->execution = array('link' => "{$lang->doc->execution}|doc|objectLibs|type=execution", 'alias' => 'execution');
 $lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|objectLibs|type=custom", 'alias' => 'custom');
 
 $lang->doc->dividerMenu = ',product,';
@@ -345,11 +346,13 @@ $lang->doc->menuOrder[10] = 'recent';
 $lang->doc->menuOrder[15] = 'my';
 $lang->doc->menuOrder[20] = 'collect';
 $lang->doc->menuOrder[25] = 'product';
-$lang->doc->menuOrder[30] = 'project';
+if($config->systemMode == 'new') $lang->doc->menuOrder[30] = 'project';
+if($config->systemMode == 'classic') $lang->doc->menuOrder[30] = 'execution';
 $lang->doc->menuOrder[35] = 'custom';
 
 $lang->doc->menu->product['subMenu'] = new stdclass();
-$lang->doc->menu->project['subMenu'] = new stdclass();
+if($config->systemMode == 'new') $lang->doc->menu->project['subMenu'] = new stdclass();
+if($config->systemMode == 'classic') $lang->doc->menu->execution['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']  = new stdclass();
 
 /* Report menu.*/

@@ -215,7 +215,6 @@ class doc extends control
             if(!dao::isError())
             {
                 $objectType = $this->post->type;
-
                 if($objectType == 'project' and $this->post->project)     $objectID = $this->post->project;
                 if($objectType == 'product' and $this->post->product)     $objectID = $this->post->product;
                 if($objectType == 'execution' and $this->post->execution) $objectID = $this->post->execution;
@@ -621,6 +620,8 @@ class doc extends control
         }
         else
         {
+            $doc        = $this->doc->getByID($docID);
+            $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
             $this->doc->delete(TABLE_DOC, $docID);
 
             /* if ajax request, send result. */
@@ -638,9 +639,7 @@ class doc extends control
 
                     if($from == 'lib')
                     {
-                        $pos  = strpos($this->session->docList, 'docID');
-                        $link = $pos !== false ? substr($this->session->docList, 0, $pos - 1) : $this->session->docList;
-                        $response['locate']  = $link;
+                        $response['locate']  = $this->createLink('doc', 'objectLibs', "type=$objectType");
                     }
                 }
                 $this->send($response);
@@ -1040,6 +1039,7 @@ class doc extends control
             }
             else if($type == 'execution')
             {
+                $objectID = $this->execution->saveState($objectID, $objects);
                 $table = TABLE_EXECUTION;
                 $libs  = $this->doc->getLibsByObject('execution', $objectID);
 
