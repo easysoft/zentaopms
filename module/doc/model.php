@@ -165,6 +165,12 @@ class docModel extends model
             ->join('users', ',')
             ->get();
 
+        if($lib->type == 'execution' and $lib->execution)
+        {
+            $execution  = $this->loadModel('execution')->getByID($lib->execution);
+            $lib->project = $execution->project;
+        }
+
         if($lib->acl == 'private') $lib->users = $this->app->user->account;
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck($this->config->doc->createlib->requiredFields, 'notempty')
