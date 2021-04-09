@@ -1667,7 +1667,9 @@ class userModel extends model
         /* Get linked projects teams. */
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
-            ->where('type')->eq('project')
+            ->where('1=1')
+            ->beginIF($this->config->systemMode == 'new')->where('type')->eq('project')->fi()
+            ->beginIF($this->config->systemMode == 'classic')->where('type')->eq('execution')->fi()
             ->andWhere('root')->in(array_keys($projectProducts))
             ->query();
 

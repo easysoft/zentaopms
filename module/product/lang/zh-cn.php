@@ -149,7 +149,7 @@ if($config->systemMode == 'new')
 }
 else
 {
-    $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人可访问)";
+    $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、相关联{$lang->executionCommon}的团队成员可访问)";
 }
 $lang->product->aclList['open']    = "公开(有{$lang->productCommon}视图权限，即可访问)";
 //$lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
