@@ -620,6 +620,8 @@ class doc extends control
         }
         else
         {
+            $doc        = $this->doc->getByID($docID);
+            $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
             $this->doc->delete(TABLE_DOC, $docID);
 
             /* if ajax request, send result. */
@@ -637,9 +639,7 @@ class doc extends control
 
                     if($from == 'lib')
                     {
-                        $pos  = strpos($this->session->docList, 'docID');
-                        $link = $pos !== false ? substr($this->session->docList, 0, $pos - 1) : $this->session->docList;
-                        $response['locate']  = $link;
+                        $response['locate']  = $this->createLink('doc', 'objectLibs', "type=$objectType");
                     }
                 }
                 $this->send($response);
