@@ -674,6 +674,7 @@ class execution extends control
         /* Load these models. */
         $this->loadModel('story');
         $this->loadModel('user');
+        $this->loadModel('datatable');
         $this->app->loadLang('testcase');
 
         $type      = strtolower($type);
@@ -791,7 +792,8 @@ class execution extends control
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
 
         if(empty($productID)) $productID = key($productPairs);
-        $modulePairs = $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', true);
+        $showModule  = !empty($this->config->datatable->executionStory->showModule) ? $this->config->datatable->executionStory->showModule : '';
+        $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
 
         /* Assign. */
         $this->view->title        = $title;
@@ -812,6 +814,7 @@ class execution extends control
         $this->view->storyCases   = $storyCases;
         $this->view->users        = $users;
         $this->view->pager        = $pager;
+        $this->view->setModule    = true;
         $this->view->branchGroups = $branchGroups;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
