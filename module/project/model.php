@@ -1351,7 +1351,7 @@ class projectModel extends model
                     }
                     break;
                 case 'name':
-                    if($this->config->systemMode == 'new')
+                    if(isset($this->config->maxVersion))
                     {
                         if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
                         if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
