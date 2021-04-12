@@ -13,8 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php
-$browseLink = $this->createLink('stakeholder', 'browse');
-$createLink = $this->createLink('stakeholder', 'create');
+$browseLink = $this->createLink('stakeholder', 'browse', "projectID=$user->objectID");
+$createLink = $this->createLink('stakeholder', 'create', "projectID=$user->objectID");
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -28,7 +28,7 @@ $createLink = $this->createLink('stakeholder', 'create');
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('stakeholder', 'create')) echo html::a($createLink, "<i class='icon icon-plus'></i> {$lang->stakeholder->create}", '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('stakeholder', 'create')) echo html::a($createLink, "<i class='icon icon-plus'></i> {$lang->stakeholder->create}", '', "class='btn btn-primary' data-app=$app->openApp");?>
   </div>
 </div>
 <div class="main-row" id="mainContent">
