@@ -45,8 +45,8 @@
         </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>
-            <?php 
-            echo html::submitButton($lang->story->activate, '', 'btn btn-wide btn-success');
+            <?php
+            echo html::submitButton($lang->story->activate, '', 'btn btn-wide btn-primary');
             echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), 'self', '', 'btn btn-wide');
             ?>
           </td>
