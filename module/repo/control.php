@@ -513,7 +513,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function revision($repoID, $objectID = 0, $revision, $root = '', $type = 'dir')
+    public function revision($repoID, $objectID = 0, $revision = '', $root = '', $type = 'dir')
     {
         $this->repo->setBackSession();
         if($repoID == 0) $repoID = $this->session->repoID;
