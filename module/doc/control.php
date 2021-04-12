@@ -501,7 +501,7 @@ class doc extends control
             $this->app->rawMethod = $objectType;
 
             /* High light menu. */
-            if($objectType)
+            if(strpos(',product,project,execution,custom,book,', ",$objectType,") !== false)
             {
                 $menu = $this->lang->doc->menu->$objectType;
                 $menu['alias']    .= ',edit';
