@@ -427,7 +427,7 @@ class productModel extends model
         $currentModule = $this->app->moduleName;
         $currentMethod = $this->app->methodName;
 
-        /* init currentModule and currentMethod for report and story. */
+        /* Init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
         {
             $storyMethods = ",track,create,batchcreate,batchclose,zerocase,";
@@ -455,7 +455,7 @@ class productModel extends model
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
             $branches     = $this->loadModel('branch')->getPairs($productID);
-            $branch       = empty($branch) ? (int)$this->cookie->preBranch : $branch;
+            $branch       = (int)$branch;
             $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
             $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
 

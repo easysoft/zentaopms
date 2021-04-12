@@ -32,6 +32,7 @@ $filter->bug        = new stdclass();
 $filter->caselib    = new stdclass();
 $filter->doc        = new stdclass();
 $filter->product    = new stdclass();
+$filter->branch     = new stdclass();
 $filter->qa         = new stdclass();
 $filter->story      = new stdclass();
 $filter->task       = new stdclass();
@@ -78,6 +79,7 @@ $filter->product->default            = new stdclass();
 $filter->product->index              = new stdclass();
 $filter->product->export             = new stdclass();
 $filter->product->project            = new stdclass();
+$filter->branch->default             = new stdclass();
 $filter->program->default            = new stdclass();
 $filter->program->pgmproject         = new stdclass();
 $filter->program->prjbrowse          = new stdclass();
@@ -165,6 +167,8 @@ $filter->product->default->cookie['preProductID']     = 'int';
 $filter->product->index->cookie['preBranch']          = 'int';
 $filter->product->export->cookie['checkedItem']       = 'reg::checked';
 $filter->product->project->cookie['involved']         = 'code';
+
+$filter->branch->default->cookie['preBranch'] = 'int';
 
 $filter->program->default->cookie['lastPGM']            = 'int';
 $filter->program->default->cookie['lastPRJ']            = 'int';

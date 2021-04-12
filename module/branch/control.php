@@ -69,8 +69,9 @@ class branch extends control
         $this->view->extra     = $extra;
 
         $branches = $this->branch->getPairs($productID);
-        $this->view->branches       = $branches;
-        $this->view->branchesPinyin = common::convert2Pinyin($branches);
+        $this->view->branches        = $branches;
+        $this->view->currentBranchID = $this->cookie->preBranch;
+        $this->view->branchesPinyin  = common::convert2Pinyin($branches);
         $this->display();
     }
 
