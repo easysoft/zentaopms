@@ -383,11 +383,11 @@ class bug extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
 
-            if(!empty($output['executionID']))
+            if($this->app->openApp == 'execution')
             {
                 $location = $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
             }
-            elseif(!empty($output['projectID']))
+            elseif($this->app->openApp == 'project')
             {
                 $location = $this->createLink('project', 'bug', "projectID={$output['projectID']}");
             }
