@@ -785,7 +785,7 @@ class projectModel extends model
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->type    = 'project';
             $lib->main    = '1';
-            $lib->acl     = 'default';
+            $lib->acl     = $project->acl;
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
@@ -820,7 +820,7 @@ class projectModel extends model
                 $lib->name    = $this->lang->doclib->main['product'];
                 $lib->type    = 'product';
                 $lib->main    = '1';
-                $lib->acl     = 'default';
+                $lib->acl     = $product->acl;
                 $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
             }
 
@@ -851,16 +851,6 @@ class projectModel extends model
                 $groupPriv->project = $projectID;
                 $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
-
-            /* Create doc lib. */
-            $this->app->loadLang('doc');
-            $lib = new stdclass();
-            $lib->project = $projectID;
-            $lib->name    = $this->lang->doclib->main['project'];
-            $lib->type    = 'project';
-            $lib->main    = '1';
-            $lib->acl     = 'default';
-            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             return $projectID;
         }

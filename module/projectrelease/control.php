@@ -192,8 +192,7 @@ class projectrelease extends control
      */
     public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
-        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -237,22 +236,23 @@ class projectrelease extends control
 
         $this->executeHooks($releaseID);
 
-        $this->view->title         = "RELEASE #$release->id $release->name/" . $product->name;
-        $this->view->position[]    = $this->lang->release->view;
-        $this->view->release       = $release;
-        $this->view->stories       = $stories;
-        $this->view->bugs          = $bugs;
-        $this->view->leftBugs      = $leftBugs;
-        $this->view->actions       = $this->loadModel('action')->getList('release', $releaseID);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->type          = $type;
-        $this->view->link          = $link;
-        $this->view->param         = $param;
-        $this->view->orderBy       = $orderBy;
-        $this->view->branchName    = $release->productType == 'normal' ? '' : $this->loadModel('branch')->getById($release->branch);
-        $this->view->storyPager    = $storyPager;
-        $this->view->bugPager      = $bugPager;
-        $this->view->leftBugPager  = $leftBugPager;
+        $this->view->title        = "RELEASE #$release->id $release->name/" . $product->name;
+        $this->view->position[]   = $this->lang->release->view;
+        $this->view->release      = $release;
+        $this->view->stories      = $stories;
+        $this->view->bugs         = $bugs;
+        $this->view->leftBugs     = $leftBugs;
+        $this->view->actions      = $this->loadModel('action')->getList('release', $releaseID);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->type         = $type;
+        $this->view->link         = $link;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->branchName   = $release->productType == 'normal' ? '' : $this->loadModel('branch')->getById($release->branch);
+        $this->view->storyPager   = $storyPager;
+        $this->view->bugPager     = $bugPager;
+        $this->view->leftBugPager = $leftBugPager;
+        $this->view->projectID    = $this->session->project;
         $this->display();
     }
 
@@ -429,7 +429,7 @@ class projectrelease extends control
             $this->projectrelease->linkStory($releaseID);
             die(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
         }
-        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
+        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->openApp);
 
         $release = $this->projectrelease->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build);
@@ -482,6 +482,7 @@ class projectrelease extends control
         $this->view->browseType     = $browseType;
         $this->view->param          = $param;
         $this->view->pager          = $pager;
+        $this->view->projectID      = $this->session->project;
         $this->display();
     }
 

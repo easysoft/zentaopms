@@ -188,10 +188,6 @@ class build extends control
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->session->project = $build->project;
 
-        /* Set session and load modules. */
-        if($type == 'story')$this->session->set('storyList', $this->app->getURI(true), 'product');
-        if($type == 'bug')  $this->session->set('bugList', $this->app->getURI(true), 'qa');
-
         $this->loadModel('story');
         $this->loadModel('bug');
 
@@ -404,7 +400,7 @@ class build extends control
     }
 
     /**
-     * Link stories
+     * Link stories.
      *
      * @param  int    $buildID
      * @param  string $browseType
@@ -423,7 +419,7 @@ class build extends control
             die(js::locate(inlink('view', "buildID=$buildID&type=story"), 'parent'));
         }
 
-        $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
+        $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->openApp);
 
         $build   = $this->build->getById($buildID);
         $product = $this->loadModel('product')->getById($build->product);

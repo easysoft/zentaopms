@@ -96,7 +96,7 @@
                 </thead>
                 <tbody>
                   <?php foreach($stories as $storyID => $story):?>
-                  <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
+                  <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$projectID", '', true);?>
                   <tr>
                     <td class='c-id text-left'>
                       <?php if(($canBatchUnlink or $canBatchClose) and $canBeChanged):?>

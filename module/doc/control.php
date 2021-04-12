@@ -501,7 +501,7 @@ class doc extends control
             $this->app->rawMethod = $objectType;
 
             /* High light menu. */
-            if($objectType)
+            if(strpos(',product,project,execution,custom,book,', ",$objectType,") !== false)
             {
                 $menu = $this->lang->doc->menu->$objectType;
                 $menu['alias']    .= ',edit';
@@ -982,7 +982,7 @@ class doc extends control
      */
     public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0, $version = 0)
     {
-        $this->session->set('docList', $this->app->getURI(true), 'doc');
+        $this->session->set('docList', $this->app->getURI(true), $this->app->openApp);
 
         $objects = $this->doc->getOrderedObjects($type);
 

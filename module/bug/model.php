@@ -1545,7 +1545,7 @@ class bugModel extends model
 
         $execution    = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($build->execution)->fetch();
         $beforeBuilds = $this->dao->select('t1.id')->from(TABLE_BUILD)->alias('t1')
-            ->leftJoin(TABLE_EXECTUION)->alias('t2')->on('t1.execution=t2.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.status')->ne('done')
             ->andWhere('t2.deleted')->eq(0)
