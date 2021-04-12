@@ -59,5 +59,3 @@ a.showMoreImage:hover {opacity: 1;}
 #userNav>li .pull-right {right: -1px;}
 #userNav>li .lang .dropdown-menu, #userNav>li .theme .dropdown-menu {top: -60px;}
 #userNav .dropdown-menu>li>a>.icon { position: initial; display: inline;}
-
-.dropup .search-list .search-box+.list-group {height: 140px}
