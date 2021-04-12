@@ -1,10 +1,10 @@
 ALTER TABLE `zt_project` DROP `isCat`, DROP `catID`;
 ALTER TABLE `zt_project` ADD `project` mediumint(8) NOT NULL DEFAULT 0 AFTER `id`;
 ALTER TABLE `zt_project` ADD `model` char(30) NOT NULL AFTER `project`;
-ALTER TABLE `zt_project` CHANGE `type` `type` char(30) NOT NULL DEFAULT 'sprint' AFTER `model`;
+ALTER TABLE `zt_project` CHANGE `type` `lifetime` char(30) NOT NULL DEFAULT 'sprint';
 ALTER TABLE `zt_project` CHANGE `acl` `acl` char(30) NOT NULL DEFAULT 'open';
+ALTER TABLE `zt_project` ADD `type` char(30) NOT NULL DEFAULT 'sprint' AFTER `model`;
 ALTER TABLE `zt_project` ADD `product` varchar(20) NOT NULL DEFAULT 'single' AFTER `type`;
-ALTER TABLE `zt_project` ADD `lifetime` char(30) NOT NULL AFTER `product`;
 ALTER TABLE `zt_project` ADD `budget` varchar(30) NOT NULL DEFAULT '0' AFTER `lifetime`;
 ALTER TABLE `zt_project` ADD `budgetUnit` char(30) NOT NULL DEFAULT 'CNY' AFTER `budget`;
 ALTER TABLE `zt_project` ADD `percent` float unsigned NOT NULL DEFAULT '0' AFTER `budgetUnit`;
