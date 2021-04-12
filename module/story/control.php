@@ -134,7 +134,7 @@ class story extends control
 
             if($objectID != 0)
             {
-                if($objectID != $this->session->project) $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $objectID);
+                if($objectID != $this->session->project) $this->loadModel('action')->create('story', $storyID, 'linked2execution', '', $objectID);
                 $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $this->session->project);
             }
 
