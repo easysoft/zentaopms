@@ -30,7 +30,7 @@ class tree extends control
 
         if($this->app->openApp == 'product')
         {
-            $this->product->setMenu($rootID, 0, 0, '', $viewType);;
+            $this->product->setMenu($rootID, 0, 0, '', $viewType);
         }
         else if($this->app->openApp == 'qa' and $viewType != 'caselib')
         {
