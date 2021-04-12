@@ -1748,7 +1748,7 @@ class execution extends control
         $this->app->loadLang('program');
 
         /* Execution not found to prevent searching for .*/
-        if(!isset($this->executions[$execution->id])) $this->executions = $this->execution->getPairs($execution->execution, 'all', 'nocode');
+        if(!isset($this->executions[$execution->id])) $this->executions = $this->execution->getPairs($execution->project, 'all', 'nocode');
 
         $products = $this->execution->getProducts($execution->id);
         $linkedBranches = array();
