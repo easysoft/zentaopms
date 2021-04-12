@@ -78,6 +78,7 @@ class product extends control
     public function project($status = 'all', $productID = 0, $branch = 0, $involved = 0)
     {
         $this->app->loadLang('execution');
+        $this->app->loadLang('project');
 
         $this->product->setMenu($productID, $branch);
 

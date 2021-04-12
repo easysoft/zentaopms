@@ -436,7 +436,6 @@ class productModel extends model
         }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
-        $this->app->loadLang('project');
         $currentProductName = $this->lang->product->common;
         if($productID)
         {
