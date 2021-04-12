@@ -3160,7 +3160,7 @@ class storyModel extends model
         if($action == 'assignto')   return $story->status != 'closed';
         if($action == 'createcase') return $story->type != 'requirement';
         if($action == 'batchcreate' and $story->parent > 0) return false;
-        if($action == 'batchcreate' and $story->type == 'requirement') return $story->status != 'draft';
+        if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return $story->status != 'draft';
         if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait')) return false;
 
         return true;
