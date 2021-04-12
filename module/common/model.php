@@ -344,11 +344,11 @@ class commonModel extends model
             echo '<li>';
             if($isGuest)
             {
-                echo html::a(helper::createLink('user', 'login'), $lang->login);
+                echo html::a(helper::createLink('user', 'login'), $lang->login, '_top');
             }
             else
             {
-                echo html::a(helper::createLink('user', 'logout'), "<i class='icon icon-exit'></i> " . $lang->logout);
+                echo html::a(helper::createLink('user', 'logout'), "<i class='icon icon-exit'></i> " . $lang->logout, '_top');
             }
             echo '</li></ul>';
         }
