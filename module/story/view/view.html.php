@@ -276,7 +276,7 @@
                       foreach($modulePath as $key => $module)
                       {
                           $moduleTitle .= $module->name;
-                          if(!common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                          if(!common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id", $module->name, '', "data-app='product'")) echo $module->name;
                           if(isset($modulePath[$key + 1]))
                           {
                               $moduleTitle .= '/';
