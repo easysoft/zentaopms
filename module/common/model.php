@@ -178,6 +178,7 @@ class commonModel extends model
      */
     public function isOpenMethod($module, $method)
     {
+        if($module == 'upgrade' and $method == 'ajaxupdatefile') return true;
         if($module == 'user' and strpos('login|logout|deny|reset|refreshrandom', $method) !== false) return true;
         if($module == 'api'  and $method == 'getsessionid') return true;
         if($module == 'misc' and $method == 'checktable') return true;
