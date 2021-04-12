@@ -109,7 +109,7 @@ class productModel extends model
             if($currentProduct->type == 'normal') unset($this->lang->product->menu->settings['subMenu']->branch);
             if($currentProduct->type != 'normal' && $currentModule != 'programplan')
             {
-                $this->lang->product->branch = $this->lang->product->branchName[$currentProduct->type];
+                $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
                 $this->lang->product->menu->settings['subMenu']->branch = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch);
 
                 $branches   = $this->loadModel('branch')->getPairs($productID);
