@@ -145,6 +145,8 @@ class stakeholder extends control
     public function edit($stakeholderID = 0)
     {
         $stakeholder = $this->stakeholder->getByID($stakeholderID);
+        $this->loadModel('project')->setMenu($stakeholder->objectID);
+
         if($_POST)
         {
             $changes = $this->stakeholder->edit($stakeholderID);
@@ -318,11 +320,14 @@ class stakeholder extends control
     */
     public function view($userID = 0)
     {
+        $user = $this->stakeholder->getByID($userID);
+        $this->loadModel('project')->setMenu($user->objectID);
         $this->commonAction($userID, 'stakeholder');
+
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->view;
         $this->view->position[] = $this->lang->stakeholder->view;
 
-        $this->view->user    = $this->stakeholder->getByID($userID);
+        $this->view->user    = $user;
         $this->view->users   = $this->loadModel('execution')->getTeamMemberPairs($this->session->project,'nodeleted');
         $this->view->expects = $this->stakeholder->getExpectByUser($userID);
 
