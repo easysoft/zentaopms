@@ -454,7 +454,7 @@ $lang->action->label->testtask    = '测试单|testtask|view|caseID=%s';
 $lang->action->label->testsuite   = '测试套件|testsuite|view|suiteID=%s';
 $lang->action->label->caselib     = '用例库|caselib|view|libID=%s';
 $lang->action->label->todo        = '待办|todo|view|todoID=%s';
-$lang->action->label->doclib      = '文档库|doc|browse|libID=%s';
+$lang->action->label->doclib      = '文档库|doc|doclibbrowse|libID=%s';
 $lang->action->label->doc         = '文档|doc|view|docID=%s';
 $lang->action->label->user        = '用户|user|view|account=%s';
 $lang->action->label->testreport  = '报告|testreport|view|report=%s';

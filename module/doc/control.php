@@ -623,7 +623,7 @@ class doc extends control
         {
             $doc        = $this->doc->getByID($docID);
             $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
-            if($this->config->systemMode == 'classic' and $objectType == 'project') $objectType = 'execution'; 
+            if($this->config->systemMode == 'classic' and $objectType == 'project') $objectType = 'execution';
             $this->doc->delete(TABLE_DOC, $docID);
 
             /* if ajax request, send result. */
@@ -967,6 +967,31 @@ class doc extends control
         if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
 
         die(js::locate('back'));
+    }
+
+    /**
+     * Doc lib browse.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function doclibBrowse($libID = 0)
+    {
+        $doclib = $this->doc->getLibById($libID);
+
+        $objecitID = 0;
+        if($doclib->type == 'product')
+        {
+            $objectID = $doclib->product;
+        }
+        elseif($doclib->type == 'project' or $doclib->type == 'execution')
+        {
+            $doclib->type = 'project';
+            $objectID = $doclib->project;
+        }
+
+        die(js::locate($this->createLink('doc', 'objectLibs', "type={$doclib->type}&objectID=$objectID&libID=$libID")));
     }
 
     /**
