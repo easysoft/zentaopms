@@ -1351,8 +1351,11 @@ class projectModel extends model
                     }
                     break;
                 case 'name':
-                    if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
-                    if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
+                    if($this->config->systemMode == 'new')
+                    {
+                        if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
+                        if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
+                    }
                     echo html::a($projectLink, $project->name);
                     break;
                 case 'PM':
