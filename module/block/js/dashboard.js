@@ -88,6 +88,7 @@ function refreshBlock($panel, afterRefresh)
         }
         $panel.find('.tablesorter').sortTable();
         $panel.find('.chosen').chosen();
+        $panel.children('.table-header-fixed').remove();
         initTableHeader($panel);
         $(".sparkline").sparkline();
     }).fail(function()
