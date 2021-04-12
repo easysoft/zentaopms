@@ -217,6 +217,7 @@ class customModel extends model
             if(is_array($allMenu)  and !isset($allMenu[$name])) $allMenu[$name] = $item;
         }
 
+        $divider = false;
         foreach($allMenu as $name => $item)
         {
             if(is_object($item)) $item = (array)$item;
@@ -242,6 +243,13 @@ class customModel extends model
                 $link = explode('|', $link);
                 list($label, $module, $method) = $link;
                 $hasPriv = commonModel::hasPriv($module, $method);
+            }
+
+            /* When last divider is not used in mainMenu, use it next menu. */
+            if($menuModuleName == 'main')
+            {
+                $openApp = $app->openApp;
+                $divider = $divider || (isset($lang->$openApp->dividerMenu) and strpos($lang->$openApp->dividerMenu, ",{$name},") !== false) ? true : false;
             }
 
             if($isTutorialMode || $hasPriv)
@@ -304,6 +312,10 @@ class customModel extends model
                 if($exclude)  $menuItem->exclude   = $exclude;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
+                /* Set divider and reset it. */
+                $menuItem->divider = $divider;
+                $divider = false;
+
                 /* Hidden menu by config in mobile. */
                 if($app->viewType == 'mhtml' and isset($config->custom->moblieHidden[$menuModuleName]) and in_array($name, $config->custom->moblieHidden[$menuModuleName])) $menuItem->hidden = 1;
 
@@ -325,9 +337,10 @@ class customModel extends model
      */
     public static function getModuleMenu($module = 'main', $rebuild = false)
     {
+        global $app, $lang, $config;
+
         if(empty($module)) $module = 'main';
 
-        global $app, $lang, $config;
         $allMenu = new stdclass();
         if($module == 'main' and !empty($lang->menu)) $allMenu = $lang->menu;
         if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
@@ -337,6 +350,7 @@ class customModel extends model
         if(commonModel::isTutorialMode() && $module === 'main') $customMenu = 'my,product,project,qa,company';
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
         if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
+
         $menu = self::setMenuByConfig($allMenu, $customMenu, $module);
 
         return $menu;
