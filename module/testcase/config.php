@@ -160,7 +160,7 @@ $config->testcase->datatable->fieldList['lastRunResult']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['status']['title']    = 'statusAB';
 $config->testcase->datatable->fieldList['status']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['status']['width']    = '90';
+$config->testcase->datatable->fieldList['status']['width']    = '60';
 $config->testcase->datatable->fieldList['status']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
