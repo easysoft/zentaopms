@@ -3,7 +3,7 @@
  * The revision view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong 
+ * @author      Wang Yidong, Zhu Jinyong
  * @package     repo
  * @version     $Id: revision.html.php $
  */
@@ -85,8 +85,8 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
 </div>
 <div id="mainActions" class='main-actions'>
   <nav class="container">
-    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->pre}" . $pathInfo . $typeInfo, "", 'html'), "<i class='icon-pre icon-chevron-left'></i>", '', "data-app='{$app->openApp}' id='prevPage' class='btn btn-info' title='{$preAndNext->pre}'")?>
-    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->next}" . $pathInfo . $typeInfo, "", 'html'), "<i class='icon-pre icon-chevron-right'></i>", '', "data-app='{$app->openApp}' id='nextPage' class='btn btn-info' title='{$preAndNext->next}'")?>
+    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->pre}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-left'></i>", '', "data-app='{$app->openApp}' id='prevPage' class='btn btn-info' title='{$preAndNext->pre}'")?>
+    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->next}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-right'></i>", '', "data-app='{$app->openApp}' id='nextPage' class='btn btn-info' title='{$preAndNext->next}'")?>
   </nav>
 </div>
 <?php include '../../common/view/footer.html.php';?>
