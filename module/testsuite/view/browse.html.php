@@ -73,12 +73,7 @@
         <?php
         common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'list', 'link');
         common::printIcon('testsuite', 'edit',     "suiteID=$suite->id", $suite, 'list');
-
-        if(common::hasPriv('testsuite', 'delete', $suite))
-        {
-            $deleteURL = $this->createLink('testsuite', 'delete', "suiteID=$suite->id&confirm=yes");
-            echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"suiteList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testsuite->delete}' class='btn'");
-        }
+        common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", $suite, 'list', 'trash', 'hiddenwin');
         ?>
       </td>
     </tr>
