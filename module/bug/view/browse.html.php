@@ -22,6 +22,8 @@ js::set('branch',        $branch);
 $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($browseType, array_keys($lang->bug->mySelects)) ? $browseType : '';
 ?>
 <style>
+#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text {color: #fff;}
+#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text:after {border-bottom: unset;}
 .btn-group a i.icon-plus {font-size: 16px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.3);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}

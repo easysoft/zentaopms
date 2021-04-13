@@ -231,6 +231,7 @@ class testsuite extends control
 
         /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
         $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"));
@@ -309,6 +310,7 @@ class testsuite extends control
 
         /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
