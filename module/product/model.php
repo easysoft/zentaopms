@@ -67,11 +67,12 @@ class productModel extends model
      * @param  int    $branch
      * @param  int    $module
      * @param  string $moduleType
+     * @param  bool   $withBranch      true|false
      *
      * @access public
      * @return string
      */
-    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0, $module = 0, $moduleType = '')
+    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0, $module = 0, $moduleType = '', $withBranch = true)
     {
         $isBrowseBug = (strpos(',project,execution,', ",{$this->app->openApp},") !== false and strpos(',bug,testcase,testtask,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
 
@@ -106,8 +107,8 @@ class productModel extends model
             $output .= "</div></div>";
             if($isMobile) $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\"><span class='text'>{$currentProduct->name}</span> <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
 
-            if($currentProduct->type == 'normal') unset($this->lang->product->menu->settings['subMenu']->branch);
-            if($currentProduct->type != 'normal' && $currentModule != 'programplan')
+            if($currentProduct->type == 'normal' || !$withBranch) unset($this->lang->product->menu->settings['subMenu']->branch);
+            if($currentProduct->type != 'normal' && $currentModule != 'programplan' && $withBranch)
             {
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
                 $this->lang->product->menu->settings['subMenu']->branch = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch);

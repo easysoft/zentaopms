@@ -862,7 +862,7 @@ class execution extends control
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $product) $productPairs[$product->id] = $product->name;
-        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', '', $branchID);
+        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', '', $branchID, 0, '', false);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
