@@ -146,17 +146,17 @@
             <?php if($isLibCase):?>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->lib;?></th>
-              <td><?php if(!common::printLink('caselib', 'browse', "libID=$case->lib", $libName)) echo $libName;?></td>
+              <td><?php echo common::hasPriv('caselib', 'browse') ? html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libName) : $libName;?></td>
             </tr>
             <?php else:?>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->product;?></th>
-              <td><?php if(!common::printLink('product', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
+              <td><?php echo common::hasPriv('product', 'browse') ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $productName) : $productName;?></td>
             </tr>
             <?php if($this->session->currentProductType != 'normal'):?>
             <tr>
-              <th><?php echo $lang->product->branch;?></th>
-              <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$case->branch", $branchName)) echo $branchName;?></td>
+              <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$this->session->currentProductType]);?></th>
+              <td><?php echo common::hasPriv('testcase', 'browse') ? html::a($this->createLink('testcase', 'browse', "productID=$case->product&branch=$case->branch"), $branchName) : $branchName;?></td>
             </tr>
             <?php endif;?>
             <?php endif;?>
@@ -177,7 +177,8 @@
 
                     foreach($modulePath as $key => $module)
                     {
-                        if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                        if($this->app->openApp == 'qa' and !common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                        if($this->app->openApp == 'project' and !common::printLink('project', 'testcase', "projectID={$this->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
                         if(isset($modulePath[$key + 1])) echo $lang->arrow;
                     }
                 }

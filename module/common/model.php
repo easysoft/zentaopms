@@ -577,12 +577,22 @@ class commonModel extends model
 
         $items = array();
         $lastItem = end($menuOrder);
+        $divider = false;
         foreach($menuOrder as $key => $group)
         {
             $nav = $lang->mainNav->$group;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
 
+            /* When last divider is not used in mainNav, use it next menu. */
+            $divider = ($divider || ($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false) ? true : false;
+
             if(!common::hasPriv($currentModule, $currentMethod)) continue;
+
+            if($divider)
+            {
+                $items[] = 'divider';
+                $divider = false;
+            }
 
             $item = new stdClass();
             $item->group      = $group;
@@ -595,11 +605,6 @@ class commonModel extends model
             $item->url        = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
 
             $items[] = $item;
-
-            if(($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false)
-            {
-                $items[] = 'divider';
-            }
         }
         return $items;
     }
@@ -633,7 +638,7 @@ class commonModel extends model
         {
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
             if(empty($menuItem->link)) continue;
-            if(isset($lang->$openApp->dividerMenu) and strpos($lang->$openApp->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
+            if($menuItem->divider) echo "<li class='divider'></li>";
 
             /* Init the these vars. */
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
@@ -814,7 +819,7 @@ class commonModel extends model
         {
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
             if($isMobile and empty($menuItem->link)) continue;
-            if(isset($lang->$moduleName->dividerMenu) and strpos($lang->$moduleName->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
+            if($menuItem->divider) echo "<li class='divider'></li>";
 
             /* Init the these vars. */
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';

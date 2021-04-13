@@ -40,7 +40,7 @@ $lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
-$lang->dividerMenu = ',devops,system,';
+$lang->dividerMenu = ',doc,admin,';
 $lang->mainNav->menuOrder[5]  = 'my';
 if($config->systemMode == 'new') $lang->mainNav->menuOrder[10] = 'program';
 $lang->mainNav->menuOrder[15] = 'product';
