@@ -38,8 +38,10 @@ $sessionString .= session_name() . '=' . session_id();
                 echo html::a("javascript:ajaxDeleteDoc(\"$deleteURL\", \"docList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->doc->delete}' class='btn btn-link'");
             }
             ?>
+            <?php if(common::hasPriv('doc', 'collect')):?>
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><i class='icon <?php echo $star;?>'></i></a>
+            <?php endif;?>
           </div>
         </div>
         <div class="detail-content article-content">

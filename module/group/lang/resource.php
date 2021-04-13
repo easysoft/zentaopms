@@ -1016,13 +1016,10 @@ $lang->resource->doc->create     = 'create';
 $lang->resource->doc->view       = 'view';
 $lang->resource->doc->edit       = 'edit';
 $lang->resource->doc->delete     = 'delete';
-//$lang->resource->doc->deleteFile = 'deleteFile';
+$lang->resource->doc->deleteFile = 'deleteFile';
 $lang->resource->doc->allLibs    = 'allLibs';
-//$lang->resource->doc->showFiles  = 'showFiles';
 $lang->resource->doc->objectLibs = 'objectLibs';
-//$lang->resource->doc->sort       = 'sort';
 $lang->resource->doc->collect    = 'collectAction';
-//$lang->resource->doc->diff       = 'diff';
 
 $lang->doc->methodOrder[0]  = 'index';
 $lang->doc->methodOrder[5]  = 'browse';
@@ -1033,13 +1030,10 @@ $lang->doc->methodOrder[25] = 'create';
 $lang->doc->methodOrder[30] = 'view';
 $lang->doc->methodOrder[35] = 'edit';
 $lang->doc->methodOrder[40] = 'delete';
-//$lang->doc->methodOrder[45] = 'deleteFile';
+$lang->doc->methodOrder[45] = 'deleteFile';
 $lang->doc->methodOrder[50] = 'allLibs';
-//$lang->doc->methodOrder[55] = 'showFiles';
-$lang->doc->methodOrder[60] = 'objectLibs';
-//$lang->doc->methodOrder[65] = 'sort';
-$lang->doc->methodOrder[70] = 'collect';
-//$lang->doc->methodOrder[55] = 'diff';
+$lang->doc->methodOrder[55] = 'objectLibs';
+$lang->doc->methodOrder[60] = 'collect';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();

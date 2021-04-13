@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
-<?php $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
+<?php $browseLink = $app->session->bugList ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>

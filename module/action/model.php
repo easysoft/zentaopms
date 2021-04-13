@@ -177,11 +177,12 @@ class actionModel extends model
         }
 
         /* Only process these object types. */
-        if(strpos(',story,productplan,release,task,build,bug,case,testtask,doc,', ",{$objectType},") !== false)
+        if(strpos(',story,productplan,release,task,build,bug,case,testtask,doc,issue,risk,', ",{$objectType},") !== false)
         {
             if(!isset($this->config->objectTables[$objectType])) return $emptyRecord;
 
             /* Set fields to fetch. */
+            $fields = '*';
             if(strpos('story, productplan, case',  $objectType) !== false) $fields = 'product';
             if(strpos('build, bug, testtask, doc', $objectType) !== false) $fields = 'product, project, execution';
             if($objectType == 'release') $fields = 'product, build';
