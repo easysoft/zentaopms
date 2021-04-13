@@ -30,6 +30,7 @@
       <div class='panel-body'>
         <form method='post' id='chartTypesForm'>
           <div class='checkboxes'>
+            <?php if($storyType == 'requirement') unset($lang->story->report->charts['storysPerPlan']);?>
             <?php echo html::checkBox('charts', $lang->story->report->charts, $checkedCharts, '', 'block');?>
           </div>
           <div class='btn-toolbar'>
