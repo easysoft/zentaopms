@@ -286,7 +286,7 @@ class project extends control
                 if($model == 'waterfall')
                 {
                     $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
-                    $this->session->set('programPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
+                    $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
                     $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
                 }
 
@@ -606,13 +606,17 @@ class project extends control
         $this->session->set('productPlanList', $uri, 'product');
         $this->session->set('releaseList',     $uri, 'product');
         $this->session->set('storyList',       $uri, 'product');
-        $this->session->set('projectList',     $uri, 'project');
-        $this->session->set('executionList',   $uri, 'execution');
         $this->session->set('taskList',        $uri, 'execution');
         $this->session->set('buildList',       $uri, 'execution');
         $this->session->set('bugList',         $uri, 'qa');
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
+
+        if($this->config->maxVersion)
+        {
+            $this->session->set('riskList', $uri, 'project');
+            $this->session->set('issueList', $uri, 'project');
+        }
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
@@ -712,7 +716,7 @@ class project extends control
         $this->loadModel('product');
 
         /* Save session. */
-        $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $this->session->set('bugList', $this->app->getURI(true), 'project');
         $this->project->setMenu($projectID);
 
         $project  = $this->project->getByID($projectID);
