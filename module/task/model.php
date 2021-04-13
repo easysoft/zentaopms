@@ -934,7 +934,6 @@ class taskModel extends model
             ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
             ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
-            ->checkIF($task->status == 'closed', 'closedReason', 'notempty')
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->where('id')->eq((int)$taskID)->exec();
 
