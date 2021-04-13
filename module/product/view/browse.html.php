@@ -14,6 +14,8 @@
 <?php include '../../common/view/datatable.fix.html.php';?>
 <style>
 body {margin-bottom: 25px;}
+#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text {color: #fff;}
+#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text:after {border-bottom: unset;}
 </style>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
