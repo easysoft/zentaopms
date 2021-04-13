@@ -1216,7 +1216,8 @@ class execution extends control
         $this->app->loadLang('programplan');
         if($executionID)
         {
-            if(!empty($planID))
+            $execution = $this->execution->getById($executionID);
+            if(!empty($planID) and $execution->lifetime != 'ops')
             {
                 if($confirm == 'yes')
                 {
@@ -1224,7 +1225,7 @@ class execution extends control
                 }
                 else
                 {
-                    die(js::confirm($this->lang->execution->importPlanStory, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID"), 'parent', 'parent'));
+                    die(js::confirm($this->lang->execution->importPlanStory, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
                 }
             }
             $this->view->title       = $this->lang->execution->tips;

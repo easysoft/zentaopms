@@ -2080,9 +2080,11 @@ class executionModel extends model
                 }
             }
         }
+
+        $projectID = $this->session->project;
         $this->linkStory($executionID, $planStories, $planProducts);
-        $this->linkStory($this->session->project, $planStories, $planProducts);
-        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate(helper::createLink('execution', 'create', "productID=&executionID=$executionID"));
+        $this->linkStory($projectID, $planStories, $planProducts);
+        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate(helper::createLink('execution', 'create', "projectID=$projectID&executionID=$executionID"));
     }
 
     /**
