@@ -723,7 +723,7 @@ class project extends control
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $product) $productPairs[$product->id] = $product->name;
-        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', '', $branchID);
+        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', '', $branchID, 0, '', false);
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->bug->common;
@@ -786,7 +786,7 @@ class project extends control
     {
         $this->loadModel('product');
         $products = array('0' => $this->lang->product->all) + $this->project->getProducts($projectID, false);
-        $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', '', $branch);
+        $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', '', $branch, 0, '', false);
 
         echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal=$orderBy&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }
