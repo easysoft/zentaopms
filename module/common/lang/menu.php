@@ -330,9 +330,9 @@ $lang->devops->menuOrder[25] = 'rules';
 /* Doc menu.*/
 $lang->doc->menu = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
-$lang->doc->menu->recent    = array('link' => "{$lang->doc->recent}|doc|browse|libID=0&browseTyp=byediteddate", 'alias' => 'recent');
-$lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|libID=0&browseTyp=openedbyme", 'alias' => 'my');
-$lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|libID=0&browseTyp=collectedbyme", 'alias' => 'collect');
+$lang->doc->menu->recent    = array('link' => "{$lang->doc->recent}|doc|browse|browseTyp=byediteddate", 'alias' => 'recent');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|browseTyp=openedbyme", 'alias' => 'my');
+$lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|browseTyp=collectedbyme", 'alias' => 'collect');
 $lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|objectLibs|type=product", 'alias' => 'product');
 if($config->systemMode == 'new') $lang->doc->menu->project = array('link' => "{$lang->doc->project}|doc|objectLibs|type=project", 'alias' => 'project');
 if($config->systemMode == 'classic') $lang->doc->menu->execution = array('link' => "{$lang->doc->execution}|doc|objectLibs|type=execution", 'alias' => 'execution');
