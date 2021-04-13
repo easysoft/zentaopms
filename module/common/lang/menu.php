@@ -173,7 +173,7 @@ $lang->product->menu->settings['subMenu']->module    = array('link' => "{$lang->
 $lang->product->menu->settings['subMenu']->branch    = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
 $lang->product->menu->settings['subMenu']->whitelist = array('link' => "{$lang->whitelist}|product|whitelist|product=%s", 'subModule' => 'personnel');
 
-$lang->product->dividerMenu = $config->URAndSR ? ',requirement,set,' : ',track,set,';
+$lang->product->dividerMenu = $config->URAndSR ? ',story,requirement,settings,' : ',story,track,settings,';
 
 /* Project menu. */
 $lang->project->homeMenu = new stdclass();
