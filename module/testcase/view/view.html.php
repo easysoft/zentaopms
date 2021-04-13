@@ -179,6 +179,7 @@
                     {
                         if($this->app->openApp == 'qa' and !common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
                         if($this->app->openApp == 'project' and !common::printLink('project', 'testcase', "projectID={$this->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                        if($this->app->openApp == 'execution') echo $module->name;
                         if(isset($modulePath[$key + 1])) echo $lang->arrow;
                     }
                 }
