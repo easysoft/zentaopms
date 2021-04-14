@@ -235,10 +235,19 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         $data = fixer::input('post')
+            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
+            ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')
             ->get();
+
+        $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $data->gitlabProject);
+
+        unset($data->gitlabHost);
+        unset($data->gitlabToken);
+        unset($data->gitlabProject);
+
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -1753,5 +1762,22 @@ class repoModel extends model
         $buildedURL .= 'repoUrl=' . helper::safe64Encode($url);
 
         return $buildedURL;
+    }
+
+   /**
+     * Get gitlab projects.
+     *
+     * @param  string   $host
+     * @param  string   $token
+     * @access public
+     * @return array
+     */
+    public function getGitlabProjects($host, $token)
+    {
+		$host  = rtrim($host, '/');
+		$host .= '/api/v4/projects';
+
+		$projects = file_get_contents($host . "?private_token=$token");
+		return json_decode($projects);
     }
 }
