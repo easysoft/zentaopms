@@ -2055,12 +2055,13 @@ class executionModel extends model
         $planStories  = array();
         $planProducts = array();
         $count        = 0;
+        $this->loadModel('story');
         if(!empty($plans))
         {
             foreach($plans as $planID => $productID)
             {
                 if(empty($planID)) continue;
-                $planStory = $this->loadModel('story')->getPlanStories($planID);
+                $planStory = $this->story->getPlanStories($planID);
                 if(!empty($planStory))
                 {
                     foreach($planStory as $id => $story)
