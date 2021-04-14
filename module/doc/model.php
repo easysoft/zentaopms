@@ -37,14 +37,7 @@ class docModel extends model
      */
     public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0)
     {
-        if($type == 'product' or $type == 'project' or $type == 'execution')
-        {
-            $stmt  = $this->dao->select('*')->from(TABLE_DOCLIB)
-                ->where($type)->eq($objectID)
-                ->andWhere('deleted')->eq('0')
-                ->query();
-        }
-        elseif($type == 'all')
+        if($type == 'all')
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)

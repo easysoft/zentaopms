@@ -69,16 +69,12 @@ class executionModel extends model
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
 
-        /*
         if($execution and $execution->lifetime == 'ops')
         {
             unset($this->lang->execution->menu->story);
             unset($this->lang->execution->menu->qa);
-            unset($this->lang->execution->subMenu->qa->bug);
-            unset($this->lang->execution->subMenu->qa->build);
-            unset($this->lang->execution->subMenu->qa->testtask);
+            unset($this->lang->execution->menu->build);
         }
-         */
 
         /* Hide story and qa menu when execution is story or design type. */
         /*

@@ -310,7 +310,7 @@ class doc extends control
         $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
 
         $this->view->libID            = $libID;
-        $this->view->libs             = $this->doc->getLibs($type = 'all', $extra = "withObject,$unclosed", $libID, $objectID);
+        $this->view->libs             = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
         $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
