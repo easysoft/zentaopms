@@ -1600,7 +1600,7 @@ class testcase extends control
         if(empty($libraries))
         {
             echo js::alert($this->lang->testcase->noLibrary);
-            die(js::locate(inlink('browse')));
+            die(js::locate($this->session->caseList));
         }
         if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);
 
