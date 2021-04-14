@@ -12,14 +12,6 @@
 class automation extends control
 {
     /** 
-     * Project id.
-     *
-     * @var    int
-     * @access public
-     */
-    public $projectID = 0;
-
-    /** 
      * Products.
      *
      * @var    array
