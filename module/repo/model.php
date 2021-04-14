@@ -248,7 +248,6 @@ class repoModel extends model
 
             unset($data->gitlabHost);
             unset($data->gitlabToken);
-            unset($data->gitlabProject);
         }
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
@@ -263,8 +262,9 @@ class repoModel extends model
         }
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->insert(TABLE_REPO)->data($data)
+        $this->dao->insert(TABLE_REPO)->data($data, $skip = 'gitlabProject')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'GitLab', 'gitlabProject', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
@@ -322,9 +322,10 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->update(TABLE_REPO)->data($data)
+        $this->dao->update(TABLE_REPO)->data($data, $skip = 'gitlabProject')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'GitLab', 'gitlabProject', 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 

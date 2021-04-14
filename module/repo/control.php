@@ -1072,6 +1072,29 @@ class repo extends control
         die($reposHtml);
     }
 
+	/**
+	 * Ajax get gitlab projects.
+	 *
+	 * @param  string    $host
+	 * @param  string    $token
+	 * @access public
+	 * @return void
+	 */
+	public function ajaxGetGitlabProjects($host, $token)
+	{
+		$host  = helper::safe64Decode($host);
+        $projects = $this->repo->getGitlabProjects($host, $token);
+
+		if(!$projects) $this->send(array('message' => array()));
+
+		$options = '';
+		foreach($projects as $project)
+		{
+			$options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name}:{$project->http_url_to_repo}</option>";
+		}
+		die($options);
+	}
+
     /**
      * Ajax get branch drop menu.
      *
