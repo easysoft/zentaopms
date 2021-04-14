@@ -21,7 +21,7 @@
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->doc->orderByEdit;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=byediteddate"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'browse', "browseTyp=byediteddate"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <div class="panel-body has-table">
@@ -127,7 +127,7 @@
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->doc->myDoc;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=openedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'browse', "browseTyp=openedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <div class="panel-body has-table">
@@ -159,7 +159,7 @@
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->doc->myCollection;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=collectedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'browse', "browseTyp=collectedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <div class="panel-body has-table">
