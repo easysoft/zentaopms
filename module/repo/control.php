@@ -165,6 +165,14 @@ class repo extends control
 
         $this->app->loadLang('action');
 
+        if($repo->SCM == 'Gitlab')
+        {
+            $projects = $this->repo->getGitlabProjects($repo->client, $repo->password);
+            $options  = array();
+            foreach($projects as $project) $options[$project->id] = $project->name . ':' . $project->http_url_to_repo;
+            $this->view->projects = $options;
+        }
+
         $repo->repoType       = $repo->id . '-' . $repo->SCM;
         $this->view->repo     = $repo;
         $this->view->repoID   = $repoID;
