@@ -1490,6 +1490,7 @@ class taskModel extends model
         $data->status         = $task->status;
         $data->lastEditedBy   = $this->app->user->account;
         $data->lastEditedDate = $now;
+        if(helper::isZeroDate($task->realStarted)) $data->realStarted = $now;
 
         if($left == 0)
         {
