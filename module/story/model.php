@@ -526,7 +526,7 @@ class storyModel extends model
         $story = fixer::input('post')
             ->callFunc('title', 'trim')
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
+            ->add('lastEditedDate', $now)
             ->setIF($this->post->assignedTo == '', 'assignedTo', $oldStory->assignedTo)
             ->setIF($this->post->assignedTo != '' and $this->post->assignedTo != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
@@ -2743,7 +2743,7 @@ class storyModel extends model
             }
             elseif($type == 'full')
             {
-                $property = '(' . $this->lang->story->pri . ':' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ',' . $this->lang->story->estimate . ':' . $this->lang->hourCommon . ')';
+                $property = '(' . $this->lang->story->pri . ':' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')';
             }
             else
             {

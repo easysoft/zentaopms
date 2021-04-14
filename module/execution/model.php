@@ -69,16 +69,12 @@ class executionModel extends model
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
 
-        /*
         if($execution and $execution->lifetime == 'ops')
         {
             unset($this->lang->execution->menu->story);
             unset($this->lang->execution->menu->qa);
-            unset($this->lang->execution->subMenu->qa->bug);
-            unset($this->lang->execution->subMenu->qa->build);
-            unset($this->lang->execution->subMenu->qa->testtask);
+            unset($this->lang->execution->menu->build);
         }
-         */
 
         /* Hide story and qa menu when execution is story or design type. */
         /*
@@ -1482,7 +1478,8 @@ class executionModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq((int)$executionID)
-            ->andWhere('t2.deleted')->eq(0);
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi();
         if(!$withBranch) return $query->fetchPairs('id', 'name');
         return $query->fetchAll('id');
     }
@@ -2058,12 +2055,13 @@ class executionModel extends model
         $planStories  = array();
         $planProducts = array();
         $count        = 0;
+        $this->loadModel('story');
         if(!empty($plans))
         {
             foreach($plans as $planID => $productID)
             {
                 if(empty($planID)) continue;
-                $planStory = $this->loadModel('story')->getPlanStories($planID);
+                $planStory = $this->story->getPlanStories($planID);
                 if(!empty($planStory))
                 {
                     foreach($planStory as $id => $story)

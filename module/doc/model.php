@@ -37,14 +37,7 @@ class docModel extends model
      */
     public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0)
     {
-        if($type == 'product' or $type == 'project' or $type == 'execution')
-        {
-            $stmt  = $this->dao->select('*')->from(TABLE_DOCLIB)
-                ->where($type)->eq($objectID)
-                ->andWhere('deleted')->eq('0')
-                ->query();
-        }
-        elseif($type == 'all')
+        if($type == 'all')
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
@@ -1659,7 +1652,7 @@ class docModel extends model
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
         {
-            $link     = helper::createLink('doc', 'browse', "libID=0&browseTyp={$key}");
+            $link     = helper::createLink('doc', 'browse', "libID=0&browseType={$key}");
             $actions .= '<li>' . html::a($link, "<i class='icon {$this->lang->doc->fastMenuIconList[$key]}'></i> {$fastMenu}") . '</li>';
         }
         $actions .='</ul>';

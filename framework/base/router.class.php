@@ -887,22 +887,6 @@ class baseRouter
     }
 
     /**
-     * 保存openApp到cookie，下次请求使用，常用在locate, reload方法。
-     * Save openApp to cookie, use it next visit, when locate, reload page.
-     *
-     * @access public
-     * @return void
-     */
-    public function saveOpenApp()
-    {
-        $module = $this->rawModule;
-        if(isset($this->lang->navGroup->$module) and $this->lang->navGroup->$module != $this->openApp)
-        {
-            setCookie('openApp', $this->openApp);
-        }
-    }
-
-    /**
      * 根据用户浏览器的语言设置和服务器配置，选择显示的语言。
      * 优先级：$lang参数 > session > cookie > 浏览器 > 配置文件。
      *

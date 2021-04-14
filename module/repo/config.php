@@ -42,6 +42,10 @@ $config->repo->edit->requiredFields = 'product,SCM,name,path,encoding,client';
 $config->repo->svn = new stdclass();
 $config->repo->svn->requiredFields = 'account,password';
 
+$config->repo->gitlab = new stdclass;
+$config->repo->gitlab->perPage = 300;
+$config->repo->gitlab->apiPath = "%s/api/v4/projects/%s/repository/";
+
 $config->repo->rules['module']['task']     = 'Task';
 $config->repo->rules['module']['bug']      = 'Bug';
 $config->repo->rules['module']['story']    = 'Story';

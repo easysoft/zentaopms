@@ -643,6 +643,9 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_0_rc1');
             $this->adjustUserView();
             $this->appendExec('15_0_rc1');
+        case '15_0_rc2':
+            $this->saveLogs('Execute 15_0_rc2');
+            $this->appendExec('15_0_rc2');
         }
 
         $this->deletePatch();

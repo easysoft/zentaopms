@@ -89,7 +89,7 @@ class extension extends control
     {
         /* Init vars. */
         $type       = strtolower($type);
-        $moduleID   = $type == 'bymodule' ? (int)$param : 0;
+        $moduleID   = $type == 'bymodule' ? (int)base64_decode($param) : 0;
         $extensions = array();
         $pager      = null;
 
