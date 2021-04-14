@@ -1228,6 +1228,13 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        if(!empty($this->view->task->team))
+        {
+            $members = array();
+            foreach($this->view->task->team as $account => $member) $members[$account] = zget($this->view->members, $account);
+            $this->view->members = $members;
+        }
+
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
         $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
