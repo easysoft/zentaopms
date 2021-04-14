@@ -612,7 +612,7 @@ class project extends control
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
 
-        if($this->config->maxVersion)
+        if(isset($this->config->maxVersion))
         {
             $this->session->set('riskList', $uri, 'project');
             $this->session->set('issueList', $uri, 'project');
