@@ -124,6 +124,14 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
+$lang->repo->scmList['Gitlab']     = 'Gitlab';
+
+$lang->repo->gitlabHost    = 'Gitlab 地址';
+$lang->repo->gitlabToken   = 'Gitlab Token';
+$lang->repo->gitlabProject = '项目';
+
+$lang->repo->placeholder = new stdclass;
+$lang->repo->placeholder->gitlabHost = '请填写gitlab访问地址';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 请稍等...';

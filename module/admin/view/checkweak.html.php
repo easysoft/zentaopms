@@ -11,11 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'>
-    <div class='btn-toolbar pull-left'><?php //common::printAdminSubMenu('system');?></div>
-  </div>
-</div>
 <div class="main-row">
   <div class='side-col' id='sidebar'>
     <div class='cell'>

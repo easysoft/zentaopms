@@ -11,7 +11,6 @@ $(function()
 
         if($blocksList.find('#moduleBlock').val() == 'scrumtest' && $('#paramstype').val() != 'all')
         {
-            console.log($('#paramstype').val());
             $titleInput.val(value);
         }
         else
@@ -19,8 +18,6 @@ $(function()
             var lang = config.clientLang;
             if(lang.indexOf('zh') >= 0)
             {
-                console.log(preValue, blockTitle);
-                console.log(blockTitle.indexOf(preValue));
                 if(blockTitle.indexOf(preValue) >= 0)
                 {
                     blockTitle = blockTitle.replace(preValue, value);

@@ -335,7 +335,6 @@ function markTestStory()
             var $tr = $(this);
             storiesHasTest[$tr.find('select[name^="testStory"]').val()] = true;
         });
-        console.log(storiesHasTest);
         return storiesHasTest;
     };
 

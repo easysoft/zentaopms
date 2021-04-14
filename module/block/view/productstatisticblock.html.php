@@ -175,10 +175,6 @@ $(function()
                 </div>
               </div>
             </div>
-            <?php $totalProject  = $product->projects ? zget($product->projects, 'all', 0) : 0;?>
-            <?php $undoneProject = $product->projects ? zget($product->projects, 'undone', 0) : 0;?>
-            <?php $delayProject  = $product->projects ? zget($product->projects, 'delay', 0) : 0;?>
-            <?php $undoneRate    = $totalProject ? round($undoneProject / $totalProject * 100, 2) : 0;?>
             <div class="product-info">
               <?php $totalRelease  = $product->releases ? array_sum($product->releases) : 0;?>
               <?php $normalRelease = $product->releases ? zget($product->releases, 'normal', 0) : 0;?>
