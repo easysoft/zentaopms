@@ -242,12 +242,14 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $data->gitlabProject);
+        if($this->post->SCM == 'Gitlab')
+        {
+            $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
 
-        unset($data->gitlabHost);
-        unset($data->gitlabToken);
-        unset($data->gitlabProject);
-
+            unset($data->gitlabHost);
+            unset($data->gitlabToken);
+            unset($data->gitlabProject);
+        }
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -291,6 +293,16 @@ class repoModel extends model
             ->skipSpecial('path,client,account,password')
             ->join('product', ',')
             ->get();
+
+        if($this->post->SCM == 'Gitlab')
+        {
+            $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
+
+            unset($data->gitlabHost);
+            unset($data->gitlabToken);
+            unset($data->gitlabProject);
+        }
+
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
         if($data->SCM == 'Subversion' and $data->path != $repo->path)
