@@ -84,7 +84,7 @@ $(function()
             <?php if($app->moduleName == 'execution' && $app->methodName == 'task'):?>
             <tr>
               <td><?php echo $lang->datatable->showAllModule;?></td>
-              <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->project->task->allModule) ? $config->project->task->allModule : 0);?></td>
+              <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0);?></td>
             </tr>
             <?php endif;?>
             <tr>
