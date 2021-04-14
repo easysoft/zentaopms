@@ -80,10 +80,10 @@
             <th><?php echo $lang->repo->account;?></th>
             <td><?php echo html::input('account', $repo->account, "class='form-control'");?></td>
           </tr>
-          <tr class="account-fields">
+          <tr class="account-fields  hide-gitlab">
             <th><?php echo $lang->repo->password;?></th>
             <td>
-              <div class='input-group hide-gitlab'>
+              <div class='input-group'>
                 <?php echo html::password('password', $repo->password, "class='form-control'");?>
                 <span class='input-group-addon fix-border fix-padding'></span>
                 <?php echo html::select('encrypt', $lang->repo->encryptList, $repo->encrypt, "class='form-control'");?>
