@@ -168,8 +168,8 @@ class stakeholder extends control
         }
 
         $users = array('' => '');
-        if($stakeholder->type == 'team') $users = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
-        elseif($stakeholder->type == 'company')
+        if($stakeholder->from == 'team') $users = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
+        elseif($stakeholder->from == 'company')
         {
             $members = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
             $users   = $this->user->getPairs('noclosed');
