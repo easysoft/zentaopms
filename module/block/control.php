@@ -853,6 +853,7 @@ class block extends control
         $this->loadModel('weekly');
         $this->app->loadLang('task');
         $this->app->loadLang('story');
+        $this->app->loadLang('bug');
 
         /* Set project status and count. */
         $status = isset($this->params->type)  ? $this->params->type       : 'all';

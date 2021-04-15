@@ -18,12 +18,8 @@ $lang->block->grid       = 'Gitter';
 $lang->block->color      = 'Farbe';
 $lang->block->reset      = 'Zurücksetzen';
 $lang->block->story      = 'Story';
-$lang->block->bug        = 'Bug';
 $lang->block->investment = 'Investment';
-$lang->block->left       = 'Left';
 $lang->block->estimate   = 'Estimate';
-$lang->block->doneBugs   = 'Done';
-$lang->block->leftBugs   = 'Left';
 $lang->block->last       = 'Last';
 
 $lang->block->account = 'Konto';
