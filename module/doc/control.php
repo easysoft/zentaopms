@@ -460,7 +460,7 @@ class doc extends control
             }
 
             $openApp    = $type == 'execution' ? 'execution' : 'doc';
-            $browseLink = inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID#app=$openApp");
+            $browseLink = inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID") . "#app=$openApp";
             $this->locate($browseLink);
         }
 

@@ -169,7 +169,12 @@ class releaseModel extends model
             }
         }
 
-        if($release->build) $release->branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch('branch');
+        if($release->build) 
+        {
+            $buildInfo = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
+            $release->branch  = $buildInfo->branch;
+            $release->project = $buildInfo->project;
+        }
 
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_RELEASE)->data($release)

@@ -168,7 +168,7 @@ class task extends control
         }
 
         $users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $members          = $this->execution->getTeamMemberPairs($executionID, 'nodeleted');
+        $members          = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $showAllModule    = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
@@ -296,7 +296,7 @@ class task extends control
 
 
         $stories = $this->story->getExecutionStoryPairs($executionID, 0, 0, 0, 'short');
-        $members = $this->execution->getTeamMemberPairs($executionID, 'nodeleted');
+        $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
@@ -334,7 +334,7 @@ class task extends control
     {
         $this->view->task      = $this->loadModel('task')->getByID($taskID);
         $this->view->execution = $this->execution->getById($this->view->task->execution);
-        $this->view->members   = $this->execution->getTeamMemberPairs($this->view->execution->id ,'nodeleted');
+        $this->view->members   = $this->loadModel('user')->getTeamMemberPairs($this->view->execution->id, 'execution','nodeleted');
         $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
@@ -554,7 +554,7 @@ class task extends control
 
         $task = $this->task->getByID($taskID);
 
-        $members = $this->execution->getTeamMemberPairs($executionID, 'nodeleted');
+        $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 
         /* Compute next assignedTo. */
         if(!empty($task->team))
@@ -767,7 +767,7 @@ class task extends control
         $this->view->position[] = $this->lang->task->start;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->members    = $this->execution->getTeamMemberPairs($task->execution, 'nodeleted');
+        $this->view->members    = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
         $this->display();
     }
@@ -926,7 +926,7 @@ class task extends control
         }
 
         $task         = $this->view->task;
-        $members      = $this->execution->getTeamMemberPairs($task->execution, 'nodeleted');
+        $members      = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $task->nextBy = $task->openedBy;
 
         $this->view->users = $members;
@@ -1027,7 +1027,7 @@ class task extends control
         $this->view->position[] = $this->lang->task->restart;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->members    = $this->execution->getTeamMemberPairs($task->execution, 'nodeleted');
+        $this->view->members    = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
         $this->display();
     }
