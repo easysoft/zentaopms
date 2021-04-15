@@ -269,7 +269,7 @@ class task extends control
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs(), $execution->id);
+        $this->execution->setMenu($execution->id);
 
         /* When common task are child tasks, query whether common task are consumed. */
         $taskConsumed = 0;
