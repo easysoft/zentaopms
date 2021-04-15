@@ -433,8 +433,9 @@ class productModel extends model
         {
             $storyMethods = ",track,create,batchcreate,batchclose,zerocase,";
             if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
-            if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
+            if($currentMethod == 'view' or $currentMethod == 'change' or $currentMethod == 'review') $currentMethod = 'browse';
         }
+        if($currentModule == 'testcase' and $currentMethod == 'view') $currentMethod = 'browse';
         if($currentMethod == 'report') $currentMethod = 'browse';
 
         $currentProductName = $this->lang->product->common;
