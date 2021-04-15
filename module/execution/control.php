@@ -542,7 +542,7 @@ class execution extends control
         $position[] = $this->lang->execution->importBug;
 
         /* Get users, products and executions.*/
-        $users    = $this->execution->getTeamMemberPairs($executionID, 'nodeleted');
+        $users    = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $products = $this->dao->select('t1.product, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
@@ -2502,7 +2502,7 @@ class execution extends control
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $this->view->position[] = $this->lang->execution->dynamic;
 
-        $this->view->userIdPairs  = $this->execution->getTeamMemberPairs($executionID, 'nodeleted|useid');
+        $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');
         $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         /* Assign. */
@@ -2540,7 +2540,7 @@ class execution extends control
      */
     public function ajaxGetMembers($executionID, $assignedTo = '')
     {
-        $users = $this->execution->getTeamMemberPairs($executionID);
+        $users = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
         if($this->app->getViewType() === 'json')
         {
             die(json_encode($users));

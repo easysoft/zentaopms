@@ -497,7 +497,7 @@ class bug extends control
         /* Set team members of the latest execution as assignedTo list. */
         $latestExecution  = $this->product->getLatestProject($productID);
         $executionMembers = array();
-        if(!empty($latestExecution)) $executionMembers = $this->loadModel('execution')->getTeamMemberPairs($latestExecution->id, 'nodeleted', $moduleOwner);
+        if(!empty($latestExecution)) $executionMembers = $this->loadModel('user')->getTeamMemberPairs($latestExecution->id, 'execution', 'nodeleted', $moduleOwner);
         if(empty($executionMembers)) $executionMembers = $this->view->users;
         if($assignedTo and !isset($executionMembers[$assignedTo]))
         {
@@ -1038,15 +1038,15 @@ class bug extends control
 
         if($this->app->openApp == 'project')
         {
-            $users = $this->project->getTeamMemberPairs($bug->project, 'nodeleted', $bug->assignedTo);
+            $users = $this->user->getTeamMemberPairs($bug->project, 'project', 'nodeleted', $bug->assignedTo);
         }
         elseif($this->app->openApp == 'execution')
         {
-            $users = $this->execution->getTeamMemberPairs($bug->execution, 'nodeleted', $bug->assignedTo);
+            $users = $this->user->getTeamMemberPairs($bug->execution, 'execution', 'nodeleted', $bug->assignedTo);
         }
         else
         {
-            $users   = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
+            $users = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
         }
 
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
@@ -1591,7 +1591,7 @@ class bug extends control
      */
     public function ajaxLoadAssignedTo($executionID, $selectedUser = '')
     {
-        $executionMembers = $this->loadModel('execution')->getTeamMemberPairs($executionID, '', $selectedUser);
+        $executionMembers = $this->user->getTeamMemberPairs($executionID, 'execution', '', $selectedUser);
 
         die(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));
     }
@@ -1609,11 +1609,11 @@ class bug extends control
         $latestExecution = $this->product->getLatestProject($productID);
         if(!empty($latestExecution))
         {
-            $executionMembers = $this->loadModel('execution')->getTeamMemberPairs($latestExecution->id, 'nodeleted', $selectedUser);
+            $executionMembers = $this->user->getTeamMemberPairs($latestExecution->id, 'execution', 'nodeleted', $selectedUser);
         }
         else
         {
-            $executionMembers = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
+            $executionMembers = $this->user->getPairs('devfirst|noclosed|nodeleted');
         }
 
         die(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));

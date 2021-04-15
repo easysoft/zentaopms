@@ -77,7 +77,7 @@ class stakeholder extends control
         else
         {
             $this->loadModel('project')->setMenu($objectID);
-            $this->view->members = $this->loadModel('project')->getTeamMemberPairs($objectID);
+            $this->view->members = $this->loadModel('user')->getTeamMemberPairs($objectID, 'project');
         }
 
         $this->view->title      = $this->lang->stakeholder->create;
@@ -168,11 +168,11 @@ class stakeholder extends control
         }
 
         $users = array('' => '');
-        if($stakeholder->type == 'team') $users = $this->loadModel('execution')->getTeamMemberPairs($this->session->project);
+        if($stakeholder->type == 'team') $users = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
         elseif($stakeholder->type == 'company')
         {
-            $members = $this->loadModel('execution')->getTeamMemberPairs($this->session->project);
-            $users   = $this->loadModel('user')->getPairs('noclosed');
+            $members = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
+            $users   = $this->user->getPairs('noclosed');
             $users   = array('' => '') + array_diff($users, $members);
         }
 
@@ -202,7 +202,7 @@ class stakeholder extends control
         }
         else
         {
-            $members = $this->loadModel('project')->getTeamMemberPairs($projectID);
+            $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         }
         die(html::select('user', $members, $user, "class='form-control chosen'"));
     }
@@ -224,7 +224,7 @@ class stakeholder extends control
         }
         else
         {
-            $members = $this->loadModel('project')->getTeamMemberPairs($projectID);
+            $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         }
 
         $users = $this->loadModel('user')->getPairs('noclosed');
@@ -328,7 +328,7 @@ class stakeholder extends control
         $this->view->position[] = $this->lang->stakeholder->view;
 
         $this->view->user    = $user;
-        $this->view->users   = $this->loadModel('execution')->getTeamMemberPairs($this->session->project,'nodeleted');
+        $this->view->users   = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
         $this->view->expects = $this->stakeholder->getExpectByUser($userID);
 
         $this->display();
@@ -391,7 +391,7 @@ class stakeholder extends control
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
         $this->view->position[] = $this->lang->stakeholder->view;
         $this->view->user       = $this->stakeholder->getByID($userID);
-        $this->view->users      = $this->loadModel('execution')->getTeamMemberPairs($this->session->project,'nodeleted');
+        $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
         $this->display();
     }
 
