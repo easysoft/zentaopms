@@ -20,13 +20,7 @@
     </div>
     <?php if(isset($this->config->bizVersion)):?>
     <div class='alert alert-warning strong'>
-      <?php
-      $isonlybody = isonlybody();
-      unset($_GET['onlybody']);
-
-      printf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType), common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice') : '###');
-      if($isonlybody) $_GET['onlybody'] = 'yes';
-      ?>
+      <?php printf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType), common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice') : '###');?>
     </div>
     <?php else:?>
     <div class='alert alert-warning strong'><?php printf($lang->doc->cannotCreateOffice, zget($lang->doc->typeList, $docType));?></div>

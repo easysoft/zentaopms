@@ -182,7 +182,7 @@ $lang->doc->noArticle            = 'No articles.';
 $lang->doc->noLib                = 'No libraries. ';
 $lang->doc->noBook               = 'The WIKI library has not created a manual, please create a new one :)';
 $lang->doc->cannotCreateOffice   = 'Sorry, %s can only be created in ZenTao Enterprise. Contact us at renee@easysoft.ltd to try ZenTao Enterprise.';
-$lang->doc->notSetOffice         = "<p>To create a %s document, you need to configure <a href='%s' target='_parent'>office convert</a>.<p>";
+$lang->doc->notSetOffice         = "<p>To create a %s document, you need to configure <a href='%s'>office convert</a>.<p>";
 $lang->doc->noSearchedDoc        = 'No documents found.';
 $lang->doc->noEditedDoc          = 'You have not edited any documents.';
 $lang->doc->noOpenedDoc          = 'You have not created any documents.';
