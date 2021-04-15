@@ -55,7 +55,6 @@
   </div>
 </div>
 <script>
-$('#navbar li[data-id="custom"]').removeClass('active');
 $("input[name='default']").change(function()
 {
     var checked = $(this).val();
