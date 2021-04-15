@@ -194,7 +194,6 @@ $lang->execution->copy              = "Copy {$lang->executionCommon}";
 $lang->execution->delete            = "Delete {$lang->executionCommon}";
 $lang->execution->deleteAB          = "Delete Execution";
 $lang->execution->browse            = "{$lang->executionCommon} List";
-$lang->execution->list              = "{$lang->executionCommon} List";
 $lang->execution->edit              = "Edit {$lang->executionCommon}";
 $lang->execution->editAction        = "Edit Execution";
 $lang->execution->batchEdit         = "Edit";
