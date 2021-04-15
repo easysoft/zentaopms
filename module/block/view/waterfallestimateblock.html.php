@@ -15,7 +15,7 @@
   <tr>
     <th class='w-100px'><?php echo $lang->workestimation->totalLaborCost;?></th>
     <td><?php echo '￥' . zget($budget, 'totalLaborCost', 0);?></td>
-    <th class='w-100px'><?php echo $lang->block->leftHour;?></th>
+    <th class='w-100px'><?php echo $lang->block->remain;?></th>
     <td><?php echo $totalLeft ? $totalLeft : 0;?></td>
   </tr>
 </table>
