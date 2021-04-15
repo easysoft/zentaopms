@@ -45,7 +45,9 @@
           <th class='w-pri'>  <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <th class='w-200px'><?php common::printOrderLink('product', $orderBy, $vars, $lang->story->product);?></th>
           <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+          <?php if($storyType != 'requirement'):?>
           <th class='w-150px'><?php common::printOrderLink('plan', $orderBy, $vars, $lang->story->plan);?></th>
+          <?php endif;?>
           <th class='w-90px'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='w-80px text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='w-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
@@ -60,7 +62,9 @@
           <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td><?php echo $story->productTitle;?></td>
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
+          <?php if($storyType != 'requirement'):?>
           <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
+          <?php endif;?>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td class='estimate text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
           <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>

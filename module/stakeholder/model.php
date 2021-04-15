@@ -113,7 +113,7 @@ class stakeholderModel extends model
         $this->loadModel('action');
         $data = (array)fixer::input('post')->get();
 
-        $members  = $this->loadModel('execution')->getTeamMemberPairs($this->session->project);
+        $members  = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
         $accounts = array_unique($data['accounts']);
         $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->project)->andWhere('objectType')->eq('project')->fetchPairs();
         $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->project)->andWhere('objectType')->eq('project')->exec();

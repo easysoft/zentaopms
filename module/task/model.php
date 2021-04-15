@@ -3244,7 +3244,7 @@ class taskModel extends model
      */
     public function getMemberPairs($task)
     {
-        $users   = $this->loadModel('execution')->getTeamMemberPairs($task->execution, 'nodeleted');
+        $users   = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $members = array('');
         foreach($task->team as $member)
         {

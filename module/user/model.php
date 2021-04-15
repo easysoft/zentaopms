@@ -2373,6 +2373,43 @@ class userModel extends model
     }
 
     /**
+     * Get team members in object.
+     *
+     * @param  int    $objectID
+     * @param  string $type     project|execution
+     * @param  string $params
+     * @param  string $usersToAppended
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberPairs($objectID, $type = 'project', $params = '', $usersToAppended = '')
+    {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
+
+        $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
+        $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.root')->eq((int)$objectID)
+            ->andWhere('t1.type')->eq($type)
+            ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
+            ->andWhere('t2.deleted')->eq(0)
+            ->fi()
+            ->fetchAll($keyField);
+
+        if($usersToAppended) $users += $this->dao->select("id, account, realname")->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
+
+        if(!$users) return array('' => '');
+
+        foreach($users as $account => $user)
+        {
+            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
+            if(!empty($this->config->isINT)) $firstLetter = '';
+            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
+        }
+        return array('' => '') + $users;
+    }
+
+    /**
      * Judge an action is clickable or not.
      *
      * @param  object    $user

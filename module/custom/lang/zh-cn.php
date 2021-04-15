@@ -227,8 +227,9 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
 $lang->custom->moduleName['execution']   = $lang->custom->execution;
 
-$lang->custom->conceptQuestions['overview'] = "1. 下述哪种组合方式更适合您公司的管理现状？";
-$lang->custom->conceptQuestions['URAndSR']  = "2. 是否启用{$lang->URCommon}和{$lang->SRCommon}概念？";
+$lang->custom->conceptQuestions['overview']   = "1. 下述哪种组合方式更适合您公司的管理现状？";
+$lang->custom->conceptQuestions['URAndSR']    = "2. 是否启用{$lang->URCommon}和{$lang->SRCommon}概念？";
+$lang->custom->conceptQuestions['storypoint'] = "3. 您公司是在使用以下哪种单位来做规模估算？";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();
