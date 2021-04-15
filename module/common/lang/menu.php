@@ -161,7 +161,7 @@ $lang->product->menuOrder[35] = 'requirement';
 $lang->product->menuOrder[40] = 'track';
 $lang->product->menuOrder[45] = 'doc';
 $lang->product->menuOrder[50] = 'dynamic';
-$lang->product->menuOrder[55] = 'setting';
+$lang->product->menuOrder[55] = 'settings';
 $lang->product->menuOrder[60] = 'create';
 $lang->product->menuOrder[65] = 'all';
 
@@ -192,7 +192,7 @@ $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projec
 $lang->scrum->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->scrum->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
-$lang->scrum->dividerMenu = ',execution,programplan,doc,dynamic,';
+$lang->scrum->dividerMenu = ',execution,programplan,doc,settings,';
 
 /* Scrum menu order. */
 $lang->scrum->menuOrder[5]  = 'index';
@@ -254,7 +254,7 @@ $lang->execution->menuOrder[45] = 'doc';
 $lang->execution->menuOrder[50] = 'build';
 $lang->execution->menuOrder[55] = 'release';
 $lang->execution->menuOrder[60] = 'action';
-$lang->execution->menuOrder[65] = 'setting';
+$lang->execution->menuOrder[65] = 'settings';
 
 $lang->execution->menu->doc['subMenu'] = new stdclass();
 
