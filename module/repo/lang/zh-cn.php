@@ -3,6 +3,7 @@ $lang->repo->common          = '代码';
 $lang->repo->browse          = '浏览';
 $lang->repo->viewRevision    = '查看修订';
 $lang->repo->product         = '所属产品';
+$lang->repo->execution       = '所属' . $lang->executionCommon;
 $lang->repo->create          = '创建';
 $lang->repo->maintain        = '版本库列表';
 $lang->repo->edit            = '编辑';

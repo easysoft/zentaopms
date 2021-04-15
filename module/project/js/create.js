@@ -78,7 +78,7 @@ function addNewProduct(obj)
 /**
  * Set access control box.
  *
- * @param  int $projectID
+ * @param  int $programID
  * @access public
  * @return void
  */
