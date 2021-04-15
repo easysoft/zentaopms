@@ -797,7 +797,7 @@ class doc extends control
         {
             $doclib   = $this->doc->getLibById($libID);
             $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
-            $objectID = $type == 'custom' ? 0 : $doclib->$type;
+            $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
         }
 
         $this->session->set('docList', $this->app->getURI(true), $this->app->openApp);
