@@ -92,7 +92,7 @@
 
         echo "<div class='divider'></div>";
         common::printIcon('bug', 'edit', $params, $bug);
-        common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
+        common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy', '', '', false, "data-app='qa'");
         common::printIcon('bug', 'delete', $params, $bug, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
@@ -112,11 +112,11 @@
               <tbody>
                 <tr valign='middle'>
                   <th class='thWidth'><?php echo $lang->bug->product;?></th>
-                  <td><?php if(!common::printLink('product', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
+                  <td><?php if(!common::printLink('product', 'browse', "productID=$bug->product", $product->name)) echo $product->name;?></td>
                 </tr>
-                <?php if($this->session->currentProductType != 'normal'):?>
+                <?php if($product->type != 'normal'):?>
                 <tr>
-                  <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$this->session->currentProductType]);?></th>
+                  <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->name]);?></th>
                   <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch", $branchName)) echo $branchName;?></td>
                 </tr>
                 <?php endif;?>
