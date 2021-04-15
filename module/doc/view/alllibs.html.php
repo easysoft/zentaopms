@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php $pageCSS .= $this->doc->appendNavCSS();?>
 <?php include '../../common/view/header.html.php';?>
 <?php $spliter = (empty($this->app->user->feedback) && !$this->cookie->feedbackView) ? true : false;?>
 <div class="main-row <?php if($spliter) echo 'split-row';?> fade" id="mainRow">

@@ -1770,26 +1770,6 @@ class docModel extends model
     }
 
     /**
-     * Append the subHeader style.
-     *
-     * @access public
-     * @return string
-     */
-    public function appendNavCSS()
-    {
-        $navCSS = '';
-        if($this->app->openApp == 'doc')
-        {
-            $navCSS .= <<<EOF
-#subHeader {margin-top: -50px; background: rgba(0,0,0,0);}
-#pageActions .btn-link {color: #fff; font-size: 14px; line-height: 18px; border: #84a2e2 1px solid;}
-EOF;
-            if($this->app->rawMethod != 'index') $navCSS .= '.header-btn+.header-btn::after, .header-btn+.header-btn::before {top: -50px;}';
-        }
-        return $navCSS;
-    }
-
-    /**
      * Create the select code of doc.
      *
      * @param  string $type
