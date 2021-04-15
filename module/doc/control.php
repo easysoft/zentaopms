@@ -781,31 +781,6 @@ class doc extends control
     }
 
     /**
-     * Doc lib browse.
-     *
-     * @param  int    $libID
-     * @access public
-     * @return void
-     */
-    public function doclibBrowse($libID = 0)
-    {
-        $doclib = $this->doc->getLibById($libID);
-
-        $objecitID = 0;
-        if($doclib->type == 'product')
-        {
-            $objectID = $doclib->product;
-        }
-        elseif($doclib->type == 'project' or $doclib->type == 'execution')
-        {
-            $doclib->type = 'project';
-            $objectID = $doclib->project;
-        }
-
-        die(js::locate($this->createLink('doc', 'objectLibs', "type={$doclib->type}&objectID=$objectID&libID=$libID")));
-    }
-
-    /**
      * Show libs for product or project.
      *
      * @param  string $type
@@ -818,6 +793,13 @@ class doc extends control
      */
     public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0, $version = 0)
     {
+        if(empty($type))
+        {
+            $doclib   = $this->doc->getLibById($libID);
+            $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
+            $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
+        }
+
         $this->session->set('docList', $this->app->getURI(true), $this->app->openApp);
 
         $objects = $this->doc->getOrderedObjects($type);

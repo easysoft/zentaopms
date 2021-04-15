@@ -154,6 +154,7 @@ $lang->extension->common  = 'Extension';
 $lang->company->common    = 'Company';
 $lang->dept->common       = 'Dept';
 $lang->program->list      = 'Program List';
+$lang->execution->list    = "{$lang->executionCommon} List";
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';

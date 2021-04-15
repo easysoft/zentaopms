@@ -139,7 +139,7 @@ class docModel extends model
 
         if($lib->type == 'execution' and $lib->execution)
         {
-            $execution  = $this->loadModel('execution')->getByID($lib->execution);
+            $execution = $this->loadModel('execution')->getByID($lib->execution);
             $lib->project = $execution->project;
         }
 
@@ -1813,7 +1813,8 @@ EOF;
             $output .= "<div class='table-col'><div class='list-group'>";
             foreach($objects as $key => $object)
             {
-                $output .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "data-app='{$this->app->openApp}'");
+                $selected = $key == $objectID ? 'selected' : '';
+                $output  .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
             $output .= "</div></div></div></div></div>";
         }
@@ -1825,7 +1826,8 @@ EOF;
             $output .= "<div class='table-col'><div class='list-group'>";
             foreach($libs as $key => $lib)
             {
-                $output .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "data-app='{$this->app->openApp}'");
+                $selected = $key == $libID ? 'selected' : '';
+                $output  .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
             $output .= "</div></div></div></div></div>";
         }

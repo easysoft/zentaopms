@@ -835,16 +835,22 @@ function adjustMenuWidth()
 /**
  * Scroll to selected item in drop menu.
  *
+ * @param  string $id
  * @access public
  * @return void
  */
-function scrollToSelected()
+function scrollToSelected(id)
 {
-    $('#dropMenu .table-row .list-group').mouseout(function(){$(this).find('.active').removeClass('active')});
-    if($('#dropMenu .table-row .col-left .list-group .selected').length > 0)
+    if(typeof(id) == 'undefined') id = '#dropMenu .table-col .list-group'
+
+    $id = $(id);
+    $selected = $id.find('.selected');
+
+    $id.mouseout(function(){$(this).find('.active').removeClass('active')});
+    if($selected.length > 0)
     {
         var offsetHeight = 75;
-        $('#dropMenu .table-row .col-left .list-group').scrollTop($('#dropMenu .table-row .col-left .list-group .selected').position().top - offsetHeight);
+        $id.scrollTop($selected.position().top - offsetHeight);
     }
 }
 

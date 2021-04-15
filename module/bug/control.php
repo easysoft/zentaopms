@@ -514,7 +514,7 @@ class bug extends control
         if($projectID)
         {
             $products    = array();
-            $productList = $this->product->getOrderedProducts('all', 40, $projectID);
+            $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
             foreach($productList as $product) $products[$product->id] = $product->name;
 
             $project   = $this->loadModel('project')->getByID($projectID);
@@ -820,6 +820,13 @@ class bug extends control
         if($this->app->openApp == 'qa')
         {
             $this->view->products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed');
+        }
+        if($this->app->openApp == 'project')
+        {
+            $products = array();
+            $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $bug->project) : $this->product->getOrderedProducts('normal', 40, $bug->project);
+            foreach($productList as $product) $products[$product->id] = $product->name;
+            $this->view->products = $products;
         }
 
         /* Set header and position. */

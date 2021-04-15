@@ -242,13 +242,7 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab')
-        {
-            $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
-
-            unset($data->gitlabHost);
-            unset($data->gitlabToken);
-        }
+        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -262,7 +256,7 @@ class repoModel extends model
         }
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->insert(TABLE_REPO)->data($data, $skip = 'gitlabProject')
+        $this->dao->insert(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'GitLab', 'gitlabProject', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
@@ -294,14 +288,7 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab')
-        {
-            $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
-
-            unset($data->gitlabHost);
-            unset($data->gitlabToken);
-            unset($data->gitlabProject);
-        }
+        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -322,7 +309,7 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->update(TABLE_REPO)->data($data, $skip = 'gitlabProject')
+        $this->dao->update(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'GitLab', 'gitlabProject', 'notempty')

@@ -194,7 +194,6 @@ $lang->execution->copy              = "复制{$lang->executionCommon}";
 $lang->execution->delete            = "删除{$lang->executionCommon}";
 $lang->execution->deleteAB          = "删除{$lang->execution->common}";
 $lang->execution->browse            = "浏览{$lang->execution->common}";
-$lang->execution->list              = "{$lang->executionCommon}列表";
 $lang->execution->edit              = "编辑{$lang->executionCommon}";
 $lang->execution->editAction        = "编辑{$lang->execution->common}";
 $lang->execution->batchEdit         = "编辑";
