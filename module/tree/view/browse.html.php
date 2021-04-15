@@ -10,9 +10,6 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if($app->openApp == 'doc'):?>
-<?php $pageCSS .= $this->loadModel('doc')->appendNavCSS();?>
-<?php endif;?>
 <?php include '../../common/view/header.html.php';?>
 
 <?php if($viewType != 'story'):?>
