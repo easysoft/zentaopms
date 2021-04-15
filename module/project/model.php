@@ -260,7 +260,7 @@ class projectModel extends model
 
         $teams = $this->dao->select('root, count(*) as teams')->from(TABLE_TEAM)
             ->where('root')->in($projectIdList)
-            ->andWhere('type')->in('project')
+            ->andWhere('type')->eq('project')
             ->groupBy('root')->fetchPairs();
 
         $hours = $this->dao->select('project,
@@ -402,7 +402,7 @@ class projectModel extends model
     }
 
     /**
-     * Get team members in pair.
+     * Get team members in project.
      *
      * @param  int    $projectID
      * @param  string $params

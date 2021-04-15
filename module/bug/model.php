@@ -945,6 +945,7 @@ class bugModel extends model
             $buildData = new stdclass();
             $buildData->product   = (int)$oldBug->product;
             $buildData->branch    = (int)$oldBug->branch;
+            $buildData->project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->buildExecution)->fetch('project');
             $buildData->execution = $bug->buildExecution;
             $buildData->name      = $bug->buildName;
             $buildData->date      = date('Y-m-d');
