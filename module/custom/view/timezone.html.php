@@ -32,11 +32,4 @@
     <?php endif;?>
   </div>
 </div>
-<script>
-$(function()
-{
-    $('#mainHeader #navbar li[data-id=model]').removeClass('active');
-})
-</script>
-
 <?php include '../../common/view/footer.html.php';?>

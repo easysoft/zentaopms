@@ -147,7 +147,7 @@ $(function()
                 <div class="col data"><?php echo $project->doneStories;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><?php echo $lang->block->left . "：";?></div>
+                <div class="col dataTitle"><?php echo $lang->project->surplus . "：";?></div>
                 <div class="col data"><?php echo $project->leftStories;?></div>
               </div>
             </div>
@@ -167,17 +167,17 @@ $(function()
               </div>
             </div>
             <div class="col-4 text-center">
-              <div><h4><?php echo $lang->block->bug;?></h4></div>
+              <div><h4><?php echo $lang->bug->common;?></h4></div>
               <div>
                 <div class="col dataTitle"><?php echo $lang->block->totalBug . "：";?></div>
                 <div class="col data"><?php echo $project->allBugs;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><?php echo $lang->block->doneBugs . "：";?></div>
+                <div class="col dataTitle"><?php echo $lang->bug->statusList['resolved'] . "：";?></div>
                 <div class="col data"><?php echo $project->doneBugs;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><?php echo $lang->block->leftBugs . "：";?></div>
+                <div class="col dataTitle"><?php echo $lang->bug->unResolved . "：";?></div>
                 <div class="col data"><?php echo $project->leftBugs;?></div>
               </div>
             </div>

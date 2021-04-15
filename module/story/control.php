@@ -1513,6 +1513,7 @@ class story extends control
     public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc')
     {
         $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->openApp, 'product');
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->openApp);
 
         $this->loadModel('testcase');
         if($this->app->openApp == 'project')

@@ -125,14 +125,11 @@ class my extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        if($this->app->viewType != 'json')
-        {
-            $this->session->set('todoList',     $uri, 'my');
-            $this->session->set('bugList',      $uri, 'qa');
-            $this->session->set('taskList',     $uri, 'execution');
-            $this->session->set('storyList',    $uri, 'product');
-            $this->session->set('testtaskList', $uri, 'qa');
-        }
+        $this->session->set('todoList',     $uri, 'my');
+        $this->session->set('bugList',      $uri, 'qa');
+        $this->session->set('taskList',     $uri, 'execution');
+        $this->session->set('storyList',    $uri, 'product');
+        $this->session->set('testtaskList', $uri, 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

@@ -18,12 +18,8 @@ $lang->block->grid       = '位置';
 $lang->block->color      = '颜色';
 $lang->block->reset      = '恢复默认';
 $lang->block->story      = '需求';
-$lang->block->bug        = 'Bug';
 $lang->block->investment = '投入';
-$lang->block->left       = '剩余';
 $lang->block->estimate   = '预计工时';
-$lang->block->doneBugs   = '已解决';
-$lang->block->leftBugs   = '未解决';
 $lang->block->last       = '近期';
 
 $lang->block->account = '所属用户';

@@ -1652,7 +1652,7 @@ class docModel extends model
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
         {
-            $link     = helper::createLink('doc', 'browse', "libID=0&browseTyp={$key}");
+            $link     = helper::createLink('doc', 'browse', "libID=0&browseType={$key}");
             $actions .= '<li>' . html::a($link, "<i class='icon {$this->lang->doc->fastMenuIconList[$key]}'></i> {$fastMenu}") . '</li>';
         }
         $actions .='</ul>';
@@ -1813,7 +1813,8 @@ EOF;
             $output .= "<div class='table-col'><div class='list-group'>";
             foreach($objects as $key => $object)
             {
-                $output .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "data-app='{$this->app->openApp}'");
+                $selected = $key == $objectID ? 'selected' : '';
+                $output  .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
             $output .= "</div></div></div></div></div>";
         }
@@ -1825,7 +1826,8 @@ EOF;
             $output .= "<div class='table-col'><div class='list-group'>";
             foreach($libs as $key => $lib)
             {
-                $output .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "data-app='{$this->app->openApp}'");
+                $selected = $key == $libID ? 'selected' : '';
+                $output  .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
             $output .= "</div></div></div></div></div>";
         }
