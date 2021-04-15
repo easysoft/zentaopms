@@ -351,7 +351,6 @@ $lang->block->availableBlocks->testtask  = 'Requests';
 $lang->block->availableBlocks->risk      = 'My Risks';
 $lang->block->availableBlocks->issue     = 'My Issues';
 
-global $config;
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;

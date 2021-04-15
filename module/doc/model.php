@@ -1652,7 +1652,7 @@ class docModel extends model
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
         {
-            $link     = helper::createLink('doc', 'browse', "libID=0&browseTyp={$key}");
+            $link     = helper::createLink('doc', 'browse', "libID=0&browseType={$key}");
             $actions .= '<li>' . html::a($link, "<i class='icon {$this->lang->doc->fastMenuIconList[$key]}'></i> {$fastMenu}") . '</li>';
         }
         $actions .='</ul>';

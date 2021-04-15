@@ -976,34 +976,6 @@ class block extends control
             $plans[$product] = $plan;
         }
 
-        /* Get projects. */
-        $projects = $this->dao->select('t1.product, t2.status, t2.end')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->in($productIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->fetchGroup('product');
-        foreach($projects as $product => $productProjects)
-        {
-            $undone= 0;
-            $done  = 0;
-            $delay = 0;
-
-            foreach($productProjects as $project)
-            {
-                ($project->status == 'done' or $project->status == 'closed') ? $done++ : $undone++;
-                if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended' && $project->end < helper::today()) $delay++;
-            }
-
-            $project = array();
-            $project['undone'] = $undone;
-            $project['done']   = $done;
-            $project['delay']  = $delay;
-            $project['all']    = count($productProjects);
-
-            $projects[$product] = $project;
-        }
-
         /* Get releases. */
         $releases = $this->dao->select('product, status, COUNT(*) AS count')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
@@ -1029,14 +1001,12 @@ class block extends control
         {
             $product->stories     = isset($stories[$productID])      ? $stories[$productID]      : 0;
             $product->plans       = isset($plans[$productID])        ? $plans[$productID]        : 0;
-            $product->projects    = isset($projects[$productID])     ? $projects[$productID]     : 0;
             $product->releases    = isset($releases[$productID])     ? $releases[$productID]     : 0;
             $product->lastRelease = isset($lastReleases[$productID]) ? $lastReleases[$productID] : 0;
         }
 
         $this->app->loadLang('story');
         $this->app->loadLang('productplan');
-        $this->app->loadLang('project');
         $this->app->loadLang('release');
 
         $this->view->products = $products;

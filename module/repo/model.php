@@ -235,10 +235,20 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         $data = fixer::input('post')
+            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
+            ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')
             ->get();
+
+        if($this->post->SCM == 'Gitlab')
+        {
+            $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
+
+            unset($data->gitlabHost);
+            unset($data->gitlabToken);
+        }
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -252,8 +262,9 @@ class repoModel extends model
         }
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->insert(TABLE_REPO)->data($data)
+        $this->dao->insert(TABLE_REPO)->data($data, $skip = 'gitlabProject')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'GitLab', 'gitlabProject', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
@@ -282,6 +293,16 @@ class repoModel extends model
             ->skipSpecial('path,client,account,password')
             ->join('product', ',')
             ->get();
+
+        if($this->post->SCM == 'Gitlab')
+        {
+            $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
+
+            unset($data->gitlabHost);
+            unset($data->gitlabToken);
+            unset($data->gitlabProject);
+        }
+
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
         if($data->SCM == 'Subversion' and $data->path != $repo->path)
@@ -301,9 +322,10 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->update(TABLE_REPO)->data($data)
+        $this->dao->update(TABLE_REPO)->data($data, $skip = 'gitlabProject')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'GitLab', 'gitlabProject', 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 
@@ -1753,5 +1775,22 @@ class repoModel extends model
         $buildedURL .= 'repoUrl=' . helper::safe64Encode($url);
 
         return $buildedURL;
+    }
+
+   /**
+     * Get gitlab projects.
+     *
+     * @param  string   $host
+     * @param  string   $token
+     * @access public
+     * @return array
+     */
+    public function getGitlabProjects($host, $token)
+    {
+		$host  = rtrim($host, '/');
+		$host .= '/api/v4/projects';
+
+		$projects = file_get_contents($host . "?private_token=$token");
+		return json_decode($projects);
     }
 }
