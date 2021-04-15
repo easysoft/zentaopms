@@ -820,7 +820,7 @@ class projectModel extends model
                 $lib->name    = $this->lang->doclib->main['product'];
                 $lib->type    = 'product';
                 $lib->main    = '1';
-                $lib->acl     = $product->acl;
+                $lib->acl     = 'default';
                 $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
             }
 

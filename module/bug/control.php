@@ -509,7 +509,7 @@ class bug extends control
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Get products and projects. */
-        $products = $this->products;
+        $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed');
         $projects = array(0 => '');
         if($projectID)
         {
@@ -815,6 +815,11 @@ class bug extends control
         foreach($this->config->bug->discardedTypes as $type)
         {
             if($bug->type != $type) unset($this->lang->bug->typeList[$type]);
+        }
+
+        if($this->app->openApp == 'qa')
+        {
+            $this->view->products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed');
         }
 
         /* Set header and position. */

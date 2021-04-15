@@ -18,12 +18,8 @@ $lang->block->grid       = '位置';
 $lang->block->color      = '颜色';
 $lang->block->reset      = '恢复默认';
 $lang->block->story      = '需求';
-$lang->block->bug        = 'Bug';
 $lang->block->investment = '投入';
-$lang->block->left       = '剩余';
 $lang->block->estimate   = '预计工时';
-$lang->block->doneBugs   = '已解决';
-$lang->block->leftBugs   = '未解决';
 $lang->block->last       = '近期';
 
 $lang->block->account = '所属用户';
@@ -291,11 +287,11 @@ $lang->block->default['full']['my']['3']['params']['count'] = '20';
 
 if($config->systemMode == 'new')
 {
-$lang->block->default['full']['my']['4']['title']           = '项目统计';
-$lang->block->default['full']['my']['4']['block']           = 'statistic';
-$lang->block->default['full']['my']['4']['source']          = 'project';
-$lang->block->default['full']['my']['4']['grid']            = 8;
-$lang->block->default['full']['my']['4']['params']['count'] = '20';
+    $lang->block->default['full']['my']['4']['title']           = '项目统计';
+    $lang->block->default['full']['my']['4']['block']           = 'statistic';
+    $lang->block->default['full']['my']['4']['source']          = 'project';
+    $lang->block->default['full']['my']['4']['grid']            = 8;
+    $lang->block->default['full']['my']['4']['params']['count'] = '20';
 }
 
 $lang->block->default['full']['my']['5']['title']  = '我的贡献';
@@ -355,7 +351,6 @@ $lang->block->availableBlocks->testtask  = '测试版本列表';
 $lang->block->availableBlocks->risk      = '我的风险';
 $lang->block->availableBlocks->issue     = '我的问题';
 
-global $config;
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = '项目';
 $lang->block->moduleList['product']   = $lang->productCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;

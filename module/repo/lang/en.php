@@ -124,6 +124,14 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';
+$lang->repo->scmList['Gitlab']     = 'Gitlab';
+
+$lang->repo->gitlabHost    = 'Gitlab Host';
+$lang->repo->gitlabToken   = 'Gitlab Token';
+$lang->repo->gitlabProject = 'Projects';
+
+$lang->repo->placeholder = new stdclass;
+$lang->repo->placeholder->gitlabHost = 'Input url of gitlab';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = 'Synchronizing. Please wait ...';

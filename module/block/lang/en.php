@@ -18,12 +18,8 @@ $lang->block->grid       = 'Position';
 $lang->block->color      = 'Color';
 $lang->block->reset      = 'Reset Layout';
 $lang->block->story      = 'Story';
-$lang->block->bug        = 'Bug';
 $lang->block->investment = 'Investment';
-$lang->block->left       = 'Left';
 $lang->block->estimate   = 'Estimate';
-$lang->block->doneBugs   = 'Done';
-$lang->block->leftBugs   = 'Left';
 $lang->block->last       = 'Last';
 
 $lang->block->account = 'Account';
@@ -355,7 +351,6 @@ $lang->block->availableBlocks->testtask  = 'Requests';
 $lang->block->availableBlocks->risk      = 'My Risks';
 $lang->block->availableBlocks->issue     = 'My Issues';
 
-global $config;
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;

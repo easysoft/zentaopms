@@ -11,7 +11,10 @@
  */
 ?>
 <?php if($preferenceSetted):?>
-<style> #submit{margin-top: 45px} </style>
+<style>
+#submit{margin-top: 45px}
+.chosen-container-single .chosen-single div b {top: 7px !important;}
+</style>
 <?php include '../../common/view/header.html.php';?>
 <?php else:?>
 <?php include '../../common/view/header.lite.html.php';?>

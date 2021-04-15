@@ -113,7 +113,7 @@
         <i class='icon icon-export muted'></i> <?php echo $lang->export ?>
         <span class='caret'></span>
       </button>
-      <ul class='dropdown-menu' id='exportActionMenu'>
+      <ul class='dropdown-menu pull-right' id='exportActionMenu'>
       <?php
       $class = common::hasPriv('testcase', 'export') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
@@ -132,7 +132,7 @@
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
-      <ul class='dropdown-menu' id='importActionMenu'>
+      <ul class='dropdown-menu pull-right' id='importActionMenu'>
       <?php
       $class = common::hasPriv('testcase', 'import') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";

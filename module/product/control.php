@@ -340,6 +340,10 @@ class product extends control
         $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
+        $lines = array();
+        if($programID) $lines = array('') + $this->product->getLinePairs($programID);
+        if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
+
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();
@@ -349,7 +353,7 @@ class product extends control
         $this->view->rdUsers    = $rdUsers;
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-        $this->view->lines      = $this->config->systemMode == 'new' ? array() : array('' => '') + $this->product->getLinePairs();
+        $this->view->lines      = $lines;
         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);

@@ -934,7 +934,6 @@ class taskModel extends model
             ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
             ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
-            ->checkIF($task->status == 'closed', 'closedReason', 'notempty')
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->where('id')->eq((int)$taskID)->exec();
 
@@ -1491,6 +1490,7 @@ class taskModel extends model
         $data->status         = $task->status;
         $data->lastEditedBy   = $this->app->user->account;
         $data->lastEditedDate = $now;
+        if(helper::isZeroDate($task->realStarted)) $data->realStarted = $now;
 
         if($left == 0)
         {

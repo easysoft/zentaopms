@@ -269,7 +269,7 @@ class task extends control
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs(), $execution->id);
+        $this->execution->setMenu($execution->id);
 
         /* When common task are child tasks, query whether common task are consumed. */
         $taskConsumed = 0;
@@ -1228,6 +1228,13 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        if(!empty($this->view->task->team))
+        {
+            $members = array();
+            foreach($this->view->task->team as $account => $member) $members[$account] = zget($this->view->members, $account);
+            $this->view->members = $members;
+        }
+
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
         $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
@@ -1559,6 +1566,18 @@ class task extends control
                 if(isset($users[$task->canceledBy]))   $task->canceledBy   = $users[$task->canceledBy];
                 if(isset($users[$task->closedBy]))     $task->closedBy     = $users[$task->closedBy];
                 if(isset($users[$task->lastEditedBy])) $task->lastEditedBy = $users[$task->lastEditedBy];
+
+                /* Convert username to real name. */
+                if(!empty($task->mailto))
+                {
+                    $mailtoList = explode(',', $task->mailto);
+
+                    $task->mailto = '';
+                    foreach($mailtoList as $mailto)
+                    {
+                        if(!empty($mailto)) $task->mailto .= ',' . zget($users, $mailto);
+                    }
+                }
 
                 if($task->parent > 0 && strpos($task->name, htmlentities('>')) !== 0) $task->name = '>' . $task->name;
                 if(!empty($task->team))   $task->name = '[' . $taskLang->multipleAB . '] ' . $task->name;
