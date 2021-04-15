@@ -106,13 +106,13 @@ function computeEndDate(delta)
         $('#end').val(longTime);
         $('#end').attr('disabled', 'disabled');
         $('#days').attr('disabled', 'disabled');
-        $('#daysDiv').addClass('hidden');
+        $('#daysBox').addClass('hidden');
         return false;
     }
     else
     {
         $('#days').removeAttr('disabled');
-        $('#daysDiv').removeClass('hidden');
+        $('#daysBox').removeClass('hidden');
         $('#end').removeAttr('disabled');
     }
 
