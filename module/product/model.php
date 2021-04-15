@@ -365,7 +365,7 @@ class productModel extends model
         $products = array();
         if($projectID)
         {
-            $pairs    = $this->getProducts($projectID);
+            $pairs    = $this->getProducts($projectID, $status == 'normal' ? 'noclosed' : '');
             $products = $this->getByIdList(array_keys($pairs));
         }
         else
