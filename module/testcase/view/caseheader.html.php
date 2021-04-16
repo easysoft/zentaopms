@@ -151,21 +151,35 @@
     <?php endif;?>
     <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
     <?php if(!common::checkNotCN()):?>
-    <?php if(common::hasPriv('testcase', 'batchCreate') or common::hasPriv('testcase', 'create')):?>
     <div class='btn-group dropdown'>
       <?php
-      $actionLink = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
-      echo html::a($actionLink, "<i class='icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary' data-app='{$this->app->openApp}'");
+      $createTestcaseLink = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
+      $batchCreateLink    = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
+
+      $buttonLink  = '';
+      $buttonTitle = '';
+      if(common::hasPriv('testcase', 'batchCreate'))
+      {
+          $buttonLink  = !empty($productID) ? $batchCreateLink : '';
+          $buttonTitle = $lang->testcase->batchCreate;
+      }
+      if(common::hasPriv('testcase', 'create'))
+      {
+          $buttonLink  = $createTestcaseLink;
+          $buttonTitle = $lang->testcase->create;
+      }
+
+      $hidden = empty($buttonLink) ? 'hidden' : '';
+      echo html::a($buttonLink, "<i class='icon-plus'></i> " . $buttonTitle, '', "class='btn btn-primary $hidden' data-app='{$this->app->openApp}'");
       ?>
-      <?php if(!empty($productID)):?>
+      <?php if(!empty($productID) and common::hasPriv('testcase', 'batchCreate') and common::hasPriv('testcase', 'create')):?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu'>
-        <li><?php echo html::a($actionLink, $lang->testcase->create);?></li>
-        <li><?php echo html::a($this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule"), $lang->testcase->batchCreate, '', "data-app='{$this->app->openApp}'");?></li>
+        <li><?php echo html::a($createTestcaseLink, $lang->testcase->create);?></li>
+        <li><?php echo html::a($batchCreateLink, $lang->testcase->batchCreate, '', "data-app='{$this->app->openApp}'");?></li>
       </ul>
       <?php endif;?>
     </div>
-    <?php endif;?>
     <?php if($this->app->rawMethod == 'browseunits' and common::canModify('product', $product)):?>
       <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary' data-app='{$this->app->openApp}'");?>
     <?php endif;?>
