@@ -114,7 +114,7 @@ $(function()
   <div class="table-row">
     <?php if(empty($projects)):?>
     <div class="table-empty-tip">
-      <p><span class="text-muted"><?php echo $lang->block->noData;?></span></p>
+      <p><span class="text-muted"><?php echo $lang->block->emptyTip;?></span></p>
     </div>
     <?php else:?>
     <div class="col col-nav">

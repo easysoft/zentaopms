@@ -35,6 +35,9 @@
 .execution-name {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 </style>
 <div class="panel-body">
+  <?php if(empty($projects)):?>
+    <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+  <?php else:?>
   <div class='row' id='cards'>
     <?php foreach ($projects as $projectID => $project):?>
     <?php $viewLink = $config->systemMode == 'new' ? $this->createLink('project', 'index', "projectID=$project->id") : $this->createLink('execution', 'task', "projectID=$project->id");?>
@@ -118,6 +121,7 @@
     </div>
     <?php endforeach;?>
   </div>
+  <?php endif;?>
 </div>
 <script>
 /* Auto resize stages */
