@@ -49,7 +49,7 @@
           </td>
           <?php $stakeholder->name = $stakeholder->companyName ? $stakeholder->companyName . '/' . $stakeholder->name : $stakeholder->name;?>
           <?php $isKey = $stakeholder->key ? " <i class='icon icon-star-empty'></i>" : '';?>
-          <?php $title = $stakeholder->key ? $lang->stakeholder->isKey : '';?>
+          <?php $title = $stakeholder->key ? $stakeholder->name . '(' . $lang->stakeholder->isKey . ')' : $stakeholder->name;?>
           <td><?php common::printLink('stakeholder', 'view', "id=$stakeholder->id", $stakeholder->name . $isKey, '', "title=$title");?></td>
           <td title='<?php echo zget($lang->stakeholder->typeList, $stakeholder->type, '');?>'><?php echo zget($lang->stakeholder->typeList, $stakeholder->type, '');?></td>
           <td title="<?php echo $stakeholder->phone;?>"><?php echo $stakeholder->phone;?></td>
