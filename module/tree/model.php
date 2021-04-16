@@ -819,6 +819,7 @@ class treeModel extends model
         $productNum   = count($products);
         foreach($products as $id => $product)
         {
+            $extra['productID']   = $id;
             $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id");
             $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&ordery=&status=byProduct&praram=$id");
             $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
@@ -1022,7 +1023,7 @@ class treeModel extends model
     {
         if(isset($extra['projectID']) and !empty($extra['projectID']))
         {
-            $productID = zget($extra , 'productID', 0);
+            $productID = zget($extra, 'productID', 0);
             $projectID = $extra['projectID'];
             return html::a(helper::createLink('projectstory', 'story', "projectID=$projectID&productID=$productID&branch=&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         }
