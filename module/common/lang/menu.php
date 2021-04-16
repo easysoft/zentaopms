@@ -161,7 +161,7 @@ $lang->product->menuOrder[35] = 'requirement';
 $lang->product->menuOrder[40] = 'track';
 $lang->product->menuOrder[45] = 'doc';
 $lang->product->menuOrder[50] = 'dynamic';
-$lang->product->menuOrder[55] = 'setting';
+$lang->product->menuOrder[55] = 'settings';
 $lang->product->menuOrder[60] = 'create';
 $lang->product->menuOrder[65] = 'all';
 
@@ -192,7 +192,7 @@ $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projec
 $lang->scrum->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->scrum->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
 
-$lang->scrum->dividerMenu = ',execution,programplan,doc,dynamic,';
+$lang->scrum->dividerMenu = ',execution,programplan,doc,settings,';
 
 /* Scrum menu order. */
 $lang->scrum->menuOrder[5]  = 'index';
@@ -232,7 +232,7 @@ $lang->execution->menu = new stdclass();
 $lang->execution->menu->task     = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
 $lang->execution->menu->kanban   = array('link' => "$lang->kanban|execution|kanban|executionID=%s");
 $lang->execution->menu->burn     = array('link' => "$lang->burn|execution|burn|executionID=%s");
-$lang->execution->menu->view     = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation');
+$lang->execution->menu->view     = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
 $lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban');
 $lang->execution->menu->qa       = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
 $lang->execution->menu->devops   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
@@ -254,7 +254,7 @@ $lang->execution->menuOrder[45] = 'doc';
 $lang->execution->menuOrder[50] = 'build';
 $lang->execution->menuOrder[55] = 'release';
 $lang->execution->menuOrder[60] = 'action';
-$lang->execution->menuOrder[65] = 'setting';
+$lang->execution->menuOrder[65] = 'settings';
 
 $lang->execution->menu->doc['subMenu'] = new stdclass();
 
@@ -389,7 +389,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
 $lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'subModule' => 'holiday');
-$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-timezone,custom-estimate');
+$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');

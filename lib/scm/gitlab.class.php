@@ -20,7 +20,7 @@ class gitlab
         $this->client = $client;
         $this->root   = rtrim($root, '/') . '/';
         $this->token  = $password;
-        $this->branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : '';
+        $this->branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : 'HEAD';
     }
 
     /**
