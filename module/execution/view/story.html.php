@@ -22,9 +22,9 @@
 <?php js::set('typeError', sprintf($this->lang->error->notempty, $this->lang->task->type))?>
 <?php js::set('workingHourError', sprintf($this->lang->error->notempty, $this->lang->workingHour))?>
 <style>
-.btn-group a i.icon-plus {font-size: 16px;}
-.btn-group a.btn-secondary {border-right: 1px solid rgba(255,255,255,0.2);}
-.btn-group button.dropdown-toggle.btn-secondary {padding:6px;}
+.btn-group a i.icon-plus, .btn-group a i.icon-link {font-size: 16px;}
+.btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
+.btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if(!empty($module->name) or !empty($product->name) or !empty($branch)):?>
@@ -58,17 +58,39 @@
     if(common::canModify('execution', $execution))
     {
         $this->lang->story->create = $this->lang->execution->createStory;
+
         if($productID and !$this->loadModel('story')->checkForceReview())
         {
-            $storyModuleID = (int)$this->cookie->storyModuleParam;
+            $storyModuleID   = (int)$this->cookie->storyModuleParam;
             $createStoryLink = $this->createLink('story', 'create', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
+            $batchCreateLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
+
+            $buttonLink  = '';
+            $buttonTitle = '';
+            if(common::hasPriv('story', 'batchCreate'))
+            {
+                $buttonLink  = $batchCreateLink;
+                $buttonTitle = $lang->story->batchCreate;
+            }
+            if(common::hasPriv('story', 'create'))
+            {
+                $buttonLink  = $createStoryLink;
+                $buttonTitle = $lang->story->create;
+            }
+
+            $hidden = empty($buttonLink) ? 'hidden' : '';
             echo "<div class='btn-group dropdown'>";
-            echo html::a($createStoryLink, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-secondary' data-app='execution'");
-            echo "<button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
-            echo "<ul class='dropdown-menu pull-right'>";
-            if(common::hasPriv('story', 'create')) echo '<li>' . html::a($createStoryLink, $lang->story->create, '', "data-app='execution'") . '</li>';
-            if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id"), $lang->story->batchCreate, '', "data-app='execution'") . '</li>';
-            echo '</ul>';
+            echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn btn-secondary $hidden' data-app='execution'");
+
+            if($common::hasPriv('story', 'create') and common::hasPriv('story', 'batchCreate'))
+            {
+                echo "<button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+                echo "<ul class='dropdown-menu pull-right'>";
+                echo '<li>' . html::a($createStoryLink, $lang->story->create, '', "data-app='execution'") . '</li>';
+                echo '<li>' . html::a($batchCreateLink, $lang->story->batchCreate, '', "data-app='execution'") . '</li>';
+                echo '</ul>';
+            }
+
             echo '</div>';
         }
 
@@ -79,14 +101,16 @@
         }
         else
         {
-            echo "<div class='btn-group dropdown-hover'>";
-            echo "<button type='button' class='btn btn-primary' id='linkButton'>";
-            echo "<i class='icon-link'></i> {$lang->execution->linkStory} <span class='caret'></span>";
-            echo '</button>';
-            echo "<ul class='dropdown-menu pull-right' id='linkActionMenu'>";
-            if(common::hasPriv('execution', 'linkStory')) echo '<li>' . html::a(inlink('linkStory', "execution=$execution->id"), $lang->execution->linkStory). "</li>";
-            if(common::hasPriv('execution', 'importPlanStories')) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
-            echo '</ul>';
+            echo "<div class='btn-group dropdown'>";
+            if(common::hasPriv('execution', 'linkStory')) echo html::a(inlink('linkStory', "execution=$execution->id"), "<i class='icon-link'></i> {$lang->execution->linkStory}", '', "class='btn btn-primary'");
+            if(common::hasPriv('execution', 'linkStory') and common::hasPriv('execution', 'importPlanStories'))
+            {
+                echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+                echo "<ul class='dropdown-menu pull-right'>";
+                echo '<li>' . html::a(inlink('linkStory', "execution=$execution->id"), $lang->execution->linkStory). "</li>";
+                echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
+                echo '</ul>';
+            }
             echo '</div>';
         }
     }
