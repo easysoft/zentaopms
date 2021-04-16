@@ -85,7 +85,6 @@ js::set('suiteID',        $suiteID);
       $canBatchCaseTypeChange     = common::hasPriv('testcase', 'batchCaseTypeChange');
       $canBatchConfirmStoryChange = common::hasPriv('testcase', 'batchConfirmStoryChange');
       $canBatchChangeModule       = common::hasPriv('testcase', 'batchChangeModule');
-
       $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>

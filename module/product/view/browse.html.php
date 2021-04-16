@@ -16,6 +16,7 @@
 body {margin-bottom: 25px;}
 #mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text {color: #fff;}
 #mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text:after {border-bottom: unset;}
+.body-modal #mainMenu>.btn-toolbar {width: auto;}
 </style>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
@@ -130,6 +131,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
+  <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
     <?php if($this->app->rawModule != 'projectstory') common::printIcon('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie", '', 'button', 'bar-chart muted'); ?>
     <div class="btn-group">
@@ -221,6 +223,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     </div>
     <?php endif;?>
   </div>
+  <?php endif;?>
 </div>
 <div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
@@ -259,7 +262,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
       $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      if($from == 'product') $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
       if($from == 'project') $vars = "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
