@@ -9,6 +9,7 @@
 .btn-group a i.icon-plus {font-size: 16px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+.body-modal #mainMenu>.btn-toolbar {width: auto;}
 </style>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
@@ -106,6 +107,7 @@
     if($this->methodName == 'browse') echo "<a id='bysearchTab' class='btn btn-link querybox-toggle'><i class='icon-search icon'></i> {$lang->testcase->bySearch}</a>";
     ?>
   </div>
+  <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
@@ -187,6 +189,7 @@
     <?php endif;?>
     <?php endif;?>
   </div>
+  <?php endif;?>
 </div>
 <?php endif;?>
 

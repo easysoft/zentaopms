@@ -153,9 +153,9 @@
               <th class='thWidth'><?php echo $lang->testcase->product;?></th>
               <td><?php echo common::hasPriv('product', 'browse') ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $productName) : $productName;?></td>
             </tr>
-            <?php if($this->session->currentProductType != 'normal'):?>
+            <?php if($product->type != 'normal'):?>
             <tr>
-              <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$this->session->currentProductType]);?></th>
+              <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
               <td><?php echo common::hasPriv('testcase', 'browse') ? html::a($this->createLink('testcase', 'browse', "productID=$case->product&branch=$case->branch"), $branchName) : $branchName;?></td>
             </tr>
             <?php endif;?>

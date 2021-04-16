@@ -118,7 +118,8 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     <?php if(common::canModify('product', $product)):?>
     <?php if(!common::checkNotCN()):?>
     <?php
-      $createBugLink = '';
+      $createBugLink   = '';
+      $batchCreateLink = '';
       if(commonModel::isTutorialMode())
       {
           $wizardParams  = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
@@ -128,14 +129,31 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       {
           $createBugLink = $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
       }
+      $batchCreateLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&executionID=0&moduleID=$moduleID");
+
+      $buttonLink  = '';
+      $buttonTitle = '';
+      if(common::hasPriv('bug', 'batchCreate'))
+      {
+          $buttonLink = $batchCreateLink;
+          $buttonTitle = $lang->bug->batchCreate;
+      }
+      if(common::hasPriv('bug', 'create'))
+      {
+          $buttonLink = $createBugLink;
+          $buttonTitle = $lang->bug->create;
+      }
+      $hidden = empty($buttonLink) ? 'hidden' : '';
     ?>
     <div class='btn-group dropdown'>
-      <?php echo html::a($createBugLink, "<i class='icon-plus'></i> {$lang->bug->create}", '', "class='btn btn-primary'");?>
+      <?php echo html::a($buttonLink, "<i class='icon-plus'></i> $buttonTitle", '', "class='btn btn-primary $hidden'");?>
+      <?php if(common::hasPriv('bug', 'batchCreate') and common::hasPriv('bug', 'create')):?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu'>
         <li><?php echo html::a($createBugLink, $lang->bug->create);?></li>
-        <li><?php echo html::a($this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&executionID=0&moduleID=$moduleID"), $lang->bug->batchCreate);?></li>
+        <li><?php echo html::a($batchCreateLink, $lang->bug->batchCreate);?></li>
       </ul>
+      <?php endif;?>
     </div>
     <?php else:?>
     <div class='btn-group dropdown-hover'>

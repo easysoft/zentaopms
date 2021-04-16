@@ -163,7 +163,7 @@ class stakeholder extends control
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $response['locate'] = $this->createLink('stakeholder', 'browse', '');
+            $response['locate'] = $this->createLink('stakeholder', 'browse', "projectID=$stakeholder->objectID");
             $this->send($response);
         }
 
