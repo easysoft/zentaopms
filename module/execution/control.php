@@ -1207,8 +1207,9 @@ class execution extends control
         }
         elseif($this->app->openApp == 'execution')
         {
-            if($this->config->systemMode == 'new') $executionID = key($this->executions);
-            $this->execution->setMenu($executionID);
+            $selectedExecutionID = $executionID;
+            if($this->config->systemMode == 'new') $selectedExecutionID = key($this->executions);
+            $this->execution->setMenu($selectedExecutionID);
         }
 
         $this->app->loadLang('program');
