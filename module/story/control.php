@@ -343,6 +343,7 @@ class story extends control
     {
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
+        /* Set menu. */
         if($executionID)
         {
             $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
@@ -360,6 +361,10 @@ class story extends control
                 $this->lang->navGroup->story = 'execution';
             }
             $this->view->execution = $execution;
+        }
+        else
+        {
+            $this->product->setMenu($productID, $branch);
         }
 
         /* Clear title when switching products and set the session for the current product. */
@@ -426,8 +431,6 @@ class story extends control
         $products = $this->product->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
-        /* Set menu. */
-        $this->product->setMenu($product->id, $branch);
 
         /* Init vars. */
         $planID   = $plan;
