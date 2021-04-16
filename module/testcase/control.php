@@ -658,6 +658,7 @@ class testcase extends control
         $this->view->case       = $case;
         $this->view->from       = $from;
         $this->view->taskID     = $taskID;
+        $this->view->product    = $product;
         $this->view->version    = $version ? $version : $case->version;
         $this->view->modulePath = $this->tree->getParents($case->module);
         $this->view->caseModule = empty($case->module) ? '' : $this->tree->getById($case->module);
