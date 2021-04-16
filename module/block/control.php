@@ -1236,7 +1236,7 @@ class block extends control
         $projectID = $this->session->project;
         $members   = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         $budget    = $this->loadModel('workestimation')->getBudget($projectID);
-        $workhour  = $this->project->getWorkhour($projectID);
+        $workhour  = $this->loadModel('project')->getWorkhour($projectID);
         if(empty($budget)) $budget = new stdclass();
 
         $this->view->people    = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('project')->eq($this->session->project)->fetch('people');

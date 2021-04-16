@@ -1046,6 +1046,7 @@ class repoModel extends model
      */
     public function checkClient()
     {
+        if($this->post->SCM == 'Gitlab') return true;
         if(!$this->config->features->checkClient) return true;
         if(!$this->post->client) return true;
 

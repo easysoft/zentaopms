@@ -200,7 +200,7 @@ class todo extends control
 
             $reviews = array();
             if(isset($this->config->qcVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account);
-            $allTodos  = $this->todo->getList($type, $account, $status);
+            $allTodos = $this->todo->getList($type, $account, $status);
             if($this->post->todoIDList) $todoIDList = $this->post->todoIDList;
 
             /* Initialize todos whose need to edited. */
@@ -210,21 +210,6 @@ class todo extends control
                 {
                     $editedTodos[$todo->id] = $todo;
                 }
-            }
-            foreach($editedTodos as $todo)
-            {
-                if($todo->type == 'story')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
-                if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
-                if($todo->type == 'bug')      $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-                if(isset($this->config->maxVersion))
-                {
-                    if($todo->type == 'issue') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
-                    if($todo->type == 'risk')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
-                }
-                if($todo->type == 'review')   $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
-                if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TESTTASK)->fetch('name');
-                $todo->begin = $todo->begin ? str_replace(':', '', $todo->begin) : '2400';
-                $todo->end   = $todo->end ? str_replace(':', '', $todo->end) : '2400';
             }
 
             /* Judge whether the edited todos is too large. */

@@ -260,7 +260,19 @@ class gitlab
         {
             if($path != '' and strpos($diff->new_path, $path) === false) unset($results->diffs[$key]);
         }
-        return $results->diffs;
+        $diffs = $results->diffs;
+        $lines = array();
+        foreach($diffs as $diff)
+        {
+            $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
+            $lines[] = sprintf("index %s ... %s %s ", $fromRevision, $toRevision, $diff->b_mode);
+            $lines[] = sprintf("--a/%s", $diff->old_path);
+            $lines[] = sprintf("--b/%s", $diff->new_path);
+            $diffLines = explode("\n", $diff->diff);
+            foreach($diffLines as $diffLine) $lines[] = $diffLine;
+        }
+        return $lines;
+        //return $results->diffs;
     }
 
     /**
@@ -329,66 +341,95 @@ class gitlab
 
     /**
      * Parse diff.
-     * 
-     * @param  array $lines 
+     *
+     * @param  array $lines
      * @access public
      * @return array
      */
-    public function parseDiff($results)
+    public function parseDiff($lines)
     {
-        if(empty($results)) return array();
-        foreach($results as $file)
+        if(empty($lines)) return array();
+        $diffs   = array();
+        $num     = count($lines);
+        $endLine = end($lines);
+        if(strpos($endLine, '\ No newline at end of file') === 0) $num -= 1;
+
+        $newFile = false;
+        for($i = 0; $i < $num; $i ++)
         {
-			$diffFile = new stdclass();
-			$diffFile->fileName = $file->new_path;
-
-            $diff = new stdclass;
-            $diff->fileName = $file->new_path;
-
-            preg_match('/^@@ -(\\d+)(,(\\d+))?\\s+\\+(\\d+)(,(\\d+))?\\s+@@/A', $file->diff, $matches);
-            if(empty($matches)) continue;
-
-            $diff->oldStartLine = $matches[1];
-            $diff->newStartLine = $matches[4];
-
-            $oldCurrentLine = $diff->oldStartLine;
-            $newCurrentLine = $diff->newStartLine;
-            if($file->new_file)
-            {   
-                $oldCurrentLine = $diff->newStartLine;
-                $newCurrentLine = $diff->oldStartLine;
-            }
-
-            $lines = explode("\n", $file->diff);
-			$newLines = array();
-            foreach($lines as $line)
+            $diffFile = new stdclass();
+            if(strpos($lines[$i], "diff --git ") === 0)
             {
-				if(strpos($line, '@@') === 0) continue;
-				if(strpos($line, '\ No newline at end of file') === 0) continue;
-				$sign = empty($line) ? '' : $line[0];
-				if($sign == '-' and $file->new_file) $sign = '+';
-				$type = $sign != '-' ? $sign == '+' ? 'new' : 'all' : 'old';
+                $fileInfo = explode(' ',$lines[$i]);
+                $fileName = substr($fileInfo[2], strpos($fileInfo[2], '/') + 1);
+                $diffFile->fileName = $fileName;
+                for($i++; $i < $num; $i ++)
+                {
+                    $diff = new stdclass();
+                    /* Fix bug #1757. */
+                    if($lines[$i] == '+++ /dev/null') $newFile = true;
+                    if(strpos($lines[$i], '+++', 0) !== false) continue;
+                    if(strpos($lines[$i], '---', 0) !== false) continue;
+                    if(strpos($lines[$i], '======', 0) !== false) continue;
+                    if(preg_match('/^@@ -(\\d+)(,(\\d+))?\\s+\\+(\\d+)(,(\\d+))?\\s+@@/A', $lines[$i]))
+                    {
+                        $startLines = trim(str_replace(array('@', '+', '-'), '', $lines[$i]));
+                        list($oldStartLine, $newStartLine) = explode(' ', $startLines);
+                        list($diff->oldStartLine) = explode(',', $oldStartLine);
+                        list($diff->newStartLine) = explode(',', $newStartLine);
+                        $oldCurrentLine = $diff->oldStartLine;
+                        $newCurrentLine = $diff->newStartLine;
+                        if($newFile)
+                        {
+                            $oldCurrentLine = $diff->newStartLine;
+                            $newCurrentLine = $diff->oldStartLine;
+                        }
+                        $newLines = array();
+                        for($i++; $i < $num; $i ++)
+                        {
+                            if(preg_match('/^@@ -(\\d+)(,(\\d+))?\\s+\\+(\\d+)(,(\\d+))?\\s+@@/A', $lines[$i]))
+                            {
+                                $i --;
+                                break;
+                            }
+                            if(strpos($lines[$i], "diff --git ") === 0) break;
 
-				if($sign == '+' or $sign == '-')
-				{
-					$line = substr_replace($line, ' ', 1, 0);
-					if($file->new_file) $line = preg_replace('/^\-/', '+', $line);
+                            $line = $lines[$i];
+                            if(strpos($line, '\ No newline at end of file') === 0)continue;
+                            $sign = empty($line) ? '' : $line[0];
+                            if($sign == '-' and $newFile) $sign = '+';
+                            $type = $sign != '-' ? $sign == '+' ? 'new' : 'all' : 'old';
+                            if($sign == '-' || $sign == '+')
+                            {
+                                $line = substr_replace($line, ' ', 1, 0);
+                                if($newFile) $line = preg_replace('/^\-/', '+', $line);
+                            }
+
+                            $newLine = new stdclass();
+                            $newLine->type  = $type;
+                            $newLine->oldlc = $type != 'new' ? $oldCurrentLine : '';
+                            $newLine->newlc = $type != 'old' ? $newCurrentLine : '';
+                            $newLine->line  = htmlspecialchars($line);
+
+                            if($type != 'new') $oldCurrentLine++;
+                            if($type != 'old') $newCurrentLine++;
+
+                            $newLines[] = $newLine;
+                        }
+
+                        $diff->lines = $newLines;
+                        $diffFile->contents[] = $diff;
+                    }
+
+                    if(isset($lines[$i]) and strpos($lines[$i], "diff --git ") === 0)
+                    {
+                        $i --;
+                        $newFile = false;
+                        break;
+                    }
                 }
-
-				$newLine = new stdclass();
-				$newLine->type  = $type;
-				$newLine->oldlc = $type != 'new' ? $oldCurrentLine : '';
-				$newLine->newlc = $type != 'old' ? $newCurrentLine : '';
-				$newLine->line  = htmlspecialchars($line);
-
-				if($type != 'new') $oldCurrentLine++;
-				if($type != 'old') $newCurrentLine++;
-
-				$newLines[] = $newLine;
+                $diffs[] = $diffFile;
             }
-            $diffFile->contents[] = $diff;
-            $diff->lines = $newLines;
-			$diffs[] = $diffFile;
         }
         return $diffs;
     }
