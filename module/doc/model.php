@@ -443,6 +443,7 @@ class docModel extends model
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
         $doc->product   = $lib->product;
+        $doc->project   = $lib->project;
         $doc->execution = $lib->execution;
         if($doc->type == 'url')
         {
