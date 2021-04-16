@@ -285,14 +285,14 @@ class repo extends control
         foreach($revisions as $log)
         {
             if($revision == 'HEAD' and $i == 0) $revision = $log->revision;
-            if($revision == $log->revision) $revisionName = $repo->SCM == 'Git' ?  $this->repo->getGitRevisionName($log->revision, $log->commit) : $log->revision;
+            if($revision == $log->revision) $revisionName = strpos($repo->SCM, 'Git') !== false ?  $this->repo->getGitRevisionName($log->revision, $log->commit) : $log->revision;
             $log->committer = zget($commiters, $log->committer, $log->committer);
             $i++;
         }
         if(!isset($revisionName))
         {
-            if($repo->SCM == 'Git') $gitCommit = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->eq($revision)->andWhere('repo')->eq($repo->id)->fetch('commit');
-            $revisionName = ($repo->SCM == 'Git' and isset($gitCommit)) ? $this->repo->getGitRevisionName($revision, $gitCommit) : $revision;
+            if(strpos($repo->SCM, 'Git') !== false) $gitCommit = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->eq($revision)->andWhere('repo')->eq($repo->id)->fetch('commit');
+            $revisionName = (strpos($repo->SCM, 'Git') !== false and isset($gitCommit)) ? $this->repo->getGitRevisionName($revision, $gitCommit) : $revision;
         }
 
         $this->view->revisions    = $revisions;
@@ -384,7 +384,7 @@ class repo extends control
                 /* Update code commit history. */
                 $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
 
-                if($refresh and $repo->SCM == 'Git')
+                if($refresh and strpos($repo->SCM, 'Git') !== false)
                 {
                     $branch = $this->cookie->repoBranch;
                     $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
@@ -426,7 +426,7 @@ class repo extends control
         $revisions = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
 
         /* Synchronous commit only in root path. */
-        if($repo->SCM == 'Git' and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
+        if(strpos($repo->SCM, 'Git') != false and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
 
         /* Set committers. */
         $commiters = $this->loadModel('user')->getCommiters();
@@ -537,7 +537,7 @@ class repo extends control
         $history = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->eq($log[0]->revision)->andWhere('repo')->eq($repoID)->fetch();
         if($history)
         {
-            if($repo->SCM == 'Git')
+            if(strpos($repo->SCM, 'Git') !== false)
             {
                 $thisAndPrevRevisions = $this->scm->exec("rev-list -n 2 {$history->revision} --");
 
@@ -555,7 +555,7 @@ class repo extends control
         if(empty($oldRevision))
         {
             $oldRevision = '^';
-            if($history and $repo->SCM == 'Git') $oldRevision = "{$history->revision}^";
+            if($history and strpos($repo->SCM, 'Git') !== false) $oldRevision = "{$history->revision}^";
         }
 
         $changes  = array();
@@ -641,7 +641,7 @@ class repo extends control
             if($encoding != 'utf-8') $blames[$i]['content'] = helper::convertEncoding($blame['content'], $encoding);
         }
 
-        $log = $repo->SCM == 'Git' ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->eq($revision)->andWhere('repo')->eq($repo->id)->fetch() : '';
+        $log = strpos($repo->SCM, 'Git') !== false ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->eq($revision)->andWhere('repo')->eq($repo->id)->fetch() : '';
 
         $this->view->title        = $this->lang->repo->common;
         $this->view->repoID       = $repoID;
@@ -652,8 +652,8 @@ class repo extends control
         $this->view->entry        = $entry;
         $this->view->file         = $file;
         $this->view->encoding     = str_replace('-', '_', $encoding);
-        $this->view->historys     = $repo->SCM == 'Git' ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repo->id)->fetchPairs() : '';
-        $this->view->revisionName = ($log and $repo->SCM == 'Git') ? $this->repo->getGitRevisionName($log->revision, $log->commit) : $revision;
+        $this->view->historys     = strpos($repo->SCM, 'Git') !== false ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repo->id)->fetchPairs() : '';
+        $this->view->revisionName = ($log and strpos($repo->SCM, 'Git') !== false) ? $this->repo->getGitRevisionName($log->revision, $log->commit) : $revision;
         $this->view->blames       = $blames;
         $this->display();
     }
@@ -759,7 +759,7 @@ class repo extends control
         $this->view->newRevision = $newRevision;
         $this->view->oldRevision = $oldRevision;
         $this->view->revision    = $newRevision;
-        $this->view->historys    = $repo->SCM == 'Git' ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in("$oldRevision,$newRevision")->andWhere('repo')->eq($repo->id)->fetchPairs() : '';
+        $this->view->historys    = strpos($repo->SCM, 'Git') !== false ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in("$oldRevision,$newRevision")->andWhere('repo')->eq($repo->id)->fetchPairs() : '';
         $this->view->info        = $info;
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
@@ -789,6 +789,7 @@ class repo extends control
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
         $content = $type == 'file' ? $this->scm->cat($entry, $fromRevision) : $this->scm->diff($entry, $fromRevision, $toRevision, 'patch');
+
         $fileName = basename(urldecode($entry));
         if($type != 'file') $fileName .= "r$fromRevision--r$toRevision.patch";
         $extension = ltrim(strrchr($fileName, '.'), '.');
@@ -865,13 +866,13 @@ class repo extends control
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) die();
-        if($repo->synced) die('finish');
+        //if($repo->synced) die('finish');
 
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
 
         $branchID = '';
-        if($repo->SCM == 'Git' and empty($branchID))
+        if(strpos($repo->SCM, 'Git') !== false and empty($branchID))
         {
             $branches = $this->scm->branch();
             if($branches)
@@ -901,13 +902,14 @@ class repo extends control
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
             ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($repo->SCM == 'Gitlab' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->orderBy('t1.time')
             ->limit(1)
             ->fetch();
 
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
         $logs     = array();
-        $revision = $version == 1 ? 'HEAD' : ($repo->SCM == 'Git' ? $latestInDB->commit : $latestInDB->revision);
+        $revision = $version == 1 ? 'HEAD' : (strpos($repo->SCM, 'Git') !== false ? $latestInDB->commit : $latestInDB->revision);
         if($type == 'batch')
         {
             $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
@@ -922,7 +924,7 @@ class repo extends control
         {
             if(!$repo->synced)
             {
-                if($repo->SCM == 'Git')
+                if(strpos($repo->SCM, 'Git') !== false)
                 {
                     if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
 
@@ -957,7 +959,7 @@ class repo extends control
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) die();
-        if($repo->SCM != 'Git') die('finish');
+        if(strpos($repo->SCM, 'Git') != false) die('finish');
         if($branch) $branch = base64_decode($branch);
 
         $this->scm->setEngine($repo);
@@ -968,7 +970,7 @@ class repo extends control
         $latestInDB = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF(strpos($repo->SCM, 'Git') !== false and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->orderBy('t1.time')
             ->limit(1)
             ->fetch();
@@ -1095,7 +1097,7 @@ class repo extends control
 
 		if(!$projects) $this->send(array('message' => array()));
 
-		$options = '';
+		$options = "<option value=''></option>";
 		foreach($projects as $project)
 		{
 			$options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name}:{$project->http_url_to_repo}</option>";
