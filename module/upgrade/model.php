@@ -645,6 +645,7 @@ class upgradeModel extends model
             $this->appendExec('15_0_rc1');
         case '15_0_rc2':
             $this->saveLogs('Execute 15_0_rc2');
+            $this->execSQL($this->getUpgradeFile('15.0.rc2'));
             $this->appendExec('15_0_rc2');
         }
 
