@@ -49,8 +49,8 @@
       </thead>
       <tbody>
       <?php foreach($cases as $case):?>
-      <tr class='text-center'>
-        <td class='cell-id'>
+      <tr class='text-left'>
+        <td class='c-id'>
           <?php echo html::checkbox('cases', array($case->id => sprintf('%03d', $case->id)));?>
         </td>
         <td><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class="form-control"');?> </td>
