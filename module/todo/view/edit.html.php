@@ -130,7 +130,7 @@
             <div class='input-group title-group required'>
               <div class='nameBox'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
               <span class="input-group-addon fix-border br-0" style="border-radius: 0px;"><?php echo $lang->todo->pri;?></span>
-			  <div class="input-group-btn pri-selector" data-type="pri">
+              <div class="input-group-btn pri-selector" data-type="pri">
                 <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                   <span class="pri-text"><span class="label-pri label-pri-<?php echo $todo->pri;?>"><?php echo $todo->pri;?></span></span> &nbsp;<span class="caret"></span>
                 </button>

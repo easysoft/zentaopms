@@ -69,7 +69,12 @@
           <?php
           if($todo->type == 'custom' or $todo->type == 'cycle')
           {
-              echo html::input("names[$todo->id]", $todo->name, "class='form-control'"); ;
+              echo html::input("names[$todo->id]", $todo->name, "class='form-control'");
+          }
+          elseif($todo->type == 'feedback')
+          {
+              echo html::input("names[$todo->id]", $todo->name, "class='form-control'");
+              echo html::hidden("feedbacks[$todo->id]", $todo->idvalue, "class='form-control'");
           }
           elseif($todo->type == 'task')
           {
