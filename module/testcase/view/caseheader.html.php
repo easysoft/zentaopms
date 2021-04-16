@@ -60,7 +60,7 @@
         $currentLable   = empty($currentSuite) ? $lang->testsuite->common : $currentSuite->name;
 
         echo "<div id='bysuiteTab' class='btn-group'>";
-        echo html::a('javascript:;', $currentLable . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
+        echo html::a('javascript:;', "<span class='text'>{$currentLable}</span>" . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
         if(common::canModify('product', $product))
         {
             echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
