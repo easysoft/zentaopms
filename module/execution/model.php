@@ -429,7 +429,7 @@ class executionModel extends model
         }
 
         /* Get team and language item. */
-        $team = $this->getTeamMemberPairs($executionID);
+        $team = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
         $this->lang->execution->team = $this->lang->execution->teamname;
 
         /* Get the data from the post. */
@@ -562,7 +562,7 @@ class executionModel extends model
         foreach($executions as $executionID => $execution)
         {
             $oldExecution = $oldExecutions[$executionID];
-            $team         = $this->getTeamMemberPairs($executionID);
+            $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')
@@ -1739,7 +1739,7 @@ class executionModel extends model
         unset($stories[0]);
 
         /* Add members to execution team. */
-        $teamMembers = $this->getTeamMemberPairs($executionID);
+        $teamMembers = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
         foreach($assignedToes as $account => $preExecutionID)
         {
             if(!isset($teamMembers[$account]))
@@ -2079,7 +2079,7 @@ class executionModel extends model
             }
         }
 
-        $projectID = $this->session->project;
+        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         $this->linkStory($executionID, $planStories, $planProducts);
         $this->linkStory($projectID, $planStories, $planProducts);
         if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate(helper::createLink('execution', 'create', "projectID=$projectID&executionID=$executionID"));
@@ -2172,43 +2172,6 @@ class executionModel extends model
             ->andWhere('t1.type')->eq('execution')
             ->andWhere('t2.deleted')->eq('0')
             ->fetchAll('account');
-    }
-
-    /**
-     * Get team members in pair.
-     *
-     * @param  int    $executionID
-     * @param  string $params
-     * @param  string $usersToAppended
-     * @access public
-     * @return array
-     */
-    public function getTeamMemberPairs($executionID, $params = '', $usersToAppended = '')
-    {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
-        $this->app->loadConfig('user');
-
-        $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
-        $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.root')->eq((int)$executionID)
-            ->andWhere('t1.type')->eq('execution')
-            ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
-            ->andWhere('t2.deleted')->eq(0)
-            ->fi()
-            ->fetchAll($keyField);
-
-        if($usersToAppended) $users += $this->dao->select("id, account, realname")->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
-
-        if(!$users) return array('' => '');
-
-        foreach($users as $account => $user)
-        {
-            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
-            if(!empty($this->config->isINT)) $firstLetter = '';
-            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
-        }
-        return array('' => '') + $users;
     }
 
     /**

@@ -497,7 +497,7 @@ class bug extends control
         /* Set team members of the latest execution as assignedTo list. */
         $latestExecution  = $this->product->getLatestProject($productID);
         $executionMembers = array();
-        if(!empty($latestExecution)) $executionMembers = $this->loadModel('execution')->getTeamMemberPairs($latestExecution->id, 'nodeleted', $moduleOwner);
+        if(!empty($latestExecution)) $executionMembers = $this->loadModel('user')->getTeamMemberPairs($latestExecution->id, 'execution', 'nodeleted', $moduleOwner);
         if(empty($executionMembers)) $executionMembers = $this->view->users;
         if($assignedTo and !isset($executionMembers[$assignedTo]))
         {
@@ -514,7 +514,7 @@ class bug extends control
         if($projectID)
         {
             $products    = array();
-            $productList = $this->product->getOrderedProducts('all', 40, $projectID);
+            $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
             foreach($productList as $product) $products[$product->id] = $product->name;
 
             $project   = $this->loadModel('project')->getByID($projectID);
@@ -691,10 +691,8 @@ class bug extends control
         $bugID = (int)$bugID;
         $bug   = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
-        if($bug->project) $this->session->project = $bug->project;
-        $this->view->products = $this->products = $this->product->getProductPairsByProject($this->session->project);
-        $this->session->set('storyList', '', 'product');
 
+        $this->session->set('storyList', '', 'product');
         $this->bug->checkBugExecutionPriv($bug);
 
         /* Update action. */
@@ -704,40 +702,39 @@ class bug extends control
         if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($bug->project);
         if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
         if($this->app->openApp == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-        if($this->app->openApp == 'repo')
+        if($this->app->openApp == 'devops')
         {
             session_write_close();
-            $repos = $this->loadModel('repo')->getRepoPairs($this->session->project);
+            $repos = $this->loadModel('repo')->getRepoPairs($bug->project);
             $this->repo->setMenu($repos);
-            $this->lang->bug->menu = $this->lang->repo->menu;
+            $this->lang->navGroup->bug = 'devops';
         }
 
         /* Get product info. */
         $productID   = $bug->product;
-        $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
-        $branches    = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
+        $product     = $this->loadModel('product')->getByID($productID);
+        $branches    = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
         $this->executeHooks($bugID);
 
         /* Header and positon. */
-        $this->view->title      = "BUG #$bug->id $bug->title - " . $productName;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
+        $this->view->title      = "BUG #$bug->id $bug->title - " . $product->name;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $product->name);
         $this->view->position[] = $this->lang->bug->view;
 
         /* Assign. */
         $this->view->productID   = $productID;
-        $this->view->productName = $productName;
         $this->view->branches    = $branches;
         $this->view->modulePath  = $this->tree->getParents($bug->module);
         $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getById($bug->module);
         $this->view->bug         = $bug;
         $this->view->from        = $from;
-        $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : zget($branches, $bug->branch, '');
+        $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);
         $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
-        $this->view->product     = $this->loadModel('product')->getByID( $productID);
+        $this->view->product     = $product;
 
         $this->display();
     }
@@ -810,6 +807,13 @@ class bug extends control
         if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($bug->project);
         if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
         if($this->app->openApp == 'qa') $this->qa->setMenu($this->products, $productID, $bug->branch);
+        if($this->app->openApp == 'devops')
+        {
+            session_write_close();
+            $repos = $this->loadModel('repo')->getRepoPairs($bug->project);
+            $this->repo->setMenu($repos);
+            $this->lang->navGroup->bug = 'devops';
+        }
 
         /* Unset discarded types. */
         foreach($this->config->bug->discardedTypes as $type)
@@ -821,6 +825,13 @@ class bug extends control
         {
             $this->view->products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed');
         }
+        if($this->app->openApp == 'project')
+        {
+            $products = array();
+            $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $bug->project) : $this->product->getOrderedProducts('normal', 40, $bug->project);
+            foreach($productList as $product) $products[$product->id] = $product->name;
+            $this->view->products = $products;
+        }
 
         /* Set header and position. */
         $this->view->title      = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$productID];
@@ -828,6 +839,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->edit;
 
         /* Assign. */
+        $product   = $this->loadModel('product')->getByID($productID);
         $allBuilds = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, 'noempty');
         if($executionID)
         {
@@ -855,13 +867,14 @@ class bug extends control
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
+        $this->view->product          = $product;
         $this->view->productName      = $this->products[$productID];
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->executions       = $this->product->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
         $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
-        $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
+        $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
@@ -1025,15 +1038,15 @@ class bug extends control
 
         if($this->app->openApp == 'project')
         {
-            $users = $this->project->getTeamMemberPairs($bug->project, 'nodeleted', $bug->assignedTo);
+            $users = $this->user->getTeamMemberPairs($bug->project, 'project', 'nodeleted', $bug->assignedTo);
         }
         elseif($this->app->openApp == 'execution')
         {
-            $users = $this->execution->getTeamMemberPairs($bug->execution, 'nodeleted', $bug->assignedTo);
+            $users = $this->user->getTeamMemberPairs($bug->execution, 'execution', 'nodeleted', $bug->assignedTo);
         }
         else
         {
-            $users   = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
+            $users = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
         }
 
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
@@ -1578,7 +1591,7 @@ class bug extends control
      */
     public function ajaxLoadAssignedTo($executionID, $selectedUser = '')
     {
-        $executionMembers = $this->loadModel('execution')->getTeamMemberPairs($executionID, '', $selectedUser);
+        $executionMembers = $this->user->getTeamMemberPairs($executionID, 'execution', '', $selectedUser);
 
         die(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));
     }
@@ -1596,11 +1609,11 @@ class bug extends control
         $latestExecution = $this->product->getLatestProject($productID);
         if(!empty($latestExecution))
         {
-            $executionMembers = $this->loadModel('execution')->getTeamMemberPairs($latestExecution->id, 'nodeleted', $selectedUser);
+            $executionMembers = $this->user->getTeamMemberPairs($latestExecution->id, 'execution', 'nodeleted', $selectedUser);
         }
         else
         {
-            $executionMembers = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
+            $executionMembers = $this->user->getPairs('devfirst|noclosed|nodeleted');
         }
 
         die(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));

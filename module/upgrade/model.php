@@ -4333,7 +4333,6 @@ class upgradeModel extends model
     public function processMergedData($programID, $projectID, $lineID, $productIdList = array(), $sprintIdList = array())
     {
         /* Product linked objects. */
-        $this->dao->update(TABLE_STORY)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_RELEASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
 
         /* Compute product acl. */

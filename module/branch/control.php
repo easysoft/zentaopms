@@ -53,13 +53,14 @@ class branch extends control
      * Ajax get drop menu.
      * 
      * @param  int    $productID 
+     * @param  int    $branch
      * @param  string $module 
      * @param  string $method 
      * @param  string $extra 
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($productID, $module, $method, $extra)
+    public function ajaxGetDropMenu($productID, $branch = 0, $module, $method, $extra = '')
     {
         $this->view->link      = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
         $this->view->productID = $productID;
@@ -70,7 +71,7 @@ class branch extends control
 
         $branches = $this->branch->getPairs($productID);
         $this->view->branches        = $branches;
-        $this->view->currentBranchID = $this->cookie->preBranch;
+        $this->view->currentBranchID = $branch;
         $this->view->branchesPinyin  = common::convert2Pinyin($branches);
         $this->display();
     }

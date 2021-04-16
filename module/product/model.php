@@ -117,7 +117,7 @@ class productModel extends model
                 $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
                 if(!$isMobile)
                 {
-                    $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+                    $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
                     $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
                     $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
                     $output .= "</div></div>";
@@ -365,7 +365,7 @@ class productModel extends model
         $products = array();
         if($projectID)
         {
-            $pairs    = $this->getProducts($projectID);
+            $pairs    = $this->getProducts($projectID, $status == 'normal' ? 'noclosed' : '');
             $products = $this->getByIdList(array_keys($pairs));
         }
         else
@@ -433,8 +433,9 @@ class productModel extends model
         {
             $storyMethods = ",track,create,batchcreate,batchclose,zerocase,";
             if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
-            if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
+            if($currentMethod == 'view' or $currentMethod == 'change' or $currentMethod == 'review') $currentMethod = 'browse';
         }
+        if($currentModule == 'testcase' and $currentMethod == 'view') $currentMethod = 'browse';
         if($currentMethod == 'report') $currentMethod = 'browse';
 
         $currentProductName = $this->lang->product->common;
@@ -458,7 +459,7 @@ class productModel extends model
             $branches     = $this->loadModel('branch')->getPairs($productID);
             $branch       = (int)$branch;
             $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
-            $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+            $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
 
             $output .= "<div class='btn-group header-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'><span class='text'>{$branchName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';

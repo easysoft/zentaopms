@@ -217,7 +217,6 @@ class customModel extends model
             if(is_array($allMenu)  and !isset($allMenu[$name])) $allMenu[$name] = $item;
         }
 
-        $divider = false;
         foreach($allMenu as $name => $item)
         {
             if(is_object($item)) $item = (array)$item;
@@ -243,13 +242,6 @@ class customModel extends model
                 $link = explode('|', $link);
                 list($label, $module, $method) = $link;
                 $hasPriv = commonModel::hasPriv($module, $method);
-            }
-
-            /* When last divider is not used in mainMenu, use it next menu. */
-            if($menuModuleName == 'main')
-            {
-                $openApp = $app->openApp;
-                $divider = $divider || (isset($lang->$openApp->dividerMenu) and strpos($lang->$openApp->dividerMenu, ",{$name},") !== false) ? true : false;
             }
 
             if($isTutorialMode || $hasPriv)
@@ -312,10 +304,6 @@ class customModel extends model
                 if($exclude)  $menuItem->exclude   = $exclude;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
-                /* Set divider and reset it. */
-                $menuItem->divider = $divider;
-                $divider = false;
-
                 /* Hidden menu by config in mobile. */
                 if($app->viewType == 'mhtml' and isset($config->custom->moblieHidden[$menuModuleName]) and in_array($name, $config->custom->moblieHidden[$menuModuleName])) $menuItem->hidden = 1;
 
@@ -325,6 +313,35 @@ class customModel extends model
         }
 
         ksort($menu, SORT_NUMERIC);
+
+        /* Set divider in main and module menu. */
+        if(!isset($lang->$openApp->menuOrder)) $lang->$openApp->menuOrder = array();
+        ksort($lang->$openApp->menuOrder, SORT_NUMERIC);
+
+        $group = 0;
+        $dividerOrders = array();
+        foreach($lang->$openApp->menuOrder as $name)
+        {
+            if(isset($lang->$openApp->dividerMenu) and strpos($lang->$openApp->dividerMenu, ",{$name},") !== false) $group++;
+            $dividerOrders[$name] = $group;
+        }
+
+        $isFirst = true; // No divider before First item.
+        $group   = 0;
+        foreach($menu as $item)
+        {
+            if(isset($dividerOrders[$item->name]) and $dividerOrders[$item->name] > $group)
+            {
+                $menu[$item->order]->divider = $isFirst ? false : true;
+                $group = $dividerOrders[$item->name];
+            }
+            else
+            {
+                $isFirst = false;
+                $menu[$item->order]->divider = false;
+            }
+        }
+
         return array_values($menu);
     }
 

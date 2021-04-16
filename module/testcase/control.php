@@ -616,7 +616,8 @@ class testcase extends control
             }
         }
 
-        $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($case->product);
+        $product   = $this->product->getByID($case->product);
+        $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($case->product);
         $isLibCase = ($case->lib and empty($case->product));
         if($isLibCase)
         {
@@ -639,7 +640,7 @@ class testcase extends control
             $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             $this->view->productName = $this->products[$productID];
-            $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : zget($branches, $case->branch, '');
+            $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 
         $caseFails = $this->dao->select('COUNT(*) AS count')->from(TABLE_TESTRESULT)

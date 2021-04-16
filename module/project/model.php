@@ -260,7 +260,7 @@ class projectModel extends model
 
         $teams = $this->dao->select('root, count(*) as teams')->from(TABLE_TEAM)
             ->where('root')->in($projectIdList)
-            ->andWhere('type')->in('project')
+            ->andWhere('type')->eq('project')
             ->groupBy('root')->fetchPairs();
 
         $hours = $this->dao->select('project,
@@ -399,43 +399,6 @@ class projectModel extends model
         $statData->bugCount   = $bugCount;
 
         return $statData;
-    }
-
-    /**
-     * Get team members in pair.
-     *
-     * @param  int    $projectID
-     * @param  string $params
-     * @param  string $usersToAppended
-     * @access public
-     * @return array
-     */
-    public function getTeamMemberPairs($projectID, $params = '', $usersToAppended = '')
-    {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
-        $this->app->loadConfig('user');
-
-        $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
-        $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.root')->eq((int)$projectID)
-            ->andWhere('t1.type')->eq('project')
-            ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
-            ->andWhere('t2.deleted')->eq(0)
-            ->fi()
-            ->fetchAll($keyField);
-
-        if($usersToAppended) $users += $this->dao->select("id, account, realname")->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
-
-        if(!$users) return array('' => '');
-
-        foreach($users as $account => $user)
-        {
-            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
-            if(!empty($this->config->isINT)) $firstLetter = '';
-            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
-        }
-        return array('' => '') + $users;
     }
 
     /**

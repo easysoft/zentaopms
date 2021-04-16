@@ -459,8 +459,13 @@ class doc extends control
                 $objectID = $docLib->$type;
             }
 
-            $openApp    = $type == 'execution' ? 'execution' : 'doc';
-            $browseLink = inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID#app=$openApp");
+            if($type == 'execution')
+            {
+                $type     = 'project';
+                $objectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('project');
+            }
+
+            $browseLink = inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID");
             $this->locate($browseLink);
         }
 

@@ -289,6 +289,7 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
+                <?php if($story->type != 'requirement'):?>
                 <tr class='plan-line'>
                   <th><?php echo $lang->story->plan;?></th>
                   <td>
@@ -304,6 +305,7 @@
                   ?>
                   </td>
                 </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->source;?></th>
                   <td id='source'><?php echo $lang->story->sourceList[$story->source];?></td>

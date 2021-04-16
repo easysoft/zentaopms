@@ -31,8 +31,8 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
     <div class="page-title">
       <strong>
         <?php
-        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}");
-        $paths= explode('/', $entry);
+        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}'");
+        $paths = explode('/', $entry);
         $fileName = array_pop($paths);
         $postPath = '';
         foreach($paths as $pathName)

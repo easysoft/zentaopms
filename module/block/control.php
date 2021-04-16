@@ -1232,7 +1232,7 @@ class block extends control
     {
         $this->app->loadLang('durationestimation');
         $projectID = $this->session->project;
-        $members   = $this->loadModel('project')->getTeamMemberPairs($projectID);
+        $members   = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         $budget    = $this->loadModel('workestimation')->getBudget($projectID);
         $workhour  = $this->project->getWorkhour($projectID);
         if(empty($budget)) $budget = new stdclass();

@@ -310,6 +310,7 @@ function loadProductBuilds(productID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(oldOpenedBuild) == 'undefined') oldOpenedBuild = 0;
     link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
 
     if(page == 'create')
