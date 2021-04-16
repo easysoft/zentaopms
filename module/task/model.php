@@ -79,7 +79,7 @@ class taskModel extends model
             if($assignedTo) $task->assignedDate = helper::now();
 
             /* Check duplicate task. */
-            if($task->type != 'affair')
+            if($task->type != 'affair' and $task->name)
             {
                 $result = $this->loadModel('common')->removeDuplicate('task', $task, "execution={$executionID} and story=" . (int)$task->story);
                 if($result['stop'])
