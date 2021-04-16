@@ -228,6 +228,7 @@ function loadProductStories(productID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleId=0&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen();});
 }
@@ -243,7 +244,8 @@ function loadProductProjects(productID)
 {
     if(systemMode == 'classic')
     {
-        loadProductExecutions(productID);
+        var projectID = $('#execution').find("option:selected").val();
+        loadProductExecutions(productID, projectID);
         return true;
     }
 
@@ -269,8 +271,6 @@ function loadProductProjects(productID)
  */
 function loadProductExecutions(productID, projectID = 0)
 {
-    if(!projectID && systemMode != 'classic') projectID = $('#project').find("option:selected").val();
-    if(!projectID && systemMode != 'classic') productID = 0;
     required = $('#execution_chosen').hasClass('required');
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
@@ -390,6 +390,7 @@ function loadExecutionStories(executionID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
     link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&branch=' + branch + '&moduleID=0&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen();});
 }
