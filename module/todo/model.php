@@ -241,7 +241,7 @@ class todoModel extends model
         $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')
+            ->checkIF(in_array($todo->type, array('custom', 'feedback')), $this->config->todo->edit->requiredFields, 'notempty')
             ->checkIF($hasObject && $todo->idvalue == 0, 'idvalue', 'notempty')
             ->where('id')->eq($todoID)
             ->exec();
@@ -276,7 +276,7 @@ class todoModel extends model
                 $todo->type   = $data->types[$todoID];
                 $todo->pri    = $data->pris[$todoID];
                 $todo->status = $data->status[$todoID];
-                $todo->name   = ($todo->type == 'custom' or $todo->type == 'cycle') ? $data->names[$todoID] : '';
+                $todo->name   = ($todo->type == 'custom' or $todo->type == 'cycle' or $todo->type == 'feedback') ? $data->names[$todoID] : '';
                 $todo->begin  = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
                 $todo->end    = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
                 if($todo->type == 'task')     $todo->idvalue = isset($data->tasks[$todoID]) ? $data->tasks[$todoID] : 0;
@@ -300,7 +300,7 @@ class todoModel extends model
                 if($oldTodo->type == 'bug' or $oldTodo->type == 'task' or $oldTodo->type == 'story' or $oldTodo->type == 'feedback') $oldTodo->name = '';
                 $this->dao->update(TABLE_TODO)->data($todo)
                     ->autoCheck()
-                    ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')
+                    ->checkIF(in_array($todo->type, array('custom', 'feedback')), $this->config->todo->edit->requiredFields, 'notempty')
                     ->checkIF($todo->type == 'bug'   and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'task'  and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'story' and $todo->idvalue == 0, 'idvalue', 'notempty')
@@ -379,9 +379,9 @@ class todoModel extends model
         if($todo->type == 'story')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
         if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')      $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-        if($todo->type == 'issue')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
-        if($todo->type == 'risk')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
-        if($todo->type == 'review')   $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
+        if($todo->type == 'issue'  and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
+        if($todo->type == 'risk'   and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
+        if($todo->type == 'review' and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
         if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TESTTASK)->fetch('name');
         $todo->date = str_replace('-', '', $todo->date);
         return $todo;
