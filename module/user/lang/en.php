@@ -97,7 +97,7 @@ $lang->user->tplContentNotEmpty    = 'The template content cannot be empty!';
 
 $lang->user->profile   = 'Profile';
 $lang->user->project   = $lang->executionCommon . 's';
-$lang->user->execution = 'Execution';
+$lang->user->execution = $lang->execution->common;
 $lang->user->task      = 'Tasks';
 $lang->user->bug       = 'Bugs';
 $lang->user->test      = 'Test';
