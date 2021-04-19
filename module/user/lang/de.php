@@ -204,7 +204,7 @@ $lang->user->error->dangerPassword = "ID %s，Passwords cannot be used with [%s]
 
 $lang->user->error->verifyPassword   = "Verifikation fehlgeschlagen. Bitte geben Sie ihr Loginpasswort ein.";
 $lang->user->error->originalPassword = "Altes Passwort ist falsch.";
-$lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information."
+$lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information.";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
