@@ -478,7 +478,7 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        $docs = $this->doc->getDocsByBrowseType(0, $type, 0, 0, $sort, $pager);
+        $docs = $this->doc->getDocsByBrowseType($type, 0, 0, $sort, $pager);
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->doc;
