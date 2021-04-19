@@ -1108,16 +1108,16 @@ class execution extends control
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->execution->interval . ($key + 1) . $this->lang->day;
 
         /* Assign. */
-        $this->view->title       = $title;
-        $this->view->position    = $position;
-        $this->view->tabID       = 'burn';
-        $this->view->burnBy      = $burnBy;
+        $this->view->title         = $title;
+        $this->view->position      = $position;
+        $this->view->tabID         = 'burn';
+        $this->view->burnBy        = $burnBy;
         $this->view->executionID   = $executionID;
         $this->view->executionName = $execution->name;
-        $this->view->type        = $type;
-        $this->view->interval    = $interval;
-        $this->view->chartData   = $chartData;
-        $this->view->dayList     = array('full' => $this->lang->execution->interval . '1' . $this->lang->day) + $dayList;
+        $this->view->type          = $type;
+        $this->view->interval      = $interval;
+        $this->view->chartData     = $chartData;
+        $this->view->dayList       = array('full' => $this->lang->execution->interval . '1' . $this->lang->day) + $dayList;
 
         unset($this->lang->TRActions);
         $this->display();
