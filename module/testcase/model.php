@@ -501,6 +501,7 @@ class testcaseModel extends model
         if($branch and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('0','$branch')";
         if(strpos($caseQuery, $allBranch) !== false) $caseQuery = str_replace($allBranch, '1', $caseQuery);
         $caseQuery .= ')';
+        $caseQuery  = str_replace(array('`product`', '`version`'), array('t1.`product`', 't1.`version`'), $caseQuery);
 
         if($this->app->openApp == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
         $cases = $this->dao->select('*')->from(TABLE_CASE)
@@ -510,11 +511,11 @@ class testcaseModel extends model
             ->beginIF($this->app->openApp == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
             ->beginIF(!empty($productID) and $queryProductID != 'all')
             ->beginIF($this->app->openApp == 'project' and !empty($productID))->andWhere('t2.product')->eq($productID)->fi()
-            ->beginIF($this->app->openApp != 'project')->andWhere('product')->eq($productID)->fi()
+            ->beginIF($this->app->openApp != 'project')->andWhere('t1.product')->eq($productID)->fi()
             ->fi()
-            ->beginIF($auto != 'unit')->andWhere('auto')->ne('unit')->fi()
-            ->beginIF($auto == 'unit')->andWhere('auto')->eq('unit')->fi()
-            ->andWhere('deleted')->eq(0)
+            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
 
         return $cases;
