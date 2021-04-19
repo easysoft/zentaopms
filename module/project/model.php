@@ -758,7 +758,7 @@ class projectModel extends model
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
                 $product->name         = $this->post->productName ? $this->post->productName : $project->name;
-                $product->bind         = $this->post->productName ? 0 : 1;
+                $product->bind         = $this->post->parent ? 0 : 1;
                 $product->program      = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
                 $product->acl          = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO           = $project->PM;
