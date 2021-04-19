@@ -758,7 +758,7 @@ class projectModel extends model
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
                 $product->name         = $this->post->productName ? $this->post->productName : $project->name;
-                $product->bind         = $this->post->productName ? 0 : 1;
+                $product->bind         = $this->post->parent ? 0 : 1;
                 $product->program      = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
                 $product->acl          = $project->acl = 'open' ? 'open' : 'private';
                 $product->PO           = $project->PM;
@@ -1655,6 +1655,7 @@ class projectModel extends model
             $lang->execution->create = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->create);
             $lang->execution->name   = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->name);
             $lang->execution->status = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->status);
+            $lang->execution->copy   = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->copy);
         }
 
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);

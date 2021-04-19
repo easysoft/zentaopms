@@ -1294,6 +1294,13 @@ class testtask extends control
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
             $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
+
+            /* Replace language. */
+            $project = $this->project->getByID($this->session->project);
+            if(!empty($project->model) and $project->model == 'waterfall')
+            {
+                $this->lang->testtask->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->testtask->execution);
+            }
         }
         else
         {

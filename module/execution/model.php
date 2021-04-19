@@ -1378,8 +1378,8 @@ class executionModel extends model
             if(strpos($taskQuery, "`execution` =") === false) $taskQuery = $taskQuery . " AND `execution` = $executionID";
             $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
             $taskQuery    = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
-            $this->session->set('taskQueryCondition', $taskQuery);
-            $this->session->set('taskOnlyCondition', true);
+            $this->session->set('taskQueryCondition', $taskQuery, $this->app->openApp);
+            $this->session->set('taskOnlyCondition', true, $this->app->openApp);
 
             $tasks = $this->getSearchTasks($taskQuery, $pager, $sort);
         }
