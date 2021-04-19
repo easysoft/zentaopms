@@ -207,6 +207,7 @@ $lang->user->error->dangerPassword = "ID %s，Passwords cannot be used with [%s]
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
 $lang->user->error->companyEmpty     = "Company name must be not empty.";
+$lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information."
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;

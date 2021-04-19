@@ -207,6 +207,7 @@ $lang->user->error->dangerPassword = "【ID %s】的密码不能使用【%s】�
 $lang->user->error->verifyPassword   = "验证失败，请检查您的系统登录密码是否正确";
 $lang->user->error->originalPassword = "原密码不正确";
 $lang->user->error->companyEmpty     = "公司名称不能为空！";
+$lang->user->error->noAccess         = "该人员和你不是同一部门，你无权访问该人员的工作信息。";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;

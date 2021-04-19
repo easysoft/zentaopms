@@ -204,6 +204,7 @@ $lang->user->error->dangerPassword = "ID %s，Les mots de passe ne peuvent pas u
 
 $lang->user->error->verifyPassword   = "Vérification en échec. Entrez votre Mot de Passe de Connexion.";
 $lang->user->error->originalPassword = "Ancien Mot de Passe incorrect.";
+$lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information."
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
