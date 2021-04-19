@@ -1126,10 +1126,12 @@ class story extends control
      *
      * @param  int    $productID
      * @param  int    $executionID
+     * @param  string $storyType
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function batchClose($productID = 0, $execution = 0, $storyType = 'story')
+    public function batchClose($productID = 0, $executionID = 0, $storyType = 'story', $from = '')
     {
         if($this->post->comments)
         {
@@ -1194,9 +1196,13 @@ class story extends control
         /* The stories of my. */
         else
         {
-            $this->lang->story->menu = $this->lang->my->menu;
+            $this->lang->story->menu      = $this->lang->my->menu;
             $this->lang->story->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
+
+            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
+            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
+
             $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
             $this->view->title      = $this->lang->story->batchEdit;
         }

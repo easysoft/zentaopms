@@ -236,7 +236,7 @@
         <?php endif;?>
         <?php if($canBatchClose):?>
         <?php
-        $actionLink = $this->createLink('story', 'batchClose');
+        $actionLink = $this->createLink('story', 'batchClose', "productID=0&executionID=0&storyType=story&from={$app->rawMethod}");
         $misc = "data-form-action=\"$actionLink\"";
         echo html::commonButton($lang->close, $misc);
         ?>
