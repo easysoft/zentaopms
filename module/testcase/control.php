@@ -188,6 +188,7 @@ class testcase extends control
         $this->view->moduleTree    = $moduleTree;
         $this->view->moduleName    = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->moduleID      = $moduleID;
+        $this->view->projectType   = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
         $this->view->summary       = $this->testcase->summary($cases);
         $this->view->pager         = $pager;
         $this->view->users         = $this->user->getPairs('noletter');
