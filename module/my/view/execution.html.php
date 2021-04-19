@@ -53,7 +53,14 @@
       <tr class='text-left'>
         <td><?php echo html::a($link, sprintf('%03d', $execution->id));?></td>
         <td class='c-name text-left'>
-          <?php echo html::a($link, $execution->name, '', "title='$execution->name'");?>
+          <?php
+          if(isset($this->config->maxVersion))
+          {
+              if($execution->type === 'stage') echo "<span class='project-type-label label label-outline label-warning'>{$lang->project->stage}</span> ";
+              if($execution->type === 'sprint') echo "<span class='project-type-label label label-outline label-info'>{$lang->executionCommon}</span> ";
+          }
+          echo html::a($link, $execution->name, '', "title='$execution->name'");
+          ?>
         </td>
         <?php if($config->systemMode == 'new'):?>
         <td class='c-name text-left'><?php echo html::a($this->createLink('project', 'view', "id=$execution->project", '', '', $execution->project), $execution->projectName, '', "title='$execution->projectName'");?></td>
