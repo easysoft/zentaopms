@@ -629,6 +629,72 @@ class my extends control
     }
 
     /**
+     * My audits.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function audit($browseType = 'wait', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->loadModel('datatable');
+        $this->session->set('reviewList', $this->app->getURI(true));
+        $this->app->loadLang('review');
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $reviewList = $this->loadModel('review')->getUserReviews($browseType, $orderBy, $pager);
+
+        $this->view->title      = $this->lang->my->myReview;
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->reviewList = $reviewList;
+        $this->view->products   = $this->my->getProductPairs();
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->browseType = $browseType;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->mode       = 'audit';
+        $this->display();
+    }
+
+    /**
+     * My ncs.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function nc($browseType = 'assignedToMe', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('nc');
+        $this->session->set('ncList', $this->app->getURI(true));
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
+
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->nc;
+        $this->view->position[] = $this->lang->my->nc;
+        $this->view->browseType = $browseType;
+        $this->view->pager      = $pager;
+        $this->view->ncs        = $this->my->getNcList($browseType, $orderBy, $pager);
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0);
+        $this->view->mode       = 'nc';
+        $this->display();
+    }
+
+    /**
      * My team.
      *
      * @param  string $orderBy
