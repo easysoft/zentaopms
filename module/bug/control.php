@@ -304,6 +304,13 @@ class bug extends control
         else if($this->app->openApp == 'project')
         {
             $this->loadModel('project')->setMenu($output['projectID']);
+
+            /* Replace language. */
+            $project = $this->project->getByID($output['projectID']);
+            if(!empty($project->model) and $project->model == 'waterfall')
+            {
+                $this->lang->bug->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->bug->execution);
+            }
         }
         else
         {
