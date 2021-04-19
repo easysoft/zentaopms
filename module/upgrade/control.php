@@ -23,7 +23,7 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
-        if(!isset($this->config->systemMode) || !isset($this->config->qcVersion))
+        if(!$this->config->systemMode && !isset($this->config->qcVersion))
         {
             /* Judge upgrade step. */
             $upgradeStep = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=upgradeStep');
@@ -134,7 +134,7 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
-            if(!isset($this->config->systemMode) && !isset($this->config->qcVersion)) $this->locate(inlink('to15Guide', "fromVersion=$fromVersion"));
+            if(!$this->config->systemMode && !isset($this->config->qcVersion)) $this->locate(inlink('to15Guide', "fromVersion=$fromVersion"));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 

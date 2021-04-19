@@ -179,7 +179,7 @@ class router extends baseRouter
         }
 
         $hourKey    = $planKey = $URSR = $URAndSR = 0;
-        $mode       = 'new';
+        $mode       = '';
         $score      = '0';
         $projectKey = empty($this->config->isINT) ? ITERATION_KEY : SPRINT_KEY;
 
