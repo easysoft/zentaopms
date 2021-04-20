@@ -56,6 +56,7 @@ $lang->tree->type         = 'Type';
 $lang->tree->parent       = 'Module Parent';
 $lang->tree->parentCate   = 'Catégorie Parente';
 $lang->tree->child        = 'Enfants';
+$lang->tree->subCategory  = 'SubCategory';
 $lang->tree->lineChild    = 'Sous-Ligne Produit';
 $lang->tree->owner        = 'Propriétaire';
 $lang->tree->order        = 'Ordre';
