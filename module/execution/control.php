@@ -1312,7 +1312,7 @@ class execution extends control
 
         $this->view->title           = (($this->app->openApp == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]      = $this->view->title;
-        $this->view->executions      = array('' => '') + $this->execution->getList();
+        $this->view->executions      = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->acl             = $acl;
