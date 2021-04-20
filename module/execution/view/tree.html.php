@@ -27,7 +27,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php
-    if(!isset($browseType)) $browseType = '';
+    if(!isset($browseType)) $browseType = 'all';
     if(!isset($orderBy))    $orderBy = '';
     $link = common::hasPriv('task', 'report', $execution) ?  $this->createLink('task', 'report', "execution=$executionID&browseType=$browseType") : '#';
     echo html::a($link, "<i class='icon icon-bar-chart muted'></i> <span class='text'>{$lang->task->reportChart}</span>", '', 'class="btn btn-link"');

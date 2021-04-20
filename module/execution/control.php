@@ -443,7 +443,7 @@ class execution extends control
         $this->view->browseType  = 'group';
         $this->view->groupBy     = $groupBy;
         $this->view->orderBy     = $groupBy;
-        $this->view->executionID   = $executionID;
+        $this->view->executionID = $executionID;
         $this->view->users       = $users;
         $this->view->moduleID    = 0;
         $this->view->moduleName  = $this->lang->tree->all;
@@ -1873,11 +1873,11 @@ class execution extends control
 
         $this->view->title      = $this->lang->execution->tree;
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->lang->execution->tree;
-        $this->view->execution    = $execution;
-        $this->view->executionID  = $executionID;
-        $this->view->level      = $type;
-        $this->view->tree       = $this->execution->printTree($tree);
+        $this->view->position[]  = $this->lang->execution->tree;
+        $this->view->execution   = $execution;
+        $this->view->executionID = $executionID;
+        $this->view->level       = $type;
+        $this->view->tree        = $this->execution->printTree($tree);
         $this->display();
     }
 
