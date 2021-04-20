@@ -28,7 +28,7 @@
     <div class="divider"></div>
     <div class="page-title">
       <?php
-      echo html::a($this->repo->createLink('browse', "repoID=$repoID"), $repo->name, '', "data-app='{$app->openApp}'");
+      echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}'");
       $paths= explode('/', $entry);
       $fileName = array_pop($paths);
       $postPath = '';
