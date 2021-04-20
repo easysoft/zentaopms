@@ -1089,23 +1089,18 @@ class docModel extends model
         }
         elseif($objectType == 'project')
         {
-            $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchPairs();
-            $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('deleted')->eq(0)
-                ->andWhere('type')->eq('project')
-                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-                ->orderBy('order_asc')
-                ->fetchAll('id');
+            /* Load module. */
+            $this->loadModel('program');
 
+            /* Sort project. */
             $orderedProjects = array();
-            foreach($programs as $programID => $programName)
+            $objects         = $this->program->getList('all', 'order_asc', null, true);
+            foreach($objects as $objectID => $object)
             {
-                foreach($projects as $id => $project)
-                {
-                    if($project->parent and $project->parent != $programID) continue;
-                    $orderedProjects[$id] = $project;
-                    unset($projects[$project->id]);
-                }
+                if($object->type == 'program') continue;
+                $object->parent = $this->program->getTopByID($object->parent);
+                $orderedProjects[$objectID] = $object;
+                unset($objects[$object->id]);
             }
 
             foreach($orderedProjects as $id => $project)

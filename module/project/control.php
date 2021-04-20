@@ -107,25 +107,24 @@ class project extends control
      */
     public function ajaxGetDropMenu($projectID = 0, $module, $method)
     {
-        $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq(0)->orderBy('order_asc')->fetchPairs();
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('project')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->orderBy('order_asc')
-            ->fetchAll('id');
-
-        /* Sort project by program. */
+        /* Load module. */
         $this->loadModel('program');
+
+        /* Sort project. */
+        $programs        = array();
         $orderedProjects = array();
-        foreach($programs as $programID => $programName)
+        $objects         = $this->program->getList('all', 'order_asc', null, true);
+        foreach($objects as $objectID => $object)
         {
-            foreach($projects as $project)
+            if($object->type == 'program')
             {
-                if($project->parent and $project->parent != $programID) continue;
-                $project->parent = $this->program->getTopByID($project->parent);
-                $orderedProjects[] = $project;
-                unset($projects[$project->id]);
+                $programs[$objectID] = $object->name;
+            }
+            else
+            {
+                $object->parent = $this->program->getTopByID($object->parent);
+                $orderedProjects[] = $object;
+                unset($objects[$object->id]);
             }
         }
 
@@ -279,7 +278,7 @@ class project extends control
             }
             elseif($this->app->openApp == 'doc')
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', 'type=project')));
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=project&objectID=$projectID")));
             }
             else
             {
