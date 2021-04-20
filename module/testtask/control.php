@@ -157,6 +157,13 @@ class testtask extends control
         {
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
+
+            if(isset($this->config->maxVersion))
+            {
+                $this->lang->waterfall->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
+                $this->lang->waterfall->menu->qa['subMenu']->testtask['subModule'] = '';
+            }
+
             $this->loadModel('project')->setMenu($this->session->project);
             $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
         }
