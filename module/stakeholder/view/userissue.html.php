@@ -45,7 +45,7 @@
               <td><?php echo zget($lang->issue->typeList, $issue->type);?></td>
               <td><?php echo zget($lang->issue->severityList, $issue->severity);?></td>
               <td><?php echo $issue->pri;?></td>
-              <td><?php echo zget($lang->issue->resolveMethods, $issue->status);?></td>
+              <td><?php echo zget($lang->issue->statusList, $issue->status);?></td>
               <td><?php echo $issue->createdDate;?></td>
             </tr>
           <?php endforeach;?>
