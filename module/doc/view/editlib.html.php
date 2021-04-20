@@ -17,7 +17,7 @@
     <div class='main-header'>
     <h2>
       <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
-      <?php echo $lang->doc->editLib;?>
+      <?php echo $lib->type != 'book' ? $lang->doc->editLib : $lang->doc->editBook;?>
     </h2>
   </div>
   <form method='post' class='form-ajax'>
@@ -35,7 +35,7 @@
       </tr>
       <?php endif;?>
       <tr>
-        <th class='w-130px'><?php echo $lang->doc->libName?></th>
+        <th class='w-130px'><?php echo $lib->type != 'book' ? $lang->doc->libName : $lang->doc->bookName;?></th>
         <td>
           <?php echo html::input('name', $lib->name, "class='form-control'");?>
           <span class='hidden'><?php echo html::radio('type', $lang->doc->libTypeList, $lib->type);?></span>
