@@ -57,7 +57,14 @@
         <tr>
           <td class='c-id'><?php printf('%03d', $project->id);?></td>
           <td class='c-name text-left' title='<?php echo $project->name?>'>
-            <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project'");?>
+            <?php
+            if(isset($this->config->maxVersion))
+            {
+                if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$lang->project->waterfall}</span> ";
+                if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$lang->project->scrum}</span> ";
+            }
+            echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project'");
+            ?>
           </td>
           <?php if($status == 'openedbyme'):?>
           <td class='c-status'><span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>

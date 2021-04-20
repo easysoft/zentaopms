@@ -71,7 +71,7 @@
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::submitButton();
-            echo html::a($app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), $lang->goback, '', 'class="btn btn-wide"');
+            if($app->openApp != 'my') echo html::a($app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), $lang->goback, '', 'class="btn btn-wide"');
             ?>
           </td>
         </tr>

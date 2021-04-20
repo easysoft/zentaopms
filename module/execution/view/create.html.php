@@ -180,7 +180,7 @@
       <?php if(count($executions) == 1):?>
       <div class='alert with-icon'>
         <i class='icon-exclamation-sign'></i>
-        <div class='content'><?php echo $lang->execution->copyNoProject;?></div>
+        <div class='content'><?php echo $lang->execution->copyNoExecution;?></div>
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
