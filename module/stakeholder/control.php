@@ -448,6 +448,7 @@ class stakeholder extends control
         $this->view->position[] = $this->lang->stakeholder->view;
 
         $this->view->stakeholder = $stakeholder;
+        $this->view->projectID   = $stakeholder->objectID;
         $this->view->issueList   = $this->stakeholder->getStakeholderIssue($stakeholder->user);
 
         $this->display();

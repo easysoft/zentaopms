@@ -4,18 +4,16 @@ class stakeholderModel extends model
     /**
      * Create a stakeholder.
      *
-     * @param  int programID
+     * @param  int objectID
      * @access public
      * @return int|bool
      */
-    public function create($programID = 0)
+    public function create($objectID = 0)
     {
         $stakeholder = new stdclass();
         $data = fixer::input('post')
-            ->setIF($programID == 0, 'objectType', 'project')
-            ->setIF($programID != 0, 'objectType', 'program')
-            ->setIF($programID == 0, 'objectID', $this->session->project)
-            ->setIF($programID != 0, 'objectID', $programID)
+            ->setDefault('objectType', $this->app->openApp)
+            ->setDefault('objectID', $objectID)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::today())
             ->stripTags($this->config->stakeholder->editor->create['id'], $this->config->allowedTags)

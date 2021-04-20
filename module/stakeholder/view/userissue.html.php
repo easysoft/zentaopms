@@ -18,7 +18,7 @@
         <span><?php echo $lang->stakeholder->viewIssue;?></span>
       </h2>
       <div class="pull-right">
-        <?php common::printLink('issue', 'create', 'from=stakeholder&owner=' . $stakeholder->user, "<i class='icon icon-plus'></i>" . $lang->issue->create, '', "class='btn btn-primary'");?>
+        <?php common::printLink('issue', 'create', "projectID=$projectID&from=stakeholder&owner=" . $stakeholder->user, "<i class='icon icon-plus'></i>" . $lang->issue->create, '', "class='btn btn-primary'");?>
       </div>
     </div>
   </div>
