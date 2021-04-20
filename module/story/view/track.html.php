@@ -91,7 +91,7 @@
               <td>
                 <?php foreach($story->revisions as $revision => $repoID):?>
                 <?php
-                echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision) . '<br/>';
+                echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision, '', "data-app='devops'") . '<br/>';
                 ?>
                 <?php endforeach;?>
               </td>
