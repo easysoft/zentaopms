@@ -1256,6 +1256,8 @@ class block extends control
     {
         $this->loadModel('milestone');
         $this->loadModel('weekly');
+        $this->app->loadLang('execution');
+
         $projectID = $this->session->project;
         $project   = $this->loadModel('project')->getByID($projectID);
 
