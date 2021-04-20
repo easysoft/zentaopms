@@ -126,7 +126,7 @@
                   <?php if($libID == 'files'):?>
                   <?php echo html::a($this->createLink('doc', 'showFiles', "type=execution&objectID=$execution->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
                   <?php else:?>
-                  <?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=execution"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
+                  <?php echo html::a($this->createLink('doc', 'objectLibs', "type=execution&objectID={$execution->id}&libID=$libID"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name, '', "data-app='execution'");?>
                   <?php endif;?>
                 </div>
                 <?php $i++;?>
