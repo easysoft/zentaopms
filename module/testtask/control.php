@@ -288,7 +288,14 @@ class testtask extends control
             $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
         }
 
-        $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        elseif($this->app->openApp == 'qa')
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        }
 
         $this->executeHooks($taskID);
 
