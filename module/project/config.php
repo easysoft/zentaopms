@@ -8,7 +8,7 @@ $config->project->editor->close    = array('id' => 'comment', 'tools' => 'simple
 $config->project->editor->suspend  = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->project->editor->start    = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->project->editor->activate = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->view     = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->view     = array('id' => 'lastComment', 'tools' => 'simpleTools');
 
 $config->project->list = new stdclass();
 $config->project->list->exportFields = 'id,name,code,template,product,status,begin,end,budget,PM,end,desc';
