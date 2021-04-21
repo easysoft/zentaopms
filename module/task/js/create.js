@@ -186,7 +186,9 @@ function setPreview()
     {
         storyLink  = createLink('story', 'view', "storyID=" + $('#story').val());
         var concat = config.requestType != 'GET' ? '?'  : '&';
-        storyLink  = storyLink + concat + 'onlybody=yes';
+
+        if(storyLink.indexOf("onlybody=yes") < 0) storyLink = storyLink + concat + 'onlybody=yes';
+
         $('#preview').removeClass('hidden');
         $('#preview a').attr('href', storyLink);
         $('#copyButton').removeClass('hidden');
