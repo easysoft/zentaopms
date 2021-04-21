@@ -191,7 +191,7 @@ function setPreview()
         $('#preview a').attr('href', storyLink);
         $('#copyButton').removeClass('hidden');
         $('.title-group.required > div').attr('id', 'copyStory-input').removeClass('.required');
-        $('div.colorpicker').css('right', '90px');//Adjust for task #4151;
+        $('div.colorpicker').css('right', '80px');//Adjust for task #4151;
         $('#copyButton').css('width', '80px');
     }
 
