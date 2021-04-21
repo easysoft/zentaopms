@@ -48,7 +48,7 @@ $lang->custom->oneUnit              = "One {$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "Please set the conversion factor of {$lang->hourCommon} to %s first";
 
 if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
-if($config->systemMode == 'classic') $lang->custom->execution = $lang->executionCommon;
+if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
