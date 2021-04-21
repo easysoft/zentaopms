@@ -195,7 +195,25 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     }
     else
     {
-        if(common::hasPriv('projectstory', 'linkStory')) echo html::a($this->createLink('projectstory', 'linkStory', "project=$projectID"), "<i class='icon-link'></i> {$lang->execution->linkStory}", '', "class='btn btn-primary'");
+        $buttonLink  = '';
+        $buttonTitle = '';
+        $dataToggle  = '';
+        if(common::hasPriv('projectstory', 'importPlanStories'))
+        {
+            $buttonLink  = empty($productID) ? '' : '#linkStoryByPlan';
+            $buttonTitle = $lang->execution->linkStoryByPlan;
+            $dataToggle  = 'data-toggle="modal"';
+        }
+        if(common::hasPriv('projectstory', 'linkStory'))
+        {
+            $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=$projectID");
+            $buttonTitle = $lang->execution->linkStory;
+            $dataToggle  = '';
+        }
+
+        $hidden = empty($buttonLink) ? 'hidden' : '';
+        echo html::a($buttonLink, "<i class='icon-link'></i> $buttonTitle", '', "class='btn btn-primary $hidden' $dataToggle");
+
         if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importPlanStories'))
         {
             echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
