@@ -80,7 +80,7 @@
           <?php foreach($program as $lineID => $line):?>
           <?php if(isset($line['lineName'])):?>
           <?php
-          if($this->config->systemMode == 'new')
+          if($this->config->systemMode == 'new' and $programID)
           {
               $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
               $trClass .= ' is-nest-child  table-nest';
@@ -110,9 +110,11 @@
           $trClass = '';
           if($product->line)
           {
+              $path = "$product->line,$product->id";
+              if($this->config->systemMode == 'new' and $product->program) $path = "$product->program,$path";
               $trAttrs  = "data-id='$product->id' data-parent='line.$product->line'";
               $trClass .= ' is-nest-child  table-nest';
-              $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='line.$product->program,$product->line,$product->id'";
+              $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='line.{$path}'";
           }
           elseif($product->program)
           {

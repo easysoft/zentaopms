@@ -177,7 +177,7 @@
 
                     foreach($modulePath as $key => $module)
                     {
-                        if($this->app->openApp == 'qa')
+                        if($this->app->openApp == 'qa' || $this->app->openApp == 'ops')
                         {
                             if($isLibCase)
                             {
