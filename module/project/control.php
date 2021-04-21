@@ -293,7 +293,7 @@ class project extends control
             }
         }
 
-        if($programID) $this->loadModel('program')->setMenu($programID);
+        if($this->app->openApp == 'program') $this->loadModel('program')->setMenu($programID);
 
         $name      = '';
         $code      = '';
