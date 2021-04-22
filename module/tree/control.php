@@ -398,6 +398,7 @@ class tree extends control
             $confirmLang = $this->lang->tree->confirmDelete;
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
             if($module->type == 'host') $confirmLang = $this->lang->tree->confirmDeleteHost;
+            if($module->type == 'feedback') $confirmLang = $this->lang->tree->confirmDelCategory;
             die(js::confirm($confirmLang, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
         }
         else
