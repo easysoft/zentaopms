@@ -1231,12 +1231,6 @@ class execution extends control
                 }
             }
 
-            $project = $this->project->getByID($projectID);
-            if(!empty($project->model) and $project->model == 'waterfall')
-            {
-                $this->lang->execution->afterInfo = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->afterInfo);
-            }
-
             $this->view->title       = $this->lang->execution->tips;
             $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
             $this->view->executionID = $executionID;
@@ -1315,6 +1309,11 @@ class execution extends control
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID")));
             }
+        }
+
+        if(!empty($project->model) and $project->model == 'waterfall')
+        {
+            $this->lang->execution->type = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->type);
         }
 
         $this->view->title           = (($this->app->openApp == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
@@ -1433,23 +1432,6 @@ class execution extends control
             $productPlans[$product->id] = $this->productplan->getPairs($product->id);
         }
 
-        $isSprint = true;
-        if($this->config->systemMode == 'new')
-        {
-            $project = $this->project->getById($execution->project);
-            if($project->model == 'scrum')
-            {
-                unset($this->lang->execution->endList[62]);
-                unset($this->lang->execution->endList[93]);
-                unset($this->lang->execution->endList[186]);
-                unset($this->lang->execution->endList[365]);
-            }
-            else
-            {
-                $isSprint = false;
-            }
-        }
-
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', $execution->PO, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
@@ -1478,7 +1460,6 @@ class execution extends control
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->productPlans         = $productPlans;
         $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
-        $this->view->isSprint             = $isSprint;
         $this->display();
     }
 
