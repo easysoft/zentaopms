@@ -274,7 +274,7 @@ class executionModel extends model
      */
     public function create($copyExecutionID = '')
     {
-        $sprintType = 'sprint';
+        $type = 'sprint';
         $this->lang->execution->team = $this->lang->execution->teamname;
 
         if($this->config->systemMode == 'new')
@@ -286,14 +286,14 @@ class executionModel extends model
             }
 
             /* Determine whether to add a sprint or a stage according to the model of the execution. */
-            $project    = $this->getByID($_POST['project']);
-            $sprintType = zget($this->config->execution->modelList, $project->model, 'sprint');
+            $project = $this->loadModel('project')->getByID($_POST['project']);
+            $type    = zget($this->config->execution->modelList, $project->model, 'sprint');
 
             $this->config->execution->create->requiredFields .= ',project';
         }
 
         /* If the execution model is a stage, determine whether the product is linked. */
-        if($sprintType == 'stage' and empty($this->post->products[0]))
+        if($type == 'stage' and empty($this->post->products[0]))
         {
             dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
             return false;
@@ -311,7 +311,7 @@ class executionModel extends model
             ->setIF($this->config->systemMode == 'new', 'parent', $this->post->project)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
-            ->add('type', $sprintType)
+            ->add('type', $type)
             ->stripTags($this->config->execution->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta, branch, uid, plans')
             ->get();
@@ -360,7 +360,7 @@ class executionModel extends model
                     $member->root = $executionID;
                     $member->join = $today;
                     $member->days = $sprint->days;
-                    $member->type = $sprintType;
+                    $member->type = $type;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
                     if($member->account == $this->app->user->account) $creatorExists = true;
                 }
@@ -375,7 +375,7 @@ class executionModel extends model
                 $member->account = $this->app->user->account;
                 $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
                 $member->join    = $today;
-                $member->type    = $sprintType;
+                $member->type    = $type;
                 $member->days    = $sprint->days;
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
@@ -840,7 +840,7 @@ class executionModel extends model
      */
     public function getSwitcher($executionID, $currentModule, $currentMethod)
     {
-        if(in_array($currentMethod,  array('index', 'all', 'batchedit'))) return;
+        if(in_array($currentMethod,  array('index', 'all', 'batchedit', 'create'))) return;
 
         $currentExecutionName = $this->lang->execution->common;
         if($executionID)
