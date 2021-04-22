@@ -38,9 +38,9 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php
-    if(!isset($browseType)) $browseType = '';
+    if(!isset($browseType)) $browseType = 'all';
     if(!isset($orderBy))    $orderBy = '';
-    common::printIcon('task', 'report', "execution=$executionID&browseType=$browseType", '', 'button', 'bar-chart muted');
+    common::printIcon('task', 'report', "execution=$executionID&browseType=all", '', 'button', 'bar-chart muted');
     ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>

@@ -17,7 +17,7 @@
     <div class='main-header'>
     <h2>
       <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
-      <?php echo $lang->doc->editLib;?>
+      <?php echo $lib->type != 'book' ? $lang->doc->editLib : $lang->doc->editBook;?>
     </h2>
   </div>
   <form method='post' class='form-ajax'>
@@ -35,7 +35,7 @@
       </tr>
       <?php endif;?>
       <tr>
-        <th class='w-130px'><?php echo $lang->doc->libName?></th>
+        <th class='w-130px'><?php echo $lib->type != 'book' ? $lang->doc->libName : $lang->doc->bookName;?></th>
         <td>
           <?php echo html::input('name', $lib->name, "class='form-control'");?>
           <span class='hidden'><?php echo html::radio('type', $lang->doc->libTypeList, $lib->type);?></span>
@@ -43,7 +43,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->doclib->control;?></th>
-        <?php if($lib->type == 'product' or $lib->type == 'execution' or ($config->systemMode == 'classic' and $lib->type != 'custom' )):?>
+        <?php if($lib->type == 'product' or $lib->type == 'execution' or ($config->systemMode == 'classic' and $lib->type != 'custom')):?>
         <td>
           <?php echo html::radio('acl', $lang->doclib->aclListA, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
           <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>

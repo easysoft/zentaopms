@@ -28,7 +28,7 @@
       <table class='table has-sort-head' id='userList'>
         <thead>
         <tr>
-          <?php $vars = "browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+          <?php $vars = "projectID=$projectID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
           <th class='c-id'>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>

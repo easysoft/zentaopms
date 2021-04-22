@@ -56,6 +56,7 @@ $lang->tree->type         = 'Loại';
 $lang->tree->parent       = 'Module mẹ';
 $lang->tree->parentCate   = 'Danh mục mẹ';
 $lang->tree->child        = 'Con';
+$lang->tree->subCategory  = 'SubCategory';
 $lang->tree->lineChild    = "Dòng {$lang->productCommon} con";
 $lang->tree->owner        = 'Sở hữu';
 $lang->tree->order        = 'Sắp xếp';

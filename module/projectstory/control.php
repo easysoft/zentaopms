@@ -103,5 +103,19 @@ class projectStory extends control
     {
         echo $this->fetch('execution', 'unlinkStory', "projectID=$projectID&storyID=$storyID&confirm=$confirm");
     }
+
+    /**
+     * Import plan stories.
+     *
+     * @param  int    $projectID
+     * @param  int    $planID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function importPlanStories($projectID, $planID, $productID = 0)
+    {
+        echo $this->fetch('execution', 'importPlanStories', "projectID=$projectID&planID=$planID&productID=$productID");
+    }
 }
 

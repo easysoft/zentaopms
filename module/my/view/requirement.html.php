@@ -94,10 +94,10 @@
             if($canBeChanged)
             {
                 $vars = "story={$story->id}";
-                common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-                common::printIcon('story', 'review',     $vars, $story, 'list', 'search');
+                common::printIcon('story', 'change',     $vars, $story, 'list', 'alter', '', 'iframe', true);
+                common::printIcon('story', 'review',     $vars, $story, 'list', 'search', '', 'iframe', true);
                 common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-                common::printIcon('story', 'edit',       $vars, $story, 'list');
+                common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
                 common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
             }
             ?>

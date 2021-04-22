@@ -56,6 +56,7 @@ $lang->tree->type         = '类型';
 $lang->tree->parent       = '上级模块';
 $lang->tree->parentCate   = '上级分类';
 $lang->tree->child        = '子模块';
+$lang->tree->subCategory  = '子分类';
 $lang->tree->lineChild    = "子{$lang->productCommon}线";
 $lang->tree->owner        = '负责人';
 $lang->tree->order        = '排序';

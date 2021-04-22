@@ -56,6 +56,7 @@ $lang->tree->type         = 'Typ';
 $lang->tree->parent       = 'Übergeordnet';
 $lang->tree->parentCate   = 'Parent Category';
 $lang->tree->child        = 'Untergeordnet';
+$lang->tree->subCategory  = 'SubCategory';
 $lang->tree->lineChild    = "Child {$lang->productCommon} Line";
 $lang->tree->owner        = 'Besitzer';
 $lang->tree->order        = 'Reihenfolge';

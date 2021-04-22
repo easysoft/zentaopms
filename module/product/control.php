@@ -855,15 +855,16 @@ class product extends control
      * AJAX: get executions of a product in html select.
      *
      * @param  int    $productID
-     * @param  int    $executionID
+     * @param  int    $projectID
      * @param  int    $branch
      * @param  string $number
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions($productID, $executionID = 0, $branch = 0, $number = '')
+    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0)
     {
-        $executions = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch, 'id_desc', $executionID);
+        $executions = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch, 'id_desc', $projectID);
         if($this->app->getViewType() == 'json') die(json_encode($executions));
 
         if($number === '')

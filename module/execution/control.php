@@ -443,7 +443,7 @@ class execution extends control
         $this->view->browseType  = 'group';
         $this->view->groupBy     = $groupBy;
         $this->view->orderBy     = $groupBy;
-        $this->view->executionID   = $executionID;
+        $this->view->executionID = $executionID;
         $this->view->users       = $users;
         $this->view->moduleID    = 0;
         $this->view->moduleName  = $this->lang->tree->all;
@@ -1230,6 +1230,13 @@ class execution extends control
                     die(js::confirm($this->lang->execution->importPlanStory, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
                 }
             }
+
+            $project = $this->project->getByID($projectID);
+            if(!empty($project->model) and $project->model == 'waterfall')
+            {
+                $this->lang->execution->afterInfo = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->afterInfo);
+            }
+
             $this->view->title       = $this->lang->execution->tips;
             $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
             $this->view->executionID = $executionID;
@@ -1873,11 +1880,11 @@ class execution extends control
 
         $this->view->title      = $this->lang->execution->tree;
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->lang->execution->tree;
-        $this->view->execution    = $execution;
-        $this->view->executionID  = $executionID;
-        $this->view->level      = $type;
-        $this->view->tree       = $this->execution->printTree($tree);
+        $this->view->position[]  = $this->lang->execution->tree;
+        $this->view->execution   = $execution;
+        $this->view->executionID = $executionID;
+        $this->view->level       = $type;
+        $this->view->tree        = $this->execution->printTree($tree);
         $this->display();
     }
 

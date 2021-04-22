@@ -10,7 +10,6 @@
   #guideDialog .project-type-img:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,0,.25);}
   #guideDialog .project-type.active img {border-color: #006AF1; border-width: 2px; margin-top: 0}
   </style>
-  <?php $group = $from == 'PGM' ? "data-group='project'" : "data-group='project'";?>
   <div class='modal-content'>
     <div class='modal-body'>
       <button class="close" data-dismiss="modal">x</button>
@@ -18,14 +17,14 @@
       <div class='row'>
         <div class='col-xs-6'>
           <div class='project-type text-center'>
-            <?php echo html::a($this->createLink("project", "create", "model=scrum&projectID=$projectID"), "<img class='project-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', $group)?>
+            <?php echo html::a($this->createLink("project", "create", "model=scrum&projectID=$projectID"), "<img class='project-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', "data-app='{$app->openApp}'")?>
             <h3><?php echo $lang->project->scrum; ?></h3>
             <p><?php echo $lang->project->scrumTitle; ?></p>
           </div>
         </div>
         <div class='col-xs-6'>
           <div class='project-type text-center'>
-            <?php echo html::a($this->createLink("project", "create", "model=waterfall&projectID=$projectID"), "<img class='project-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>", '', $group)?>
+            <?php echo html::a($this->createLink("project", "create", "model=waterfall&projectID=$projectID"), "<img class='project-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>", '', "data-app='{$app->openApp}'")?>
             <h3><?php echo $lang->project->waterfall; ?></h3>
             <p><?php echo $lang->project->waterfallTitle; ?></p>
           </div>

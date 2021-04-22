@@ -102,7 +102,25 @@
         else
         {
             echo "<div class='btn-group dropdown'>";
-            if(common::hasPriv('execution', 'linkStory')) echo html::a(inlink('linkStory', "execution=$execution->id"), "<i class='icon-link'></i> {$lang->execution->linkStory}", '', "class='btn btn-primary'");
+
+            $buttonLink  = '';
+            $buttonTitle = '';
+            $dataToggle  = '';
+            if(common::hasPriv('execution', 'importPlanStories'))
+            {
+                $buttonLink  = '#linkStoryByPlan';
+                $buttonTitle = $lang->execution->linkStoryByPlan;
+                $dataToggle  = 'data-toggle="modal"';
+            }
+            if(common::hasPriv('execution', 'linkStory'))
+            {
+                $buttonLink  = inlink('linkStory', "execution=$execution->id");
+                $buttonTitle = $lang->execution->linkStory;
+                $dataToggle  = '';
+            }
+            $hidden = empty($buttonLink) ? 'hidden' : '';
+            echo html::a($buttonLink, "<i class='icon-link'></i> $buttonTitle", '', "class='btn btn-primary $hidden' $dataToggle");
+
             if(common::hasPriv('execution', 'linkStory') and common::hasPriv('execution', 'importPlanStories'))
             {
                 echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
@@ -111,6 +129,7 @@
                 echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
                 echo '</ul>';
             }
+
             echo '</div>';
         }
     }

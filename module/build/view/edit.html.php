@@ -89,4 +89,5 @@
   </div>
 </div>
 <?php js::set('productGroups', $productGroups)?>
+<?php js::set('projectID', $build->project)?>
 <?php include '../../common/view/footer.html.php';?>
