@@ -38,7 +38,7 @@
           echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
       }
       echo '/' . ' ' . $fileName;
-      if($repo->SCM == 'Git')
+      if(strpos($repo->SCM, 'Git') !== false)
       {
           $oldRevision = $oldRevision == '^' ? "$newRevision" : $oldRevision;
           echo " <span class='label label-info'>" . substr($oldRevision, 0, 10) . " : " . substr($newRevision, 0, 10) . ' (' . $historys[$oldRevision] . ' : ' . $historys[$newRevision] . ')</span>';
@@ -155,7 +155,7 @@
 </div>
 <div class='revisions hidden'>
   <?php
-  if($repo->SCM == 'Git')
+  if(strpos($repo->SCM, 'Git') !== false)
   {
       $oldRevision = $oldRevision == '^' ? "$newRevision" : $oldRevision;
       echo " <span class='label label-info'>" . substr($oldRevision, 0, 10) . " : " . substr($newRevision, 0, 10) . ' (' . $historys[$oldRevision] . ' : ' . $historys[$newRevision] . ')</span>';

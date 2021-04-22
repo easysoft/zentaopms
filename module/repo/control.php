@@ -726,6 +726,7 @@ class repo extends control
         /* When arrange is appose then adjust data for show them easy.*/
         if($arrange == 'appose')
         {
+
             foreach($diffs as $diffFile)
             {
                 if(empty($diffFile->contents)) continue;
