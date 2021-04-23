@@ -1649,7 +1649,6 @@ class projectModel extends model
         $lang->project->menuOrder   = $lang->{$project->model}->menuOrder;
         $lang->project->dividerMenu = $lang->{$project->model}->dividerMenu;
 
-
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
         common::setMenuVars('project', $objectID);
     }
