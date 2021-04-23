@@ -1000,7 +1000,7 @@ class execution extends control
         /* Get builds. */
         if($type == 'bysearch')
         {
-            $builds = $this->loadModel('build')->getBuildsBySearch((int)$executionID, $queryID);
+            $builds = $this->loadModel('build')->getExecutionBuildsBySearch((int)$executionID, $queryID);
         }
         else
         {
