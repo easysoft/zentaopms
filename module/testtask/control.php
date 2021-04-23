@@ -297,7 +297,11 @@ class testtask extends control
 
         if($this->app->openApp == 'project')
         {
-            $this->loadModel('project')->setMenu($this->session->project);
+            $this->loadModel('project')->setMenu($task->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
         }
         elseif($this->app->openApp == 'qa')
         {
@@ -623,7 +627,18 @@ class testtask extends control
         $task    = $this->testtask->getById($taskID);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
-        $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        }
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canBeChanged('testtask', $task);
