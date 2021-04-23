@@ -211,13 +211,13 @@ $(function()
             edit:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'edit', "moduleID={0}&type=$viewType"); ?>',
-                title: '<?php echo $viewType == 'doc' ? $lang->doc->editType : $lang->tree->edit ?>',
+                title: '<?php echo $viewType == 'doc' ? $lang->doc->editType : ($viewType == 'feedback' ? $lang->tree->editCategory : $lang->tree->edit);?>',
                 template: '<a><i class="icon-edit"></i></a>'
             },
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=$rootID&moduleID={0}"); ?>',
-                title: '<?php echo $viewType == 'doc' ? $lang->doc->deleteType : $lang->tree->delete ?>',
+                title: '<?php echo $viewType == 'doc' ? $lang->doc->deleteType : ($viewType == 'feedback' ? $lang->tree->delCategory : $lang->tree->delete)?>',
                 template: '<a><i class="icon-trash"></i></a>'
             },
             subModules:

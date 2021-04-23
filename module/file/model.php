@@ -97,7 +97,7 @@ class fileModel extends model
         foreach($files as $id => $file)
         {
             if($file['size'] == 0) continue;
-            if(!move_uploaded_file($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
+            if(!helper::saveFile($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
 
             $file = $this->compressImage($file);
 
@@ -262,7 +262,7 @@ class fileModel extends model
             }
             else
             {
-                if(!move_uploaded_file($file['tmpname'], $tmpFileChunkPath)) return false;
+                if(!helper::saveFile($file['tmpname'], $tmpFileChunkPath)) return false;
             }
 
             if($file['chunk'] == ($file['chunks'] - 1))
@@ -278,7 +278,7 @@ class fileModel extends model
         }
         else
         {
-            if(!move_uploaded_file($file['tmpname'], $file['realpath'])) return false;
+            if(!helper::saveFile($file['tmpname'], $file['realpath'])) return false;
 
             $uploadFile['extension'] = $file['extension'];
             $uploadFile['pathname']  = $file['pathname'];
@@ -471,7 +471,7 @@ class fileModel extends model
             $pathName = $filePath->pathname;
             $realPathName = $this->savePath . $this->getRealPathName($pathName);
             if(!is_dir(dirname($realPathName)))mkdir(dirname($realPathName));
-            move_uploaded_file($file['tmpname'], $realPathName);
+            helper::saveFile($file['tmpname'], $realPathName);
 
             $file['pathname'] = $pathName;
             $file = $this->compressImage($file);

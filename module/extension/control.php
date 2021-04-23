@@ -431,7 +431,7 @@ class extension extends control
             $tmpName   = $_FILES['file']['tmp_name'];
             $fileName  = $_FILES['file']['name'];
             $dest      = $this->app->getTmpRoot() . "/extension/$fileName";
-            move_uploaded_file($tmpName, $dest);
+            helper::saveFile($tmpName, $dest);
 
             $extension = basename($fileName, '.zip');
             $return    = $this->extension->extractPackage($extension);

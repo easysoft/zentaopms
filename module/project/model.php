@@ -1644,19 +1644,11 @@ class projectModel extends model
     {
         global $lang;
         $project = $this->getByID($objectID);
+
         $lang->project->menu        = $lang->{$project->model}->menu;
         $lang->project->menuOrder   = $lang->{$project->model}->menuOrder;
         $lang->project->dividerMenu = $lang->{$project->model}->dividerMenu;
 
-        /* Replace waterfall lang. */
-        if($project->model == 'waterfall')
-        {
-            $this->loadModel('execution');
-            $lang->execution->create = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->create);
-            $lang->execution->name   = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->name);
-            $lang->execution->status = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->status);
-            $lang->execution->copy   = str_replace($lang->executionCommon, $lang->project->stage, $lang->execution->copy);
-        }
 
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
         common::setMenuVars('project', $objectID);

@@ -10,9 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if($app->openApp == 'execution'): ?>
+<style>#heading {padding: 8px 0;}</style>
+<?php endif;?>
 <?php if(isset($tips)):?>
 <?php $defaultURL = $config->systemMode == 'new' ? $this->createLink('project', 'execution', "status=all&projectID=$projectID") : $this->createLink('execution', 'task', 'executionID=' . $executionID);?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('isStage', false);?>
 <body>
   <div class='modal-dialog mw-500px' id='tipsModal'>
     <div class='modal-header'>
