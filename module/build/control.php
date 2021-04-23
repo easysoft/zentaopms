@@ -585,7 +585,7 @@ class build extends control
         }
         else
         {
-            $allBugs = $this->bug->getExecutionBugs($build->execution, 0, 'noclosed', 0, 'status_desc,id_desc', $build->bugs, $pager);
+            $allBugs = $this->bug->getExecutionBugs($build->execution, 0, $buildID, 'noclosed', 0, 'status_desc,id_desc', $build->bugs, $pager);
         }
 
         $this->view->allBugs    = $allBugs;
