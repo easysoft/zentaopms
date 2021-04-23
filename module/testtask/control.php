@@ -449,7 +449,11 @@ class testtask extends control
         $productID = $task->product;
         if($this->app->openApp == 'project')
         {
-            $this->loadModel('project')->setMenu($this->session->project);
+            $this->loadModel('project')->setMenu($task->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
         }
         else
         {
@@ -692,8 +696,12 @@ class testtask extends control
         {
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
-            $this->loadModel('project')->setMenu($this->session->project);
+            $this->loadModel('project')->setMenu($task->project);
             $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
         }
         else
         {
@@ -959,7 +967,11 @@ class testtask extends control
         /* Save session. */
         if($this->app->openApp == 'project')
         {
-            $this->loadModel('project')->setMenu($this->session->project);
+            $this->loadModel('project')->setMenu($task->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
         }
         else
         {
