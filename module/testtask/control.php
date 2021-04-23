@@ -557,10 +557,11 @@ class testtask extends control
         $this->loadModel('report');
         $this->view->charts = array();
 
+        $task = $this->testtask->getById($taskID);
+
         if(!empty($_POST))
         {
             $this->app->loadLang('testcase');
-            $task    = $this->testtask->getById($taskID);
             $bugInfo = $this->testtask->getBugInfo($taskID, $productID);
             foreach($this->post->charts as $chart)
             {
@@ -574,7 +575,19 @@ class testtask extends control
             }
         }
 
-        $this->loadModel('qa')->setMenu($this->products, $productID, $branchID, $taskID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($task->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID, $branchID, $taskID);
+        }
+
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
         $this->view->position[]    = html::a($this->createLink('testtask', 'cases', "taskID=$taskID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->testtask->reportChart;
