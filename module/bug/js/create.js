@@ -29,7 +29,12 @@ function loadAllUsers()
 function loadExecutionTeamMembers(productID)
 {
     var link = createLink('bug', 'ajaxLoadExecutionTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
-    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen();});
+    $.post(link, function(data)
+    {
+        $('#assignedTo').replaceWith(data);
+        $('#assignedTo_chosen').remove();
+        $('#assignedTo').chosen();
+    })
 }
 
 /**

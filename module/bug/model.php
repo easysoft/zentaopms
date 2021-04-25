@@ -1592,6 +1592,29 @@ class bugModel extends model
         return $bugs;
     }
 
+    public function getProductMemberPairs($productID)
+    {
+        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID);
+
+        $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.root')->in(array_keys($projects))
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq(0)
+            ->fi()
+            ->fetchAll('account');
+
+        if(!$users) return array('' => '');
+
+        foreach($users as $account => $user)
+        {
+            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':'; 
+            if(!empty($this->config->isINT)) $firstLetter = '';
+            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
+        }
+        return array('' => '') + $users;
+    }
+
     /**
      * Get bugs according to buildID and productID.
      *
