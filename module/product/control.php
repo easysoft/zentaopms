@@ -848,7 +848,7 @@ class product extends control
         $projects += $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : $branch);
         if($this->app->getViewType() == 'json') die(json_encode($projects));
 
-        die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID})'"));
+        die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
     }
 
     /**
