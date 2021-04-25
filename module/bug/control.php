@@ -502,14 +502,12 @@ class bug extends control
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
 
         /* Set team members of the latest execution as assignedTo list. */
-        $latestExecution  = $this->product->getLatestProject($productID);
-        $executionMembers = array();
-        if(!empty($latestExecution)) $executionMembers = $this->loadModel('user')->getTeamMemberPairs($latestExecution->id, 'execution', 'nodeleted', $moduleOwner);
-        if(empty($executionMembers)) $executionMembers = $this->view->users;
-        if($assignedTo and !isset($executionMembers[$assignedTo]))
+        $productMembers = $this->bug->getProductMemberPairs($productID);
+        if(empty($productMembers)) $productMembers = $this->view->users;
+        if($assignedTo and !isset($productMembers[$assignedTo]))
         {
             $user = $this->loadModel('user')->getById($assignedTo);
-            if($user) $executionMembers[$assignedTo] = $user->realname;
+            if($user) $productMembers[$assignedTo] = $user->realname;
         }
 
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
@@ -583,7 +581,7 @@ class bug extends control
         $this->view->steps            = htmlspecialchars($steps);
         $this->view->os               = $os;
         $this->view->browser          = $browser;
-        $this->view->executionMembers = $executionMembers;
+        $this->view->productMembers   = $productMembers;
         $this->view->assignedTo       = $assignedTo;
         $this->view->deadline         = $deadline;
         $this->view->mailto           = $mailto;
@@ -1613,17 +1611,9 @@ class bug extends control
      */
     public function ajaxLoadExecutionTeamMembers($productID, $selectedUser = '')
     {
-        $latestExecution = $this->product->getLatestProject($productID);
-        if(!empty($latestExecution))
-        {
-            $executionMembers = $this->user->getTeamMemberPairs($latestExecution->id, 'execution', 'nodeleted', $selectedUser);
-        }
-        else
-        {
-            $executionMembers = $this->user->getPairs('devfirst|noclosed|nodeleted');
-        }
+        $productMembers = $this->bug->getProductMemberPairs($productID);
 
-        die(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));
+        die(html::select('assignedTo', $productMembers, $selectedUser, 'class="form-control"'));
     }
 
     /**

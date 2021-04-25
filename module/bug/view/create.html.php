@@ -129,7 +129,7 @@ js::set('blockID', $blockID);
             <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
             <td>
               <div class='input-group'>
-                <?php echo html::select('assignedTo', $executionMembers, $assignedTo, "class='form-control chosen'");?>
+                <?php echo html::select('assignedTo', $productMembers, $assignedTo, "class='form-control chosen'");?>
                 <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
               </div>
             </td>
@@ -325,7 +325,7 @@ js::set('blockID', $blockID);
           <tr>
             <td colspan="3" class="text-center form-actions">
               <?php echo html::submitButton();?>
-              <?php if($caseID == 0) echo html::backButton();?>
+              <?php echo html::backButton();?>
               <?php echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);?>
               <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', empty($testtask) ? 0 : $testtask->id);?>
             </td>
