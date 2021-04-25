@@ -334,9 +334,9 @@ class build extends control
     }
 
     /**
-     * AJAX: get builds of a project in html select.
+     * AJAX: get builds of an execution in html select.
      *
-     * @param  int    $projectID
+     * @param  int    $executionID
      * @param  string $varName      the name of the select object to create
      * @param  string $build        build to selected
      * @param  int    $branch
@@ -346,49 +346,49 @@ class build extends control
      * @access public
      * @return string
      */
-    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 0, $index = 0, $needCreate = false, $type = 'normal')
+    public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 0, $index = 0, $needCreate = false, $type = 'normal')
     {
         $branch = $branch ? "0,$branch" : $branch;
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
         {
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
-            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, $params, $build);
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, $params, $build);
             if($isJsonView) die(json_encode($builds));
             else die(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
         }
         if($varName == 'openedBuilds')
         {
-            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty');
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty');
             if($isJsonView) die(json_encode($builds));
             else die(html::select($varName . "[$index][]", $builds , $build, 'size=4 class=form-control multiple'));
         }
         if($varName == 'resolvedBuild')
         {
             $params = ($type == 'all') ? '' : 'noterminate, nodone';
-            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, $params, $build);
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, $params, $build);
             if($isJsonView) die(json_encode($builds));
             else die(html::select($varName, $builds, $build, "class='form-control'"));
         }
         if($varName == 'testTaskBuild')
         {
-            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
 
             if(empty($builds))
             {
-                $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->fetch('project');
+                $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
 
-                $html  = html::a($this->createLink('build', 'create', "projectID=$projectID&productID=$productID&projectID=$projectID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
+                $html  = html::a($this->createLink('build', 'create', "executionID=$executionID&productID=$productID&projectID=$projectID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
                 $html .= '&nbsp; ';
-                $html .= html::a("javascript:loadExecutionBuilds($projectID)", $this->lang->refresh);
+                $html .= html::a("javascript:loadExecutionBuilds($executionID)", $this->lang->refresh);
                 die($html);
             }
             die(html::select('build', $builds, $build, "class='form-control'"));
         }
         if($varName == 'dropdownList')
         {
-            $builds = $this->build->getExecutionBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
 
             $list  = "<div class='list-group'>";
