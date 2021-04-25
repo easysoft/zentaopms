@@ -54,7 +54,7 @@
           <th class='w-50px'>  <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
           <th>                 <?php common::printOrderLink('title',    $orderBy, $vars, $lang->testcase->title);?></th>
           <?php if($type == 'assigntome'):?>
-          <th class='w-100px'>  <?php common::printOrderLink('task',     $orderBy, $vars, $lang->testtask->common);?></th>
+          <th class='w-100px'> <?php common::printOrderLink('task',     $orderBy, $vars, $lang->testtask->common);?></th>
           <?php endif;?>
           <th class='w-type'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
           <th class='c-user'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
@@ -87,7 +87,7 @@
           <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
           <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', $params), $case->title, null, "style='color: $case->color'");?></td>
           <?php if($type == 'assigntome'):?>
-          <td class='c-name'><?php echo $case->taskName;?></td>
+          <td class='c-name' title='<?php echo $case->taskName;?>'><?php echo $case->taskName;?></td>
           <?php endif;?>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
