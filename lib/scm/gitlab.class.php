@@ -5,13 +5,13 @@ class gitlab
     public $projectID;
 
     /**
-     * Construct 
-     * 
+     * Construct
+     *
      * @param  string    $client    gitlab api url.
      * @param  string    $root      id of gitlab project.
      * @param  string    $username  null
      * @param  string    $password  token of gitlab api.
-     * @param  string    $encoding 
+     * @param  string    $encoding
      * @access public
      * @return void
      */
@@ -25,9 +25,9 @@ class gitlab
 
     /**
      * List files.
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
@@ -41,124 +41,124 @@ class gitlab
         $param->ref       = $revision;
         $param->recursive = 0;
 
-		$list = $this->fetch($api, $param);
+        $list = $this->fetch($api, $param);
         if(empty($list)) return array();
 
         $infos = array();
         foreach($list as $file)
         {
-			$info = new stdClass();
-            if($file->type == 'blob') 
-			{
+            $info = new stdClass();
+            if($file->type == 'blob')
+            {
                 $path = $file->path;
-				$file = $this->files($file->path);
-                
-				$info->name     = $file->file_name;
-				$info->kind     = 'file';
-				$info->account  = $file->committer;
-				$info->date     = $file->date;
-				$info->size     = $file->size;
-				$info->comment  = $file->comment;
-				$info->revision = $file->revision;
-			}
-			else
-			{
-				$commits = $this->getCommitsByPath($file->path);
-				if(empty($commits)) continue;
-				$commit = $commits[0];
+                $file = $this->files($file->path);
 
-				$info->name     = $file->path;
-				$info->kind     = 'dir';
-				$info->revision = $commit->id;
-				$info->account  = $commit->committer_name;
-				$info->date     = date('Y-m-d H:i:s', strtotime($commit->committed_date));
-				$info->size     = 0;
-				$info->comment  = $commit->message;
-			}
+                $info->name     = $file->file_name;
+                $info->kind     = 'file';
+                $info->account  = $file->committer;
+                $info->date     = $file->date;
+                $info->size     = $file->size;
+                $info->comment  = $file->comment;
+                $info->revision = $file->revision;
+            }
+            else
+            {
+                $commits = $this->getCommitsByPath($file->path);
+                if(empty($commits)) continue;
+                $commit = $commits[0];
 
-			$infos[] = $info;
-			unset($info);
-		}
+                $info->name     = $file->path;
+                $info->kind     = 'dir';
+                $info->revision = $commit->id;
+                $info->account  = $commit->committer_name;
+                $info->date     = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+                $info->size     = 0;
+                $info->comment  = $commit->message;
+            }
 
-		/* Sort by kind */
-		foreach($infos as $key => $info) $kinds[$key] = $info->kind;
-		if($infos) array_multisort($kinds, SORT_ASC, $infos);
-		return $infos;
-	}
+            $infos[] = $info;
+            unset($info);
+        }
 
-	/**
-	 * Get files info.
-	 * 
-	 * @param  string    $path 
-	 * @param  string    $ref 
-	 * @access public
-	 * @return array
-	 */
-	public function files($path, $ref = 'master')
-	{
-		$path = urlencode($path);
-		$api  = "files/$path";
-		$param = new stdclass();
-		$param->ref = $ref;
-		$file = $this->fetch($api, $param);
+        /* Sort by kind */
+        foreach($infos as $key => $info) $kinds[$key] = $info->kind;
+        if($infos) array_multisort($kinds, SORT_ASC, $infos);
+        return $infos;
+    }
 
-		$commits = $this->getCommitsByPath($path);
-		$file->revision = $file->commit_id;
-		$file->size     = $this->formatBytes($file->size);
+    /**
+     * Get files info.
+     *
+     * @param  string    $path
+     * @param  string    $ref
+     * @access public
+     * @return array
+     */
+    public function files($path, $ref = 'master')
+    {
+        $path = urlencode($path);
+        $api  = "files/$path";
+        $param = new stdclass();
+        $param->ref = $ref;
+        $file = $this->fetch($api, $param);
 
-		if(!empty($commits))
-		{
-			$commit = $commits[0];
-			$file->committer = $commit->committer_name;
-			$file->comment   = $commit->message;
-			$file->date      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
-		}
+        $commits = $this->getCommitsByPath($path);
+        $file->revision = $file->commit_id;
+        $file->size     = $this->formatBytes($file->size);
 
-		return $file;
-	}
+        if(!empty($commits))
+        {
+            $commit = $commits[0];
+            $file->committer = $commit->committer_name;
+            $file->comment   = $commit->message;
+            $file->date      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+        }
 
-	/**
-	 * Get tags 
-	 * 
-	 * @param  string $path 
-	 * @param  string $revision 
-	 * @access public
-	 * @return array
-	 */
-	public function tags($path, $revision = 'HEAD')
-	{
-		$api = "tags";
+        return $file;
+    }
+
+    /**
+     * Get tags
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @access public
+     * @return array
+     */
+    public function tags($path, $revision = 'HEAD')
+    {
+        $api = "tags";
         $list = $this->fetch($api);
 
         $tags = array();
         foreach($list as $tag) $tags[] = $tag->name;
 
-		return $tags;
-	}
+        return $tags;
+    }
 
-	/**
-	 * Get branch 
-	 * 
-	 * @access public
-	 * @return array
-	 */
-	public function branch()
-	{
-		$api  = "branches";
-		$list = $this->fetch($api);
+    /**
+     * Get branch
+     *
+     * @access public
+     * @return array
+     */
+    public function branch()
+    {
+        $api  = "branches";
+        $list = $this->fetch($api);
 
-		$branches = array();
-		foreach($list as $branch) $branches[$branch->name] = $branch->name;
-		asort($branches);
+        $branches = array();
+        foreach($list as $branch) $branches[$branch->name] = $branch->name;
+        asort($branches);
 
-		return $branches;
-	}
+        return $branches;
+    }
 
-	/**
-	 * Get last log. 
-	 * 
-	 * @param  string $path 
-     * @param  int    $count 
+    /**
+     * Get last log.
+     *
+     * @param  string $path
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -169,11 +169,11 @@ class gitlab
 
     /**
      * Get logs.
-     * 
-     * @param  string $path 
-     * @param  string $fromRevision 
-     * @param  string $toRevision 
-     * @param  int    $count 
+     *
+     * @param  string $path
+     * @param  string $fromRevision
+     * @param  string $toRevision
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -193,9 +193,9 @@ class gitlab
 
     /**
      * Blame file
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
@@ -204,47 +204,47 @@ class gitlab
         if(!scm::checkRevision($revision)) return array();
 
         $path = ltrim($path, DIRECTORY_SEPARATOR);
-		$path = urlencode($path);
-		$api  = "files/$path/blame";
-		$param = new stdclass;
-		$param->ref = $this->branch;
+        $path = urlencode($path);
+        $api  = "files/$path/blame";
+        $param = new stdclass;
+        $param->ref = $this->branch;
         $results = $this->fetch($api, $param);
 
         $blames   = array();
         $revLine  = 0;
         $revision = '';
 
-		$lineNumber = 1;
-		foreach($results as $blame)
-		{
-			$line = array();
-			$line['revision']  = $blame->commit->id;
-			$line['committer'] = $blame->commit->committer_name;
-			$line['time']      = $blame->commit->committer_name;
-			$line['line']      = $lineNumber;
-			$line['lines']     = count($blame->lines);
-			$line['content']   = array_shift($blame->lines);
+        $lineNumber = 1;
+        foreach($results as $blame)
+        {
+            $line = array();
+            $line['revision']  = $blame->commit->id;
+            $line['committer'] = $blame->commit->committer_name;
+            $line['time']      = $blame->commit->committer_name;
+            $line['line']      = $lineNumber;
+            $line['lines']     = count($blame->lines);
+            $line['content']   = array_shift($blame->lines);
 
-			$blames[] = $line;
+            $blames[] = $line;
 
-			$lineNumber ++;
+            $lineNumber ++;
 
-			foreach($blame->lines as $line)
-			{
-				$blames[] = array('line' => $lineNumber, 'content' => $line);
-				$lineNumber ++;
-			}
-		}
+            foreach($blame->lines as $line)
+            {
+                $blames[] = array('line' => $lineNumber, 'content' => $line);
+                $lineNumber ++;
+            }
+        }
 
         return $blames;
     }
 
     /**
      * Diff file.
-     * 
-     * @param  string $path 
-     * @param  string $fromRevision 
-     * @param  string $toRevision 
+     *
+     * @param  string $path
+     * @param  string $fromRevision
+     * @param  string $toRevision
      * @access public
      * @return array
      */
@@ -252,7 +252,7 @@ class gitlab
     {
         if(!scm::checkRevision($fromRevision)) return array();
         if(!scm::checkRevision($toRevision))   return array();
-        
+
         $api     = "compare";
         $params  = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => 1);
         $results = $this->fetch($api, $params);
@@ -277,9 +277,9 @@ class gitlab
 
     /**
      * Cat file.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return string
      */
@@ -292,9 +292,9 @@ class gitlab
 
     /**
      * Get info.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return object
      */
@@ -303,9 +303,10 @@ class gitlab
         if(!scm::checkRevision($revision)) return false;
 
         $info = new stdclass();
-        $info->kind = 'dir';
-        $info->path = $entry; 
-        $info->root = '';
+        $info->kind     = 'dir';
+        $info->path     = $entry;
+        $info->revision = $revision;
+        $info->root     = '';
 
         if($entry)
         {
@@ -327,15 +328,14 @@ class gitlab
 
     /**
      * Exec git cmd.
-     * 
-     * @param  string $cmd 
+     *
+     * @param  string $cmd
      * @access public
      * @todo Exec commads by gitlab api.
      * @return array
      */
     public function exec($cmd)
     {
-        chdir($this->root);
         return execCmd(escapeCmd("$this->client $cmd"), 'array');
     }
 
@@ -436,9 +436,9 @@ class gitlab
 
     /**
      * Get commit count.
-     * 
-     * @param  int    $commits 
-     * @param  string $lastVersion 
+     *
+     * @param  int    $commits
+     * @param  string $lastVersion
      * @access public
      * @return int
      */
@@ -453,7 +453,7 @@ class gitlab
 
     /**
      * Get first revision.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -465,8 +465,8 @@ class gitlab
     }
 
     /**
-     * Get latest revision 
-     * 
+     * Get latest revision
+     *
      * @access public
      * @return string
      */
@@ -480,10 +480,10 @@ class gitlab
 
     /**
      * Get commits.
-     * 
-     * @param  string $version 
-     * @param  int    $count 
-     * @param  string $branch 
+     *
+     * @param  string $version
+     * @param  int    $count
+     * @param  string $branch
      * @access public
      * @return array
      */
@@ -491,18 +491,19 @@ class gitlab
     {
         if(!scm::checkRevision($version)) return array();
         $api = "commits";
-	
+
         $count = 500;
         $params = array();
         $params['ref_name'] = $branch;
         $params['per_page'] = $count;
         $params['all']      = 1;
 
-		if($version)
-		{
-			$lastCommit = $this->getSingleCommit($version);
-			$params['until'] = $lastCommit->committed_date;
-		}
+        if($version)
+        {
+            $lastCommit = $this->getSingleCommit($version);
+            if(empty($lastCommit)) return array();
+            $params['until'] = $lastCommit->committed_date;
+        }
 
         $list = $this->fetch($api, $params);
 
@@ -514,42 +515,42 @@ class gitlab
             $log->revision  = $commit->id;
             $log->comment   = $commit->message;
             $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
-            
+
             $commits[$commit->id] = $log;
-            $files[$commit->id]   = $this->getFilesByCommit($log->revision);                          
+            $files[$commit->id]   = $this->getFilesByCommit($log->revision);
         }
 
         return array('commits' => $commits, 'files' => $files);
     }
 
-	/**
-	 * getCommit 
-	 * 
-	 * @param  int    $sha 
-	 * @access public
-	 * @return void
-	 */
-	public function getSingleCommit($sha)
-	{
+    /**
+     * getCommit
+     *
+     * @param  int    $sha
+     * @access public
+     * @return void
+     */
+    public function getSingleCommit($sha)
+    {
         if(!scm::checkRevision($sha)) return null;
         $api = "commits/$sha";
-		return $this->fetch($api);
-	}
+        return $this->fetch($api);
+    }
 
-	/**
-	 * Get commits by path.
-	 * 
-	 * @param  string    $path 
-	 * @access public
-	 * @return array
-	 */
-	public function getCommitsByPath($path, $fromRevision = '', $toRevision = '')
-	{
+    /**
+     * Get commits by path.
+     *
+     * @param  string    $path
+     * @access public
+     * @return array
+     */
+    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '')
+    {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
-		$api = "commits";
+        $api = "commits";
 
-		$param = new stdclass();  
-		$param->path     = urldecode($path);
+        $param = new stdclass();
+        $param->path     = urldecode($path);
         $param->ref_name = $this->branch;
 
         if($fromRevision) $fromRevision = $this->getSingleCommit($fromRevision);
@@ -566,13 +567,13 @@ class gitlab
         $param->since = $since;
         $param->until = $until;
 
-		return $this->fetch($api, $param);
-	}
+        return $this->fetch($api, $param);
+    }
 
     /**
      * Get files by commit.
-     * 
-     * @param  string    $commit 
+     *
+     * @param  string    $commit
      * @access public
      * @return void
      */
@@ -598,7 +599,7 @@ class gitlab
             $file->revision = $revision;
             $file->path     = '/' . $row->new_path;
             $file->type     = 'file';
-    
+
             $file->action   = 'M';
             if($row->new_file) $file->action = 'A';
             if($row->renamed_file) $file->action = 'R';
@@ -611,9 +612,9 @@ class gitlab
 
     /**
      * Repository/tree api.
-     * 
-     * @param  string    $path 
-     * @param  bool      $recursive 
+     *
+     * @param  string    $path
+     * @param  bool      $recursive
      * @access public
      * @return void
      */
@@ -630,8 +631,8 @@ class gitlab
 
     /**
      * Fetch data from gitlab api.
-     * 
-     * @param  string    $api 
+     *
+     * @param  string    $api
      * @access public
      * @return void
      */
@@ -640,7 +641,7 @@ class gitlab
         $params = (array) $params;
         $params['private_token'] = $this->token;
 
-		$api = ltrim($api, '/');
+        $api = ltrim($api, '/');
         $api = $this->root . $api . '?' . http_build_query($params);
 
         $response = file_get_contents($api);
@@ -649,24 +650,24 @@ class gitlab
 
     /**
      * Format bytes shown.
-     * 
-     * @param  int    $size 
+     *
+     * @param  int    $size
      * @static
      * @access public
      * @return string
      */
     public static function formatBytes($size)
-    {   
-		if($size < 1024) return $size . 'Bytes';
+    {
+        if($size < 1024) return $size . 'Bytes';
         if(round($size / (1024 * 1024), 2) > 1) return round($size / (1024 * 1024), 2) . 'G';
-		if(round($size / 1024, 2) > 1) return round($size / 1024, 2) . 'M';
-		return round($size, 2) . 'KB';
-    }  
+        if(round($size / 1024, 2) > 1) return round($size / 1024, 2) . 'M';
+        return round($size, 2) . 'KB';
+    }
 
     /**
      * Parse log.
-     * 
-     * @param  array  $logs 
+     *
+     * @param  array  $logs
      * @access public
      * @return array
      */
