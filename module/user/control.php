@@ -765,12 +765,25 @@ class user extends control
      */
     public function login($referer = '', $from = '')
     {
+        /* Check if you can operating on the folder. */
+        $canModifyDIR = true;
         if($this->user->checkTmp() === false)
+        {
+            $canModifyDIR = false;
+            $floderPath   = $this->app->tmpRoot;
+        }
+        elseif(!is_dir($this->app->dataRoot) or substr(base_convert(@fileperms($this->app->dataRoot),10,8),-4) != '0777')
+        {
+            $canModifyDIR = false;
+            $floderPath   = $this->app->dataRoot;
+        }
+
+        if(!$canModifyDIR)
         {
             echo "<html><head><meta charset='utf-8'></head>";
             echo "<body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>";
-            echo "<div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>{$this->app->tmpRoot}</strong>是否存在并有操作权限。</div>";
-            echo "<div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>{$this->app->tmpRoot}</strong> exists and has permission to operate.</div>";
+            echo "<div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>{$floderPath}</strong>是否存在并有操作权限。</div>";
+            echo "<div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>{$floderPath}</strong> exists and has permission to operate.</div>";
             die("</td></tr></table></body></html>");
         }
         $this->setReferer($referer);
