@@ -1151,6 +1151,11 @@ class executionModel extends model
             $module = 'execution';
             $method = 'story';
         }
+        if($module == 'product' and $method == 'showerrornone')
+        {
+            $module = 'execution';
+            $method = 'task';
+        }
 
         if($module == 'execution' and $method == 'create') return;
         if($extra != '')
