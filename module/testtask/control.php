@@ -100,7 +100,7 @@ class testtask extends control
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
-        $this->loadModel('qa')->setMenu($this->products, $productID, $branch);
+        $this->loadModel('qa')->setMenu($this->products, $productID, $branch, $type);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
