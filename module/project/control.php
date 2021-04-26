@@ -400,6 +400,14 @@ class project extends control
 
         if($_POST)
         {
+            $oldPlans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('plan');
+            $oldPlanStories = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
+                ->where('t1.project')->eq($projectID)
+                ->andWhere('t2.plan')->in(array_keys($oldPlans))
+                ->fetchAll('story');
+            $diffResult = array_diff($oldPlans, $_POST['plans']);
+
             $changes = $this->project->update($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -407,6 +415,31 @@ class project extends control
             {
                 $actionID = $this->action->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
+            }
+
+            /* Link the plan stories. */
+            if(!empty($_POST['plans']) and !empty($diffResult))
+            {
+                $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->in(array_keys($oldPlanStories))->exec();
+                foreach($_POST['plans'] as $planID)
+                {
+                    $planStories = $planProducts = array();
+                    $planStory   = $this->loadModel('story')->getPlanStories($planID);
+                    if(!empty($planStory))
+                    {
+                        foreach($planStory as $id => $story)
+                        {
+                            if($story->status == 'draft')
+                            {
+                                unset($planStory[$id]);
+                                continue;
+                            }
+                            $planProducts[$story->id] = $story->product;
+                        }
+                        $planStories = array_keys($planStory);
+                        $this->execution->linkStory($projectID, $planStories, $planProducts);
+                    }
+                }
             }
 
             $locateLink = $this->session->projectList ? $this->session->projectList : inLink('view', "projectID=$projectID");
