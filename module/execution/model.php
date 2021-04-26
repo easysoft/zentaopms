@@ -840,7 +840,7 @@ class executionModel extends model
      */
     public function getSwitcher($executionID, $currentModule, $currentMethod)
     {
-        if(in_array($currentMethod,  array('index', 'all', 'batchedit', 'create'))) return;
+        if($currentModule == 'execution' and in_array($currentMethod,  array('index', 'all', 'batchedit', 'create'))) return;
 
         $currentExecutionName = $this->lang->execution->common;
         if($executionID)
