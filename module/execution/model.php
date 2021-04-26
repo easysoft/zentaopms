@@ -69,6 +69,14 @@ class executionModel extends model
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
 
+        if($execution->type == 'stage')
+        {
+            global $lang;
+            $this->loadModel('execution');
+            $lang->executionCommon = $lang->project->stage;
+            include $this->app->getModulePath('execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
+
         if($execution and $execution->lifetime == 'ops')
         {
             unset($this->lang->execution->menu->story);
