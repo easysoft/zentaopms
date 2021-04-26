@@ -38,6 +38,16 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
   </div>
 </div>
 <div id='mainContent' class="main-row fade">
+  <?php if(empty($executionStats)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $from == 'execution' ? $lang->execution->noExecutions : $lang->execution->noExecution;?></span>
+      <?php if(common::hasPriv('execution', 'create')):?>
+      <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-info' data-app='$from'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
   <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table'>
     <table class='table has-sort-head table-fixed' id='executionList'>
@@ -154,6 +164,7 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
     </div>
     <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <script>
 $("#<?php echo $status;?>Tab").addClass('btn-active-text');

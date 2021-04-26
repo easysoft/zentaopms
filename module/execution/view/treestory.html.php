@@ -41,12 +41,12 @@
       <tbody>
       <tr>
         <th class='w-100px'><?php echo $lang->story->product;?></th>
-        <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name);?></td>
+        <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name, '', "data-app='product'");?></td>
       </tr>
       <?php if($product->type != 'normal'):?>
         <tr>
           <th><?php echo sprintf($lang->product->branch, zget($lang->product->branchName, $product->type));?></th>
-          <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch]);?></td>
+          <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch], '', "data-app='product'");?></td>
         </tr>
       <?php endif;?>
       <tr>

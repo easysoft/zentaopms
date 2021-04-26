@@ -203,7 +203,7 @@ class todoModel extends model
             ->setIF($this->post->end   == false, 'end', '2400')
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
-            ->remove(implode(',', $this->config->todo->moduleList) . 'uid')
+            ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
         if($todo->end < $todo->begin)

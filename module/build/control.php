@@ -234,7 +234,7 @@ class build extends control
         $this->view->storyPager    = $storyPager;
 
         $generatedBugPager = new pager($type == 'generatedBug' ? $recTotal : 0, $recPerPage, $type == 'generatedBug' ? $pageID : 1);
-        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->id, '', 0, $type == 'generatedBug' ? $orderBy : 'status_desc,id_desc', '', $generatedBugPager);
+        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, $build->id, $type, $type == 'generatedBug' ? $orderBy : 'status_desc,id_desc', '', $generatedBugPager);
         $this->view->generatedBugPager = $generatedBugPager;
 
         $this->executeHooks($buildID);
@@ -334,7 +334,7 @@ class build extends control
     }
 
     /**
-     * AJAX: get builds of a execution in html select.
+     * AJAX: get builds of an execution in html select.
      *
      * @param  int    $executionID
      * @param  string $varName      the name of the select object to create
@@ -585,7 +585,7 @@ class build extends control
         }
         else
         {
-            $allBugs = $this->bug->getExecutionBugs($build->execution, 0, 'noclosed', 0, 'status_desc,id_desc', $build->bugs, $pager);
+            $allBugs = $this->bug->getExecutionBugs($build->execution, 0, $buildID, 'noclosed', 0, 'status_desc,id_desc', $build->bugs, $pager);
         }
 
         $this->view->allBugs    = $allBugs;

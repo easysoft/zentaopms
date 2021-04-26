@@ -277,7 +277,7 @@ $lang->execution->howToUpdateBurn     = "<a href='http://api.zentao.net/goto.php
 $lang->execution->whyNoStories        = "Keine Story kann verknüpft werden. Bitte prüfen Sie ob ein Story mit {$lang->executionCommon} verknüpft ist {$lang->productCommon} und stellen Sie sicher das diese geprüft ist.";
 $lang->execution->productStories      = "{$lang->executionCommon} verknüpfte Story ist ein Subset von {$lang->productCommon}, welche nur nach überprüfung verknüpft werden kann. Bitte <a href='%s'> Story verknüpfen</a>。";
 $lang->execution->haveDraft           = "There are %s draft stories can't be linked.";
-$lang->execution->doneExecutions        = 'Erledigt';
+$lang->execution->doneExecutions      = 'Erledigt';
 $lang->execution->selectDept          = 'Abteilung wählen';
 $lang->execution->selectDeptTitle     = 'Abteilung wählen';
 $lang->execution->copyTeam            = 'Team kopieren';
@@ -285,12 +285,13 @@ $lang->execution->copyFromTeam        = "Kopieren von {$lang->executionCommon} T
 $lang->execution->noMatched           = "$lang->executionCommon mit '%s' konnte nicht gefunden werden.";
 $lang->execution->copyTitle           = "Wählen Sie ein {$lang->executionCommon} zum Kopieren.";
 $lang->execution->copyTeamTitle       = "Wählen Sie ein {$lang->executionCommon} Team zum Kopieren.";
-$lang->execution->copyNoExecution       = "{$lang->executionCommon} kann nicht kopiert werden.";
-$lang->execution->copyFromExecution     = "Kopie von {$lang->executionCommon} <strong>%s</strong>";
+$lang->execution->copyNoExecution     = "{$lang->executionCommon} kann nicht kopiert werden.";
+$lang->execution->copyFromExecution   = "Kopie von {$lang->executionCommon} <strong>%s</strong>";
 $lang->execution->cancelCopy          = 'Kopieren abbrechen';
 $lang->execution->byPeriod            = 'Nach Zeit';
 $lang->execution->byUser              = 'Nach Benutzer';
-$lang->execution->noExecution           = 'Keine Projekte. ';
+$lang->execution->noExecution         = 'Keine Projekte. ';
+$lang->execution->noExecutions        = "No {$lang->execution->common}.";
 $lang->execution->noMembers           = 'Keine Mitglieder. ';
 $lang->execution->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 $lang->execution->linkPRJStoryTip     = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the project)";

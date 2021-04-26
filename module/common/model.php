@@ -295,7 +295,7 @@ class commonModel extends model
 
             echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
             echo "<div id='main-avatar' class='avatar avatar bg-secondary avatar-circle'>";
-            echo $app->user->avatar ? html::image($app->user->avatar) : strtoupper($app->user->account[0]);
+            echo !empty($app->user->avatar) ? html::image($app->user->avatar) : strtoupper($app->user->account[0]);
             echo "</div>\n";
             echo '</a>';
             echo "<ul class='dropdown-menu pull-right'>";

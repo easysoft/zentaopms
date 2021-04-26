@@ -92,7 +92,7 @@
         <td><?php echo $case->stepNumber;?></td>
         <td class='c-actions'>
           <?php common::printIcon('testcase', 'edit', "caseID=$case->id", $case, 'list');?>
-          <?php common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'list', '', 'hiddenwin');?>
+          <?php common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'list', 'trash', 'hiddenwin');?>
         </td>
       </tr>
       <?php $i++;?>

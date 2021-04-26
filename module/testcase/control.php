@@ -125,7 +125,7 @@ class testcase extends control
             $this->qa->setMenu($this->products, $productID, $branch);
         }
 
-        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->openApp);
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
@@ -228,7 +228,7 @@ class testcase extends control
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', '', $branch);
         }
 
-        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->openApp);
 
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
@@ -617,8 +617,6 @@ class testcase extends control
             }
         }
 
-        $product   = $this->product->getByID($case->product);
-        $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($case->product);
         $isLibCase = ($case->lib and empty($case->product));
         if($isLibCase)
         {
@@ -633,6 +631,9 @@ class testcase extends control
         else
         {
             $productID = $case->product;
+            $product   = $this->product->getByID($productID);
+            $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+
             if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
             if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
             if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
@@ -640,6 +641,8 @@ class testcase extends control
             $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
             $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
+            $this->view->product     = $product;
+            $this->view->branches    = $branches;
             $this->view->productName = $this->products[$productID];
             $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
@@ -659,7 +662,6 @@ class testcase extends control
         $this->view->case       = $case;
         $this->view->from       = $from;
         $this->view->taskID     = $taskID;
-        $this->view->product    = $product;
         $this->view->version    = $version ? $version : $case->version;
         $this->view->modulePath = $this->tree->getParents($case->module);
         $this->view->caseModule = empty($case->module) ? '' : $this->tree->getById($case->module);
@@ -669,7 +671,6 @@ class testcase extends control
         $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
         $this->view->isLibCase  = $isLibCase;
         $this->view->caseFails  = $caseFails;
-        $this->view->branches   = $branches;
 
         $this->display();
     }
@@ -1522,7 +1523,7 @@ class testcase extends control
             $file = $file[0];
 
             $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
-            move_uploaded_file($file['tmpname'], $fileName);
+            helper::saveFile($file['tmpname'], $fileName);
 
             $rows   = $this->file->parseCSV($fileName);
             $fields = $this->testcase->getImportFields($productID);

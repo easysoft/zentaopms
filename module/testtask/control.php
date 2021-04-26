@@ -297,7 +297,11 @@ class testtask extends control
 
         if($this->app->openApp == 'project')
         {
-            $this->loadModel('project')->setMenu($this->session->project);
+            $this->loadModel('project')->setMenu($task->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
         }
         elseif($this->app->openApp == 'qa')
         {
@@ -449,7 +453,11 @@ class testtask extends control
         $productID = $task->product;
         if($this->app->openApp == 'project')
         {
-            $this->loadModel('project')->setMenu($this->session->project);
+            $this->loadModel('project')->setMenu($task->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
         }
         else
         {
@@ -553,10 +561,11 @@ class testtask extends control
         $this->loadModel('report');
         $this->view->charts = array();
 
+        $task = $this->testtask->getById($taskID);
+
         if(!empty($_POST))
         {
             $this->app->loadLang('testcase');
-            $task    = $this->testtask->getById($taskID);
             $bugInfo = $this->testtask->getBugInfo($taskID, $productID);
             foreach($this->post->charts as $chart)
             {
@@ -570,7 +579,19 @@ class testtask extends control
             }
         }
 
-        $this->loadModel('qa')->setMenu($this->products, $productID, $branchID, $taskID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($task->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID, $branchID, $taskID);
+        }
+
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
         $this->view->position[]    = html::a($this->createLink('testtask', 'cases', "taskID=$taskID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->testtask->reportChart;
@@ -606,7 +627,18 @@ class testtask extends control
         $task    = $this->testtask->getById($taskID);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
-        $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
+        }
+        else
+        {
+            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+        }
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canBeChanged('testtask', $task);
@@ -692,8 +724,12 @@ class testtask extends control
         {
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
-            $this->loadModel('project')->setMenu($this->session->project);
+            $this->loadModel('project')->setMenu($task->project);
             $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
         }
         else
         {
@@ -959,7 +995,11 @@ class testtask extends control
         /* Save session. */
         if($this->app->openApp == 'project')
         {
-            $this->loadModel('project')->setMenu($this->session->project);
+            $this->loadModel('project')->setMenu($task->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($task->execution);
         }
         else
         {
