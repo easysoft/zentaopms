@@ -84,7 +84,7 @@
           echo html::a($link, $info->name, '', "title='{$info->name}' data-app={$app->openApp}");
           ?>
           </td>
-          <td align='center'><?php echo $repo->SCM == 'Git' ? substr($info->revision, 0, 10) : $info->revision;?></td>
+          <td align='center'><?php echo $repo->SCM == 'Subversion' ? $info->revision : substr($info->revision, 0, 10);?></td>
           <td><?php echo substr($info->date, 0, 10)?></td>
           <td><?php echo $info->committer?></td>
           <?php $comment = htmlspecialchars($info->comment, ENT_QUOTES);?>
