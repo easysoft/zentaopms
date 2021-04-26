@@ -868,6 +868,7 @@ class actionModel extends model
     public function transformActions($actions)
     {
         $this->app->loadLang('todo');
+        $requirements = array();
 
         /* Get commiters. */
         $commiters = $this->loadModel('user')->getCommiters();
@@ -900,6 +901,16 @@ class actionModel extends model
                         $objectName[$object->id]    = $object->name;
                         $objectProject[$object->id] = $object->project > 0 ? $object->project : $object->id;
                     }
+                }
+                elseif($objectType == 'story')
+                {
+                    $objectInfo  = $this->dao->select('id,title,type')->from($table)->where('id')->in($objectIds)->fetchAll();
+                    foreach($objectInfo as $object)
+                    {
+                        $objectName[$object->id] = $object->title;
+                        if($object->type == 'requirement') $requirements[$object->id] = $object->id;
+                    }
+                    $objectProject = array();
                 }
                 else
                 {
@@ -946,6 +957,10 @@ class actionModel extends model
             if(isset($this->lang->action->label->$objectType))
             {
                 $objectLabel = $this->lang->action->label->$objectType;
+
+                /* Replace story to requirement. */
+                if(in_array($action->objectID, $requirements)) $objectLabel = str_replace($this->lang->SRCommon, $this->lang->URCommon, $objectLabel);
+
                 if(!is_array($objectLabel)) $action->objectLabel = $objectLabel;
                 if(is_array($objectLabel) and isset($objectLabel[$actionType])) $action->objectLabel = $objectLabel[$actionType];
             }
