@@ -193,6 +193,7 @@ class projectrelease extends control
     public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->session->set('buildList', $this->app->getURI(true), 'execution');
+        $this->session->set('storyList', $this->app->getURI(true), $this->app->openApp);
 
         $this->loadModel('story');
         $this->loadModel('bug');
