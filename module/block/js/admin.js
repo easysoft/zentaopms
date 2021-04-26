@@ -15,7 +15,8 @@ $(function()
         }
         else
         {
-            var lang = config.clientLang;
+            var lang   = config.clientLang;
+            blockTitle = $blockParams.find('#title').val();
             if(lang.indexOf('zh') >= 0)
             {
                 if(blockTitle.indexOf(preValue) >= 0)

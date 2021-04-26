@@ -69,6 +69,14 @@ class executionModel extends model
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
 
+        if($execution->type == 'stage')
+        {
+            global $lang;
+            $this->loadModel('execution');
+            $lang->executionCommon = $lang->project->stage;
+            include $this->app->getModulePath('execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
+
         if($execution and $execution->lifetime == 'ops')
         {
             unset($this->lang->execution->menu->story);
@@ -387,10 +395,10 @@ class executionModel extends model
             $this->app->loadLang('doc');
             $lib = new stdclass();
             $lib->execution = $executionID;
-            $lib->name    = $this->lang->doclib->main['execution'];
-            $lib->type    = 'execution';
-            $lib->main    = '1';
-            $lib->acl     = 'default';
+            $lib->name      = $type == 'stage' ? str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doclib->main['execution']) : $this->lang->doclib->main['execution'];
+            $lib->type      = 'execution';
+            $lib->main      = '1';
+            $lib->acl       = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $whitelist = explode(',', $sprint->whitelist);

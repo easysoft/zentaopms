@@ -2044,6 +2044,13 @@ class execution extends control
             if($unresolvedBugs->count)  $tips .= sprintf($this->lang->execution->unresolvedBug,  $unresolvedBugs->count);
             if($tips)                   $tips  = $this->lang->execution->unfinishedExecution . $tips;
 
+            $type = $this->dao->select('type')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('type');
+            if($type == 'stage')
+            {
+                if($tips) $tips = str_replace($this->lang->executionCommon, $this->lang->project->stage, $tips);
+                $this->lang->execution->confirmDelete = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->confirmDelete);
+            }
+
             echo js::confirm($tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes"));
             exit;
         }
@@ -2816,6 +2823,10 @@ class execution extends control
             $this->post->set('kind', 'execution');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
+
+        $this->loadModel('project');
+        $project = $this->project->getByID($this->session->project);
+        if($project->model == 'waterfall') $this->lang->executionCommon = $this->lang->project->stage;
 
         $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->executionCommon;
 

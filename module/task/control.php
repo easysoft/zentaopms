@@ -677,7 +677,7 @@ class task extends control
 
         /* Set menu. */
         $execution = $this->execution->getById($task->execution);
-        $this->execution->setMenu($execution->id);
+        if($this->app->openApp == 'execution') $this->execution->setMenu($execution->id);
 
         $this->executeHooks($taskID);
 

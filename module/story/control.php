@@ -1195,18 +1195,25 @@ class story extends control
             $this->view->position[] = html::a($this->createLink('execution', 'story', "executionID=$execution->id"), $execution->name);
             $this->view->title      = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
         }
-        /* The stories of my. */
         else
         {
-            $this->lang->story->menu      = $this->lang->my->menu;
-            $this->lang->story->menuOrder = $this->lang->my->menuOrder;
-            $this->loadModel('my')->setMenu();
+            if($this->app->openApp == 'project')
+            {
+                $this->project->setMenu($this->session->project);
+                $this->view->title = $this->lang->story->batchEdit;
+            }
+            else
+            {
+                $this->lang->story->menu      = $this->lang->my->menu;
+                $this->lang->story->menuOrder = $this->lang->my->menuOrder;
+                $this->loadModel('my')->setMenu();
 
-            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
-            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
+                if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
+                if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
 
-            $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
-            $this->view->title      = $this->lang->story->batchEdit;
+                $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
+                $this->view->title      = $this->lang->story->batchEdit;
+            }
         }
 
         /* Judge whether the editedStories is too large and set session. */
