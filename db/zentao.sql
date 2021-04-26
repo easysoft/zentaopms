@@ -751,6 +751,7 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `synced` tinyint(1) NOT NULL DEFAULT '0',
   `lastSync` datetime NOT NULL,
   `desc` text NOT NULL,
+  `extra` char(30) NOT NULL,
   `deleted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
