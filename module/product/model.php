@@ -74,7 +74,7 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0, $module = 0, $moduleType = '', $withBranch = true)
     {
-        $isBrowseBug = (strpos(',project,execution,', ",{$this->app->openApp},") !== false and strpos(',bug,testcase,testtask,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
+        $isBrowseBug = (strpos(',project,execution,', ",{$this->app->openApp},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
 
         $this->app->loadLang('product');
         if(!$isBrowseBug and !$productID)
@@ -1574,6 +1574,10 @@ class productModel extends model
             elseif($module == 'story' && $method == 'report')
             {
                 $link = helper::createLink($module, 'report', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&extra=$extra");
+            }
+            elseif($module == 'testtask')
+            {
+                $link = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&extra=$extra");
             }
             elseif($module == 'bug' && $method == 'view')
             {

@@ -61,7 +61,7 @@
 
         echo "<div id='bysuiteTab' class='btn-group'>";
         echo html::a('javascript:;', "<span class='text'>{$currentLable}</span>" . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
-        if(common::canModify('product', $product))
+        if(empty($productID) or common::canModify('product', $product))
         {
             echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
 
@@ -130,7 +130,7 @@
       </ul>
     </div>
     <?php endif;?>
-    <?php if(common::canModify('product', $product)):?>
+    <?php if(empty($productID) or common::canModify('product', $product)):?>
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
@@ -180,7 +180,7 @@
       </ul>
       <?php endif;?>
     </div>
-    <?php if($this->app->rawMethod == 'browseunits' and common::canModify('product', $product)):?>
+    <?php if($this->app->rawMethod == 'browseunits' and (empty($productID) or common::canModify('product', $product))):?>
       <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary' data-app='{$this->app->openApp}'");?>
     <?php endif;?>
     <?php else:?>
