@@ -75,7 +75,7 @@
             <th><?php echo $lang->product->acl;?></th>
             <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->product->aclList, 'private', "onclick='setWhite(this.value);'", 'block'));?></td>
           </tr>
-          <tr class="hidden" id="whitelistBox">
+          <tr id="whitelistBox">
             <th><?php echo $lang->whitelist;?></th>
             <td><?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?></td>
             <td></td>
