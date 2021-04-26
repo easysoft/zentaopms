@@ -13,12 +13,6 @@
 <?php if(empty($totalData)): ?>
 <div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
-<style>
-.table {margin-bottom: 12px;}
-.table thead tr th {padding-left: 0; text-align: right; border-bottom: unset;}
-.table tbody tr td {padding-left: 0;}
-.table tbody tr th {text-align: right;}
-</style>
 <table class="table table-data">
   <thead>
     <tr>
