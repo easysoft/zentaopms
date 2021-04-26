@@ -443,6 +443,7 @@ class project extends control
             }
 
             $locateLink = $this->session->projectList ? $this->session->projectList : inLink('view', "projectID=$projectID");
+            if($from == 'projectView')    $locateLink = $this->createLink('project', 'view', "projectID=$projectID");
             if($from == 'program')        $locateLink = $this->createLink('program', 'browse');
             if($from == 'programProject') $locateLink = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
