@@ -273,7 +273,7 @@ class project extends control
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
             /* Link the plan stories. */
-            if($_POST['plans'])
+            if(!empty($_POST['plans']))
             {
                 foreach($_POST['plans'] as $planID)
                 {
