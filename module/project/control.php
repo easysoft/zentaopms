@@ -272,6 +272,30 @@ class project extends control
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
+            /* Link the plan stories. */
+            if($_POST['plans'])
+            {
+                foreach($_POST['plans'] as $planID)
+                {
+                    $planStories = $planProducts = array();
+                    $planStory   = $this->loadModel('story')->getPlanStories($planID);
+                    if(!empty($planStory))
+                    {
+                        foreach($planStory as $id => $story)
+                        {
+                            if($story->status == 'draft')
+                            {
+                                unset($planStory[$id]);
+                                continue;
+                            }
+                            $planProducts[$story->id] = $story->product;
+                        }
+                        $planStories = array_keys($planStory);
+                        $this->execution->linkStory($projectID, $planStories, $planProducts);
+                    }
+                }
+            }
+
             if($this->app->openApp == 'program')
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
