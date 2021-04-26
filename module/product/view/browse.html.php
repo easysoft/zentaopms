@@ -81,9 +81,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     </div>
     <?php endif;?>
     <?php
-    $this->moduleName = $this->app->rawModule;
-    $this->methodName = $this->app->rawMethod;
-    foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
+    foreach(customModel::getFeatureMenu($this->app->rawModule, $this->app->rawMethod) as $menuItem)
     {
         if(isset($menuItem->hidden)) continue;
         if($menuItem->name == 'emptysr' && $storyType == 'story') continue;
