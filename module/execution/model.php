@@ -387,10 +387,10 @@ class executionModel extends model
             $this->app->loadLang('doc');
             $lib = new stdclass();
             $lib->execution = $executionID;
-            $lib->name    = $this->lang->doclib->main['execution'];
-            $lib->type    = 'execution';
-            $lib->main    = '1';
-            $lib->acl     = 'default';
+            $lib->name      = $type == 'stage' ? str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doclib->main['execution']) : $this->lang->doclib->main['execution'];
+            $lib->type      = 'execution';
+            $lib->main      = '1';
+            $lib->acl       = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $whitelist = explode(',', $sprint->whitelist);
