@@ -69,7 +69,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
       <thead>
         <tr>
           <td class='w-70px'><?php echo $lang->repo->revision?></td>
-          <?php if($repo->SCM == 'Git'):?>
+          <?php if($repo->SCM != 'Subversion'):?>
           <td class='w-50px'><?php echo $lang->repo->commit?></td>
           <?php endif;?>
           <td class='w-100px'><?php echo $lang->repo->committer?></td>
@@ -85,9 +85,9 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
           {
               $rowspan = $blame['lines'];
               echo '<td rowspan="' . $rowspan . '" class="info" title="' . $blame['revision'] . '">';
-              echo $repo->SCM == 'Git' ? substr($blame['revision'], 0, 10) : $blame['revision'];
+              echo $repo->SCM != 'Subversion' ? substr($blame['revision'], 0, 10) : $blame['revision'];
               echo '</td>';
-              if($repo->SCM == 'Git') echo '<td rowspan="' . $rowspan . '" class="info">' . zget($historys, $blame['revision'], '') . '</td>';
+              if($repo->SCM != 'Subversion') echo '<td rowspan="' . $rowspan . '" class="info">' . zget($historys, $blame['revision'], '') . '</td>';
               echo '<td rowspan="' . $rowspan . '" class="info">' . $blame['committer'] . '</td>';
           }
           ?>

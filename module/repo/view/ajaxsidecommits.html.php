@@ -20,7 +20,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
       <tr>
         <th class='w-40px'></th>
         <th class='w-80px'><?php echo $lang->repo->revisionA?></th>
-        <?php if($repo->SCM == 'Git'):?>
+        <?php if($repo->SCM != 'Subversion'):?>
         <th class='w-70px'><?php echo $lang->repo->commit?></th>
         <?php endif;?>
         <th class='w-80px'><?php echo $lang->repo->time?></th>
@@ -37,8 +37,8 @@ if(isset($entry)) $pathInfo .= '&type=file';
             <label></label>
           </div>
         </td>
-        <td class='versions'><span class="revision"><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$log->revision}" . $pathInfo), $repo->SCM == 'Git' ? substr($log->revision, 0, 10) : $log->revision, '', "data-app='{$this->app->openApp}'");?></span></td>
-        <?php if($repo->SCM == 'Git'):?>
+        <td class='versions'><span class="revision"><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$log->revision}" . $pathInfo), $repo->SCM != 'Subversion' ? substr($log->revision, 0, 10) : $log->revision, '', "data-app='{$this->app->openApp}'");?></span></td>
+        <?php if($repo->SCM != 'Subversion'):?>
         <td><?php echo $log->commit?></td>
         <?php endif;?>
         <td><?php echo substr($log->time, 0, 10);?></td>

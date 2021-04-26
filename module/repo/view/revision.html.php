@@ -23,7 +23,7 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
     <?php echo html::a($browseLink, "<i class='icon icon-back'></i>" . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");?>
     <div class="divider"></div>
     <div class="page-title">
-      <?php echo $lang->repo->revisionA . ' ' . ($repo->SCM == 'Git' ? $this->repo->getGitRevisionName($revision, $log->commit) : $revision);?>
+      <?php echo $lang->repo->revisionA . ' ' . ($repo->SCM == 'Subversion' ? $revision : $this->repo->getGitRevisionName($revision, $log->commit));?>
     </div>
   </div>
 </div>
@@ -63,7 +63,7 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
               <th><?php echo $lang->repo->revisionA?></th>
               <td><?php echo $log->revision?></td>
             </tr>
-            <?php if($repo->SCM == 'Git'):?>
+            <?php if($repo->SCM != 'Subversion'):?>
             <tr>
               <th><?php echo $lang->repo->commit?></th>
               <td><?php echo $log->commit?></td>

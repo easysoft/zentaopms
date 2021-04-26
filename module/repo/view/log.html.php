@@ -53,7 +53,7 @@
         <tr>
           <th class='w-40px'></th>
           <th class='w-110px'><?php echo $lang->repo->revision?></th>
-          <?php if($repo->SCM == 'Git'):?>
+          <?php if($repo->SCM != 'Subversion'):?>
           <th class='w-90px'><?php echo $lang->repo->commit?></th>
           <?php endif;?>
           <th class='w-150px'><?php echo $lang->repo->date?></th>
@@ -71,7 +71,7 @@
             </div>
           </td>
           <td class='versions'><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision=" . $log->revision), substr($log->revision, 0, 10), '', "data-app='{$app->openApp}'");?></td>
-          <?php if($repo->SCM == 'Git'):?>
+          <?php if($repo->SCM != 'Subversion'):?>
           <td><?php echo $log->commit?></td>
           <?php endif;?>
           <td><?php echo $log->time;?></td>
