@@ -1465,13 +1465,12 @@ class project extends control
     /**
      * Manage products.
      *
-     * @param  int     $projectID
-     * @param  int     $programID
+     * @param  int    $projectID
      * @param  string $from  project|program|programproject
      * @access public
      * @return void
      */
-    public function manageProducts($projectID, $programID = 0, $from = 'project')
+    public function manageProducts($projectID, $from = 'project')
     {
         $this->loadModel('product');
         $this->loadModel('program');
@@ -1510,9 +1509,9 @@ class project extends control
             $this->project->setMenu($projectID);
         }
 
-        $allProducts        = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts     = $this->product->getProducts($project->id);
-        $linkedBranches     = array();
+        $allProducts    = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
+        $linkedProducts = $this->product->getProducts($project->id);
+        $linkedBranches = array();
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
         $unmodifiableProducts = array();
