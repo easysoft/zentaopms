@@ -53,8 +53,12 @@ function loadList(type, id)
     {
         link = createLink('review', 'ajaxGetUserReviews', param);
     }
+    else if(type == 'feedback')
+    {
+        link = createLink('feedback', 'ajaxGetUserFeedback', param);
+    }
 
-    if(type == 'bug' || type == 'task' || type == 'story' || type == 'issue' || type == 'risk' || type == 'testtask' || type == 'review' )
+    if(type == 'bug' || type == 'task' || type == 'story' || type == 'issue' || type == 'risk' || type == 'testtask' || type == 'review' || type == 'feedback')
     {
         $.get(link, function(data, status)
         {
