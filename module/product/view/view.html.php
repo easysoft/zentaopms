@@ -26,7 +26,7 @@
           </div>
           <?php if($product->type == 'platform'):?>
           <div class="detail">
-          <div class="detail-title"><strong><?php echo $lang->product->branchName['platform'];?></strong><a class="btn btn-link pull-right muted"><i class="icon icon-more icon-sm"></i></a></div>
+          <div class="detail-title"><strong><?php echo $lang->product->branchName['platform'];?></strong><a class="btn btn-link pull-right muted" href="<?php echo $this->createLink('branch', 'manage', "productID={$product->id}")?>"><i class="icon icon-more icon-sm"></i></a></div>
             <div class="detail-content">
               <ul class="clearfix branch-list">
                 <?php foreach($branches as $branchName):?>

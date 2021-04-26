@@ -544,7 +544,7 @@ function notice()
     if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
-        if($('#execution').length == 0 || $('#execution').val() == '')
+        if($('#execution').length == 0 || $('#execution').val() == 0)
         {
             var branch = $('#branch').val();
             if(typeof(branch) == 'undefined') branch = 0;
