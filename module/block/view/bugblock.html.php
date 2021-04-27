@@ -53,7 +53,7 @@
       ?>
       <tr>
         <td class='c-id-xs'><?php echo sprintf('%03d', $bug->id);?></td>
-        <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', '', $bug->project), $bug->title)?></td>
+        <td class='c-name' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', "style='color: $bug->color'")?></td>
         <?php if($longBlock):?>
         <td class='c-severity'>
           <?php if($hasCustomSeverity):?>
