@@ -1549,7 +1549,7 @@ class productModel extends model
     public function getProductLink($module, $method, $extra, $branch = false)
     {
         $link = '';
-        if(strpos('programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory', ',' . $module . ',') !== false)
+        if(strpos(',programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory,', ',' . $module . ',') !== false)
         {
             if($module == 'product' && $method == 'project')
             {
@@ -1578,7 +1578,7 @@ class productModel extends model
             elseif($module == 'programplan')
             {
                 $extra = $extra ? $extra : 'gantt';
-                $link  = helper::createLink($module, 'browse', "projectID=%s&productID=%s&type=$extra" . ($branch ? "&branch=%s" : ''));
+                $link  = helper::createLink($module, 'browse', "projectID=%s&productID=%s&type=$extra");
             }
             elseif($module == 'story' && $method == 'report')
             {
