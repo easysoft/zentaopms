@@ -2841,6 +2841,10 @@ class execution extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $this->loadModel('project');
+        $project = $this->project->getByID($this->session->project);
+        if($project->model == 'waterfall') $this->lang->executionCommon = $this->lang->project->stage;
+
         $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->executionCommon;
 
         $this->display();

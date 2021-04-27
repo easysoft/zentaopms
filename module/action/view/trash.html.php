@@ -54,8 +54,8 @@
             $methodName = 'view';
             if($module == 'caselib')
             {
-                $methodName = 'libview';
-                $module     = 'testsuite';
+                $methodName = 'view';
+                $module     = 'caselib';
             }
             if(isset($config->action->customFlows[$action->objectType]))
             {
