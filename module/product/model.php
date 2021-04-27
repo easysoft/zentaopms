@@ -261,21 +261,36 @@ class productModel extends model
      *
      * @param  string $mode
      * @param  string $programID
+     * @param  string $orderBy   program_asc
      * @return array
      */
-    public function getPairs($mode = '', $programID = 0)
+    public function getPairs($mode = '', $programID = 0, $orderBy = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
-        $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-        $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
-            ->from(TABLE_PRODUCT)
-            ->where('deleted')->eq(0)
-            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
-            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
-            ->orderBy($orderBy)
-            ->fetchPairs('id', 'name');
+        if($orderBy == 'program_asc')
+        {
+            $products = $this->dao->select('t1.id as id, t1.name as name, t1.*, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+                ->where('t1.deleted')->eq(0)
+                ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
+                ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+                ->orderBy('t2.order_asc, t1.line_desc, t1.order_desc')
+                ->fetchPairs('id', 'name');
+        }
+        else
+        {
+            $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
+            $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
+                ->from(TABLE_PRODUCT)
+                ->where('deleted')->eq(0)
+                ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+                ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+                ->orderBy($orderBy)
+                ->fetchPairs('id', 'name');
+        }
         return $products;
     }
 
