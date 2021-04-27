@@ -40,7 +40,7 @@
           <th class='w-80px'><?php echo $lang->project->begin;?></th>
           <th class='w-80px'><?php echo $lang->project->end;?></th>
           <th class='w-70px'><?php echo $lang->project->status;?></th>
-          <th class="w-70px"><?php echo $lang->project->budget;?></th>
+          <th class="w-80px text-center"><?php echo $lang->project->budget;?></th>
           <th class="w-60px text-center"><?php echo $lang->project->estimate;?></th>
           <th class="w-60px text-center"><?php echo $lang->project->consume;?></th>
           <th class='w-50px'><?php echo $lang->project->progress;?></th>
@@ -78,7 +78,8 @@
           </td>
           <?php $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
           <?php $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;?>
-          <td title='<?php echo $budgetTitle;?>' class='text-ellipsis text-right padding-right'><?php echo $budgetTitle;?></td>
+          <?php $textStyle = $project->budget != 0 ? 'text-right' : 'text-center';?>
+          <td title='<?php echo $budgetTitle;?>' class="text-ellipsis <?php echo $textStyle;?>"><?php echo $budgetTitle;?></td>
           <td class="text-right padding-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
           <td class="text-right padding-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
           <td class='padding-right text-center'>
