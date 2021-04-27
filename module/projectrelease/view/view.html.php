@@ -146,7 +146,7 @@
 
                   if(common::hasPriv('story', 'batchClose'))
                   {
-                      $closeURL = $this->createLink('story', 'batchClose', "productID=$release->product");
+                      $closeURL = $this->createLink('story', 'batchClose');
                       echo html::a("###", $lang->story->batchClose, '', "onclick='setFormAction(\"$closeURL\", \"\", this)' class='btn'");
                   }
                   ?>

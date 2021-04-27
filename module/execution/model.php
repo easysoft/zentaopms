@@ -69,6 +69,15 @@ class executionModel extends model
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
 
+        if($execution->type == 'stage')
+        {
+            global $lang;
+            $this->loadModel('execution');
+            $this->app->loadLang('project');
+            $lang->executionCommon = $lang->project->stage;
+            include $this->app->getModulePath('execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
+
         if($execution and $execution->lifetime == 'ops')
         {
             unset($this->lang->execution->menu->story);
@@ -387,10 +396,10 @@ class executionModel extends model
             $this->app->loadLang('doc');
             $lib = new stdclass();
             $lib->execution = $executionID;
-            $lib->name    = $this->lang->doclib->main['execution'];
-            $lib->type    = 'execution';
-            $lib->main    = '1';
-            $lib->acl     = 'default';
+            $lib->name      = $type == 'stage' ? str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doclib->main['execution']) : $this->lang->doclib->main['execution'];
+            $lib->type      = 'execution';
+            $lib->main      = '1';
+            $lib->acl       = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $whitelist = explode(',', $sprint->whitelist);
@@ -840,7 +849,7 @@ class executionModel extends model
      */
     public function getSwitcher($executionID, $currentModule, $currentMethod)
     {
-        if(in_array($currentMethod,  array('index', 'all', 'batchedit', 'create'))) return;
+        if($currentModule == 'execution' and in_array($currentMethod,  array('index', 'all', 'batchedit', 'create'))) return;
 
         $currentExecutionName = $this->lang->execution->common;
         if($executionID)
@@ -1150,6 +1159,11 @@ class executionModel extends model
         {
             $module = 'execution';
             $method = 'story';
+        }
+        if($module == 'product' and $method == 'showerrornone')
+        {
+            $module = 'execution';
+            $method = 'task';
         }
 
         if($module == 'execution' and $method == 'create') return;
@@ -2114,7 +2128,7 @@ class executionModel extends model
 
         $this->loadModel('story')->setStage($storyID);
         $this->unlinkCases($executionID, $storyID);
-        $objectType = $executionID == $this->session->project ? unlinkedfromproject : unlinkedfromexecution;
+        $objectType = $executionID == $this->session->project ? 'unlinkedfromproject' : 'unlinkedfromexecution';
         $this->loadModel('action')->create('story', $storyID, $objectType, '', $executionID);
 
         $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->andWhere('status')->in('wait,doing')->fetchPairs('id');

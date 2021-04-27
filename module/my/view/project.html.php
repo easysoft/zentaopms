@@ -26,13 +26,6 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->project->empty;?></span>
-      <?php if(isset($this->config->maxVersion) and common::hasPriv('project', 'createGuide')):?>
-      <?php echo html::a($this->createLink('project', 'createGuide'), "<i class='icon icon-plus'></i> " . $lang->my->createProgram, '', "class='btn btn-info' data-toggle=modal");?>
-      <?php elseif($this->config->systemMode == 'new' and common::hasPriv('project', 'create')):?>
-      <?php echo html::a($this->createLink('project', 'create', 'mode=scrum'), '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info"');?>
-      <?php elseif($this->config->systemMode == 'classic' and common::hasPriv('execution', 'create')):?>
-      <?php echo html::a($this->createLink('execution', 'create'), '<i class="icon icon-plus"></i>' . $lang->execution->create, '', 'class="btn btn-info"');?>
-      <?php endif;?>
     </p>
   </div>
   <?php else:?>
@@ -98,7 +91,7 @@
             <div class='btn-group'>
               <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
               <ul class='dropdown-menu pull-right text-center' role='menu'>
-                <?php common::printIcon('project', 'manageProducts', "projectID=$project->id&projectID=$project->parent", $project, 'list', 'link', '', '', false, "data-group='project'", '', $project->id);?>
+                <?php common::printIcon('project', 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', '', false, "data-group='project'", '', $project->id);?>
                 <?php common::printIcon('project', 'whitelist', "projectID=$project->id&projectID=$project->parent&module=project", $project, 'list', 'shield-check', '', '', false, "data-group='project'", '', $project->id);?>
                 <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->project->delete}' data-group='my'");?>
               </ul>

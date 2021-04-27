@@ -431,7 +431,7 @@ class extension extends control
             $tmpName   = $_FILES['file']['tmp_name'];
             $fileName  = $_FILES['file']['name'];
             $dest      = $this->app->getTmpRoot() . "/extension/$fileName";
-            helper::saveFile($tmpName, $dest);
+            move_uploaded_file($tmpName, $dest);
 
             $extension = basename($fileName, '.zip');
             $return    = $this->extension->extractPackage($extension);
@@ -455,6 +455,7 @@ class extension extends control
             $link = $type == 'install' ? inlink('install', "extension=$extension") : inlink('upgrade', "extension=$extension");
             die(js::locate($link, 'parent'));
         }
+
         $this->display();
     }
 

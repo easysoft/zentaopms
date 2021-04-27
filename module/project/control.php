@@ -272,6 +272,30 @@ class project extends control
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
+            /* Link the plan stories. */
+            if(!empty($_POST['plans']))
+            {
+                foreach($_POST['plans'] as $planID)
+                {
+                    $planStories = $planProducts = array();
+                    $planStory   = $this->loadModel('story')->getPlanStories($planID);
+                    if(!empty($planStory))
+                    {
+                        foreach($planStory as $id => $story)
+                        {
+                            if($story->status == 'draft')
+                            {
+                                unset($planStory[$id]);
+                                continue;
+                            }
+                            $planProducts[$story->id] = $story->product;
+                        }
+                        $planStories = array_keys($planStory);
+                        $this->execution->linkStory($projectID, $planStories, $planProducts);
+                    }
+                }
+            }
+
             if($this->app->openApp == 'program')
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
@@ -376,6 +400,14 @@ class project extends control
 
         if($_POST)
         {
+            $oldPlans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('plan');
+            $oldPlanStories = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
+                ->where('t1.project')->eq($projectID)
+                ->andWhere('t2.plan')->in(array_keys($oldPlans))
+                ->fetchAll('story');
+            $diffResult = array_diff($oldPlans, $_POST['plans']);
+
             $changes = $this->project->update($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -385,7 +417,14 @@ class project extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            /* Link the plan stories. */
+            if(!empty($_POST['plans']) and !empty($diffResult))
+            {
+                $this->loadModel('productplan')->linkProject($projectID, $_POST['plans'], $oldPlanStories);
+            }
+
             $locateLink = $this->session->projectList ? $this->session->projectList : inLink('view', "projectID=$projectID");
+            if($from == 'projectView')    $locateLink = $this->createLink('project', 'view', "projectID=$projectID");
             if($from == 'program')        $locateLink = $this->createLink('program', 'browse');
             if($from == 'programProject') $locateLink = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
@@ -1441,13 +1480,12 @@ class project extends control
     /**
      * Manage products.
      *
-     * @param  int     $projectID
-     * @param  int     $programID
+     * @param  int    $projectID
      * @param  string $from  project|program|programproject
      * @access public
      * @return void
      */
-    public function manageProducts($projectID, $programID = 0, $from = 'project')
+    public function manageProducts($projectID, $from = 'project')
     {
         $this->loadModel('product');
         $this->loadModel('program');
@@ -1486,9 +1524,9 @@ class project extends control
             $this->project->setMenu($projectID);
         }
 
-        $allProducts        = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts     = $this->product->getProducts($project->id);
-        $linkedBranches     = array();
+        $allProducts    = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
+        $linkedProducts = $this->product->getProducts($project->id);
+        $linkedBranches = array();
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
         $unmodifiableProducts = array();

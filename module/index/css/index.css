@@ -25,7 +25,7 @@ body.menu-hide {padding-left: 0;}
 .menu-hide #menu .nav > li.has-avatar > a {padding: 2px 0;}
 #menuMoreNav {display: none;}
 .show-more-nav #menuMoreNav {display: block;}
-#menuMoreList {left: 100%; margin-left: -2px; top: -5px; background-color: #3c495c;}
+#menuMoreList {left: 100%; margin-left: -2px; top: 0; background-color: #3c495c;}
 #menuMoreList > li {padding: 2px 6px;}
 #menuMoreList > li > a {color: #fff; padding: 4px 6px 4px 12px; border-radius: 2px; margin: 0;}
 #menuMoreList > li > a > .icon {opacity: 1; font-size: 16px;}

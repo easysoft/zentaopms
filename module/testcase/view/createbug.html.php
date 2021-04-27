@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php js::set('openApp', $app->openApp);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->testcase->createBug;?></h2>
@@ -30,7 +31,9 @@ function createBug(obj)
 
     var onlybody    = config.onlybody;
     config.onlybody = 'no';
-    window.open(createLink('bug', 'create', params + ',stepIdList=' + stepIdList), '_parent');
+    var link        = createLink('bug', 'create', params + ',stepIdList=' + stepIdList);
+    if(openApp == 'my') window.parent.$.apps.open(link, 'qa')
+    window.open(link, '_parent');
     config.onlybody = onlybody;
 }
 

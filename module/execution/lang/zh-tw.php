@@ -291,6 +291,7 @@ $lang->execution->cancelCopy          = '取消複製';
 $lang->execution->byPeriod            = '按時間段';
 $lang->execution->byUser              = '按用戶';
 $lang->execution->noExecution         = "暫時沒有{$lang->executionCommon}。";
+$lang->execution->noExecutions        = "暫時沒有{$lang->execution->common}。";
 $lang->execution->noMembers           = '暫時沒有團隊成員。';
 $lang->execution->workloadTotal       = "工作量占比累計不應當超過100, 當前產品下的工作量之和為%s";
 // $lang->execution->linkProjectStoryTip = "(關聯{$lang->SRCommon}來源於項目下所關聯的{$lang->SRCommon})";

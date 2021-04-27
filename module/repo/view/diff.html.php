@@ -29,7 +29,7 @@
     <div class="page-title">
       <?php
       echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}'");
-      $paths= explode('/', $entry);
+      $paths    = explode('/', $entry);
       $fileName = array_pop($paths);
       $postPath = '';
       foreach($paths as $pathName)
@@ -38,10 +38,10 @@
           echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
       }
       echo '/' . ' ' . $fileName;
-      if(strpos($repo->SCM, 'Git') !== false)
+      if(strpos($repo->SCM, 'Subversion') === false)
       {
           $oldRevision = $oldRevision == '^' ? "$newRevision" : $oldRevision;
-          echo " <span class='label label-info'>" . substr($oldRevision, 0, 10) . " : " . substr($newRevision, 0, 10) . ' (' . $historys[$oldRevision] . ' : ' . $historys[$newRevision] . ')</span>';
+          echo " <span class='label label-info'>" . substr($oldRevision, 0, 10) . " : " . substr($newRevision, 0, 10) . ' (' . zget($historys, $oldRevision, '') . ' : ' . zget($historys, $newRevision, '') . ')</span>';
       }
       else
       {
@@ -155,7 +155,7 @@
 </div>
 <div class='revisions hidden'>
   <?php
-  if(strpos($repo->SCM, 'Git') !== false)
+  if(strpos($repo->SCM, 'Subversion') === false)
   {
       $oldRevision = $oldRevision == '^' ? "$newRevision" : $oldRevision;
       echo " <span class='label label-info'>" . substr($oldRevision, 0, 10) . " : " . substr($newRevision, 0, 10) . ' (' . $historys[$oldRevision] . ' : ' . $historys[$newRevision] . ')</span>';

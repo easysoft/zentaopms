@@ -429,7 +429,7 @@
         var maxHeight      = $menuNav.height();
         var showMoreMenu   = false;
         var currentHeight  = 40;
-        var moreMenuHeight = 13;
+        var moreMenuHeight = 12;
 
         $menuItems.each(function()
         {
@@ -450,7 +450,7 @@
 
                     if(isDivider) return;
                 }
-                moreMenuHeight += isDivider ? 13 : 31;
+                moreMenuHeight += isDivider ? 13 : 30;
                 $list.append($item.clone().removeClass('hidden'));
             }
             else
@@ -461,7 +461,26 @@
 
         /* The magic number "111" is the space between dropdown trigger
            btn and the bottom of screen */
-        $list.css('top', moreMenuHeight > 111 ? 111 - moreMenuHeight : '');
+        var listStyle = {maxHeight: 'initial', top: moreMenuHeight > 111 ? 111 - moreMenuHeight : ''};
+        if($list[0].getBoundingClientRect)
+        {
+            var btnBounding = $list.prev('a')[0].getBoundingClientRect();
+            if(btnBounding.height)
+            {
+                var winHeight = $(window).height();
+                if(winHeight < moreMenuHeight)
+                {
+                    listStyle.maxHeight = winHeight;
+                    listStyle.overflow = 'auto';
+                    listStyle.top = 5 - btnBounding.top;
+                }
+                else if(moreMenuHeight > (winHeight - btnBounding.top))
+                {
+                    listStyle.top = winHeight - btnBounding.top - moreMenuHeight + 5;
+                }
+            }
+        }
+        $list.css(listStyle);
         $menuNav.toggleClass('show-more-nav', showMoreMenu);
 
         if(showMoreMenu && !$list.data('listened-click'))
@@ -554,6 +573,7 @@
         /* Refresh more menu on window resize */
         $(window).on('resize', refreshMoreMenu);
         refreshMoreMenu();
+        setTimeout(refreshMoreMenu, 500);
     });
 }());
 

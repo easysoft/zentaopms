@@ -83,7 +83,6 @@ class tree extends control
             /* Set menu.*/
             $products = $this->product->getPairs();
             $this->product->saveState($rootID, $products);
-            $this->product->setMenu($rootID, 0, 0, '', $viewType);
 
             unset($products[$rootID]);
             $currentProduct = key($products);

@@ -544,7 +544,7 @@ function notice()
     if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
-        if($('#execution').length == 0 || $('#execution').val() == '')
+        if($('#execution').length == 0 || $('#execution').val() == 0)
         {
             var branch = $('#branch').val();
             if(typeof(branch) == 'undefined') branch = 0;
@@ -556,7 +556,9 @@ function notice()
         else
         {
             executionID = $('#execution').val();
-            link = createLink('build', 'create','executionID=' + executionID + '&productID=' + $('#product').val());
+            productID   = $('#product').val();
+            projectID   = $('#project').val();
+            link = createLink('build', 'create','executionID=' + executionID + '&productID=' + productID + '&projectID=' + projectID);
             link += config.requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
             html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createBuild + '</a> ';
             html += '<a href="javascript:loadExecutionBuilds(' + executionID + ')">' + refresh + '</a>';

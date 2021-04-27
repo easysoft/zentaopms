@@ -117,7 +117,7 @@
                 </tr>
                 <?php if($product->type != 'normal'):?>
                 <tr>
-                  <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->name]);?></th>
+                  <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
                   <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch", $branchName)) echo $branchName;?></td>
                 </tr>
                 <?php endif;?>
@@ -240,7 +240,7 @@
             <table class='table table-data'>
               <tbody>
                 <tr>
-                  <th class='w-60px'><?php echo $lang->bug->execution;?></th>
+                  <th class='w-70px'><?php echo $lang->bug->execution;?></th>
                   <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'browse', "executionid=$bug->execution"), $bug->executionName);?></td>
                 </tr>
                 <tr class='nofixed'>

@@ -81,9 +81,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     </div>
     <?php endif;?>
     <?php
-    $this->moduleName = $this->app->rawModule;
-    $this->methodName = $this->app->rawMethod;
-    foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
+    foreach(customModel::getFeatureMenu($this->app->rawModule, $this->app->rawMethod) as $menuItem)
     {
         if(isset($menuItem->hidden)) continue;
         if($menuItem->name == 'emptysr' && $storyType == 'story') continue;
@@ -341,6 +339,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             <ul class='dropdown-menu'>
               <?php
               $class      = $canBatchClose ? '' : "class='disabled'";
+              $productID  = $this->app->openApp == 'project' ? 0 : $productID;
               $actionLink = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0&storyType=$storyType");
               $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink')\"" : '';
               echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";

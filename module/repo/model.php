@@ -237,6 +237,7 @@ class repoModel extends model
         $data = fixer::input('post')
             ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')

@@ -29,7 +29,9 @@ class caselibModel extends model
 
         if($libraries)
         {
-            $currentLibName = zget($libraries, $libID, '');
+            $libName = '';
+            if(!isset($libraries[$libID])) $libName = $this->dao->select('name')->from(TABLE_TESTSUITE)->where('id')->eq($libID)->fetch('name');
+            $currentLibName = zget($libraries, $libID, $libName);
             setCookie("lastCaseLib", $libID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
             $dropMenuLink = helper::createLink('caselib', 'ajaxGetDropMenu', "objectID=$libID&module=caselib&method=browse");

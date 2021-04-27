@@ -291,6 +291,7 @@ $lang->execution->cancelCopy          = '取消复制';
 $lang->execution->byPeriod            = '按时间段';
 $lang->execution->byUser              = '按用户';
 $lang->execution->noExecution         = "暂时没有{$lang->executionCommon}。";
+$lang->execution->noExecutions        = "暂时没有{$lang->execution->common}。";
 $lang->execution->noMembers           = '暂时没有团队成员。';
 $lang->execution->workloadTotal       = "工作量占比累计不应当超过100, 当前产品下的工作量之和为%s";
 // $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";

@@ -60,7 +60,7 @@
           <th class='c-hours'>     <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='c-status'>    <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-stage'>     <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
-          <th class='c-actions-5'> <?php echo $lang->actions;?></th>
+          <th class='c-actions-4'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -98,7 +98,6 @@
                 common::printIcon('story', 'review',     $vars, $story, 'list', 'search', '', 'iframe', true);
                 common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
-                common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
             }
             ?>
           </td>

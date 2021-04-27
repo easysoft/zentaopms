@@ -26,7 +26,7 @@
           </div>
           <?php if($product->type == 'platform'):?>
           <div class="detail">
-          <div class="detail-title"><strong><?php echo $lang->product->branchName['platform'];?></strong><a class="btn btn-link pull-right muted"><i class="icon icon-more icon-sm"></i></a></div>
+          <div class="detail-title"><strong><?php echo $lang->product->branchName['platform'];?></strong><a class="btn btn-link pull-right muted" href="<?php echo $this->createLink('branch', 'manage', "productID={$product->id}")?>"><i class="icon icon-more icon-sm"></i></a></div>
             <div class="detail-content">
               <ul class="clearfix branch-list">
                 <?php foreach($branches as $branchName):?>
@@ -114,8 +114,8 @@
                   <tr>
                     <th><?php echo $lang->story->statusList['changed']  . $space . $lang->story->common;?></th>
                     <td><strong><?php echo $product->stories['changed']?></strong></td>
-                    <th><?php echo $lang->product->projects?></th>
-                    <td><strong><?php echo $product->projects?></strong></td>
+                    <th><?php echo $lang->product->releases?></th>
+                    <td><strong><?php echo $product->releases?></strong></td>
                     <th><?php echo $lang->product->cases?></th>
                     <td><strong><?php echo $product->cases?></strong></td>
                   </tr>
@@ -130,8 +130,12 @@
                   <tr>
                     <th><?php echo $lang->story->statusList['closed']  . $space . $lang->story->common;?></th>
                     <td><strong><?php echo $product->stories['closed']?></strong></td>
-                    <th><?php echo $lang->product->releases?></th>
-                    <td><strong><?php echo $product->releases?></strong></td>
+                    <?php if($config->systemMode == 'new'):?>
+                    <th><?php echo $lang->product->projects?></th>
+                    <td><strong><?php echo $product->projects?></strong></td>
+                    <?php endif;?>
+                    <th><?php echo $lang->product->executions?></th>
+                    <td><strong><?php echo $product->executions?></strong></td>
                   </tr>
                 </tbody>
               </table>

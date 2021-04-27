@@ -291,6 +291,7 @@ $lang->execution->cancelCopy          = 'Cancel Copy';
 $lang->execution->byPeriod            = 'By Time';
 $lang->execution->byUser              = 'By User';
 $lang->execution->noExecution         = "No {$lang->executionCommon}. ";
+$lang->execution->noExecutions        = "No {$lang->execution->common}.";
 $lang->execution->noMembers           = 'No team members yet. ';
 $lang->execution->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 // $lang->execution->linkProjectStoryTip = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
