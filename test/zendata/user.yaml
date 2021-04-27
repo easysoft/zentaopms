@@ -1,0 +1,256 @@
+title: table zt_user
+desc: "用户信息"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: dept
+    note: "所属部门"
+    range: 1-10000
+    prefix: ""
+    postfix: "\t"
+    format: ""
+  - field: account
+    note: "用户名"
+    from: name.enaccount.v1.yaml
+    use: common_underline
+    postfix: "\t"           # 后缀，特殊字符加引号，否则无法解析。
+    format: ""
+  - field: password
+    note: "密码"
+    range: 123456
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: role
+    note: "职位"
+    range: qa,dev,pm,po,td,pd,qd,top,market,service,operation,support,others
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: realname
+    note: "真实姓名"
+    from: name.cnreal.v1.yaml
+    use: three
+    format: ""
+  - field: nickname
+    note: "昵称"
+    from: name.enaccount.v1.yaml
+    use: common
+    postfix: "\t"
+    loop: 0
+  - field: commiter
+    note: "源代码帐号"
+    from: name.enaccount.v1.yaml
+    use: common
+    postfix: "@zentao.net"
+    loop: 0
+    format: ""
+  - field: avatar
+    note: ""
+    range: 0
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: birthday
+    note: "生日"
+    from: time.date.v1.yaml
+    use: date
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: gender
+    note: "性别"
+    range: f,m
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: email
+    note: "邮箱"
+    range: 1-10000
+    prefix: "这里是邮箱"
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: skype
+    note: "Skype"
+    range: Skype
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: qq
+    note: "QQ"
+    range: QQ
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: mobile
+    note: "手机"
+    range: mobile
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: phone
+    note: "电话"
+    range: phone
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: weixin
+    note: "微信"
+    range: weixin
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: dingding
+    note: "钉钉"
+    range: dingding
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: slack
+    note: "Slack"
+    range: slack
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: whatsapp
+    note: "WhatsApp"
+    range: whatsApp
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: address
+    note: "通讯地址"
+    range: 1-10000
+    prefix: "这是通讯地址"
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: zipcode
+    note: "邮编"
+    range: 1-10000
+    prefix: "这是邮编"
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: join
+    note: "入职日期"
+    from: time.date.v1.yaml
+    use: date
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: visits
+    note: "访问次数"
+    range: 0-10000:R
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: ip
+    note: "最后IP"
+    from: ip.v1.yaml
+    use: ipA,ipB
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: last
+    note: "最后登录"
+    range: 1-10000
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: fails
+    note: "失败次数"
+    range: 1-10000
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: locked
+    note: "锁定时间"
+    from: time.date.v1.yaml
+    use: date
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: feedback
+    note: "反馈[非研发]"
+    range: 0
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: ranzhi
+    note: "ZDOO账号"
+    range: 0
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: ldap
+    note: ""
+    range: 0
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: score
+    note: "积分"
+    range: 1-10000:R
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: scoreLevel
+    note: "积分等级"
+    range: 0
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: clientStatus
+    note: "连接状态"
+    range: offline
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: clientLang
+    note: "连接语言"
+    range: en
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
