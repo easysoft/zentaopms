@@ -4304,7 +4304,7 @@ class upgradeModel extends model
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->type    = 'project';
             $lib->main    = '1';
-            $lib->acl     = 'default';
+            $lib->acl     = $project->acl;
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
