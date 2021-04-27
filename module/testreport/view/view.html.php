@@ -116,7 +116,8 @@
     <?php
     if(common::canBeChanged('report', $report))
     {
-        if(common::hasPriv('testreport', 'create')) echo html::a(inLink('create', "objectID=$report->objectID&objectType=$report->objectType&extra=$report->id"),  "<i class='icon-refresh'></i>", '', "class='btn' title='{$lang->testreport->recreate}' data-app='{$this->app->openApp}'");
+        $extra = $report->objectType == 'execution' ? "&extra=$report->tasks" : '';
+        if(common::hasPriv('testreport', 'create')) echo html::a(inLink('create', "objectID=$report->objectID&objectType=$report->objectType" . $extra),  "<i class='icon-refresh'></i>", '', "class='btn' title='{$lang->testreport->recreate}' data-app='{$this->app->openApp}'");
         common::printIcon('testreport', 'edit', "reportID=$report->id", '', 'button');
         common::printIcon('testreport', 'delete', "reportID=$report->id", '', 'button', 'trash', 'hiddenwin');
     }

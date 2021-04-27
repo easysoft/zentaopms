@@ -61,7 +61,7 @@ class bug extends control
         }
         else
         {
-            $products = $this->product->getPairs();
+            $products = $this->product->getPairs('', 0, 'program_asc');
         }
 
         $this->view->products = $this->products = $products;
@@ -514,7 +514,7 @@ class bug extends control
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Get products and projects. */
-        $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed');
+        $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, 'program_asc');
         $projects = array(0 => '');
         if($projectID)
         {

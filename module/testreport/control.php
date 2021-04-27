@@ -260,6 +260,18 @@ class testreport extends control
                 die(js::locate('back'));
             }
 
+            if($this->app->openApp == 'qa')
+            {
+                $productID = $this->product->saveState(key($productIdList), $this->products);
+                $this->loadModel('qa')->setMenu($this->products, $productID);
+            }
+            elseif($this->app->openApp == 'project')
+            {
+                $projects  = $this->project->getPairsByProgram();
+                $projectID = $this->project->saveState($execution->project, $projects);
+                $this->project->setMenu($projectID);
+            }
+
             $builds  = $this->build->getByList($buildIdList);
             $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getExecutionStories($execution->id);;
 
