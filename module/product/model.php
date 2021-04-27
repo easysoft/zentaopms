@@ -1257,16 +1257,25 @@ class productModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('project')
             ->fetch();
 
-        $product->stories  = $stories;
-        $product->plans    = $plans    ? $plans->count : 0;
-        $product->releases = $releases ? $releases->count : 0;
-        $product->builds   = $builds   ? $builds->count : 0;
-        $product->cases    = $cases    ? $cases->count : 0;
-        $product->projects = $projects ? $projects->count : 0;
-        $product->bugs     = $bugs     ? $bugs->count : 0;
-        $product->docs     = $docs     ? $docs->count : 0;
+        $executions = $this->dao->select('count("t1.*") AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.product')->eq($productID)
+            ->andWhere('t2.type')->in('sprint,stage')
+            ->fetch();
+
+        $product->stories    = $stories;
+        $product->plans      = $plans      ? $plans->count : 0;
+        $product->releases   = $releases   ? $releases->count : 0;
+        $product->builds     = $builds     ? $builds->count : 0;
+        $product->cases      = $cases      ? $cases->count : 0;
+        $product->projects   = $projects   ? $projects->count : 0;
+        $product->executions = $executions ? $executions->count : 0;
+        $product->bugs       = $bugs       ? $bugs->count : 0;
+        $product->docs       = $docs       ? $docs->count : 0;
 
         return $product;
     }
