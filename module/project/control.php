@@ -420,26 +420,7 @@ class project extends control
             /* Link the plan stories. */
             if(!empty($_POST['plans']) and !empty($diffResult))
             {
-                $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->in(array_keys($oldPlanStories))->exec();
-                foreach($_POST['plans'] as $planID)
-                {
-                    $planStories = $planProducts = array();
-                    $planStory   = $this->loadModel('story')->getPlanStories($planID);
-                    if(!empty($planStory))
-                    {
-                        foreach($planStory as $id => $story)
-                        {
-                            if($story->status == 'draft')
-                            {
-                                unset($planStory[$id]);
-                                continue;
-                            }
-                            $planProducts[$story->id] = $story->product;
-                        }
-                        $planStories = array_keys($planStory);
-                        $this->execution->linkStory($projectID, $planStories, $planProducts);
-                    }
-                }
+                $this->loadModel('productplan')->linkProject($projectID, $_POST['plans'], $oldPlanStories);
             }
 
             $locateLink = $this->session->projectList ? $this->session->projectList : inLink('view', "projectID=$projectID");
