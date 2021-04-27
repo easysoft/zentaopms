@@ -578,6 +578,41 @@ class productplanModel extends model
     }
 
     /**
+     * Link project.
+     *
+     * @param  int    $projectID
+     * @param  array  $newPlans
+     * @param  array  $oldPlanStories
+     * @access public
+     * @return void
+     */
+    public function linkProject($projectID, $newPlans, $oldPlanStories = '')
+    {
+        if(!empty($oldPlanStories)) $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->in(array_keys($oldPlanStories))->exec();
+
+        $this->loadModel('execution');
+        foreach($newPlans as $planID)
+        {
+            $planStories = $planProducts = array();
+            $planStory   = $this->loadModel('story')->getPlanStories($planID);
+            if(!empty($planStory))
+            {
+                foreach($planStory as $id => $story)
+                {
+                    if($story->status == 'draft')
+                    {
+                        unset($planStory[$id]);
+                        continue;
+                    }
+                    $planProducts[$story->id] = $story->product;
+                }
+                $planStories = array_keys($planStory);
+                $this->execution->linkStory($projectID, $planStories, $planProducts);
+            }
+        }
+    }
+
+    /**
      * Reorder for children plans.
      *
      * @param  array    $plans
