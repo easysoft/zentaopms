@@ -1523,7 +1523,7 @@ class testcase extends control
             $file = $file[0];
 
             $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
-            helper::saveFile($file['tmpname'], $fileName);
+            move_uploaded_file($file['tmpname'], $fileName);
 
             $rows   = $this->file->parseCSV($fileName);
             $fields = $this->testcase->getImportFields($productID);

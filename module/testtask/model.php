@@ -1628,7 +1628,7 @@ class testtaskModel extends model
 
         $file     = $file[0];
         $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
-        helper::saveFile($file['tmpname'], $fileName);
+        move_uploaded_file($file['tmpname'], $fileName);
         if(simplexml_load_file($fileName) === false)
         {
             dao::$errors[] = $this->lang->testtask->cannotBeParsed;
