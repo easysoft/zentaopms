@@ -228,30 +228,6 @@ class helper extends baseHelper
 			$version
 		);
 	}
-
-    /**
-     * Save file to storage: fs(www/data/upload) or s3(s3, oss, minio)
-     *
-     * @param  string $tmpFile
-     * @param  string $fileName
-     * @access public
-     * @return bool
-     */
-    public static function saveFile($tmpFile, $filePath)
-    {
-        global $config;
-
-        if(!isset($config->storageType) or $config->storageType == 'fs')
-        {
-            return move_uploaded_file($tmpFile, $filePath);
-        }
-        else if(isset($config->storageType) and $config->storageType == 's3')
-        {
-            return move_uploaded_file($tmpFile, $filePath); // TODO
-        }
-
-        return false;
-    }
 }
 
 /**

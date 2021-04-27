@@ -73,6 +73,7 @@ class executionModel extends model
         {
             global $lang;
             $this->loadModel('execution');
+            $this->app->loadLang('project');
             $lang->executionCommon = $lang->project->stage;
             include $this->app->getModulePath('execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
