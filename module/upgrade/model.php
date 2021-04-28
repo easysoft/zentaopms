@@ -647,6 +647,10 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_0_rc2');
             $this->execSQL($this->getUpgradeFile('15.0.rc2'));
             $this->appendExec('15_0_rc2');
+        case '15_0_rc3':
+            $this->saveLogs('Execute 15_0_rc3');
+            $this->updateLibType();
+            $this->appendExec('15_0_rc3');
         }
 
         $this->deletePatch();
@@ -4304,7 +4308,7 @@ class upgradeModel extends model
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->type    = 'project';
             $lib->main    = '1';
-            $lib->acl     = $project->acl;
+            $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
@@ -4860,6 +4864,20 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_PRODUCT)->set('acl')->eq('private')->where('id')->eq($product->id)->exec();
         }
+
+        return true;
+    }
+
+    /**
+     * Update execution main doclib type.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateLibType()
+    {
+        $executionList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->fetchAll('id');
+        $this->dao->update(TABLE_DOCLIB)->set('type')->eq('execution')->where('execution')->in(array_keys($executionList))->exec();
 
         return true;
     }
