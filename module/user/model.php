@@ -192,6 +192,7 @@ class userModel extends model
      * Get user info by ID.
      *
      * @param  mix    $userID
+     * @param  string    $field id|account
      * @access public
      * @return object|bool
      */

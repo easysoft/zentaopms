@@ -1769,20 +1769,27 @@ class repoModel extends model
         return $buildedURL;
     }
 
-   /**
-     * Get gitlab projects.
-     *
-     * @param  string   $host
-     * @param  string   $token
-     * @access public
-     * @return array
-     */
-    public function getGitlabProjects($host, $token)
-    {
+	/**  
+	 * Get gitlab projects.
+	 *
+	 * @param  string   $host
+	 * @param  string   $token
+	 * @access public
+	 * @return array
+	 */
+	public function getGitlabProjects($host, $token)
+	{    
 		$host  = rtrim($host, '/');
 		$host .= '/api/v4/projects';
 
-		$projects = file_get_contents($host . "?private_token=$token");
-		return json_decode($projects);
-    }
+		$allResults = array();
+		for($page = 1; true; $page ++)
+		{    
+			$results = json_decode(file_get_contents($host . "?private_token=$token&page={$page}&per_page=100"));
+			if(empty($results)) break;
+			$allResults = $allResults + $results;
+		}    
+
+		return $allResults;
+	} 
 }

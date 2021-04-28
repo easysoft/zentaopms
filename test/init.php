@@ -46,8 +46,8 @@ function run($result)
 /**
  * Print expect data.
  * 
- * @param  int    $key 
- * @param  string $delimiter 
+ * @param  string    $key 
+ * @param  string    $delimiter 
  * @access public
  * @return void
  */
@@ -96,6 +96,6 @@ function zdImport($table, $yaml, $count = 10)
     global $app, $config;
     $dns   = "mysql://{$config->db->user}:{$config->db->password}@{$config->db->host}:{$config->db->port}/{$config->db->name}#utf8";
     $table = trim($table, '`');
-    $commad = "$config->zdPath -c $yaml -t $table -T -dns $dns --clear -n $count";
-    system($commad);
+    $command = "$config->zdPath -c $yaml -t $table -T -dns $dns --clear -n $count";
+    system($command);
 }

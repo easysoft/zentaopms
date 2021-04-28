@@ -1178,6 +1178,10 @@ class executionModel extends model
         {
             $link = helper::createLink($module, $method, "productID=0&branch=0&extra=executionID=%s");
         }
+        elseif(in_array($module, array('bug', 'case', 'testtask', 'testreport')) and $method == 'view')
+        {
+            $link = helper::createLink('execution', $module, "executionID=%s");
+        }
         else
         {
             $link = helper::createLink($module, $method, "executionID=%s");

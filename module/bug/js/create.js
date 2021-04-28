@@ -14,7 +14,9 @@ function loadAllUsers()
             var moduleID  = $('#module').val();
             var productID = $('#product').val();
             setAssignedTo(moduleID, productID);
-            $('#assignedTo').empty().append($(data).find('option')).trigger('chosen:updated').trigger('chosen:activate');
+            $('#assignedTo').replaceWith(data);
+            $('#assignedTo_chosen').remove();
+            $('#assignedTo').chosen();
         }
     });
 }
