@@ -58,7 +58,7 @@ zentaoxx:
 	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
 	mv $(XUANPATH)/xuan.zip .
 	unzip xuan.zip
-	cp xuan/xxb/config/ext/xuanxuan.php zentaoxx/config/ext/
+	cp xuan/xxb/config/ext/_0_xuanxuan.php zentaoxx/config/ext/
 	cp -r xuan/xxb/lib/phpaes zentaoxx/lib/
 	cp -r xuan/xxb/framework/xuanxuan.class.php zentaoxx/framework/
 	cp -r xuan/xxb/db/*.sql zentaoxx/db/
@@ -78,8 +78,7 @@ zentaoxx:
 	cp -r xuan/xxb/www/x.php zentaoxx/www/
 	mkdir zentaoxx/module/action
 	cp -r xuan/xxb/module/action/ext zentaoxx/module/action
-	cp -r xuan/xxb/config/ext/xxb.php zentaoxx/config/ext/
-	cp -r xuan/xxb/config/ext/maps.php zentaoxx/config/ext/
+	cp -r xuan/xxb/config/ext/_1_maps.php zentaoxx/config/ext/
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
@@ -87,8 +86,8 @@ zentaoxx:
 	mkdir zentaoxx/db/
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
 	rm -rf zentaoxx/db_bak/
-	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/xuanxuan.php
-	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/xuanxuan.php
+	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/_0_xuanxuan.php
+	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/_0_xuanxuan.php
 	sed -i 's/site,//' zentaoxx/module/im/model/user.php
 	sed -i 's/admin, g/g/' zentaoxx/module/im/model/user.php
 	sed -i '/password = md5/d' zentaoxx/module/im/model/user.php

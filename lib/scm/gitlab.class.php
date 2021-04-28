@@ -47,6 +47,8 @@ class gitlab
         $infos = array();
         foreach($list as $file)
         {
+            if(!isset($file->type)) continue;
+
             $info = new stdClass();
             if($file->type == 'blob')
             {
