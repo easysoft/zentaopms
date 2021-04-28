@@ -419,10 +419,12 @@ class tree extends control
      * @param  string $returnType
      * @param  string $fieldID
      * @param  bool   $needManage
+     * @param  string $extra
+     * @param  int    $currentModuleID
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false, $extra = '')
+    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false, $extra = '', $currentModuleID = 0)
     {
         if($viewType == 'task')
         {
@@ -448,7 +450,7 @@ class tree extends control
                 $changeFunc = '';
                 if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
                 $field = $fieldID ? "modules[$fieldID]" : 'module';
-                $output = html::select("$field", $optionMenu, '', "class='form-control' $changeFunc");
+                $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control' $changeFunc");
                 if(count($optionMenu) == 1 and $needManage)
                 {
                     $output .=  "<span class='input-group-addon'>";

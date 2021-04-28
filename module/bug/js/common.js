@@ -209,7 +209,8 @@ function loadProductModules(productID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
+    if(typeof(moduleID) == 'undefined') moduleID = 0;
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + moduleID);
     $('#moduleIdBox').load(link, function()
     {
         $(this).find('select').chosen()
