@@ -262,7 +262,7 @@ class fileModel extends model
             }
             else
             {
-                if(!helper::saveFile($file['tmpname'], $tmpFileChunkPath)) return false;
+                if(!move_uploaded_file($file['tmpname'], $tmpFileChunkPath)) return false;
             }
 
             if($file['chunk'] == ($file['chunks'] - 1))
@@ -278,7 +278,7 @@ class fileModel extends model
         }
         else
         {
-            if(!helper::saveFile($file['tmpname'], $file['realpath'])) return false;
+            if(!move_uploaded_file($file['tmpname'], $file['realpath'])) return false;
 
             $uploadFile['extension'] = $file['extension'];
             $uploadFile['pathname']  = $file['pathname'];
@@ -471,7 +471,7 @@ class fileModel extends model
             $pathName = $filePath->pathname;
             $realPathName = $this->savePath . $this->getRealPathName($pathName);
             if(!is_dir(dirname($realPathName))) mkdir(dirname($realPathName));
-            helper::saveFile($file['tmpname'], $realPathName);
+            move_uploaded_file($file['tmpname'], $realPathName);
 
             $file['pathname'] = $pathName;
             $file = $this->compressImage($file);
@@ -964,6 +964,31 @@ class fileModel extends model
             while(!feof($handle)) echo fread($handle, $chunkSize);
             fclose($handle);
             die();
+        }
+    }
+
+    /**
+     * Get image size.
+     *
+     * @access public
+     * @param  object $file
+     * @return array
+     */
+    public function getImageSize($file)
+    {
+        if($this->config->file->storageType == 'fs')
+        {
+            return getimagesize($file->realPath);
+        }
+        else if($this->config->file->storageType == 's3')
+        {
+            $this->app->loadClass('ossclient', true);
+
+            $config    = $this->config->file;
+            $ossClient = new ossclient($config->accessKeyId, $config->accessKeySecret, $config->endpoint, $config->bucket);
+            $info      = $ossClient->getImageInfo($file->pathname);
+
+            return array($info->ImageWidth->value, $info->ImageHeight->value, 'img');
         }
     }
 }
