@@ -501,12 +501,14 @@ class testcaseModel extends model
         if($branch and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('0','$branch')";
         if(strpos($caseQuery, $allBranch) !== false) $caseQuery = str_replace($allBranch, '1', $caseQuery);
         $caseQuery .= ')';
-        $caseQuery  = str_replace(array('`product`', '`version`'), array('t1.`product`', 't1.`version`'), $caseQuery);
+        $caseQuery  = str_replace('`version`', 't1.`version`', $caseQuery);
 
         if($this->app->openApp == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
-        $cases = $this->dao->select('*')->from(TABLE_CASE)
-            ->beginIF($this->app->openApp == 'project')->alias('t1')->fi()
-            ->beginIF($this->app->openApp == 'project')->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case')->fi()
+
+        /* Search criteria under compatible project. */
+        $sql = $this->dao->select('*')->from(TABLE_CASE)->alias('t1');
+        if($this->app->openApp == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
+        $cases = $sql
             ->where($caseQuery)
             ->beginIF($this->app->openApp == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
             ->beginIF(!empty($productID) and $queryProductID != 'all')
