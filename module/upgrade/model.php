@@ -4195,6 +4195,7 @@ class upgradeModel extends model
             $program->openedDate    = helper::now();
             $program->openedVersion = $this->config->version;
             $program->acl           = 'open';
+            $program->days          = $this->computeDaysDelta($program->begin, $program->end);
 
             $this->app->loadLang('program');
             $this->app->loadLang('project');
@@ -4270,6 +4271,7 @@ class upgradeModel extends model
             $project->status         = $data->projectStatus;
             $project->begin          = $data->begin;
             $project->end            = isset($data->end) ? $data->end : LONG_TIME;
+            $project->days           = $this->computeDaysDelta($project->begin, $project->end);
             $project->PM             = $data->PM;
             $project->auth           = 'extend';
             $project->openedBy       = $account;
@@ -4318,6 +4320,32 @@ class upgradeModel extends model
         }
 
         return array($programID, $projectID, $lineID);
+    }
+
+    /**
+     * Compute delta of two days.
+     *
+     * @param  string begin
+     * @param  string end
+     * @access public
+     * @return int
+     */
+    public function computeDaysDelta($begin, $end)
+    {
+        if($end == LONG_TIME) return 0;
+
+        $delta   = helper::diffDate($end, $begin);
+        $week    = date('w', strtotime($begin));
+        $weekend = 0;
+        for($i = 0; $i < $delta; $i++)
+        {
+            $week = $week % 7;
+            if($week == 0 or $week == 6) $weekend ++;
+
+            $week++;
+        }
+
+        return $delta - $weekend;
     }
 
     /**
@@ -4393,8 +4421,11 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
         }
 
-        /* Compute sprint path and grade. */
-        $sprints = $this->dao->select('id, type, acl')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll();
+        /* Compute sprint path, grade and the minimum start date and end date of the project. */
+        $project      = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        $sprints      = $this->dao->select('id, type, acl, begin, end')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll();
+        $minBeginDate = $project->begin;
+        $maxEndData   = $project->end;
         foreach($sprints as $sprint)
         {
             $data = new stdclass();
@@ -4407,6 +4438,9 @@ class upgradeModel extends model
             $data->lifetime = empty($sprint->lifetime) ? $sprint->type : $sprint->lifetime;
 
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
+
+            $minBeginDate = ($sprint->begin < $minBeginDate) ? $sprint->begin : $minBeginDate;
+            $maxEndData   = $sprint->end > $maxEndData ? $sprint->end : $maxEndData;
         }
 
         /* Compute project date and status. */
@@ -4423,6 +4457,13 @@ class upgradeModel extends model
         {
             $data->realEnd    = substr($maxRealEnd, 0, 10);
             $data->closedDate = $maxRealEnd;
+        }
+
+        if($minBeginDate != $project->begin or $maxEndData != $project->end)
+        {
+            $data->begin = $minBeginDate;
+            $data->end   = $maxEndData;
+            $data->days  = $this->computeDaysDelta($data->begin, $data->end);
         }
 
         $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
@@ -4477,8 +4518,10 @@ class upgradeModel extends model
         $users = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs('account', 'account');
 
         /* Insert product and sprint team into project team. */
-        $today = helper::today();
-        foreach($teams as $account)
+        $today         = helper::today();
+        $project       = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        $projectMember = $this->dao->select('*')->from(TABLE_TEAM)->where('account')->in($teams)->fetchAll('account');
+        foreach($projectMember as $account => $user)
         {
             if(empty($account)) continue;
             if(!isset($users[$account])) continue;
@@ -4487,7 +4530,10 @@ class upgradeModel extends model
             $team->root    = $projectID;
             $team->type    = 'project';
             $team->account = $account;
+            $team->role    = $user->role;
             $team->join    = $today;
+            $team->days    = $project->days;
+            $team->hours   = '7.0';
             $this->dao->replace(TABLE_TEAM)->data($team)->exec();
         }
 
