@@ -1601,7 +1601,8 @@ class productModel extends model
             }
             elseif($module == 'testtask')
             {
-                $link = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&extra=$extra");
+                $extra = $method != 'browse' ? '' : "&extra=$extra";
+                $link  = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . $extra);
             }
             elseif($module == 'bug' && $method == 'view')
             {
