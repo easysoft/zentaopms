@@ -546,7 +546,7 @@ class bug extends control
         }
 
         /* Get executions. */
-        $executions = array('' => '');
+        $executions = array(0 => '');
         if(isset($projects[$projectID]) or $this->config->systemMode == 'classic') $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
 
         /* Set custom. */
@@ -877,7 +877,7 @@ class bug extends control
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         $this->view->currentModuleID  = $currentModuleID;
-        $this->view->executions       = $this->product->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
+        $this->view->executions       = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
         $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
         $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
