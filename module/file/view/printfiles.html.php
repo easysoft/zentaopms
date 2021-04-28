@@ -53,7 +53,7 @@ $sessionString .= session_name() . '=' . session_id();
               $imageWidth = 0;
               if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false)
               {
-                  $imageSize  = getimagesize($file->realPath);
+                  $imageSize  = $this->file->getImageSize($file);
                   $imageWidth = $imageSize ? $imageSize[0] : 0;
               }
 
