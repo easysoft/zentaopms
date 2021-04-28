@@ -815,7 +815,7 @@ class projectModel extends model
                 $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
 
-            $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             return $projectID;
         }
