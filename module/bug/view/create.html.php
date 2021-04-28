@@ -25,6 +25,7 @@ js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
 js::set('isStepsTemplate', $isStepsTemplate);
 js::set('oldProjectID', $projectID);
 js::set('blockID', $blockID);
+js::set('moduleID', $moduleID);
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
