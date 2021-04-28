@@ -867,7 +867,7 @@ class repo extends control
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) die();
-        //if($repo->synced) die('finish');
+        if($repo->synced) die('finish');
 
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
