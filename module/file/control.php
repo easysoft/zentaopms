@@ -63,7 +63,7 @@ class file extends control
                     die(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
                 }
             }
-            if(@helper::saveFile($file['tmpname'], $this->file->savePath . $this->file->getSaveName($file['pathname'])))
+            if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $this->file->getSaveName($file['pathname'])))
             {
                 /* Compress image for jpg and bmp. */
                 $file = $this->file->compressImage($file);

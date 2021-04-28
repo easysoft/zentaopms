@@ -748,7 +748,7 @@ class projectModel extends model
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->type    = 'project';
             $lib->main    = '1';
-            $lib->acl     = $project->acl;
+            $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
@@ -814,6 +814,8 @@ class projectModel extends model
                 $groupPriv->project = $projectID;
                 $this->dao->replace(TABLE_USERGROUP)->data($groupPriv)->exec();
             }
+
+            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             return $projectID;
         }

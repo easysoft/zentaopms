@@ -29,6 +29,13 @@ $tester = $app->loadCommon();
 $config->zendataRoot = dirname(__FILE__) . DS . 'zendata';
 $config->zdPath      = "/usr/local/zd/zd";
      
+/**
+ * Save variable to $_result.
+ * 
+ * @param  mix    $result 
+ * @access public
+ * @return bool true
+ */
 function run($result)
 {
     global $_result;
@@ -36,6 +43,14 @@ function run($result)
     return true;
 }
 
+/**
+ * Print expect data.
+ * 
+ * @param  string    $key 
+ * @param  string    $delimiter 
+ * @access public
+ * @return void
+ */
 function expect($key, $delimiter = ',')
 {
     global $_result;
@@ -66,12 +81,21 @@ function expect($key, $delimiter = ',')
     echo "\n";
 }
 
+/**
+ * Import data create by zendata to one table.
+ * 
+ * @param  string    $table 
+ * @param  string    $yaml 
+ * @param  int       $count 
+ * @access public
+ * @return void
+ */
 function zdImport($table, $yaml, $count = 10)
 {
     chdir(dirname(__FILE__));
     global $app, $config;
     $dns   = "mysql://{$config->db->user}:{$config->db->password}@{$config->db->host}:{$config->db->port}/{$config->db->name}#utf8";
     $table = trim($table, '`');
-    $commad = "$config->zdPath -c $yaml -t $table -T -dns $dns --clear -n $count";
-    system($commad);
+    $command = "$config->zdPath -c $yaml -t $table -T -dns $dns --clear -n $count";
+    system($command);
 }

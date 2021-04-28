@@ -134,7 +134,7 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
-            if(!$this->config->systemMode && !isset($this->config->qcVersion)) $this->locate(inlink('to15Guide', "fromVersion=$fromVersion"));
+            if(!$this->config->systemMode && !isset($this->config->qcVersion) && strpos($fromVersion, 'max') === false) $this->locate(inlink('to15Guide', "fromVersion=$fromVersion"));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 

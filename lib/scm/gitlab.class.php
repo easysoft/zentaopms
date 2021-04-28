@@ -501,7 +501,8 @@ class gitlab
         if($version)
         {
             $lastCommit = $this->getSingleCommit($version);
-            if(empty($lastCommit)) return array();
+            if(!isset($lastCommit->committed_date)) return array('commits' => array(), 'files' => array());
+
             $params['until'] = $lastCommit->committed_date;
         }
 
@@ -644,7 +645,13 @@ class gitlab
         $api = ltrim($api, '/');
         $api = $this->root . $api . '?' . http_build_query($params);
 
-        $response = file_get_contents($api);
+        $response = commonModel::http($api);
+        if(!empty(commonModel::$requestErrors))
+        {
+            commonModel::$requestErrors = array();
+            return array();
+        }
+
         return json_decode($response);
     }
 
