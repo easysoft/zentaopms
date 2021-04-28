@@ -240,7 +240,7 @@
             <table class='table table-data'>
               <tbody>
                 <tr>
-                  <th class='w-60px'><?php echo $lang->bug->execution;?></th>
+                  <th class='w-70px'><?php echo $lang->bug->execution;?></th>
                   <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'browse', "executionid=$bug->execution"), $bug->executionName);?></td>
                 </tr>
                 <tr class='nofixed'>

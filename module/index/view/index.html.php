@@ -56,7 +56,6 @@ js::set('defaultOpen', $open);
       <li id='menuToggleMenu'>
         <a type='button' class='menu-toggle'>
           <i class='icon icon-sm icon-menu-collapse'></i>
-          <i class='icon icon-sm icon-menu-unfold'></i>
         </a>
       </li>
     </ul>

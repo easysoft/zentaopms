@@ -97,7 +97,7 @@ class fileModel extends model
         foreach($files as $id => $file)
         {
             if($file['size'] == 0) continue;
-            if(!helper::saveFile($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
+            if(!move_uploaded_file($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
 
             $file = $this->compressImage($file);
 
@@ -470,7 +470,7 @@ class fileModel extends model
             $filePath = $this->dao->select('pathname')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch();
             $pathName = $filePath->pathname;
             $realPathName = $this->savePath . $this->getRealPathName($pathName);
-            if(!is_dir(dirname($realPathName)))mkdir(dirname($realPathName));
+            if(!is_dir(dirname($realPathName))) mkdir(dirname($realPathName));
             helper::saveFile($file['tmpname'], $realPathName);
 
             $file['pathname'] = $pathName;

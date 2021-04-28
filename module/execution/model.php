@@ -2127,7 +2127,7 @@ class executionModel extends model
 
         $this->loadModel('story')->setStage($storyID);
         $this->unlinkCases($executionID, $storyID);
-        $objectType = $executionID == $this->session->project ? unlinkedfromproject : unlinkedfromexecution;
+        $objectType = $executionID == $this->session->project ? 'unlinkedfromproject' : 'unlinkedfromexecution';
         $this->loadModel('action')->create('story', $storyID, $objectType, '', $executionID);
 
         $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->andWhere('status')->in('wait,doing')->fetchPairs('id');

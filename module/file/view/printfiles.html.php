@@ -17,8 +17,9 @@ $sessionString .= session_name() . '=' . session_id();
   function deleteFile(fileID)
   {
       if(!fileID) return;
-      hiddenwin.location.href =createLink('file', 'delete', 'fileID=' + fileID);
+      hiddenwin.location.href = createLink('file', 'delete', 'fileID=' + fileID);
   }
+
   /* Download a file, append the mouse to the link. Thus we call decide to open the file in browser no download it. */
   function downloadFile(fileID, extension, imageWidth, fileTitle)
   {
