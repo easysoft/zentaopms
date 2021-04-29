@@ -18,3 +18,13 @@ public function uploadFile($fileName, $path, $size, $time, $userID, $users, $cha
 {
     return $this->loadExtension('xuanxuan')->uploadFile($fileName, $path, $size, $time, $userID, $users, $chat);
 }
+
+public function chatAddAction($chatId = '', $action = '', $actorId = '', $result = '', $comment = '')
+{
+    return;
+}
+
+public function userAddAction($chatId = '', $action = '', $actorId = '', $result = '', $comment = '')
+{
+    return;
+}
