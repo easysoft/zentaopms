@@ -58,7 +58,7 @@ zentaoxx:
 	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
 	mv $(XUANPATH)/xuan.zip .
 	unzip xuan.zip
-	cp xuan/xxb/config/ext/xuanxuan.php zentaoxx/config/ext/
+	cp xuan/xxb/config/ext/_0_xuanxuan.php zentaoxx/config/ext/
 	cp -r xuan/xxb/lib/phpaes zentaoxx/lib/
 	cp -r xuan/xxb/framework/xuanxuan.class.php zentaoxx/framework/
 	cp -r xuan/xxb/db/*.sql zentaoxx/db/
@@ -78,8 +78,7 @@ zentaoxx:
 	cp -r xuan/xxb/www/x.php zentaoxx/www/
 	mkdir zentaoxx/module/action
 	cp -r xuan/xxb/module/action/ext zentaoxx/module/action
-	cp -r xuan/xxb/config/ext/xxb.php zentaoxx/config/ext/
-	cp -r xuan/xxb/config/ext/maps.php zentaoxx/config/ext/
+	cp -r xuan/xxb/config/ext/_1_maps.php zentaoxx/config/ext/
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
@@ -87,8 +86,8 @@ zentaoxx:
 	mkdir zentaoxx/db/
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
 	rm -rf zentaoxx/db_bak/
-	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/xuanxuan.php
-	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/xuanxuan.php
+	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/_0_xuanxuan.php
+	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/_0_xuanxuan.php
 	sed -i 's/site,//' zentaoxx/module/im/model/user.php
 	sed -i 's/admin, g/g/' zentaoxx/module/im/model/user.php
 	sed -i '/password = md5/d' zentaoxx/module/im/model/user.php
@@ -120,6 +119,8 @@ zentaoxx:
 	sed -i 's/helper::jsonEncode(/json_encode(/g' zentaoxx/framework/xuanxuan.class.php
 	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/module/im/view/debug.html.php
 	sed -i 's/v\.//g' zentaoxx/module/client/js/checkupgrade.js
+	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/module/im/control.php
+	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/module/im/model/conference.php
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	cp tools/en2de.php zentaoxx/tools; cd zentaoxx/tools; php en2de.php ../
