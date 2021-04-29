@@ -24,9 +24,9 @@ class caselibModel extends model
     public function setLibMenu($libraries, $libID)
     {
         /* Set case lib menu. */
-        $products =$this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs();
         if(!empty($products) and $this->session->product) $this->loadModel('qa')->setMenu($products, $this->session->product);
-        if(empty($products)) $this->loadModel('qa')->setMenu($products, 0);
+        if(empty($products)) $this->loadModel('qa')->setMenu(array(0 => ''), 0);
 
         if($libraries)
         {
