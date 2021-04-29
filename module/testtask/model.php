@@ -1130,7 +1130,7 @@ class testtaskModel extends model
             /* Update testRun's status. */
             if(!dao::isError())
             {
-                $runStatus = $caseResult == 'blocked' ? 'blocked' : 'done';
+                $runStatus = $caseResult == 'blocked' ? 'blocked' : 'normal';
                 $this->dao->update(TABLE_TESTRUN)
                     ->set('lastRunResult')->eq($caseResult)
                     ->set('status')->eq($runStatus)
@@ -1429,7 +1429,7 @@ class testtaskModel extends model
                 foreach(explode(',', trim($run->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
                 break;
             case 'status':
-                echo $caseChanged ? "<span class='warning'>{$this->lang->testcase->changed}</span>" : $this->processStatus('testtask', $run);
+                echo $caseChanged ? "<span class='warning'>{$this->lang->testcase->changed}</span>" : $this->processStatus('testcase', $run);
                 break;
             case 'precondition':
                 echo $run->precondition;

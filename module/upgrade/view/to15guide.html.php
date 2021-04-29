@@ -10,14 +10,6 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php 
-$mode = 'classic';
-if(isset($config->maxVersion))
-{
-    unset($lang->upgrade->to15Mode['classic']);
-    $mode = 'new';
-}
-?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
   <div class='panel' style='padding:50px; margin:50px 300px;'>
@@ -26,7 +18,7 @@ if(isset($config->maxVersion))
       <div class='panel-body'>
         <div style='width:600px; margin: auto;'>
           <?php echo $lang->upgrade->to15Desc;?>
-          <?php echo html::radio('mode', $lang->upgrade->to15Mode, $mode);?>
+          <?php echo html::radio('mode', $lang->upgrade->to15Mode, 'classic');?>
           <p> </p>
           <div id='selectedModeTips' class='text-info'><?php echo $lang->upgrade->selectedModeTips['classic'];?></div>
         </div>

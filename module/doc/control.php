@@ -199,7 +199,7 @@ class doc extends control
         if(!empty($lib->execution)) $this->view->execution = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->eq($lib->execution)->fetch();
         $this->view->lib     = $lib;
         $this->view->groups  = $this->loadModel('group')->getPairs();
-        $this->view->users   = $this->user->getPairs('noletter', $lib->users);
+        $this->view->users   = $this->user->getPairs('noletter|noclosed', $lib->users);
         $this->view->libID   = $libID;
 
         die($this->display());

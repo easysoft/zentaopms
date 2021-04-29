@@ -12,6 +12,11 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
+<?php if($lib->type == 'product'):?>
+<style> .chosen-container .chosen-results {max-height: 180px;}</style>
+<?php else:?>
+<style> .chosen-container .chosen-results {max-height: 145px;}</style>
+<?php endif;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

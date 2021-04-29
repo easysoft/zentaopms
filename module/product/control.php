@@ -474,13 +474,13 @@ class product extends control
 
         /* Get the relevant person in charge. */
         $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|pofirst',  $product->PO, $this->config->maxCount);
+        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  $product->PO, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
 
-        $qdUsers = $this->user->getPairs('nodeleted|qdfirst',  $product->QD, $this->config->maxCount);
+        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  $product->QD, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
 
-        $rdUsers = $this->user->getPairs('nodeleted|devfirst', $product->RD, $this->config->maxCount);
+        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', $product->RD, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $lines = array();
