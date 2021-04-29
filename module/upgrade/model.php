@@ -650,6 +650,7 @@ class upgradeModel extends model
         case '15_0_rc3':
             $this->saveLogs('Execute 15_0_rc3');
             $this->updateLibType();
+            $this->updateRunCaseStatus();
             $this->appendExec('15_0_rc3');
         }
 
@@ -4924,6 +4925,19 @@ class upgradeModel extends model
     {
         $executionList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->fetchAll('id');
         $this->dao->update(TABLE_DOCLIB)->set('type')->eq('execution')->where('execution')->in(array_keys($executionList))->exec();
+
+        return true;
+    }
+
+    /**
+     * Update the testtask related cases status.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateRunCaseStatus()
+    {
+        $this->dao->update(TABLE_TESTRUN)->set('status')->eq('normal')->where('status')->in('wait,done')->exec();
 
         return true;
     }
