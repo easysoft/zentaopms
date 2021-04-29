@@ -32,8 +32,14 @@ function createBug(obj)
     var onlybody    = config.onlybody;
     config.onlybody = 'no';
     var link        = createLink('bug', 'create', params + ',stepIdList=' + stepIdList);
-    if(openApp == 'my') window.parent.$.apps.open(link, 'qa')
-    window.open(link, '_parent');
+    if(openApp == 'my')
+    {
+        window.parent.$.apps.open(link, 'qa');
+    }
+    else
+    {
+        window.open(link, '_parent');
+    }
     config.onlybody = onlybody;
 }
 
