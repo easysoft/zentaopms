@@ -58,6 +58,7 @@
               <?php endforeach;?>
             </td>
           </tr>
+          <?php if($config->systemMode == 'new'):?>
           <tr>
             <th class='w-140px'>
               <div class="checkbox-primary checkbox-inline checkbox-right check-all">
@@ -71,6 +72,7 @@
               <?php endforeach;?>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <td class='text-center form-actions' colspan='2'>
               <?php

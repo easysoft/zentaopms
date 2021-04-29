@@ -256,7 +256,12 @@ class group extends control
         $groupUsers   = $this->group->getUserPairs($groupID);
         $allUsers     = $this->loadModel('dept')->getDeptUserPairs($deptID);
         $otherUsers   = array_diff_assoc($allUsers, $groupUsers);
-        $outsideUsers = $this->user->getPairs('outside|noclosed|noletter|noempty');
+
+        if($this->config->systemMode == 'new')
+        {
+            $outsideUsers = $this->user->getPairs('outside|noclosed|noletter|noempty');
+            $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
+        }
 
         $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[] = $group->name;
@@ -268,7 +273,6 @@ class group extends control
         $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
         $this->view->groupUsers   = $groupUsers;
         $this->view->otherUsers   = $otherUsers;
-        $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
         $this->display();
     }
 
