@@ -243,7 +243,7 @@
               <th><?php echo $lang->testcase->status;?></th>
               <td>
                 <?php
-                echo $this->processStatus($from != 'testtask' ? 'testcase' : 'testtask', $case);
+                echo $this->processStatus('testcase', $case);
                 if($case->version > $case->currentVersion and $from == 'testtask')
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromTesttask}>{$lang->testcase->changed}</span> ";

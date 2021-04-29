@@ -861,7 +861,7 @@ class testtaskModel extends model
             $row->case       = $caseID;
             $row->version    = $postData->versions[$caseID];
             $row->assignedTo = '';
-            $row->status     = 'wait';
+            $row->status     = 'normal';
             if($type == 'bybuild') $row->assignedTo = zget($assignedToPairs, $caseID, '');
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
 
