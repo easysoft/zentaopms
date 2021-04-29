@@ -119,6 +119,8 @@ zentaoxx:
 	sed -i 's/helper::jsonEncode(/json_encode(/g' zentaoxx/framework/xuanxuan.class.php
 	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/module/im/view/debug.html.php
 	sed -i 's/v\.//g' zentaoxx/module/client/js/checkupgrade.js
+	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/module/im/control.php
+	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/module/im/model/conference.php
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	cp tools/en2de.php zentaoxx/tools; cd zentaoxx/tools; php en2de.php ../
