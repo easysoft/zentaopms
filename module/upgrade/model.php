@@ -649,6 +649,7 @@ class upgradeModel extends model
             $this->appendExec('15_0_rc2');
         case '15_0_rc3':
             $this->saveLogs('Execute 15_0_rc3');
+            $this->execSQL($this->getUpgradeFile('15.0.rc3'));
             $this->updateLibType();
             $this->updateRunCaseStatus();
             $this->appendExec('15_0_rc3');
@@ -836,6 +837,9 @@ class upgradeModel extends model
             case '12_5_1':
             case '12_5_2':
             case '12_5_3': $confirmContent .= file_get_contents($this->getUpgradeFile('12.5.3'));
+            case '15_0_rc1':
+            case '15_0_rc2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.rc2'));
+            case '15_0_rc3': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.rc3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
