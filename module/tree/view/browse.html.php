@@ -160,7 +160,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none
               <?php endif;?>
               <td colspan="2" class="form-actions">
                 <?php if($canBeChanged) echo html::submitButton();?>
-                <?php echo html::a($backLink, $lang->goback, '', "class='btn btn-wide'");?>
+                <?php if(!isonlybody()) echo html::a($backLink, $lang->goback, '', "class='btn btn-wide'");?>
                 <?php echo html::hidden('parentModuleID', $currentModuleID);?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
               </td>
