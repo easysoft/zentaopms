@@ -173,6 +173,9 @@ class project extends control
     {
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
+        if($projectID == 0 and common::hasPriv('project', 'create')) $this->locate($this->createLink('project', 'create'));
+        if($projectID == 0 and !common::hasPriv('project', 'create')) $this->locate($this->createLink('project', 'browse'));
+
         $this->project->setMenu($projectID);
 
         $project = $this->project->getByID($projectID);
