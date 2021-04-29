@@ -230,6 +230,7 @@ $lang->custom->moduleName['execution']   = $lang->custom->execution;
 $lang->custom->conceptQuestions['overview'] = "1. Which combination of management fits your company?";
 $lang->custom->conceptQuestions['URAndSR']  = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
 
+
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();
 $lang->custom->conceptOptions->story['0'] = 'Requirement';

@@ -128,6 +128,7 @@ $whiteList[] = 'ci-initqueue';
 $whiteList[] = 'ci-exec';
 $whiteList[] = 'ci-checkcompilestatus';
 $whiteList[] = 'im-userlogin';
+$whiteList[] = 'user-refreshRandom';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";

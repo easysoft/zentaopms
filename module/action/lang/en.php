@@ -431,7 +431,6 @@ $lang->action->dynamicAction->entry['created'] = 'Add Application';
 $lang->action->dynamicAction->entry['edited']  = 'Edit Application';
 
 /* Generate the corresponding object link. */
-global $config;
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'Release|release|view|productID=%s';
@@ -478,9 +477,9 @@ $lang->action->search->objectTypeList['case']        = 'Case';
 $lang->action->search->objectTypeList['caseresult']  = 'Case Result';
 $lang->action->search->objectTypeList['stepresult']  = 'Case Steps';
 $lang->action->search->objectTypeList['story']       = "$lang->SRCommon/$lang->URCommon";
-$lang->action->search->objectTypeList['task']        = 'Task'; 
-$lang->action->search->objectTypeList['testtask']    = 'Request';     
-$lang->action->search->objectTypeList['user']        = 'User'; 
+$lang->action->search->objectTypeList['task']        = 'Task';
+$lang->action->search->objectTypeList['testtask']    = 'Request';
+$lang->action->search->objectTypeList['user']        = 'User';
 $lang->action->search->objectTypeList['doc']         = 'Doc';
 $lang->action->search->objectTypeList['doclib']      = 'Doc Lib';
 $lang->action->search->objectTypeList['todo']        = 'Todo';
