@@ -708,6 +708,7 @@ CREATE TABLE `zt_projectcase` (
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `count` mediumint(8) unsigned NOT NULL DEFAULT '1',
   `version` smallint(6) NOT NULL DEFAULT '1',
   `order` smallint(6) unsigned NOT NULL,
   UNIQUE KEY `project` (`project`,`case`)

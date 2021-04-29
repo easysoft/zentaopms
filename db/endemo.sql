@@ -391,14 +391,6 @@ INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES
 (114, 176, 'status', 'doing', 'done', ''),
 (115, 176, 'left', '5', '0', ''),
 (116, 176, 'finishedBy', '', 'dev3', '');
-INSERT INTO `zt_lang` (`id`, `lang`, `module`, `section`, `key`, `value`, `system`) VALUES
-(1, 'zh-cn', 'custom', 'URSRList', '1', '{\"SRName\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
-(2, 'zh-cn', 'custom', 'URSRList', '2', '{\"SRName\":\"\\u7814\\u53d1\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
-(3, 'zh-cn', 'custom', 'URSRList', '3', '{\"SRName\":\"\\u8f6f\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '1'),
-(4, 'zh-cn', 'custom', 'URSRList', '4', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u53f2\\u8bd7\"}', '1'),
-(5, 'zh-cn', 'custom', 'URSRList', '5', '{\"SRName\":\"\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
-(6, 'en', 'custom', 'URSRList', '1', '{\"SRName\":\"Story\",\"URName\":\"Epic\"}', '0'),
-(7, 'en', 'custom', 'URSRList', '2', '{\"SRName\":\"Story\",\"URName\":\"Requirement\"}', '0');
 INSERT INTO `zt_module` (`id`, `root`, `branch`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`, `collector`, `short`, `deleted`) VALUES
 (1, 1, 0, '首页', 0, ',1,', 1, 10, 'story', '', '', '', '0'),
 (2, 1, 0, '新闻中心', 0, ',2,', 1, 20, 'story', '', '', '', '0'),
