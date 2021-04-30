@@ -959,7 +959,11 @@ class bugModel extends model
             $bug->resolvedBuild = $buildID;
         }
 
-        if($bug->resolvedBuild and $bug->resolvedBuild != 'trunk') $bug->testtask = (int) $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
+        if($bug->resolvedBuild and $bug->resolvedBuild != 'trunk')
+        {
+            $testtaskID = (int) $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
+            if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtask;
+        }
 
         $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution,comment')
             ->autoCheck()
@@ -1608,7 +1612,7 @@ class bugModel extends model
 
         foreach($users as $account => $user)
         {
-            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':'; 
+            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
             if(!empty($this->config->isINT)) $firstLetter = '';
             $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
         }
