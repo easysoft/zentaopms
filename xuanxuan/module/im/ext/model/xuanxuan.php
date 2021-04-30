@@ -21,10 +21,10 @@ public function uploadFile($fileName, $path, $size, $time, $userID, $users, $cha
 
 public function chatAddAction($chatId = '', $action = '', $actorId = '', $result = '', $comment = '')
 {
-    return;
+    return $this->loadExtension('xuanxuan')->chatAddAction($chatId, $action, $actorId, $result, $comment);
 }
 
-public function userAddAction($chatId = '', $action = '', $actorId = '', $result = '', $comment = '')
+public function userAddAction($user, $actionType, $result, $comment = '', $common = false)
 {
-    return;
+    return $this->loadExtension('xuanxuan')->userAddAction($user, $actionType, $result, $comment, $common);
 }

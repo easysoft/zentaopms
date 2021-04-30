@@ -113,4 +113,36 @@ class xuanxuanIm extends imModel
 
         return $fileID;
     }
+
+    public function chatAddAction($chatId = '', $action = '', $actorId = '', $result = '', $comment = '')
+    {
+        if(!$this->loadModel('action')->checkLogLevel('chat', $action)) return;
+
+        $account = $this->dao->select('account')->from(TABLE_USER)->where('id')->eq($actorId)->fetch('account');
+        $actor   = !empty($account) ? $account : '';
+        $extra   = json_encode(array('actorId' => $actorId));
+        $this->loadModel('action')->create('chat', $chatId, $action, $comment, $extra, $actor);
+    }
+
+    public function userAddAction($user, $actionType, $result, $comment = '', $common = false)
+    {
+        if(!zget($this->config->xuanxuan, 'logLevel', 1) && !$common) return;
+
+        $account = '';
+        $userID  = 0;
+        if(is_int($user))
+        {
+            $account = $this->dao->select('account')->from(TABLE_USER)->where('id')->eq($user)->fetch('account');
+            $userID  = $user;
+        }
+        if(is_string($user))
+        {
+            $userID  = $this->dao->select('id')->from(TABLE_USER)->where('account')->eq($user)->fetch('id');
+            $account = $user;
+        }
+
+        $actor   = !empty($account) ? $account : '';
+        $extra   = json_encode(array('actorId' => $userID));
+        $this->loadModel('action')->create('user', $userID, $actionType, $comment, $extra, $actor);
+    }
 }

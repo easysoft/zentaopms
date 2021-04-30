@@ -122,6 +122,7 @@ zentaoxx:
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/module/im/control.php
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/module/im/model/conference.php
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
+	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	cp tools/en2de.php zentaoxx/tools; cd zentaoxx/tools; php en2de.php ../
 	rm -rf zentaoxx/tools
