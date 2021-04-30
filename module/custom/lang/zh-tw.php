@@ -48,7 +48,7 @@ $lang->custom->oneUnit              = "一個{$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "請先設置{$lang->hourCommon}轉換為%s的換算係數";
 
 if($config->systemMode == 'new') $lang->custom->execution = '執行';
-if($config->systemMode == 'classic') $lang->custom->execution = $lang->executionCommon;
+if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
 
 $lang->custom->unitList['efficiency'] = '工時/';
 $lang->custom->unitList['manhour']    = '人時/';
@@ -227,8 +227,9 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '計劃';
 $lang->custom->moduleName['execution']   = $lang->custom->execution;
 
-$lang->custom->conceptQuestions['overview'] = "1. 下述哪種組合方式更適合您公司的管理現狀？";
-$lang->custom->conceptQuestions['URAndSR']  = "2. 是否啟用{$lang->URCommon}和{$lang->SRCommon}概念？";
+$lang->custom->conceptQuestions['overview']   = "1. 下述哪種組合方式更適合您公司的管理現狀？";
+$lang->custom->conceptQuestions['URAndSR']    = "2. 是否啟用{$lang->URCommon}和{$lang->SRCommon}概念？";
+$lang->custom->conceptQuestions['storypoint'] = "3. 您公司是在使用以下哪種單位來做規模估算？";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();

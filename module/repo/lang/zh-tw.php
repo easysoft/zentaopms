@@ -3,6 +3,7 @@ $lang->repo->common          = '代碼';
 $lang->repo->browse          = '瀏覽';
 $lang->repo->viewRevision    = '查看修訂';
 $lang->repo->product         = '所屬產品';
+$lang->repo->execution       = '所屬' . $lang->execution->common;
 $lang->repo->create          = '創建';
 $lang->repo->maintain        = '版本庫列表';
 $lang->repo->edit            = '編輯';
@@ -124,6 +125,14 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
+$lang->repo->scmList['Gitlab']     = 'Gitlab';
+
+$lang->repo->gitlabHost    = 'Gitlab 地址';
+$lang->repo->gitlabToken   = 'Gitlab Token';
+$lang->repo->gitlabProject = '項目';
+
+$lang->repo->placeholder = new stdclass;
+$lang->repo->placeholder->gitlabHost = '請填寫gitlab訪問地址';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 請稍等...';

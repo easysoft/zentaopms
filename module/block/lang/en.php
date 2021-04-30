@@ -328,6 +328,11 @@ $lang->block->default['full']['my']['9']['title']  = 'Project List';
 $lang->block->default['full']['my']['9']['block']  = 'project';
 $lang->block->default['full']['my']['9']['source'] = 'project';
 $lang->block->default['full']['my']['9']['grid']   = 8;
+if($config->systemMode == 'classic')
+{
+    $lang->block->default['full']['my']['9']['block']  = 'execution';
+    $lang->block->default['full']['my']['9']['source'] = 'execution';
+}
 
 $lang->block->default['full']['my']['9']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['9']['params']['count']   = '15';

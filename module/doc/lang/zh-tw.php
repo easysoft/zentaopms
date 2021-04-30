@@ -71,15 +71,13 @@ $lang->doc->index            = '文檔主頁';
 $lang->doc->create           = '創建文檔';
 $lang->doc->edit             = '編輯文檔';
 $lang->doc->delete           = '刪除文檔';
+$lang->doc->createBook       = '創建手冊';
 $lang->doc->browse           = '文檔列表';
 $lang->doc->view             = '文檔詳情';
 $lang->doc->diff             = '對比';
 $lang->doc->diffAction       = '對比文檔';
 $lang->doc->sort             = '文檔排序';
 $lang->doc->manageType       = '維護目錄';
-$lang->doc->createBook       = '創建手冊';
-$lang->doc->manageBook       = '維護手冊';
-$lang->doc->editBook         = '編輯手冊';
 $lang->doc->editType         = '編輯目錄';
 $lang->doc->deleteType       = '刪除目錄';
 $lang->doc->addType          = '增加目錄';
@@ -105,12 +103,13 @@ $lang->doc->fixedMenu      = '固定到菜單欄';
 $lang->doc->removeMenu     = '從菜單欄移除';
 $lang->doc->search         = '搜索';
 
+global $config;
 /* 查詢條件列表 */
 $lang->doc->allProduct    = '所有' . $lang->productCommon;
 $lang->doc->allExecutions = '所有' . $lang->executionCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文檔庫';
-$lang->doc->libTypeList['project']   = '項目文檔庫';
+if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = '項目文檔庫';
 $lang->doc->libTypeList['execution'] = $lang->executionCommon . '文檔庫';
 $lang->doc->libTypeList['custom']    = '自定義文檔庫';
 
@@ -181,7 +180,7 @@ $lang->doc->noArticle            = '暫時沒有文章。';
 $lang->doc->noLib                = '暫時沒有文檔庫。';
 $lang->doc->noBook               = 'WIKI庫還未創建手冊，請新建 ：）';
 $lang->doc->cannotCreateOffice   = '<p>對不起，企業版才能創建%s文檔。<p><p>試用企業版，請聯繫我們：4006-8899-23 &nbsp; 0532-86893032。</p>';
-$lang->doc->notSetOffice         = "<p>創建%s文檔，需要配置<a href='%s' target='_parent'>Office轉換設置</a>。<p>";
+$lang->doc->notSetOffice         = "<p>創建%s文檔，需要配置<a href='%s'>Office轉換設置</a>。<p>";
 $lang->doc->noSearchedDoc        = '沒有搜索到任何文檔。';
 $lang->doc->noEditedDoc          = '您還沒有編輯任何文檔。';
 $lang->doc->noOpenedDoc          = '您還沒有創建任何文檔。';

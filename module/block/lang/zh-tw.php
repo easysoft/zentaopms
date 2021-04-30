@@ -18,12 +18,8 @@ $lang->block->grid       = '位置';
 $lang->block->color      = '顏色';
 $lang->block->reset      = '恢復預設';
 $lang->block->story      = '需求';
-$lang->block->bug        = 'Bug';
 $lang->block->investment = '投入';
-$lang->block->left       = '剩餘';
 $lang->block->estimate   = '預計工時';
-$lang->block->doneBugs   = '已解決';
-$lang->block->leftBugs   = '未解決';
 $lang->block->last       = '近期';
 
 $lang->block->account = '所屬用戶';
@@ -291,11 +287,11 @@ $lang->block->default['full']['my']['3']['params']['count'] = '20';
 
 if($config->systemMode == 'new')
 {
-$lang->block->default['full']['my']['4']['title']           = '項目統計';
-$lang->block->default['full']['my']['4']['block']           = 'statistic';
-$lang->block->default['full']['my']['4']['source']          = 'project';
-$lang->block->default['full']['my']['4']['grid']            = 8;
-$lang->block->default['full']['my']['4']['params']['count'] = '20';
+    $lang->block->default['full']['my']['4']['title']           = '項目統計';
+    $lang->block->default['full']['my']['4']['block']           = 'statistic';
+    $lang->block->default['full']['my']['4']['source']          = 'project';
+    $lang->block->default['full']['my']['4']['grid']            = 8;
+    $lang->block->default['full']['my']['4']['params']['count'] = '20';
 }
 
 $lang->block->default['full']['my']['5']['title']  = '我的貢獻';
@@ -332,6 +328,11 @@ $lang->block->default['full']['my']['9']['title']  = '項目列表';
 $lang->block->default['full']['my']['9']['block']  = 'project';
 $lang->block->default['full']['my']['9']['source'] = 'project';
 $lang->block->default['full']['my']['9']['grid']   = 8;
+if($config->systemMode == 'classic')
+{
+    $lang->block->default['full']['my']['9']['block']  = 'execution';
+    $lang->block->default['full']['my']['9']['source'] = 'execution';
+}
 
 $lang->block->default['full']['my']['9']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['9']['params']['count']   = '15';
@@ -355,7 +356,6 @@ $lang->block->availableBlocks->testtask  = '測試版本列表';
 $lang->block->availableBlocks->risk      = '我的風險';
 $lang->block->availableBlocks->issue     = '我的問題';
 
-global $config;
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = '項目';
 $lang->block->moduleList['product']   = $lang->productCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;

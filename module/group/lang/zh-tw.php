@@ -32,7 +32,7 @@ $lang->group->productList        = '可訪問' . $lang->productCommon;
 $lang->group->projectList        = '可訪問項目';
 $lang->group->dynamic            = '可查看動態';
 $lang->group->noticeVisit        = '空代表沒有訪問限制';
-$lang->group->noneProgram        = "暫時沒有項目";
+$lang->group->noneProgram        = "暫時沒有項目集";
 $lang->group->noneProduct        = "暫時沒有{$lang->productCommon}";
 $lang->group->noneProject        = "暫時沒有{$lang->executionCommon}";
 
