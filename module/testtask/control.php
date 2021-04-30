@@ -722,8 +722,6 @@ class testtask extends control
         /* Set menu. */
         if($this->app->openApp == 'project')
         {
-            $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
-            $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($task->project);
             $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
         }
@@ -734,7 +732,6 @@ class testtask extends control
         else
         {
             $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
-            $this->app->rawModule = 'testcase';
         }
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
