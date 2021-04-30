@@ -368,7 +368,7 @@ class executionModel extends model
                     $member->root = $executionID;
                     $member->join = $today;
                     $member->days = $sprint->days;
-                    $member->type = $type;
+                    $member->type = 'execution';
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
                     if($member->account == $this->app->user->account) $creatorExists = true;
                 }
@@ -383,7 +383,7 @@ class executionModel extends model
                 $member->account = $this->app->user->account;
                 $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
                 $member->join    = $today;
-                $member->type    = $type;
+                $member->type    = 'execution';
                 $member->days    = $sprint->days;
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();

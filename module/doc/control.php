@@ -275,8 +275,9 @@ class doc extends control
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
-            $params = "type=$objectType&objectID=$objectID&libID=$libID&docID=" . $docResult['id'];
-            $link = $this->createLink('doc', 'objectLibs', $params);
+            $objectID = zget($lib, $lib->type, '');
+            $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
+            $link     = $this->createLink('doc', 'objectLibs', $params);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 

@@ -652,6 +652,8 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('15.0.rc3'));
             $this->updateLibType();
             $this->updateRunCaseStatus();
+            $this->fix4TaskLinkProject();
+            $this->fixExecutionTeam();
             $this->appendExec('15_0_rc3');
         }
 
@@ -4399,8 +4401,10 @@ class upgradeModel extends model
         $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'product' and product " . helper::dbIN($productIdList) . ')')->exec();
 
         /* Project linked objects. */
-        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('project')->in($sprintIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and project " . helper::dbIN($sprintIdList) . ')')->exec();
+        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->exec();
 
         /* Put sprint stories into project story mdoule. */
         $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
@@ -4942,6 +4946,60 @@ class upgradeModel extends model
     public function updateRunCaseStatus()
     {
         $this->dao->update(TABLE_TESTRUN)->set('status')->eq('normal')->where('status')->in('wait,done')->exec();
+
+        return true;
+    }
+
+    /**
+     * Fix for task link project.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fix4TaskLinkProject()
+    {
+        if($this->config->systemMode != 'new') return true;
+
+        $executionIdList = $this->dao->select('distinct execution')->from(TABLE_TASK)->where('project')->eq(0)->fetchPairs('execution', 'execution');
+        $executionPairs  = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->in($executionIdList)->andWhere('project')->ne('0')->fetchPairs('id', 'project');
+        foreach($executionPairs as $executionID => $projectID) $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->eq($executionID)->exec();
+
+        return true;
+    }
+
+    /**
+     * Fix execution team.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fixExecutionTeam()
+    {
+        $errorTeams = $this->dao->select('id,root,account')->from(TABLE_TEAM)->where('type')->eq('')->fetchGroup('root', 'id');
+        $duplicateTeams = $this->dao->select('root,account')->from(TABLE_TEAM)->where('root')->in(array_keys($errorTeams))->andWhere('type')->ne('')->fetchGroup('root', 'account');
+
+        foreach($errorTeams as $root => $teams)
+        {
+            if(!isset($duplicateTeams[$root]))
+            {
+                $this->dao->update(TABLE_TASK)->set('type')->eq('execution')->where('id')->in(array_keys($teams))->exec();
+            }
+            else
+            {
+                $existsTeams = $duplicateTeams[$root];
+                foreach($teams as $team)
+                {
+                    if(isset($existsTeams[$team->account]))
+                    {
+                        $this->dao->delete()->from(TABLE_TEAM)->where('id')->eq($team->id);
+                    }
+                    else
+                    {
+                        $this->dao->update(TABLE_TASK)->set('type')->eq('execution')->where('id')->in($team->id)->exec();
+                    }
+                }
+            }
+        }
 
         return true;
     }
