@@ -161,7 +161,20 @@ class upgrade extends control
             if($mode == 'new')     $this->locate(inlink('mergeTips'));
         }
 
-        $this->view->title = $this->lang->upgrade->to15Guide;
+        if(isset($this->config->bizVersion))
+        {
+            $title = $this->lang->upgrade->toBIZ5Guide;
+        }
+        elseif(isset($this->config->proVersion))
+        {
+            $title = $this->lang->upgrade->toPRO10Guide;
+        }
+        else
+        {
+            $title = $this->lang->upgrade->toPMS15Guide;
+        }
+
+        $this->view->title = $title;
         $this->display();
     }
 

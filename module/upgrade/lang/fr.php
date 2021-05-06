@@ -52,7 +52,9 @@ $lang->upgrade->noticeSQL     = 'Votre base de donnée est inconsistente avec le
 $lang->upgrade->afterDeleted  = "Le fichier n'est pas supprimé. Recommencez après l'avoir supprimé.";
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->to15Guide     = 'ZenTao open source version 15.0.beta1 upgrade';
+$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15.0.beta1 upgrade';
+$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10.0.rc1 upgrade';
+$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5.0.rc1 upgrade';
 $lang->upgrade->to15Desc      = <<<EOD
 <p>Dear users, ZenTao has made adjustments to navigation and concepts since version 15. The main changes are as follows:</p>
 <ol>

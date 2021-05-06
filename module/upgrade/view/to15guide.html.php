@@ -14,7 +14,22 @@
 <div class='container'>
   <div class='panel' style='padding:50px; margin:50px 300px;'>
     <form method='post'>
-      <div class='panel-title text-center'><?php echo $lang->upgrade->to15Guide;?></div>
+      <div class='panel-title text-center'>
+        <?php
+        if(isset($config->bizVersion))
+        {
+            echo $lang->upgrade->toBIZ5Guide;
+        }
+        elseif(isset($config->proVersion))
+        {
+            echo $lang->upgrade->toPRO10Guide;
+        }
+        else
+        {
+            echo $lang->upgrade->toPMS15Guide;
+        }
+        ?>
+      </div>
       <div class='panel-body'>
         <div style='width:600px; margin: auto;'>
           <?php echo $lang->upgrade->to15Desc;?>
