@@ -282,14 +282,14 @@ class testreportModel extends model
             $case->lastRunner    = '';
             $case->lastRunDate   = '';
             $case->lastRunResult = '';
-            $case->status        = 'wait';
+            $case->status        = 'normal';
             if(isset($results[$caseID]))
             {
                 $result = $results[$caseID];
                 $case->lastRunner    = $result->lastRunner;
                 $case->lastRunDate   = $result->date;
                 $case->lastRunResult = $result->caseResult;
-                $case->status        = $result->caseResult == 'blocked' ? 'blocked' : 'done';
+                $case->status        = $result->caseResult == 'blocked' ? 'blocked' : 'normal';
             }
         }
 
