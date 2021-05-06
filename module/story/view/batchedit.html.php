@@ -32,7 +32,7 @@
 $visibleFields = array();
 foreach(explode(',', $showFields) as $field)
 {
-    if($field)$visibleFields[$field] = '';
+    if($field and ($storyType == 'story' or $field != 'stage'))$visibleFields[$field] = '';
 }
 ?>
 <form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "productID=$productID&executionID=$executionID")?>" id="batchEditForm">
