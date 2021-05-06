@@ -26,11 +26,11 @@
       <tr>
         <th class='rowhead thWidth'><?php echo $lang->user->account;?></th>
         <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->user->originalPassword;?></th>
         <td><?php echo html::password('originalPassword', '', "class='form-control'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->user->newPassword;?></th>
         <td>
@@ -39,7 +39,7 @@
             <span class='input-group-addon' id='passwordStrength'></span>
           </span>
         </td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->user->password2;?></th>
         <td><?php echo html::password('password2', '', "class='form-control'");?></td>
