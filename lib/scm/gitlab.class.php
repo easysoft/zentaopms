@@ -37,7 +37,7 @@ class gitlab
         $api  = "tree";
 
         $param = new stdclass();
-        $param->path      = urlencode(ltrim($path, '/'));
+        $param->path      = ltrim($path, '/');
         $param->ref       = $revision;
         $param->recursive = 0;
 
@@ -69,7 +69,7 @@ class gitlab
                 if(empty($commits)) continue;
                 $commit = $commits[0];
 
-                $info->name     = $file->path;
+                $info->name     = $file->name;
                 $info->kind     = 'dir';
                 $info->revision = $commit->id;
                 $info->account  = $commit->committer_name;
