@@ -291,7 +291,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <?php
           foreach($setting as $key => $value)
           {
-              if($storyType == 'requirement' and $value->id == 'plan') $value->show = false;
+              if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage')))) $value->show = false;
 
               if($value->show)
               {
