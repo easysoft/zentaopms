@@ -44,7 +44,7 @@
       <td></td>
       <th><?php echo $lang->block->consumedHours . ':';?></th>
       <td><?php echo $totalData[$projectID]->consumed . $lang->execution->workHour;?></td>
-      <th><?php echo $lang->block->done . ':';?></th>
+      <th><?php echo $lang->bug->statusList['resolved'] . ':';?></th>
       <td><?php echo $totalData[$projectID]->doneBugs;?></td>
     </tr>
     <tr>
