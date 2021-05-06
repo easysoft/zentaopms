@@ -402,24 +402,27 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   echo '</div></li>';
               }
 
-              if($canBatchChangeStage)
+              if($storyType == 'story')
               {
-                  echo "<li class='dropdown-submenu'>";
-                  echo html::a('javascript:;', $lang->story->stageAB, '', "id='stageItem'");
-                  echo "<ul class='dropdown-menu'>";
-                  foreach($lang->story->stageList as $key => $stage)
+                  if($canBatchChangeStage)
                   {
-                      if(empty($key)) continue;
-                      if(strpos('tested|verified|released|closed', $key) === false) continue;
-                      $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
-                      echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                      echo "<li class='dropdown-submenu'>";
+                      echo html::a('javascript:;', $lang->story->stageAB, '', "id='stageItem'");
+                      echo "<ul class='dropdown-menu'>";
+                      foreach($lang->story->stageList as $key => $stage)
+                      {
+                          if(empty($key)) continue;
+                          if(strpos('tested|verified|released|closed', $key) === false) continue;
+                          $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
+                          echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                      }
+                      echo '</ul></li>';
                   }
-                  echo '</ul></li>';
-              }
-              else
-              {
-                  $class= "class='disabled'";
-                  echo "<li $class>" . html::a('javascript:;', $lang->story->stageAB, '', $class) . '</li>';
+                  else
+                  {
+                      $class= "class='disabled'";
+                      echo "<li $class>" . html::a('javascript:;', $lang->story->stageAB, '', $class) . '</li>';
+                  }
               }
               ?>
             </ul>

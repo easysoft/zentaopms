@@ -749,7 +749,9 @@ class story extends control
         if($storyType == 'requirement')
         {
             unset($customFields['plan']);
-            $showFields = str_replace('plan', '', $showFields);
+            unset($customFields['stage']);
+            $showFields = str_replace('plan',  '', $showFields);
+            $showFields = str_replace('stage', '', $showFields);
         }
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
