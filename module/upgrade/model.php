@@ -650,6 +650,20 @@ class upgradeModel extends model
         case '15_0_rc3':
             $this->saveLogs('Execute 15_0_rc3');
             $this->execSQL($this->getUpgradeFile('15.0.rc3'));
+            if(empty($this->config->isINT))
+            {
+                if(!$executeXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.3.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.beta2.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.beta3.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+            }
             $this->updateLibType();
             $this->updateRunCaseStatus();
             $this->fix4TaskLinkProject();
