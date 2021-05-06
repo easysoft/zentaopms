@@ -3,7 +3,7 @@
  * The create view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong 
+ * @author      Wang Yidong, Zhu Jinyong
  * @package     repo
  * @version     $Id: create.html.php $
  */
@@ -34,7 +34,7 @@
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabHost;?></th>
-            <td><?php echo html::input('gitlabHost', '', "class='form-control' placeholder='{$lang->repo->placeholder}'");?>
+            <td><?php echo html::input('gitlabHost', '', "class='form-control' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabToken;?></th>

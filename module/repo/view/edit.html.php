@@ -40,7 +40,7 @@
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabHost;?></th>
-            <td><?php echo html::input('gitlabHost', $repo->client, "class='form-control' placeholder='{$lang->repo->placeholder}'");?>
+            <td><?php echo html::input('gitlabHost', $repo->client, "class='form-control' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabToken;?></th>
