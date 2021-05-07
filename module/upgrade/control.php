@@ -163,10 +163,12 @@ class upgrade extends control
 
         if(isset($this->config->bizVersion))
         {
+            $this->lang->upgrade->to15Desc = str_replace('15', '5', $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toBIZ5Guide;
         }
         elseif(isset($this->config->proVersion))
         {
+            $this->lang->upgrade->to15Desc = str_replace('15', '10', $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toPRO10Guide;
         }
         else
