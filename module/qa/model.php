@@ -24,6 +24,7 @@ class qaModel extends model
     public function setMenu($products, $productID, $branch = 0, $extra = '')
     {
         if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->loadModel('product')->getSwitcher($productID, $extra, $branch);
+        if($this->app->rawModule == 'product' and $this->app->rawMethod == 'showerrornone') $this->lang->switcherMenu = '';
         common::setMenuVars('qa', $productID);
     }
 

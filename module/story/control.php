@@ -749,7 +749,9 @@ class story extends control
         if($storyType == 'requirement')
         {
             unset($customFields['plan']);
-            $showFields = str_replace('plan', '', $showFields);
+            unset($customFields['stage']);
+            $showFields = str_replace('plan',  '', $showFields);
+            $showFields = str_replace('stage', '', $showFields);
         }
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
@@ -1907,18 +1909,23 @@ class story extends control
                         unset($stories[$story->id]);
                     }
                 }
+
                 if(!empty($children))
                 {
-                    $position = 0;
+                    $reorderStory = array();
                     foreach($stories as $story)
                     {
-                        $position ++;
+                        $reorderStory[$story->id] = $story;
                         if(isset($children[$story->id]))
                         {
-                            array_splice($stories, $position, 0, $children[$story->id]);
-                            $position += count($children[$story->id]);
+                            foreach($children[$story->id] as $childrenID => $childrenStory)
+                            {
+                                $reorderStory[$childrenID] = $childrenStory;
+                            }
                         }
+                        unset($stories[$story->id]);
                     }
+                    $stories = $reorderStory;
                 }
             }
 
