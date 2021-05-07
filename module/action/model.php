@@ -877,10 +877,10 @@ class actionModel extends model
         foreach($actions as $object) $objectTypes[$object->objectType][] = $object->objectID;
         foreach($objectTypes as $objectType => $objectIds)
         {
-            if(!isset($this->config->objectTables[$objectType])) continue;    // If no defination for this type, omit it.
+            if(!isset($this->config->objectTables[$objectType]) and $objectType != 'makeup') continue;    // If no defination for this type, omit it.
 
             $objectIds = array_unique($objectIds);
-            $table     = $this->config->objectTables[$objectType];
+            $table     = $objectType == 'makeup' ? '`zt_overtime`' : $this->config->objectTables[$objectType];
             $field     = $this->config->action->objectNameFields[$objectType];
             if($table != TABLE_TODO)
             {

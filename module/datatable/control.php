@@ -3,17 +3,17 @@
  * The view file of datatable module of ZenTaoPMS.
  *
  * @copyright   Copyright 2014-2014 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     business(商业软件) 
+ * @license     business(商业软件)
  * @author      Hao sun <sunhao@cnezsoft.com>
- * @package     datatable 
+ * @package     datatable
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 class datatable extends control
 {
     /**
-     * Construct function, set menu. 
-     * 
+     * Construct function, set menu.
+     *
      * @access public
      * @return void
      */
@@ -24,7 +24,7 @@ class datatable extends control
 
     /**
      * Save config
-     * 
+     *
      * @access public
      * @return void
      */
@@ -47,13 +47,14 @@ class datatable extends control
 
     /**
      * custom fields.
-     * 
-     * @param  string $module 
-     * @param  string $method 
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function ajaxCustom($module, $method)
+    public function ajaxCustom($module, $method, $extra = '')
     {
         $target = $module . ucfirst($method);
         $mode   = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
@@ -85,17 +86,24 @@ class datatable extends control
             $setting = json_encode($this->config->$module->datatable->defaultField);
         }
 
-        $this->view->cols    = $this->datatable->getFieldList($module);
+        $cols = $this->datatable->getFieldList($module);
+        if($extra == 'requirement')
+        {
+            unset($cols['plan']);
+            unset($cols['stage']);
+        }
+
+        $this->view->cols    = $cols;
         $this->view->setting = $setting;
         $this->display();
     }
 
     /**
      * Ajax reset cols
-     * 
-     * @param  string $module 
-     * @param  string $method 
-     * @param  string $confirm 
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $confirm
      * @access public
      * @return void
      */
