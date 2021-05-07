@@ -669,6 +669,8 @@ class upgradeModel extends model
             $this->fix4TaskLinkProject();
             $this->fixExecutionTeam();
             $this->appendExec('15_0_rc3');
+        case '15_0':
+            $this->updateProjectLifeTime();
         }
 
         $this->deletePatch();
@@ -5028,6 +5030,19 @@ class upgradeModel extends model
                 }
             }
         }
+
+        return true;
+    }
+
+    /**
+     * Update the lifetime field default value of the zt_project table.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateRunCaseStatus()
+    {
+        $this->dao->update(TABLE_PROJECT)->set('lifetime')->eq('')->where('lifetime')->eq('sprint')->exec();
 
         return true;
     }
