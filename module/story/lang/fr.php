@@ -249,7 +249,7 @@ $lang->story->lblClose    = 'Fermer';
 $lang->story->lblTBC      = 'Tâche/Bug/CasTest';
 
 $lang->story->checkAffection       = 'Influence';
-$lang->story->affectedProjects     = '' . $lang->executionCommon . 's';
+$lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'CasTests';
 

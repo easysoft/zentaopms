@@ -154,6 +154,13 @@ class doc extends control
         $projects   = $this->project->getPairsByProgram();
         $executions = $this->execution->getPairs();
 
+        if($type == 'execution')
+        {
+            $execution = $this->execution->getByID($objectID);
+            $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
+            $this->lang->doc->libTypeList['execution'] = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->libTypeList['execution']);
+        }
+
         $libTypeList = $this->lang->doc->libTypeList;
         if(empty($products))   unset($libTypeList['product']);
         if(empty($projects))   unset($libTypeList['project']);
@@ -196,7 +203,13 @@ class doc extends control
 
         $lib = $this->doc->getLibByID($libID);
         if(!empty($lib->product))   $this->view->product   = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($lib->product)->fetch();
-        if(!empty($lib->execution)) $this->view->execution = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->eq($lib->execution)->fetch();
+        if(!empty($lib->execution))
+        {
+            $execution = $this->execution->getByID($lib->execution);
+            if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
+
+            $this->view->execution = $execution;
+        }
         $this->view->lib     = $lib;
         $this->view->groups  = $this->loadModel('group')->getPairs();
         $this->view->users   = $this->user->getPairs('noletter|noclosed', $lib->users);
