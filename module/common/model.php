@@ -2289,8 +2289,9 @@ EOD;
         /* If the method is in homeMenu, display homeMenu. */
         foreach($lang->$openApp->homeMenu as $menu)
         {
-            $link = is_array($menu) ? $menu['link'] : $menu;
-            $method = explode('|', $link)[2];
+            $link   = is_array($menu) ? $menu['link'] : $menu;
+            $params = explode('|', $link);
+            $method = $params[2];
 
             if($method == $app->rawMethod)
             {
