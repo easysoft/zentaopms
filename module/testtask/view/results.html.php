@@ -50,8 +50,8 @@
           <td class='w-60px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-angle-down text-muted'></i></td>
         </tr>
-        <?php $executionParam = ($this->app->openApp == 'execution' and isset($testtask)) ? "executionID=$testtask->execution," : '';?>
-        <?php $params = isset($testtask) ? ",testtask=$testtask->id,{$executionParam}buildID=$testtask->build" : '';?>
+        <?php $executionParam = ($this->app->openApp == 'execution' and isset($testtask)) ? "executionID=$testtask->execution," : "executionID={$this->session->execution}";?>
+        <?php $params = isset($testtask) ? ",testtask=$testtask->id,{$executionParam}buildID=$testtask->build" : ",$executionParam";?>
         <tr class='result-detail hide' id='tr-detail_<?php echo $trCount++; ?>'>
           <td colspan='7' class='pd-0'>
             <?php $projectParam = $this->app->openApp == 'project' ? "projectID={$this->session->project}," : ''?>

@@ -936,7 +936,7 @@ class execution extends control
         $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $orderBy, $pager, $type);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
-        $cases = $this->testcase->appendData($cases, 'run');
+        $cases = $this->testcase->appendData($cases, 'case');
 
         $this->view->title       = $this->lang->execution->testcase;
         $this->view->executionID = $executionID;
