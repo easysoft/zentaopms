@@ -160,6 +160,7 @@ $lang->bug->createBuild   = 'Mới';
 /* Legend list。*/
 $lang->bug->legendBasicInfo             = 'Thông tin cơ bản';
 $lang->bug->legendAttatch               = 'Files';
+$lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
 $lang->bug->legendExecStoryTask         = $lang->executionCommon . '/Câu chuyện/Nhiệm vụ';
 $lang->bug->lblTypeAndSeverity          = 'Loại/Mức độ';
 $lang->bug->lblSystemBrowserAndHardware = 'Hệ thống/Trình duyệt';

@@ -105,7 +105,7 @@
       <div class='tabs'>
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#legendBasicInfo' data-toggle='tab'><?php echo $lang->bug->legendBasicInfo;?></a></li>
-          <li><a href='#legendExecStoryTask' data-toggle='tab'><?php echo $lang->bug->legendExecStoryTask;?></a></li>
+          <li><a href='#legendExecStoryTask' data-toggle='tab'><?php echo $config->systemMode == 'new' ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask;?></a></li>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
@@ -239,9 +239,15 @@
           <div class='tab-pane' id='legendExecStoryTask'>
             <table class='table table-data'>
               <tbody>
+                <?php if($config->systemMode == 'new'):?>
+                <tr>
+                  <th class='w-70px'><?php echo $lang->bug->project;?></th>
+                  <td><?php if($bug->project) echo html::a($this->createLink('project', 'view', "projectID=$bug->project"), $bug->projectName);?></td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th class='w-70px'><?php echo $lang->bug->execution;?></th>
-                  <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'browse', "executionid=$bug->execution"), $bug->executionName);?></td>
+                  <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'browse', "executionID=$bug->execution"), $bug->executionName);?></td>
                 </tr>
                 <tr class='nofixed'>
                   <th><?php echo $lang->bug->story;?></th>

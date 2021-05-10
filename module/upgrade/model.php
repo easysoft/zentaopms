@@ -5040,7 +5040,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function updateRunCaseStatus()
+    public function updateProjectLifeTime()
     {
         $this->dao->update(TABLE_PROJECT)->set('lifetime')->eq('')->where('lifetime')->eq('sprint')->exec();
 
