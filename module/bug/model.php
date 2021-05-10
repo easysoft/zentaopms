@@ -440,6 +440,8 @@ class bugModel extends model
             ->where('t1.id')->eq((int)$bugID)->fetch();
         if(!$bug) return false;
 
+        if(!empty($bug->project)) $bug->projectName = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($bug->project)->fetch('name');
+
         $bug = $this->loadModel('file')->replaceImgURL($bug, 'steps');
         if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
