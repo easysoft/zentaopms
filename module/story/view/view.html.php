@@ -489,7 +489,7 @@
                     <?php
                     foreach($cases as $case)
                     {
-                        echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C] #$case->id $case->title", '', "class='iframe' data-width='80%'") . '</li>';
+                        echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C] #$case->id $case->title") . '</li>';
                     }
                     ?>
                     </ul>
