@@ -40,7 +40,7 @@ class execution extends control
 
         $this->loadModel('project');
 
-        if(!in_array($this->methodName, array('computeburn', 'ajaxgetdropmenu')))
+        if(!in_array($this->methodName, array('computeburn', 'ajaxgetdropmenu')) and $this->app->openApp == 'execution')
         {
             $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
@@ -936,7 +936,7 @@ class execution extends control
         $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $orderBy, $pager, $type);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
-        $cases = $this->testcase->appendData($cases, 'run');
+        $cases = $this->testcase->appendData($cases, 'case');
 
         $this->view->title       = $this->lang->execution->testcase;
         $this->view->executionID = $executionID;
