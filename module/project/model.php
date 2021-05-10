@@ -674,7 +674,7 @@ class projectModel extends model
             if(isset($project->budget) and $program->budget != 0)
             {
                 $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
-                if($project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->project->beyondParentBudget;
+                if($project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
 
             /* Judge products not empty. */

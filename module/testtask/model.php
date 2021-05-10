@@ -1429,7 +1429,16 @@ class testtaskModel extends model
                 foreach(explode(',', trim($run->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
                 break;
             case 'status':
-                echo $caseChanged ? "<span class='warning'>{$this->lang->testcase->changed}</span>" : $this->processStatus('testcase', $run);
+                if($caseChanged)
+                {
+                    echo "<span class='warning'>{$this->lang->testcase->changed}</span>";
+                }
+                else
+                {
+                    $status = $this->processStatus('testcase', $run);
+                    if($run->status == $status) $status = $this->processStatus('testtask', $run);
+                    echo $status;
+                }
                 break;
             case 'precondition':
                 echo $run->precondition;

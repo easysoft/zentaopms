@@ -116,12 +116,7 @@ class xuanxuanIm extends imModel
 
     public function chatAddAction($chatId = '', $action = '', $actorId = '', $result = '', $comment = '')
     {
-        if(!$this->loadModel('action')->checkLogLevel('chat', $action)) return;
-
-        $account = $this->dao->select('account')->from(TABLE_USER)->where('id')->eq($actorId)->fetch('account');
-        $actor   = !empty($account) ? $account : '';
-        $extra   = json_encode(array('actorId' => $actorId));
-        $this->loadModel('action')->create('chat', $chatId, $action, $comment, $extra, $actor);
+        return;
     }
 
     public function userAddAction($user, $actionType, $result, $comment = '', $common = false)

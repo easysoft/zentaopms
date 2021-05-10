@@ -897,7 +897,7 @@ class story extends control
         }
         elseif($from == 'project')
         {
-            $this->loadModel('project')->setMenu($param);
+            if(!isonlybody()) $this->loadModel('project')->setMenu($param);
         }
         elseif($from == 'qa')
         {
