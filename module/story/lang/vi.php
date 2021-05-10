@@ -249,7 +249,7 @@ $lang->story->lblClose    = 'Đóng';
 $lang->story->lblTBC      = 'Nhiệm vụ/Bug/Tình huống';
 
 $lang->story->checkAffection   = 'Ảnh hưởng';
-$lang->story->affectedProjects = ' ' . $lang->executionCommon;
+$lang->story->affectedProjects = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs     = 'Bugs';
 $lang->story->affectedCases    = 'Tình huống';
 

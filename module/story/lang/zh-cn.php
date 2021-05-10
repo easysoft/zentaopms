@@ -250,7 +250,7 @@ $lang->story->lblClose             = "关闭{$lang->SRCommon}";
 $lang->story->lblTBC               = '任务Bug用例';
 
 $lang->story->checkAffection       = '影响范围';
-$lang->story->affectedProjects     = '影响的' . $lang->executionCommon;
+$lang->story->affectedProjects     = "影响的{$lang->project->common}或{$lang->execution->common}";
 $lang->story->affectedBugs         = '影响的Bug';
 $lang->story->affectedCases        = '影响的用例';
 
