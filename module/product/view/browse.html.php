@@ -74,7 +74,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <?php
       if($moduleID)
       {
-          $removeLink = $browseType == 'bymodule' ? $this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
+          $removeLink = $browseType == 'bymodule' ? $this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModuleParam")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted btn btn-link' style='padding-left: 0;'");
       }
       ?>

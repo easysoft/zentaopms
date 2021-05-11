@@ -151,13 +151,15 @@ class product extends control
         if($browseType == 'bymodule' or $browseType == '')
         {
             setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($this->app->openApp == 'project') setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $_COOKIE['storyBranch'] = 0;
             setcookie('storyBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
         if($browseType == 'bybranch') setcookie('storyBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-        $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->storyModule ? $this->cookie->storyModule : 0));
+        $cookieModule = $this->app->openApp == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
+        $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($cookieModule ? $cookieModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu. The projectstory module does not execute. */
