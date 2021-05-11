@@ -388,7 +388,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function edit($projectID = 0, $from = 'project')
+    public function edit($projectID = 0)
     {
         $this->loadModel('action');
         $this->loadModel('custom');
@@ -426,10 +426,9 @@ class project extends control
                 $this->loadModel('productplan')->linkProject($projectID, $_POST['plans'], $oldPlanStories);
             }
 
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+
             $locateLink = $this->session->projectList ? $this->session->projectList : inLink('view', "projectID=$projectID");
-            if($from == 'projectView')    $locateLink = $this->createLink('project', 'view', "projectID=$projectID");
-            if($from == 'program')        $locateLink = $this->createLink('program', 'browse');
-            if($from == 'programProject') $locateLink = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "projectID=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
@@ -472,7 +471,6 @@ class project extends control
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
         $this->view->URSRPairs            = $this->custom->getURSRPairs();
-        $this->view->from                 = $from;
         $this->view->parentProject        = $parentProject;
         $this->view->parentProgram        = $this->program->getByID($project->parent);
         $this->view->availableBudget      = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;

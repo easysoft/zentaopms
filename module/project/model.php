@@ -1373,8 +1373,10 @@ class projectModel extends model
                         echo "</div>";
                     }
 
-                    $from    = $project->from == 'project' ? 'project' : 'pgmproject';
-                    common::printIcon('project', 'edit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-app=project", '', $project->id);
+                    $from     = $project->from == 'project' ? 'project' : 'pgmproject';
+                    $iframe   = $this->app->openApp == 'program' ? 'iframe' : '';
+                    $onlyBody = $this->app->openApp == 'program' ? true : '';
+                    common::printIcon('project', 'edit', "projectID=$project->id", $project, 'list', 'edit', '', $iframe, $onlyBody, "data-app=project", '', $project->id);
                     common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', "data-app=project", $this->lang->execution->team, $project->id);
                     if($this->config->systemMode == 'new') common::printIcon('project', 'group', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', "data-app=project", '', $project->id);
 

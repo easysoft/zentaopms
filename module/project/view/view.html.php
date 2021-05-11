@@ -104,7 +104,7 @@
             echo $this->buildOperateMenu($project, 'view');
 
             echo "<div class='divider'></div>";
-            common::printIcon('project', 'edit', $params . '&from=projectView', $project, 'button', 'edit', '', '', '', '', $lang->edit);
+            common::printIcon('project', 'edit', $params, $project, 'button', 'edit', '', '', '', '', $lang->edit);
             common::printIcon('project', 'delete', $params, $project, 'button', 'trash', 'hiddenwin', '', '', '', $lang->delete);
         }
         ?>

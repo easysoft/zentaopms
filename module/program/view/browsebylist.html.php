@@ -96,7 +96,7 @@
             </ul>
           </div>
           <?php endif;?>
-          <?php common::printIcon('project', 'edit', "projectID=$program->id&from=browse", $program, 'list', 'edit', '', '', '', "data-app='project'", '', $program->id);?>
+          <?php common::printIcon('project', 'edit', "projectID=$program->id", $program, 'list', 'edit', '', 'iframe', true, '', '', $program->id);?>
           <?php common::printIcon('project', 'manageMembers', "projectID=$program->id", $program, 'list', 'group', '', '', '', 'data-app="project"', '', $program->id);?>
           <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', '', '', 'data-app="project"', '', $program->id);?>
           <?php if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete')):?>
