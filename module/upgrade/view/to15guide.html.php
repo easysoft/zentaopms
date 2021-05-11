@@ -16,7 +16,11 @@
     <form method='post'>
       <div class='panel-title text-center'>
         <?php
-        if(isset($config->bizVersion))
+        if(isset($config->maxVersion))
+        {
+            echo $lang->upgrade->toMAXGuide;
+        }
+        elseif(isset($config->bizVersion))
         {
             echo $lang->upgrade->toBIZ5Guide;
         }
@@ -33,9 +37,10 @@
       <div class='panel-body'>
         <div style='width:600px; margin: auto;'>
           <?php echo $lang->upgrade->to15Desc;?>
-          <?php echo html::radio('mode', $lang->upgrade->to15Mode, 'classic');?>
+          <?php $systemMode = isset($lang->upgrade->to15Mode['classic']) ? 'classic' : 'new');?>
+          <?php echo html::radio('mode', $lang->upgrade->to15Mode, $systemMode);?>
           <p> </p>
-          <div id='selectedModeTips' class='text-info'><?php echo $lang->upgrade->selectedModeTips['classic'];?></div>
+          <div id='selectedModeTips' class='text-info'><?php echo $lang->upgrade->selectedModeTips[$systemMode];?></div>
         </div>
       </div>
       <hr/>

@@ -160,6 +160,7 @@ $lang->bug->createBuild   = '創建';
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
 $lang->bug->legendAttatch               = '附件';
+$lang->bug->legendPRJExecStoryTask      = "項目/" . $lang->executionCommon . "/{$lang->SRCommon}/任務";
 $lang->bug->legendExecStoryTask         = $lang->executionCommon . "/{$lang->SRCommon}/任務";
 $lang->bug->lblTypeAndSeverity          = '類型/嚴重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系統/瀏覽器';

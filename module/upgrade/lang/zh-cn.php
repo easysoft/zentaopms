@@ -56,6 +56,7 @@ $lang->upgrade->mergeTips      = '数据迁移提示';
 $lang->upgrade->toPMS15Guide   = '禅道开源版15版本升级';
 $lang->upgrade->toPRO10Guide   = '禅道专业版10版本升级';
 $lang->upgrade->toBIZ5Guide    = '禅道企业版5版本升级';
+$lang->upgrade->toMAXGuide     = '禅道旗舰版版本升级';
 $lang->upgrade->to15Desc       = <<<EOD
 <p>尊敬的用户，禅道从15版本开始对导航和概念做了调整，主要改动如下：</p>
 <ol>
