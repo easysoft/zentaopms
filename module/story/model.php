@@ -186,7 +186,7 @@ class storyModel extends model
      */
     public function create($executionID = 0, $bugID = 0, $from = '')
     {
-        if(!$this->post->needNotReview and empty($this->post->reviewedBy))
+        if(!$this->post->needNotReview and empty(array_filter($_POST['reviewedBy'])))
         {
             dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
             return false;
@@ -527,7 +527,7 @@ class storyModel extends model
             return false;
         }
 
-        if(!$this->post->needNotReview and empty($this->post->reviewedBy))
+        if(!$this->post->needNotReview and empty(array_filter($_POST['reviewedBy'])))
         {
             dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
             return false;
@@ -540,6 +540,7 @@ class storyModel extends model
         $story = fixer::input('post')
             ->callFunc('title', 'trim')
             ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('reviewedBy', '')
             ->add('lastEditedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
@@ -550,6 +551,7 @@ class storyModel extends model
             ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '0000-00-00')
             ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '0000-00-00')
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
+            ->join('reviewedBy', ',')
             ->remove('files,labels,comment,needNotReview,uid')
             ->get();
         if($specChanged and $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
