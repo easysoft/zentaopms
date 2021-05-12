@@ -12,9 +12,9 @@
 class jobModel extends model
 {
     /**
-     * Get by id. 
-     * 
-     * @param  int    $id 
+     * Get by id.
+     *
+     * @param  int    $id
      * @access public
      * @return object
      */
@@ -25,7 +25,7 @@ class jobModel extends model
 
     /**
      * Get job list.
-     * 
+     *
      * @param  string $orderBy
      * @param  object $pager
      * @access public
@@ -44,7 +44,7 @@ class jobModel extends model
 
     /**
      * Get list by triggerType field.
-     * 
+     *
      * @param  string  $triggerType
      * @param  array   $repoIdList
      * @access public
@@ -107,7 +107,7 @@ class jobModel extends model
 
     /**
      * Create a job.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -164,13 +164,13 @@ class jobModel extends model
 
         $id = $this->dao->lastInsertId();
         $this->initJob($id, $job, $this->post->repoType);
-        return true;
+        return $id;
     }
 
     /**
      * Update a job.
-     * 
-     * @param  int    $id 
+     *
+     * @param  int    $id
      * @access public
      * @return bool
      */
@@ -236,10 +236,10 @@ class jobModel extends model
 
     /**
      * Init when create or update job.
-     * 
-     * @param  int    $id 
-     * @param  object $job 
-     * @param  string $repoType 
+     *
+     * @param  int    $id
+     * @param  object $job
+     * @param  string $repoType
      * @access public
      * @return bool
      */
@@ -281,8 +281,8 @@ class jobModel extends model
 
     /**
      * Exec job.
-     * 
-     * @param  int    $id 
+     *
+     * @param  int    $id
      * @access public
      * @return bool
      */

@@ -321,6 +321,7 @@ class product extends control
             $this->loadModel('action')->create('product', $productID, 'opened');
 
             $this->executeHooks($productID);
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
 
             $openApp    = $this->app->openApp;
             $moduleName = $openApp == 'program'? 'program' : $this->moduleName;
