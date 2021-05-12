@@ -98,6 +98,12 @@
               </td>
             </tr>
             <tr>
+              <th><?php echo $lang->testtask->type;?></th>
+              <?php $testType = '';?>
+              <?php foreach(explode(',', $task->type) as $type) $testType .= zget($lang->testtask->typeList, $type) . ' ';?>
+              <td><?php echo $testType;?></td>
+            </tr>
+            <tr>
               <th><?php echo $lang->testtask->owner;?></th>
               <td><?php echo zget($users, $task->owner);?></td>
             </tr>

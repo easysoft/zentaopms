@@ -1050,6 +1050,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `name` char(90) NOT NULL,
   `execution` mediumint(8) unsigned NOT NULL default '0',
   `build` char(30) NOT NULL,
+  `type` varchar(255) NOT NULL,
   `owner` varchar(30) NOT NULL,
   `pri` tinyint(3) unsigned NOT NULL default '0',
   `begin` date NOT NULL,

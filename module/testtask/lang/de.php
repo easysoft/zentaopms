@@ -59,6 +59,7 @@ $lang->testtask->common         = 'Testaufgabe';
 $lang->testtask->product        = $lang->productCommon;
 $lang->testtask->project        = 'Project';
 $lang->testtask->execution      = $lang->execution->common;
+$lang->testtask->type           = 'Typ';
 $lang->testtask->build          = 'Build';
 $lang->testtask->owner          = 'Besitzer';
 $lang->testtask->executor       = 'Executor';
@@ -193,3 +194,9 @@ $lang->testtask->unitTag['thisWeek']  = 'This week';
 $lang->testtask->unitTag['lastWeek']  = 'Last week';
 $lang->testtask->unitTag['thisMonth'] = 'This month';
 $lang->testtask->unitTag['lastMonth'] = 'Last month';
+
+$lang->testtask->typeList['integrate']   = 'Integrate';
+$lang->testtask->typeList['system']      = 'System';
+$lang->testtask->typeList['acceptance']  = 'Acceptance';
+$lang->testtask->typeList['performance'] = 'Performance';
+$lang->testtask->typeList['safety']      = 'Safety';

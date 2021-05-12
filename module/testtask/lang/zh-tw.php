@@ -62,6 +62,7 @@ $lang->testtask->common         = '測試單';
 $lang->testtask->product        = '所屬' . $lang->productCommon;
 $lang->testtask->project        = '所屬項目';
 $lang->testtask->execution      = '所屬' . $lang->executionCommon;
+$lang->testtask->type           = '測試類型';
 $lang->testtask->build          = '版本';
 $lang->testtask->owner          = '負責人';
 $lang->testtask->executor       = '執行人';
@@ -196,3 +197,9 @@ $lang->testtask->unitTag['thisWeek']  = '本週';
 $lang->testtask->unitTag['lastWeek']  = '上周';
 $lang->testtask->unitTag['thisMonth'] = '本月';
 $lang->testtask->unitTag['lastMonth'] = '上月';
+
+$lang->testtask->typeList['integrate']   = '集成測試';
+$lang->testtask->typeList['system']      = '系統測試';
+$lang->testtask->typeList['acceptance']  = '接受度測試';
+$lang->testtask->typeList['performance'] = '性能測試';
+$lang->testtask->typeList['safety']      = '安全測試';
