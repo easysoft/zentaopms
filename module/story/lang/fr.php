@@ -259,6 +259,7 @@ $lang->story->successSaved         = "Story est sauvegardée !";
 $lang->story->confirmDelete        = "Voulez-vous vraiment supprimer cette story ?";
 $lang->story->errorEmptyChildStory = '『Decomposed Stories』ne peuvent être vides.';
 $lang->story->errorNotSubdivide    = "Si le statut n'est pas actif, ou l'étape n'est pas en attente, ou si c'est une sous-story, elle ne peut pas être subdivisée.";
+$lang->story->errorEmptyReviewedBy = "『ReviewedBy』ne peuvent être vides."
 $lang->story->mustChooseResult     = 'Sélect Résultat';
 $lang->story->mustChoosePreVersion = 'Sélect une version pour revenir en arrière.';
 $lang->story->noStory              = "Aucune story pour l'instant. ";

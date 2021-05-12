@@ -259,6 +259,7 @@ $lang->story->successSaved         = "Câu chuyện đã lưu lại!";
 $lang->story->confirmDelete        = "Bạn có muốn xóa câu chuyện này?";
 $lang->story->errorEmptyChildStory = '『Câu chuyện đã phân rã』 không thể để trống.';
 $lang->story->errorNotSubdivide    = "Nếu tình trạng này là chưa kích hoạt, hoặc giai đoạn này chưa đợi, hoặc một câu chuyện con, nó không thể bị chia nhỏ.";
+$lang->story->errorEmptyReviewedBy = "『ReviewedBy』 không thể để trống.";
 $lang->story->mustChooseResult     = 'Chọn kết quả';
 $lang->story->mustChoosePreVersion = 'Chọn một phiên bản để chuyển thành.';
 $lang->story->noStory              = 'Không có câu chuyện nào';

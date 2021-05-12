@@ -259,6 +259,7 @@ $lang->story->successSaved         = "Story wurde gespeichrt!";
 $lang->story->confirmDelete        = "Möchten Sie diese Story löschen?";
 $lang->story->errorEmptyChildStory = '『Unterteilte Story』 darf nicht leer sein.';
 $lang->story->errorNotSubdivide    = "If the status is not active, or the stage is not wait, or a sub story, it cannot be subdivided.";
+$lang->story->errorEmptyReviewedBy = "『ReviewedBy』darf nicht leer sein.";
 $lang->story->mustChooseResult     = 'Ergebnis wählen';
 $lang->story->mustChoosePreVersion = 'Version wählen um es umzukhren.';
 $lang->story->noStory              = 'Keine Storys. ';

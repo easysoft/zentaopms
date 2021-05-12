@@ -186,6 +186,12 @@ class storyModel extends model
      */
     public function create($executionID = 0, $bugID = 0, $from = '')
     {
+        if(!$this->post->needNotReview and empty($this->post->reviewedBy))
+        {
+            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+            return false;
+        }
+
         $now   = helper::now();
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
@@ -521,6 +527,12 @@ class storyModel extends model
             return false;
         }
 
+        if(!$this->post->needNotReview and empty($this->post->reviewedBy))
+        {
+            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+            return false;
+        }
+
         $story = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
         if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
 
@@ -529,8 +541,6 @@ class storyModel extends model
             ->callFunc('title', 'trim')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
-            ->setIF($this->post->assignedTo == '', 'assignedTo', $oldStory->assignedTo)
-            ->setIF($this->post->assignedTo != '' and $this->post->assignedTo != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
             ->setIF($specChanged and $oldStory->status == 'draft'  and $this->post->needNotReview, 'status', 'active')

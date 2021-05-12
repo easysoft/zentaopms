@@ -24,9 +24,9 @@
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
-          <td class='w-p35-f'>
+          <td colspan="2">
             <div class="input-group">
-              <?php echo html::select('assignedTo', $users, $story->reviewedBy, 'class="form-control chosen"');?>
+              <?php echo html::select('reviewedBy[]', $users, $story->reviewedBy, 'class="form-control chosen" multiple');?>
               <?php if(!$this->story->checkForceReview()):?>
               <span class="input-group-addon">
               <?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?>
@@ -34,7 +34,6 @@
               <?php endif;?>
             </div>
           </td>
-          <td></td>
         </tr>
         <tr class='hide'>
           <th><?php echo $lang->story->status;?></th>
