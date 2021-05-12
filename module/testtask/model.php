@@ -33,6 +33,7 @@ class testtaskModel extends model
             ->setIF($this->config->systemMode == 'new', 'project', $projectID)
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
+            ->join('type', ',')
             ->remove('uid,contactListMenu')
             ->get();
 
@@ -730,7 +731,7 @@ class testtaskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
-        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid,comment,contactListMenu')->get();
+        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->join('type', ',')->remove('uid,comment,contactListMenu')->get();
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($task)
             ->autoCheck()

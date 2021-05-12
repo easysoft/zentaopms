@@ -51,6 +51,10 @@
           <td></td>
         </tr>
         <tr>
+          <th><?php echo $lang->testtask->type;?></th>
+          <td><?php echo html::select('type[]', $lang->testtask->typeList, '', "class='form-control chosen' multiple");?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->testtask->owner;?></th>
           <td>
             <div id='ownerAndPriBox' class='input-group'>
