@@ -142,6 +142,7 @@ class doc extends control
 
                 $this->action->create('docLib', $libID, 'Created');
 
+                if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
                 die(js::locate($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID"), 'parent.parent'));
             }
             else
@@ -288,6 +289,7 @@ class doc extends control
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, '');
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
             $link     = $this->createLink('doc', 'objectLibs', $params);
