@@ -385,6 +385,9 @@ class bug extends control
 
             $this->executeHooks($bugID);
 
+            /* Return bug id when call the API. */
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID));
+
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
@@ -612,6 +615,13 @@ class bug extends control
         if(!empty($_POST))
         {
             $actions = $this->bug->batchCreate($productID, $branch);
+
+            /* Return bug id list when call the API. */
+            if($this->viewType == 'json')
+            {
+                $bugIDList = array_keys($actions);
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList));
+            }
 
             setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             die(js::locate($this->createLink('bug', 'browse', "productID={$productID}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc"), 'parent'));

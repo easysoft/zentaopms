@@ -161,7 +161,7 @@ class bugModel extends model
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = $now;
             $bug->product     = (int)$productID;
-            $bug->branch      = (int)$data->branches[$i];
+            $bug->branch      = isset($data->branches) ? (int)$data->branches[$i] : 0;
             $bug->module      = (int)$data->modules[$i];
             $bug->execution   = (int)$data->executions[$i];
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);

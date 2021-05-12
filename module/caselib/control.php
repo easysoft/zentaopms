@@ -42,6 +42,14 @@ class caselib extends control
                 $this->send($response);
             }
             $this->loadModel('action')->create('caselib', $libID, 'opened');
+
+            /* Return lib id when call the API. */
+            if($this->viewType == 'json')
+            {
+                $response['id'] = $libID;
+                $this->send($response);
+            }
+
             $response['locate']  = $this->createLink('caselib', 'browse', "libID=$libID");
             $this->send($response);
         }
