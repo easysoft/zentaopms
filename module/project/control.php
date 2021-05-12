@@ -299,6 +299,8 @@ class project extends control
                 }
             }
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
+
             if($this->app->openApp == 'program')
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
@@ -612,8 +614,9 @@ class project extends control
         if(!empty($_POST))
         {
             $_POST['project'] = $projectID;
-            $this->group->create();
+            $groupID = $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
             die(js::closeModal('parent.parent'));
         }
 
