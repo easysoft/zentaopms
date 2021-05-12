@@ -822,6 +822,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `title` varchar(255) NOT NULL,
   `keywords` varchar(255) NOT NULL,
   `type` varchar(30) NOT NULL default 'story',
+  `category` varchar(30) NOT NULL default 'feature',
   `pri` tinyint(3) unsigned NOT NULL default '3',
   `estimate` float unsigned NOT NULL,
   `status` enum('','changed','active','draft','closed') NOT NULL default '',
