@@ -97,9 +97,10 @@ class testcaseModel extends model
      * Batch create cases.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return array
      */
     function batchCreate($productID, $branch, $storyID)
     {
@@ -181,6 +182,7 @@ class testcaseModel extends model
             }
         }
 
+        $caseIDList = array();
         foreach($data as $i => $case)
         {
             $this->dao->insert(TABLE_CASE)->data($case)
@@ -194,7 +196,8 @@ class testcaseModel extends model
                 die(js::reload('parent'));
             }
 
-            $caseID = $this->dao->lastInsertID();
+            $caseID       = $this->dao->lastInsertID();
+            $caseIDList[] = $caseID;
 
             /* If the story is linked project, make the case link the project. */
             $this->syncCase2Project($case, $caseID);
@@ -206,6 +209,7 @@ class testcaseModel extends model
             if($this->app->openApp == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
+        return $caseIDList;
     }
 
     /**

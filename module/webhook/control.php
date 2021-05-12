@@ -62,8 +62,9 @@ class webhook extends control
     {
         if($_POST)
         {
-            $this->webhook->create();
+            $webhookID = $this->webhook->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $webhookID));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 

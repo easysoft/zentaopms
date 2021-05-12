@@ -1542,7 +1542,7 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  string $type
      * @access public
-     * @return void
+     * @return array
      */
     public function manageChild($rootID, $type)
     {
@@ -1580,6 +1580,8 @@ class treeModel extends model
             $parentPath = ',';
         }
         $i = 1;
+
+        $moduleIDList = array();
         foreach($childs as $moduleID => $moduleName)
         {
             if(empty($moduleName)) continue;
@@ -1607,8 +1609,9 @@ class treeModel extends model
                 $module->type   = $type;
                 $module->order  = $order;
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
-                $moduleID  = $this->dao->lastInsertID();
-                $childPath = $parentPath . "$moduleID,";
+                $moduleID       = $this->dao->lastInsertID();
+                $moduleIDList[] = $moduleID;
+                $childPath      = $parentPath . "$moduleID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($childPath)->where('id')->eq($moduleID)->limit(1)->exec();
             }
             else
@@ -1619,6 +1622,8 @@ class treeModel extends model
                 $this->dao->update(TABLE_MODULE)->set('name')->eq(strip_tags(trim($moduleName)))->set('short')->eq($short)->set('order')->eq($order)->where('id')->eq($moduleID)->limit(1)->exec();
             }
         }
+
+        return $moduleIDList;
     }
 
     /**

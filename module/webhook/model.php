@@ -211,7 +211,7 @@ class webhookModel extends model
             ->batchCheck($this->config->webhook->create->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
-        return !dao::isError();
+        return $this->dao->lastInsertId();
     }
 
     /**

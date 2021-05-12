@@ -101,7 +101,7 @@ class todoModel extends model
      * Create batch todo
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function batchCreate()
     {
@@ -164,6 +164,7 @@ class todoModel extends model
             }
         }
 
+        $todoIDList = array();
         foreach($validTodos as $todo)
         {
             $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
@@ -172,10 +173,13 @@ class todoModel extends model
                 echo js::error(dao::getError());
                 die(js::reload('parent'));
             }
-            $todoID = $this->dao->lastInsertID();
+            $todoID       = $this->dao->lastInsertID();
+            $todoIDList[] = $todoID;
             $this->loadModel('score')->create('todo', 'create', $todoID);
             $this->loadModel('action')->create('todo', $todoID, 'opened');
         }
+
+        return $todoIDList;
     }
 
     /**

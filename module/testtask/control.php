@@ -216,6 +216,8 @@ class testtask extends control
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
 
             $this->executeHooks($taskID);
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
+
             $task = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch();
             if($this->app->openApp == 'project') $link = $this->createLink('project', 'testtask', "projectID=$task->project");
             if($this->app->openApp == 'execution') $link = $this->createLink('execution', 'testtask', "executionID=$task->execution");
