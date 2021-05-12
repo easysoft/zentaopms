@@ -196,6 +196,7 @@ class storyModel extends model
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
+            ->setDefault('reviewedBy', '')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview or $executionID > 0, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
@@ -203,6 +204,7 @@ class storyModel extends model
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
+            ->join('reviewedBy', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
             ->remove('files,labels,needNotReview,newStory,uid,contactListMenu,URS')
             ->get();
