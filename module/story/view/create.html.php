@@ -100,7 +100,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
-            <td colspan="2">
+            <td colspan="4">
               <div class="table-row">
                 <div class="table-col">
                   <?php echo html::select('reviewedBy[]', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
