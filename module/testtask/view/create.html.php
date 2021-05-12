@@ -87,6 +87,10 @@
           <td colspan='2'><?php echo html::textarea('desc', '', "rows=10 class='form-control'");?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->files;?></th>
+          <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->testtask->mailto;?></th>
           <td colspan='2'>
             <div id='mailtoGroup' class='input-group'>
