@@ -1564,7 +1564,7 @@ class storyModel extends model
      * @param  int    $executionID
      * @param  int    $projectID
      * @access public
-     * @return bool
+     * @return bool|array
      */
     public function batchToTask($executionID, $projectID = 0)
     {
@@ -1590,6 +1590,7 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         /* Create tasks. */
+        $tasks   = array();
         $stories = $this->getByList($data->storyIdList);
         foreach($stories as $story)
         {
@@ -1627,9 +1628,11 @@ class storyModel extends model
                 ->exec();
 
             if(dao::isError()) return false;
-            $taskID = $this->dao->lastInsertID();
+            $taskID  = $this->dao->lastInsertID();
+            $tasks[] = $taskID;
             $this->action->create('task', $taskID, 'Opened', '');
         }
+        return $tasks;
     }
 
     /**

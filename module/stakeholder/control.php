@@ -61,6 +61,7 @@ class stakeholder extends control
             }
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
 
             $moduleName = $this->app->openApp == 'program' ? 'program'              : $this->moduleName;
             $methodName = $this->app->openApp == 'program' ? 'stakeholder'          : 'browse';
@@ -102,7 +103,8 @@ class stakeholder extends control
     {
         if($_POST)
         {
-            $this->stakeholder->batchCreate();
+            $stakeholderList = $this->stakeholder->batchCreate();
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stakeholderList));
             die(js::locate($this->createLink('stakeholder', 'browse', "projectID=$projectID"), 'parent'));
         }
 
