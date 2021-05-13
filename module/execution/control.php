@@ -2384,7 +2384,7 @@ class execution extends control
 
         $this->view->object       = $object;
         $this->view->products     = $products;
-        $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
+        $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
         $this->view->pager        = $pager;
         $this->view->browseType   = $browseType;
         $this->view->productType  = $productType;
