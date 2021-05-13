@@ -79,18 +79,21 @@ class personnelModel extends model
         if(empty($userGroups)) $userGroups = $this->dao->select('*')->from(TABLE_USERGROUP)->fetchGroup('account', 'group');
 
         $programRight = false;
-        foreach($userGroups[$account] as $groupID => $userGroup)
+        if(isset($userGroups[$account]))
         {
-            $group = json_decode($groupAcl[$groupID]);
-            if(!isset($group->programs))
+            foreach($userGroups[$account] as $groupID => $userGroup)
             {
-                $programRight = true;
-                continue;
-            }
-            elseif(in_array($programID, $group->programs))
-            {
-                $programRight = true;
-                continue;
+                $group = json_decode($groupAcl[$groupID]);
+                if(!isset($group->programs))
+                {
+                    $programRight = true;
+                    continue;
+                }
+                elseif(in_array($programID, $group->programs))
+                {
+                    $programRight = true;
+                    continue;
+                }
             }
         }
         return $programRight;
