@@ -14,6 +14,7 @@ $lang->testreport->product     = $lang->productCommon;
 $lang->testreport->bugTitle    = 'Bug';
 $lang->testreport->storyTitle  = 'Câu chuyện';
 $lang->testreport->project     = 'Dự án';
+$lang->testreport->execution   = 'Execution';
 $lang->testreport->testtask    = 'Test bản dựng';
 $lang->testreport->tasks       = $lang->testreport->testtask;
 $lang->testreport->startEnd    = 'Bắt đầu & Kết thúc';

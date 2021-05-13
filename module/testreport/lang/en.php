@@ -14,6 +14,7 @@ $lang->testreport->product     = $lang->productCommon;
 $lang->testreport->bugTitle    = 'Bug';
 $lang->testreport->storyTitle  = 'Story';
 $lang->testreport->project     = 'Project';
+$lang->testreport->execution   = 'Execution';
 $lang->testreport->testtask    = 'Test Build';
 $lang->testreport->tasks       = $lang->testreport->testtask;
 $lang->testreport->startEnd    = 'Begin&End';
