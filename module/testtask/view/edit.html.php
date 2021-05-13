@@ -25,7 +25,7 @@
     <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo $lang->testtask->execution;?></th>
+          <th class='w-100px'><?php echo $lang->testtask->execution;?></th>
           <td class='w-p35-f'>
           <?php
           echo html::select('execution', $executions, $task->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");
@@ -35,7 +35,7 @@
           <td></td>
         </tr>
         <tr>
-          <th class='w-80px'><?php echo $lang->testtask->build;?></th>
+          <th><?php echo $lang->testtask->build;?></th>
           <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></span></td>
           <td></td>
         </tr>
@@ -66,6 +66,10 @@
         <tr>
           <th><?php echo $lang->testtask->status;?></th>
           <td><?php echo html::select('status', $lang->testtask->statusList, $task->status,  "class='form-control chosen'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testtask->testreport;?></th>
+          <td><?php echo html::select('testreport', $testreports, $task->testreport,  "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->name;?></th>
