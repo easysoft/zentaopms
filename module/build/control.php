@@ -373,7 +373,7 @@ class build extends control
         }
         if($varName == 'testTaskBuild')
         {
-            $builds = array('' => '') + $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,notrunk');
+            $builds = array('') + $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
 
             if(empty(array_filter($builds)))
