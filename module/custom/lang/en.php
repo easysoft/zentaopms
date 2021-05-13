@@ -43,6 +43,7 @@ $lang->custom->browseStoryConcept   = "List of story concepts";
 $lang->custom->deleteStoryConcept   = "Delete story Concept";
 $lang->custom->URConcept            = "UR Concept";
 $lang->custom->SRConcept            = "SR Concept";
+$lang->custom->reviewRule           = 'Review Rules';
 $lang->custom->switch               = "Switch";
 $lang->custom->oneUnit              = "One {$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "Please set the conversion factor of {$lang->hourCommon} to %s first";
@@ -248,3 +249,6 @@ $lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';
 
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = 'Set concept';
+
+$lang->custom->reviewRules[1] = 'All passed';
+$lang->custom->reviewRules[0] = 'More than half passed';

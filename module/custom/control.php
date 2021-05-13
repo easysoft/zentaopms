@@ -59,6 +59,11 @@ class custom extends control
             $this->view->unitList        = explode(',', $unitList);
             $this->view->defaultCurrency = zget($this->config->$module, 'defaultCurrency', 'CNY');
         }
+        if($module == 'story' and $field == 'reviewRules')
+        {
+            $this->app->loadConfig($module);
+            $this->view->reviewRule = zget($this->config->$module, 'reviewRules', '1');
+        }
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
@@ -104,6 +109,11 @@ class custom extends control
             elseif($module == 'story' and $field == 'review')
             {
                 $data = fixer::input('post')->join('forceReview', ',')->get();
+                $this->loadModel('setting')->setItems("system.$module", $data);
+            }
+            elseif($module == 'story' and $field == 'reviewRules')
+            {
+                $data = fixer::input('post')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
             elseif($module == 'testcase' and $field == 'review')
