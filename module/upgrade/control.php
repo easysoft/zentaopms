@@ -169,7 +169,7 @@ class upgrade extends control
 
         if(isset($this->config->maxVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', 'Max2', $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15', 'Max', $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toMAXGuide;
         }
         elseif(isset($this->config->bizVersion))

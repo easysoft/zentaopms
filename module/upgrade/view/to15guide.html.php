@@ -37,7 +37,7 @@
       <div class='panel-body'>
         <div style='width:600px; margin: auto;'>
           <?php echo $lang->upgrade->to15Desc;?>
-          <?php $systemMode = isset($lang->upgrade->to15Mode['classic']) ? 'classic' : 'new');?>
+          <?php $systemMode = isset($lang->upgrade->to15Mode['classic']) ? 'classic' : 'new';?>
           <?php echo html::radio('mode', $lang->upgrade->to15Mode, $systemMode);?>
           <p> </p>
           <div id='selectedModeTips' class='text-info'><?php echo $lang->upgrade->selectedModeTips[$systemMode];?></div>
