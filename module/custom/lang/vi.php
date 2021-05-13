@@ -96,6 +96,7 @@ $lang->custom->project->defaultCurrency    = 'Default Currency';
 $lang->custom->project->fields['unitList'] = 'Unit List';
 
 $lang->custom->story = new stdClass();
+$lang->custom->story->fields['categoryList']     = 'Category';
 $lang->custom->story->fields['priList']          = 'Ưu tiên';
 $lang->custom->story->fields['sourceList']       = 'Nguồn';
 $lang->custom->story->fields['reasonList']       = 'Lý do đóng';

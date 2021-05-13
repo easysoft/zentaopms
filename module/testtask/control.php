@@ -244,6 +244,8 @@ class testtask extends control
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
+        $testreports = empty($build) ? array() : $this->dao->select('id,title')->from(TABLE_TESTREPORT)->where('builds')->like('%' . $build . '%')->fetchPairs('id','title');
+
         /* Set menu. */
         $productID  = $this->product->saveState($productID, $this->products);
 
@@ -258,6 +260,7 @@ class testtask extends control
         $this->view->executions  = $executions;
         $this->view->builds      = $builds;
         $this->view->build       = $build;
+        $this->view->testreports = $testreports;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
 
         $this->display();
@@ -317,13 +320,14 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->view;
 
-        $this->view->productID = $productID;
-        $this->view->task      = $task;
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->actions   = $this->loadModel('action')->getList('testtask', $taskID);
-        $this->view->build     = $build;
-        $this->view->stories   = $stories;
-        $this->view->bugs      = $bugs;
+        $this->view->productID       = $productID;
+        $this->view->task            = $task;
+        $this->view->users           = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->actions         = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->build           = $build;
+        $this->view->testreportTitle = $this->dao->select('title')->from(TABLE_TESTREPORT)->where('id')->eq($task->testreport)->fetch('title');
+        $this->view->stories         = $stories;
+        $this->view->bugs            = $bugs;
         $this->display();
     }
 
@@ -742,14 +746,16 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->edit;
 
         /* Create testtask from testtask of test.*/
-        $productID  = $productID ? $productID : key($this->products);
-        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
-        $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $productID   = $productID ? $productID : key($this->products);
+        $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
+        $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
+        $builds      = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $testreports = $this->dao->select('id,title')->from(TABLE_TESTREPORT)->where('builds')->like('%' . $task->build . '%')->fetchPairs('id','title');
 
         $this->view->task         = $task;
         $this->view->executions   = $executions;
         $this->view->builds       = $builds;
+        $this->view->testreports  = $testreports;
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
@@ -1412,5 +1418,19 @@ class testtask extends control
     {
         $pairs = $this->testtask->getPairs($productID, $executionID);
         die(html::select('testtask', $pairs, '', "class='form-control chosen'"));
+    }
+
+    /**
+     * Ajax get test report.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTestReports($buildID)
+    {
+        /* Testreport list. */
+        $pairs = $this->dao->select('id,title')->from(TABLE_TESTREPORT)->where('builds')->like('%' . $buildID . '%')->fetchPairs('id','title');
+        die(html::select('testreport', $pairs, '', "class='form-control chosen'"));
     }
 }

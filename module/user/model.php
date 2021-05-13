@@ -303,7 +303,7 @@ class userModel extends model
             $this->loadModel('mail');
             if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
 
-            return $usereID;
+            return $userID;
         }
     }
 

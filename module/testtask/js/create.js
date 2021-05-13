@@ -7,8 +7,8 @@
 function loadProductRelated()
 {
     loadExecutions($('#product').val());
-    data = '<select id="build" name="build" class="form-control"></select>';
-    $('#build').replaceWith(data);
+    buildData = '<select id="build" name="build" class="form-control" onchange="loadTestReports(this.value)"></select>';
+    $('#build').replaceWith(buildData);
     $('#build_chosen').remove();
     $("#build").chosen();
     $('#build').trigger("chosen:updated");

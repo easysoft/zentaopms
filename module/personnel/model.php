@@ -41,18 +41,62 @@ class personnelModel extends model
         /* Determine who can be accessed based on access control. */
         $program = $this->loadModel('program')->getByID($programID);
         $personnelList = array();
-        if($program->acl != 'open')
+        $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t2.deleted')->eq(0)
+            ->beginIF($program->acl != 'open')->andWhere("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
+            ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
+            ->page($pager)
+            ->fetchAll('id');
+
+        if($program->acl == 'open')
         {
-            $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
-                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-                ->where("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
-                ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
-                ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
-                ->page($pager)
-                ->fetchAll();
+            foreach($personnelList as $personnel)
+            {
+                if(!$this->canViewProgram($programID, $personnel->account)) unset($personnelList[$personnel->id]);
+            }
         }
 
         return $personnelList;
+    }
+
+    /**
+     * Check if you have permission to view the program.
+     *
+     * @param  int    $programID
+     * @param  string $account
+     * @access public
+     * @return void
+     */
+    public function canViewProgram($programID, $account)
+    {
+        if(strpos($this->app->company->admins, ",{$account},") !== false) return true;
+        static $groupAcl = array();
+        if(empty($groupAcl)) $groupAcl = $this->dao->select('id,acl')->from(TABLE_GROUP)->fetchPairs();
+
+        static $userGroups = array();
+        if(empty($userGroups)) $userGroups = $this->dao->select('*')->from(TABLE_USERGROUP)->fetchGroup('account', 'group');
+
+        $programRight = false;
+        if(isset($userGroups[$account]))
+        {
+            foreach($userGroups[$account] as $groupID => $userGroup)
+            {
+                $group = json_decode($groupAcl[$groupID]);
+                if(!isset($group->programs))
+                {
+                    $programRight = true;
+                    continue;
+                }
+                elseif(in_array($programID, $group->programs))
+                {
+                    $programRight = true;
+                    continue;
+                }
+            }
+        }
+        return $programRight;
     }
 
     /**

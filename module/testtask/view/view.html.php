@@ -80,7 +80,7 @@
           <table class="table table-data table-fixed">
             <?php $isOnlybody = helper::inOnlyBodyMode(); ?>
             <tr>
-              <th class='w-60px'><?php echo $lang->testtask->execution;?></th>
+              <th class='w-90px'><?php echo $lang->testtask->execution;?></th>
               <td><?php echo $isOnlybody ? $task->executionName : html::a($this->createLink('execution', 'story', "executionID=$task->execution"), $task->executionName, '', "title='{$task->executionName}'");?></td>
             </tr>
             <tr>
@@ -127,6 +127,10 @@
             <tr>
               <th><?php echo $lang->testtask->status;?></th>
               <td class='task-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->testtask->testreport;?></th>
+              <td class="c-name" title="<?php echo $testreportTitle;?>"><?php echo empty($task->testreport) ? '' : html::a($this->createLink('testreport', 'view', "reportID=$task->testreport"), $testreportTitle);?></td>
             </tr>
           </table>
         </div>

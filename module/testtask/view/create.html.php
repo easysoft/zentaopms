@@ -24,7 +24,7 @@
       <table class='table table-form'>
         <?php if(isset($executionID)):?>
         <tr>
-          <th class='w-80px'><?php echo $lang->testtask->product;?></th>
+          <th class='w-100px'><?php echo $lang->testtask->product;?></th>
           <td class='w-p35-f'><?php echo html::select('product', $products, $productID, "class='form-control chosen' onchange='loadProductRelated()'");?></td><td></td>
         </tr>
         <?php else:?>
@@ -41,7 +41,7 @@
           <th class='w-80px'><?php echo $lang->testtask->build;?></th>
           <td class='w-p35-f'>
             <div class='input-group' id='buildBox'>
-            <?php echo html::select('build', empty($builds) ? '' : $builds, $build, "class='form-control chosen'");?>
+            <?php echo html::select('build', empty($builds) ? '' : $builds, $build, "class='form-control chosen' onchange='loadTestReports(this.value)'");?>
             <?php if(isset($executionID) and $executionID and empty($builds)):?>
             <span class='input-group-addon'><?php echo html::a(helper::createLink('build', 'create', "executionID=$executionID&productID=$productID&projectID=$projectID", '', true), $lang->build->create, '', "data-toggle='modal' data-type='iframe' data-width='95%'")?> </span>
             </div>
@@ -77,6 +77,10 @@
         <tr>
           <th><?php echo $lang->testtask->status;?></th>
           <td><?php echo html::select('status', $lang->testtask->statusList, '',  "class='form-control chosen'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testtask->testreport;?></th>
+          <td><?php echo html::select('testreport', $testreports, '',  "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->name;?></th>
