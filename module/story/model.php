@@ -4010,7 +4010,6 @@ class storyModel extends model
             $storyLang->copyTitle          = str_replace($SRCommon, $URCommon, $storyLang->copyTitle);
             $storyLang->common             = str_replace($SRCommon, $URCommon, $storyLang->common);
             $storyLang->title              = str_replace($SRCommon, $URCommon, $storyLang->title);
-            $storyLang->type               = str_replace($SRCommon, $URCommon, $storyLang->type);
             $storyLang->spec               = str_replace($SRCommon, $URCommon, $storyLang->spec);
             $storyLang->children           = str_replace($SRCommon, $URCommon, $storyLang->children);
             $storyLang->linkStories        = str_replace($SRCommon, $URCommon, $storyLang->linkStories);
