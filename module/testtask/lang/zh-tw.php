@@ -75,6 +75,7 @@ $lang->testtask->desc           = '描述';
 $lang->testtask->mailto         = '抄送給';
 $lang->testtask->status         = '當前狀態';
 $lang->testtask->subStatus      = '子狀態';
+$lang->testtask->testreport     = '相關測試報告';
 $lang->testtask->assignedTo     = '指派給';
 $lang->testtask->linkVersion    = '版本';
 $lang->testtask->lastRunAccount = '執行人';

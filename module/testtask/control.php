@@ -1413,4 +1413,18 @@ class testtask extends control
         $pairs = $this->testtask->getPairs($productID, $executionID);
         die(html::select('testtask', $pairs, '', "class='form-control chosen'"));
     }
+
+    /**
+     * Ajax get test report.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTestReports($buildID)
+    {
+        /* Testreport list. */
+        $pairs = $this->dao->select('id,title')->from(TABLE_TESTREPORT)->where('builds')->like('%' . $buildID . '%')->fetchPairs('id','title');
+        die(html::select('testreport', $pairs, '', "class='form-control chosen'"));
+    }
 }

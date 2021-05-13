@@ -1060,6 +1060,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `desc` text NOT NULL,
   `report` text NOT NULL,
   `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait',
+  `testreport` mediumint(8) unsigned NOT NULL,
   `auto` varchar(10) NOT NULL DEFAULT 'no',
   `subStatus` varchar(30) NOT NULL default '',
   `deleted` enum('0','1') NOT NULL default '0',

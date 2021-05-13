@@ -72,6 +72,7 @@ $lang->testtask->desc           = 'Mô tả';
 $lang->testtask->mailto         = 'Mail tới';
 $lang->testtask->status         = 'Tình trạng';
 $lang->testtask->subStatus      = 'Tình trạng con';
+$lang->testtask->testreport     = 'Test Report';
 $lang->testtask->assignedTo     = 'Đã giao';
 $lang->testtask->linkVersion    = 'Bản dựng';
 $lang->testtask->lastRunAccount = 'Chạy bởi';
