@@ -2,7 +2,7 @@ $(function()
 {
     $('#needNotReview').on('change', function()
     {
-        $('#assignedTo').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
+        $('#reviewedBy').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
         getStatus('create', "product=" + $('#product').val() + ",execution=" + executionID + ",needNotReview=" + ($(this).prop('checked') ? 1 : 0));
     });
     $('#needNotReview').change();

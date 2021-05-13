@@ -57,8 +57,9 @@ class group extends control
     {
         if(!empty($_POST))
         {
-            $this->group->create();
+            $groupID = $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }

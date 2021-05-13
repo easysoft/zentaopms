@@ -104,7 +104,7 @@
             echo $this->buildOperateMenu($project, 'view');
 
             echo "<div class='divider'></div>";
-            common::printIcon('project', 'edit', $params . '&from=projectView', $project, 'button', 'edit', '', '', '', '', $lang->edit);
+            common::printIcon('project', 'edit', $params, $project, 'button', 'edit', '', '', '', '', $lang->edit);
             common::printIcon('project', 'delete', $params, $project, 'button', 'trash', 'hiddenwin', '', '', '', $lang->delete);
         }
         ?>
@@ -169,7 +169,7 @@
                   <tr>
                     <td colspan="4">
                       <?php $progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;?>
-                      <?php echo $lang->project->progress;?> <em><?php echo $progress . $lang->percent;?></em> &nbsp;
+                      <?php echo $lang->project->progress;?> <?php echo $progress . $lang->percent;?> &nbsp;
                       <div class="progress inline-block">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress . $lang->percent;?>"></div>
                       </div>
@@ -179,23 +179,23 @@
                     <th><?php echo $lang->project->begin;?></th>
                     <td><?php echo $project->begin;?></td>
                     <th><?php echo $lang->execution->totalEstimate;?></th>
-                    <td><em><?php echo (float)$workhour->totalEstimate . $lang->execution->workHour;?></em></td>
+                    <td><?php echo (float)$workhour->totalEstimate . $lang->execution->workHour;?></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->project->end;?></th>
                     <td><?php echo $project->end;?></td>
                     <th><?php echo $lang->execution->totalConsumed;?></th>
-                    <td><em><?php echo (float)$workhour->totalConsumed . $lang->execution->workHour;?></em></td>
+                    <td><?php echo (float)$workhour->totalConsumed . $lang->execution->workHour;?></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->execution->totalDays;?></th>
                     <td><?php echo $project->days;?></td>
                     <th><?php echo $lang->execution->totalLeft;?></th>
-                    <td><em><?php echo (float)$workhour->totalLeft . $lang->execution->workHour;?></em></td>
+                    <td><?php echo (float)$workhour->totalLeft . $lang->execution->workHour;?></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->execution->totalHours;?></th>
-                    <td><em><?php echo (float)$workhour->totalHours . $lang->execution->workHour;?></em></td>
+                    <td><?php echo (float)$workhour->totalHours . $lang->execution->workHour;?></td>
                   </tr>
                 </tbody>
               </table>
@@ -208,11 +208,11 @@
                 <tbody>
                   <tr>
                     <th><?php echo $lang->story->common;?></th>
-                    <td><em><?php echo $statData->storyCount;?></em></td>
+                    <td><?php echo $statData->storyCount;?></td>
                     <th><?php echo $lang->task->common;?></th>
-                    <td><em><?php echo $statData->taskCount;?></em></td>
+                    <td><?php echo $statData->taskCount;?></td>
                     <th><?php echo $lang->bug->common;?></th>
-                    <td><em><?php echo $statData->bugCount;?></em></td>
+                    <td><?php echo $statData->bugCount;?></td>
                   </tr>
                 </tbody>
               </table>

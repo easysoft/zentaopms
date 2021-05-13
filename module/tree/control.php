@@ -371,8 +371,9 @@ class tree extends control
     {
         if(!empty($_POST))
         {
-            $this->tree->manageChild($rootID, $viewType);
+            $moduleIDList = $this->tree->manageChild($rootID, $viewType);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $moduleIDList));
             if($viewType == 'doc' and isonlybody()) die(js::reload('parent.parent'));
             if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.$('a.refresh').click()}"));
 

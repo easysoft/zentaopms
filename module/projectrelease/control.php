@@ -108,6 +108,8 @@ class projectrelease extends control
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
             $this->executeHooks($releaseID);
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
+
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 

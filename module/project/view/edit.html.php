@@ -18,7 +18,6 @@
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('longTime', $lang->project->longTime);?>
-<?php js::set('from', $from);?>
 <?php js::set('unmodifiableProducts', $unmodifiableProducts)?>
 <?php js::set('tip', $lang->project->notAllowRemoveProducts);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
@@ -161,7 +160,7 @@
               echo html::hidden('model', $project->model);
               echo html::submitButton();
               $browseLink = $this->session->projectList ? $this->session->projectList : $this->createLink('project', 'browse');
-              echo html::a($browseLink, $lang->goback, '', 'class="btn btn-back btn-wide"');
+              echo isonlybody() ? html::backButton() : html::a($browseLink, $lang->goback, '', 'class="btn btn-back btn-wide"');
             ?>
           </td>
         </tr>

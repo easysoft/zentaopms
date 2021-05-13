@@ -61,8 +61,9 @@ class jenkins extends control
     {
         if($_POST)
         {
-            $this->jenkins->create();
+            $jenkinsID = $this->jenkins->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jenkinsID));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -116,8 +117,8 @@ class jenkins extends control
 
     /**
      * Ajax get tasks.
-     * 
-     * @param  int    $id 
+     *
+     * @param  int    $id
      * @access public
      * @return void
      */

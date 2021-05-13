@@ -186,6 +186,12 @@ class storyModel extends model
      */
     public function create($executionID = 0, $bugID = 0, $from = '')
     {
+        if(!$this->post->needNotReview and empty(array_filter($_POST['reviewedBy'])))
+        {
+            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+            return false;
+        }
+
         $now   = helper::now();
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
@@ -196,6 +202,7 @@ class storyModel extends model
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
+            ->setDefault('reviewedBy', '')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview or $executionID > 0, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
@@ -203,6 +210,7 @@ class storyModel extends model
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
+            ->join('reviewedBy', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
             ->remove('files,labels,needNotReview,newStory,uid,contactListMenu,URS')
             ->get();
@@ -519,6 +527,12 @@ class storyModel extends model
             return false;
         }
 
+        if(!$this->post->needNotReview and empty(array_filter($_POST['reviewedBy'])))
+        {
+            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+            return false;
+        }
+
         $story = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
         if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
 
@@ -526,9 +540,8 @@ class storyModel extends model
         $story = fixer::input('post')
             ->callFunc('title', 'trim')
             ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('reviewedBy', '')
             ->add('lastEditedDate', $now)
-            ->setIF($this->post->assignedTo == '', 'assignedTo', $oldStory->assignedTo)
-            ->setIF($this->post->assignedTo != '' and $this->post->assignedTo != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
             ->setIF($specChanged and $oldStory->status == 'draft'  and $this->post->needNotReview, 'status', 'active')
@@ -538,6 +551,7 @@ class storyModel extends model
             ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '0000-00-00')
             ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '0000-00-00')
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
+            ->join('reviewedBy', ',')
             ->remove('files,labels,comment,needNotReview,uid')
             ->get();
         if($specChanged and $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
@@ -1552,7 +1566,7 @@ class storyModel extends model
      * @param  int    $executionID
      * @param  int    $projectID
      * @access public
-     * @return bool
+     * @return bool|array
      */
     public function batchToTask($executionID, $projectID = 0)
     {
@@ -1578,6 +1592,7 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         /* Create tasks. */
+        $tasks   = array();
         $stories = $this->getByList($data->storyIdList);
         foreach($stories as $story)
         {
@@ -1615,9 +1630,11 @@ class storyModel extends model
                 ->exec();
 
             if(dao::isError()) return false;
-            $taskID = $this->dao->lastInsertID();
+            $taskID  = $this->dao->lastInsertID();
+            $tasks[] = $taskID;
             $this->action->create('task', $taskID, 'Opened', '');
         }
+        return $tasks;
     }
 
     /**

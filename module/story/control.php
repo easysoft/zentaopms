@@ -146,6 +146,8 @@ class story extends control
 
             $this->executeHooks($storyID);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $storyID));
+
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
@@ -404,6 +406,7 @@ class story extends control
                 if(dao::isError()) die(js::error(dao::getError()));
             }
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
 
             if($storyID)
@@ -1274,7 +1277,7 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->story->successToTask;
 
-            $this->story->batchToTask($executionID, $this->session->project);
+            $tasks = $this->story->batchToTask($executionID, $this->session->project);
 
             if(dao::isError())
             {
@@ -1283,6 +1286,7 @@ class story extends control
                 $this->send($response);
             }
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $tasks));
             $response['locate'] = $this->createLink('execution', 'task', "executionID=$executionID");
             $this->send($response);
         }

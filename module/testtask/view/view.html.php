@@ -33,6 +33,7 @@
         <div class="detail-title"><?php echo $lang->testtask->desc;?></div>
         <div class="detail-content article-content"><?php echo !empty($task->desc) ? $task->desc : $lang->noData;?></div>
       </div>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));?>
       <?php if($task->report):?>
       <div class="detail">
         <div class="detail-title"><?php echo $lang->testtask->report;?></div>
@@ -96,6 +97,12 @@
                 }
                 ?>
               </td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->testtask->type;?></th>
+              <?php $testType = '';?>
+              <?php foreach(explode(',', $task->type) as $type) $testType .= zget($lang->testtask->typeList, $type) . ' ';?>
+              <td><?php echo $testType;?></td>
             </tr>
             <tr>
               <th><?php echo $lang->testtask->owner;?></th>

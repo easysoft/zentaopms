@@ -260,6 +260,7 @@ $lang->story->successSaved         = "Story is saved!";
 $lang->story->confirmDelete        = "Do you want to delete this story?";
 $lang->story->errorEmptyChildStory = '『Decomposed Stories』canot be blank.';
 $lang->story->errorNotSubdivide    = "If the status is not active, or the stage is not wait, or a sub story, it cannot be subdivided.";
+$lang->story->errorEmptyReviewedBy = "『ReviewedBy』canot be blank.";
 $lang->story->mustChooseResult     = 'Select Result';
 $lang->story->mustChoosePreVersion = 'Select a version to revert to.';
 $lang->story->noStory              = 'No stories yet. ';

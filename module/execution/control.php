@@ -1287,6 +1287,8 @@ class execution extends control
 
             $this->executeHooks($executionID);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $executionID));
+
             if($this->app->openApp == 'doc')
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=execution")));

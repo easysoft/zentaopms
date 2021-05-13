@@ -27,7 +27,8 @@ class groupModel extends model
             unset($group->limited);
             $group->role = 'limited';
         }
-        return $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->exec();
+        return $this->dao->lastInsertId();
     }
 
     /**

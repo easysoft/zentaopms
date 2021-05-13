@@ -51,6 +51,10 @@
           <td></td>
         </tr>
         <tr>
+          <th><?php echo $lang->testtask->type;?></th>
+          <td><?php echo html::select('type[]', $lang->testtask->typeList, '', "class='form-control chosen' multiple");?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->testtask->owner;?></th>
           <td>
             <div id='ownerAndPriBox' class='input-group'>
@@ -81,6 +85,10 @@
         <tr>
           <th><?php echo $lang->testtask->desc;?></th>
           <td colspan='2'><?php echo html::textarea('desc', '', "rows=10 class='form-control'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->files;?></th>
+          <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->mailto;?></th>

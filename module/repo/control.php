@@ -119,6 +119,7 @@ class repo extends control
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }

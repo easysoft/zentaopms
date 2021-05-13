@@ -69,7 +69,8 @@ class todo extends control
                 $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
             }
 
-            if($this->app->getViewType() == 'xhtml') die(js::locate($this->createLink('todo', 'view', "todoID=$todoID"), 'parent'));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
+            if($this->viewType == 'xhtml') die(js::locate($this->createLink('todo', 'view', "todoID=$todoID"), 'parent'));
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('my', 'todo', "type=all&userID=&status=all&orderBy=id_desc"), 'parent'));
         }
@@ -96,7 +97,7 @@ class todo extends control
         if($date == 'today') $date = date(DT_DATE1, time());
         if(!empty($_POST))
         {
-            $this->todo->batchCreate();
+            $todoIDList = $this->todo->batchCreate();
             if(dao::isError()) die(js::error(dao::getError()));
 
             /* Locate the browser. */
@@ -109,6 +110,8 @@ class todo extends control
             {
                 $date= 'today';
             }
+
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIDList));
             if(isonlybody())die(js::reload('parent.parent'));
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }

@@ -324,6 +324,7 @@ class testcase extends control
 
             $this->executeHooks($caseID);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $caseID));
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
@@ -473,9 +474,11 @@ class testcase extends control
         $this->loadModel('story');
         if(!empty($_POST))
         {
-            $caseID = $this->testcase->batchCreate($productID, $branch, $storyID);
+            $caseIDList = $this->testcase->batchCreate($productID, $branch, $storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIDList));
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';

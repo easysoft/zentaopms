@@ -12,9 +12,9 @@
 class branch extends control
 {
     /**
-     * Manage branch 
-     * 
-     * @param  int    $productID 
+     * Manage branch
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -24,7 +24,8 @@ class branch extends control
 
         if($_POST)
         {
-            $this->branch->manage($productID);
+            $newBranches = $this->branch->manage($productID);
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $newBranches));
             die(js::reload('parent'));
         }
 
@@ -40,7 +41,7 @@ class branch extends control
 
     /**
      * Sort branch.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -51,12 +52,12 @@ class branch extends control
 
     /**
      * Ajax get drop menu.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  int    $branch
-     * @param  string $module 
-     * @param  string $method 
-     * @param  string $extra 
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
      * @access public
      * @return void
      */
@@ -77,10 +78,10 @@ class branch extends control
     }
 
     /**
-     * Delete branch 
-     * 
-     * @param  int    $branchID 
-     * @param  string $confirm 
+     * Delete branch
+     *
+     * @param  int    $branchID
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -100,9 +101,9 @@ class branch extends control
 
     /**
      * Ajax get branches.
-     * 
-     * @param  int    $productID 
-     * @param  int    $oldBranch 
+     *
+     * @param  int    $productID
+     * @param  int    $oldBranch
      * @access public
      * @return void
      */

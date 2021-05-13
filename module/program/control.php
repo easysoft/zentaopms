@@ -124,10 +124,11 @@ class program extends control
 
         if($_POST)
         {
-            $projectID = $this->program->create();
+            $programID = $this->program->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID));
 
-            $this->loadModel('action')->create('program', $projectID, 'opened');
+            $this->loadModel('action')->create('program', $programID, 'opened');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
