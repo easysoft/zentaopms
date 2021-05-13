@@ -863,6 +863,15 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `verify` text NOT NULL,
   UNIQUE KEY `story` (`story`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_storyreview`;
+CREATE TABLE IF NOT EXISTS `zt_storyreview` (
+  `story` mediumint(9) NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `reviewer` varchar(30) NOT NULL,
+  `result` varchar(30) NOT NULL,
+  `reivewDate` datetime NOT NULL,
+  UNIQUE KEY `story` (`story`,`version`,`reviewer`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storystage`;
 CREATE TABLE IF NOT EXISTS `zt_storystage` (
   `story` mediumint(8) unsigned NOT NULL,

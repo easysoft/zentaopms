@@ -43,6 +43,7 @@ $lang->custom->browseStoryConcept   = "需求概念列表";
 $lang->custom->deleteStoryConcept   = "删除需求概念";
 $lang->custom->URConcept            = "用需概念";
 $lang->custom->SRConcept            = "软需概念";
+$lang->custom->reviewRule           = "评审规则";
 $lang->custom->switch               = "切换";
 $lang->custom->oneUnit              = "一个{$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "请先设置{$lang->hourCommon}转换为%s的换算系数";
@@ -102,6 +103,7 @@ $lang->custom->story->fields['sourceList']       = '来源';
 $lang->custom->story->fields['reasonList']       = '关闭原因';
 $lang->custom->story->fields['stageList']        = '阶段';
 $lang->custom->story->fields['statusList']       = '状态';
+$lang->custom->story->fields['reviewRules']      = '评审规则';
 $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
 
@@ -248,3 +250,6 @@ $lang->custom->conceptOptions->hourPoint['2'] = '功能点';
 
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = '设置项目概念';
+
+$lang->custom->reviewRules[1] = '全部通过通过';
+$lang->custom->reviewRules[0] = '半数以上通过通过';

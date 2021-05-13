@@ -1,3 +1,14 @@
+-- DROP TABLE IF EXISTS `zt_storyreview`;
+CREATE TABLE IF NOT EXISTS `zt_storyreview` (
+  `story` mediumint(9) NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `reviewer` varchar(30) NOT NULL,
+  `result` varchar(30) NOT NULL,
+  `reivewDate` datetime NOT NULL,
+  UNIQUE KEY `story` (`story`,`version`,`reviewer`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 ALTER TABLE `zt_project` CHANGE `lifetime` `lifetime` char(30) NOT NULL DEFAULT '';
 ALTER TABLE `zt_story` ADD `category` varchar(30) NOT NULL DEFAULT 'feature' AFTER `type`;
 ALTER TABLE `zt_testtask` ADD `type` varchar(255) NOT NULL DEFAULT '' AFTER `build`;
