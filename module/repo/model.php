@@ -208,7 +208,7 @@ class repoModel extends model
     public function getListBySCM($scm, $type = 'all')
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('SCM')->eq($scm)
+            ->andWhere('SCM')->in($scm)
             ->andWhere('synced')->eq(1)
             ->orderBy('id')
             ->fetchAll();
@@ -1769,7 +1769,7 @@ class repoModel extends model
         return $buildedURL;
     }
 
-	/**  
+	/**
 	 * Get gitlab projects.
 	 *
 	 * @param  string   $host
@@ -1778,18 +1778,18 @@ class repoModel extends model
 	 * @return array
 	 */
 	public function getGitlabProjects($host, $token)
-	{    
+	{
 		$host  = rtrim($host, '/');
 		$host .= '/api/v4/projects';
 
 		$allResults = array();
 		for($page = 1; true; $page ++)
-		{    
+		{
 			$results = json_decode(file_get_contents($host . "?private_token=$token&page={$page}&per_page=100"));
 			if(empty($results)) break;
 			$allResults = $allResults + $results;
-		}    
+		}
 
 		return $allResults;
-	} 
+	}
 }
