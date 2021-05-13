@@ -80,7 +80,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->testreport;?></th>
-          <td><?php echo html::select('testreport', '', '',  "class='form-control chosen'");?></td>
+          <td><?php echo html::select('testreport', $testreports, '',  "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->name;?></th>

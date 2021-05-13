@@ -244,6 +244,8 @@ class testtask extends control
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
+        $testreports = empty($build) ? array() : $this->dao->select('id,title')->from(TABLE_TESTREPORT)->where('builds')->like('%' . $build . '%')->fetchPairs('id','title');
+
         /* Set menu. */
         $productID  = $this->product->saveState($productID, $this->products);
 
@@ -258,6 +260,7 @@ class testtask extends control
         $this->view->executions  = $executions;
         $this->view->builds      = $builds;
         $this->view->build       = $build;
+        $this->view->testreports = $testreports;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
 
         $this->display();
