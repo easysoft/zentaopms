@@ -7,11 +7,17 @@
 function loadProductRelated()
 {
     loadExecutions($('#product').val());
-    data = '<select id="build" name="build" class="form-control" onchange="loadTestReports(this.value)"></select>';
-    $('#build').replaceWith(data);
+    buildData = '<select id="build" name="build" class="form-control" onchange="loadTestReports(this.value)"></select>';
+    $('#build').replaceWith(buildData);
     $('#build_chosen').remove();
     $("#build").chosen();
     $('#build').trigger("chosen:updated");
+
+    testreportData = '<select id="testreport" name="testreport" class="form-control"></select>';
+    $('#testreport').replaceWith(testreportData);
+    $('#testreport_chosen').remove();
+    $("#testreport").chosen();
+    $('#testreport').trigger("chosen:updated");
 }
 
 /**
