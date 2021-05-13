@@ -23,7 +23,8 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
-        if(!$this->config->systemMode && !isset($this->config->qcVersion))
+        $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
+        if(empty($systemMode) && !isset($this->config->qcVersion))
         {
             /* Judge upgrade step. */
             $upgradeStep = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=upgradeStep');
@@ -134,7 +135,12 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
-            if(!$this->config->systemMode && !isset($this->config->qcVersion) && strpos($fromVersion, 'max') === false) $this->locate(inlink('to15Guide', "fromVersion=$fromVersion"));
+            $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
+            if((empty($systemMode) && !isset($this->config->qcVersion) && strpos($fromVersion, 'max') === false) or
+               ($systemMode != 'new' && strpos($fromVersion, 'max') === false && strpos($this->config->version, 'max') !== false))
+            {
+                $this->locate(inlink('to15Guide', "fromVersion=$fromVersion"));
+            }
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 
@@ -161,14 +167,19 @@ class upgrade extends control
             if($mode == 'new')     $this->locate(inlink('mergeTips'));
         }
 
-        if(isset($this->config->bizVersion))
+        if(isset($this->config->maxVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', '5', $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15', 'Max', $this->lang->upgrade->to15Desc);
+            $title = $this->lang->upgrade->toMAXGuide;
+        }
+        elseif(isset($this->config->bizVersion))
+        {
+            $this->lang->upgrade->to15Desc = str_replace('15', 'Biz5', $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toBIZ5Guide;
         }
         elseif(isset($this->config->proVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', '10', $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15', 'Pro10', $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toPRO10Guide;
         }
         else
