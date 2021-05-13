@@ -384,6 +384,7 @@ class storyModel extends model
             $story->color      = $stories->color[$i];
             $story->title      = $stories->title[$i];
             $story->source     = $stories->source[$i];
+            $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
             $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
@@ -1022,6 +1023,7 @@ class storyModel extends model
                 $story->color          = $data->colors[$storyID];
                 $story->title          = $data->titles[$storyID];
                 $story->estimate       = $data->estimates[$storyID];
+                $story->category       = $data->category[$storyID];
                 $story->pri            = $data->pris[$storyID];
                 $story->assignedTo     = $data->assignedTo[$storyID];
                 $story->assignedDate   = $oldStory == $data->assignedTo[$storyID] ? $oldStory->assignedDate : $now;
@@ -3330,6 +3332,10 @@ class storyModel extends model
                 $title  = $story->sourceNote;
                 $class .= ' text-ellipsis';
             }
+            else if($id == 'category')
+            {
+                $title  = zget($this->lang->story->categoryList, $story->category);
+            }
             else if($id == 'estimate')
             {
                 $title = $story->estimate . ' ' . $this->lang->hourCommon;
@@ -3401,6 +3407,9 @@ class storyModel extends model
                 break;
             case 'sourceNote':
                 echo $story->sourceNote;
+                break;
+            case 'category':
+                echo zget($this->lang->story->categoryList, $story->category);
                 break;
             case 'status':
                 if($story->URChanged)

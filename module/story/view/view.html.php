@@ -336,6 +336,10 @@
                 </tr>
                 <?php endif;?>
                 <tr>
+                  <th><?php echo $lang->story->category;?></th>
+                  <td><?php echo $lang->story->categoryList[$story->category];?></td>
+                </tr>
+                <tr>
                   <th><?php echo $lang->story->pri;?></th>
                   <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
                 </tr>
