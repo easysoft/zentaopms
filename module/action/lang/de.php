@@ -97,6 +97,8 @@ $lang->action->objectTypes['budget']      = 'Cost Estimate';
 $lang->action->objectTypes['entry']       = 'Eintrag';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['job']         = 'Job';
+$lang->action->objectTypes['team']        = 'Team';
+$lang->action->objectTypes['whitelist']   = 'Whitelist';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -238,6 +240,8 @@ $lang->action->label->unlinkparenttask      = "unlink from parent task";
 $lang->action->label->batchcreate           = "batch created tasks";
 $lang->action->label->createchildren        = "create child tasks";
 $lang->action->label->managed               = "managed";
+$lang->action->label->managedteam           = "managed";
+$lang->action->label->managedwhitelist      = "managed";
 $lang->action->label->deletechildrentask    = "delete children task";
 $lang->action->label->createchildrenstory   = "create child stories";
 $lang->action->label->linkchildstory        = "linked a child story";

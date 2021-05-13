@@ -101,6 +101,8 @@ $lang->action->objectTypes['stakeholder'] = '干系人';
 $lang->action->objectTypes['budget']      = '费用估算';
 $lang->action->objectTypes['entry']       = '应用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
+$lang->action->objectTypes['team']        = '团队';
+$lang->action->objectTypes['whitelist']   = '白名单';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -242,6 +244,8 @@ $lang->action->label->unlinkparenttask      = "从父任务取消关联";
 $lang->action->label->batchcreate           = "批量创建任务";
 $lang->action->label->createchildren        = "创建子任务";
 $lang->action->label->managed               = "维护";
+$lang->action->label->managedteam           = "维护了";
+$lang->action->label->managedwhitelist      = "维护了";
 $lang->action->label->deletechildrentask    = "删除子任务";
 $lang->action->label->createchildrenstory   = "创建子需求";
 $lang->action->label->linkchildstory        = "关联子需求";

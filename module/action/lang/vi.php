@@ -97,6 +97,8 @@ $lang->action->objectTypes['budget']      = 'Cost Estimate';
 $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['job']         = 'Job';
+$lang->action->objectTypes['team']        = 'Team';
+$lang->action->objectTypes['whitelist']   = 'Whitelist';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -238,6 +240,8 @@ $lang->action->label->unlinkparenttask      = "unlink from nhiệm vụ cha";
 $lang->action->label->batchcreate           = "batch created tasks";
 $lang->action->label->createchildren        = "create child tasks";
 $lang->action->label->managed               = "managed";
+$lang->action->label->managedteam           = "managed";
+$lang->action->label->managedwhitelist      = "managed";
 $lang->action->label->deletechildrentask    = "delete children task";
 $lang->action->label->createchildrenstory   = "create child stories";
 $lang->action->label->linkchildstory        = "linked a child story";
@@ -464,19 +468,19 @@ $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
-$lang->action->search->objectTypeList['']            = ''; 
+$lang->action->search->objectTypeList['']            = '';
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
 $lang->action->search->objectTypeList['program']     = 'Program';
 $lang->action->search->objectTypeList['project']     = 'Project';
 $lang->action->search->objectTypeList['execution']   = 'Execution';
 $lang->action->search->objectTypeList['bug']         = 'Bug';
-$lang->action->search->objectTypeList['case']        = 'Tình huống'; 
+$lang->action->search->objectTypeList['case']        = 'Tình huống';
 $lang->action->search->objectTypeList['caseresult']  = 'Kết quả tình huống';
 $lang->action->search->objectTypeList['stepresult']  = 'Các bước tình huống';
 $lang->action->search->objectTypeList['story']       = "$lang->SRCommon/$lang->URCommon";
-$lang->action->search->objectTypeList['task']        = 'Nhiệm vụ'; 
-$lang->action->search->objectTypeList['testtask']    = 'Yêu cầu';  
-$lang->action->search->objectTypeList['user']        = 'Người dùng'; 
+$lang->action->search->objectTypeList['task']        = 'Nhiệm vụ';
+$lang->action->search->objectTypeList['testtask']    = 'Yêu cầu';
+$lang->action->search->objectTypeList['user']        = 'Người dùng';
 $lang->action->search->objectTypeList['doc']         = 'Tài liệu';
 $lang->action->search->objectTypeList['doclib']      = 'Doc Lib';
 $lang->action->search->objectTypeList['todo']        = 'Việc làm';
