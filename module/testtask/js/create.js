@@ -12,12 +12,6 @@ function loadProductRelated()
     $('#build_chosen').remove();
     $("#build").chosen();
     $('#build').trigger("chosen:updated");
-
-    testreportData = '<select id="testreport" name="testreport" class="form-control"></select>';
-    $('#testreport').replaceWith(testreportData);
-    $('#testreport_chosen').remove();
-    $("#testreport").chosen();
-    $('#testreport').trigger("chosen:updated");
 }
 
 /**

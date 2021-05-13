@@ -91,11 +91,6 @@ function loadExecutionBuilds(executionID)
     {
         $('#resolvedBuild').attr('id', 'build').attr('name', 'build').find('option[value=trunk]').remove();
         $('#build').chosen();
-
-        testreportData = '<select id="testreport" name="testreport" class="form-control"></select>';
-        $('#testreport').replaceWith(testreportData);
-        $('#testreport_chosen').remove();
-        $("#testreport").chosen();
     });
 }
 
