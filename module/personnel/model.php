@@ -19,11 +19,10 @@ class personnelModel extends model
      * @param  string    $browseType
      * @param  string    $orderBy
      * @param  int       $queryID
-     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getAccessiblePersonnel($programID = 0, $deptID = 0, $browseType = 'all', $queryID = 0, $pager)
+    public function getAccessiblePersonnel($programID = 0, $deptID = 0, $browseType = 'all', $queryID = 0)
     {
         $accessibleQuery = '';
         if($browseType == 'bysearch')
@@ -47,7 +46,6 @@ class personnelModel extends model
             ->beginIF($program->acl != 'open')->andWhere("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
             ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
-            ->page($pager)
             ->fetchAll('id');
 
         if($program->acl == 'open')

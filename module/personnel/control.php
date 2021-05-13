@@ -31,13 +31,17 @@ class personnel extends control
 
         $program = $this->program->getByID($programID);
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
         /* Build the search form. */
         $queryID   = $browseType == 'bysearch' ? (int)$param : 0;
         $actionURL = $this->createLink('personnel', 'accessible', "pargramID=$programID&deptID=$deptID&browseType=bysearch&quertID=myQueryID");
+        $personnelList = $this->personnel->getAccessiblePersonnel($programID, $deptID, $browseType, $queryID);
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', true);
+        $recTotal      = count($personnelList);
+        $pager         = new pager($recTotal, $recPerPage, $pageID);
+        $personnelList = array_chunk($personnelList, $pager->recPerPage);
+
         $this->config->personnel->accessible->search['params']['role']['values']   = $this->lang->user->roleList;
         $this->config->personnel->accessible->search['params']['gender']['values'] = $this->lang->user->genderList;
         $this->personnel->buildSearchForm($queryID, $actionURL);
@@ -54,7 +58,7 @@ class personnel extends control
         $this->view->pager         = $pager;
         $this->view->param         = $param;
         $this->view->browseType    = $browseType;
-        $this->view->personnelList = $this->personnel->getAccessiblePersonnel($programID, $deptID, $browseType, $queryID, $pager);
+        $this->view->personnelList = empty($personnelList) ? $personnelList : $personnelList[$pageID - 1];
         $this->view->deptList      = $this->loadModel('dept')->getOptionMenu();
         $this->view->dept          = $this->dept->getByID($deptID);
         $this->view->deptTree      = $this->dept->getTreeMenu($deptID = 0, array(new personnelModel, 'createMemberLink'), $programID);
