@@ -136,6 +136,7 @@ define('TABLE_EXPECT',        '`' . $config->db->prefix . 'expect`');
 define('TABLE_STAKEHOLDER',   '`' . $config->db->prefix . 'stakeholder`');
 define('TABLE_STORY',         '`' . $config->db->prefix . 'story`');
 define('TABLE_STORYSPEC',     '`' . $config->db->prefix . 'storyspec`');
+define('TABLE_STORYREVIEW',   '`' . $config->db->prefix . 'storyreview`');
 define('TABLE_STORYSTAGE',    '`' . $config->db->prefix . 'storystage`');
 define('TABLE_STORYESTIMATE', '`' . $config->db->prefix . 'storyestimate`');
 define('TABLE_PRODUCTPLAN',   '`' . $config->db->prefix . 'productplan`');

@@ -1046,7 +1046,7 @@ class productModel extends model
         $projectIdList = array();
         foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
 
-        $executionPairs = array();
+        $executionPairs = array(0 => '');
         $projectPairs   = $this->loadModel('project')->getPairsByIdList($projectIdList);
         foreach($executions as $id => $execution)
         {
