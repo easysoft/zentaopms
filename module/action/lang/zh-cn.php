@@ -329,8 +329,8 @@ $lang->action->dynamicAction->execution['managed']               = '维护' . $l
 $lang->action->dynamicAction->execution['undeleted']             = '还原' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['hidden']                = '隐藏' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']                 = '导入任务';
-$lang->action->dynamicAction->execution['linked2execution']      = '关联' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['unlinkedfromexecution'] = '移除' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['linked2execution']      = '关联' . $lang->SRCommon;
+$lang->action->dynamicAction->execution['unlinkedfromexecution'] = '移除' . $lang->SRCommon;
 
 $lang->action->dynamicAction->task['opened']              = '创建任务';
 $lang->action->dynamicAction->task['edited']              = '编辑任务';

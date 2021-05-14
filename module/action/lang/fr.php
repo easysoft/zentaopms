@@ -338,8 +338,8 @@ $lang->action->dynamicAction->execution['managed']               = 'Manage ' . $
 $lang->action->dynamicAction->execution['undeleted']             = 'Restore ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['hidden']                = 'Hide ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']                 = 'Improt Task';
-$lang->action->dynamicAction->execution['linked2execution']      = 'Link ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['unlinkedfromexecution'] = 'Unlik ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['linked2execution']      = 'Link ' . $lang->SRCommon;
+$lang->action->dynamicAction->execution['unlinkedfromexecution'] = 'Unlik ' . $lang->SRCommon;
 
 $lang->action->dynamicAction->task['opened']              = 'Créer Tâche';
 $lang->action->dynamicAction->task['edited']              = 'Editer Tâche';

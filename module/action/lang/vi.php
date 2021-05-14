@@ -325,8 +325,8 @@ $lang->action->dynamicAction->execution['managed']               = 'Quản lý '
 $lang->action->dynamicAction->execution['undeleted']             = 'Phục hổi ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['hidden']                = 'Ẩn ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']                 = 'Nhập nhiệm vụ';
-$lang->action->dynamicAction->execution['linked2execution']      = 'Link ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['unlinkedfromexecution'] = 'Unlik ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['linked2execution']      = 'Link ' . $lang->SRCommon;
+$lang->action->dynamicAction->execution['unlinkedfromexecution'] = 'Unlik ' . $lang->SRCommon;
 
 $lang->action->dynamicAction->task['opened']              = 'Tạo nhiệm vụ';
 $lang->action->dynamicAction->task['edited']              = 'Sửa nhiệm vụ';
