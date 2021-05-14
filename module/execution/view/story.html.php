@@ -196,7 +196,7 @@
             <th title='<?php echo $lang->story->taskCount?>' class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
             <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
             <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
-            <th class='c-actions-4 text-center {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='c-actions-5 text-center {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody id='storyTableList' class='sortable'>
@@ -274,6 +274,11 @@
                   if($productID and $hasDBPriv and common::hasPriv('testcase', 'create'))
                   {
                       echo html::a($this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id"), '<i class="icon-testcase-create icon-sitemap"></i>', '', "title='{$lang->testcase->create}' data-app='qa'");
+                  }
+
+                  if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
+                  {
+                      common::printIcon('execution', 'storyEstimate', "executionID=$execution->id&storyID=$story->id", '', 'list', 'bell', '', 'iframe', true, "data-width='600px'");
                   }
 
                   if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))

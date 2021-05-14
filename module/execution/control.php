@@ -2695,6 +2695,36 @@ class execution extends control
     }
 
     /**
+     * Story estimate.
+     *
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @param  int    $round
+     * @access public
+     * @return void
+     */
+    public function storyEstimate($executionID, $storyID, $round = 0)
+    {
+        $this->loadModel('story');
+
+        if($_POST)
+        {
+            $this->story->saveEstimateInfo($storyID);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'storyEstimate', "executionID=$executionID&storyID=$storyID")));
+        }
+        $estimateInfo = $this->story->getEstimateInfo($storyID, $round);
+
+        $this->view->estimateInfo = $estimateInfo;
+        $this->view->round        = !empty($estimateInfo->round) ? $estimateInfo->round : 0;
+        $this->view->rounds       = $this->story->getEstimateRounds($storyID);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->team         = $this->execution->getTeamMembers($executionID);
+        $this->view->executionID  = $executionID;
+        $this->view->storyID      = $storyID;
+        $this->display();
+    }
+
+    /**
      * All execution.
      *
      * @param  string $status

@@ -65,6 +65,13 @@ class actionModel extends model
         $action->project   = ($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') ? (int)$extra : (int)$relation['project'];
         $action->execution = ($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') ? (int)$extra : (int)$relation['execution'];
 
+        if($objectType == 'story' and ($actionType == 'linked2build' or $actionType == 'unlinkedfrombuild'))
+        {
+            $build = $this->dao->select('project,execution')->from(TABLE_BUILD)->where('id')->eq((int)$extra)->fetch();
+            $action->project   = $build->project;
+            $action->execution = $build->execution;
+        }
+
         if($objectType == 'whitelist' and $extra == 'product') $action->product = $objectID;
         if($objectType == 'whitelist' and $extra == 'project') $action->project = $objectID;
         if($objectType == 'whitelist' and ($extra == 'sprint' or $extra == 'stage')) $action->execution = $objectID;
@@ -181,7 +188,7 @@ class actionModel extends model
         }
 
         /* Only process these object types. */
-        if(strpos(',story,productplan,release,task,build,bug,case,testtask,doc,issue,risk,repo,team,', ",{$objectType},") !== false)
+        if(strpos(',story,productplan,release,task,build,bug,case,testtask,doc,issue,risk,team,', ",{$objectType},") !== false)
         {
             if(!isset($this->config->objectTables[$objectType])) return $emptyRecord;
 
@@ -196,11 +203,7 @@ class actionModel extends model
             $record = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
 
             /* Process story, release and task. */
-            if($objectType == 'story')
-            {
-                $record->project   = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
-                $record->execution = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
-            }
+            if($objectType == 'story') $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
             if($objectType == 'team')
             {
