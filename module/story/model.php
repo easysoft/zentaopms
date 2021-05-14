@@ -3939,6 +3939,84 @@ class storyModel extends model
     }
 
     /**
+     * Get estimate info
+     *
+     * @param  int    $storyID
+     * @param  int    $round
+     * @access public
+     * @return bool|array
+     */
+    public function getEstimateInfo($storyID, $round = 0)
+    {
+        $estimateInfo = $this->dao->select('*')->from(TABLE_STORYESTIMATE)
+            ->where('story')->eq($storyID)
+            ->beginIf($round)->andWhere('round')->eq($round)->fi()
+            ->orderBy('round_desc')
+            ->fetch();
+
+        if(!empty($estimateInfo)) $estimateInfo->estimate = json_decode($estimateInfo->estimate);
+        return $estimateInfo;
+    }
+
+    /**
+     * Get estimate rounds.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getEstimateRounds($storyID)
+    {
+        $lastRound = $this->dao->select('round')->from(TABLE_STORYESTIMATE)
+            ->where('story')->eq($storyID)
+            ->orderBy('round_desc')
+            ->fetch('round');
+        if(!$lastRound) return array();
+
+        $rounds = array();
+        for($i = 1; $i <= $lastRound; $i++)
+        {
+            $rounds[$i] = sprintf($this->lang->story->storyRound, $i);
+        }
+
+        return $rounds;
+    }
+
+    /**
+     * Save estimate information.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function saveEstimateInfo($storyID)
+    {
+        $data = fixer::input('post')->get();
+
+        $lastRound = $this->dao->select('round')->from(TABLE_STORYESTIMATE)
+            ->where('story')->eq($storyID)
+            ->orderBy('round_desc')
+            ->fetch('round');
+
+        $estimates = array();
+        foreach($data->account as $key => $account)
+        {
+            $estimates[$key]['account']  = $account;
+            $estimates[$key]['estimate'] = $data->estimate[$key];
+        }
+
+        $storyEstimate = new stdclass();
+        $storyEstimate->story      = $storyID;
+        $storyEstimate->round      = empty($lastRound) ? 1 : $lastRound + 1;
+        $storyEstimate->estimate   = json_encode($estimates);
+        $storyEstimate->average    = $data->average;
+        $storyEstimate->openedBy   = $this->app->user->account;
+        $storyEstimate->openedDate = helper::now();
+
+        $this->dao->insert(TABLE_STORYESTIMATE)->data($storyEstimate)->exec();
+    }
+
+    /**
      * Update the story order according to the plan.
      *
      * @param  int    $planID
