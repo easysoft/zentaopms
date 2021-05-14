@@ -326,6 +326,21 @@ $lang->action->dynamicAction->project['undeleted'] = 'Restaurer ' . $lang->execu
 $lang->action->dynamicAction->project['hidden']    = 'Masquer ' . $lang->executionCommon;
 $lang->action->dynamicAction->project['moved']     = 'Déplacer Tâche';
 
+$lang->action->dynamicAction->execution['opened']                = 'Create ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['edited']                = 'Edit ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['deleted']               = 'Delete ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['started']               = 'Start ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['delayed']               = 'Delay ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['suspended']             = 'Suspend ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['activated']             = 'Activate ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['closed']                = 'Close ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['managed']               = 'Manage ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['undeleted']             = 'Restore ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['hidden']                = 'Hide ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['moved']                 = 'Improt Task';
+$lang->action->dynamicAction->execution['linked2execution']      = 'Link ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['unlinkedfromexecution'] = 'Unlik ' . $lang->executionCommon;
+
 $lang->action->dynamicAction->task['opened']              = 'Créer Tâche';
 $lang->action->dynamicAction->task['edited']              = 'Editer Tâche';
 $lang->action->dynamicAction->task['commented']           = 'Commenter Tâche';
@@ -355,8 +370,9 @@ $lang->action->dynamicAction->task['hidden']              = 'Masquer Tâche';
 $lang->action->dynamicAction->task['svncommited']         = 'Committer SVN';
 $lang->action->dynamicAction->task['gitcommited']         = 'Committer GIT';
 
-$lang->action->dynamicAction->build['opened'] = 'Créer Build';
-$lang->action->dynamicAction->build['edited'] = 'Editer Build';
+$lang->action->dynamicAction->build['opened']  = 'Créer Build';
+$lang->action->dynamicAction->build['edited']  = 'Editer Build';
+$lang->action->dynamicAction->build['deleted'] = 'Delete Build';
 
 $lang->action->dynamicAction->bug['opened']              = 'Remonter Bug';
 $lang->action->dynamicAction->bug['edited']              = 'Editer Bug';

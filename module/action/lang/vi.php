@@ -313,18 +313,20 @@ $lang->action->dynamicAction->story['unlinkedfromproject'] = 'Hủy liên kết 
 $lang->action->dynamicAction->story['undeleted']           = 'Khôi phục câu chuyện';
 $lang->action->dynamicAction->story['hidden']              = 'Ẩn câu chuyện';
 
-$lang->action->dynamicAction->execution['opened']    = 'Tạo ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['edited']    = 'Sửa ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['deleted']   = 'Xóa ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['started']   = 'Bắt đầu ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['delayed']   = 'Tạm ngưng ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['suspended'] = 'Đình chỉ ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['activated'] = 'Kích hoạt ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['closed']    = 'Đóng ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['managed']   = 'Quản lý ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['undeleted'] = 'Phục hổi ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['hidden']    = 'Ẩn ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['moved']     = 'Nhập nhiệm vụ';
+$lang->action->dynamicAction->execution['opened']                = 'Tạo ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['edited']                = 'Sửa ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['deleted']               = 'Xóa ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['started']               = 'Bắt đầu ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['delayed']               = 'Tạm ngưng ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['suspended']             = 'Đình chỉ ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['activated']             = 'Kích hoạt ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['closed']                = 'Đóng ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['managed']               = 'Quản lý ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['undeleted']             = 'Phục hổi ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['hidden']                = 'Ẩn ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['moved']                 = 'Nhập nhiệm vụ';
+$lang->action->dynamicAction->execution['linked2execution']      = 'Link ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['unlinkedfromexecution'] = 'Unlik ' . $lang->executionCommon;
 
 $lang->action->dynamicAction->task['opened']              = 'Tạo nhiệm vụ';
 $lang->action->dynamicAction->task['edited']              = 'Sửa nhiệm vụ';
@@ -355,8 +357,9 @@ $lang->action->dynamicAction->task['hidden']              = 'Ẩn nhiệm vụ';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN Commit';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT Commit';
 
-$lang->action->dynamicAction->build['opened'] = 'Tạo bản dựng';
-$lang->action->dynamicAction->build['edited'] = 'Sửa bản dựng';
+$lang->action->dynamicAction->build['opened']  = 'Tạo bản dựng';
+$lang->action->dynamicAction->build['edited']  = 'Sửa bản dựng';
+$lang->action->dynamicAction->build['deleted'] = 'Delete Build';
 
 $lang->action->dynamicAction->bug['opened']              = 'Báo cáo Bug';
 $lang->action->dynamicAction->bug['edited']              = 'Sửa Bug';

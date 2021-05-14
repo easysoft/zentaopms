@@ -317,18 +317,20 @@ $lang->action->dynamicAction->story['unlinkedfromproject'] = 'Unlink Project';
 $lang->action->dynamicAction->story['undeleted']           = 'Restore Story';
 $lang->action->dynamicAction->story['hidden']              = 'Hide Story';
 
-$lang->action->dynamicAction->execution['opened']    = 'Create ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['edited']    = 'Edit ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['deleted']   = 'Delete ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['started']   = 'Start ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['delayed']   = 'Delay ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['suspended'] = 'Suspend ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['activated'] = 'Activate ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['closed']    = 'Close ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['managed']   = 'Manage ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['moved']     = 'Improt Task';
+$lang->action->dynamicAction->execution['opened']                = 'Create ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['edited']                = 'Edit ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['deleted']               = 'Delete ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['started']               = 'Start ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['delayed']               = 'Delay ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['suspended']             = 'Suspend ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['activated']             = 'Activate ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['closed']                = 'Close ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['managed']               = 'Manage ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['undeleted']             = 'Restore ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['hidden']                = 'Hide ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['moved']                 = 'Improt Task';
+$lang->action->dynamicAction->execution['linked2execution']      = 'Link ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['unlinkedfromexecution'] = 'Unlik ' . $lang->executionCommon;
 
 $lang->action->dynamicAction->task['opened']              = 'Create Task';
 $lang->action->dynamicAction->task['edited']              = 'Edit Task';
@@ -359,8 +361,9 @@ $lang->action->dynamicAction->task['hidden']              = 'Hide Task';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN Commit';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT Commit';
 
-$lang->action->dynamicAction->build['opened'] = 'Create Build';
-$lang->action->dynamicAction->build['edited'] = 'Edit Build';
+$lang->action->dynamicAction->build['opened']  = 'Create Build';
+$lang->action->dynamicAction->build['edited']  = 'Edit Build';
+$lang->action->dynamicAction->build['deleted'] = 'Delete Build';
 
 $lang->action->dynamicAction->bug['opened']              = 'Report Bug';
 $lang->action->dynamicAction->bug['edited']              = 'Edit Bug';
