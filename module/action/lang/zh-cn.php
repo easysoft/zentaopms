@@ -237,6 +237,8 @@ $lang->action->label->logout                = "退出登录";
 $lang->action->label->deleteestimate        = "删除了工时";
 $lang->action->label->linked2build          = "关联了";
 $lang->action->label->linked2bug            = "关联了";
+$lang->action->label->linked2testtask       = "关联了";
+$lang->action->label->unlinkedfromtesttask  = "移除了";
 $lang->action->label->linkchildtask         = "关联子任务";
 $lang->action->label->unlinkchildrentask    = "取消关联子任务";
 $lang->action->label->linkparenttask        = "关联到父任务";
@@ -255,6 +257,7 @@ $lang->action->label->unlinkparentstory     = "从父需求取消关联";
 $lang->action->label->deletechildrenstory   = "删除子需求";
 $lang->action->label->tracked               = '跟踪了';
 $lang->action->label->hangup                = '挂起了';
+$lang->action->label->run                   = '执行了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -314,18 +317,20 @@ $lang->action->dynamicAction->story['unlinkedfromproject'] = '移除项目';
 $lang->action->dynamicAction->story['undeleted']           = "还原{$lang->SRCommon}";
 $lang->action->dynamicAction->story['hidden']              = "隐藏{$lang->SRCommon}";
 
-$lang->action->dynamicAction->execution['opened']    = '创建' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['edited']    = '编辑' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['deleted']   = '删除' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['started']   = '开始' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['delayed']   = '延期' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['suspended'] = '挂起' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['activated'] = '激活' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['closed']    = '关闭' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['managed']   = '维护' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['undeleted'] = '还原' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['hidden']    = '隐藏' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['moved']     = '导入任务';
+$lang->action->dynamicAction->execution['opened']                = '创建' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['edited']                = '编辑' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['deleted']               = '删除' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['started']               = '开始' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['delayed']               = '延期' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['suspended']             = '挂起' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['activated']             = '激活' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['closed']                = '关闭' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['managed']               = '维护' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['undeleted']             = '还原' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['hidden']                = '隐藏' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['moved']                 = '导入任务';
+$lang->action->dynamicAction->execution['linked2execution']      = '关联' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['unlinkedfromexecution'] = '移除' . $lang->executionCommon;
 
 $lang->action->dynamicAction->task['opened']              = '创建任务';
 $lang->action->dynamicAction->task['edited']              = '编辑任务';
@@ -356,8 +361,9 @@ $lang->action->dynamicAction->task['hidden']              = '隐藏任务';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN提交';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT提交';
 
-$lang->action->dynamicAction->build['opened'] = '创建版本';
-$lang->action->dynamicAction->build['edited'] = '编辑版本';
+$lang->action->dynamicAction->build['opened']  = '创建版本';
+$lang->action->dynamicAction->build['edited']  = '编辑版本';
+$lang->action->dynamicAction->build['deleted'] = '删除版本';
 
 $lang->action->dynamicAction->bug['opened']              = '创建Bug';
 $lang->action->dynamicAction->bug['edited']              = '编辑Bug';
