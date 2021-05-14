@@ -72,6 +72,13 @@ class actionModel extends model
             $action->execution = $build->execution;
         }
 
+        if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false))
+        {
+            $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
+            $action->project   = $testtask->project;
+            $action->execution = $testtask->execution;
+        }
+
         if($objectType == 'whitelist' and $extra == 'product') $action->product = $objectID;
         if($objectType == 'whitelist' and $extra == 'project') $action->project = $objectID;
         if($objectType == 'whitelist' and ($extra == 'sprint' or $extra == 'stage')) $action->execution = $objectID;

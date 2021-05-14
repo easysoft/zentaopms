@@ -237,6 +237,8 @@ $lang->action->label->logout                = "logout";
 $lang->action->label->deleteestimate        = "deleted ";
 $lang->action->label->linked2build          = "linked ";
 $lang->action->label->linked2bug            = "linked ";
+$lang->action->label->linked2testtask       = "linked";
+$lang->action->label->unlinkedfromtesttask  = "unlinked";
 $lang->action->label->linkchildtask         = "linked a child task";
 $lang->action->label->unlinkchildrentask    = "unlinked a child task";
 $lang->action->label->linkparenttask        = "linked a parent task";
@@ -255,6 +257,7 @@ $lang->action->label->unlinkparentstory     = "unlink from parent story";
 $lang->action->label->deletechildrenstory   = "delete children story";
 $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
+$lang->action->label->run                   = 'run';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;

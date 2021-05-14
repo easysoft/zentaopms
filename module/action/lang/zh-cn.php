@@ -237,6 +237,8 @@ $lang->action->label->logout                = "退出登录";
 $lang->action->label->deleteestimate        = "删除了工时";
 $lang->action->label->linked2build          = "关联了";
 $lang->action->label->linked2bug            = "关联了";
+$lang->action->label->linked2testtask       = "关联了";
+$lang->action->label->unlinkedfromtesttask  = "移除了";
 $lang->action->label->linkchildtask         = "关联子任务";
 $lang->action->label->unlinkchildrentask    = "取消关联子任务";
 $lang->action->label->linkparenttask        = "关联到父任务";
@@ -255,6 +257,7 @@ $lang->action->label->unlinkparentstory     = "从父需求取消关联";
 $lang->action->label->deletechildrenstory   = "删除子需求";
 $lang->action->label->tracked               = '跟踪了';
 $lang->action->label->hangup                = '挂起了';
+$lang->action->label->run                   = '执行了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

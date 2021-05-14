@@ -233,6 +233,8 @@ $lang->action->label->logout                = "s'est Déconnecté";
 $lang->action->label->deleteestimate        = "a remis à zéro ";
 $lang->action->label->linked2build          = "a ajouté au Build ";
 $lang->action->label->linked2bug            = "a lié au Bug ";
+$lang->action->label->linked2testtask       = "linked";
+$lang->action->label->unlinkedfromtesttask  = "unlinked";
 $lang->action->label->linkchildtask         = "a raccroché à une sous-tâche";
 $lang->action->label->unlinkchildrentask    = "a décroché la sous-tâche";
 $lang->action->label->linkparenttask        = "a raccroché à une tâche parent";
@@ -251,6 +253,7 @@ $lang->action->label->unlinkparentstory     = "a décroché de la story parent";
 $lang->action->label->deletechildrenstory   = "a supprimé la sous-story";
 $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
+$lang->action->label->run                   = 'run';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
