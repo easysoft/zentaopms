@@ -186,7 +186,8 @@ class storyModel extends model
      */
     public function create($executionID = 0, $bugID = 0, $from = '')
     {
-        if(!$this->post->needNotReview and empty(array_filter($_POST['reviewedBy'])))
+        if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
+        if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
             dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
             return false;
@@ -202,7 +203,6 @@ class storyModel extends model
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setDefault('reviewedBy', '')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview or $executionID > 0, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
@@ -210,9 +210,8 @@ class storyModel extends model
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
-            ->join('reviewedBy', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,needNotReview,newStory,uid,contactListMenu,URS')
+            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS')
             ->get();
 
         /* Check repeat story. */
@@ -250,6 +249,19 @@ class storyModel extends model
             $data->spec    = $story->spec;
             $data->verify  = $story->verify;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+
+            /* Save the story reviewer to storyreview table. */
+            if(isset($_POST['reviewer']))
+            {
+                foreach($this->post->reviewer as $reviewer)
+                {
+                    $reviewData = new stdclass();
+                    $reviewData->story    = $storyID;
+                    $reviewData->version  = 1;
+                    $reviewData->reviewer = $reviewer;
+                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                }
+            }
 
             /* Project or execution linked story. */
             if($executionID != 0 and $story->status != 'draft')
@@ -528,7 +540,8 @@ class storyModel extends model
             return false;
         }
 
-        if(!$this->post->needNotReview and empty(array_filter($_POST['reviewedBy'])))
+        if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
+        if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
             dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
             return false;
@@ -541,7 +554,6 @@ class storyModel extends model
         $story = fixer::input('post')
             ->callFunc('title', 'trim')
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('reviewedBy', '')
             ->add('lastEditedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
@@ -552,8 +564,7 @@ class storyModel extends model
             ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '0000-00-00')
             ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '0000-00-00')
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
-            ->join('reviewedBy', ',')
-            ->remove('files,labels,comment,needNotReview,uid')
+            ->remove('files,labels,reviewer,comment,needNotReview,uid')
             ->get();
         if($specChanged and $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
@@ -561,6 +572,7 @@ class storyModel extends model
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
+
         if(!dao::isError())
         {
             if($specChanged)
@@ -597,7 +609,23 @@ class storyModel extends model
             {
                 unset($story->spec);
                 unset($oldStory->spec);
+
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
             }
+
+            /* Update the reviewer. */
+            $oldReviewerList = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer');
+            foreach($_POST['reviewer'] as $reviewer)
+            {
+                if(!$specChanged and in_array($reviewer, $oldReviewerList)) continue;
+
+                $reviewData = new stdclass();
+                $reviewData->story    = $storyID;
+                $reviewData->version  = $specChanged ? $story->version : $oldStory->version;
+                $reviewData->reviewer = $reviewer;
+                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+            }
+
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
             return common::createChanges($oldStory, $story);
         }
@@ -1120,12 +1148,10 @@ class storyModel extends model
         $now      = helper::now();
         $date     = helper::today();
         $story = fixer::input('post')
+            ->add('reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
             ->setDefault('reviewedDate', $date)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
-            ->setDefault('reviewedBy', '')
-            ->setIF($this->post->result == 'pass' and $oldStory->status == 'draft',   'status', 'active')
-            ->setIF($this->post->result == 'pass' and $oldStory->status == 'changed', 'status', 'active')
             ->setIF($this->post->result == 'reject', 'closedBy',   $this->app->user->account)
             ->setIF($this->post->result == 'reject', 'closedDate', $now)
             ->setIF($this->post->result == 'reject', 'assignedTo', 'closed')
@@ -1137,12 +1163,21 @@ class storyModel extends model
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
-            ->join('reviewedBy', ',')
             ->remove('result,preVersion,comment')
             ->get();
 
-        /* fix bug #671. */
+        /* Fix bug #671. */
         $this->lang->story->closedReason = $this->lang->story->rejectedReason;
+
+        $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($this->post->result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
+
+        /* Update the story status by review rules. */
+        $passCount    = 0;
+        $reviewRule   = $this->config->story->reviewRules;
+        $reviewerList = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer', 'result');
+        foreach($reviewerList as $reviewer => $result) $passCount = $result == 'pass' ? $passCount + 1 : $passCount;
+        if($reviewRule == 'allpass'  and $passCount == count($reviewerList)) $story->status = 'active';
+        if($reviewRule == 'halfpass' and $passCount >= floor(count($reviewerList) / 2) + 1) $story->status = 'active';
 
         $this->dao->update(TABLE_STORY)->data($story)
             ->autoCheck()
@@ -2532,13 +2567,16 @@ class storyModel extends model
      */
     public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story')
     {
-        $stories = $this->dao->select('t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('t1.deleted')->eq(0)
+        $sql = $this->dao->select('t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id');
+        if($type == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story');
+
+        $stories = $sql->where('t1.deleted')->eq(0)
             ->andWhere('t1.type')->eq($storyType)
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
             ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
+            ->beginIF($type == 'reviewBy')->andWhere('t3.reviewer')->eq($account)->andWhere('t3.result')->eq('')->fi()
             ->beginIF($type == 'openedBy')->andWhere('openedBy')->eq($account)->fi()
             ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', reviewedBy, ',')")->like("%,$account,%")->fi()
             ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()

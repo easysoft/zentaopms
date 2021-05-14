@@ -250,5 +250,5 @@ $lang->custom->conceptOptions->hourPoint['2'] = '功能點';
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = '設置項目概念';
 
-$lang->custom->reviewRules[1] = '全部通過通過';
-$lang->custom->reviewRules[0] = '半數以上通過通過';
+$lang->custom->reviewRules['allpass']  = '全部通過通過';
+$lang->custom->reviewRules['halfpass'] = '半數以上通過通過';

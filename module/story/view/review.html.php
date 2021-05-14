@@ -70,10 +70,6 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
         </tr>
         <?php $this->printExtendFields($story, 'table');?>
         <tr>
-          <th><?php echo $lang->story->reviewedBy;?></th>
-          <td colspan='2'><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control chosen' multiple data-placeholder='{$lang->story->chosen->reviewedBy}'");?></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>
         </tr>

@@ -820,11 +820,16 @@ class story extends control
         $this->app->loadLang('testcase');
         $this->app->loadLang('execution');
 
+        $story    = $this->story->getById($storyID);
+        $reviewer = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
+
         /* Assign. */
         $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->users      = $this->user->getPairs('pofirst|nodeleted', $this->view->story->assignedTo);
         $this->view->position[] = $this->lang->story->change;
         $this->view->needReview = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->reviewer   = implode(',', array_keys($reviewer));
+
         $this->display();
     }
 
@@ -2187,8 +2192,6 @@ class story extends control
         {
             $oldStory = $this->dao->findById((int)$params['storyID'])->from(TABLE_STORY)->fetch();
             $status   = $oldStory->status;
-            if($params['result'] == 'pass' and $oldStory->status == 'draft')   $status = 'active';
-            if($params['result'] == 'pass' and $oldStory->status == 'changed') $status = 'active';
             if($params['result'] == 'revert') $status = 'active';
             if($params['result'] == 'reject') $status = 'closed';
         }

@@ -249,5 +249,5 @@ $lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = 'Set concept';
 
-$lang->custom->reviewRules[1] = 'All passed';
-$lang->custom->reviewRules[0] = 'More than half passed';
+$lang->custom->reviewRules['allpass']  = 'All passed';
+$lang->custom->reviewRules['halfpass'] = 'More than half passed';
