@@ -869,7 +869,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `version` smallint(6) NOT NULL,
   `reviewer` varchar(30) NOT NULL,
   `result` varchar(30) NOT NULL,
-  `reivewDate` datetime NOT NULL,
+  `reviewDate` datetime NOT NULL,
   UNIQUE KEY `story` (`story`,`version`,`reviewer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storystage`;
