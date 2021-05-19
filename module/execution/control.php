@@ -2710,6 +2710,8 @@ class execution extends control
         if($_POST)
         {
             $this->story->saveEstimateInfo($storyID);
+
+            $this->loadModel('action')->create('story', $storyID, 'estimated', '', $executionID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'storyEstimate', "executionID=$executionID&storyID=$storyID")));
         }
         $estimateInfo = $this->story->getEstimateInfo($storyID, $round);

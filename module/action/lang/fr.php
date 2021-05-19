@@ -146,6 +146,7 @@ $lang->action->desc->diff3          = 'Le nom du fichier %s a changé pour %s .'
 $lang->action->desc->linked2bug     = '$date, affecté à <strong>$extra</strong> par <strong>$actor</strong>';
 $lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
 $lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed.' . "\n";
+$lang->action->desc->estimated      = '$date, by <strong>$actor</strong> estimated。' . "\n";
 
 /* 子任务修改父任务的历史操作记录 */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -254,6 +255,7 @@ $lang->action->label->deletechildrenstory   = "a supprimé la sous-story";
 $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
 $lang->action->label->run                   = 'run';
+$lang->action->label->estimated             = 'estimated';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -314,6 +316,7 @@ $lang->action->dynamicAction->story['undeleted']             = 'Restaurer Story'
 $lang->action->dynamicAction->story['hidden']                = 'Masquer Story';
 $lang->action->dynamicAction->story['linked2execution']      = "Link Story";
 $lang->action->dynamicAction->story['unlinkedfromexecution'] = "Unlink Story";
+$lang->action->dynamicAction->story['estimated']             = "Estimate $lang->SRCommon";
 
 $lang->action->dynamicAction->project['opened']    = 'Créer ' . $lang->executionCommon;
 $lang->action->dynamicAction->project['edited']    = 'Editer ' . $lang->executionCommon;
