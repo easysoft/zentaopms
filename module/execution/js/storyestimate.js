@@ -3,6 +3,15 @@ $('.new-estimate input').keyup(function()
     computeAverage();
 })
 
+$(function()
+{
+    $('#round_chosen').click(function()
+    {
+        var maxHeight = $(window).height() - 150;
+        $('.chosen-container .chosen-results').attr('style', 'max-height: ' + maxHeight + 'px !important;');
+    })
+})
+
 function computeAverage()
 {
     var summary = 0;
