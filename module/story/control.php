@@ -1012,7 +1012,8 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::reload('parent.parent'));
+
 
             $module = $from == 'project' ? 'projectstory' : 'story';
             die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
