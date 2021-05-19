@@ -822,7 +822,9 @@ class testcase extends control
         $caseIDList = array_unique($caseIDList);
         $branchProduct = false;
 
-        if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($this->session->project);
+        if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
+        if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
 
         /* The cases of a product. */
         if($productID)
@@ -846,7 +848,6 @@ class testcase extends control
             else
             {
                 $product = $this->product->getByID($productID);
-                $this->testcase->setMenu($this->products, $productID, $branch);
 
                 if($product->type != 'normal') $branchProduct = true;
 
