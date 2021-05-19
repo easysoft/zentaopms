@@ -59,6 +59,11 @@ class custom extends control
             $this->view->unitList        = explode(',', $unitList);
             $this->view->defaultCurrency = zget($this->config->$module, 'defaultCurrency', 'CNY');
         }
+        if($module == 'story' and $field == 'reviewRules')
+        {
+            $this->app->loadConfig($module);
+            $this->view->reviewRule = zget($this->config->$module, 'reviewRules', '1');
+        }
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
@@ -105,6 +110,28 @@ class custom extends control
             {
                 $data = fixer::input('post')->join('forceReview', ',')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
+            }
+            elseif($module == 'story' and $field == 'reviewRules')
+            {
+                $data = fixer::input('post')->get();
+                $this->loadModel('setting')->setItems("system.$module", $data);
+                if($data->reviewRules == 'halfpass')
+                {
+                    $storyList = $this->dao->select('t1.*')->from(TABLE_STORYREVIEW)->alias('t1')
+                        ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                        ->where('t2.status')->in('change, draft')
+                        ->fetchGroup('story');
+
+                    foreach($storyList as $storyID => $reviewerList)
+                    {
+                        $passCount = 0;
+                        foreach($reviewerList as $reviewer) $passCount += $reviewer->result == 'pass' ? 1 : 0;
+                        if($passCount >= floor(count($reviewerList) / 2) + 1)
+                        {
+                            $this->dao->update(TABLE_STORY)->set('status')->eq('active')->where('id')->eq($storyID)->exec();
+                        }
+                    }
+                }
             }
             elseif($module == 'testcase' and $field == 'review')
             {
@@ -211,7 +238,7 @@ class custom extends control
         $this->view->fieldList   = $fieldList;
         $this->view->dbFields    = $dbFields;
         $this->view->field       = $field;
-        $this->view->lang2Set     = str_replace('_', '-', $lang);
+        $this->view->lang2Set    = str_replace('_', '-', $lang);
         $this->view->module      = $module;
         $this->view->currentLang = $currentLang;
         $this->view->canAdd      = strpos($this->config->custom->canAdd[$module], $field) !== false;

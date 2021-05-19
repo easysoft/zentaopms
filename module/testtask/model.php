@@ -882,8 +882,10 @@ class testtaskModel extends model
                 $data->version = 1;
                 $data->order   = ++ $lastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
+                $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
             }
         }
+
     }
 
     /**

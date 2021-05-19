@@ -585,6 +585,7 @@ $lang->resource->execution->storySort         = 'storySort';
 $lang->resource->execution->whitelist         = 'whitelist';
 $lang->resource->execution->addWhitelist      = 'addWhitelist';
 $lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
+$lang->resource->execution->storyEstimate     = 'storyEstimate';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 //$lang->execution->methodOrder[0]   = 'index';
@@ -640,6 +641,7 @@ $lang->execution->methodOrder[240] = 'storySort';
 $lang->execution->methodOrder[245] = 'whitelist';
 $lang->execution->methodOrder[250] = 'addWhitelist';
 $lang->execution->methodOrder[255] = 'unbindWhitelist';
+$lang->execution->methodOrder[260] = 'storyEstimate';
 
 /* Task. */
 $lang->resource->task = new stdclass();

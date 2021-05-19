@@ -863,6 +863,25 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `verify` text NOT NULL,
   UNIQUE KEY `story` (`story`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_storyreview`;
+CREATE TABLE IF NOT EXISTS `zt_storyreview` (
+  `story` mediumint(9) NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `reviewer` varchar(30) NOT NULL,
+  `result` varchar(30) NOT NULL,
+  `reviewDate` datetime NOT NULL,
+  UNIQUE KEY `story` (`story`,`version`,`reviewer`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_storyestimate`;
+CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
+  `story` mediumint(9) NOT NULL,
+  `round` smallint(6) NOT NULL,
+  `estimate` text NOT NULL,
+  `average` float(10,2) NOT NULL,
+  `openedBy` varchar(30) NOT NULL,
+  `openedDate` datetime NOT NULL,
+  UNIQUE KEY `story` (`story`,`round`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storystage`;
 CREATE TABLE IF NOT EXISTS `zt_storystage` (
   `story` mediumint(8) unsigned NOT NULL,
@@ -4191,3 +4210,4 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'global', 'mode', 'new');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'project', '', 'unitList', 'CNY,USD');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'project', '', 'defaultCurrency', 'CNY');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'reivewRules', 'allpass');

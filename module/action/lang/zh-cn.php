@@ -101,6 +101,8 @@ $lang->action->objectTypes['stakeholder'] = '干系人';
 $lang->action->objectTypes['budget']      = '费用估算';
 $lang->action->objectTypes['entry']       = '应用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
+$lang->action->objectTypes['team']        = '团队';
+$lang->action->objectTypes['whitelist']   = '白名单';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -148,6 +150,7 @@ $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
 $lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>';
 $lang->action->desc->resolved       = '$date, 由 <strong>$actor</strong> 解决。' . "\n";
 $lang->action->desc->managed        = '$date, 由 <strong>$actor</strong> 维护。' . "\n";
+$lang->action->desc->estimated      = '$date, 由 <strong>$actor</strong> 估算。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -235,6 +238,8 @@ $lang->action->label->logout                = "退出登录";
 $lang->action->label->deleteestimate        = "删除了工时";
 $lang->action->label->linked2build          = "关联了";
 $lang->action->label->linked2bug            = "关联了";
+$lang->action->label->linked2testtask       = "关联了";
+$lang->action->label->unlinkedfromtesttask  = "移除了";
 $lang->action->label->linkchildtask         = "关联子任务";
 $lang->action->label->unlinkchildrentask    = "取消关联子任务";
 $lang->action->label->linkparenttask        = "关联到父任务";
@@ -242,6 +247,8 @@ $lang->action->label->unlinkparenttask      = "从父任务取消关联";
 $lang->action->label->batchcreate           = "批量创建任务";
 $lang->action->label->createchildren        = "创建子任务";
 $lang->action->label->managed               = "维护";
+$lang->action->label->managedteam           = "维护了";
+$lang->action->label->managedwhitelist      = "维护了";
 $lang->action->label->deletechildrentask    = "删除子任务";
 $lang->action->label->createchildrenstory   = "创建子需求";
 $lang->action->label->linkchildstory        = "关联子需求";
@@ -251,6 +258,8 @@ $lang->action->label->unlinkparentstory     = "从父需求取消关联";
 $lang->action->label->deletechildrenstory   = "删除子需求";
 $lang->action->label->tracked               = '跟踪了';
 $lang->action->label->hangup                = '挂起了';
+$lang->action->label->run                   = '执行了';
+$lang->action->label->estimated             = '估算了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -293,22 +302,25 @@ $lang->action->dynamicAction->release['changestatus'] = '修改发布状态';
 $lang->action->dynamicAction->release['undeleted']    = '还原发布';
 $lang->action->dynamicAction->release['hidden']       = '隐藏发布';
 
-$lang->action->dynamicAction->story['opened']              = "创建{$lang->SRCommon}";
-$lang->action->dynamicAction->story['edited']              = "编辑{$lang->SRCommon}";
-$lang->action->dynamicAction->story['activated']           = "激活{$lang->SRCommon}";
-$lang->action->dynamicAction->story['reviewed']            = "评审{$lang->SRCommon}";
-$lang->action->dynamicAction->story['closed']              = "关闭{$lang->SRCommon}";
-$lang->action->dynamicAction->story['assigned']            = "指派{$lang->SRCommon}";
-$lang->action->dynamicAction->story['changed']             = "变更{$lang->SRCommon}";
-$lang->action->dynamicAction->story['linked2plan']         = "{$lang->SRCommon}关联计划";
-$lang->action->dynamicAction->story['unlinkedfromplan']    = "计划移除{$lang->SRCommon}";
-$lang->action->dynamicAction->story['linked2release']      = "{$lang->SRCommon}关联发布";
-$lang->action->dynamicAction->story['unlinkedfromrelease'] = "发布移除{$lang->SRCommon}";
-$lang->action->dynamicAction->story['linked2build']        = "{$lang->SRCommon}关联版本";
-$lang->action->dynamicAction->story['unlinkedfrombuild']   = "版本移除{$lang->SRCommon}";
-$lang->action->dynamicAction->story['unlinkedfromproject'] = '移除项目';
-$lang->action->dynamicAction->story['undeleted']           = "还原{$lang->SRCommon}";
-$lang->action->dynamicAction->story['hidden']              = "隐藏{$lang->SRCommon}";
+$lang->action->dynamicAction->story['opened']                = "创建{$lang->SRCommon}";
+$lang->action->dynamicAction->story['edited']                = "编辑{$lang->SRCommon}";
+$lang->action->dynamicAction->story['activated']             = "激活{$lang->SRCommon}";
+$lang->action->dynamicAction->story['reviewed']              = "评审{$lang->SRCommon}";
+$lang->action->dynamicAction->story['closed']                = "关闭{$lang->SRCommon}";
+$lang->action->dynamicAction->story['assigned']              = "指派{$lang->SRCommon}";
+$lang->action->dynamicAction->story['changed']               = "变更{$lang->SRCommon}";
+$lang->action->dynamicAction->story['linked2plan']           = "{$lang->SRCommon}关联计划";
+$lang->action->dynamicAction->story['unlinkedfromplan']      = "计划移除{$lang->SRCommon}";
+$lang->action->dynamicAction->story['linked2release']        = "{$lang->SRCommon}关联发布";
+$lang->action->dynamicAction->story['unlinkedfromrelease']   = "发布移除{$lang->SRCommon}";
+$lang->action->dynamicAction->story['linked2build']          = "{$lang->SRCommon}关联版本";
+$lang->action->dynamicAction->story['unlinkedfrombuild']     = "版本移除{$lang->SRCommon}";
+$lang->action->dynamicAction->story['unlinkedfromproject']   = '移除项目';
+$lang->action->dynamicAction->story['undeleted']             = "还原{$lang->SRCommon}";
+$lang->action->dynamicAction->story['hidden']                = "隐藏{$lang->SRCommon}";
+$lang->action->dynamicAction->story['linked2execution']      = "关联$lang->SRCommon";
+$lang->action->dynamicAction->story['unlinkedfromexecution'] = "移除$lang->SRCommon";
+$lang->action->dynamicAction->story['estimated']             = "估算$lang->SRCommon";
 
 $lang->action->dynamicAction->execution['opened']    = '创建' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['edited']    = '编辑' . $lang->executionCommon;
@@ -352,8 +364,9 @@ $lang->action->dynamicAction->task['hidden']              = '隐藏任务';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN提交';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT提交';
 
-$lang->action->dynamicAction->build['opened'] = '创建版本';
-$lang->action->dynamicAction->build['edited'] = '编辑版本';
+$lang->action->dynamicAction->build['opened']  = '创建版本';
+$lang->action->dynamicAction->build['edited']  = '编辑版本';
+$lang->action->dynamicAction->build['deleted'] = '删除版本';
 
 $lang->action->dynamicAction->bug['opened']              = '创建Bug';
 $lang->action->dynamicAction->bug['edited']              = '编辑Bug';
@@ -411,6 +424,7 @@ $lang->action->dynamicAction->caselib['hidden']    = '隐藏用例库';
 
 $lang->action->dynamicAction->doclib['created'] = '创建文档库';
 $lang->action->dynamicAction->doclib['edited']  = '编辑文档库';
+$lang->action->dynamicAction->doclib['deleted'] = '删除文档库';
 
 $lang->action->dynamicAction->doc['created']   = '创建文档';
 $lang->action->dynamicAction->doc['edited']    = '编辑文档';

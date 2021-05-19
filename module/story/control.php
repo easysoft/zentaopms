@@ -606,16 +606,24 @@ class story extends control
         $stories = $this->story->getParentStoryPairs($story->product, $story->parent);
         if(isset($stories[$storyID])) unset($stories[$storyID]);
 
+        /* Get users. */
+        $users = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
+
+        $reviewedBy   = explode(',', trim($reviewedBy, ','));
+        $reivewerList = '';
+        foreach($reviewedBy as $reviewer) $reivewerList .= zget($users, $reviewer) . ' ';
+
         $this->story->replaceURLang($story->type);
 
         $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
         $this->view->story      = $story;
         $this->view->stories    = $stories;
-        $this->view->users      = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
+        $this->view->users      = $users;
         $this->view->product    = $product;
         $this->view->products   = $myProducts + $othersProducts;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
+        $this->view->reviewers  = $reivewerList;
         $this->display();
     }
 
@@ -820,11 +828,16 @@ class story extends control
         $this->app->loadLang('testcase');
         $this->app->loadLang('execution');
 
+        $story    = $this->story->getById($storyID);
+        $reviewer = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
+
         /* Assign. */
         $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->users      = $this->user->getPairs('pofirst|nodeleted', $this->view->story->assignedTo);
+        $this->view->users      = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
         $this->view->position[] = $this->lang->story->change;
         $this->view->needReview = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->reviewer   = implode(',', array_keys($reviewer));
+
         $this->display();
     }
 
@@ -999,7 +1012,8 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::reload('parent.parent'));
+
 
             $module = $from == 'project' ? 'projectstory' : 'story';
             die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
@@ -2187,8 +2201,6 @@ class story extends control
         {
             $oldStory = $this->dao->findById((int)$params['storyID'])->from(TABLE_STORY)->fetch();
             $status   = $oldStory->status;
-            if($params['result'] == 'pass' and $oldStory->status == 'draft')   $status = 'active';
-            if($params['result'] == 'pass' and $oldStory->status == 'changed') $status = 'active';
             if($params['result'] == 'revert') $status = 'active';
             if($params['result'] == 'reject') $status = 'closed';
         }

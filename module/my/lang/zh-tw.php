@@ -67,6 +67,7 @@ $lang->my->taskMenu->canceledByMe = '由我取消';
 
 $lang->my->storyMenu = new stdclass();
 $lang->my->storyMenu->assignedToMe = '指派給我';
+$lang->my->storyMenu->reviewByMe   = '待我評審';
 $lang->my->storyMenu->openedByMe   = '由我創建';
 $lang->my->storyMenu->reviewedByMe = '由我評審';
 $lang->my->storyMenu->closedByMe   = '由我關閉';

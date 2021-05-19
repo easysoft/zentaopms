@@ -14,6 +14,7 @@ $lang->testreport->product     = "所屬{$lang->productCommon}";
 $lang->testreport->bugTitle    = 'Bug 標題';
 $lang->testreport->storyTitle  = "{$lang->SRCommon}標題";
 $lang->testreport->project     = '所屬項目';
+$lang->testreport->execution   = '所屬執行';
 $lang->testreport->testtask    = '測試版本';
 $lang->testreport->tasks       = $lang->testreport->testtask;
 $lang->testreport->startEnd    = '起止時間';

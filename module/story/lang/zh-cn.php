@@ -83,6 +83,7 @@ $lang->story->skipStory       = '需求：%s 为父需求，将不会被关闭�
 $lang->story->closedStory     = '需求：%s 已关闭，将不会被关闭。';
 $lang->story->batchToTaskTips = "此操作会创建与所选{$lang->SRCommon}同名的任务，并将{$lang->SRCommon}关联到任务中，已关闭的需求不会转为任务。";
 $lang->story->successToTask   = '批量转任务成功';
+$lang->story->storyRound      = '第 %s 轮估算';
 
 $lang->story->common         = $lang->SRCommon;
 $lang->story->id             = '编号';
@@ -269,6 +270,7 @@ $lang->story->ignoreChangeStage     = "{$lang->SRCommon} %s 为草稿状态或�
 $lang->story->cannotDeleteParent    = "不能删除父{$lang->SRCommon}";
 $lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所属产品会将其下的子{$lang->SRCommon}也移动到所选产品下。";
 $lang->story->changeTips            = '该软件需求关联的用户需求有变更，点击“不变更”忽略此条变更，点击“变更”来进行该软件需求的变更。';
+$lang->story->estimateMustBeNumber  = '估算值必须是数字';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = "该{$lang->SRCommon}所属范围";

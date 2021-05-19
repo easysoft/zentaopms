@@ -97,6 +97,8 @@ $lang->action->objectTypes['budget']      = 'Cost Estimate';
 $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['job']         = 'Job';
+$lang->action->objectTypes['team']        = 'Team';
+$lang->action->objectTypes['whitelist']   = 'Whitelist';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -144,6 +146,7 @@ $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date, liên kết tới <strong>$extra</strong> bởi <strong>$actor</strong>';
 $lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
 $lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed.' . "\n";
+$lang->action->desc->estimated      = '$date, by <strong>$actor</strong> estimated。' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -231,6 +234,8 @@ $lang->action->label->logout                = "logout";
 $lang->action->label->deleteestimate        = "deleted ";
 $lang->action->label->linked2build          = "linked ";
 $lang->action->label->linked2bug            = "linked ";
+$lang->action->label->linked2testtask       = "linked";
+$lang->action->label->unlinkedfromtesttask  = "unlinked";
 $lang->action->label->linkchildtask         = "linked a child task";
 $lang->action->label->unlinkchildrentask    = "hủy liên kết a child task";
 $lang->action->label->linkparenttask        = "linked a nhiệm vụ cha";
@@ -238,6 +243,8 @@ $lang->action->label->unlinkparenttask      = "unlink from nhiệm vụ cha";
 $lang->action->label->batchcreate           = "batch created tasks";
 $lang->action->label->createchildren        = "create child tasks";
 $lang->action->label->managed               = "managed";
+$lang->action->label->managedteam           = "managed";
+$lang->action->label->managedwhitelist      = "managed";
 $lang->action->label->deletechildrentask    = "delete children task";
 $lang->action->label->createchildrenstory   = "create child stories";
 $lang->action->label->linkchildstory        = "linked a child story";
@@ -247,6 +254,8 @@ $lang->action->label->unlinkparentstory     = "unlink from parent story";
 $lang->action->label->deletechildrenstory   = "delete children story";
 $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
+$lang->action->label->run                   = 'run';
+$lang->action->label->estimated             = 'estimated';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -289,22 +298,25 @@ $lang->action->dynamicAction->release['changestatus'] = 'Thay đổi Tình trạ
 $lang->action->dynamicAction->release['undeleted']    = 'Khôi phục phát hành';
 $lang->action->dynamicAction->release['hidden']       = 'Ẩn phát hành';
 
-$lang->action->dynamicAction->story['opened']              = 'Tạo câu chuyện';
-$lang->action->dynamicAction->story['edited']              = 'Sửa câu chuyện';
-$lang->action->dynamicAction->story['activated']           = 'Kích hoạt câu chuyện';
-$lang->action->dynamicAction->story['reviewed']            = 'Duyệt câu chuyện';
-$lang->action->dynamicAction->story['closed']              = 'Đóng câu chuyện';
-$lang->action->dynamicAction->story['assigned']            = 'Bàn giao câu chuyện';
-$lang->action->dynamicAction->story['changed']             = 'Thay đổi câu chuyện';
-$lang->action->dynamicAction->story['linked2plan']         = 'Liên kết Story to kế hoạch';
-$lang->action->dynamicAction->story['unlinkedfromplan']    = 'Hủy liên kết Story from kế hoạch';
-$lang->action->dynamicAction->story['linked2release']      = 'Liên kết Story to phát hành';
-$lang->action->dynamicAction->story['unlinkedfromrelease'] = 'Hủy liên kết Story from kế hoạch';
-$lang->action->dynamicAction->story['linked2build']        = 'Liên kết Story to bản dựng';
-$lang->action->dynamicAction->story['unlinkedfrombuild']   = 'Hủy liên kết Story from bản dựng';
-$lang->action->dynamicAction->story['unlinkedfromproject'] = 'Hủy liên kết Project';
-$lang->action->dynamicAction->story['undeleted']           = 'Khôi phục câu chuyện';
-$lang->action->dynamicAction->story['hidden']              = 'Ẩn câu chuyện';
+$lang->action->dynamicAction->story['opened']                = 'Tạo câu chuyện';
+$lang->action->dynamicAction->story['edited']                = 'Sửa câu chuyện';
+$lang->action->dynamicAction->story['activated']             = 'Kích hoạt câu chuyện';
+$lang->action->dynamicAction->story['reviewed']              = 'Duyệt câu chuyện';
+$lang->action->dynamicAction->story['closed']                = 'Đóng câu chuyện';
+$lang->action->dynamicAction->story['assigned']              = 'Bàn giao câu chuyện';
+$lang->action->dynamicAction->story['changed']               = 'Thay đổi câu chuyện';
+$lang->action->dynamicAction->story['linked2plan']           = 'Liên kết Story to kế hoạch';
+$lang->action->dynamicAction->story['unlinkedfromplan']      = 'Hủy liên kết Story from kế hoạch';
+$lang->action->dynamicAction->story['linked2release']        = 'Liên kết Story to phát hành';
+$lang->action->dynamicAction->story['unlinkedfromrelease']   = 'Hủy liên kết Story from kế hoạch';
+$lang->action->dynamicAction->story['linked2build']          = 'Liên kết Story to bản dựng';
+$lang->action->dynamicAction->story['unlinkedfrombuild']     = 'Hủy liên kết Story from bản dựng';
+$lang->action->dynamicAction->story['unlinkedfromproject']   = 'Hủy liên kết Project';
+$lang->action->dynamicAction->story['undeleted']             = 'Khôi phục câu chuyện';
+$lang->action->dynamicAction->story['hidden']                = 'Ẩn câu chuyện';
+$lang->action->dynamicAction->story['linked2execution']      = "Link Story";
+$lang->action->dynamicAction->story['unlinkedfromexecution'] = "Unlink Story";
+$lang->action->dynamicAction->story['estimated']             = "Estimate $lang->SRCommon";
 
 $lang->action->dynamicAction->execution['opened']    = 'Tạo ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['edited']    = 'Sửa ' . $lang->executionCommon;
@@ -348,8 +360,9 @@ $lang->action->dynamicAction->task['hidden']              = 'Ẩn nhiệm vụ';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN Commit';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT Commit';
 
-$lang->action->dynamicAction->build['opened'] = 'Tạo bản dựng';
-$lang->action->dynamicAction->build['edited'] = 'Sửa bản dựng';
+$lang->action->dynamicAction->build['opened']  = 'Tạo bản dựng';
+$lang->action->dynamicAction->build['edited']  = 'Sửa bản dựng';
+$lang->action->dynamicAction->build['deleted'] = 'Delete Build';
 
 $lang->action->dynamicAction->bug['opened']              = 'Báo cáo Bug';
 $lang->action->dynamicAction->bug['edited']              = 'Sửa Bug';
@@ -407,6 +420,7 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Ẩn Case Lib';
 
 $lang->action->dynamicAction->doclib['created'] = 'Tạo Doc thư viện';
 $lang->action->dynamicAction->doclib['edited']  = 'Sửa Doc thư viện';
+$lang->action->dynamicAction->doclib['deleted'] = 'Delete Doc Library';
 
 $lang->action->dynamicAction->doc['created']   = 'Tạo tài liệu';
 $lang->action->dynamicAction->doc['edited']    = 'Sửa tài liệu';
@@ -464,19 +478,19 @@ $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
-$lang->action->search->objectTypeList['']            = ''; 
+$lang->action->search->objectTypeList['']            = '';
 $lang->action->search->objectTypeList['product']     = $lang->productCommon;
 $lang->action->search->objectTypeList['program']     = 'Program';
 $lang->action->search->objectTypeList['project']     = 'Project';
 $lang->action->search->objectTypeList['execution']   = 'Execution';
 $lang->action->search->objectTypeList['bug']         = 'Bug';
-$lang->action->search->objectTypeList['case']        = 'Tình huống'; 
+$lang->action->search->objectTypeList['case']        = 'Tình huống';
 $lang->action->search->objectTypeList['caseresult']  = 'Kết quả tình huống';
 $lang->action->search->objectTypeList['stepresult']  = 'Các bước tình huống';
 $lang->action->search->objectTypeList['story']       = "$lang->SRCommon/$lang->URCommon";
-$lang->action->search->objectTypeList['task']        = 'Nhiệm vụ'; 
-$lang->action->search->objectTypeList['testtask']    = 'Yêu cầu';  
-$lang->action->search->objectTypeList['user']        = 'Người dùng'; 
+$lang->action->search->objectTypeList['task']        = 'Nhiệm vụ';
+$lang->action->search->objectTypeList['testtask']    = 'Yêu cầu';
+$lang->action->search->objectTypeList['user']        = 'Người dùng';
 $lang->action->search->objectTypeList['doc']         = 'Tài liệu';
 $lang->action->search->objectTypeList['doclib']      = 'Doc Lib';
 $lang->action->search->objectTypeList['todo']        = 'Việc làm';

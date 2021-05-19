@@ -43,6 +43,7 @@ $lang->custom->browseStoryConcept   = "需求概念列表";
 $lang->custom->deleteStoryConcept   = "刪除需求概念";
 $lang->custom->URConcept            = "用需概念";
 $lang->custom->SRConcept            = "軟需概念";
+$lang->custom->reviewRule           = '評審規則';
 $lang->custom->switch               = "切換";
 $lang->custom->oneUnit              = "一個{$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "請先設置{$lang->hourCommon}轉換為%s的換算係數";
@@ -248,3 +249,6 @@ $lang->custom->conceptOptions->hourPoint['2'] = '功能點';
 
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = '設置項目概念';
+
+$lang->custom->reviewRules['allpass']  = '全部通過通過';
+$lang->custom->reviewRules['halfpass'] = '半數以上通過通過';

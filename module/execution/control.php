@@ -1903,14 +1903,14 @@ class execution extends control
 
         if($_POST)
         {
-            $stories    = $this->loadModel('story')->getStories($executionID, 0, 0, $orderBy);
+            $stories    = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
             $storySpecs = $this->story->getStorySpecs(array_keys($stories));
 
             $order = 1;
             foreach($stories as $story) $story->order = $order++;
 
             $kanbanTasks = $this->execution->getKanbanTasks($executionID, "id");
-            $kanbanBugs  = $this->loadModel('bug')->getBugs($executionID);
+            $kanbanBugs  = $this->loadModel('bug')->getExecutionBugs($executionID);
 
             $users       = array();
             $taskAndBugs = array();
@@ -1980,7 +1980,7 @@ class execution extends control
 
             $this->view->hasBurn    = $hasBurn;
             $this->view->datas      = $datas;
-            $this->view->chartData  = $chartData;
+            $this->view->chartData  = isset($chartData) ? $chartData : array();
             $this->view->storySpecs = $storySpecs;
             $this->view->realnames  = $this->loadModel('user')->getRealNameAndEmails($users);
             $this->view->executionID  = $executionID;
@@ -2188,6 +2188,8 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->execution->manageMembers($executionID);
+            $teamID = $this->dao->select('id')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetch('id');
+            $this->loadModel('action')->create('team', $teamID, 'managedTeam');
             die(js::locate($this->createLink('execution', 'team', "executionID=$executionID"), 'parent'));
         }
 
@@ -2254,6 +2256,11 @@ class execution extends control
         $account = $user->account;
 
         $this->execution->unlinkMember($executionID, $account);
+        if(!dao::isError())
+        {
+            $teamID = $this->dao->select('id')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetch('id');
+            $this->loadModel('action')->create('team', $teamID, 'managedTeam');
+        }
 
         /* if ajax request, send result. */
         if($this->server->ajax)
@@ -2377,7 +2384,7 @@ class execution extends control
 
         $this->view->object       = $object;
         $this->view->products     = $products;
-        $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
+        $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
         $this->view->pager        = $pager;
         $this->view->browseType   = $browseType;
         $this->view->productType  = $productType;
@@ -2685,6 +2692,44 @@ class execution extends control
             $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('project')->eq($executionID)->exec();
             $order++;
         }
+    }
+
+    /**
+     * Story estimate.
+     *
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @param  int    $round
+     * @access public
+     * @return void
+     */
+    public function storyEstimate($executionID, $storyID, $round = 0)
+    {
+        $this->loadModel('story');
+
+        if($_POST)
+        {
+            $this->story->saveEstimateInfo($storyID);
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
+
+            $this->loadModel('action')->create('story', $storyID, 'estimated', '', $executionID);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'storyEstimate', "executionID=$executionID&storyID=$storyID")));
+        }
+        $estimateInfo = $this->story->getEstimateInfo($storyID, $round);
+
+        $this->view->estimateInfo = $estimateInfo;
+        $this->view->round        = !empty($estimateInfo->round) ? $estimateInfo->round : 0;
+        $this->view->rounds       = $this->story->getEstimateRounds($storyID);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->team         = $this->execution->getTeamMembers($executionID);
+        $this->view->executionID  = $executionID;
+        $this->view->storyID      = $storyID;
+        $this->display();
     }
 
     /**

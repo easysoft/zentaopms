@@ -101,6 +101,8 @@ $lang->action->objectTypes['stakeholder'] = 'Stakeholder';
 $lang->action->objectTypes['budget']      = 'Cost Estimate';
 $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['webhook']     = 'Webhook';
+$lang->action->objectTypes['team']        = 'Team';
+$lang->action->objectTypes['whitelist']   = 'Whitelist';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -148,6 +150,7 @@ $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
 $lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed.' . "\n";
+$lang->action->desc->estimated      = '$date, by <strong>$actor</strong> estimated。' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -235,6 +238,8 @@ $lang->action->label->logout                = "logout";
 $lang->action->label->deleteestimate        = "deleted ";
 $lang->action->label->linked2build          = "linked ";
 $lang->action->label->linked2bug            = "linked ";
+$lang->action->label->linked2testtask       = "linked";
+$lang->action->label->unlinkedfromtesttask  = "unlinked";
 $lang->action->label->linkchildtask         = "linked a child task";
 $lang->action->label->unlinkchildrentask    = "unlinked a child task";
 $lang->action->label->linkparenttask        = "linked a parent task";
@@ -242,6 +247,8 @@ $lang->action->label->unlinkparenttask      = "unlink from parent task";
 $lang->action->label->batchcreate           = "batch created tasks";
 $lang->action->label->createchildren        = "create child tasks";
 $lang->action->label->managed               = "managed";
+$lang->action->label->managedteam           = "managed";
+$lang->action->label->managedwhitelist      = "managed";
 $lang->action->label->deletechildrentask    = "delete children task";
 $lang->action->label->createchildrenstory   = "create child stories";
 $lang->action->label->linkchildstory        = "linked a child story";
@@ -251,6 +258,8 @@ $lang->action->label->unlinkparentstory     = "unlink from parent story";
 $lang->action->label->deletechildrenstory   = "delete children story";
 $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
+$lang->action->label->run                   = 'run';
+$lang->action->label->estimated             = 'estimated';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -293,22 +302,25 @@ $lang->action->dynamicAction->release['changestatus'] = 'Change Release Status';
 $lang->action->dynamicAction->release['undeleted']    = 'Restore Release';
 $lang->action->dynamicAction->release['hidden']       = 'Hide Release';
 
-$lang->action->dynamicAction->story['opened']              = 'Create Story';
-$lang->action->dynamicAction->story['edited']              = 'Edit Story';
-$lang->action->dynamicAction->story['activated']           = 'Activate Story';
-$lang->action->dynamicAction->story['reviewed']            = 'Review Story';
-$lang->action->dynamicAction->story['closed']              = 'Close Story';
-$lang->action->dynamicAction->story['assigned']            = 'Assign Story';
-$lang->action->dynamicAction->story['changed']             = 'Change Story';
-$lang->action->dynamicAction->story['linked2plan']         = 'Link Story to Plan';
-$lang->action->dynamicAction->story['unlinkedfromplan']    = 'Unlink Story from Plan';
-$lang->action->dynamicAction->story['linked2release']      = 'Link Story to Release';
-$lang->action->dynamicAction->story['unlinkedfromrelease'] = 'Unlink Story from Plan';
-$lang->action->dynamicAction->story['linked2build']        = 'Link Story to Build';
-$lang->action->dynamicAction->story['unlinkedfrombuild']   = 'Unlink Story from Build';
-$lang->action->dynamicAction->story['unlinkedfromproject'] = 'Unlink Project';
-$lang->action->dynamicAction->story['undeleted']           = 'Restore Story';
-$lang->action->dynamicAction->story['hidden']              = 'Hide Story';
+$lang->action->dynamicAction->story['opened']                = 'Create Story';
+$lang->action->dynamicAction->story['edited']                = 'Edit Story';
+$lang->action->dynamicAction->story['activated']             = 'Activate Story';
+$lang->action->dynamicAction->story['reviewed']              = 'Review Story';
+$lang->action->dynamicAction->story['closed']                = 'Close Story';
+$lang->action->dynamicAction->story['assigned']              = 'Assign Story';
+$lang->action->dynamicAction->story['changed']               = 'Change Story';
+$lang->action->dynamicAction->story['linked2plan']           = 'Link Story to Plan';
+$lang->action->dynamicAction->story['unlinkedfromplan']      = 'Unlink Story from Plan';
+$lang->action->dynamicAction->story['linked2release']        = 'Link Story to Release';
+$lang->action->dynamicAction->story['unlinkedfromrelease']   = 'Unlink Story from Plan';
+$lang->action->dynamicAction->story['linked2build']          = 'Link Story to Build';
+$lang->action->dynamicAction->story['unlinkedfrombuild']     = 'Unlink Story from Build';
+$lang->action->dynamicAction->story['unlinkedfromproject']   = 'Unlink Project';
+$lang->action->dynamicAction->story['undeleted']             = 'Restore Story';
+$lang->action->dynamicAction->story['hidden']                = 'Hide Story';
+$lang->action->dynamicAction->story['linked2execution']      = "Link Story";
+$lang->action->dynamicAction->story['unlinkedfromexecution'] = "Unlink Story";
+$lang->action->dynamicAction->story['estimated']             = "Estimate $lang->SRCommon";
 
 $lang->action->dynamicAction->execution['opened']    = 'Create ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['edited']    = 'Edit ' . $lang->executionCommon;
@@ -352,8 +364,9 @@ $lang->action->dynamicAction->task['hidden']              = 'Hide Task';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN Commit';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT Commit';
 
-$lang->action->dynamicAction->build['opened'] = 'Create Build';
-$lang->action->dynamicAction->build['edited'] = 'Edit Build';
+$lang->action->dynamicAction->build['opened']  = 'Create Build';
+$lang->action->dynamicAction->build['edited']  = 'Edit Build';
+$lang->action->dynamicAction->build['deleted'] = 'Delete Build';
 
 $lang->action->dynamicAction->bug['opened']              = 'Report Bug';
 $lang->action->dynamicAction->bug['edited']              = 'Edit Bug';
@@ -411,6 +424,7 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Hide Case Lib';
 
 $lang->action->dynamicAction->doclib['created'] = 'Create Doc Library';
 $lang->action->dynamicAction->doclib['edited']  = 'Edit Doc Library';
+$lang->action->dynamicAction->doclib['deleted'] = 'Delete Doc Library';
 
 $lang->action->dynamicAction->doc['created']   = 'Create Document';
 $lang->action->dynamicAction->doc['edited']    = 'Edit Document';

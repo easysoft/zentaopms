@@ -70,6 +70,17 @@ EOT;
           <td colspan='4' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
+      <?php elseif($module == 'story' and $field == 'reviewRules'):?>
+      <table class='table table-form mw-700px'>
+        <tr>
+          <th class='thWidth'><?php echo $lang->custom->reviewRule;?></th>
+          <td><?php echo html::radio('reviewRules', $lang->custom->reviewRules, $reviewRule);?></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
       <?php elseif(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
       <table class='table table-form mw-800px'>
         <tr>

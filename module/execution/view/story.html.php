@@ -187,6 +187,7 @@
             <?php endif;?>
             <th class='c-pri {sorter:false}'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
             <th class='c-name {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->execution->storyTitle);?></th>
+            <th class='w-70px {sorter:false}'><?php common::printOrderLink('category',    $orderBy, $vars, $lang->story->category);?></th>
             <th class='c-user {sorter:false}'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='c-user {sorter:false}'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
             <th class='c-estimate w-80px {sorter:false} text-right'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
@@ -195,7 +196,7 @@
             <th title='<?php echo $lang->story->taskCount?>' class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
             <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
             <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
-            <th class='c-actions-4 text-center {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='c-actions-5 text-center {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody id='storyTableList' class='sortable'>
@@ -222,6 +223,7 @@
               <?php if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";?>
               <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color' data-app='execution'");?>
             </td>
+            <td class='c-name' title='<?php echo zget($lang->story->categoryList, $story->category);?>'><?php echo zget($lang->story->categoryList, $story->category);?></td>
             <td class='c-user' title='<?php echo zget($users, $story->openedBy);?>'><?php echo zget($users, $story->openedBy);?></td>
             <td class='c-user' title='<?php echo zget($users, $story->assignedTo);?>'><?php echo zget($users, $story->assignedTo);?></td>
             <td class='c-estimate text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
@@ -274,6 +276,11 @@
                       echo html::a($this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id"), '<i class="icon-testcase-create icon-sitemap"></i>', '', "title='{$lang->testcase->create}' data-app='qa'");
                   }
 
+                  if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
+                  {
+                      common::printIcon('execution', 'storyEstimate', "executionID=$execution->id&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='600px'");
+                  }
+
                   if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))
                   {
                       common::printIcon('execution', 'unlinkStory', "executionID=$execution->id&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
@@ -322,7 +329,7 @@
                 if(empty($key)) continue;
                 if(strpos('wait|planned|projected', $key) !== false) continue;
                 $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
-                echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#storyList')\"") . "</li>";
             }
             echo '</ul>';
             ?>

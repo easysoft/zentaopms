@@ -167,6 +167,10 @@
               </tr>
               <?php endif;?>
               <tr>
+                <th><?php echo $lang->story->category;?></th>
+                <td><?php echo html::select('category', $lang->story->categoryList, $story->category, "class='form-control chosen'");?></td>
+              </tr>
+              <tr>
                 <th><?php echo $lang->story->pri;?></th>
                 <td><?php echo html::select('pri', $lang->story->priList, $story->pri, "class='form-control chosen'");?></td>
               </tr>
@@ -203,7 +207,7 @@
               <?php if($story->reviewedBy):?>
               <tr>
                 <th><?php echo $lang->story->reviewedBy;?></th>
-                <td><?php echo html::select('reviewedBy[]', $users, str_replace(' ', '', $story->reviewedBy), 'class="form-control chosen" multiple');?></td>
+                <td><?php echo $reviewers;?></td>
               </tr>
               <?php endif;?>
               <?php if($story->status == 'closed'):?>

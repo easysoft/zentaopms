@@ -12,9 +12,6 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<script>
-var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : print($story->openedBy);?>';
-</script>
 <div class='main-content' id='mainContent'>
   <div class='center-block'>
     <div class='main-header'>
@@ -60,19 +57,11 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
           <td colspan='2'><?php echo html::radio('preVersion', array_combine(range($story->version - 1, 1), range($story->version - 1, 1)), $story->version - 1);?></td>
         </tr>
         <?php endif;?>
-        <tr>
-          <th><?php echo $lang->story->assignedTo;?></th>
-          <td><?php echo html::select('assignedTo', $users, $story->lastEditedBy ? $story->lastEditedBy : $story->openedBy, "class='form-control chosen'");?></td><td></td>
-        </tr>
         <tr class='hide'>
           <th><?php echo $lang->story->status;?></th>
           <td><?php echo html::hidden('status', $story->status);?></td>
         </tr>
         <?php $this->printExtendFields($story, 'table');?>
-        <tr>
-          <th><?php echo $lang->story->reviewedBy;?></th>
-          <td colspan='2'><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control chosen' multiple data-placeholder='{$lang->story->chosen->reviewedBy}'");?></td>
-        </tr>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>

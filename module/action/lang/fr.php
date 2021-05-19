@@ -97,6 +97,8 @@ $lang->action->objectTypes['budget']      = 'Cost Estimate';
 $lang->action->objectTypes['entry']       = 'Entrée';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['job']         = 'Job';
+$lang->action->objectTypes['team']        = 'Team';
+$lang->action->objectTypes['whitelist']   = 'Whitelist';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -144,6 +146,7 @@ $lang->action->desc->diff3          = 'Le nom du fichier %s a changé pour %s .'
 $lang->action->desc->linked2bug     = '$date, affecté à <strong>$extra</strong> par <strong>$actor</strong>';
 $lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
 $lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed.' . "\n";
+$lang->action->desc->estimated      = '$date, by <strong>$actor</strong> estimated。' . "\n";
 
 /* 子任务修改父任务的历史操作记录 */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -231,6 +234,8 @@ $lang->action->label->logout                = "s'est Déconnecté";
 $lang->action->label->deleteestimate        = "a remis à zéro ";
 $lang->action->label->linked2build          = "a ajouté au Build ";
 $lang->action->label->linked2bug            = "a lié au Bug ";
+$lang->action->label->linked2testtask       = "linked";
+$lang->action->label->unlinkedfromtesttask  = "unlinked";
 $lang->action->label->linkchildtask         = "a raccroché à une sous-tâche";
 $lang->action->label->unlinkchildrentask    = "a décroché la sous-tâche";
 $lang->action->label->linkparenttask        = "a raccroché à une tâche parent";
@@ -238,6 +243,8 @@ $lang->action->label->unlinkparenttask      = "a décroché de la tâche parent"
 $lang->action->label->batchcreate           = "a créé tâches par lot";
 $lang->action->label->createchildren        = "a créé sous-tâches par lot";
 $lang->action->label->managed               = "a managé";
+$lang->action->label->managedteam           = "managed";
+$lang->action->label->managedwhitelist      = "managed";
 $lang->action->label->deletechildrentask    = "a supprimé une sous-tâche";
 $lang->action->label->createchildrenstory   = "a créé une sous-story";
 $lang->action->label->linkchildstory        = "a raccroché à une sous-story";
@@ -247,6 +254,8 @@ $lang->action->label->unlinkparentstory     = "a décroché de la story parent";
 $lang->action->label->deletechildrenstory   = "a supprimé la sous-story";
 $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
+$lang->action->label->run                   = 'run';
+$lang->action->label->estimated             = 'estimated';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -289,22 +298,25 @@ $lang->action->dynamicAction->release['changestatus'] = 'Changer Statut Release'
 $lang->action->dynamicAction->release['undeleted']    = 'Restaurer Release';
 $lang->action->dynamicAction->release['hidden']       = 'Masquer Release';
 
-$lang->action->dynamicAction->story['opened']              = 'Créer Story';
-$lang->action->dynamicAction->story['edited']              = 'Editer Story';
-$lang->action->dynamicAction->story['activated']           = 'Activer Story';
-$lang->action->dynamicAction->story['reviewed']            = 'Consulter Story';
-$lang->action->dynamicAction->story['closed']              = 'Fermer Story';
-$lang->action->dynamicAction->story['assigned']            = 'Assigner Story';
-$lang->action->dynamicAction->story['changed']             = 'Changer Story';
-$lang->action->dynamicAction->story['linked2plan']         = 'Inclure Story au Plan';
-$lang->action->dynamicAction->story['unlinkedfromplan']    = 'Enlever Story du Plan';
-$lang->action->dynamicAction->story['linked2release']      = 'Inclure Story à la Release';
-$lang->action->dynamicAction->story['unlinkedfromrelease'] = 'Enlever Story de la Release';
-$lang->action->dynamicAction->story['linked2build']        = 'Ajouter Story au Build';
-$lang->action->dynamicAction->story['unlinkedfrombuild']   = 'Détacher Story du Build';
-$lang->action->dynamicAction->story['unlinkedfromproject'] = 'Détacher du Project';
-$lang->action->dynamicAction->story['undeleted']           = 'Restaurer Story';
-$lang->action->dynamicAction->story['hidden']              = 'Masquer Story';
+$lang->action->dynamicAction->story['opened']                = 'Créer Story';
+$lang->action->dynamicAction->story['edited']                = 'Editer Story';
+$lang->action->dynamicAction->story['activated']             = 'Activer Story';
+$lang->action->dynamicAction->story['reviewed']              = 'Consulter Story';
+$lang->action->dynamicAction->story['closed']                = 'Fermer Story';
+$lang->action->dynamicAction->story['assigned']              = 'Assigner Story';
+$lang->action->dynamicAction->story['changed']               = 'Changer Story';
+$lang->action->dynamicAction->story['linked2plan']           = 'Inclure Story au Plan';
+$lang->action->dynamicAction->story['unlinkedfromplan']      = 'Enlever Story du Plan';
+$lang->action->dynamicAction->story['linked2release']        = 'Inclure Story à la Release';
+$lang->action->dynamicAction->story['unlinkedfromrelease']   = 'Enlever Story de la Release';
+$lang->action->dynamicAction->story['linked2build']          = 'Ajouter Story au Build';
+$lang->action->dynamicAction->story['unlinkedfrombuild']     = 'Détacher Story du Build';
+$lang->action->dynamicAction->story['unlinkedfromproject']   = 'Détacher du Project';
+$lang->action->dynamicAction->story['undeleted']             = 'Restaurer Story';
+$lang->action->dynamicAction->story['hidden']                = 'Masquer Story';
+$lang->action->dynamicAction->story['linked2execution']      = "Link Story";
+$lang->action->dynamicAction->story['unlinkedfromexecution'] = "Unlink Story";
+$lang->action->dynamicAction->story['estimated']             = "Estimate $lang->SRCommon";
 
 $lang->action->dynamicAction->project['opened']    = 'Créer ' . $lang->executionCommon;
 $lang->action->dynamicAction->project['edited']    = 'Editer ' . $lang->executionCommon;
@@ -318,6 +330,19 @@ $lang->action->dynamicAction->project['managed']   = 'Manager ' . $lang->executi
 $lang->action->dynamicAction->project['undeleted'] = 'Restaurer ' . $lang->executionCommon;
 $lang->action->dynamicAction->project['hidden']    = 'Masquer ' . $lang->executionCommon;
 $lang->action->dynamicAction->project['moved']     = 'Déplacer Tâche';
+
+$lang->action->dynamicAction->execution['opened']    = 'Create ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['edited']    = 'Edit ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['deleted']   = 'Delete ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['started']   = 'Start ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['delayed']   = 'Delay ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['suspended'] = 'Suspend ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['activated'] = 'Activate ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['closed']    = 'Close ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['managed']   = 'Manage ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
+$lang->action->dynamicAction->execution['moved']     = 'Improt Task';
 
 $lang->action->dynamicAction->task['opened']              = 'Créer Tâche';
 $lang->action->dynamicAction->task['edited']              = 'Editer Tâche';
@@ -348,8 +373,9 @@ $lang->action->dynamicAction->task['hidden']              = 'Masquer Tâche';
 $lang->action->dynamicAction->task['svncommited']         = 'Committer SVN';
 $lang->action->dynamicAction->task['gitcommited']         = 'Committer GIT';
 
-$lang->action->dynamicAction->build['opened'] = 'Créer Build';
-$lang->action->dynamicAction->build['edited'] = 'Editer Build';
+$lang->action->dynamicAction->build['opened']  = 'Créer Build';
+$lang->action->dynamicAction->build['edited']  = 'Editer Build';
+$lang->action->dynamicAction->build['deleted'] = 'Delete Build';
 
 $lang->action->dynamicAction->bug['opened']              = 'Remonter Bug';
 $lang->action->dynamicAction->bug['edited']              = 'Editer Bug';
@@ -407,6 +433,7 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Masqué CasTest Lib';
 
 $lang->action->dynamicAction->doclib['created'] = 'Créer Doc Library';
 $lang->action->dynamicAction->doclib['edited']  = 'Editer Doc Library';
+$lang->action->dynamicAction->doclib['deleted'] = 'Delete Doc Library';
 
 $lang->action->dynamicAction->doc['created']   = 'Créer Document';
 $lang->action->dynamicAction->doc['edited']    = 'Editer Document';
@@ -469,13 +496,13 @@ $lang->action->search->objectTypeList['program']     = 'Program';
 $lang->action->search->objectTypeList['project']     = 'Project';
 $lang->action->search->objectTypeList['execution']   = 'Execution';
 $lang->action->search->objectTypeList['bug']         = 'Bug';
-$lang->action->search->objectTypeList['case']        = 'CasTest'; 
+$lang->action->search->objectTypeList['case']        = 'CasTest';
 $lang->action->search->objectTypeList['caseresult']  = 'CasTest Result';
 $lang->action->search->objectTypeList['stepresult']  = 'CasTest Steps';
 $lang->action->search->objectTypeList['story']       = "$lang->SRCommon/$lang->URCommon";
-$lang->action->search->objectTypeList['task']        = 'Tâche'; 
-$lang->action->search->objectTypeList['testtask']    = 'Recette';     
-$lang->action->search->objectTypeList['user']        = 'Utilisateur'; 
+$lang->action->search->objectTypeList['task']        = 'Tâche';
+$lang->action->search->objectTypeList['testtask']    = 'Recette';
+$lang->action->search->objectTypeList['user']        = 'Utilisateur';
 $lang->action->search->objectTypeList['doc']         = 'Doc';
 $lang->action->search->objectTypeList['doclib']      = 'Doc Lib';
 $lang->action->search->objectTypeList['todo']        = 'Todo';

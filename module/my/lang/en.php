@@ -67,6 +67,7 @@ $lang->my->taskMenu->canceledByMe = 'CancelledByMe';
 
 $lang->my->storyMenu = new stdclass();
 $lang->my->storyMenu->assignedToMe = 'AssignedToMe';
+$lang->my->storyMenu->reviewByMe   = 'ReviewByMe';
 $lang->my->storyMenu->openedByMe   = 'CreatedByMe';
 $lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
 $lang->my->storyMenu->closedByMe   = 'ClosedByMe';

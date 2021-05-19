@@ -82,6 +82,7 @@ $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
 $lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->SRCommon} and link {$lang->SRCommon} to the task. The closed {$lang->SRCommon} will not be converted into tasks.";
 $lang->story->successToTask   = "Converted to task.";
+$lang->story->storyRound      = '%s time estimation';
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -268,6 +269,7 @@ $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Ple
 $lang->story->cannotDeleteParent   = "Can not delete parent {$lang->SRCommon}";
 $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
+$lang->story->estimateMustBeNumber = 'Estimate value must be number.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Story Bereich';
