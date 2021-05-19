@@ -606,16 +606,24 @@ class story extends control
         $stories = $this->story->getParentStoryPairs($story->product, $story->parent);
         if(isset($stories[$storyID])) unset($stories[$storyID]);
 
+        /* Get users. */
+        $users = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
+
+        $reviewedBy   = explode(',', trim($reviewedBy, ','));
+        $reivewerList = '';
+        foreach($reviewedBy as $reviewer) $reivewerList .= zget($users, $reviewer) . ' ';
+
         $this->story->replaceURLang($story->type);
 
         $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
         $this->view->story      = $story;
         $this->view->stories    = $stories;
-        $this->view->users      = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
+        $this->view->users      = $users;
         $this->view->product    = $product;
         $this->view->products   = $myProducts + $othersProducts;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
+        $this->view->reviewers  = $reivewerList;
         $this->display();
     }
 
