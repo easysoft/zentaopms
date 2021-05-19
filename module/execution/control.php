@@ -1903,14 +1903,14 @@ class execution extends control
 
         if($_POST)
         {
-            $stories    = $this->loadModel('story')->getStories($executionID, 0, 0, $orderBy);
+            $stories    = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
             $storySpecs = $this->story->getStorySpecs(array_keys($stories));
 
             $order = 1;
             foreach($stories as $story) $story->order = $order++;
 
             $kanbanTasks = $this->execution->getKanbanTasks($executionID, "id");
-            $kanbanBugs  = $this->loadModel('bug')->getBugs($executionID);
+            $kanbanBugs  = $this->loadModel('bug')->getExecutionBugs($executionID);
 
             $users       = array();
             $taskAndBugs = array();
