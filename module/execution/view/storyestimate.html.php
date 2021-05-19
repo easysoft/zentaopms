@@ -13,6 +13,7 @@
 <style>
 #showAverage {margin: 0;}
 .chosen-container-single .chosen-single div b {top: 8px !important;}
+.chosen-container .chosen-drop {bottom: auto !important;}
 </style>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('executionID', $executionID);?>
