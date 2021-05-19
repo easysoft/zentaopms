@@ -48,7 +48,7 @@
           <td><?php echo zget($users, $user->account);?></td>
           <?php echo html::hidden('account[]', $user->account, "class='form-control'");?>
           <?php if(!empty($estimateInfo->estimate)):?>
-          <td><?php echo $estimateInfo->estimate->{$user->account}->estimate;?></td>
+          <td><?php echo isset($estimateInfo->estimate->{$user->account}) ? $estimateInfo->estimate->{$user->account}->estimate : '';?></td>
           <td class='new-estimate hide'><?php echo html::input('estimate[]', '', "class='form-control'");?></td>
           <?php else:?>
           <td class='new-estimate'><?php echo html::input('estimate[]', '', "class='form-control'");?></td>
