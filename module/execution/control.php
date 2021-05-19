@@ -2710,6 +2710,12 @@ class execution extends control
         if($_POST)
         {
             $this->story->saveEstimateInfo($storyID);
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
 
             $this->loadModel('action')->create('story', $storyID, 'estimated', '', $executionID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'storyEstimate', "executionID=$executionID&storyID=$storyID")));

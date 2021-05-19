@@ -270,6 +270,7 @@ $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Ple
 $lang->story->cannotDeleteParent   = "Can not delete parent {$lang->SRCommon}";
 $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
+$lang->story->estimateMustBeNumber = 'Estimate value must be number.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Scope';

@@ -4043,8 +4043,14 @@ class storyModel extends model
         foreach($data->account as $key => $account)
         {
             $estimates[$key]['account']  = $account;
+            if(!is_numeric($data->estimate[$key]))
+            {
+                dao::$errors[] = $this->lang->story->estimateMustBeNumber;
+                return false;
+            }
             $estimates[$key]['estimate'] = $data->estimate[$key];
         }
+
 
         $storyEstimate = new stdclass();
         $storyEstimate->story      = $storyID;
