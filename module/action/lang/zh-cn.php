@@ -150,6 +150,7 @@ $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
 $lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>';
 $lang->action->desc->resolved       = '$date, 由 <strong>$actor</strong> 解决。' . "\n";
 $lang->action->desc->managed        = '$date, 由 <strong>$actor</strong> 维护。' . "\n";
+$lang->action->desc->estimated      = '$date, 由 <strong>$actor</strong> 估算。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -258,6 +259,7 @@ $lang->action->label->deletechildrenstory   = "删除子需求";
 $lang->action->label->tracked               = '跟踪了';
 $lang->action->label->hangup                = '挂起了';
 $lang->action->label->run                   = '执行了';
+$lang->action->label->estimated             = '估算了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -318,6 +320,7 @@ $lang->action->dynamicAction->story['undeleted']             = "还原{$lang->SR
 $lang->action->dynamicAction->story['hidden']                = "隐藏{$lang->SRCommon}";
 $lang->action->dynamicAction->story['linked2execution']      = "关联$lang->SRCommon";
 $lang->action->dynamicAction->story['unlinkedfromexecution'] = "移除$lang->SRCommon";
+$lang->action->dynamicAction->story['estimated']             = "估算$lang->SRCommon";
 
 $lang->action->dynamicAction->execution['opened']    = '创建' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['edited']    = '编辑' . $lang->executionCommon;
@@ -421,6 +424,7 @@ $lang->action->dynamicAction->caselib['hidden']    = '隐藏用例库';
 
 $lang->action->dynamicAction->doclib['created'] = '创建文档库';
 $lang->action->dynamicAction->doclib['edited']  = '编辑文档库';
+$lang->action->dynamicAction->doclib['deleted'] = '删除文档库';
 
 $lang->action->dynamicAction->doc['created']   = '创建文档';
 $lang->action->dynamicAction->doc['edited']    = '编辑文档';

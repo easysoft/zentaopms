@@ -72,6 +72,12 @@ class actionModel extends model
             $action->execution = $build->execution;
         }
 
+        if($objectType == 'story' and $actionType == 'estimated')
+        {
+            $action->project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq((int)$extra)->fetch('project');
+            $action->execution = (int)$extra;
+        }
+
         if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false))
         {
             $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();

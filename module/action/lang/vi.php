@@ -146,6 +146,7 @@ $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date, liên kết tới <strong>$extra</strong> bởi <strong>$actor</strong>';
 $lang->action->desc->resolved       = '$date, resolved by <strong>$actor</strong> ' . "\n";
 $lang->action->desc->managed        = '$date, by <strong>$actor</strong> managed.' . "\n";
+$lang->action->desc->estimated      = '$date, by <strong>$actor</strong> estimated。' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -254,6 +255,7 @@ $lang->action->label->deletechildrenstory   = "delete children story";
 $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
 $lang->action->label->run                   = 'run';
+$lang->action->label->estimated             = 'estimated';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -314,6 +316,7 @@ $lang->action->dynamicAction->story['undeleted']             = 'Khôi phục câ
 $lang->action->dynamicAction->story['hidden']                = 'Ẩn câu chuyện';
 $lang->action->dynamicAction->story['linked2execution']      = "Link Story";
 $lang->action->dynamicAction->story['unlinkedfromexecution'] = "Unlink Story";
+$lang->action->dynamicAction->story['estimated']             = "Estimate $lang->SRCommon";
 
 $lang->action->dynamicAction->execution['opened']    = 'Tạo ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['edited']    = 'Sửa ' . $lang->executionCommon;
@@ -417,6 +420,7 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Ẩn Case Lib';
 
 $lang->action->dynamicAction->doclib['created'] = 'Tạo Doc thư viện';
 $lang->action->dynamicAction->doclib['edited']  = 'Sửa Doc thư viện';
+$lang->action->dynamicAction->doclib['deleted'] = 'Delete Doc Library';
 
 $lang->action->dynamicAction->doc['created']   = 'Tạo tài liệu';
 $lang->action->dynamicAction->doc['edited']    = 'Sửa tài liệu';

@@ -499,7 +499,8 @@ $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
 
-$lang->navGroup->doc = 'doc';
+$lang->navGroup->doc    = 'doc';
+$lang->navGroup->doclib = 'doc';
 
 $lang->navGroup->report = 'report';
 

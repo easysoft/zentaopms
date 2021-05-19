@@ -1980,7 +1980,7 @@ class execution extends control
 
             $this->view->hasBurn    = $hasBurn;
             $this->view->datas      = $datas;
-            $this->view->chartData  = $chartData;
+            $this->view->chartData  = isset($chartData) ? $chartData : array();
             $this->view->storySpecs = $storySpecs;
             $this->view->realnames  = $this->loadModel('user')->getRealNameAndEmails($users);
             $this->view->executionID  = $executionID;
@@ -2710,6 +2710,8 @@ class execution extends control
         if($_POST)
         {
             $this->story->saveEstimateInfo($storyID);
+
+            $this->loadModel('action')->create('story', $storyID, 'estimated', '', $executionID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'storyEstimate', "executionID=$executionID&storyID=$storyID")));
         }
         $estimateInfo = $this->story->getEstimateInfo($storyID, $round);
