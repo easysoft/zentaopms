@@ -1148,7 +1148,6 @@ class storyModel extends model
         $now      = helper::now();
         $date     = helper::today();
         $story = fixer::input('post')
-            ->add('reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
             ->setDefault('reviewedDate', $date)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -1160,6 +1159,7 @@ class storyModel extends model
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'revert', 'status',  'active')
             ->setIF($this->post->closedReason == 'done', 'stage', 'released')
+            ->setIF(strpos($oldStory->reviewedBy, $this->app->user->account) === false, 'reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
