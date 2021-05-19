@@ -37,10 +37,10 @@ class docModel extends model
      */
     public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0)
     {
-        if($type == 'all')
+        if($type == 'all' or $type == 'includeDeleted')
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
-                ->where('deleted')->eq(0)
+                ->beginIF($type == 'all')->where('deleted')->eq(0)->fi()
                 ->orderBy('id_desc')
                 ->query();
         }
