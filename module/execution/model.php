@@ -1149,6 +1149,11 @@ class executionModel extends model
             $module = 'execution';
             $method = 'testcase';
         }
+        if($module == 'testtask' and ($method == 'view' || $method == 'create' || $method == 'edit'))
+        {
+            $module = 'execution';
+            $method = 'testtask';
+        }
         if($module == 'build' and ($method == 'edit' || $method= 'view'))
         {
             $module = 'execution';
