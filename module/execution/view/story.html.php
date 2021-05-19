@@ -278,7 +278,7 @@
 
                   if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
                   {
-                      common::printIcon('execution', 'storyEstimate', "executionID=$execution->id&storyID=$story->id", '', 'list', 'bell', '', 'iframe', true, "data-width='600px'");
+                      common::printIcon('execution', 'storyEstimate', "executionID=$execution->id&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='600px'");
                   }
 
                   if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))
