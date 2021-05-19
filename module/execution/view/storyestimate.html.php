@@ -10,7 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<style>#showAverage {margin: 0;}</style>
+<style>
+#showAverage {margin: 0;}
+.chosen-container-single .chosen-single div b {top: 8px !important;}
+</style>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('executionID', $executionID);?>
 <?php js::set('storyID', $storyID);?>
