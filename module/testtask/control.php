@@ -756,7 +756,7 @@ class testtask extends control
         $this->view->executions   = $executions;
         $this->view->builds       = $builds;
         $this->view->testreports  = $testreports;
-        $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
+        $this->view->users        = $this->loadModel('user')->getPairs('nodeleted|noclosed', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
         $this->display();
