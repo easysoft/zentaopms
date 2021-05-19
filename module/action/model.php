@@ -731,7 +731,7 @@ class actionModel extends model
         if(is_numeric($projectID)) $executions = $this->loadModel('execution')->getPairs($projectID);
 
         $this->loadModel('doc');
-        $libs = $this->doc->getLibs('all');
+        $libs = $this->doc->getLibs('includeDeleted');
         $docs = $this->doc->getPrivDocs(array_keys($libs), 0, 'all');
 
         $actionCondition = $this->getActionCondition();
