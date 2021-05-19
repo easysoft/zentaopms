@@ -133,7 +133,7 @@ class doc extends control
                 if($objectType == 'execution' and $this->post->execution) $objectID = $this->post->execution;
                 if($objectType == 'custom' or $objectType == 'book')      $objectID = 0;
 
-                if($objectType == 'execution' and $this->config->systemMode == 'new')
+                if($objectType == 'execution' and $this->config->systemMode == 'new' and $this->app->openApp == 'doc')
                 {
                     $execution  = $this->execution->getByID($this->post->execution);
                     $objectType = 'project';
