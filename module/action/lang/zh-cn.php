@@ -424,6 +424,7 @@ $lang->action->dynamicAction->caselib['hidden']    = '隐藏用例库';
 
 $lang->action->dynamicAction->doclib['created'] = '创建文档库';
 $lang->action->dynamicAction->doclib['edited']  = '编辑文档库';
+$lang->action->dynamicAction->doclib['deleted'] = '删除文档库';
 
 $lang->action->dynamicAction->doc['created']   = '创建文档';
 $lang->action->dynamicAction->doc['edited']    = '编辑文档';

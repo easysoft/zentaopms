@@ -420,6 +420,7 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Hide Case Lib';
 
 $lang->action->dynamicAction->doclib['created'] = 'Create Doc Library';
 $lang->action->dynamicAction->doclib['edited']  = 'Edit Doc Library';
+$lang->action->dynamicAction->doclib['deleted'] = 'Delete Doc Library';
 
 $lang->action->dynamicAction->doc['created']   = 'Create Document';
 $lang->action->dynamicAction->doc['edited']    = 'Edit Document';

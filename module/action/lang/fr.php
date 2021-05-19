@@ -433,6 +433,7 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Masqué CasTest Lib';
 
 $lang->action->dynamicAction->doclib['created'] = 'Créer Doc Library';
 $lang->action->dynamicAction->doclib['edited']  = 'Editer Doc Library';
+$lang->action->dynamicAction->doclib['deleted'] = 'Delete Doc Library';
 
 $lang->action->dynamicAction->doc['created']   = 'Créer Document';
 $lang->action->dynamicAction->doc['edited']    = 'Editer Document';

@@ -420,6 +420,7 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Ẩn Case Lib';
 
 $lang->action->dynamicAction->doclib['created'] = 'Tạo Doc thư viện';
 $lang->action->dynamicAction->doclib['edited']  = 'Sửa Doc thư viện';
+$lang->action->dynamicAction->doclib['deleted'] = 'Delete Doc Library';
 
 $lang->action->dynamicAction->doc['created']   = 'Tạo tài liệu';
 $lang->action->dynamicAction->doc['edited']    = 'Sửa tài liệu';
