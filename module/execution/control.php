@@ -1980,7 +1980,7 @@ class execution extends control
 
             $this->view->hasBurn    = $hasBurn;
             $this->view->datas      = $datas;
-            $this->view->chartData  = $chartData;
+            $this->view->chartData  = isset($chartData) ? $chartData : array();
             $this->view->storySpecs = $storySpecs;
             $this->view->realnames  = $this->loadModel('user')->getRealNameAndEmails($users);
             $this->view->executionID  = $executionID;
