@@ -4042,13 +4042,13 @@ class storyModel extends model
         $estimates = array();
         foreach($data->account as $key => $account)
         {
-            $estimates[$key]['account']  = $account;
-            if(!is_numeric($data->estimate[$key]))
+            $estimates[$account]['account']  = $account;
+            if(!empty($data->estimate[$key]) and !is_numeric($data->estimate[$key]))
             {
                 dao::$errors[] = $this->lang->story->estimateMustBeNumber;
                 return false;
             }
-            $estimates[$key]['estimate'] = $data->estimate[$key];
+            $estimates[$account]['estimate'] = $data->estimate[$key];
         }
 
 

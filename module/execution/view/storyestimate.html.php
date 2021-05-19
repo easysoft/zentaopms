@@ -43,35 +43,29 @@
         </tr>
       </thead>
       <tbody>
-        <?php if(!empty($estimateInfo->estimate)):?>
-        <?php foreach($estimateInfo->estimate as $estimate):?>
-        <tr class='text-center'>
-          <td><?php echo zget($users, $estimate->account);?></td>
-          <?php echo html::hidden('account[]', $estimate->account, "class='form-control'");?>
-          <td><?php echo $estimate->estimate;?></td>
-          <td class='new-estimate hide'><?php echo html::input('estimate[]', '', "class='form-control'");?></td>
-        </tr>
-        <?php endforeach;?>
-        <tr class='text-center'>
-          <td><?php echo $lang->execution->average;?></td>
-          <td><?php echo $estimateInfo->average;?></td>
-          <td class='new-estimate hide'><p id='showAverage'></p></td>
-          <?php echo html::hidden('average', '', "class='form-control'");?>
-        </tr>
-        <?php else:?>
         <?php foreach($team as $user):?>
         <tr class='text-center'>
           <td><?php echo zget($users, $user->account);?></td>
           <?php echo html::hidden('account[]', $user->account, "class='form-control'");?>
+          <?php if(!empty($estimateInfo->estimate)):?>
+          <td><?php echo $estimateInfo->estimate->{$user->account}->estimate;?></td>
+          <td class='new-estimate hide'><?php echo html::input('estimate[]', '', "class='form-control'");?></td>
+          <?php else:?>
           <td class='new-estimate'><?php echo html::input('estimate[]', '', "class='form-control'");?></td>
+          <?php endif;?>
         </tr>
         <?php endforeach;?>
         <tr class='text-center'>
           <td><strong><?php echo $lang->execution->average;?></strong></td>
+          <?php if(!empty($estimateInfo->estimate)):?>
+          <td><?php echo $estimateInfo->average;?></td>
+          <td class='new-estimate hide'><p id='showAverage'></p></td>
+          <?php echo html::hidden('average', '', "class='form-control'");?>
+          <?php else:?>
           <td><p id='showAverage'></p></td>
           <?php echo html::hidden('average', '', "class='form-control'");?>
+          <?php endif;?>
         </tr>
-        <?php endif;?>
       </tbody>
       <tfoot>
         <tr>

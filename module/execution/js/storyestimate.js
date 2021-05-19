@@ -20,11 +20,13 @@ function computeAverage()
     $('.new-estimate').each(function()
     {
         var value = $(this).find('input').val();
-        if(!value) return false;
-        value = parseFloat(value);
-        if(isNaN(value)) value = 0;
-        summary += value;
-        count   += 1;
+        if(value)
+        {
+            value = parseFloat(value);
+            if(isNaN(value)) value = 0;
+            summary += value;
+            count   += 1;
+        }
     })
 
     if(count) average = summary / count;
