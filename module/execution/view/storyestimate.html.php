@@ -42,9 +42,10 @@
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
-          <th class='w-120px'><?php echo $lang->execution->team;?></th>
-          <th class='w-90px'> <?php echo $lang->story->estimate;?></th>
-          <th class='w-90px th-new-estimate hide'><?php echo $lang->execution->newEstimate;?></th>
+          <th><?php echo $lang->execution->team;?></th>
+          <th> <?php echo $lang->story->estimate;?></th>
+          <th class='th-new-estimate hide'><?php echo $lang->execution->newEstimate;?></th>
+          <th class='empty-th'></th>
         </tr>
       </thead>
       <tbody>

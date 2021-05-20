@@ -39,6 +39,7 @@ function showNewEstimate()
     $('.th-new-estimate').removeClass('hide');
     $('.new-estimate').removeClass('hide');
     $('.form-actions').removeClass('hide');
+    $('.empty-th').addClass('hide');
 }
 
 function selectRound(round)
