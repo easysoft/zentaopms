@@ -3226,7 +3226,7 @@ class storyModel extends model
         if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate') return false;
 
         global $config, $app, $dao;
-        $reviewers = $dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->andWhere('result')->notin('pass,reject')->fetchAll('reviewer');
+        $reviewers = $dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->andWhere('result')->eq('')->fetchAll('reviewer');
 
         if($action == 'change')     return $story->status != 'closed';
         if($action == 'review')     return in_array($app->user->account, array_keys($reviewers)) and ($story->status == 'draft' or $story->status == 'changed');
