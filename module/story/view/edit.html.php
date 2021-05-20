@@ -204,7 +204,7 @@
                 <th><?php echo $lang->story->assignedTo;?></th>
                 <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="form-control chosen"');?></td>
               </tr>
-              <?php if($story->reviewedBy):?>
+              <?php if($reviewers):?>
               <tr>
                 <th><?php echo $lang->story->reviewedBy;?></th>
                 <td><?php echo $reviewers;?></td>
