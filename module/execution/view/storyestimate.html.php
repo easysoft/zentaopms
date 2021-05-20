@@ -22,6 +22,11 @@
   <div class="main-header">
     <h2><?php echo $lang->execution->storyEstimate;?></h2>
   </div>
+  <?php if(empty($team)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->execution->noTeam;?></span></p>
+  </div>
+  <?php else:?>
   <div class='btn-toolbar pull-left'>
     <?php if(!empty($rounds)):?>
     <div class='input-group space w-200px'>
@@ -76,5 +81,6 @@
       </tfoot>
     </table>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
