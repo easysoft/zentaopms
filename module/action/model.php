@@ -220,8 +220,9 @@ class actionModel extends model
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
             if($objectType == 'team')
             {
-                $team = $this->dao->select('type,root')->from(TABLE_TEAM)->where('id')->eq($objectID)->fetch();
-                $record->{$team->type} = $team->root;
+                $team = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+                $type = $team->type == 'project' ? 'project' : 'execution';
+                $record->$type = $objectID;
             }
             if($objectType == 'task')
             {
@@ -944,16 +945,15 @@ class actionModel extends model
                 }
                 elseif($objectType == 'team')
                 {
-                    $objectInfo = $this->dao->select('t1.id as projectID,t2.id,t1.team as name,t1.type')->from(TABLE_PROJECT)->alias('t1')
-                        ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
-                        ->where('t2.id')->in($objectIds)
+                    $objectInfo = $this->dao->select('id,team,type')->from(TABLE_PROJECT)
+                        ->where('id')->in($objectIds)
                         ->fetchAll();
 
                     $objectProject = array();
                     foreach($objectInfo as $object)
                     {
-                        $objectName[$object->id] = $object->name;
-                        if($object->type == 'project') $objectProject[$object->id] = $object->projectID;
+                        $objectName[$object->id] = $object->team;
+                        if($object->type == 'project') $objectProject[$object->id] = $object->id;
                     }
                 }
                 else
