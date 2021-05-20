@@ -609,7 +609,7 @@ class story extends control
         /* Get users. */
         $users = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
 
-        $reviewedBy   = explode(',', trim($reviewedBy, ','));
+        $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
         $reivewerList = '';
         foreach($reviewedBy as $reviewer) $reivewerList .= zget($users, $reviewer) . ' ';
 
@@ -2202,7 +2202,6 @@ class story extends control
             $oldStory = $this->dao->findById((int)$params['storyID'])->from(TABLE_STORY)->fetch();
             $status   = $oldStory->status;
             if($params['result'] == 'revert') $status = 'active';
-            if($params['result'] == 'reject') $status = 'closed';
         }
         die($status);
     }
