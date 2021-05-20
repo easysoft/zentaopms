@@ -2760,6 +2760,12 @@ class execution extends control
             $this->project->setMenu($projectID);
         }
 
+        if($this->app->viewType == 'mhtml')
+        {
+            $executionID = $this->execution->saveState(0, $this->executions);
+            $this->execution->setMenu($productID);
+        }
+
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);

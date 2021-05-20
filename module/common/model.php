@@ -1522,22 +1522,25 @@ EOD;
         $preAndNextObject->next = '';
 
         $preObj = false;
-        foreach($existsObjectList['objectList'] as $id => $object)
+        if(isset($existsObjectList['objectList']))
         {
-            /* Get next object. */
-            if($preObj === true)
+            foreach($existsObjectList['objectList'] as $id => $object)
             {
-                $preAndNextObject->next = $object;
-                break;
-            }
+                /* Get next object. */
+                if($preObj === true)
+                {
+                    $preAndNextObject->next = $object;
+                    break;
+                }
 
-            /* Get pre object. */
-            if($id == $objectID)
-            {
-                if($preObj) $preAndNextObject->pre = $preObj;
-                $preObj = true;
+                /* Get pre object. */
+                if($id == $objectID)
+                {
+                    if($preObj) $preAndNextObject->pre = $preObj;
+                    $preObj = true;
+                }
+                if($preObj !== true) $preObj = $object;
             }
-            if($preObj !== true) $preObj = $object;
         }
 
         return $preAndNextObject;
@@ -2347,16 +2350,19 @@ EOD;
      */
     static public function setMenuVars($moduleName, $objectID, $params = array())
     {
-        global $lang;
+        global $app, $lang;
 
-        foreach($lang->$moduleName->menu as $label => $menu)
+        $menuKey = 'menu';
+        if($app->viewType == 'mhtml') $menuKey = 'webMenu';
+
+        foreach($lang->$moduleName->$menuKey as $label => $menu)
         {
-            $lang->$moduleName->menu->$label = self::setMenuVarsEx($menu, $objectID, $params);
+            $lang->$moduleName->$menuKey->$label = self::setMenuVarsEx($menu, $objectID, $params);
             if(isset($menu['subMenu']))
             {
                 foreach($menu['subMenu'] as $key1 => $subMenu)
                 {
-                    $lang->$moduleName->menu->{$label}['subMenu']->$key1 = self::setMenuVarsEx($subMenu, $objectID, $params);
+                    $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1 = self::setMenuVarsEx($subMenu, $objectID, $params);
                 }
             }
 
@@ -2364,13 +2370,13 @@ EOD;
 
             foreach($menu['dropMenu'] as $key2 => $dropMenu)
             {
-                $lang->$moduleName->menu->{$label}['dropMenu']->$key2 = self::setMenuVarsEx($dropMenu, $objectID, $params);
+                $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key2 = self::setMenuVarsEx($dropMenu, $objectID, $params);
 
                 if(!isset($dropMenu['subMenu'])) continue;
 
                 foreach($dropMenu['subMenu'] as $key3 => $subMenu)
                 {
-                    $lang->$moduleName->menu->{$label}['dropMenu']->$key3 = self::setMenuVarsEx($subMenu, $objectID, $params);
+                    $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key3 = self::setMenuVarsEx($subMenu, $objectID, $params);
                 }
             }
         }

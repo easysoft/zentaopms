@@ -56,7 +56,8 @@ class product extends control
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
-        //$this->product->setMenu($productID, $branch);
+
+        if($this->app->viewType == 'mhtml') $this->product->setMenu($productID, $branch);
 
         if(common::hasPriv('product', 'create')) $this->lang->TRActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
 
@@ -1048,6 +1049,12 @@ class product extends control
         /* Load module and set session. */
         $this->loadModel('program');
         $this->session->set('productList', $this->app->getURI(true), 'product');
+
+        if($this->app->viewType == 'mhtml')
+        {
+            $productID = $this->product->saveState(0, $this->products);
+            $this->product->setMenu($productID);
+        }
 
         /* Process product structure. */
         $productStructure = array();
