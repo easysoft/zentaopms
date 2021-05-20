@@ -836,7 +836,7 @@ class taskModel extends model
             ->setIF($oldTask->parent < 0, 'estimate', $oldTask->estimate)
             ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
 
-            ->setIF($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline, 'version', $oldTask->version + 1)
+            ->setIF($oldTask->name != $this->post->name || $oldTask->estStarted != $this->post->estStarted || $oldTask->deadline != $this->post->deadline, 'version', $oldTask->version + 1)
 
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -947,7 +947,7 @@ class taskModel extends model
             }
 
             /* Record task version. */
-            if($task->version > $oldTask->version)
+            if(isset($task->version) and $task->version > $oldTask->version)
             {
                 $taskSpec = new stdClass();
                 $taskSpec->task       = $taskID;
