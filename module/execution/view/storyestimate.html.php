@@ -22,6 +22,11 @@
   <div class="main-header">
     <h2><?php echo $lang->execution->storyEstimate;?></h2>
   </div>
+  <?php if(empty($team)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->execution->noTeam;?></span></p>
+  </div>
+  <?php else:?>
   <div class='btn-toolbar pull-left'>
     <?php if(!empty($rounds)):?>
     <div class='input-group space w-200px'>
@@ -37,9 +42,10 @@
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
-          <th class='w-120px'><?php echo $lang->execution->team;?></th>
-          <th class='w-90px'> <?php echo $lang->story->estimate;?></th>
-          <th class='w-90px th-new-estimate hide'><?php echo $lang->execution->newEstimate;?></th>
+          <th><?php echo $lang->execution->team;?></th>
+          <th> <?php echo $lang->story->estimate;?></th>
+          <th class='th-new-estimate hide'><?php echo $lang->execution->newEstimate;?></th>
+          <th class='empty-th'></th>
         </tr>
       </thead>
       <tbody>
@@ -76,5 +82,6 @@
       </tfoot>
     </table>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

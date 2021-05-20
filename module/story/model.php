@@ -670,7 +670,7 @@ class storyModel extends model
             ->join('mailto', ',')
             ->join('linkStories', ',')
             ->join('childStories', ',')
-            ->remove('files,labels,comment,contactListMenu,stages')
+            ->remove('files,labels,comment,contactListMenu,stages,reviewer')
             ->get();
 
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
@@ -783,6 +783,21 @@ class storyModel extends model
                 $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan); // Insert a new story sort in this plan.
 
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
+            }
+
+            /* Update story reviewer. */
+            $_POST['reviewer'] = array_filter($_POST['reviewer']);
+            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
+            $oldReviewerList = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer');
+            foreach($_POST['reviewer'] as $reviewer)
+            {
+                if(in_array($reviewer, $oldReviewerList)) continue;
+
+                $reviewData = new stdclass();
+                $reviewData->story    = $storyID;
+                $reviewData->version  = $oldStory->version;
+                $reviewData->reviewer = $reviewer;
+                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
             }
 
             unset($oldStory->parent);
@@ -1148,15 +1163,15 @@ class storyModel extends model
         $now      = helper::now();
         $date     = helper::today();
         $story    = fixer::input('post')
-            ->setDefault('reviewedDate', $date)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'revert', 'status',  'active')
-            ->setIF(strpos($oldStory->reviewedBy, $this->app->user->account) === false, 'reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
+            ->add('reviewedDate', $now)
+            ->add('reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
             ->remove('result,preVersion,comment')
             ->get();
 
@@ -1166,36 +1181,41 @@ class storyModel extends model
         $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($this->post->result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
 
         /* Update the story status by review rules. */
-        $passCount    = 0;
-        $rejectCount  = 0;
-        $reviewRule   = $this->config->story->reviewRules;
         $reviewerList = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer', 'result');
-        foreach($reviewerList as $reviewer => $result)
+        $reviewedBy = explode(',', trim($story->reviewedBy, ','));
+        if(!array_diff(array_keys($reviewerList), $reviewedBy))
         {
-            $passCount   = $result == 'pass'   ? $passCount   + 1 : $passCount;
-            $rejectCount = $result == 'reject' ? $rejectCount + 1 : $rejectCount;
-        }
-        if($reviewRule == 'allpass')
-        {
-            if($passCount   == count($reviewerList)) $story->status = 'active';
-            if($rejectCount == count($reviewerList)) $story->status = 'closed';
-        }
-        if($reviewRule == 'halfpass')
-        {
-            if($passCount   >= floor(count($reviewerList) / 2) + 1) $story->status = 'active';
-            if($rejectCount >= floor(count($reviewerList) / 2) + 1) $story->status = 'closed';
-        }
-        if($story->status == 'closed')
-        {
-            $story->closedBy   = $this->app->user->account;
-            $story->closedDate = $now;
-            $story->assignedTo = 'closed';
-            $story->stage      = 'closed';
-            if($this->post->closedReason == 'done') $story->stage = 'released';
+            $passCount    = 0;
+            $rejectCount  = 0;
+            $reviewRule   = $this->config->story->reviewRules;
+            foreach($reviewerList as $reviewer => $result)
+            {
+                $passCount   = $result == 'pass'   ? $passCount   + 1 : $passCount;
+                $rejectCount = $result == 'reject' ? $rejectCount + 1 : $rejectCount;
+            }
+            if($reviewRule == 'allpass')
+            {
+                if($passCount   == count($reviewerList)) $story->status = 'active';
+                if($rejectCount == count($reviewerList)) $story->status = 'closed';
+            }
+            if($reviewRule == 'halfpass')
+            {
+                if($passCount   >= floor(count($reviewerList) / 2) + 1) $story->status = 'active';
+                if($rejectCount >= floor(count($reviewerList) / 2) + 1) $story->status = 'closed';
+            }
+            if($story->status == 'closed')
+            {
+                $story->closedBy   = $this->app->user->account;
+                $story->closedDate = $now;
+                $story->assignedTo = 'closed';
+                $story->stage      = 'closed';
+                if($this->post->closedReason == 'done') $story->stage = 'released';
+            }
         }
 
         $this->dao->update(TABLE_STORY)->data($story)
             ->autoCheck()
+            ->batchCheck($this->config->story->review->requiredFields, 'notempty')
             ->checkIF($this->post->result == 'reject', 'closedReason', 'notempty')
             ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();
@@ -3225,10 +3245,11 @@ class storyModel extends model
         if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate') return false;
 
         global $config, $app, $dao;
-        $reviewers = $dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->andWhere('result')->ne('pass')->fetchAll('reviewer');
+        $notReview = $dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->andWhere('result')->eq('')->fetchAll('reviewer');
+        $reviewers = $dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
 
-        if($action == 'change')     return $story->status != 'closed';
-        if($action == 'review')     return in_array($app->user->account, array_keys($reviewers)) and ($story->status == 'draft' or $story->status == 'changed');
+        if($action == 'change')     return (count($reviewers) == 0 || count($notReview) == 0) and $story->status != 'closed';
+        if($action == 'review')     return in_array($app->user->account, array_keys($notReview)) and ($story->status == 'draft' or $story->status == 'changed');
         if($action == 'close')      return $story->status != 'closed';
         if($action == 'activate')   return $story->status == 'closed';
         if($action == 'assignto')   return $story->status != 'closed';

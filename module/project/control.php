@@ -1094,8 +1094,7 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
-            $teamID = $this->dao->select('id')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->fetch('id');
-            $this->loadModel('action')->create('team', $teamID, 'ManagedTeam');
+            $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
             $link = $this->createLink('project', 'manageMembers', "projectID=$projectID");
             $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));

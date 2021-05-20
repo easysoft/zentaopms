@@ -8,22 +8,22 @@
  * @package     spliter
  * @version     $Id$
  * @link        http://www.chanzhi.org
- * @see         http://www.cnblogs.com/chenwenbiao/archive/2011/08/11/2134503.html 
+ * @see         http://www.cnblogs.com/chenwenbiao/archive/2011/08/11/2134503.html
  * @see         http://stackoverflow.com/questions/9361303/can-i-get-the-unicode-value-of-a-character-or-vise-versa-with-php
  */
 class spliter
 {
     /**
      * Split a utf-8 string into words, computing unicode for every word.
-     * 
-     * @param  string    $string 
+     *
+     * @param  string    $string
      * @access public
      * @return array
      */
     public function utf8Split($string)
     {
         $string = strtolower($string);
-        $i = 0; 
+        $i = 0;
         $length = strlen($string);
         $dict   = array();
         $words  = '';
@@ -50,11 +50,15 @@ class spliter
                         $word .= $letter;
                         $i++;
                     }
-                    
+
                     /* Process intigers. */
                     if(is_numeric($word) and (strpos($word, '.') === false)) $word = "|" . $word . "|";
                     $word   = str_pad(strtolower($word), 5, '_');
                     $words .= ' ' . $word;
+                }
+                elseif($ord == 32)
+                {
+                    $words .= ' ';
                 }
                 continue;
             }
@@ -76,7 +80,14 @@ class spliter
                 }
                 else
                 {
-                    $words .= ' ' . $letter;
+                    if(is_numeric(substr($words, strlen($words) - 1, 1)))
+                    {
+                        $words .= ' ' . $letter;
+                    }
+                    else
+                    {
+                        $words .= $letter;
+                    }
                 }
                 $i += $offset;
             }
@@ -86,13 +97,13 @@ class spliter
     }
 
     /**
-     * Return unicode value for a char. 
-     * 
-     * @param  string    $c 
+     * Return unicode value for a char.
+     *
+     * @param  string    $c
      * @access public
      * @return int
      */
-    public function unicode($c) 
+    public function unicode($c)
     {
         if(ord($c{0}) >= 0   && ord($c{0}) <= 127) return  ord($c{0});
         if(ord($c{0}) >= 192 && ord($c{0}) <= 223) return (ord($c{0}) - 192) * 64         + (ord($c{1}) - 128);
@@ -107,8 +118,8 @@ class spliter
 
     /**
      * Judge a char is Letter or not.
-     * 
-     * @param  string    $letter 
+     *
+     * @param  string    $letter
      * @access public
      * @return bool
      */

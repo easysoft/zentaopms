@@ -609,9 +609,7 @@ class story extends control
         /* Get users. */
         $users = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
 
-        $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
-        $reivewerList = '';
-        foreach($reviewedBy as $reviewer) $reivewerList .= zget($users, $reviewer) . ' ';
+        $reviewerList = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetchPairs('reviewer');
 
         $this->story->replaceURLang($story->type);
 
@@ -623,7 +621,7 @@ class story extends control
         $this->view->product    = $product;
         $this->view->products   = $myProducts + $othersProducts;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
-        $this->view->reviewers  = $reivewerList;
+        $this->view->reviewers  = implode(',', $reviewerList);
         $this->display();
     }
 
@@ -1004,9 +1002,11 @@ class story extends control
 
             if($changes)
             {
-                $result   = $this->post->result;
-                $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
-                if($result == 'reject') $actionID = $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
+                $result      = $this->post->result;
+                $reasonParam = $result == 'reject' ? ',' . $this->post->closedReason : '';
+                $storyStatus = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('status');
+                $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result) . $reasonParam);
+                if($storyStatus == 'closed') $actionID = $this->action->create('story', $storyID, 'ReviewClosed');
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -1041,8 +1041,10 @@ class story extends control
         }
 
         /* Set the review result options. */
+        $reviewers = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
         if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);
         if($story->status == 'changed') unset($this->lang->story->reviewResultList['reject']);
+        if(count($reviewers) > 1) unset($this->lang->story->reviewResultList['revert']);
 
         $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);

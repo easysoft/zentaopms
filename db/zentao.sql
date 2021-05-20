@@ -838,7 +838,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `lastEditedBy` varchar(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,
   `reviewedBy` varchar(255) NOT NULL,
-  `reviewedDate` date NOT NULL,
+  `reviewedDate` datetime NOT NULL default '0000-00-00 00:00:00',
   `closedBy` varchar(30) NOT NULL default '',
   `closedDate` datetime NOT NULL,
   `closedReason` varchar(30) NOT NULL,
