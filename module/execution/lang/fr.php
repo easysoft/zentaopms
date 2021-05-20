@@ -95,6 +95,7 @@ $lang->execution->oneProduct      = "Only one stage can be linked {$lang->produc
 $lang->execution->noLinkProduct   = "Stage not linked {$lang->productCommon}";
 $lang->execution->recent          = 'Recent visits: ';
 $lang->execution->copyNoExecution = 'There are no ' . $lang->executionCommon . 'available to copy.';
+$lang->execution->noTeam          = 'No team members at the moment';
 
 $lang->execution->start    = 'Démarrer';
 $lang->execution->activate = 'Activer';

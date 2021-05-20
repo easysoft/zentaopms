@@ -2188,8 +2188,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->execution->manageMembers($executionID);
-            $teamID = $this->dao->select('id')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetch('id');
-            $this->loadModel('action')->create('team', $teamID, 'managedTeam');
+            $this->loadModel('action')->create('team', $executionID, 'managedTeam');
             die(js::locate($this->createLink('execution', 'team', "executionID=$executionID"), 'parent'));
         }
 
@@ -2258,8 +2257,7 @@ class execution extends control
         $this->execution->unlinkMember($executionID, $account);
         if(!dao::isError())
         {
-            $teamID = $this->dao->select('id')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetch('id');
-            $this->loadModel('action')->create('team', $teamID, 'managedTeam');
+            $this->loadModel('action')->create('team', $executionID, 'managedTeam');
         }
 
         /* if ajax request, send result. */
