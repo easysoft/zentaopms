@@ -1044,7 +1044,7 @@ class story extends control
         $reviewers = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
         if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);
         if($story->status == 'changed') unset($this->lang->story->reviewResultList['reject']);
-        if($story->status == 'changed' and count($reviewers) > 1) unset($this->lang->story->reviewResultList['revert']);
+        if(count($reviewers) > 1) unset($this->lang->story->reviewResultList['revert']);
 
         $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
