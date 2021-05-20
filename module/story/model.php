@@ -670,7 +670,7 @@ class storyModel extends model
             ->join('mailto', ',')
             ->join('linkStories', ',')
             ->join('childStories', ',')
-            ->remove('files,labels,comment,contactListMenu,stages')
+            ->remove('files,labels,comment,contactListMenu,stages,reviewer')
             ->get();
 
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
@@ -783,6 +783,21 @@ class storyModel extends model
                 $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan); // Insert a new story sort in this plan.
 
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
+            }
+
+            /* Update story reviewer. */
+            $_POST['reviewer'] = array_filter($_POST['reviewer']);
+            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
+            $oldReviewerList = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer');
+            foreach($_POST['reviewer'] as $reviewer)
+            {
+                if(in_array($reviewer, $oldReviewerList)) continue;
+
+                $reviewData = new stdclass();
+                $reviewData->story    = $storyID;
+                $reviewData->version  = $oldStory->version;
+                $reviewData->reviewer = $reviewer;
+                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
             }
 
             unset($oldStory->parent);

@@ -204,12 +204,10 @@
                 <th><?php echo $lang->story->assignedTo;?></th>
                 <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="form-control chosen"');?></td>
               </tr>
-              <?php if($reviewers):?>
               <tr>
                 <th><?php echo $lang->story->reviewedBy;?></th>
-                <td><?php echo $reviewers;?></td>
+                <td><?php echo html::select('reviewer[]', $users, $reviewers, 'class="form-control chosen" multiple')?></td>
               </tr>
-              <?php endif;?>
               <?php if($story->status == 'closed'):?>
               <tr>
                 <th><?php echo $lang->story->closedBy;?></th>

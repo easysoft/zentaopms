@@ -609,9 +609,7 @@ class story extends control
         /* Get users. */
         $users = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
 
-        $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
-        $reivewerList = '';
-        foreach($reviewedBy as $reviewer) $reivewerList .= zget($users, $reviewer) . ' ';
+        $reviewerList = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetchPairs('reviewer');
 
         $this->story->replaceURLang($story->type);
 
@@ -623,7 +621,7 @@ class story extends control
         $this->view->product    = $product;
         $this->view->products   = $myProducts + $othersProducts;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
-        $this->view->reviewers  = $reivewerList;
+        $this->view->reviewers  = implode(',', $reviewerList);
         $this->display();
     }
 
