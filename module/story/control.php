@@ -1004,9 +1004,11 @@ class story extends control
 
             if($changes)
             {
-                $result   = $this->post->result;
-                $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
-                if($result == 'reject') $actionID = $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
+                $result      = $this->post->result;
+                $reasonParam = $result == 'reject' ? ',' . $this->post->closedReason : '';
+                $storyStatus = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('status');
+                $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result) . $reasonParam);
+                if($storyStatus == 'closed') $actionID = $this->action->create('story', $storyID, 'ReviewClosed');
                 $this->action->logHistory($actionID, $changes);
             }
 

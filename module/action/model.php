@@ -627,7 +627,11 @@ class actionModel extends model
          */
         if(empty($desc))
         {
-            if(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+            if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, ',') !== false)
+            {
+                $desc = $this->lang->$objectType->action->rejectreviewed;
+            }
+            elseif(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
             {
                 $desc = $this->lang->$objectType->action->$actionType;
             }
@@ -668,14 +672,23 @@ class actionModel extends model
             /* Fix bug #741. */
             if(isset($desc['extra'])) $desc['extra'] = $this->lang->$objectType->{$desc['extra']};
 
+            $actionDesc = '';
             if(isset($desc['extra'][$extra]))
             {
-                echo str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+                $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
             }
             else
             {
-                echo str_replace('$extra', $action->extra, $desc['main']);
+                $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
             }
+
+            if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, ',') !== false)
+            {
+                list($extra, $reason) = explode(',', $extra);
+                $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
+                $actionDesc = str_replace(array('$extra', '$reason'), array($desc['extra'][$extra], $desc['reason'][$reason]), $desc['main']);
+            }
+            echo $actionDesc;
         }
         else
         {

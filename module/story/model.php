@@ -1196,6 +1196,7 @@ class storyModel extends model
 
         $this->dao->update(TABLE_STORY)->data($story)
             ->autoCheck()
+            ->batchCheck($this->config->story->review->requiredFields, 'notempty')
             ->checkIF($this->post->result == 'reject', 'closedReason', 'notempty')
             ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();

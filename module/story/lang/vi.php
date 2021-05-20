@@ -279,7 +279,9 @@ $lang->story->form->file     = 'Nếu bất kỳ tập tin mà liên kết tới
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed              = array('main' => '$date, ghi nhận bởi <strong>$actor</strong>. Kết quả là <strong>$extra</strong>.', 'extra' => 'reviewResultList');
-$lang->story->action->closed                = array('main' => '$date, được đóng bởi <strong>$actor</strong>.Lý do là <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
+$lang->story->action->rejectreviewed        = array('main' => '$date, ghi nhận bởi <strong>$actor</strong>. Kết quả là <strong>$extra</strong>. Lý do là <strong>$reason</strong>', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
+$lang->story->action->closed                = array('main' => '$date, được đóng bởi <strong>$actor</strong>. Lý do là <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
+$lang->story->action->reviewclosed          = array('main' => '$date, closed by <strong>System</strong>. The reasion is <strong>Review Failed</strong>.');
 $lang->story->action->linked2plan           = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới kế hoạch <strong>$extra</strong>');
 $lang->story->action->unlinkedfromplan      = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ kế hoạch <strong>$extra</strong>.');
 $lang->story->action->linked2execution      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới ' . $lang->executionCommon . ' <strong>$extra</strong>.');
