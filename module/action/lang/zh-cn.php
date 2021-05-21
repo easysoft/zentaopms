@@ -335,6 +335,8 @@ $lang->action->dynamicAction->execution['undeleted'] = '还原' . $lang->executi
 $lang->action->dynamicAction->execution['hidden']    = '隐藏' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = '导入任务';
 
+$lang->action->dynamicAction->team['managedTeam'] = '维护团队';
+
 $lang->action->dynamicAction->task['opened']              = '创建任务';
 $lang->action->dynamicAction->task['edited']              = '编辑任务';
 $lang->action->dynamicAction->task['commented']           = '备注任务';

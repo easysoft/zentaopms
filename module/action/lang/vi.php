@@ -331,6 +331,8 @@ $lang->action->dynamicAction->execution['undeleted'] = 'Phục hổi ' . $lang->
 $lang->action->dynamicAction->execution['hidden']    = 'Ẩn ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = 'Nhập nhiệm vụ';
 
+$lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
+
 $lang->action->dynamicAction->task['opened']              = 'Tạo nhiệm vụ';
 $lang->action->dynamicAction->task['edited']              = 'Sửa nhiệm vụ';
 $lang->action->dynamicAction->task['commented']           = 'Task nhận xét';
