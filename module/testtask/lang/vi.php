@@ -176,6 +176,8 @@ $lang->testtask->report->charts['bugOpenedByGroups']    = 'Phân chia người b
 $lang->testtask->report->charts['bugResolvedByGroups']  = 'Phân chia người giải quyết Bug';
 $lang->testtask->report->charts['bugResolutionGroups']  = 'Phân chia giải pháp Bug';
 $lang->testtask->report->charts['bugModuleGroups']      = 'Phân chia Module Bug';
+$lang->testtask->report->charts['bugStageGroups']       = 'Bug importance stage distribution';
+$lang->testtask->report->charts['bugHandleGroups']      = 'Distribution of daily bug processing';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();

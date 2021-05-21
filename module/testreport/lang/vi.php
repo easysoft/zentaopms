@@ -49,6 +49,7 @@ $lang->testreport->legendLegacyBugs  = 'Bug còn lại';
 $lang->testreport->legendReport      = 'Báo cáo';
 $lang->testreport->legendComment     = 'Tóm tắt';
 $lang->testreport->legendMore        = 'Thêm';
+$lang->testreport->date              = 'Date';
 
 $lang->testreport->bugSeverityGroups   = 'Phân chia mức độ Bug';
 $lang->testreport->bugTypeGroups       = 'Phân chia loại Bug';
@@ -57,9 +58,16 @@ $lang->testreport->bugOpenedByGroups   = 'Phân chia người báo cáo Bug';
 $lang->testreport->bugResolvedByGroups = 'Phân chia người giải quyết Bug';
 $lang->testreport->bugResolutionGroups = 'Phân chia giải pháp Bug';
 $lang->testreport->bugModuleGroups     = 'Phân chia Module Bug';
+$lang->testreport->bugStageGroups      = 'Bug importance stage distribution';
+$lang->testreport->bugHandleGroups     = 'Distribution of daily bug processing';
 $lang->testreport->legacyBugs          = 'Bug còn lại';
 $lang->testreport->bugConfirmedRate    = 'Đánh giá Bug đã xác nhận (Nghị quyết đã ban hành hoặc tạm hoãn / tình trạng được giải quyết hoặc đóng)';
 $lang->testreport->bugCreateByCaseRate = 'Đánh giá Bug được báo cáo trong Tình huống (Bug được báo cáo trong tình huống /Thêm mới Bugs)';
+
+$lang->testreport->bugStageList = array();
+$lang->testreport->bugStageList['generated'] = 'Generated Bugs';
+$lang->testreport->bugStageList['legacy']    = 'Legacy Bugs';
+$lang->testreport->bugStageList['resolved']  = 'Resolved Bugs';
 
 $lang->testreport->caseSummary    = 'Tổng <strong>%s</strong> tình huống. <strong>%s</strong> tình huống đang chạy. <strong>%s</strong> kết quả được tạo. <strong>%s</strong> cases thất bại';
 $lang->testreport->buildSummary   = 'Đã test <strong>%s</strong> bản dựng.';
