@@ -78,7 +78,7 @@ class actionModel extends model
             $action->execution = (int)$extra;
         }
 
-        if($objectType == 'story' and strpos('ReviewClosed,PassReviewed,ClarifyReviewed', $actionType) !== false) $action->actor = 'System';
+        if($objectType == 'story' and $actionType !== 'reviewed' and strpos('reviewclosed,passreviewed,clarifyreviewed', $actionType) !== false) $action->actor = 'System';
 
         if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false))
         {
