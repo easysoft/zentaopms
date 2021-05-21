@@ -115,46 +115,6 @@ class custom extends control
             {
                 $data = fixer::input('post')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
-                if($data->reviewRules == 'halfpass')
-                {
-                    $storyList = $this->dao->select('t1.*')->from(TABLE_STORYREVIEW)->alias('t1')
-                        ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                        ->where('t2.status')->in('change, draft')
-                        ->fetchGroup('story');
-
-                    foreach($storyList as $storyID => $reviewerList)
-                    {
-                        $reviewedBy = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('reviewedBy');
-                        $reviewedBy = explode(',', trim($reviewedBy, ','));
-                        $reviewers = array();
-                        foreach($reviewerList as $reviewer) $reviewers[] = $reviewer->reviewer;
-
-                        if(!array_diff($reviewers, $reviewedBy))
-                        {
-                            $passCount   = 0;
-                            $rejectCount = 0;
-                            foreach($reviewerList as $reviewer)
-                            {
-                                $passCount   += $reviewer->result == 'pass'   ? 1 : 0;
-                                $rejectCount += $reviewer->result == 'reject' ? 1 : 0;
-                            }
-                            if($passCount >= floor(count($reviewerList) / 2) + 1)
-                            {
-                                $this->dao->update(TABLE_STORY)->set('status')->eq('active')->where('id')->eq($storyID)->exec();
-                            }
-                            if($rejectCount >= floor(count($reviewerList) / 2) + 1)
-                            {
-                                $story = new stdclass();
-                                $story->closedBy   = $this->app->user->account;
-                                $story->closedDate = helper::now();
-                                $story->assignedTo = 'closed';
-                                $story->status     = 'closed';
-                                $story->stage      = 'closed';
-                                $this->dao->update(TABLE_STORY)->data($story)->where('id')->eq($storyID)->exec();
-                            }
-                        }
-                    }
-                }
             }
             elseif($module == 'testcase' and $field == 'review')
             {
