@@ -103,6 +103,7 @@ $lang->custom->story->fields['sourceList']       = '來源';
 $lang->custom->story->fields['reasonList']       = '關閉原因';
 $lang->custom->story->fields['stageList']        = '階段';
 $lang->custom->story->fields['statusList']       = '狀態';
+$lang->custom->story->fields['reviewRules']      = '評審規則';
 $lang->custom->story->fields['reviewResultList'] = '評審結果';
 $lang->custom->story->fields['review']           = '評審流程';
 
