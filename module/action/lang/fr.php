@@ -344,6 +344,8 @@ $lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->execu
 $lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = 'Improt Task';
 
+$lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
+
 $lang->action->dynamicAction->task['opened']              = 'Créer Tâche';
 $lang->action->dynamicAction->task['edited']              = 'Editer Tâche';
 $lang->action->dynamicAction->task['commented']           = 'Commenter Tâche';

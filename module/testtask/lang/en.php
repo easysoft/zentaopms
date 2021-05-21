@@ -179,6 +179,8 @@ $lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug ReportedBy Distri
 $lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug ResolvedBy Distribution';
 $lang->testtask->report->charts['bugResolutionGroups']  = 'Bug Resolution Distribution';
 $lang->testtask->report->charts['bugModuleGroups']      = 'Bug Module Distribution';
+$lang->testtask->report->charts['bugStageGroups']       = 'Bug importance stage distribution';
+$lang->testtask->report->charts['bugHandleGroups']      = 'Distribution of daily bug processing';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();

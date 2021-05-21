@@ -213,15 +213,16 @@ class actionModel extends model
             if($objectType == 'release') $fields = 'product, build';
             if($objectType == 'task')    $fields = 'project, execution, story';
 
-            $record = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+            if($objectType != 'team') $record = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
 
             /* Process story, release and task. */
             if($objectType == 'story') $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
             if($objectType == 'team')
             {
-                $team = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
-                $type = $team->type == 'project' ? 'project' : 'execution';
+                $team   = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+                $type   = $team->type == 'project' ? 'project' : 'execution';
+                $record = new stdclass();
                 $record->$type = $objectID;
             }
             if($objectType == 'task')

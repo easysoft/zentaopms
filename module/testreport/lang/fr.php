@@ -49,6 +49,7 @@ $lang->testreport->legendLegacyBugs  = 'Bugs Restants';
 $lang->testreport->legendReport      = 'Rapport';
 $lang->testreport->legendComment     = 'Résumé';
 $lang->testreport->legendMore        = 'Plus...';
+$lang->testreport->date              = 'Date';
 
 $lang->testreport->bugSeverityGroups   = 'Distribution Sévérité de Bug';
 $lang->testreport->bugTypeGroups       = 'Distribution Type de Bug';
@@ -57,9 +58,16 @@ $lang->testreport->bugOpenedByGroups   = 'Distribution Bug Signalé par';
 $lang->testreport->bugResolvedByGroups = 'Distribution Bug Résolu par';
 $lang->testreport->bugResolutionGroups = 'Distribution Bug Résolution';
 $lang->testreport->bugModuleGroups     = 'Distribution Bug Module';
+$lang->testreport->bugStageGroups      = 'Bug importance stage distribution';
+$lang->testreport->bugHandleGroups     = 'Distribution of daily bug processing';
 $lang->testreport->legacyBugs          = 'Bugs Restants';
 $lang->testreport->bugConfirmedRate    = 'Taux de Bugs confirmés (Résolution est corrigée ou reportée / statut est résolu ou fermé)';
 $lang->testreport->bugCreateByCaseRate = 'Taux Bug Signalés par CasTest (Bugs signalés dans les CasTests / Nouveaux bugs)';
+
+$lang->testreport->bugStageList = array();
+$lang->testreport->bugStageList['generated'] = 'Generated Bugs';
+$lang->testreport->bugStageList['legacy']    = 'Legacy Bugs';
+$lang->testreport->bugStageList['resolved']  = 'Resolved Bugs';
 
 $lang->testreport->caseSummary    = 'Total <strong>%s</strong> casTests. <strong>%s</strong> casTests joués. <strong>%s</strong> résultats générés. <strong>%s</strong> casTests ont échoué.';
 $lang->testreport->buildSummary   = 'Testé <strong>%s</strong> builds.';

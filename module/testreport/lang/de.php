@@ -49,6 +49,7 @@ $lang->testreport->legendLegacyBugs  = 'Legacy Bugs';
 $lang->testreport->legendReport      = 'Bericht';
 $lang->testreport->legendComment     = 'Summe';
 $lang->testreport->legendMore        = 'Mehr';
+$lang->testreport->date              = 'Date';
 
 $lang->testreport->bugSeverityGroups   = 'Nach Dringlichkeit';
 $lang->testreport->bugTypeGroups       = 'Nach Typ';
@@ -57,9 +58,16 @@ $lang->testreport->bugOpenedByGroups   = 'Nach Ersteller';
 $lang->testreport->bugResolvedByGroups = 'Nach Löser';
 $lang->testreport->bugResolutionGroups = 'Nach Lösung';
 $lang->testreport->bugModuleGroups     = 'Nach Modul';
+$lang->testreport->bugStageGroups      = 'Bug importance stage distribution';
+$lang->testreport->bugHandleGroups     = 'Distribution of daily bug processing';
 $lang->testreport->legacyBugs          = 'Legacy Bugs';
 $lang->testreport->bugConfirmedRate    = 'Bestätigte Bugs Rate (Lösung ist gelöst oder verschoben / Status ist gelöst oder Geschlossen)';
 $lang->testreport->bugCreateByCaseRate = 'Bug in Fall Rate (Bugs erstellt in Fall / Neu hinzugefügte Bugs)';
+
+$lang->testreport->bugStageList = array();
+$lang->testreport->bugStageList['generated'] = 'Generated Bugs';
+$lang->testreport->bugStageList['legacy']    = 'Legacy Bugs';
+$lang->testreport->bugStageList['resolved']  = 'Resolved Bugs';
 
 $lang->testreport->caseSummary    = ' <strong>%s</strong> Fälle in Summe : <strong>%s</strong> ausgeführt, <strong>%s</strong> Ergebnisse, <strong>%s</strong> fehlgeschlagen.';
 $lang->testreport->buildSummary   = 'Getsetetes <strong>%s</strong> Build.';
