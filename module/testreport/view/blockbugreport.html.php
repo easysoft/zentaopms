@@ -119,8 +119,8 @@
                   </tr>
                 </thead>
                 <?php
-                $beginTime = strtotime($report->begin);
-                $endTime   = strtotime($report->end);
+                $beginTime = isset($report->begin) ? strtotime($report->begin) : strtotime($begin);
+                $endTime   = isset($report->end) ? strtotime($report->end) : strtotime($end);
                 ?>
                 <?php for($time = $beginTime; $time <= $endTime; $time += 86400):?>
                 <?php $date = date('m-d', $time);?>
