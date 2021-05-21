@@ -260,6 +260,9 @@ $lang->action->label->tracked               = '跟踪了';
 $lang->action->label->hangup                = '挂起了';
 $lang->action->label->run                   = '执行了';
 $lang->action->label->estimated             = '估算了';
+$lang->action->label->reviewclosed          = '评审失败';
+$lang->action->label->passreviewed          = '确认通过';
+$lang->action->label->clarifyreviewed       = '有待明确';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

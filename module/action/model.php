@@ -78,6 +78,8 @@ class actionModel extends model
             $action->execution = (int)$extra;
         }
 
+        if($objectType == 'story' and strpos('reviewclosed,passreviewed,clarifyreviewed') !== false) $action->actor = 'System';
+
         if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false))
         {
             $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();

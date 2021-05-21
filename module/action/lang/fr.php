@@ -256,6 +256,9 @@ $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
 $lang->action->label->run                   = 'run';
 $lang->action->label->estimated             = 'estimated';
+$lang->action->label->reviewclosed          = 'Review Failed';
+$lang->action->label->passreviewed          = 'Pass';
+$lang->action->label->clarifyreviewed       = 'Clarify';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
