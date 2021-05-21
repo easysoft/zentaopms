@@ -260,6 +260,9 @@ $lang->action->label->tracked               = '跟踪了';
 $lang->action->label->hangup                = '挂起了';
 $lang->action->label->run                   = '执行了';
 $lang->action->label->estimated             = '估算了';
+$lang->action->label->reviewclosed          = '评审失败';
+$lang->action->label->passreviewed          = '确认通过';
+$lang->action->label->clarifyreviewed       = '有待明确';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -334,6 +337,8 @@ $lang->action->dynamicAction->execution['managed']   = '维护' . $lang->executi
 $lang->action->dynamicAction->execution['undeleted'] = '还原' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['hidden']    = '隐藏' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = '导入任务';
+
+$lang->action->dynamicAction->team['managedTeam'] = '维护团队';
 
 $lang->action->dynamicAction->task['opened']              = '创建任务';
 $lang->action->dynamicAction->task['edited']              = '编辑任务';

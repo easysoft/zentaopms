@@ -498,6 +498,7 @@ $lang->navGroup->milestone      = 'project';
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';
 $lang->navGroup->build     = 'execution';
+$lang->navGroup->team      = 'execution';
 
 $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';

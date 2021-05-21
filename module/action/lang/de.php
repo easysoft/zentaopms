@@ -256,6 +256,9 @@ $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
 $lang->action->label->run                   = 'run';
 $lang->action->label->estimated             = 'estimated';
+$lang->action->label->reviewclosed          = 'Review Failed';
+$lang->action->label->passreviewed          = 'Pass';
+$lang->action->label->clarifyreviewed       = 'Clarify';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass;
@@ -330,6 +333,8 @@ $lang->action->dynamicAction->execution['managed']   = 'Manage ' . $lang->execut
 $lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = 'Improt Task';
+
+$lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
 
 $lang->action->dynamicAction->task['opened']              = 'Create Task';
 $lang->action->dynamicAction->task['edited']              = 'Edit Task';

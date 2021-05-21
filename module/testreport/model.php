@@ -138,23 +138,77 @@ class testreportModel extends model
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
         $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
+        $resolvedBugs  = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('resolvedDate')->ge($begin)->andWhere('resolvedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
         $foundBugs     = array();
         $legacyBugs    = array();
         $byCaseNum     = 0;
         $buildIdList   = array_keys($builds);
         $taskIdList    = array_keys($tasks);
 
+        $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = $stageGoups = $handleGroups = array();
+
+        /* Init stageGroups. */
+        foreach($this->lang->bug->priList as $priKey => $priValue)
+        {
+            $stageGroups[$priKey]['generated'] = 0;
+            $stageGroups[$priKey]['legacy']    = 0;
+            $stageGroups[$priKey]['resolved']  = 0;
+        }
+
+        /* Init handleGroups. */
+        $beginTimeStamp = strtotime($begin);
+        $endTimeStamp   = strtotime($end);
+        for($i = $beginTimeStamp; $i <= $endTimeStamp; $i += 86400)
+        {
+            $date = date('m-d', $i);
+            $handleGroups['generated'][$date] = 0;
+            $handleGroups['legacy'][$date]    = 0;
+            $handleGroups['resolved'][$date]  = 0;
+        }
+
+        /* Get the resolved bug data. */
+        foreach($resolvedBugs as $bug)
+        {
+            if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
+            {
+                $resolvedDate = date('m-d', strtotime($bug->resolvedDate));
+                $stageGroups[$bug->pri]['resolved']      += 1;
+                $handleGroups['resolved'][$resolvedDate] += 1;
+            }
+        }
+
+        /* Get the generated and leagcy bug data. */
         foreach($generatedBugs as $bug)
         {
             if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
             {
+                $openedDate = date('m-d', strtotime($bug->openedDate));
+
                 $foundBugs[$bug->id] = $bug;
-                if($bug->status == 'active' or $bug->resolvedDate > "$end 23:59:59") $legacyBugs[$bug->id] = $bug;
+                $stageGroups[$bug->pri]['generated']    += 1;
+                $handleGroups['generated'][$openedDate] += 1;
+
+                if($bug->status == 'active' or $bug->resolvedDate > "$end 23:59:59")
+                {
+                    $legacyBugs[$bug->id] = $bug;
+                    $stageGroups[$bug->pri]['legacy'] += 1;
+
+                    $beginTimeStamp = strtotime($begin);
+                    $endTimeStamp   = strtotime($end);
+                    for($i = $beginTimeStamp; $i <= $endTimeStamp; $i += 86400)
+                    {
+                        $dateTime = date('Y-m-d 23:59:59', $i);
+                        if($bug->openedDate <= $dateTime and (helper::isZeroDate($bug->resolvedDate) or $bug->resolvedDate > $dateTime))
+                        {
+                            $date = date('m-d', $i);
+                            $handleGroups['legacy'][$date] += 1;
+                        }
+                    }
+                }
                 if($bug->case and !empty($bug->testtask) and in_array($bug->testtask, $taskIdList)) $byCaseNum ++;
             }
         }
 
-        $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = array();
         $resolvedBugs   = 0;
         foreach($foundBugs as $bug)
         {
@@ -174,6 +228,8 @@ class testreportModel extends model
         $bugInfo['countBugByTask']      = $byCaseNum;
         $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
+        $bugInfo['bugStageGroups']      = $stageGroups;
+        $bugInfo['bugHandleGroups']     = $handleGroups;
 
         $this->app->loadLang('bug');
         $users = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted');

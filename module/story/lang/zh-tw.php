@@ -124,6 +124,7 @@ $lang->story->closedDate     = '關閉日期';
 $lang->story->closedReason   = '關閉原因';
 $lang->story->rejectedReason = '拒絶原因';
 $lang->story->reviewedBy     = '由誰評審';
+$lang->story->reviewers      = '評審人員';
 $lang->story->reviewedDate   = '評審時間';
 $lang->story->version        = '版本號';
 $lang->story->plan           = "所屬計劃";
@@ -156,6 +157,8 @@ $lang->story->noRequirement  = '無需求';
 $lang->story->one            = '一個';
 $lang->story->field          = '同步的欄位';
 $lang->story->completeRate   = '完成率';
+$lang->story->reviewed       = '已評審';
+$lang->story->toBeReviewed   = '待評審';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "該{$lang->SRCommon}與上一{$lang->SRCommon}不屬於同一產品！";
@@ -280,6 +283,8 @@ $lang->story->form->file      = "附件，如果該{$lang->SRCommon}有相關檔
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed              = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
+$lang->story->action->passreviewed          = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>確認通過</strong>。');
+$lang->story->action->clarifyreviewed       = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>有待明確</strong>，請變更後重新發起評審。');
 $lang->story->action->rejectreviewed        = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>，原因為 <strong>$reason</strong>。', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->reviewclosed          = array('main' => '$date, 由 <strong>系統</strong> 關閉，原因為 <strong>評審失敗</strong>。');

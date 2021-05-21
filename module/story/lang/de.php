@@ -123,6 +123,7 @@ $lang->story->closedDate     = 'Geschlossen am';
 $lang->story->closedReason   = 'Geschlossen weil';
 $lang->story->rejectedReason = 'Abgelehnt weil';
 $lang->story->reviewedBy     = 'Prüfer';
+$lang->story->reviewers      = 'Reviewers';
 $lang->story->reviewedDate   = 'Geprüft am';
 $lang->story->version        = 'Version';
 $lang->story->plan           = 'Plan';
@@ -155,6 +156,8 @@ $lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 $lang->story->completeRate   = 'Completion Rate';
+$lang->story->reviewed       = 'Reviewed';
+$lang->story->toBeReviewed   = 'To Be Reviewed';
 
 $lang->story->ditto       = 'Dito';
 $lang->story->dittoNotice = 'Die Story gehört nicht zum Projekt wie die vorherige!';
@@ -279,6 +282,8 @@ $lang->story->form->file     = 'Wenn Dateien zu dieser Story gehören, laden Sie
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed              = array('main' => '$date, geprüft von <strong>$actor</strong>. Das Ergebnis ist <strong>$extra</strong>.', 'extra' => 'reviewResultList');
+$lang->story->action->passreviewed          = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Pass</strong>.');
+$lang->story->action->clarifyreviewed       = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Clarify</strong>. Please re-initiate the review after changing.');
 $lang->story->action->rejectreviewed        = array('main' => '$date, geprüft von <strong>$actor</strong>. Das Ergebnis ist <strong>$extra</strong>, Der Grund ist <strong>$reason</strong>.', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->closed                = array('main' => '$date, geschlossen von <strong>$actor</strong>. Der Grund ist <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
 $lang->story->action->reviewclosed          = array('main' => '$date, closed by <strong>System</strong>. The reasion is <strong>Review Failed</strong>.');

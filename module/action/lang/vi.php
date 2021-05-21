@@ -256,6 +256,9 @@ $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
 $lang->action->label->run                   = 'run';
 $lang->action->label->estimated             = 'estimated';
+$lang->action->label->reviewclosed          = 'Review Failed';
+$lang->action->label->passreviewed          = 'Pass';
+$lang->action->label->clarifyreviewed       = 'Clarify';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -330,6 +333,8 @@ $lang->action->dynamicAction->execution['managed']   = 'Quản lý ' . $lang->ex
 $lang->action->dynamicAction->execution['undeleted'] = 'Phục hổi ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['hidden']    = 'Ẩn ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = 'Nhập nhiệm vụ';
+
+$lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
 
 $lang->action->dynamicAction->task['opened']              = 'Tạo nhiệm vụ';
 $lang->action->dynamicAction->task['edited']              = 'Sửa nhiệm vụ';
