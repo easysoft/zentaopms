@@ -124,11 +124,34 @@ class custom extends control
 
                     foreach($storyList as $storyID => $reviewerList)
                     {
-                        $passCount = 0;
-                        foreach($reviewerList as $reviewer) $passCount += $reviewer->result == 'pass' ? 1 : 0;
-                        if($passCount >= floor(count($reviewerList) / 2) + 1)
+                        $reviewedBy = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('reviewedBy');
+                        $reviewedBy = explode(',', trim($reviewedBy, ','));
+                        $reviewers = array();
+                        foreach($reviewerList as $reviewer) $reviewers[] = $reviewer->reviewer;
+
+                        if(!array_diff($reviewers, $reviewedBy))
                         {
-                            $this->dao->update(TABLE_STORY)->set('status')->eq('active')->where('id')->eq($storyID)->exec();
+                            $passCount   = 0;
+                            $rejectCount = 0;
+                            foreach($reviewerList as $reviewer)
+                            {
+                                $passCount   += $reviewer->result == 'pass'   ? 1 : 0;
+                                $rejectCount += $reviewer->result == 'reject' ? 1 : 0;
+                            }
+                            if($passCount >= floor(count($reviewerList) / 2) + 1)
+                            {
+                                $this->dao->update(TABLE_STORY)->set('status')->eq('active')->where('id')->eq($storyID)->exec();
+                            }
+                            if($rejectCount >= floor(count($reviewerList) / 2) + 1)
+                            {
+                                $story = new stdclass();
+                                $story->closedBy   = $this->app->user->account;
+                                $story->closedDate = helper::now();
+                                $story->assignedTo = 'closed';
+                                $story->status     = 'closed';
+                                $story->stage      = 'closed';
+                                $this->dao->update(TABLE_STORY)->data($story)->where('id')->eq($storyID)->exec();
+                            }
                         }
                     }
                 }

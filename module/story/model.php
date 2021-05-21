@@ -1185,9 +1185,9 @@ class storyModel extends model
         $reviewedBy = explode(',', trim($story->reviewedBy, ','));
         if(!array_diff(array_keys($reviewerList), $reviewedBy))
         {
-            $passCount    = 0;
-            $rejectCount  = 0;
-            $reviewRule   = $this->config->story->reviewRules;
+            $passCount   = 0;
+            $rejectCount = 0;
+            $reviewRule  = $this->config->story->reviewRules;
             foreach($reviewerList as $reviewer => $result)
             {
                 $passCount   = $result == 'pass'   ? $passCount   + 1 : $passCount;
