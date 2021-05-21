@@ -103,6 +103,7 @@ $lang->custom->story->fields['sourceList']       = 'Nguồn';
 $lang->custom->story->fields['reasonList']       = 'Lý do đóng';
 $lang->custom->story->fields['stageList']        = 'Giai đoạn';
 $lang->custom->story->fields['statusList']       = 'Tình trạng';
+$lang->custom->story->fields['reviewRules']      = 'Review Rules';
 $lang->custom->story->fields['reviewResultList'] = 'Duyệt kết quả';
 $lang->custom->story->fields['review']           = 'Duyệt nhu cầu';
 
