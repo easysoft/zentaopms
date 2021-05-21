@@ -136,3 +136,4 @@ $lang->upgrade->fromVersions['12_5_3']     = '12.5.3';
 $lang->upgrade->fromVersions['15_0_rc1']   = '15.0.rc1';
 $lang->upgrade->fromVersions['15_0_rc2']   = '15.0.rc2';
 $lang->upgrade->fromVersions['15_0_rc3']   = '15.0.rc3';
+$lang->upgrade->fromVersions['15_0']       = '15.0';

@@ -101,6 +101,8 @@ $lang->action->objectTypes['stakeholder'] = '干係人';
 $lang->action->objectTypes['budget']      = '費用估算';
 $lang->action->objectTypes['entry']       = '應用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
+$lang->action->objectTypes['team']        = '團隊';
+$lang->action->objectTypes['whitelist']   = '白名單';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -148,6 +150,7 @@ $lang->action->desc->diff3          = '將檔案名 %s 改為 %s 。' . "\n";
 $lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 關聯到版本 <strong>$extra</strong>';
 $lang->action->desc->resolved       = '$date, 由 <strong>$actor</strong> 解決。' . "\n";
 $lang->action->desc->managed        = '$date, 由 <strong>$actor</strong> 維護。' . "\n";
+$lang->action->desc->estimated      = '$date, 由 <strong>$actor</strong> 估算。' . "\n";
 
 /* 用來描述和父子任務相關的操作歷史記錄。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 創建子任務 <strong>$extra</strong>。' . "\n";
@@ -235,6 +238,8 @@ $lang->action->label->logout                = "退出登錄";
 $lang->action->label->deleteestimate        = "刪除了工時";
 $lang->action->label->linked2build          = "關聯了";
 $lang->action->label->linked2bug            = "關聯了";
+$lang->action->label->linked2testtask       = "關聯了";
+$lang->action->label->unlinkedfromtesttask  = "移除了";
 $lang->action->label->linkchildtask         = "關聯子任務";
 $lang->action->label->unlinkchildrentask    = "取消關聯子任務";
 $lang->action->label->linkparenttask        = "關聯到父任務";
@@ -242,6 +247,8 @@ $lang->action->label->unlinkparenttask      = "從父任務取消關聯";
 $lang->action->label->batchcreate           = "批量創建任務";
 $lang->action->label->createchildren        = "創建子任務";
 $lang->action->label->managed               = "維護";
+$lang->action->label->managedteam           = "維護了";
+$lang->action->label->managedwhitelist      = "維護了";
 $lang->action->label->deletechildrentask    = "刪除子任務";
 $lang->action->label->createchildrenstory   = "創建子需求";
 $lang->action->label->linkchildstory        = "關聯子需求";
@@ -251,6 +258,8 @@ $lang->action->label->unlinkparentstory     = "從父需求取消關聯";
 $lang->action->label->deletechildrenstory   = "刪除子需求";
 $lang->action->label->tracked               = '跟蹤了';
 $lang->action->label->hangup                = '掛起了';
+$lang->action->label->run                   = '執行了';
+$lang->action->label->estimated             = '估算了';
 
 /* 動態信息按照對象分組 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -293,22 +302,25 @@ $lang->action->dynamicAction->release['changestatus'] = '修改發佈狀態';
 $lang->action->dynamicAction->release['undeleted']    = '還原發佈';
 $lang->action->dynamicAction->release['hidden']       = '隱藏發佈';
 
-$lang->action->dynamicAction->story['opened']              = "創建{$lang->SRCommon}";
-$lang->action->dynamicAction->story['edited']              = "編輯{$lang->SRCommon}";
-$lang->action->dynamicAction->story['activated']           = "激活{$lang->SRCommon}";
-$lang->action->dynamicAction->story['reviewed']            = "評審{$lang->SRCommon}";
-$lang->action->dynamicAction->story['closed']              = "關閉{$lang->SRCommon}";
-$lang->action->dynamicAction->story['assigned']            = "指派{$lang->SRCommon}";
-$lang->action->dynamicAction->story['changed']             = "變更{$lang->SRCommon}";
-$lang->action->dynamicAction->story['linked2plan']         = "{$lang->SRCommon}關聯計劃";
-$lang->action->dynamicAction->story['unlinkedfromplan']    = "計劃移除{$lang->SRCommon}";
-$lang->action->dynamicAction->story['linked2release']      = "{$lang->SRCommon}關聯發佈";
-$lang->action->dynamicAction->story['unlinkedfromrelease'] = "發佈移除{$lang->SRCommon}";
-$lang->action->dynamicAction->story['linked2build']        = "{$lang->SRCommon}關聯版本";
-$lang->action->dynamicAction->story['unlinkedfrombuild']   = "版本移除{$lang->SRCommon}";
-$lang->action->dynamicAction->story['unlinkedfromproject'] = '移除項目';
-$lang->action->dynamicAction->story['undeleted']           = "還原{$lang->SRCommon}";
-$lang->action->dynamicAction->story['hidden']              = "隱藏{$lang->SRCommon}";
+$lang->action->dynamicAction->story['opened']                = "創建{$lang->SRCommon}";
+$lang->action->dynamicAction->story['edited']                = "編輯{$lang->SRCommon}";
+$lang->action->dynamicAction->story['activated']             = "激活{$lang->SRCommon}";
+$lang->action->dynamicAction->story['reviewed']              = "評審{$lang->SRCommon}";
+$lang->action->dynamicAction->story['closed']                = "關閉{$lang->SRCommon}";
+$lang->action->dynamicAction->story['assigned']              = "指派{$lang->SRCommon}";
+$lang->action->dynamicAction->story['changed']               = "變更{$lang->SRCommon}";
+$lang->action->dynamicAction->story['linked2plan']           = "{$lang->SRCommon}關聯計劃";
+$lang->action->dynamicAction->story['unlinkedfromplan']      = "計劃移除{$lang->SRCommon}";
+$lang->action->dynamicAction->story['linked2release']        = "{$lang->SRCommon}關聯發佈";
+$lang->action->dynamicAction->story['unlinkedfromrelease']   = "發佈移除{$lang->SRCommon}";
+$lang->action->dynamicAction->story['linked2build']          = "{$lang->SRCommon}關聯版本";
+$lang->action->dynamicAction->story['unlinkedfrombuild']     = "版本移除{$lang->SRCommon}";
+$lang->action->dynamicAction->story['unlinkedfromproject']   = '移除項目';
+$lang->action->dynamicAction->story['undeleted']             = "還原{$lang->SRCommon}";
+$lang->action->dynamicAction->story['hidden']                = "隱藏{$lang->SRCommon}";
+$lang->action->dynamicAction->story['linked2execution']      = "關聯$lang->SRCommon";
+$lang->action->dynamicAction->story['unlinkedfromexecution'] = "移除$lang->SRCommon";
+$lang->action->dynamicAction->story['estimated']             = "估算$lang->SRCommon";
 
 $lang->action->dynamicAction->execution['opened']    = '創建' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['edited']    = '編輯' . $lang->executionCommon;
@@ -352,8 +364,9 @@ $lang->action->dynamicAction->task['hidden']              = '隱藏任務';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN提交';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT提交';
 
-$lang->action->dynamicAction->build['opened'] = '創建版本';
-$lang->action->dynamicAction->build['edited'] = '編輯版本';
+$lang->action->dynamicAction->build['opened']  = '創建版本';
+$lang->action->dynamicAction->build['edited']  = '編輯版本';
+$lang->action->dynamicAction->build['deleted'] = '刪除版本';
 
 $lang->action->dynamicAction->bug['opened']              = '創建Bug';
 $lang->action->dynamicAction->bug['edited']              = '編輯Bug';
@@ -411,6 +424,7 @@ $lang->action->dynamicAction->caselib['hidden']    = '隱藏用例庫';
 
 $lang->action->dynamicAction->doclib['created'] = '創建文檔庫';
 $lang->action->dynamicAction->doclib['edited']  = '編輯文檔庫';
+$lang->action->dynamicAction->doclib['deleted'] = '刪除文檔庫';
 
 $lang->action->dynamicAction->doc['created']   = '創建文檔';
 $lang->action->dynamicAction->doc['edited']    = '編輯文檔';

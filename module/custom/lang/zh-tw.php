@@ -43,7 +43,7 @@ $lang->custom->browseStoryConcept   = "需求概念列表";
 $lang->custom->deleteStoryConcept   = "刪除需求概念";
 $lang->custom->URConcept            = "用需概念";
 $lang->custom->SRConcept            = "軟需概念";
-$lang->custom->reviewRule           = '評審規則';
+$lang->custom->reviewRule           = "評審規則";
 $lang->custom->switch               = "切換";
 $lang->custom->oneUnit              = "一個{$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "請先設置{$lang->hourCommon}轉換為%s的換算係數";
@@ -103,6 +103,7 @@ $lang->custom->story->fields['sourceList']       = '來源';
 $lang->custom->story->fields['reasonList']       = '關閉原因';
 $lang->custom->story->fields['stageList']        = '階段';
 $lang->custom->story->fields['statusList']       = '狀態';
+$lang->custom->story->fields['reviewRules']      = '評審規則';
 $lang->custom->story->fields['reviewResultList'] = '評審結果';
 $lang->custom->story->fields['review']           = '評審流程';
 

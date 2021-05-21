@@ -83,6 +83,7 @@ $lang->story->skipStory       = '需求：%s 為父需求，將不會被關閉�
 $lang->story->closedStory     = '需求：%s 已關閉，將不會被關閉。';
 $lang->story->batchToTaskTips = "此操作會創建與所選{$lang->SRCommon}同名的任務，並將{$lang->SRCommon}關聯到任務中，已關閉的需求不會轉為任務。";
 $lang->story->successToTask   = '批量轉任務成功';
+$lang->story->storyRound      = '第 %s 輪估算';
 
 $lang->story->common         = $lang->SRCommon;
 $lang->story->id             = '編號';
@@ -269,6 +270,7 @@ $lang->story->ignoreChangeStage     = "{$lang->SRCommon} %s 為草稿狀態或�
 $lang->story->cannotDeleteParent    = "不能刪除父{$lang->SRCommon}";
 $lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所屬產品會將其下的子{$lang->SRCommon}也移動到所選產品下。";
 $lang->story->changeTips            = '該軟件需求關聯的用戶需求有變更，點擊“不變更”忽略此條變更，點擊“變更”來進行該軟件需求的變更。';
+$lang->story->estimateMustBeNumber  = '估算值必須是數字';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = "該{$lang->SRCommon}所屬範圍";
@@ -393,7 +395,7 @@ $lang->story->convertToTask->fieldList['assignedTo'] = '指派給';
 
 $lang->story->categoryList['feature']     = '功能';
 $lang->story->categoryList['interface']   = '介面';
-$lang->story->categoryList['performance'] = '效能';
+$lang->story->categoryList['performance'] = '性能';
 $lang->story->categoryList['safe']        = '安全';
 $lang->story->categoryList['experience']  = '體驗';
 $lang->story->categoryList['improve']     = '改進';

@@ -103,6 +103,7 @@ $lang->custom->story->fields['sourceList']       = 'Source';
 $lang->custom->story->fields['reasonList']       = 'Close Reason';
 $lang->custom->story->fields['stageList']        = 'Phase';
 $lang->custom->story->fields['statusList']       = 'Status';
+$lang->custom->story->fields['reviewRules']      = 'Review Rules';
 $lang->custom->story->fields['reviewResultList'] = 'Review Result';
 $lang->custom->story->fields['review']           = 'Need Review';
 
