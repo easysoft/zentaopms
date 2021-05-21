@@ -123,6 +123,7 @@ $lang->story->closedDate     = 'Date Fermeture';
 $lang->story->closedReason   = 'Raison';
 $lang->story->rejectedReason = 'Raison du Rejet';
 $lang->story->reviewedBy     = 'Validée par';
+$lang->story->reviewers      = 'Reviewers';
 $lang->story->reviewedDate   = 'Date Validation';
 $lang->story->version        = 'Version';
 $lang->story->plan           = 'Intégrée Plans';
@@ -155,6 +156,8 @@ $lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 $lang->story->completeRate   = 'Completion Rate';
+$lang->story->reviewed       = 'Reviewed';
+$lang->story->toBeReviewed   = 'To Be Reviewed';
 
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "La story n'est pas associée au même product que la précédente !";

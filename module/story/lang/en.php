@@ -124,6 +124,7 @@ $lang->story->closedDate     = 'ClosedDate';
 $lang->story->closedReason   = 'Reason';
 $lang->story->rejectedReason = 'Reject Reason';
 $lang->story->reviewedBy     = 'ReviewedBy';
+$lang->story->reviewers      = 'Reviewers';
 $lang->story->reviewedDate   = 'ReviewedDate';
 $lang->story->version        = 'Version';
 $lang->story->plan           = 'Linked Plan';
@@ -156,6 +157,8 @@ $lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 $lang->story->completeRate   = 'Completion Rate';
+$lang->story->reviewed       = 'Reviewed';
+$lang->story->toBeReviewed   = 'To Be Reviewed';
 
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = 'This story is not linked to the same product as the last one is!';

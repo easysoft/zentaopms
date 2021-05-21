@@ -123,6 +123,7 @@ $lang->story->closedDate     = 'Ngày đóng';
 $lang->story->closedReason   = 'Lý do';
 $lang->story->rejectedReason = 'Lý do từ chối';
 $lang->story->reviewedBy     = 'Người duyệt';
+$lang->story->reviewers      = 'Reviewers';
 $lang->story->reviewedDate   = 'Ngày duyệt';
 $lang->story->version        = 'Phiên bản';
 $lang->story->plan           = 'Kế hoạch liên kết';
@@ -155,6 +156,8 @@ $lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 $lang->story->completeRate   = 'Completion Rate';
+$lang->story->reviewed       = 'Reviewed';
+$lang->story->toBeReviewed   = 'To Be Reviewed';
 
 $lang->story->ditto       = 'Như trên';
 $lang->story->dittoNotice = 'Câu chuyện này chưa liên kết tới cùng sản phẩm bởi bởi vì nó là cuối cùng!';

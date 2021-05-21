@@ -124,6 +124,7 @@ $lang->story->closedDate     = '关闭日期';
 $lang->story->closedReason   = '关闭原因';
 $lang->story->rejectedReason = '拒绝原因';
 $lang->story->reviewedBy     = '由谁评审';
+$lang->story->reviewers      = '评审人员';
 $lang->story->reviewedDate   = '评审时间';
 $lang->story->version        = '版本号';
 $lang->story->plan           = "所属计划";
@@ -156,6 +157,8 @@ $lang->story->noRequirement  = '无需求';
 $lang->story->one            = '一个';
 $lang->story->field          = '同步的字段';
 $lang->story->completeRate   = '完成率';
+$lang->story->reviewed       = '已评审';
+$lang->story->toBeReviewed   = '待评审';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->SRCommon}与上一{$lang->SRCommon}不属于同一产品！";

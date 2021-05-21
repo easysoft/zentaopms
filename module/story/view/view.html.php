@@ -370,8 +370,16 @@
                   <td><?php if($story->assignedTo) echo zget($users, $story->assignedTo) . $lang->at . $story->assignedDate;?></td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->story->reviewedBy;?></th>
-                  <td><?php $reviewedBy = explode(',', $story->reviewedBy); foreach($reviewedBy as $account) echo ' ' . zget($users, trim($account)); ?></td>
+                  <th><?php echo $lang->story->reviewers;?></th>
+                  <td>
+                    <?php
+                    $reviewedBy = explode(',', trim($story->reviewedBy, ','));
+                    foreach($reviewers as $reviewer)
+                    {
+                        echo in_array($reviewer, $reviewedBy) ? '<span style="color: #cbd0db" title="' . $lang->story->reviewed . '"> ' . zget($users, $reviewer) . '</span>' : '<span title="' . $lang->story->toBeReviewed .'"> ' . zget($users, $reviewer) . '</span>';
+                    }
+                    ?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->reviewedDate;?></th>

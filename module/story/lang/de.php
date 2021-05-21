@@ -123,6 +123,7 @@ $lang->story->closedDate     = 'Geschlossen am';
 $lang->story->closedReason   = 'Geschlossen weil';
 $lang->story->rejectedReason = 'Abgelehnt weil';
 $lang->story->reviewedBy     = 'Prüfer';
+$lang->story->reviewers      = 'Reviewers';
 $lang->story->reviewedDate   = 'Geprüft am';
 $lang->story->version        = 'Version';
 $lang->story->plan           = 'Plan';
@@ -155,6 +156,8 @@ $lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 $lang->story->completeRate   = 'Completion Rate';
+$lang->story->reviewed       = 'Reviewed';
+$lang->story->toBeReviewed   = 'To Be Reviewed';
 
 $lang->story->ditto       = 'Dito';
 $lang->story->dittoNotice = 'Die Story gehört nicht zum Projekt wie die vorherige!';

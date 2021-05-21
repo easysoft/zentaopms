@@ -900,6 +900,7 @@ class story extends control
         $modulePath   = $this->tree->getParents($story->module);
         $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
         $users        = $this->user->getPairs('noletter');
+        $reviewers    = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
 
         /* Set the menu. */
         $from = $this->app->openApp;
@@ -937,6 +938,7 @@ class story extends control
         $this->view->story       = $story;
         $this->view->track       = $this->story->getTrackByID($story->id);
         $this->view->users       = $users;
+        $this->view->reviewers   = array_keys($reviewers);
         $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
         $this->view->executions  = $this->execution->getPairs(0, 'all', 'nocode');
         $this->view->execution   = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();

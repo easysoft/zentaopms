@@ -123,6 +123,7 @@ $lang->story->closedDate     = '關閉日期';
 $lang->story->closedReason   = '關閉原因';
 $lang->story->rejectedReason = '拒絶原因';
 $lang->story->reviewedBy     = '由誰評審';
+$lang->story->reviewers      = '評審人員';
 $lang->story->reviewedDate   = '評審時間';
 $lang->story->version        = '版本號';
 $lang->story->plan           = "所屬計劃";
@@ -155,6 +156,8 @@ $lang->story->noRequirement  = '無需求';
 $lang->story->one            = '一個';
 $lang->story->field          = '同步的欄位';
 $lang->story->completeRate   = '完成率';
+$lang->story->reviewed       = '已評審';
+$lang->story->toBeReviewed   = '待評審';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "該{$lang->SRCommon}與上一{$lang->SRCommon}不屬於同一產品！";
