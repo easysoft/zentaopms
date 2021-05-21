@@ -1006,9 +1006,13 @@ class story extends control
             {
                 $result      = $this->post->result;
                 $reasonParam = $result == 'reject' ? ',' . $this->post->closedReason : '';
-                $storyStatus = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('status');
-                $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result) . $reasonParam);
-                if($storyStatus == 'closed') $actionID = $this->action->create('story', $storyID, 'ReviewClosed');
+                $story       = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+                $reviewers   = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
+                $reviewedBy  = explode(',', trim($story->reviewedBy, ','));
+                $actionID    = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result) . $reasonParam);
+                if($story->status == 'closed') $actionID = $this->action->create('story', $storyID, 'ReviewClosed');
+                if($story->status == 'active') $actionID = $this->action->create('story', $storyID, 'PassReviewed');
+                if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $actionID = $this->action->create('story', $storyID, 'ClarifyReviewed');
                 $this->action->logHistory($actionID, $changes);
             }
 
