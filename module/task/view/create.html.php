@@ -109,7 +109,7 @@
               <tbody>
                 <?php $i = 0;?>
                 <?php foreach($stories as $storyID => $storyTitle):?>
-                <?php if(empty($storyID) or !isset($testStoryIdList[$storyID])) continue;?>
+                <?php if(empty($storyID) or isset($testStoryIdList[$storyID])) continue;?>
                 <tr>
                   <td><?php echo html::select("testStory[]", array($storyID => $storyTitle), $storyID, "class='form-control chosen'");?></td>
                   <td><?php echo html::select("testPri[]", $lang->task->priList, $task->pri, "class='form-control chosen'");?></td>
