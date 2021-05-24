@@ -284,7 +284,7 @@ $lang->story->form->file      = "附件，如果該{$lang->SRCommon}有相關檔
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed              = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
 $lang->story->action->passreviewed          = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>確認通過</strong>。');
-$lang->story->action->clarifyreviewed       = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>有待明確</strong>，請變更後重新發起評審。');
+$lang->story->action->clarifyreviewed       = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>評審不通過</strong>，請變更後重新發起評審。');
 $lang->story->action->rejectreviewed        = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>，原因為 <strong>$reason</strong>。', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->reviewclosed          = array('main' => '$date, 由 <strong>系統</strong> 關閉，原因為 <strong>評審失敗</strong>。');

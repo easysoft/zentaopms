@@ -283,7 +283,7 @@ $lang->story->form->file     = 'Nếu bất kỳ tập tin mà liên kết tới
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed              = array('main' => '$date, ghi nhận bởi <strong>$actor</strong>. Kết quả là <strong>$extra</strong>.', 'extra' => 'reviewResultList');
 $lang->story->action->passreviewed          = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Pass</strong>.');
-$lang->story->action->clarifyreviewed       = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Clarify</strong>. Please re-initiate the review after changing.');
+$lang->story->action->clarifyreviewed       = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Review Failed</strong>. Please re-initiate the review after changing.');
 $lang->story->action->rejectreviewed        = array('main' => '$date, ghi nhận bởi <strong>$actor</strong>. Kết quả là <strong>$extra</strong>. Lý do là <strong>$reason</strong>', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->closed                = array('main' => '$date, được đóng bởi <strong>$actor</strong>. Lý do là <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
 $lang->story->action->reviewclosed          = array('main' => '$date, closed by <strong>System</strong>. The reasion is <strong>Review Failed</strong>.');
