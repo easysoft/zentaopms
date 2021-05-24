@@ -34,7 +34,7 @@
       <?php
       $appid            = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
       $productViewLink  = $this->createLink('product', 'browse', "productID={$testtask->product}");
-      $buildViewLink    = $this->createLink('build', 'view', "buildID={$testtask->execution}");
+      $buildViewLink    = $this->createLink('build', 'view', "buildID={$testtask->build}");
       $testtaskViewLink = $this->createLink('testtask', 'view', "testtaskID={$testtask->id}");
       ?>
       <tr class='text-center' <?php echo $appid?>>

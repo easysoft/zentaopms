@@ -200,7 +200,7 @@
 <?php js::set('zeroPri', $lang->null);?>
 <?php js::set('bugStageGroups', $bugInfo['bugStageGroups']);?>
 <?php js::set('bugHandleGroups', $bugInfo['bugHandleGroups']);?>
-<?php js::set('dateGroups', array_keys($bugInfo['bugHandleGroups']['generated']));?>
+<?php js::set('dateGroups', !empty($bugInfo['bugHandleGroups']) ? array_keys($bugInfo['bugHandleGroups']['generated']) : '');?>
 <script>
 var priList   = [];
 var stageList = [];
