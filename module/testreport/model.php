@@ -148,6 +148,7 @@ class testreportModel extends model
         $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = $stageGoups = $handleGroups = array();
 
         /* Init stageGroups. */
+        $isEmptyStage = true;
         foreach($this->lang->bug->priList as $priKey => $priValue)
         {
             $stageGroups[$priKey]['generated'] = 0;
@@ -156,6 +157,7 @@ class testreportModel extends model
         }
 
         /* Init handleGroups. */
+        $isEmptyHandle  = true;
         $beginTimeStamp = strtotime($begin);
         $endTimeStamp   = strtotime($end);
         for($i = $beginTimeStamp; $i <= $endTimeStamp; $i += 86400)
@@ -174,6 +176,8 @@ class testreportModel extends model
                 $resolvedDate = date('m-d', strtotime($bug->resolvedDate));
                 $stageGroups[$bug->pri]['resolved']      += 1;
                 $handleGroups['resolved'][$resolvedDate] += 1;
+                $isEmptyStage  = false;
+                $isEmptyHandle = false;
             }
         }
 
@@ -187,6 +191,8 @@ class testreportModel extends model
                 $foundBugs[$bug->id] = $bug;
                 $stageGroups[$bug->pri]['generated']    += 1;
                 $handleGroups['generated'][$openedDate] += 1;
+                $isEmptyStage  = false;
+                $isEmptyHandle = false;
 
                 if($bug->status == 'active' or $bug->resolvedDate > "$end 23:59:59")
                 {
@@ -228,8 +234,8 @@ class testreportModel extends model
         $bugInfo['countBugByTask']      = $byCaseNum;
         $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
-        $bugInfo['bugStageGroups']      = $stageGroups;
-        $bugInfo['bugHandleGroups']     = $handleGroups;
+        $bugInfo['bugStageGroups']      = $isEmptyStage ? array() : $stageGroups;
+        $bugInfo['bugHandleGroups']     = $isEmptyHandle ? array() : $handleGroups;
 
         $this->app->loadLang('bug');
         $users = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted');
