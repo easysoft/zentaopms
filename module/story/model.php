@@ -1185,24 +1185,7 @@ class storyModel extends model
         $reviewedBy = explode(',', trim($story->reviewedBy, ','));
         if(!array_diff(array_keys($reviewerList), $reviewedBy))
         {
-            $passCount   = 0;
-            $rejectCount = 0;
-            $reviewRule  = $this->config->story->reviewRules;
-            foreach($reviewerList as $reviewer => $result)
-            {
-                $passCount   = $result == 'pass'   ? $passCount   + 1 : $passCount;
-                $rejectCount = $result == 'reject' ? $rejectCount + 1 : $rejectCount;
-            }
-            if($reviewRule == 'allpass')
-            {
-                if($passCount   == count($reviewerList)) $story->status = 'active';
-                if($rejectCount == count($reviewerList)) $story->status = 'closed';
-            }
-            if($reviewRule == 'halfpass')
-            {
-                if($passCount   >= floor(count($reviewerList) / 2) + 1) $story->status = 'active';
-                if($rejectCount >= floor(count($reviewerList) / 2) + 1) $story->status = 'closed';
-            }
+            $story->status = $this->setStatusByReviewRules($reviewerList);
             if($story->status == 'closed')
             {
                 $story->closedBy   = $this->app->user->account;
@@ -1247,7 +1230,6 @@ class storyModel extends model
     function batchReview($storyIdList, $result, $reason)
     {
         $now     = helper::now();
-        $date    = helper::today();
         $actions = array();
         $this->loadModel('action');
 
@@ -1256,28 +1238,45 @@ class storyModel extends model
         {
             $oldStory = $oldStories[$storyID];
             if($oldStory->status != 'draft' and $oldStory->status != 'changed') continue;
+            $hasResult = $this->dao->select('result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->fetch('result');
+            if($hasResult) continue;
 
             $story = new stdClass();
-            $story->reviewedDate   = $date;
+            $story->reviewedDate   = $now;
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
-            $story->reviewedBy     = $this->app->user->account;
-            if($result == 'pass') $story->status = 'active';
-            if($reason == 'done') $story->stage = 'released';
-            if($result == 'reject')
+            $story->reviewedBy     = $oldStory->reviewedBy . ',' . $this->app->user->account;
+
+            $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
+
+            /* Update the story status by review rules. */
+            $reviewerList = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer', 'result');
+            $reviewedBy = explode(',', trim($story->reviewedBy, ','));
+            if(!array_diff(array_keys($reviewerList), $reviewedBy))
             {
-                $story->status     = 'closed';
-                $story->closedBy   = $this->app->user->account;
-                $story->closedDate = $now;
-                $story->assignedTo = closed;
-                $this->action->create('story', $storyID, 'Closed', '', ucfirst($reason));
+                $status = $this->setStatusByReviewRules($reviewerList);
+                $story->status = $status ? $status : $oldStory->status;
+                if($story->status == 'closed')
+                {
+                    $story->closedBy   = $this->app->user->account;
+                    $story->closedDate = $now;
+                    $story->assignedTo = 'closed';
+                    $story->stage      = 'closed';
+                    if($reason == 'done') $story->stage = 'released';
+                }
             }
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
             $this->setStage($storyID);
 
-            if($reason and strpos('done,postponed', $reason) !== false) $result = 'pass';
-            $actions[$storyID] = $this->action->create('story', $storyID, 'Reviewed', '', ucfirst($result));
+            $reasonParam = $result == 'reject' ? ',' . $reason : '';
+            $reviewers   = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchAll('reviewer');
+            $reviewedBy  = explode(',', trim($story->reviewedBy, ','));
+            $actions[$storyID] = $this->action->create('story', $storyID, 'Reviewed', '', ucfirst($result) . $reasonParam);
+
+            if($story->status == 'closed') $this->action->create('story', $storyID, 'ReviewClosed');
+            if($story->status == 'active') $this->action->create('story', $storyID, 'PassReviewed');
+            if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $this->action->create('story', $storyID, 'ClarifyReviewed');
         }
 
         return $actions;
@@ -4191,4 +4190,36 @@ class storyModel extends model
             $storyLang->report->charts['storysPerSource']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerSource']);
         }
     }
+
+    /**
+     * Set story status by review rules.
+     *
+     * @param  array  $reviewerList
+     * @access public
+     * @return string
+     */
+    public function setStatusByReviewRules($reviewerList)
+    {
+        $passCount   = 0;
+        $rejectCount = 0;
+        $reviewRule  = $this->config->story->reviewRules;
+        foreach($reviewerList as $reviewer => $reviewResult)
+        {
+            $passCount   = $reviewResult == 'pass'   ? $passCount   + 1 : $passCount;
+            $rejectCount = $reviewResult == 'reject' ? $rejectCount + 1 : $rejectCount;
+        }
+        if($reviewRule == 'allpass')
+        {
+            if($passCount   == count($reviewerList)) $status = 'active';
+            if($rejectCount == count($reviewerList)) $status = 'closed';
+        }
+        if($reviewRule == 'halfpass')
+        {
+            if($passCount   >= floor(count($reviewerList) / 2) + 1) $status = 'active';
+            if($rejectCount >= floor(count($reviewerList) / 2) + 1) $status = 'closed';
+        }
+
+        return $status;
+    }
+
 }
