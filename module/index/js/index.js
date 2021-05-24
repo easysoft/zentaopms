@@ -178,18 +178,6 @@
             }
         }
 
-        /* Set openApp cookie */
-        $.cookie('openApp', appCode, {expires: config.cookieLife, path: config.webRoot});
-
-        /* Highlight at main menu */
-        var $menuMainNav   = $('#menuMainNav,#menuMoreNav');
-        var $lastActiveNav = $menuMainNav.find('li.active');
-        if($lastActiveNav.data('app') !== appCode)
-        {
-            $lastActiveNav.removeClass('active');
-            $menuMainNav.find('li[data-app="' + appCode + '"]').addClass('active');
-        }
-
         /* Create pate app object and store it */
         var app = openedApps[appCode];
         if(app)
@@ -228,6 +216,18 @@
 
             /* If first show without url, then use the default url */
             if(!url) url = appsMap[appCode].url;
+        }
+
+        /* Set openApp cookie */
+        $.cookie('openApp', appCode, {expires: config.cookieLife, path: config.webRoot});
+
+        /* Highlight at main menu */
+        var $menuMainNav   = $('#menuMainNav,#menuMoreNav');
+        var $lastActiveNav = $menuMainNav.find('li.active');
+        if($lastActiveNav.data('app') !== appCode)
+        {
+            $lastActiveNav.removeClass('active');
+            $menuMainNav.find('li[data-app="' + appCode + '"]').addClass('active');
         }
 
         /* Show page app and update iframe source */
