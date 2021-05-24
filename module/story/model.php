@@ -1213,7 +1213,7 @@ class storyModel extends model
             }
         }
 
-        $this->dao->update(TABLE_STORY)->data($story)
+        $this->dao->update(TABLE_STORY)->data($story, 'closedReason')
             ->autoCheck()
             ->batchCheck($this->config->story->review->requiredFields, 'notempty')
             ->checkIF($this->post->result == 'reject', 'closedReason', 'notempty')
@@ -1233,6 +1233,7 @@ class storyModel extends model
         }
         if($this->post->result != 'reject') $this->setStage($storyID);
 
+        if(isset($story->closedReason)) unset($story->closedReason);
         return common::createChanges($oldStory, $story);
     }
 
