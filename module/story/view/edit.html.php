@@ -204,9 +204,9 @@
                 <th><?php echo $lang->story->assignedTo;?></th>
                 <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="form-control chosen"');?></td>
               </tr>
-              <?php if($story->status == 'draft' or $story->status == 'changed'):?>
+              <?php if($isShowReviewer):?>
               <tr>
-                <th><?php echo $lang->story->reviewedBy;?></th>
+                <th><?php echo $lang->story->reviewers;?></th>
                 <td><?php echo html::select('reviewer[]', $users, $reviewers, 'class="form-control chosen" multiple')?></td>
               </tr>
               <?php endif;?>
