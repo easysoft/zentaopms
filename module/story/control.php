@@ -607,25 +607,29 @@ class story extends control
         if(isset($stories[$storyID])) unset($stories[$storyID]);
 
         /* Get users. */
-        $users = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
+        $users = $this->user->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
 
         $isShowReviewer = true;
         $reviewerList   = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetchPairs('reviewer');
         $reviewedBy     = explode(',', trim($story->reviewedBy, ','));
         if(!array_diff($reviewerList, $reviewedBy)) $isShowReviewer = false;
 
+        $reviewedReviewer = array();
+        foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
+
         $this->story->replaceURLang($story->type);
 
-        $this->view->title          = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->position[]     = $this->lang->story->edit;
-        $this->view->story          = $story;
-        $this->view->stories        = $stories;
-        $this->view->users          = $users;
-        $this->view->product        = $product;
-        $this->view->products       = $myProducts + $othersProducts;
-        $this->view->branches       = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
-        $this->view->reviewers      = implode(',', $reviewerList);
-        $this->view->isShowReviewer = $isShowReviewer;
+        $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
+        $this->view->position[]       = $this->lang->story->edit;
+        $this->view->story            = $story;
+        $this->view->stories          = $stories;
+        $this->view->users            = $users;
+        $this->view->product          = $product;
+        $this->view->products         = $myProducts + $othersProducts;
+        $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
+        $this->view->reviewers        = implode(',', $reviewerList);
+        $this->view->reviewedReviewer = $reviewedReviewer;
+        $this->view->isShowReviewer   = $isShowReviewer;
         $this->display();
     }
 
