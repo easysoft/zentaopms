@@ -785,13 +785,17 @@ class storyModel extends model
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
 
-            /* Update story reviewer. */
             $_POST['reviewer'] = array_filter($_POST['reviewer']);
+            $oldReviewer = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchAll('reviewer');
+            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
+            $story->reviewers    = implode(',', $_POST['reviewer']);
+
+            /* Update story reviewer. */
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
-            $oldReviewerList = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer');
+            $existedReviewer = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer');
             foreach($_POST['reviewer'] as $reviewer)
             {
-                if(in_array($reviewer, $oldReviewerList)) continue;
+                if(in_array($reviewer, $existedReviewer)) continue;
 
                 $reviewData = new stdclass();
                 $reviewData->story    = $storyID;
