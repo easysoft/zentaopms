@@ -45,6 +45,10 @@ function loadList(type, id)
     {
         link = createLink('risk', 'ajaxGetUserRisks', param);
     }
+    else if(type == 'opportunity')
+    {
+        link = createLink('opportunity', 'ajaxGetUseropportunities', param);
+    }
     else if(type == 'testtask')
     {
         link = createLink('testtask', 'ajaxGetUserTestTasks', param);
@@ -58,7 +62,7 @@ function loadList(type, id)
         link = createLink('feedback', 'ajaxGetUserFeedback', param);
     }
 
-    if(type == 'bug' || type == 'task' || type == 'story' || type == 'issue' || type == 'risk' || type == 'testtask' || type == 'review' || type == 'feedback')
+    if(type == 'bug' || type == 'task' || type == 'story' || type == 'issue' || type == 'risk' || type == 'testtask' || type == 'review' || type == 'feedback' || type == 'opportunity')
     {
         $.get(link, function(data, status)
         {
