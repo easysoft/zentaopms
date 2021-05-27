@@ -41,6 +41,8 @@ class action extends control
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
         $this->session->set('docList',         $uri, 'doc');
+        $this->session->set('opportunityList', $uri, 'project');
+        $this->session->set('riskList',        $uri, 'project');
 
         /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
