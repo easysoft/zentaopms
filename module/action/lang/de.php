@@ -100,6 +100,7 @@ $lang->action->objectTypes['job']         = 'Job';
 $lang->action->objectTypes['team']        = 'Team';
 $lang->action->objectTypes['whitelist']   = 'Whitelist';
 $lang->action->objectTypes['opportunity'] = 'Opportunity';
+$lang->action->objectTypes['trainplan']   = 'Trainplan';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
