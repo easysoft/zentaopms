@@ -40,6 +40,7 @@ class gitlab
         $param->path      = ltrim($path, '/');
         $param->ref       = $revision;
         $param->recursive = 0;
+        if(!empty($this->branch)) $param->ref = $this->branch;
 
         $list = $this->fetch($api, $param);
         if(empty($list)) return array();
@@ -257,6 +258,7 @@ class gitlab
 
         $api     = "compare";
         $params  = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => 1);
+        if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
         $results = $this->fetch($api, $params);
         foreach($results->diffs as $key => $diff)
         {
@@ -288,6 +290,7 @@ class gitlab
     public function cat($entry, $revision = 'HEAD')
     {
         if(!scm::checkRevision($revision)) return false;
+        if($revision == 'HEAD' and $this->branch) $revision = $this->branch;
         $file = $this->files($entry, $revision);
         return base64_decode($file->content);
     }
@@ -309,6 +312,7 @@ class gitlab
         $info->path     = $entry;
         $info->revision = $revision;
         $info->root     = '';
+        if($revision == 'HEAD' and $this->branch) $info->revision = $this->branch;
 
         if($entry)
         {
@@ -494,13 +498,13 @@ class gitlab
         if(!scm::checkRevision($version)) return array();
         $api = "commits";
 
-        $count = 500;
+        $count  = 500;
         $params = array();
         $params['ref_name'] = $branch;
         $params['per_page'] = $count;
         $params['all']      = 1;
 
-        if($version)
+        if($version and $version != 'HEAD')
         {
             $lastCommit = $this->getSingleCommit($version);
             if(!isset($lastCommit->committed_date)) return array('commits' => array(), 'files' => array());

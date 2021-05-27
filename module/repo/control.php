@@ -338,6 +338,7 @@ class repo extends control
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
+        if($branchID) $this->repo->setRepoBranch($branchID);
 
         /* Get path and refresh. */
         if($this->get->repoPath) $path = $this->get->repoPath;
@@ -427,7 +428,7 @@ class repo extends control
         $revisions = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
 
         /* Synchronous commit only in root path. */
-        if(strpos($repo->SCM, 'Git') != false and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
+        if(strpos($repo->SCM, 'Git') !== false and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
 
         /* Set committers. */
         $commiters = $this->loadModel('user')->getCommiters();
@@ -911,7 +912,7 @@ class repo extends control
 
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
         $logs     = array();
-        $revision = $version == 1 ? 'HEAD' : (strpos($repo->SCM, 'Git') !== false ? $latestInDB->commit : $latestInDB->revision);
+        $revision = $version == 1 ? 'HEAD' : ($repo->SCM == 'Git' ? $latestInDB->commit : $latestInDB->revision);
         if($type == 'batch')
         {
             $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
@@ -961,7 +962,7 @@ class repo extends control
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) die();
-        if(strpos($repo->SCM, 'Git') != false) die('finish');
+        if(strpos($repo->SCM, 'Git') !== false) die('finish');
         if($branch) $branch = base64_decode($branch);
 
         $this->scm->setEngine($repo);
@@ -980,6 +981,7 @@ class repo extends control
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
         $logs     = array();
         $revision = $version == 1 ? 'HEAD' : $latestInDB->commit;
+        if($repo->SCM == 'Gitlab' and $version > 1) $revision = $latestInDB->revision;
 
         $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branch);
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branch);
