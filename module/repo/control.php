@@ -338,6 +338,8 @@ class repo extends control
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
+
+        if(empty($branchID) and $this->cookie->repoBranch) $branchID = $this->cookie->repoBranch;
         if($branchID) $this->repo->setRepoBranch($branchID);
 
         /* Get path and refresh. */

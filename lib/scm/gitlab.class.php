@@ -560,19 +560,23 @@ class gitlab
         $param->path     = urldecode($path);
         $param->ref_name = $this->branch;
 
-        if($fromRevision) $fromRevision = $this->getSingleCommit($fromRevision);
-        if($toRevision)   $toRevision   = $this->getSingleCommit($toRevision);
+        $fromRevision = ($fromRevision and $fromRevision != 'HEAD') ? $this->getSingleCommit($fromRevision) : '';
+        $toRevision   = ($toRevision and $toRevision != 'HEAD') ? $this->getSingleCommit($toRevision) : '';
 
-        if(!$fromRevision) $since = '';
-        if(!$toRevision)   $until = '';
+        $since = '';
+        $until = '';
         if($fromRevision and $toRevision)
         {
             $since = min($fromRevision->committed_date, $toRevision->committed_date);
             $until = max($fromRevision->committed_date, $toRevision->committed_date);
         }
+        elseif($fromRevision)
+        {
+            $since = $fromRevision->committed_date;
+        }
 
-        $param->since = $since;
-        $param->until = $until;
+        if($since) $param->since = $since;
+        if($until) $param->until = $until;
 
         return $this->fetch($api, $param);
     }

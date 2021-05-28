@@ -15,39 +15,39 @@ class svnModel extends model
 {
     /**
      * The svn binary client.
-     * 
-     * @var int   
+     *
+     * @var int
      * @access public
      */
     public $client;
 
     /**
      * Repos.
-     * 
-     * @var array 
+     *
+     * @var array
      * @access public
      */
-    public $repos = array(); 
+    public $repos = array();
 
     /**
      * The root path of a repo
-     * 
+     *
      * @var string
      * @access public
      */
     public $repoRoot = '';
 
     /**
-     * Users 
-     * 
-     * @var array 
+     * Users
+     *
+     * @var array
      * @access public
      */
     public $users = array();
 
     /**
      * Construct function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -59,8 +59,8 @@ class svnModel extends model
     }
 
     /**
-     * Run. 
-     * 
+     * Run.
+     *
      * @access public
      * @return void
      */
@@ -134,7 +134,7 @@ class svnModel extends model
             return false;
         }
 
-        $version = $lastInDB->commit;
+        $version = (int)$lastInDB->commit + 1;
         $logs    = $this->repo->getUnsyncCommits($repo);
 
         /* Update code commit history. */
@@ -184,7 +184,7 @@ class svnModel extends model
 
     /**
      * Set the repos.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -212,7 +212,7 @@ class svnModel extends model
 
     /**
      * Get repos.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -227,8 +227,8 @@ class svnModel extends model
 
     /**
      * Set repo.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
      * @return bool
      */
@@ -243,8 +243,8 @@ class svnModel extends model
 
     /**
      * Set the svn binary client of a repo.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
      * @return bool
      */
@@ -257,7 +257,7 @@ class svnModel extends model
             $version = `$cmd`;
             if(version_compare($version, '1.6.0', '>'))
             {
-                $this->client .= ' --trust-server-cert'; 
+                $this->client .= ' --trust-server-cert';
             }
         }
         if(isset($repo->account)) $this->client .= " --username $repo->account --password $repo->password --no-auth-cache";
@@ -266,10 +266,10 @@ class svnModel extends model
 
     /**
      * set the root path of a repo.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
-     * @return void 
+     * @return void
      */
     public function setRepoRoot($repo)
     {
@@ -295,9 +295,9 @@ class svnModel extends model
 
     /**
      * Get repo logs.
-     * 
-     * @param  object  $repo 
-     * @param  int     $fromRevision 
+     *
+     * @param  object  $repo
+     * @param  int     $fromRevision
      * @access public
      * @return array
      */
@@ -325,9 +325,9 @@ class svnModel extends model
 
     /**
      * Diff a url.
-     * 
-     * @param  string $url 
-     * @param  int    $revision 
+     *
+     * @param  string $url
+     * @param  int    $revision
      * @access public
      * @return string|bool
      */
@@ -356,9 +356,9 @@ class svnModel extends model
 
     /**
      * Cat a url.
-     * 
-     * @param  string $url 
-     * @param  int    $revision 
+     *
+     * @param  string $url
+     * @param  int    $revision
      * @access public
      * @return string|bool
      */
@@ -386,8 +386,8 @@ class svnModel extends model
 
     /**
      * Get repo by url.
-     * 
-     * @param  string    $url 
+     *
+     * @param  string    $url
      * @access public
      * @return object|bool
      */
@@ -403,8 +403,8 @@ class svnModel extends model
 
     /**
      * Pring log.
-     * 
-     * @param  sting    $log 
+     *
+     * @param  sting    $log
      * @access public
      * @return void
      */

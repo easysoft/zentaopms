@@ -145,7 +145,7 @@ class gitModel extends model
                 continue;
             }
 
-            $version = $lastInDB->commit;
+            $version = (int)$lastInDB->commit + 1;
             $logs    = $this->repo->getUnsyncCommits($repo);
             $objects = array();
             if(!empty($logs))
