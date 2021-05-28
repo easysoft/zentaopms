@@ -265,6 +265,7 @@ $lang->action->label->estimated             = 'estimated';
 $lang->action->label->reviewclosed          = 'Review Failed';
 $lang->action->label->passreviewed          = 'Pass';
 $lang->action->label->clarifyreviewed       = 'Clarify';
+$lang->action->label->commitsummary         = 'Commit Summary';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
