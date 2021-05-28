@@ -104,6 +104,7 @@ $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['team']        = 'Team';
 $lang->action->objectTypes['whitelist']   = 'Whitelist';
 $lang->action->objectTypes['opportunity'] = 'Opportunity';
+$lang->action->objectTypes['trainplan']   = 'Trainplan';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
