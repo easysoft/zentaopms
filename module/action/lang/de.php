@@ -481,6 +481,8 @@ $lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
 $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
+$lang->action->label->opportunity = 'Opportunity|opportunity|view|userID=%s';
+$lang->action->label->trainplan   = 'Trainplan|trainplan|view|userID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
