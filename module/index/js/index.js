@@ -133,6 +133,7 @@
             if(['team'].includes(methodLowerCase)) return 'system';
         }
         if(moduleName === 'company') if(methodLowerCase == 'browse') return 'admin';
+        if(moduleName === 'opportunity' || moduleName === 'risk' || moduleName == 'trainplan') if(methodLowerCase == 'view') return 'project';
         if(moduleName === 'tree')
         {
             if(methodLowerCase === 'browse')

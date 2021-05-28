@@ -104,6 +104,7 @@ $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['team']        = '团队';
 $lang->action->objectTypes['whitelist']   = '白名单';
 $lang->action->objectTypes['opportunity'] = '机会';
+$lang->action->objectTypes['trainplan']   = '培训计划';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -264,6 +265,7 @@ $lang->action->label->estimated             = '估算了';
 $lang->action->label->reviewclosed          = '评审失败';
 $lang->action->label->passreviewed          = '确认通过';
 $lang->action->label->clarifyreviewed       = '有待明确';
+$lang->action->label->commitsummary         = '提交培训总结';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -484,6 +486,8 @@ $lang->action->label->risk        = '风险|risk|view|riskID=%s';
 $lang->action->label->issue       = '问题|issue|view|issueID=%s';
 $lang->action->label->design      = '设计|design|view|designID=%s';
 $lang->action->label->stakeholder = '干系人|stakeholder|view|userID=%s';
+$lang->action->label->opportunity = '机会|opportunity|view|userID=%s';
+$lang->action->label->trainplan   = '培训计划|trainplan|view|userID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

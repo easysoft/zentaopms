@@ -31,6 +31,7 @@ $config->action->objectNameFields['budget']      = 'name';
 $config->action->objectNameFields['job']         = 'name';
 $config->action->objectNameFields['team']        = 'name';
 $config->action->objectNameFields['opportunity'] = 'name';
+$config->action->objectNameFields['trainplan']   = 'name';
 
 $config->action->commonImgSize = 870;
 
@@ -44,4 +45,4 @@ $config->action->majorList['program']   = array('opened', 'edited');
 $config->action->majorList['project']   = array('opened', 'edited');
 $config->action->majorList['execution'] = array('opened', 'edited');
 
-$config->action->needGetProjectType = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity';
+$config->action->needGetProjectType = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity,trainplan';

@@ -180,12 +180,16 @@ class company extends control
         $this->session->set('releaseList',     $uri, 'product');
         $this->session->set('storyList',       $uri, 'product');
         $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('riskList',        $uri, 'project');
+        $this->session->set('opportunityList', $uri, 'project');
+        $this->session->set('trainplanList',   $uri, 'project');
         $this->session->set('executionList',   $uri, 'execution');
         $this->session->set('taskList',        $uri, 'execution');
         $this->session->set('buildList',       $uri, 'execution');
         $this->session->set('bugList',         $uri, 'qa');
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
+        $this->session->set('effortList',      $uri, 'my');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);

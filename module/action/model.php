@@ -203,7 +203,7 @@ class actionModel extends model
         }
 
         /* Only process these object types. */
-        if(strpos(',story,productplan,release,task,build,bug,case,testtask,testreport,doc,doclib,issue,risk,opportunity,team,', ",{$objectType},") !== false)
+        if(strpos(',story,productplan,release,task,build,bug,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,team,', ",{$objectType},") !== false)
         {
             if(!isset($this->config->objectTables[$objectType])) return $emptyRecord;
 

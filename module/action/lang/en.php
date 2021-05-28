@@ -104,6 +104,7 @@ $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['team']        = 'Team';
 $lang->action->objectTypes['whitelist']   = 'Whitelist';
 $lang->action->objectTypes['opportunity'] = 'Opportunity';
+$lang->action->objectTypes['trainplan']   = 'Trainplan';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -264,6 +265,7 @@ $lang->action->label->estimated             = 'estimated';
 $lang->action->label->reviewclosed          = 'Review Failed';
 $lang->action->label->passreviewed          = 'Pass';
 $lang->action->label->clarifyreviewed       = 'Clarify';
+$lang->action->label->commitsummary         = 'Commit Summary';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -484,6 +486,8 @@ $lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
 $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
+$lang->action->label->opportunity = 'Opportunity|opportunity|view|userID=%s';
+$lang->action->label->trainplan   = 'Trainplan|trainplan|view|userID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
