@@ -339,9 +339,6 @@ class repo extends control
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
 
-        if(empty($branchID) and $this->cookie->repoBranch) $branchID = $this->cookie->repoBranch;
-        if($branchID) $this->repo->setRepoBranch($branchID);
-
         /* Get path and refresh. */
         if($this->get->repoPath) $path = $this->get->repoPath;
         if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;
@@ -358,7 +355,20 @@ class repo extends control
         $repo = $this->repo->getRepoByID($repoID);
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID"));
 
-        $branches = $this->repo->getBranches($repo);
+        /* Set branch for git. */
+        $branches = array();
+        if(strpos($repo->SCM, 'Git') !== false)
+        {
+            $branches = $this->repo->getBranches($repo);
+
+            if(empty($branchID) and $this->cookie->repoBranch) $branchID = $this->cookie->repoBranch;
+            if($branchID) $this->repo->setRepoBranch($branchID);
+            if(!isset($branches[$branchID]))
+            {
+                $branchID = key($branches);
+                $this->repo->setRepoBranch($branchID);
+            }
+        }
 
         /* Decrypt path and get cacheFile. */
         $path      = $this->repo->decodePath($path);
@@ -445,7 +455,7 @@ class repo extends control
         $this->view->infos     = $infos;
         $this->view->repoID    = $repoID;
         $this->view->branches  = $branches;
-        $this->view->branchID  = $branchID ? $branchID : key($branches);
+        $this->view->branchID  = $branchID;
         $this->view->objectID  = $objectID;
         $this->view->pager     = $pager;
         $this->view->path      = urldecode($path);
@@ -964,7 +974,7 @@ class repo extends control
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) die();
-        if(strpos($repo->SCM, 'Git') !== false) die('finish');
+        if(strpos($repo->SCM, 'Git') === false) die('finish');
         if($branch) $branch = base64_decode($branch);
 
         $this->scm->setEngine($repo);
