@@ -168,6 +168,7 @@ class projectModel extends model
         if(!$project) return false;
 
         if($project->end == '0000-00-00') $project->end = '';
+        $project = $this->loadModel('file')->replaceImgURL($project, 'desc');
         return $project;
     }
 
