@@ -1498,7 +1498,7 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->fetchPairs('account', 'realname');
 
-        return array('') + $members;
+        return array('' => '') + $members;
     }
 
     /**
