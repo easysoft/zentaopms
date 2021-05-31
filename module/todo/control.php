@@ -377,7 +377,8 @@ class todo extends control
 
         $this->loadModel('user');
 
-        $projects = $this->loadModel('project')->getPairsByModel('all');
+        $model = $todo->type == 'opportunity' ? 'waterfall' : 'all';
+        $projects = $this->loadModel('project')->getPairsByModel($model);
         if(!isset($this->session->project)) $this->session->set('project', key($projects));
 
         $this->view->title           = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;

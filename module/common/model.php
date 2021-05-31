@@ -1408,7 +1408,7 @@ EOD;
                 $diff = '';
                 if(substr_count($value, "\n") > 1     or
                     substr_count($old->$key, "\n") > 1 or
-                    strpos('name,title,desc,spec,steps,content,digest,verify,report', strtolower($key)) !== false)
+                    strpos('name,title,desc,spec,steps,content,digest,verify,report,analysis,prevention,resolution', strtolower($key)) !== false)
                 {
                     $diff = commonModel::diff($old->$key, $value);
                 }
