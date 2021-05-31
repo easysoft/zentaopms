@@ -888,6 +888,7 @@ class bug extends control
         $this->view->product          = $product;
         $this->view->productName      = $this->products[$productID];
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
+        $this->view->projects         = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->executions       = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
