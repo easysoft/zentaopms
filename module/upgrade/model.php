@@ -673,6 +673,8 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_0');
             $this->execSQL($this->getUpgradeFile('15.0'));
             $this->updateProjectLifeTime();
+            $this->adjustBugOfProject();
+            $this->processBuildTable();
             $this->appendExec('15_0');
         }
 
@@ -4798,82 +4800,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Process sprint concept.
-     *
-     * @access public
-     * @return bool
-     */
-    public function processSprintConcept()
-    {
-        $productProject = $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('module')->eq('custom')
-            ->andWhere('`key`')->eq('productProject')
-            ->fetch();
-
-        $newValue = substr($productProject->value, 2);
-        $this->dao->update(TABLE_CONFIG)
-            ->set('`value`')->eq($newValue)
-            ->set('`key`')->eq('sprintConcept')
-            ->where('id')->eq($productProject->id)
-            ->exec();
-
-        return true;
-    }
-
-    /**
-     * Adjust budget units and values.
-     *
-     * @access public
-     * @return bool
-     */
-    public function adjustBudget()
-    {
-        $budgets = $this->dao->select('id,budget,budgetUnit')->from(TABLE_PROJECT)
-            ->where('type')->in('project,program')
-            ->fetchAll('id');
-
-        foreach($budgets as $id => $budget)
-        {
-            $data = array();
-            if($budget->budgetUnit == 'yuan')
-            {
-                $data['budget']     = number_format($budget->budget / 10000, 2);
-                $data['budgetUnit'] = 'wanyuan';
-            }
-
-            if($data) $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($id)->exec();
-        }
-
-        return true;
-    }
-
-    /**
-     * Adjust budget units and values.
-     *
-     * @access public
-     * @return bool
-     */
-    public function adjustBudgetUnit()
-    {
-        $budgets = $this->dao->select('id,budget,budgetUnit')->from(TABLE_PROJECT)
-            ->where('type')->in('project,program')
-            ->fetchAll('id');
-
-        foreach($budgets as $id => $budget)
-        {
-            $data = array();
-            $data['budgetUnit'] = 'CNY';
-            $data['budget']     = str_replace(',', '', $budget->budget);
-            if($budget->budgetUnit == 'wanyuan') $data['budget']     = (float)$data['budget'] * 10000;
-            if($budget->budgetUnit == 'dollar')  $data['budgetUnit'] = 'USD';
-
-            if($data) $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($id)->exec();
-        }
-
-        return true;
-    }
-
-    /**
      * Adjust the project field of the zt_bug table.
      *
      * @access public
@@ -4881,15 +4807,14 @@ class upgradeModel extends model
      */
     public function adjustBugOfProject()
     {
-        $bugs       = $this->dao->select('id,execution')->from(TABLE_BUG)->fetchAll('id');
-        $executions = $this->dao->select('id,project')->from(TABLE_EXECUTION)->fetchAll('id');
+        if($this->config->systemMode != 'new') return true;
 
-        foreach($bugs as $id => $bug)
+        $bugs       = $this->dao->select('id,execution')->from(TABLE_BUG)->where('execution')->ne('0')->andWhere('project')->eq(0)->fetchPairs('id', 'execution');
+        $executions = $this->dao->select('id,project')->from(TABLE_EXECUTION)->where('id')->in(array_unique(array_values($bugs)))->fetchPairs('id', 'project');
+
+        foreach($bugs as $id => $executionID)
         {
-            if($bug->execution == 0) continue;
-            $data = array();
-            $data['project'] = $executions[$bug->execution]->project;
-            if($data) $this->dao->update(TABLE_BUG)->data($data)->where('id')->eq($id)->exec();
+            if(isset($executions[$executionID])) $this->dao->update(TABLE_BUG)->set('project')->eq($executions[$executionID])->where('id')->eq($id)->exec();
         }
 
         return true;
