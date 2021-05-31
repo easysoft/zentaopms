@@ -101,6 +101,7 @@ $lang->action->objectTypes['team']        = 'Team';
 $lang->action->objectTypes['whitelist']   = 'Whitelist';
 $lang->action->objectTypes['opportunity'] = 'Opportunity';
 $lang->action->objectTypes['trainplan']   = 'Trainplan';
+$lang->action->objectTypes['gapanalysis'] = 'Gap Analysis';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -485,6 +486,7 @@ $lang->action->label->design      = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
 $lang->action->label->opportunity = 'Opportunity|opportunity|view|opportunityID=%s';
 $lang->action->label->trainplan   = 'Trainplan|trainplan|view|trainplanID=%s';
+$lang->action->label->gapanalysis = 'Gap Analysis|gapanalysis|view|gapanalysisID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
