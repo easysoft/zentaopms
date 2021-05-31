@@ -3,6 +3,15 @@ $(function()
     $('#needNotReview').on('change', function()
     {
         $('#reviewer').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
+        if($(this).is(':checked'))
+        {
+            $('#reviewerTd').removeClass('required');
+        }
+        else
+        {
+            $('#reviewerTd').addClass('required');
+        }
+
         getStatus('create', "product=" + $('#product').val() + ",execution=" + executionID + ",needNotReview=" + ($(this).prop('checked') ? 1 : 0));
     });
     $('#needNotReview').change();
