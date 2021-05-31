@@ -498,7 +498,7 @@ class gitlab
         if(!scm::checkRevision($version)) return array();
         $api = "commits";
 
-        $count  = 500;
+        if(empty($count)) $count = 100;
         $params = array();
         $params['ref_name'] = $branch;
         $params['per_page'] = $count;
