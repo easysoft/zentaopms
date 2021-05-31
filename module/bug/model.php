@@ -627,11 +627,15 @@ class bugModel extends model
             ->checkIF($bug->resolvedBy, 'resolution', 'notempty')
             ->checkIF($bug->closedBy,   'resolution', 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
+            ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
 
         if(!dao::isError())
         {
+            /* Link bug to build and release. */
+            if($bug->resolution == 'fixed' and !empty($bug->resolvedBuild))$this->linkBugToBuild($bugID, $bug->resolvedBuild);
+
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             return common::createChanges($oldBug, $bug);
