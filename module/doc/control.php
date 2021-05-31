@@ -896,7 +896,7 @@ class doc extends control
 
         if(!$libID) $libID = key($libs);
 
-        $openApp = $this->app->openApp;
+        $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
         if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
 
         /* Set Custom. */
