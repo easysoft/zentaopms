@@ -813,6 +813,10 @@ class baseJS
             return json_encode($output);
         }
 
+        /* Convert ' to \'. */
+        $message = str_replace("\\'", "'", $message);
+        $message = str_replace("'", "\\'", $message);
+
         return self::start($full) . "alert('" . $message . "')" . self::end() . self::resetForm();
     }
 
