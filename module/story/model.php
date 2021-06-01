@@ -2470,7 +2470,7 @@ class storyModel extends model
                 ->fi()
                 ->beginIF($execution->type != 'project')
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
-                ->beginIF($this->session->executionStoryBrowseType == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF(strpos('changed|closed', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->fi()
                 ->beginIF($this->session->storyBrowseType == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF(!empty($branchParam))->andWhere('t2.branch')->eq($branchParam)->fi()
