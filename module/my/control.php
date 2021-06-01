@@ -742,6 +742,7 @@ class my extends control
         if(!empty($_POST))
         {
             $_POST['account'] = $this->app->user->account;
+            $_POST['groups']  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
             $this->user->update($this->app->user->id);
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('my', 'profile'), 'parent'));
