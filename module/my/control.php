@@ -181,11 +181,7 @@ class my extends control
     public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json')
-        {
-            $this->session->set('storyList', $this->app->getURI(true), 'product');
-            $this->session->set('storyList', $this->app->getURI(true), 'my');
-        }
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -746,6 +742,7 @@ class my extends control
         if(!empty($_POST))
         {
             $_POST['account'] = $this->app->user->account;
+            $_POST['groups']  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
             $this->user->update($this->app->user->id);
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('my', 'profile'), 'parent'));

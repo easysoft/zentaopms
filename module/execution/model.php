@@ -295,6 +295,17 @@ class executionModel extends model
 
             /* Determine whether to add a sprint or a stage according to the model of the execution. */
             $project = $this->loadModel('project')->getByID($_POST['project']);
+            if($_POST['begin'] < $project->begin and $this->config->systemMode == 'new')
+            {
+                dao::$errors['begin'] = sprintf($this->lang->execution->errorBegin, $project->begin);
+                return false;
+            }
+
+            if($_POST['end'] > $project->end and $this->config->systemMode == 'new')
+            {
+                dao::$errors['end'] = sprintf($this->lang->execution->errorEnd, $project->end);
+                return false;
+            }
             $type    = zget($this->config->execution->modelList, $project->model, 'sprint');
 
             $this->config->execution->create->requiredFields .= ',project';
@@ -453,6 +464,18 @@ class executionModel extends model
             ->remove('products, branch, uid, plans')
             ->get();
 
+        $project = $this->dao->select('begin, end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->project)->fetch();
+        if($execution->begin < $project->begin and $this->config->systemMode == 'new')
+        {
+            dao::$errors['begin'] = sprintf($this->lang->execution->errorBegin, $project->begin);
+            return false;
+        }
+
+        if($execution->end > $project->end and $this->config->systemMode == 'new')
+        {
+            dao::$errors['end'] = sprintf($this->lang->execution->errorEnd, $project->end);
+            return false;
+        }
         /* Child stage inherits parent stage permissions. */
         if(!isset($execution->acl)) $execution->acl = $oldExecution->acl;
         if($execution->acl == 'open') $execution->whitelist = '';

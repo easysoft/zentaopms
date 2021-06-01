@@ -1097,7 +1097,7 @@ class story extends control
 
         if(dao::isError()) die(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->storyList, 'parent'));
+        die(js::reload('parent'));
     }
 
     /**
