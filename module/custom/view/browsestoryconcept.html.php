@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <style>
-    .table-form>tbody>tr>th{text-align: center}
+.table-form>tbody>tr>th{text-align: center}
 </style>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-right'>
@@ -23,9 +23,6 @@
       <table class='table table-form'>
         <thead>
           <tr>
-            <?php if(common::hasPriv('custom', 'setDefaultConcept')):?>
-            <th class='w-60px text-center'><?php echo $lang->custom->default;?> </th>
-            <?php endif;?>
             <?php if($this->config->URAndSR):?>
             <th class='text-left'><?php echo $lang->custom->URConcept;?> </th>
             <?php endif;?>
@@ -36,9 +33,6 @@
         <tbody>
         <?php foreach($URSRList as $key => $URSR):?>
           <tr>
-            <?php if(common::hasPriv('custom', 'setDefaultConcept')):?>
-            <td class='text-center'><input type="radio" name='default' value='<?php echo $key;?>' <?php if($key == $config->custom->URSR) echo 'checked';?>></td>
-            <?php endif;?>
             <?php if($this->config->URAndSR):?>
             <td class='text-left'><?php echo $URSR['URName'];?></td>
             <?php endif;?>
@@ -54,11 +48,4 @@
       </table>
   </div>
 </div>
-<script>
-$("input[name='default']").change(function()
-{
-    var checked = $(this).val();
-    hiddenwin.location.href = createLink('custom', 'setDefaultConcept', 'key=' + checked);
-})
-</script>
 <?php include '../../common/view/footer.html.php';?>
