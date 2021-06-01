@@ -631,7 +631,7 @@ class actionModel extends model
          */
         if(empty($desc))
         {
-            if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, ',') !== false)
+            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
             {
                 $desc = $this->lang->$objectType->action->rejectreviewed;
             }
