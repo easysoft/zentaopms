@@ -149,7 +149,7 @@ class repoModel extends model
                         if(isset($productIdList[$productID])) $hasPriv = true;
                     }
 
-                    if(!$haspriv) unset($repos[$i]);
+                    if(!$hasPriv) unset($repos[$i]);
                 }
             }
         }
