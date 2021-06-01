@@ -92,7 +92,8 @@ class dept extends control
         }
 
         $dept  = $this->dept->getById($deptID);
-        $users = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted|all');
+        $users = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted|all', $dept->manager, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["manager"] = $this->config->user->moreLink;
 
         $this->view->optionMenu = $this->dept->getOptionMenu();
 
