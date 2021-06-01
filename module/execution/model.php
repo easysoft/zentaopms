@@ -677,6 +677,19 @@ class executionModel extends model
             ->remove('comment')
             ->get();
 
+        $project = $this->dao->select('begin, end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->project)->fetch();
+        if($execution->begin < $project->begin and $this->config->systemMode == 'new')
+        {
+            dao::$errors['begin'] = sprintf($this->lang->execution->errorBegin, $project->begin);
+            return false;
+        }
+
+        if($execution->end > $project->end and $this->config->systemMode == 'new')
+        {
+            dao::$errors['end'] = sprintf($this->lang->execution->errorEnd, $project->end);
+            return false;
+        }
+
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->where('id')->eq((int)$executionID)
