@@ -21,6 +21,8 @@ function loadAll(executionID)
  */
 function loadExecutionMembers(executionID)
 {
+    $("#multipleBox").removeAttr("checked");
+    $('.team-group').addClass('hidden');
     $.get(createLink('execution', 'ajaxGetMembers', 'executionID=' + executionID + '&assignedTo=' + $('#assignedTo').val()), function(data)
     {
         $('#assignedTo_chosen').remove();
