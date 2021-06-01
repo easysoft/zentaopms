@@ -1192,10 +1192,11 @@ class storyModel extends model
             $story->status = $this->setStatusByReviewRules($reviewerList);
             if($story->status == 'closed')
             {
-                $story->closedBy   = $this->app->user->account;
-                $story->closedDate = $now;
-                $story->assignedTo = 'closed';
-                $story->stage      = 'closed';
+                $story->closedBy     = $this->app->user->account;
+                $story->closedDate   = $now;
+                $story->assignedTo   = 'closed';
+                $story->assignedDate = $now;
+                $story->stage        = 'closed';
                 if($this->post->closedReason == 'done') $story->stage = 'released';
             }
         }
