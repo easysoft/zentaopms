@@ -507,7 +507,7 @@ class productModel extends model
             ->remove('uid,newLine,lineName')
             ->get();
 
-        if(!empty($product->lineName))
+        if(!empty($this->post->lineName))
         {
             /* Insert product line. */
             $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
