@@ -38,7 +38,6 @@ $lang->custom->waterfallCommon      = "Waterfall";
 $lang->custom->buildin              = "Buildin";
 $lang->custom->editStoryConcept     = "Edit Story Concept";
 $lang->custom->setStoryConcept      = "Set Story Concept";
-$lang->custom->setDefaultConcept    = "Set Default Concept";
 $lang->custom->browseStoryConcept   = "List of story concepts";
 $lang->custom->deleteStoryConcept   = "Delete story Concept";
 $lang->custom->URConcept            = "UR Concept";
