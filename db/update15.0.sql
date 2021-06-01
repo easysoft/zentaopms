@@ -25,4 +25,4 @@ ALTER TABLE `zt_testtask` ADD `type` varchar(255) NOT NULL DEFAULT '' AFTER `bui
 ALTER TABLE `zt_testtask` ADD `testreport` mediumint(8) unsigned NOT NULL AFTER `status`;
 ALTER TABLE `zt_story` MODIFY COLUMN `reviewedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 
-REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'reivewRules', 'allpass');
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'reviewRules', 'allpass');
