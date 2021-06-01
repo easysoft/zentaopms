@@ -1785,8 +1785,8 @@ class repoModel extends model
 		$allResults = array();
 		for($page = 1; true; $page ++)
 		{
-			$results = json_decode(file_get_contents($host . "?private_token=$token&page={$page}&per_page=100"));
-			if(empty($results)) break;
+			$results = json_decode(file_get_contents($host . "?private_token=$token&simple=true&membership=true&page={$page}&per_page=100"));
+			if(empty($results) or $page > 10) break;
 			$allResults = $allResults + $results;
 		}
 

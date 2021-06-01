@@ -175,6 +175,12 @@ js::set('systemMode'             , $config->systemMode);
             <div class='detail-title'><?php echo $lang->bug->legendExecStoryTask;?></div>
             <table class='table table-form'>
               <tbody>
+                <?php if($config->systemMode == 'new'):?>
+                <tr>
+                  <th class='w-85px'><?php echo $lang->bug->project;?></th>
+                  <td><span id='projectBox'><?php echo html::select('project', $projects, $bug->project, "class='form-control chosen' onchange='loadProductExecutions($bug->product, this.value)'");?></span></td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th class='w-85px'><?php echo $lang->bug->execution;?></th>
                   <td><span id='executionIdBox'><?php echo html::select('execution', $executions, $bug->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></span></td>

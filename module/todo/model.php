@@ -26,6 +26,7 @@ class todoModel extends model
 
         $idvalue = 0;
         if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
+
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->setDefault('idvalue', 0)
@@ -37,6 +38,50 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
+
+        if(!isset($todo->pri))
+        {
+            if($this->post->type == 'task')
+            {
+                $todo->pri = $this->dao->select('pri')->from(TABLE_TASK)->where('id')->eq($this->post->idvalue)->fetch('pri');
+            }
+            elseif($this->post->type == 'bug')
+            {
+                $todo->pri = $this->dao->select('pri')->from(TABLE_BUG)->where('id')->eq($this->post->idvalue)->fetch('pri');
+            }
+            elseif($this->post->type == 'story')
+            {
+                $todo->pri = $this->dao->select('pri')->from(TABLE_STORY)->where('id')->eq($this->post->idvalue)->fetch('pri');
+            }
+            elseif($this->post->type == 'testtask')
+            {
+                $todo->pri = $this->dao->select('pri')->from(TABLE_TESTTASK)->where('id')->eq($this->post->idvalue)->fetch('pri');
+            }
+            elseif($this->post->type == 'issue' and isset($this->config->maxVersion))
+            {
+                $todo->pri = $this->dao->select('pri')->from(TABLE_ISSUE)->where('id')->eq($this->post->idvalue)->fetch('pri');
+            }
+            elseif($this->post->type == 'risk' and isset($this->config->maxVersion))
+            {
+                $todo->pri = $this->dao->select('pri')->from(TABLE_RISK)->where('id')->eq($this->post->idvalue)->fetch('pri');
+            }
+            elseif($this->post->type == 'review' and isset($this->config->maxVersion))
+            {
+                $todo->pri = $this->dao->select('pri')->from(TABLE_REVIEW)->where('id')->eq($this->post->idvalue)->fetch('pri');
+            }
+            elseif($this->post->type == 'feedback' and isset($this->config->maxVersion))
+            {
+                $todo->pri = $this->dao->select('pri')->from(TABLE_FEEDBACK)->where('id')->eq($this->post->idvalue)->fetch('pri');
+            }
+            elseif($this->post->type == 'opportunity' and isset($this->config->maxVersion))
+            {
+                $todo->pri = $this->dao->select('pri')->from(TABLE_OPPORTUNITY)->where('id')->eq($this->post->idvalue)->fetch('pri');
+            }
+
+            if($todo->pri == 'high')   $todo->pri = 1;
+            if($todo->pri == 'middle') $todo->pri = 2;
+            if($todo->pri == 'low')    $todo->pri = 3;
+        }
 
         if($todo->type != 'custom')
         {

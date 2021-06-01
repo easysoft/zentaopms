@@ -78,7 +78,9 @@ class programModel extends model
      */
     public function getByID($programID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('`type`')->eq('program')->fetch();
+        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('`type`')->eq('program')->fetch();
+        $program = $this->loadModel('file')->replaceImgURL($program, 'desc');
+        return $program;
     }
 
     /**
