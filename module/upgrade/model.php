@@ -674,6 +674,10 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('15.0'));
             $this->updateProjectLifeTime();
             $this->appendExec('15_0');
+        case '15_0_1':
+            $this->saveLogs('Execute 15_0_1');
+            $this->updateProductVersion();
+            $this->appendExec('15_0_1');
         }
 
         $this->deletePatch();
@@ -4635,13 +4639,14 @@ class upgradeModel extends model
             if(isset($data->name))
             {
                 $product = new stdclass();
-                $product->program     = $data->program;
-                $product->name        = $data->name;
-                $product->acl         = 'open';
-                $product->PO          = isset($this->app->user->account) ? $this->app->user->account : '';
-                $product->createdBy   = isset($this->app->user->account) ? $this->app->user->account : '';
-                $product->createdDate = helper::now();
-                $product->status      = 'normal';
+                $product->program        = $data->program;
+                $product->name           = $data->name;
+                $product->acl            = 'open';
+                $product->PO             = isset($this->app->user->account) ? $this->app->user->account : '';
+                $product->createdBy      = isset($this->app->user->account) ? $this->app->user->account : '';
+                $product->createdDate    = helper::now();
+                $product->status         = 'normal';
+                $product->createdVersion = $this->config->version;
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertID();
@@ -5048,6 +5053,18 @@ class upgradeModel extends model
     {
         $this->dao->update(TABLE_PROJECT)->set('lifetime')->eq('')->where('lifetime')->eq('sprint')->exec();
 
+        return true;
+    }
+
+    /**
+     * Update the createdVersion field of the zt_product table.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateProductVersion()
+    {
+        $this->dao->update(TABLE_PRODUCT)->set('createdVersion')->eq($this->config->version)->where('createdVersion')->eq('')->exec();
         return true;
     }
 }
