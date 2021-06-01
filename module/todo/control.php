@@ -282,11 +282,12 @@ class todo extends control
         {
             $confirmNote = 'confirm' . ucfirst($todo->type);
             $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
+            $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
             if($todo->type == 'bug')   $app = 'qa';
             if($todo->type == 'task')  $app = 'execution';
             if($todo->type == 'story') $app = 'product';
             $cancelURL   = $this->server->HTTP_REFERER;
-            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, 'window.parent.$.apps.open', 'parent', $app));
+            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
         }
         if(isonlybody())die(js::reload('parent.parent'));
         die(js::reload('parent'));
