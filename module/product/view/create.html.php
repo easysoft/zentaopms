@@ -29,7 +29,24 @@
           <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
+            <?php if($programID):?>
+            <td>
+              <div class='input-group'>
+                <?php echo html::select("line", $lines, '', "class='form-control hidden line-exist'");?>
+                <?php echo html::input("lineName", '', "class='form-control line-no-exist'");?>
+                <?php if(count($lines)):?>
+                <span class='input-group-addon'>
+                  <div class="checkbox-primary">
+                    <input type="checkbox" name="newLine" value="0" checked onchange="toggleLine(this)" id="newLine0" />
+                    <label for="newLine0"><?php echo $lang->product->newLine;?></label>
+                  </div>
+                </span>
+                <?php endif;?>
+              </div>
+            </td>
+            <?php else:?>
             <td><?php echo html::select('line', $lines, '', "class='form-control chosen'");?></td><td></td>
+            <?php endif;?>
           </tr>
           <tr>
             <th><?php echo $lang->product->name;?></th>

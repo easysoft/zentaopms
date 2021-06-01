@@ -26,6 +26,7 @@ $lang->product->closed          = '已关闭';
 $lang->product->updateOrder     = '排序';
 $lang->product->all             = "所有{$lang->productCommon}";
 $lang->product->manageLine      = "维护{$lang->productCommon}线";
+$lang->product->newLine         = "新建{$lang->productCommon}线";
 $lang->product->export          = '导出数据';
 $lang->product->dashboard       = "{$lang->productCommon}仪表盘";
 $lang->product->changeProgram   = "{$lang->productCommon}调整所属项目集影响范围确认";
