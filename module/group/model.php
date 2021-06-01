@@ -337,7 +337,7 @@ class groupModel extends model
     }
 
     /**
-     * Update view priv
+     * Update view priv.
      *
      * @param  int    $groupID
      * @access public
@@ -355,7 +355,7 @@ class groupModel extends model
             $dynamic = array();
             foreach($actions['actions'] as $moduleName => $moduleActions)
             {
-                if($moduleName != 'my' and !isset($actions['views'][$moduleName])) continue;
+                if($moduleName != 'todo' and !in_array($this->lang->navGroup->$moduleName, $actions['views'])) continue;
 
                 $dynamic[$moduleName] = $moduleActions;
             }

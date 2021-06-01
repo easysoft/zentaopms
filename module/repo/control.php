@@ -369,6 +369,10 @@ class repo extends control
                 $this->repo->setRepoBranch($branchID);
             }
         }
+        else
+        {
+            $this->repo->setRepoBranch('');
+        }
 
         /* Decrypt path and get cacheFile. */
         $path      = $this->repo->decodePath($path);
