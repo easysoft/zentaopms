@@ -263,6 +263,7 @@ $lang->action->label->reviewclosed          = 'Review Failed';
 $lang->action->label->passreviewed          = 'Pass';
 $lang->action->label->clarifyreviewed       = 'Clarify';
 $lang->action->label->commitsummary         = 'Commit Summary';
+$lang->action->label->updatetrainee         = 'Update Trainee';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass;

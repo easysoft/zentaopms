@@ -267,6 +267,7 @@ $lang->action->label->reviewclosed          = '评审失败';
 $lang->action->label->passreviewed          = '确认通过';
 $lang->action->label->clarifyreviewed       = '有待明确';
 $lang->action->label->commitsummary         = '提交培训总结';
+$lang->action->label->updatetrainee         = '更新培训人员';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
