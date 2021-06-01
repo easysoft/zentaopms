@@ -103,7 +103,7 @@
                 common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
                 if(common::hasPriv('execution', 'testreport'))
                 {
-                    echo html::a($this->createLink('testreport', 'browse', "objectID=$task->product&objectType=product&extra=$task->id"), '<i class="icon-testreport-browse icon-flag"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="qa"');
+                    echo html::a($this->createLink('execution', 'testreport', "executionID=$executionID&objctType=execution&extra=$task->id"), '<i class="icon-testreport-browse icon-flag"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="execution"');
                 }
                 common::printIcon('testtask', 'edit',   "taskID=$task->id", $task, 'list');
                 common::printIcon('testtask', 'delete', "taskID=$task->id", $task, 'list', 'trash', 'hiddenwin');

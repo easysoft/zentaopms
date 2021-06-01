@@ -97,9 +97,9 @@ class testreport extends control
 
         $reports = $this->testreport->getList($objectID, $objectType, $extra, $orderBy, $pager);
 
-        if(strpos('project|execution', $objectType) !== false and isset($_POST['taskIdList']))
+        if(strpos('project|execution', $objectType) !== false and ($extra or isset($_POST['taskIdList'])))
         {
-            $taskIdList = $_POST['taskIdList'];
+            $taskIdList = isset($_POST['taskIdList']) ? $_POST['taskIdList'] : array($extra);
             foreach($reports as $reportID => $report)
             {
                 $tasks = explode(',', $report->tasks);
@@ -114,8 +114,8 @@ class testreport extends control
             if($objectType == 'product' and $extra) $param = "objectID=$extra&objectType=testtask";
             if(($objectType == 'project' or $objectType == 'execution') and ($extra or !empty($_POST['taskIdList'])))
             {
-                $param = "objectID=$objectID&objectType=$objectType";
-                if(isset($_POST['taskIdList'])) $param .= '&extra=' . join(',', $_POST['taskIdList']);
+                $param  = "objectID=$objectID&objectType=$objectType";
+                $param .= isset($_POST['taskIdList']) ? '&extra=' . join(',', $_POST['taskIdList']) : '&extra=' . $extra;
             }
             if($param) $this->locate($this->createLink('testreport', 'create', $param));
         }
@@ -196,6 +196,9 @@ class testreport extends control
                 $productID = $this->commonAction($task->product, 'product');
             }
             $this->view->taskPairs = $taskPairs;
+
+            if($this->app->openApp == 'execution') $this->execution->setMenu($task->execution);
+            if($this->app->openApp == 'project') $this->project->setMenu($task->project);
         }
 
         if(empty($objectID)) die(js::alert($this->lang->testreport->noObjectID) . js::locate('back'));
