@@ -15,6 +15,8 @@ function addItem(obj)
 
 function deleteItem(obj)
 {
+    if($("table tr").size() < 3) return false;
+
     var $currentLine= $(obj).closest('tr');
     $currentLine.remove();
 }
