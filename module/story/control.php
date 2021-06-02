@@ -434,7 +434,6 @@ class story extends control
         $products = $this->product->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
-
         /* Init vars. */
         $planID   = $plan;
         $pri      = 0;
@@ -494,6 +493,7 @@ class story extends control
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $plans;
+        $this->view->users            = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $this->view->priList          = $priList;
         $this->view->sourceList       = $sourceList;
         $this->view->planID           = $planID;

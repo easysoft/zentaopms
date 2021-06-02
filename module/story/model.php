@@ -353,6 +353,16 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0, $branch = 0, $type = 'story')
     {
+        foreach($_POST['needReview'] as $index => $value)
+        {
+            if(isset($_POST['reviewer'][$index])) $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
+            if($value and !isset($_POST['reviewer'][$index]))
+            {
+                dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+                return false;
+            }
+        }
+
         $this->loadModel('action');
         $branch    = (int)$branch;
         $productID = (int)$productID;
@@ -489,6 +499,19 @@ class storyModel extends model
 
             $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
+            /* Save the story reviewer to storyreview table. */
+            if(isset($_POST['reviewer'][$i]))
+            {
+                foreach($_POST['reviewer'][$i] as $reviewer)
+                {
+                    $reviewData = new stdclass();
+                    $reviewData->story    = $storyID;
+                    $reviewData->version  = 1;
+                    $reviewData->reviewer = $reviewer;
+                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                }
+            }
+
             $this->executeHooks($storyID);
 
             $actionID = $this->action->create('story', $storyID, 'Opened', '');
@@ -497,7 +520,6 @@ class storyModel extends model
             $mails[$i]->storyID  = $storyID;
             $mails[$i]->actionID = $actionID;
         }
-
 
         /* Remove upload image file and session. */
         if(!empty($stories->uploadImage) and $this->session->storyImagesFile)
