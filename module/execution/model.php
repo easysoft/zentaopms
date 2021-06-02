@@ -346,6 +346,14 @@ class executionModel extends model
         }
 
         $sprint = $this->loadModel('file')->processImgURL($sprint, $this->config->execution->editor->create['id'], $this->post->uid);
+
+        /* Replace required language. */
+        if($this->app->openApp == 'project')
+        {
+            $this->lang->project->name = $this->lang->execution->name;
+            $this->lang->project->code = $this->lang->execution->code;
+        }
+
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
@@ -492,6 +500,10 @@ class executionModel extends model
             if(!empty($execution->realBegan) and !empty($execution->realEnd)) $execution->realDuration = $this->loadModel('programplan')->getDuration($execution->realBegan, $execution->realEnd);
         }
 
+        /* Replace required language. */
+        $this->lang->project->name = $this->lang->execution->name;
+        $this->lang->project->code = $this->lang->execution->code;
+
         /* Update data. */
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck($skipFields = 'begin,end')
@@ -555,6 +567,23 @@ class executionModel extends model
         $oldExecutions = $this->getByIdList($this->post->executionIDList);
         $nameList    = array();
         $codeList    = array();
+
+        /* Replace required language. */
+        if($this->app->openApp == 'project')
+        {
+            $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($this->session->project)->fetch('model');
+            if($projectModel == 'scrum')
+            {
+                $this->lang->project->name = $this->lang->execution->name;
+                $this->lang->project->code = $this->lang->execution->code;
+            }
+            else
+            {
+                $this->lang->project->name = str_replace($this->lang->project->common, $this->lang->project->stage, $this->lang->project->name);
+                $this->lang->project->code = str_replace($this->lang->project->common, $this->lang->project->stage, $this->lang->project->code);
+            }
+        }
+
         foreach($data->executionIDList as $executionID)
         {
             $executionName = $data->names[$executionID];
@@ -601,7 +630,7 @@ class executionModel extends model
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
                 ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-                ->check('code', 'unique', "id NOT " . helper::dbIN($data->executionIDList) . " and deleted='0'")
+                ->checkIF($execution->code != '', 'code', 'unique', "id NOT " . helper::dbIN($data->executionIDList) . " and deleted='0'")
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();
