@@ -542,7 +542,7 @@ class testreport extends control
         $this->view->actions   = $this->loadModel('action')->getList('testreport', $reportID);
 
         $this->view->storySummary = $this->product->summary($stories);
-        $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $caseIdList, $report->begin, $report->end);
+        $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $cases, $report->begin, $report->end);
 
         $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $caseIdList, $report->begin, $report->end);
         $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $caseIdList, $report->begin, $report->end);
