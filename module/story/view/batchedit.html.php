@@ -109,7 +109,7 @@ foreach(explode(',', $showFields) as $field)
           <td title='<?php echo $story->title?>'>
             <div class="input-group">
               <div class="input-control has-icon-right">
-                <?php echo html::input("titles[$storyID]", $story->title, "class='form-control input-story-title'"); ?>
+                <?php echo html::input("titles[$storyID]", $story->title, "class='form-control input-story-title' disabled"); ?>
 
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
