@@ -409,7 +409,8 @@ class storyModel extends model
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
-            $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
+            $story->status     = ($this->app->openApp == project || $this->app->openApp == execution ||($stories->needReview[$i] == 0 and !$forceReview)) ? 'active' : 'draft';
+            $story->stage      = ($this->app->openApp == project || $this->app->openApp == execution) ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
             $story->product    = $productID;
