@@ -196,8 +196,9 @@ class todo extends control
             $storys    = $this->loadModel('story')->getUserStoryPairs($account);
             if(isset($this->config->maxVersion))
             {
-                $issues = $this->loadModel('issue')->getUserIssuePairs($account);
-                $risks  = $this->loadModel('risk')->getUserRiskPairs($account);
+                $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
+                $risks         = $this->loadmodel('risk')->getuserriskpairs($account);
+                $opportunities = $this->loadmodel('opportunity')->getUserOpportunityPairs($account);
             }
             $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
 
@@ -238,8 +239,9 @@ class todo extends control
             $this->view->storys      = $storys;
             if(isset($this->config->maxVersion))
             {
-                $this->view->issues = $issues;
-                $this->view->risks  = $risks;
+                $this->view->issues        = $issues;
+                $this->view->risks         = $risks;
+                $this->view->opportunities = $opportunities;
             }
             $this->view->reviews     = $reviews;
             $this->view->testtasks   = $testtasks;
@@ -559,8 +561,9 @@ class todo extends control
             $tasks     = $this->loadModel('task')->getUserTaskPairs($account);
             if(isset($this->config->maxVersion))
             {
-                $issues = $this->loadModel('issue')->getUserIssuePairs($account);
-                $risks  = $this->loadModel('risk')->getUserRiskPairs($account);
+                $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
+                $risks         = $this->loadModel('risk')->getUserRiskPairs($account);
+                $opportunities = $this->loadModel('opprotunity')->getUserOpportunityPairs($account);
             }
             $testTasks = $this->loadModel('testtask')->getUserTesttaskPairs($account);
             if(isset($this->config->qcVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account, 0, 'wait');
@@ -582,6 +585,7 @@ class todo extends control
                 {
                     if($type == 'issue') $todo->name = isset($issues[$todo->idvalue]) ? $issues[$todo->idvalue] . "(#$todo->idvalue)" : '';
                     if($type == 'risk')  $todo->name = isset($risks[$todo->idvalue])  ? $risks[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                    if($type == 'opportunity')  $todo->name = isset($opportunities[$todo->idvalue])  ? $opportunities[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 }
                 if($type == 'testtask')           $todo->name    = isset($testTasks[$todo->idvalue]) ? $testTasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if($type == 'review' && isset($this->config->qcVersion)) $todo->name = isset($reviews[$todo->idvalue]) ? $reviews[$todo->idvalue] . "(#$todo->idvalue)" : '';

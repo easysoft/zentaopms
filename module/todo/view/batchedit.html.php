@@ -104,6 +104,10 @@
           {
               echo html::select("testtasks[$todo->id]", $testtasks, $todo->idvalue, 'class="form-control chosen"');
           }
+          elseif($todo->type == 'opportunity')
+          {
+              echo html::select("opportunities[$todo->id]", $opportunities, $todo->idvalue, 'class="form-control chosen"');
+          }
           ?>
           </div>
         </td>
@@ -111,9 +115,9 @@
         <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
           <div class='input-group'>
             <?php
-            echo html::select("begins[$todo->id]", $times, $todo->begin, "onchange=\"setBeginsAndEnds($todo->id, 'begin');\" class='form-control chosen control-time-begin'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
+            echo html::select("begins[$todo->id]", $times, substr($todo->begin, 0, 2) . substr($todo->begin, 3, 2), "onchange=\"setBeginsAndEnds($todo->id, 'begin');\" class='form-control chosen control-time-begin'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
             echo '<span class="input-group-addon fix-border fix-padding"></span>';
-            echo html::select("ends[$todo->id]", $times, $todo->end, "onchange=\"setBeginsAndEnds($todo->id, 'end');\" class='form-control chosen control-time-end'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
+            echo html::select("ends[$todo->id]", $times, substr($todo->end, 0, 2) . substr($todo->end, 3, 2), "onchange=\"setBeginsAndEnds($todo->id, 'end');\" class='form-control chosen control-time-end'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
             ?>
             <span class="input-group-addon">
               <div class='checkbox-primary dateSwitcher'>
