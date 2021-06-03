@@ -253,6 +253,14 @@ class build extends control
         $this->view->type         = $type;
         $this->view->bugPager     = $bugPager;
         $this->view->branchName   = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
+
+        if($this->app->getViewType() == 'json')
+        {
+            unset($this->view->storyPager);
+            unset($this->view->generatedBugPager);
+            unset($this->view->bugPager);
+        }
+
         $this->display();
     }
 

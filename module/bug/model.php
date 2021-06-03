@@ -2654,7 +2654,7 @@ class bugModel extends model
                 $class .= ' c-user';
                 $title  = "title='" . zget($users, $bug->resolvedBy) . "'";
             }
-            if($id == 'deadline' && isset($bug->delay)) $class .= ' delayed';
+            if($id == 'deadline' && isset($bug->delay) && $bug->status == 'active') $class .= ' delayed';
             if(strpos(',type,execution,story,plan,task,openedBuild,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
             echo "<td class='" . $class . "' $title>";

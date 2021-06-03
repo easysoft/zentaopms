@@ -122,9 +122,10 @@ $(function()
         idEnd: <?php echo max((empty($titles) ? 0 : count($titles)), 9)?>,
         rowCreator: function($row, index)
         {
-            $row.find('select.chosen').each(function()
+            $row.find('select.chosen,select.picker-select').each(function()
             {
                 var $select = $(this);
+                if($select.hasClass('picker-select')) $select.parent().find('.picker').remove();
                 if(index == 0) $select.find("option[value='ditto']").remove();
                 if(index > 0) $select.val('ditto');
                 if($select.attr('id').indexOf('branch') >= 0) $select.val('<?php echo $branch;?>')

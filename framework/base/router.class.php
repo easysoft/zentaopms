@@ -2276,6 +2276,9 @@ class baseRouter
         extract($trace[1]);
         $log .= ", last called by $file on line $line through function $function.\n";
 
+        /* Change absolute path to relative path. */
+        $log = str_replace($this->basePath, '', $log);
+
         /* 触发错误(Trigger the error) */
         trigger_error($log, $exit ? E_USER_ERROR : E_USER_WARNING);
     }
