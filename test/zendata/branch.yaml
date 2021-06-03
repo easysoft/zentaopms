@@ -1,0 +1,37 @@
+title: table zt_branch
+desc: "分支信息"
+author: liyuchun
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 1-2{5}
+    prefix: ""
+    postfix: "\t"
+    format: ""
+  - field: name
+    note: "分支名称"
+    range: A-Z
+    prefix: ""
+    postfix: "\t"
+    loop: 0
+    format: ""
+  - field: order
+    note: "排序"
+    range: 1-10
+    prefix: ""
+    postfix: "\t"
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: "\t"
+    format: ""
