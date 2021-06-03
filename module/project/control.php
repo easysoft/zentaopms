@@ -1141,6 +1141,12 @@ class project extends control
         $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
 
+        if($this->config->systemMode == 'new')
+        {
+            $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
+            $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
+        }
+
         $title      = $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[] = $group->name;
         $position[] = $this->lang->group->manageMember;

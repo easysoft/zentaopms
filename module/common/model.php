@@ -1399,16 +1399,19 @@ EOD;
             if(strtolower($key) == 'editedby')        continue;
             if(strtolower($key) == 'editeddate')      continue;
             if(strtolower($key) == 'uid')             continue;
-            if(strtolower($key) == 'finisheddate' && $value == '')  continue;
-            if(strtolower($key) == 'canceleddate' && $value == '')  continue;
-            if(strtolower($key) == 'closeddate'   && $value == '')  continue;
+            if(strtolower($key) == 'finisheddate' && $value == '')    continue;
+            if(strtolower($key) == 'canceleddate' && $value == '')    continue;
+            if(strtolower($key) == 'hangupeddate' && $value == '')    continue;
+            if(strtolower($key) == 'lastcheckeddate' && $value == '') continue;
+            if(strtolower($key) == 'activateddate' && $value == '')   continue;
+            if(strtolower($key) == 'closeddate'   && $value == '')    continue;
 
             if(isset($old->$key) and $value != stripslashes($old->$key))
             {
                 $diff = '';
                 if(substr_count($value, "\n") > 1     or
                     substr_count($old->$key, "\n") > 1 or
-                    strpos('name,title,desc,spec,steps,content,digest,verify,report,analysis,prevention,resolution', strtolower($key)) !== false)
+                    strpos('name,title,desc,spec,steps,content,digest,verify,report,analysis,summary,prevention,resolution', strtolower($key)) !== false)
                 {
                     $diff = commonModel::diff($old->$key, $value);
                 }
@@ -1720,7 +1723,7 @@ EOD;
             $method = $this->app->rawMethod;
         }
 
-        if(!empty($this->app->user->modifyPassword) and (($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
+        if(!empty($this->app->user->modifyPassword) and (($module != 'user' or $method != 'deny') and ($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
         if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();

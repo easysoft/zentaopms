@@ -4488,7 +4488,6 @@ class upgradeModel extends model
             $data->path     = ",{$projectID},{$sprint->id},";
             $data->type     = 'sprint';
             $data->acl      = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
-            $data->lifetime = empty($sprint->lifetime) ? $sprint->type : $sprint->lifetime;
 
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
 

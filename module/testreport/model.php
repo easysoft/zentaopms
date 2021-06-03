@@ -115,8 +115,8 @@ class testreportModel extends model
         $objectID = (int)$objectID;
         return $this->dao->select('*')->from(TABLE_TESTREPORT)
             ->where('deleted')->eq(0)
-            ->beginIF($objectType == 'execution')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('execution')->fi()
-            ->beginIF($objectType == 'project')->andWhere('project')->eq($objectID)->andWhere('objectType')->eq('execution')->fi()
+            ->beginIF($objectType == 'execution')->andWhere('execution')->eq($objectID)->fi()
+            ->beginIF($objectType == 'project')->andWhere('project')->eq($objectID)->fi()
             ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
             ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()
             ->orderBy($orderBy)
@@ -328,30 +328,33 @@ class testreportModel extends model
             ->beginIF($idList)->andWhere('t2.id')->in($idList)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchGroup('task','id');
 
-        $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
-            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
-            ->where('t2.task')->in(array_keys($tasks))
-            ->andWhere('t1.`case`')->in(array_keys($cases))
-            ->andWhere('t1.date')->ge($begin)
-            ->andWhere('t1.date')->le($end . " 23:59:59")
-            ->orderBy('date')
-            ->fetchAll('case');
-
-        foreach($cases as $caseID => $case)
+        foreach($cases as $taskID => $caseList)
         {
-            $case->lastRunner    = '';
-            $case->lastRunDate   = '';
-            $case->lastRunResult = '';
-            $case->status        = 'normal';
-            if(isset($results[$caseID]))
+            $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
+                ->where('t2.task')->eq($taskID)
+                ->andWhere('t1.`case`')->in(array_keys($caseList))
+                ->andWhere('t1.date')->ge($begin)
+                ->andWhere('t1.date')->le($end . " 23:59:59")
+                ->orderBy('date')
+                ->fetchAll('case');
+
+            foreach($caseList as $caseID => $case)
             {
-                $result = $results[$caseID];
-                $case->lastRunner    = $result->lastRunner;
-                $case->lastRunDate   = $result->date;
-                $case->lastRunResult = $result->caseResult;
-                $case->status        = $result->caseResult == 'blocked' ? 'blocked' : 'normal';
+                $case->lastRunner    = '';
+                $case->lastRunDate   = '';
+                $case->lastRunResult = '';
+                $case->status        = 'normal';
+                if(isset($results[$caseID]))
+                {
+                    $result = $results[$caseID];
+                    $case->lastRunner    = $result->lastRunner;
+                    $case->lastRunDate   = $result->date;
+                    $case->lastRunResult = $result->caseResult;
+                    $case->status        = $result->caseResult == 'blocked' ? 'blocked' : 'normal';
+                }
             }
         }
 
@@ -390,23 +393,32 @@ class testreportModel extends model
      */
     public function getResultSummary($tasks, $cases, $begin, $end)
     {
+        $caseCount = 0;
+        $casesList = array();
+        foreach($cases as $taskID => $caseList)
+        {
+            foreach($caseList as $caseID => $case)
+            {
+                $casesList[$caseID] = $case;
+                $caseCount++;
+            }
+        }
+
         $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
             ->where('t2.task')->in(array_keys($tasks))
-            ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->andWhere('t1.`case`')->in(array_keys($casesList))
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->orderBy('date')
             ->fetchAll('id');
 
-        $failResults = array();
+        $failResults = 0;
         $runCasesNum = array();
-        foreach($results as $result)
-        {
-            $runCasesNum[$result->case] = $result->case;
-            if($result->caseResult == 'fail') $failResults[$result->case] = $result->case;
-        }
-        return sprintf($this->lang->testreport->caseSummary, count($cases), count($runCasesNum), count($results), count($failResults));
+        foreach($results as $result) $runCasesNum[$result->run] = $result->caseResult;
+        foreach($runCasesNum as $lastResult) if($lastResult == 'fail') $failResults++;
+
+        return sprintf($this->lang->testreport->caseSummary, $caseCount, count($runCasesNum), count($results), $failResults);
     }
 
     /**

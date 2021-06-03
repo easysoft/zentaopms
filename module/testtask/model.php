@@ -1437,7 +1437,7 @@ class testtaskModel extends model
             case 'status':
                 if($caseChanged)
                 {
-                    echo "<span class='warning'>{$this->lang->testcase->changed}</span>";
+                    echo "<span title='{$this->lang->testcase->changed}' class='warning'>{$this->lang->testcase->changed}</span>";
                 }
                 else
                 {

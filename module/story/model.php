@@ -353,6 +353,16 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0, $branch = 0, $type = 'story')
     {
+        foreach($_POST['needReview'] as $index => $value)
+        {
+            if($_POST['title'][$index] and isset($_POST['reviewer'][$index])) $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
+            if($_POST['title'][$index] and $value and !isset($_POST['reviewer'][$index]))
+            {
+                dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+                return false;
+            }
+        }
+
         $this->loadModel('action');
         $branch    = (int)$branch;
         $productID = (int)$productID;
@@ -399,7 +409,8 @@ class storyModel extends model
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
-            $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
+            $story->status     = ($this->app->openApp == project || $this->app->openApp == execution ||($stories->needReview[$i] == 0 and !$forceReview)) ? 'active' : 'draft';
+            $story->stage      = ($this->app->openApp == project || $this->app->openApp == execution) ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
             $story->product    = $productID;
@@ -489,6 +500,19 @@ class storyModel extends model
 
             $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
+            /* Save the story reviewer to storyreview table. */
+            if(isset($_POST['reviewer'][$i]))
+            {
+                foreach($_POST['reviewer'][$i] as $reviewer)
+                {
+                    $reviewData = new stdclass();
+                    $reviewData->story    = $storyID;
+                    $reviewData->version  = 1;
+                    $reviewData->reviewer = $reviewer;
+                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                }
+            }
+
             $this->executeHooks($storyID);
 
             $actionID = $this->action->create('story', $storyID, 'Opened', '');
@@ -497,7 +521,6 @@ class storyModel extends model
             $mails[$i]->storyID  = $storyID;
             $mails[$i]->actionID = $actionID;
         }
-
 
         /* Remove upload image file and session. */
         if(!empty($stories->uploadImage) and $this->session->storyImagesFile)
@@ -1192,10 +1215,11 @@ class storyModel extends model
             $story->status = $this->setStatusByReviewRules($reviewerList);
             if($story->status == 'closed')
             {
-                $story->closedBy   = $this->app->user->account;
-                $story->closedDate = $now;
-                $story->assignedTo = 'closed';
-                $story->stage      = 'closed';
+                $story->closedBy     = $this->app->user->account;
+                $story->closedDate   = $now;
+                $story->assignedTo   = 'closed';
+                $story->assignedDate = $now;
+                $story->stage        = 'closed';
                 if($this->post->closedReason == 'done') $story->stage = 'released';
             }
         }
@@ -2470,8 +2494,9 @@ class storyModel extends model
                 ->fi()
                 ->beginIF($execution->type != 'project')
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
-                ->beginIF($this->session->executionStoryBrowseType == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF(strpos('changed|closed', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->fi()
+                ->beginIF(strpos('changed|closed', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF(!empty($branchParam))->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
                 ->andWhere('t2.deleted')->eq(0)

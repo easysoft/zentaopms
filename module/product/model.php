@@ -504,8 +504,30 @@ class productModel extends model
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->join('whitelist', ',')
-            ->remove('uid')
+            ->remove('uid,newLine,lineName')
             ->get();
+
+        if(!empty($_POST['lineName']))
+        {
+            /* Insert product line. */
+            $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
+            $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
+
+            $line = new stdClass();
+            $line->type   = 'line';
+            $line->parent = 0;
+            $line->grade  = 1;
+            $line->name   = $this->post->lineName;
+            $line->root   = $product->program;
+            $line->order = $maxOrder;
+            $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+            $lineID = $this->dao->lastInsertID();
+            $path   = ",$lineID,";
+            $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+
+            if(dao::isError()) return false;
+            $product->line = $lineID;
+        }
 
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()

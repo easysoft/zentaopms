@@ -26,6 +26,7 @@ $lang->product->closed          = 'Closed';
 $lang->product->updateOrder     = 'Order';
 $lang->product->all             = "All {$lang->productCommon}s";
 $lang->product->manageLine      = "Manage {$lang->productCommon} Line";
+$lang->product->newLine         = "Create {$lang->productCommon} Line";
 $lang->product->export          = 'Export';
 $lang->product->dashboard       = "Dashboard";
 $lang->product->changeProgram   = "{$lang->productCommon} confirmation of the scope of influence of adjustment of the program set";

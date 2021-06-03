@@ -57,6 +57,7 @@
             <th class='col-pri<?php      echo zget($visibleFields, 'pri',      ' hidden') . zget($requiredFields, 'pri',      '', ' required');?>'><?php echo $lang->story->pri;?></th>
             <th class='col-estimate<?php echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', '', ' required');?>'><?php echo $lang->story->estimate;?></th>
             <th class='col-review<?php   echo zget($visibleFields, 'review',   ' hidden') . zget($requiredFields, 'review',   '', ' required');?>'><?php echo $lang->story->needReview;?></th>
+            <th class='<?php echo zget($visibleFields, 'review',   ' hidden');?>' style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();
@@ -95,6 +96,8 @@
             <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select('pri[$id]', $priList, $pri, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select('needReview[$id]', $lang->story->reviewList, $needReview, "class='form-control'");?></td>
+            <?php $isDisabled = $needReview ? '' : 'disabled';?>
+            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select('reviewer[$id][]', $users, '', "class='form-control chosen' multiple $isDisabled");?></td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
             <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, '', $extendField->field . '[$id]') . "</td>";?>
           </tr>
@@ -142,6 +145,14 @@ $(function()
               }
         }
     });
+
+    $(document).on('change', "#mainContent select[name^=needReview]", function()
+    {
+        select = $(this).parent('td').next('td').children("select[name^=reviewer]");
+        $(select).removeAttr('disabled');
+        if($(this).val() == 0) $(select).attr('disabled', 'disabled');
+        $(select).trigger("chosen:updated");
+    })
 });
 </script>
 <?php if(isset($execution)) js::set('execution', $execution);?>

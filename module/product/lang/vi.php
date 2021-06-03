@@ -28,6 +28,7 @@ $lang->product->updateOrder   = 'Sắp xếp';
 $lang->product->orderAction   = "Đánh giá {$lang->productCommon}";
 $lang->product->all           = "Tất cả {$lang->productCommon}";
 $lang->product->manageLine    = "Manage {$lang->productCommon} Line";
+$lang->product->newLine       = "Create {$lang->productCommon} Line";
 $lang->product->export        = 'Xuất';
 $lang->product->exportAction  = "Xuất {$lang->productCommon}";
 $lang->product->dashboard     = "Dashboard";

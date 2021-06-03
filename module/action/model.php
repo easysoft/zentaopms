@@ -80,7 +80,7 @@ class actionModel extends model
 
         if($objectType == 'story' and $actionType !== 'reviewed' and strpos('reviewclosed,passreviewed,clarifyreviewed', $actionType) !== false) $action->actor = 'System';
 
-        if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false))
+        if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false) and (int)$extra)
         {
             $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
             $action->project   = $testtask->project;
@@ -631,7 +631,7 @@ class actionModel extends model
          */
         if(empty($desc))
         {
-            if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, ',') !== false)
+            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
             {
                 $desc = $this->lang->$objectType->action->rejectreviewed;
             }
