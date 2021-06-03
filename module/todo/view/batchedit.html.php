@@ -115,13 +115,13 @@
         <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
           <div class='input-group'>
             <?php
-            echo html::select("begins[$todo->id]", $times, substr($todo->begin, 0, 2) . substr($todo->begin, 3, 2), "onchange=\"setBeginsAndEnds($todo->id, 'begin');\" class='form-control chosen control-time-begin'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
+            echo html::select("begins[$todo->id]", $times, substr($todo->begin, 0, 2) . substr($todo->begin, 3, 2), "onchange=\"setBeginsAndEnds($todo->id, 'begin');\" class='form-control chosen control-time-begin'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '') ? '' : " disabled"));
             echo '<span class="input-group-addon fix-border fix-padding"></span>';
-            echo html::select("ends[$todo->id]", $times, substr($todo->end, 0, 2) . substr($todo->end, 3, 2), "onchange=\"setBeginsAndEnds($todo->id, 'end');\" class='form-control chosen control-time-end'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
+            echo html::select("ends[$todo->id]", $times, substr($todo->end, 0, 2) . substr($todo->end, 3, 2), "onchange=\"setBeginsAndEnds($todo->id, 'end');\" class='form-control chosen control-time-end'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '') ? '' : " disabled"));
             ?>
             <span class="input-group-addon">
               <div class='checkbox-primary dateSwitcher'>
-                <input type='checkbox' name="switchTime[<?php echo $todo->id;?>]" id="switchTime<?php echo $todo->id;?>" data-key="<?php echo $todo->id;?>" onclick='switchTimeList(<?php echo $todo->id?>);' <?php if($todo->begin == '2400') echo "checked='checked'";?>>
+                <input type='checkbox' name="switchTime[<?php echo $todo->id;?>]" id="switchTime<?php echo $todo->id;?>" data-key="<?php echo $todo->id;?>" onclick='switchTimeList(<?php echo $todo->id?>);' <?php if($todo->begin == '') echo "checked='checked'";?>>
                 <label for='switchTime'><?php echo $lang->todo->periods['future'];?></label>
               </div>
             </span>
