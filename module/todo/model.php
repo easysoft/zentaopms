@@ -297,16 +297,11 @@ class todoModel extends model
                 $todo->name   = ($todo->type == 'custom' or $todo->type == 'cycle' or $todo->type == 'feedback') ? $data->names[$todoID] : '';
                 $todo->begin  = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
                 $todo->end    = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
-                if($todo->type == 'task')        $todo->idvalue = isset($data->tasks[$todoID]) ? $data->tasks[$todoID] : 0;
-                if($todo->type == 'bug')         $todo->idvalue = isset($data->bugs[$todoID]) ? $data->bugs[$todoID] : 0;
-                if($todo->type == 'story')       $todo->idvalue = isset($data->storys[$todoID]) ? $data->storys[$todoID] : 0;
-                if($todo->type == 'issue')       $todo->idvalue = isset($data->issues[$todoID]) ? $data->issues[$todoID] : 0;
-                if($todo->type == 'risk')        $todo->idvalue = isset($data->risks[$todoID]) ? $data->risks[$todoID] : 0;
-                if($todo->type == 'opportunity') $todo->idvalue = isset($data->opportunities[$todoID]) ? $data->opportunities[$todoID] : 0;
-                if($todo->type == 'review')      $todo->idvalue = isset($data->reviews[$todoID]) ? $data->reviews[$todoID] : 0;
-                if($todo->type == 'testtask')    $todo->idvalue = isset($data->testtasks[$todoID]) ? $data->testtasks[$todoID] : 0;
-                if($todo->type == 'feedback')    $todo->idvalue = isset($data->feedbacks[$todoID]) ? $data->feedbacks[$todoID] : 0;
 
+                if(in_array($todo->type, $this->config->todo->moduleList))
+                {
+                    $todo->idvalue = isset($data->{$this->config->todo->objectList[$todo->type]}[$todoID]) ? $data->{$this->config->todo->objectList[$todo->type]}[$todoID] : 0;
+                }
                 if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $todos[$todoID] = $todo;
