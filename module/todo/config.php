@@ -34,4 +34,9 @@ $config->todo->getUserObjectsMethod['bug']      = 'ajaxGetUserBugs';
 $config->todo->getUserObjectsMethod['task']     = 'ajaxGetUserTasks';
 $config->todo->getUserObjectsMethod['story']    = 'ajaxGetUserStories';
 $config->todo->getUserObjectsMethod['testtask'] = 'ajaxGetUserTestTasks';
-$config->todo->getUserObjectsMethod['review']   = 'ajaxGetUserReviews';
+
+$config->todo->objectList = array();
+$config->todo->objectList['bug']      = 'bugs';
+$config->todo->objectList['task']     = 'tasks';
+$config->todo->objectList['story']    = 'stories';
+$config->todo->objectList['testtask'] = 'testtasks';
