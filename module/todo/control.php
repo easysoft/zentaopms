@@ -394,7 +394,7 @@ class todo extends control
         $this->view->from            = $from;
         $this->view->projects        = $projects;
         $this->view->executions      = $this->loadModel('execution')->getPairs($this->session->project);
-        $this->view->products        = $this->loadModel('product')->getPairs();
+        $this->view->products        = $todo->type == 'opportunity' ? $this->loadModel('product')->getPairsByProjectModel('waterfall') : $this->loadModel('product')->getPairs();
         $this->view->projectProducts = $this->loadModel('product')->getProductPairsByProject($this->session->project);
 
         $this->display();
