@@ -1192,6 +1192,7 @@ class storyModel extends model
         $story    = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('status', $oldStory->status)
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'revert', 'status',  'active')
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
@@ -1209,10 +1210,10 @@ class storyModel extends model
 
         /* Update the story status by review rules. */
         $reviewerList = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer', 'result');
-        $reviewedBy = explode(',', trim($story->reviewedBy, ','));
+        $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
         if(!array_diff(array_keys($reviewerList), $reviewedBy))
         {
-            $story->status = $this->setStatusByReviewRules($reviewerList);
+            $story->status = $this->setStatusByReviewRules($reviewerList) ? $story->status : $oldStory->status;
             if($story->status == 'closed')
             {
                 $story->closedBy     = $this->app->user->account;
@@ -1261,28 +1262,32 @@ class storyModel extends model
         $actions = array();
         $this->loadModel('action');
 
-        $oldStories = $this->getByList($storyIdList);
+        $oldStories   = $this->getByList($storyIdList);
+        $hasResult    = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($this->app->user->account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
+        $reviewerList = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
             if($oldStory->status != 'draft' and $oldStory->status != 'changed') continue;
-            $hasResult = $this->dao->select('result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->fetch('result');
-            if($hasResult) continue;
+            if(isset($hasResult[$storyID])) continue;
 
             $story = new stdClass();
             $story->reviewedDate   = $now;
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->reviewedBy     = $oldStory->reviewedBy . ',' . $this->app->user->account;
+            $story->status         = $oldStory->status;
 
             $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
 
             /* Update the story status by review rules. */
-            $reviewerList = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer', 'result');
-            $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
-            if(!array_diff(array_keys($reviewerList), $reviewedBy))
+            $reviewedBy = explode(',', trim($story->reviewedBy, ','));
+            if(!array_diff(array_keys($reviewerList[$storyID]), $reviewedBy))
             {
-                $status = $this->setStatusByReviewRules($reviewerList);
+                $reviewerPairs = array();
+                foreach($reviewerList[$storyID] as $reviewer => $reviewInfo) $reviewerPairs[$reviewer] = $reviewInfo->result;
+                $reviewerPairs[$this->app->user->account] = $result;
+                $status = $this->setStatusByReviewRules($reviewerPairs);
                 $story->status = $status ? $status : $oldStory->status;
                 if($story->status == 'closed')
                 {
@@ -4229,6 +4234,7 @@ class storyModel extends model
      */
     public function setStatusByReviewRules($reviewerList)
     {
+        $status      = '';
         $passCount   = 0;
         $rejectCount = 0;
         $reviewRule  = $this->config->story->reviewRules;
