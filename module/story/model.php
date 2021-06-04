@@ -4284,7 +4284,8 @@ class storyModel extends model
         $reviewers   = $this->getReviewerPairs($story->id, $story->version);
         $reviewedBy  = explode(',', trim($story->reviewedBy, ','));
 
-        $actionID = $this->loadModel('action')->create('story', $story->id, 'Reviewed', isset($this->post->comment) ? $this->post->comment : '', ucfirst($result) . $reasonParam);
+        $comment  = isset($_POST['comment']) ? $this->post->comment : '';
+        $actionID = $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . $reasonParam);
 
         if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewClosed');
         if($story->status == 'active') $this->action->create('story', $story->id, 'PassReviewed');
