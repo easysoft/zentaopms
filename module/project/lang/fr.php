@@ -165,7 +165,7 @@ $lang->project->aclList['open']    = "Open (accessible with project view permiss
 $lang->project->acls['private'] = 'Private';
 $lang->project->acls['open']    = "Open";
 
-$lang->project->subAclList['private'] = "Private (For team members and stakeholders only)";
+$lang->project->subAclList['private'] = "Private (Only the project leader, team members and stakeholders can access)";
 $lang->project->subAclList['open']    = "Open (accessible with project view permissions)";
 $lang->project->subAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members and stakeholders can access)';
 
