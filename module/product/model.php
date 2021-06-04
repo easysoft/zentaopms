@@ -18,9 +18,10 @@ class productModel extends model
      *
      * @param  array  $products
      * @param  int    $productID
-     * @param  string $currentModule
-     * @param  string $currentMethod
      * @param  string $extra
+     * @param  string $branch
+     * @param  string $module
+     * @param  string $moduleType
      *
      * @access public
      * @return string
