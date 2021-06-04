@@ -500,10 +500,6 @@ class executionModel extends model
             if(!empty($execution->realBegan) and !empty($execution->realEnd)) $execution->realDuration = $this->loadModel('programplan')->getDuration($execution->realBegan, $execution->realEnd);
         }
 
-        /* Replace required language. */
-        $this->lang->project->name = $this->lang->execution->name;
-        $this->lang->project->code = $this->lang->execution->code;
-
         /* Update data. */
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck($skipFields = 'begin,end')

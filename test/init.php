@@ -27,12 +27,12 @@ $app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 $tester = $app->loadCommon();
 
 $config->zendataRoot = dirname(__FILE__) . DS . 'zendata';
-$config->zdPath      = "/usr/local/zd/zd";
-     
+$config->zdPath      = __DIR__ . "/runtime/zd/zd";
+
 /**
  * Save variable to $_result.
- * 
- * @param  mix    $result 
+ *
+ * @param  mix    $result
  * @access public
  * @return bool true
  */
@@ -45,9 +45,9 @@ function run($result)
 
 /**
  * Print expect data.
- * 
- * @param  string    $key 
- * @param  string    $delimiter 
+ *
+ * @param  string    $key
+ * @param  string    $delimiter
  * @access public
  * @return void
  */
@@ -65,13 +65,13 @@ function expect($key, $delimiter = ',')
     {
         $keyList =  explode(',', $key);
         $dimension = 1;
-        foreach($_result as $value) 
+        foreach($_result as $value)
         {
             if(is_array($value) or is_object($value)) $dimension = 2;
         }
 
         if($dimension == 1) $_result = array($_result);
-        foreach($_result as $object) 
+        foreach($_result as $object)
         {
             foreach($keyList as $key) $result .= zget($object, $key, '') . $delimiter;
         }
@@ -83,10 +83,10 @@ function expect($key, $delimiter = ',')
 
 /**
  * Import data create by zendata to one table.
- * 
- * @param  string    $table 
- * @param  string    $yaml 
- * @param  int       $count 
+ *
+ * @param  string    $table
+ * @param  string    $yaml
+ * @param  int       $count
  * @access public
  * @return void
  */

@@ -1,15 +1,14 @@
 #!/usr/bin/env php
 <?php
-include dirname(dirname(dirname(__FILE__))) . '/init.php';
 /**
-[case]
 title=测试 trainplanModel::getById();
 cid=1
 pid=1
-[group]
-  1. 获取到的project是21,lecturer是hufangzhou  >> `21,hufangzhou`
-[esac]
+
+获取到的project是21,lecturer是hufangzhou  >> `21,hufangzhou`
 */
+include dirname(dirname(dirname(__FILE__))) . '/init.php';
+
 $trainplan = $tester->loadModel('trainplan');
 
 $app->dbh->query("truncate zt_trainplan");
