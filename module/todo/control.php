@@ -24,7 +24,6 @@ class todo extends control
         $this->loadModel('task');
         $this->loadModel('bug');
         $this->loadModel('my')->setMenu();
-        if(!isset($this->config->qcVersion)) unset($this->lang->todo->typeList['review']);
     }
 
     /**

@@ -97,7 +97,6 @@ $lang->todo->typeList['cycle']    = 'Récur';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = 'Tâche';
 $lang->todo->typeList['story']    = 'Story';
-$lang->todo->typeList['review']   = 'Review';
 $lang->todo->typeList['testtask'] = 'Testtask';
 
 $lang->todo->confirmDelete  = "Voulez-vous supprimer cette entrée de l'agenda ?";

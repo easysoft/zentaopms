@@ -39,44 +39,9 @@ class todoModel extends model
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
-        if(!isset($todo->pri))
+        if(!isset($todo->pri) and in_array($this->post->type, $this->config->todo->moduleList) and $this->post->type !== 'review')
         {
-            if($this->post->type == 'task')
-            {
-                $todo->pri = $this->dao->select('pri')->from(TABLE_TASK)->where('id')->eq($this->post->idvalue)->fetch('pri');
-            }
-            elseif($this->post->type == 'bug')
-            {
-                $todo->pri = $this->dao->select('pri')->from(TABLE_BUG)->where('id')->eq($this->post->idvalue)->fetch('pri');
-            }
-            elseif($this->post->type == 'story')
-            {
-                $todo->pri = $this->dao->select('pri')->from(TABLE_STORY)->where('id')->eq($this->post->idvalue)->fetch('pri');
-            }
-            elseif($this->post->type == 'testtask')
-            {
-                $todo->pri = $this->dao->select('pri')->from(TABLE_TESTTASK)->where('id')->eq($this->post->idvalue)->fetch('pri');
-            }
-            elseif($this->post->type == 'issue' and isset($this->config->maxVersion))
-            {
-                $todo->pri = $this->dao->select('pri')->from(TABLE_ISSUE)->where('id')->eq($this->post->idvalue)->fetch('pri');
-            }
-            elseif($this->post->type == 'risk' and isset($this->config->maxVersion))
-            {
-                $todo->pri = $this->dao->select('pri')->from(TABLE_RISK)->where('id')->eq($this->post->idvalue)->fetch('pri');
-            }
-            elseif($this->post->type == 'review' and isset($this->config->maxVersion))
-            {
-                $todo->pri = $this->dao->select('pri')->from(TABLE_REVIEW)->where('id')->eq($this->post->idvalue)->fetch('pri');
-            }
-            elseif($this->post->type == 'feedback' and isset($this->config->maxVersion))
-            {
-                $todo->pri = $this->dao->select('pri')->from(TABLE_FEEDBACK)->where('id')->eq($this->post->idvalue)->fetch('pri');
-            }
-            elseif($this->post->type == 'opportunity' and isset($this->config->maxVersion))
-            {
-                $todo->pri = $this->dao->select('pri')->from(TABLE_OPPORTUNITY)->where('id')->eq($this->post->idvalue)->fetch('pri');
-            }
+            $todo->pri = $this->dao->select('pri')->from($this->config->objectTables[$this->post->type])->where('id')->eq($this->post->idvalue)->fetch('pri');
 
             if($todo->pri == 'high')   $todo->pri = 1;
             if($todo->pri == 'middle') $todo->pri = 2;
@@ -155,7 +120,17 @@ class todoModel extends model
         $validTodos = array();
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
-            if($todos->names[$i] != '' || isset($todos->bugs[$i + 1]) || isset($todos->tasks[$i + 1]) || isset($todos->stories[$i + 1]) || isset($todos->issues[$i + 1]) || isset($todos->risks[$i + 1]) || isset($todos->reviews[$i + 1]) || isset($todos->testtasks[$i + 1]) || isset($todos->opportunities[$i + 1]))
+            $isExist = false;
+            foreach($this->config->todo->objectList as $objects)
+            {
+                if(isset($todos->{$objects}[$i + 1]))
+                {
+                    $isExist = true;
+                    break;
+                }
+            }
+
+            if($todos->names[$i] != '' || $isExist)
             {
                 $todo          = new stdclass();
                 $todo->account = $this->app->user->account;
@@ -178,14 +153,7 @@ class todoModel extends model
                 $todo->private = 0;
                 $todo->idvalue = 0;
 
-                if($todo->type == 'bug')         $todo->idvalue = isset($todos->bugs[$i + 1])          ? $todos->bugs[$i + 1] : 0;
-                if($todo->type == 'task')        $todo->idvalue = isset($todos->tasks[$i + 1])         ? $todos->tasks[$i + 1] : 0;
-                if($todo->type == 'story')       $todo->idvalue = isset($todos->stories[$i + 1])       ? $todos->stories[$i + 1] : 0;
-                if($todo->type == 'issue')       $todo->idvalue = isset($todos->issues[$i + 1])        ? $todos->issues[$i + 1] : 0;
-                if($todo->type == 'risk')        $todo->idvalue = isset($todos->risks[$i + 1])         ? $todos->risks[$i + 1] : 0;
-                if($todo->type == 'opportunity') $todo->idvalue = isset($todos->opportunities[$i + 1]) ? $todos->opportunities[$i + 1] : 0;
-                if($todo->type == 'review')      $todo->idvalue = isset($todos->reviews[$i + 1])       ? $todos->reviews[$i + 1] : 0;
-                if($todo->type == 'testtask')    $todo->idvalue = isset($todos->testtasks[$i + 1])     ? $todos->testtasks[$i + 1] : 0;
+                if(in_array($todo->type, $this->config->todo->moduleList)) $todo->idvalue = isset($todos->{$this->config->todo->objectList[$todo->type]}[$i + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$i + 1] : 0;
 
                 if($todo->type != 'custom' and $todo->idvalue)
                 {

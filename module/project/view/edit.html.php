@@ -160,7 +160,7 @@
               echo html::hidden('model', $project->model);
               echo html::submitButton();
               $browseLink = $this->session->projectList ? $this->session->projectList : $this->createLink('project', 'browse');
-              echo isonlybody() ? html::backButton() : html::a($browseLink, $lang->goback, '', 'class="btn btn-back btn-wide"');
+              if(!isonlybody()) echo html::a($browseLink, $lang->goback, '', 'class="btn btn-back btn-wide"');
             ?>
           </td>
         </tr>
