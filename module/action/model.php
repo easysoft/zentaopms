@@ -182,8 +182,6 @@ class actionModel extends model
             return $relation;
         }
 
-        if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $action->project  = (int)$extra ;
-        if($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') $action->execution = (int)$extra;
 
         /* Only process these object types. */
         if(strpos(',story,productplan,release,task,build,bug,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,', ",{$objectType},") !== false)
@@ -246,6 +244,8 @@ class actionModel extends model
                     $record->product = join(',', array_keys($products));
                 }
             }
+            if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $record->project = (int)$extra ;
+            if($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') $record->execution = (int)$extra;
 
             if($record)
             {
