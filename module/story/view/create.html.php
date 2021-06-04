@@ -101,7 +101,7 @@
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
             <?php $colspan = $type == 'story' ? "colspan='4'" : "colspan='2'";?>
-            <td <?php echo $colspan;?> id='reviewerTd'>
+            <td <?php echo $colspan;?> id='reviewerBox'>
               <div class="table-row">
                 <div class="table-col">
                   <?php echo html::select('reviewer[]', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
