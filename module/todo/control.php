@@ -197,7 +197,7 @@ class todo extends control
             if(isset($this->config->maxVersion))
             {
                 $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
-                $risks         = $this->loadmodel('risk')->getuserriskpairs($account);
+                $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
                 $opportunities = $this->loadmodel('opportunity')->getUserOpportunityPairs($account);
             }
             $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
