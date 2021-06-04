@@ -172,7 +172,7 @@ js::set('systemMode'             , $config->systemMode);
             </table>
           </div>
           <div class='detail'>
-            <div class='detail-title'><?php echo $lang->bug->legendExecStoryTask;?></div>
+            <div class='detail-title'><?php echo $config->systemMode == 'class' ? $lang->bug->legendExecStoryTask : $lang->bug->legendPRJExecStoryTask;?></div>
             <table class='table table-form'>
               <tbody>
                 <?php if($config->systemMode == 'new'):?>
