@@ -1013,22 +1013,14 @@ class story extends control
 
             if($changes)
             {
-                $result      = $this->post->result;
-                $reasonParam = $result == 'reject' ? ',' . $this->post->closedReason : '';
-                $story       = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-                $reviewers   = $this->story->getReviewerPairs($storyID, $story->version);
-                $reviewedBy  = explode(',', trim($story->reviewedBy, ','));
-                $actionID    = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result) . $reasonParam);
-                if($story->status == 'closed') $actionID = $this->action->create('story', $storyID, 'ReviewClosed');
-                if($story->status == 'active') $actionID = $this->action->create('story', $storyID, 'PassReviewed');
-                if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $actionID = $this->action->create('story', $storyID, 'ClarifyReviewed');
+                $story    = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+                $actionID = $this->story->recordReviewAction($story, $this->post->result, $this->post->closedReason);
                 $this->action->logHistory($actionID, $changes);
             }
 
             $this->executeHooks($storyID);
 
             if(isonlybody()) die(js::reload('parent.parent'));
-
 
             $module = $from == 'project' ? 'projectstory' : 'story';
             die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));

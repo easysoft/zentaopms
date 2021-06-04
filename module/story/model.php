@@ -1287,8 +1287,10 @@ class storyModel extends model
                 $reviewerPairs = array();
                 foreach($reviewerList[$storyID] as $reviewer => $reviewInfo) $reviewerPairs[$reviewer] = $reviewInfo->result;
                 $reviewerPairs[$this->app->user->account] = $result;
+
                 $status = $this->setStatusByReviewRules($reviewerPairs);
                 $story->status = $status ? $status : $oldStory->status;
+
                 if($story->status == 'closed')
                 {
                     $story->closedBy   = $this->app->user->account;
@@ -1302,15 +1304,9 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
             $this->setStage($storyID);
 
-            $reasonParam = $result == 'reject' ? ',' . $reason : '';
-            $reviewers   = $this->getReviewerPairs($storyID, $oldStory->version);
-            $reviewedBy  = explode(',', trim($story->reviewedBy, ','));
-
-            $actions[$storyID] = $this->action->create('story', $storyID, 'Reviewed', '', ucfirst($result) . $reasonParam);
-
-            if($story->status == 'closed') $this->action->create('story', $storyID, 'ReviewClosed');
-            if($story->status == 'active') $this->action->create('story', $storyID, 'PassReviewed');
-            if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $this->action->create('story', $storyID, 'ClarifyReviewed');
+            $story->id         = $storyID;
+            $story->version    = $oldStory->version;
+            $actions[$storyID] = $this->recordReviewAction($story, $result, $reason);
         }
 
         return $actions;
@@ -4272,4 +4268,29 @@ class storyModel extends model
 
         return $status;
     }
+
+    /**
+     * Record story review actions.
+     *
+     * @param  object $story
+     * @param  string $result
+     * @param  string $reason
+     * @access public
+     * @return int
+     */
+    public function recordReviewAction($story, $result, $reason)
+    {
+        $reasonParam = $result == 'reject' ? ',' . $reason : '';
+        $reviewers   = $this->getReviewerPairs($story->id, $story->version);
+        $reviewedBy  = explode(',', trim($story->reviewedBy, ','));
+
+        $actionID = $this->loadModel('action')->create('story', $story->id, 'Reviewed', isset($this->post->comment) ? $this->post->comment : '', ucfirst($result) . $reasonParam);
+
+        if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewClosed');
+        if($story->status == 'active') $this->action->create('story', $story->id, 'PassReviewed');
+        if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $this->action->create('story', $story->id, 'ClarifyReviewed');
+
+        return $actionID;
+    }
+
 }
