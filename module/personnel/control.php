@@ -32,8 +32,8 @@ class personnel extends control
         $program = $this->program->getByID($programID);
 
         /* Build the search form. */
-        $queryID   = $browseType == 'bysearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('personnel', 'accessible', "pargramID=$programID&deptID=$deptID&browseType=bysearch&quertID=myQueryID");
+        $queryID       = $browseType == 'bysearch' ? (int)$param : 0;
+        $actionURL     = $this->createLink('personnel', 'accessible', "pargramID=$programID&deptID=$deptID&browseType=bysearch&quertID=myQueryID");
         $personnelList = $this->personnel->getAccessiblePersonnel($programID, $deptID, $browseType, $queryID);
 
         /* Set the pager. */

@@ -386,7 +386,6 @@ class project extends control
      * Edit a project.
      *
      * @param  int    $projectID
-     * @param  string $from  project|program|programProject
      * @access public
      * @return void
      */

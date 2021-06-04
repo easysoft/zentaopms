@@ -1052,8 +1052,8 @@ class actionModel extends model
             elseif($action->objectType == 'team')
             {
                 $action->objectLink = '';
-                if($action->execution) $action->objectLink = helper::createLink('execution', 'team', 'executionID=' . $action->execution);
                 if($action->project) $action->objectLink = helper::createLink('project', 'manageMembers', 'projectID=' . $action->project);
+                if($action->execution) $action->objectLink = helper::createLink('execution', 'team', 'executionID=' . $action->execution);
                 $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
             }
             else

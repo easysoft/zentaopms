@@ -1487,8 +1487,6 @@ class projectModel extends model
      */
     public function getTeamMemberPairs($projectID)
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembers();
-
         $project = $this->getByID($projectID);
         $type    = $this->config->systemMode == 'new' ? $project->type : 'project';
         if(empty($project)) return array();
