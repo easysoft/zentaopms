@@ -1947,20 +1947,20 @@ class story extends control
 
                 if(!empty($children))
                 {
-                    $reorderStory = array();
+                    $reorderStories = array();
                     foreach($stories as $story)
                     {
-                        $reorderStory[$story->id] = $story;
+                        $reorderStories[$story->id] = $story;
                         if(isset($children[$story->id]))
                         {
                             foreach($children[$story->id] as $childrenID => $childrenStory)
                             {
-                                $reorderStory[$childrenID] = $childrenStory;
+                                $reorderStories[$childrenID] = $childrenStory;
                             }
                         }
                         unset($stories[$story->id]);
                     }
-                    $stories = $reorderStory;
+                    $stories = $reorderStories;
                 }
             }
 
