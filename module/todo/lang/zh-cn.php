@@ -98,7 +98,6 @@ $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = '任务';
 $lang->todo->typeList['story']    = $lang->SRCommon;
-$lang->todo->typeList['review']   = '评审';
 $lang->todo->typeList['testtask'] = '测试单';
 
 $lang->todo->confirmDelete  = "您确定要删除这条待办吗？";
