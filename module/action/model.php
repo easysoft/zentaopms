@@ -184,7 +184,7 @@ class actionModel extends model
 
 
         /* Only process these object types. */
-        if(strpos(',story,productplan,release,task,build,bug,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,', ",{$objectType},") !== false)
+        if(strpos($this->config->action->needGetRelateField, ",{$objectType},") !== false)
         {
             if(!isset($this->config->objectTables[$objectType])) return $emptyRecord;
             if($objectType == 'story' and ($actionType == 'linked2build' or $actionType == 'unlinkedfrombuild'))
