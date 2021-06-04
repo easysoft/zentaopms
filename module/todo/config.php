@@ -28,3 +28,10 @@ $config->todo->custom->batchCreateFields = 'type,pri,desc,beginAndEnd';
 $config->todo->custom->batchEditFields   = 'pri,beginAndEnd,status';
 
 $config->todo->moduleList = array('bug', 'task', 'story', 'review', 'testtask');
+
+$config->todo->getUserObjectsMethod = array();
+$config->todo->getUserObjectsMethod['bug']      = 'ajaxGetUserBugs';
+$config->todo->getUserObjectsMethod['task']     = 'ajaxGetUserTasks';
+$config->todo->getUserObjectsMethod['story']    = 'ajaxGetUserStories';
+$config->todo->getUserObjectsMethod['testtask'] = 'ajaxGetUserTestTasks';
+$config->todo->getUserObjectsMethod['review']   = 'ajaxGetUserReviews';
