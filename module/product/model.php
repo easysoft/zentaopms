@@ -537,8 +537,9 @@ class productModel extends model
             $line->grade  = 1;
             $line->name   = $this->post->lineName;
             $line->root   = $product->program;
-            $line->order = $maxOrder;
+            $line->order  = $maxOrder;
             $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+
             $lineID = $this->dao->lastInsertID();
             $path   = ",$lineID,";
             $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();

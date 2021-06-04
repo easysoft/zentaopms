@@ -1279,7 +1279,7 @@ class storyModel extends model
 
             /* Update the story status by review rules. */
             $reviewerList = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->fetchPairs('reviewer', 'result');
-            $reviewedBy = explode(',', trim($story->reviewedBy, ','));
+            $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
             if(!array_diff(array_keys($reviewerList), $reviewedBy))
             {
                 $status = $this->setStatusByReviewRules($reviewerList);
@@ -4237,11 +4237,13 @@ class storyModel extends model
             $passCount   = $reviewResult == 'pass'   ? $passCount   + 1 : $passCount;
             $rejectCount = $reviewResult == 'reject' ? $rejectCount + 1 : $rejectCount;
         }
+
         if($reviewRule == 'allpass')
         {
             if($passCount   == count($reviewerList)) $status = 'active';
             if($rejectCount == count($reviewerList)) $status = 'closed';
         }
+
         if($reviewRule == 'halfpass')
         {
             if($passCount   >= floor(count($reviewerList) / 2) + 1) $status = 'active';
@@ -4250,5 +4252,4 @@ class storyModel extends model
 
         return $status;
     }
-
 }

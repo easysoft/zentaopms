@@ -2256,10 +2256,7 @@ class execution extends control
         $account = $user->account;
 
         $this->execution->unlinkMember($executionID, $account);
-        if(!dao::isError())
-        {
-            $this->loadModel('action')->create('team', $executionID, 'managedTeam');
-        }
+        if(!dao::isError()) $this->loadModel('action')->create('team', $executionID, 'managedTeam');
 
         /* if ajax request, send result. */
         if($this->server->ajax)

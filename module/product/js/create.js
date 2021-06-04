@@ -1,5 +1,5 @@
 /**
-  * Load product Lines. 
+  * Load product Lines.
   *
   * @param  $rootID
   * @access public
@@ -47,7 +47,7 @@ $('#program').change(function()
  */
 function toggleLine(obj)
 {
-    var $obj       = $(obj);
+    var $obj = $(obj);
     if($obj.length == 0) return false;
 
     var $line = $obj.closest('table').find('#line');

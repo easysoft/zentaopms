@@ -381,10 +381,10 @@ class build extends control
         }
         if($varName == 'testTaskBuild')
         {
-            $builds = array('') + $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,notrunk');
+            $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
 
-            if(empty(array_filter($builds)))
+            if(empty($builds))
             {
                 $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
 
@@ -393,7 +393,7 @@ class build extends control
                 $html .= html::a("javascript:loadExecutionBuilds($executionID)", $this->lang->refresh);
                 die($html);
             }
-            die(html::select('build', $builds, $build, "class='form-control' onchange='loadTestReports(this.value)'"));
+            die(html::select('build', array('') + $builds, $build, "class='form-control' onchange='loadTestReports(this.value)'"));
         }
         if($varName == 'dropdownList')
         {
