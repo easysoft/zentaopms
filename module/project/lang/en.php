@@ -170,6 +170,10 @@ $lang->project->aclList['open']    = "Open (accessible with project view permiss
 $lang->project->acls['private'] = 'Private';
 $lang->project->acls['open']    = 'Open';
 
+$lang->project->subAclList['private'] = "Private (For team members and stakeholders only)";
+$lang->project->subAclList['open']    = "Open (accessible with project view permissions)";
+$lang->project->subAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members and stakeholders can access)';
+
 $lang->project->authList['extend'] = 'Inherit (system privilege and project privilege)';
 $lang->project->authList['reset']  = 'Reset (project privilege only)';
 
