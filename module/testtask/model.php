@@ -885,7 +885,6 @@ class testtaskModel extends model
                 $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
             }
         }
-
     }
 
     /**
