@@ -87,7 +87,7 @@ function updateFile(link)
 }
 <?php endif;?>
 </script>
-<?php if(!isset($needProcess['search'])):?>
+<?php if(isset($needProcess['search'])):?>
 <script>
 $(function()
 {
