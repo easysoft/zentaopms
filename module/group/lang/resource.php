@@ -1081,6 +1081,7 @@ $lang->resource->custom->timezone           = 'timezone';
 $lang->resource->custom->setStoryConcept    = 'setStoryConcept';
 $lang->resource->custom->editStoryConcept   = 'editStoryConcept';
 $lang->resource->custom->browseStoryConcept = 'browseStoryConcept';
+$lang->resource->custom->setDefaultConcept  = 'setDefaultConcept';
 $lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
 
 $lang->custom->methodOrder[5]  = 'index';
@@ -1095,7 +1096,8 @@ $lang->custom->methodOrder[45] = 'timezone';
 $lang->custom->methodOrder[50] = 'setStoryConcept';
 $lang->custom->methodOrder[55] = 'editStoryConcept';
 $lang->custom->methodOrder[60] = 'browseStoryConcept';
-$lang->custom->methodOrder[65] = 'deleteStoryConcept';
+$lang->custom->methodOrder[65] = 'setDefaultConcept';
+$lang->custom->methodOrder[70] = 'deleteStoryConcept';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
@@ -1806,6 +1808,7 @@ $lang->changelog['15.0.rc1'][] = 'user-execution';
 $lang->changelog['15.0.rc1'][] = 'custom-setStoryConcept';
 $lang->changelog['15.0.rc1'][] = 'custom-editStoryConcept';
 $lang->changelog['15.0.rc1'][] = 'custom-browseStoryConcept';
+$lang->changelog['15.0.rc1'][] = 'custom-setDefaultConcept';
 $lang->changelog['15.0.rc1'][] = 'custom-deleteStoryConcept';
 $lang->changelog['15.0.rc1'][] = 'search-index';
 $lang->changelog['15.0.rc1'][] = 'search-buildIndex';

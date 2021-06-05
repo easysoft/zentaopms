@@ -38,6 +38,7 @@ $lang->custom->waterfallCommon      = "瀑布";
 $lang->custom->buildin              = "系統內置";
 $lang->custom->editStoryConcept     = "編輯需求概念";
 $lang->custom->setStoryConcept      = "設置需求概念";
+$lang->custom->setDefaultConcept    = "設置預設概念";
 $lang->custom->browseStoryConcept   = "需求概念列表";
 $lang->custom->deleteStoryConcept   = "刪除需求概念";
 $lang->custom->URConcept            = "用需概念";
