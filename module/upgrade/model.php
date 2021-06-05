@@ -988,6 +988,18 @@ class upgradeModel extends model
     }
 
     /**
+     * Delete tmp model files.
+     *
+     * @access public
+     * @return void
+     */
+    public function deleteTmpModel()
+    {
+        $tmpModelDir = $this->app->getTmpRoot() . 'model/';
+        foreach(glob($tmpModelDir . '/*.php') as $tmpModelFile) unlink($tmpModelFile);
+    }
+
+    /**
      * Delete Useless Files
      *
      * @access public
@@ -1020,8 +1032,6 @@ class upgradeModel extends model
 
         return $result;
     }
-
-
 
     /**
      * Update ubb code in bug table and user Templates table to html.
