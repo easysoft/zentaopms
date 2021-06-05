@@ -182,34 +182,10 @@ class actionModel extends model
             return $relation;
         }
 
-
         /* Only process these object types. */
         if(strpos($this->config->action->needGetRelateField, ",{$objectType},") !== false)
         {
             if(!isset($this->config->objectTables[$objectType])) return $emptyRecord;
-            if($objectType == 'story' and ($actionType == 'linked2build' or $actionType == 'unlinkedfrombuild'))
-            {
-                $build = $this->dao->select('project,execution')->from(TABLE_BUILD)->where('id')->eq((int)$extra)->fetch();
-                $action->project   = $build->project;
-                $action->execution = $build->execution;
-            }
-
-            if($objectType == 'story' and $actionType == 'estimated')
-            {
-                $action->project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq((int)$extra)->fetch('project');
-                $action->execution = (int)$extra;
-            }
-
-            if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false) and (int)$extra)
-            {
-                $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
-                $action->project   = $testtask->project;
-                $action->execution = $testtask->execution;
-            }
-
-            if($objectType == 'whitelist' and $extra == 'product') $action->product = $objectID;
-            if($objectType == 'whitelist' and $extra == 'project') $action->project = $objectID;
-            if($objectType == 'whitelist' and ($extra == 'sprint' or $extra == 'stage')) $action->execution = $objectID;
 
             /* Set fields to fetch. */
             $fields = '*';
@@ -244,6 +220,30 @@ class actionModel extends model
                     $record->product = join(',', array_keys($products));
                 }
             }
+
+            if($objectType == 'story' and ($actionType == 'linked2build' or $actionType == 'unlinkedfrombuild'))
+            {
+                $build = $this->dao->select('project,execution')->from(TABLE_BUILD)->where('id')->eq((int)$extra)->fetch();
+                $record->project   = $build->project;
+                $record->execution = $build->execution;
+            }
+
+            if($objectType == 'story' and $actionType == 'estimated')
+            {
+                $record->project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq((int)$extra)->fetch('project');
+                $record->execution = (int)$extra;
+            }
+
+            if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false) and (int)$extra)
+            {
+                $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
+                $record->project   = $testtask->project;
+                $record->execution = $testtask->execution;
+            }
+
+            if($objectType == 'whitelist' and $extra == 'product') $record->product = $objectID;
+            if($objectType == 'whitelist' and $extra == 'project') $record->project = $objectID;
+            if($objectType == 'whitelist' and ($extra == 'sprint' or $extra == 'stage')) $record->execution = $objectID;
             if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $record->project = (int)$extra ;
             if($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') $record->execution = (int)$extra;
 
