@@ -230,6 +230,8 @@ class product extends control
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch' && $this->app->rawModule != 'projectstory');
 
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
         /* Get related tasks, bugs, cases count of each story. */
         $storyIdList = array();
         foreach($stories as $story)

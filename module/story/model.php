@@ -3275,12 +3275,13 @@ class storyModel extends model
 
         if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate') return false;
 
-        global $config, $app, $dao;
-        $notReview = $dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->andWhere('result')->eq('')->fetchAll('reviewer');
-        $reviewers = $dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
+        global $app;
 
-        if($action == 'change')     return (count($reviewers) == 0 || count($notReview) == 0) and $story->status != 'closed';
-        if($action == 'review')     return in_array($app->user->account, array_keys($notReview)) and ($story->status == 'draft' or $story->status == 'changed');
+        $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
+        $story->notReview = isset($story->notReview) ? $story->notReview : array();
+
+        if($action == 'change')     return (count($story->reviewer) == 0 || count($story->notReview) == 0) and $story->status != 'closed';
+        if($action == 'review')     return in_array($app->user->account, $story->notReview) and ($story->status == 'draft' or $story->status == 'changed');
         if($action == 'close')      return $story->status != 'closed';
         if($action == 'activate')   return $story->status == 'closed';
         if($action == 'assignto')   return $story->status != 'closed';
@@ -3368,6 +3369,39 @@ class storyModel extends model
 
         /* For save session query. */
         $this->dao->sqlobj->sql = $query;
+        return $stories;
+    }
+
+    /**
+     * Merge story reviewers.
+     *
+     * @param  array|object  $stories
+     * @param  bool          $isObject
+     * @access public
+     * @return array|object
+     */
+    public function mergeReviewer($stories, $isObject = false)
+    {
+        if($isObject)
+        {
+            $story = $stories;
+            $stories = (array)$stories;
+            $stories[$story->id] = $story;
+        }
+
+        $allReviewers = $this->dao->select('story,reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->in(array_keys($stories))->orderBy('version')->fetchGroup('story', 'reviewer');
+
+        foreach($allReviewers as $storyID => $reviewerList)
+        {
+            $stories[$storyID]->reviewer  = array_keys($reviewerList);
+            $stories[$storyID]->notReview = array();
+            foreach($reviewerList as $reviewer => $reviewInfo)
+            {
+                if($reviewInfo->result == '') $stories[$storyID]->notReview[] = $reviewer;
+            }
+        }
+
+        if($isObject) return $stories[$story->id];
         return $stories;
     }
 

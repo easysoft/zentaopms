@@ -898,6 +898,8 @@ class story extends control
         $story   = $this->story->getById($storyID, $version, true);
         if(!$story) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        $story = $this->story->mergeReviewer($story, true);
+
         $this->story->replaceURLang($story->type);
 
         $story->files = $this->loadModel('file')->getByObject('story', $storyID);
@@ -908,7 +910,7 @@ class story extends control
         $cases        = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $modulePath   = $this->tree->getParents($story->module);
         $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
-        $users        = $this->user->getPairs('noletter');
+
         $reviewers    = $this->story->getReviewerPairs($storyID, $story->version);
 
         /* Set the menu. */
@@ -946,7 +948,7 @@ class story extends control
         $this->view->cases       = $cases;
         $this->view->story       = $story;
         $this->view->track       = $this->story->getTrackByID($story->id);
-        $this->view->users       = $users;
+        $this->view->users       = $this->user->getPairs('noletter');
         $this->view->reviewers   = array_keys($reviewers);
         $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
         $this->view->executions  = $this->execution->getPairs(0, 'all', 'nocode');
