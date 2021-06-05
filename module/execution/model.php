@@ -297,16 +297,17 @@ class executionModel extends model
             if(dao::isError()) return false;
 
             /* Determine whether to add a sprint or a stage according to the model of the execution. */
+            $project = $this->loadModel('project')->getByID($_POST['project']);
             $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-            $this->config->execution->create->requiredFields .= ',project';
-        }
+            /* If the execution model is a stage, determine whether the product is linked. */
+            if($type == 'stage' and empty($this->post->products[0]))
+            {
+                dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
+                return false;
+            }
 
-        /* If the execution model is a stage, determine whether the product is linked. */
-        if($type == 'stage' and empty($this->post->products[0]))
-        {
-            dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
-            return false;
+            $this->config->execution->create->requiredFields .= ',project';
         }
 
         /* Get the data from the post. */
