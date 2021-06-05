@@ -23,6 +23,8 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
+        $this->upgrade->deleteTmpModel();
+
         $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
         if(empty($systemMode) && !isset($this->config->qcVersion))
         {
