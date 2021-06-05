@@ -4988,7 +4988,7 @@ class upgradeModel extends model
      */
     public function updateProductVersion()
     {
-        $this->dao->update(TABLE_PRODUCT)->set('createdVersion')->eq($this->config->version)->where('createdVersion')->eq('')->exec();
+        $this->dao->update(TABLE_PRODUCT)->set('createdVersion')->eq($this->config->version)->where('createdVersion')->eq('')->andWhere('createdDate')->gt('2020-01-01')->exec();
         return true;
     }
 }
