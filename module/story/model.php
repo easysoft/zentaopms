@@ -356,7 +356,7 @@ class storyModel extends model
         foreach($_POST['needReview'] as $index => $value)
         {
             if($_POST['title'][$index] and isset($_POST['reviewer'][$index])) $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
-            if($_POST['title'][$index] and $value and !isset($_POST['reviewer'][$index]))
+            if($_POST['title'][$index] and $value and empty($_POST['reviewer'][$index]))
             {
                 dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
                 return false;
