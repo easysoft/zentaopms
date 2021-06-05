@@ -672,7 +672,6 @@ class upgradeModel extends model
         case '15_0':
             $this->saveLogs('Execute 15_0');
             $this->execSQL($this->getUpgradeFile('15.0'));
-            $this->updateProjectLifeTime();
             $this->adjustBugOfProject();
             $this->processBuildTable();
             $this->appendExec('15_0');
@@ -4963,19 +4962,6 @@ class upgradeModel extends model
                 }
             }
         }
-
-        return true;
-    }
-
-    /**
-     * Update the lifetime field default value of the zt_project table.
-     *
-     * @access public
-     * @return bool
-     */
-    public function updateProjectLifeTime()
-    {
-        $this->dao->update(TABLE_PROJECT)->set('lifetime')->eq('')->where('lifetime')->eq('sprint')->exec();
 
         return true;
     }

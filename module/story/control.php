@@ -610,7 +610,8 @@ class story extends control
         $users = $this->user->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
 
         $isShowReviewer = true;
-        $reviewerList   = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetchPairs('reviewer');
+        $reviewerList   = $this->story->getReviewerPairs($story->id, $story->version);
+        $reviewerList   = array_keys($reviewerList);
         $reviewedBy     = explode(',', trim($story->reviewedBy, ','));
         if(!array_diff($reviewerList, $reviewedBy)) $isShowReviewer = false;
 
@@ -835,7 +836,7 @@ class story extends control
         $this->app->loadLang('execution');
 
         $story    = $this->story->getById($storyID);
-        $reviewer = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
+        $reviewer = $this->story->getReviewerPairs($storyID, $story->version);
 
         /* Assign. */
         $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
@@ -908,7 +909,7 @@ class story extends control
         $modulePath   = $this->tree->getParents($story->module);
         $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
         $users        = $this->user->getPairs('noletter');
-        $reviewers    = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
+        $reviewers    = $this->story->getReviewerPairs($storyID, $story->version);
 
         /* Set the menu. */
         $from = $this->app->openApp;
@@ -1012,22 +1013,14 @@ class story extends control
 
             if($changes)
             {
-                $result      = $this->post->result;
-                $reasonParam = $result == 'reject' ? ',' . $this->post->closedReason : '';
-                $story       = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-                $reviewers   = $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
-                $reviewedBy  = explode(',', trim($story->reviewedBy, ','));
-                $actionID    = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result) . $reasonParam);
-                if($story->status == 'closed') $actionID = $this->action->create('story', $storyID, 'ReviewClosed');
-                if($story->status == 'active') $actionID = $this->action->create('story', $storyID, 'PassReviewed');
-                if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $actionID = $this->action->create('story', $storyID, 'ClarifyReviewed');
+                $story    = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+                $actionID = $this->story->recordReviewAction($story, $this->post->result, $this->post->closedReason);
                 $this->action->logHistory($actionID, $changes);
             }
 
             $this->executeHooks($storyID);
 
             if(isonlybody()) die(js::reload('parent.parent'));
-
 
             $module = $from == 'project' ? 'projectstory' : 'story';
             die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
@@ -1055,10 +1048,13 @@ class story extends control
         }
 
         /* Set the review result options. */
-        $reviewers = $this->dao->select('reviewer')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->fetchAll('reviewer');
+        $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $this->lang->story->resultList = $this->lang->story->reviewResultList;
+
         if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->resultList['revert']);
+
         if($story->status == 'changed') unset($this->lang->story->resultList['reject']);
+
         if(count($reviewers) > 1) unset($this->lang->story->resultList['revert']);
 
         $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
