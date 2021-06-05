@@ -131,6 +131,9 @@ class task extends control
 
             $this->executeHooks($taskID);
 
+            /* Return task id when call the API. */
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
+
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
@@ -283,6 +286,12 @@ class task extends control
         {
             $mails = $this->task->batchCreate($executionID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $taskIDList = array();
+            foreach($mails as $mail) $taskIDList[] = $mail->taskID;
+
+            /* Return task id list when call the API. */
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
 
             /* Locate the browser. */
             if(!empty($iframe)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));

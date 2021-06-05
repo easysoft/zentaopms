@@ -376,9 +376,11 @@ class storyModel extends model
             $story->color      = $stories->color[$i];
             $story->title      = $stories->title[$i];
             $story->source     = $stories->source[$i];
+            $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
             $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
+            $story->stage      = ($this->app->openApp == project or $this->app->openApp == execution) ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
             $story->product    = $productID;
@@ -476,7 +478,6 @@ class storyModel extends model
             $mails[$i]->storyID  = $storyID;
             $mails[$i]->actionID = $actionID;
         }
-
 
         /* Remove upload image file and session. */
         if(!empty($stories->uploadImage) and $this->session->storyImagesFile)
@@ -1008,6 +1009,7 @@ class storyModel extends model
                 $story->color          = $data->colors[$storyID];
                 $story->title          = $data->titles[$storyID];
                 $story->estimate       = $data->estimates[$storyID];
+                $story->category       = $data->category[$storyID];
                 $story->pri            = $data->pris[$storyID];
                 $story->assignedTo     = $data->assignedTo[$storyID];
                 $story->assignedDate   = $oldStory == $data->assignedTo[$storyID] ? $oldStory->assignedDate : $now;
@@ -1125,7 +1127,7 @@ class storyModel extends model
             ->remove('result,preVersion,comment')
             ->get();
 
-        /* fix bug #671. */
+        /* Fix bug #671. */
         $this->lang->story->closedReason = $this->lang->story->rejectedReason;
 
         $this->dao->update(TABLE_STORY)->data($story)
@@ -1148,6 +1150,7 @@ class storyModel extends model
         }
         if($this->post->result != 'reject') $this->setStage($storyID);
 
+        if(isset($story->closedReason)) unset($story->closedReason);
         return common::createChanges($oldStory, $story);
     }
 
@@ -1552,7 +1555,7 @@ class storyModel extends model
      * @param  int    $executionID
      * @param  int    $projectID
      * @access public
-     * @return bool
+     * @return bool|array
      */
     public function batchToTask($executionID, $projectID = 0)
     {
@@ -1578,6 +1581,7 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         /* Create tasks. */
+        $tasks   = array();
         $stories = $this->getByList($data->storyIdList);
         foreach($stories as $story)
         {
@@ -1615,9 +1619,11 @@ class storyModel extends model
                 ->exec();
 
             if(dao::isError()) return false;
-            $taskID = $this->dao->lastInsertID();
+            $taskID  = $this->dao->lastInsertID();
+            $tasks[] = $taskID;
             $this->action->create('task', $taskID, 'Opened', '');
         }
+        return $tasks;
     }
 
     /**
@@ -2378,8 +2384,9 @@ class storyModel extends model
                 ->fi()
                 ->beginIF($execution->type != 'project')
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
-                ->beginIF($this->session->executionStoryBrowseType == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF(strpos('changed|closed', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->fi()
+                ->beginIF(strpos('changed|closed', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF(!empty($branchParam))->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
                 ->andWhere('t2.deleted')->eq(0)
@@ -3313,6 +3320,10 @@ class storyModel extends model
                 $title  = $story->sourceNote;
                 $class .= ' text-ellipsis';
             }
+            else if($id == 'category')
+            {
+                $title  = zget($this->lang->story->categoryList, $story->category);
+            }
             else if($id == 'estimate')
             {
                 $title = $story->estimate . ' ' . $this->lang->hourCommon;
@@ -3384,6 +3395,9 @@ class storyModel extends model
                 break;
             case 'sourceNote':
                 echo $story->sourceNote;
+                break;
+            case 'category':
+                echo zget($this->lang->story->categoryList, $story->category);
                 break;
             case 'status':
                 if($story->URChanged)
@@ -3984,7 +3998,6 @@ class storyModel extends model
             $storyLang->copyTitle          = str_replace($SRCommon, $URCommon, $storyLang->copyTitle);
             $storyLang->common             = str_replace($SRCommon, $URCommon, $storyLang->common);
             $storyLang->title              = str_replace($SRCommon, $URCommon, $storyLang->title);
-            $storyLang->type               = str_replace($SRCommon, $URCommon, $storyLang->type);
             $storyLang->spec               = str_replace($SRCommon, $URCommon, $storyLang->spec);
             $storyLang->children           = str_replace($SRCommon, $URCommon, $storyLang->children);
             $storyLang->linkStories        = str_replace($SRCommon, $URCommon, $storyLang->linkStories);

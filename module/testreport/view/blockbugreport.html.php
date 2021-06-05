@@ -48,12 +48,91 @@
   <?php foreach($bugInfo as $infoKey => $infoValue):?>
   <tr>
     <td class='text-top'>
-      <table class='table table-condensed table-report' id='bugSeverityGroups'>
+      <table class='table table-condensed table-report' id='bugStageGroups'>
         <?php if(empty($infoValue)):?>
         <tr>
           <td class='none-data'>
             <h5><?php echo $lang->testreport->$infoKey?></h5>
             <?php echo $lang->testreport->none;?>
+          </td>
+        </tr>
+        <?php elseif($infoKey == 'bugStageGroups'):?>
+        <tr class='text-top'>
+          <td class='w-p70'>
+            <div class='chart-wrapper text-center'>
+              <h5><?php echo $lang->testreport->$infoKey?></h5>
+              <div class='chart-canvas'>
+                <?php if(isset($_POST["chart-{$infoKey}"])):?>
+                <img src='<?php echo strip_tags($_POST["chart-{$infoKey}"])?>' />
+                <?php else:?>
+                <canvas id='chart-<?php echo $infoKey?>' width='90' height='20' data-responsive='true'></canvas>
+                <?php endif;?>
+              </div>
+            </div>
+          </td>
+          <td class='text-top'>
+            <div class='table-wrapper' style='overflow:auto'>
+              <table class='table table-condensed table-hover table-striped table-bordered' data-chart='bar' data-target='#chart-<?php echo $infoKey?>' data-animation='false'>
+                <thead>
+                  <tr>
+                    <th class='w-60px'><?php echo $lang->bug->pri;?></th>
+                    <th class='w-80px'><?php echo $lang->testreport->bugStageList['generated'];?></th>
+                    <th class='w-80px'><?php echo $lang->testreport->bugStageList['legacy'];?></th>
+                    <th class='w-80px'><?php echo $lang->testreport->bugStageList['resolved'];?></th>
+                  </tr>
+                </thead>
+                <?php foreach($lang->bug->priList as $key => $value):?>
+                <tr class='text-center'>
+                <td class='chart-color w-20px'><i class="chart-color-dot pri-<?php echo $key;?>"></i> <?php echo $key == 0 ? $lang->null : $value;?></td>
+                  <td class='chart-value'><?php echo $infoValue[$key]['generated'];?></td>
+                  <td class='chart-value'><?php echo $infoValue[$key]['legacy'];?></td>
+                  <td class='chart-value'><?php echo $infoValue[$key]['resolved'];?></td>
+                </tr>
+                <?php endforeach?>
+              </table>
+            </div>
+          </td>
+        </tr>
+        <?php elseif($infoKey == 'bugHandleGroups'):?>
+        <tr class='text-top'>
+          <td class='w-p70'>
+            <div class='chart-wrapper text-center'>
+              <h5><?php echo $lang->testreport->$infoKey?></h5>
+              <div class='chart-canvas'>
+                <?php if(isset($_POST["chart-{$infoKey}"])):?>
+                <img src='<?php echo strip_tags($_POST["chart-{$infoKey}"])?>' />
+                <?php else:?>
+                <canvas id='chart-<?php echo $infoKey?>' width='90' height='20' data-responsive='true'></canvas>
+                <?php endif;?>
+              </div>
+            </div>
+          </td>
+          <td class='text-top'>
+            <div class='table-wrapper' style='overflow:auto'>
+              <table class='table table-condensed table-hover table-striped table-bordered' data-chart='line' data-target='#chart-<?php echo $infoKey?>' data-animation='false'>
+                <thead>
+                  <tr>
+                    <th class='w-40px'><?php echo $lang->testreport->date;?></th>
+                    <th class='w-80px'><i class='chart-color-dot generated'></i> <?php echo $lang->testreport->bugStageList['generated'];?></th>
+                    <th class='w-80px'><i class='chart-color-dot legacy'></i> <?php echo $lang->testreport->bugStageList['legacy'];?></th>
+                    <th class='w-80px'><i class='chart-color-dot resolved'></i> <?php echo $lang->testreport->bugStageList['resolved'];?></th>
+                  </tr>
+                </thead>
+                <?php
+                $beginTime = isset($report->begin) ? strtotime($report->begin) : strtotime($begin);
+                $endTime   = isset($report->end) ? strtotime($report->end) : strtotime($end);
+                ?>
+                <?php for($time = $beginTime; $time <= $endTime; $time += 86400):?>
+                <?php $date = date('m-d', $time);?>
+                <tr class='text-center'>
+                  <td class='chart-value'><?php echo $date?></td>
+                  <td class='chart-value'><?php echo $infoValue['generated'][$date];?></td>
+                  <td class='chart-value'><?php echo $infoValue['legacy'][$date];?></td>
+                  <td class='chart-value'><?php echo $infoValue['resolved'][$date];?></td>
+                </tr>
+                <?php endfor?>
+              </table>
+            </div>
           </td>
         </tr>
         <?php else:?>
@@ -115,3 +194,54 @@
   </tr>
   <?php endforeach;?>
 </table>
+<?php js::set('bugStageList', $lang->testreport->bugStageList);?>
+<?php js::set('bugStageValueList', array_values($lang->testreport->bugStageList));?>
+<?php js::set('bugPriList', $lang->bug->priList);?>
+<?php js::set('zeroPri', $lang->null);?>
+<?php js::set('bugStageGroups', $bugInfo['bugStageGroups']);?>
+<?php js::set('bugHandleGroups', $bugInfo['bugHandleGroups']);?>
+<?php js::set('dateGroups', !empty($bugInfo['bugHandleGroups']) ? array_keys($bugInfo['bugHandleGroups']['generated']) : '');?>
+<script>
+var priList   = [];
+var stageList = [];
+var colorList = ['#d5d9df', '#d50000', '#ff9800', '#2098ee', '#009688'];
+var colorKey  = 0;
+for(var key in bugPriList)
+{
+    $('.pri-' + key).css('background', colorList[colorKey]);
+    var priName  = key == 0 ? zeroPri : bugPriList[key];
+    var pri = {
+        label: priName,
+        color: colorList[colorKey],
+        data:  [bugStageGroups[key]['generated'], bugStageGroups[key]['legacy'], bugStageGroups[key]['resolved']]
+    }
+    priList.push(pri);
+    colorKey++;
+    if(colorKey >= 5) colorKey -= 5;
+}
+var data = {
+    labels: bugStageValueList,
+    datasets: priList,
+};
+var options = {responsive: true};
+var bugStageGroups = $('#chart-bugStageGroups').barChart(data, options);
+
+colorKey = 2;
+for(var key in bugHandleGroups)
+{
+    $('.' + key).css('background', colorList[colorKey]);
+    var stageName  = bugStageList[key];
+    var stage = {
+        label: stageName,
+        color: colorList[colorKey],
+        data:  bugHandleGroups[key]
+    }
+    stageList.push(stage);
+    colorKey++;
+}
+var data = {
+    labels: dateGroups,
+    datasets: stageList,
+};
+var bugHandleGroups = $('#chart-bugHandleGroups').lineChart(data, options);
+</script>

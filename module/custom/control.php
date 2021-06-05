@@ -211,7 +211,7 @@ class custom extends control
         $this->view->fieldList   = $fieldList;
         $this->view->dbFields    = $dbFields;
         $this->view->field       = $field;
-        $this->view->lang2Set     = str_replace('_', '-', $lang);
+        $this->view->lang2Set    = str_replace('_', '-', $lang);
         $this->view->module      = $module;
         $this->view->currentLang = $currentLang;
         $this->view->canAdd      = strpos($this->config->custom->canAdd[$module], $field) !== false;
@@ -408,19 +408,6 @@ class custom extends control
 
         $this->view->URSR = json_decode($URSR);
         $this->display();
-    }
-
-    /**
-     * Set story concept.
-     *
-     * @param  int   $key
-     * @access public
-     * @return void
-     */
-    public function setDefaultConcept($key = 0)
-    {
-        $this->loadModel('setting')->setItem('system.custom.URSR', $key);
-        die(js::reload('parent'));
     }
 
     /**

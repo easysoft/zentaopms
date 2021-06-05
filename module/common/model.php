@@ -1399,16 +1399,19 @@ EOD;
             if(strtolower($key) == 'editedby')        continue;
             if(strtolower($key) == 'editeddate')      continue;
             if(strtolower($key) == 'uid')             continue;
-            if(strtolower($key) == 'finisheddate' && $value == '')  continue;
-            if(strtolower($key) == 'canceleddate' && $value == '')  continue;
-            if(strtolower($key) == 'closeddate'   && $value == '')  continue;
+            if(strtolower($key) == 'finisheddate' && $value == '')    continue;
+            if(strtolower($key) == 'canceleddate' && $value == '')    continue;
+            if(strtolower($key) == 'hangupeddate' && $value == '')    continue;
+            if(strtolower($key) == 'lastcheckeddate' && $value == '') continue;
+            if(strtolower($key) == 'activateddate' && $value == '')   continue;
+            if(strtolower($key) == 'closeddate'   && $value == '')    continue;
 
             if(isset($old->$key) and $value != stripslashes($old->$key))
             {
                 $diff = '';
                 if(substr_count($value, "\n") > 1     or
                     substr_count($old->$key, "\n") > 1 or
-                    strpos('name,title,desc,spec,steps,content,digest,verify,report', strtolower($key)) !== false)
+                    strpos('name,title,desc,spec,steps,content,digest,verify,report,analysis,summary,prevention,resolution', strtolower($key)) !== false)
                 {
                     $diff = commonModel::diff($old->$key, $value);
                 }
@@ -1522,22 +1525,25 @@ EOD;
         $preAndNextObject->next = '';
 
         $preObj = false;
-        foreach($existsObjectList['objectList'] as $id => $object)
+        if(isset($existsObjectList['objectList']))
         {
-            /* Get next object. */
-            if($preObj === true)
+            foreach($existsObjectList['objectList'] as $id => $object)
             {
-                $preAndNextObject->next = $object;
-                break;
-            }
+                /* Get next object. */
+                if($preObj === true)
+                {
+                    $preAndNextObject->next = $object;
+                    break;
+                }
 
-            /* Get pre object. */
-            if($id == $objectID)
-            {
-                if($preObj) $preAndNextObject->pre = $preObj;
-                $preObj = true;
+                /* Get pre object. */
+                if($id == $objectID)
+                {
+                    if($preObj) $preAndNextObject->pre = $preObj;
+                    $preObj = true;
+                }
+                if($preObj !== true) $preObj = $object;
             }
-            if($preObj !== true) $preObj = $object;
         }
 
         return $preAndNextObject;
@@ -1717,7 +1723,7 @@ EOD;
             $method = $this->app->rawMethod;
         }
 
-        if(!empty($this->app->user->modifyPassword) and (($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
+        if(!empty($this->app->user->modifyPassword) and (($module != 'user' or $method != 'deny') and ($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
         if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
@@ -2347,16 +2353,19 @@ EOD;
      */
     static public function setMenuVars($moduleName, $objectID, $params = array())
     {
-        global $lang;
+        global $app, $lang;
 
-        foreach($lang->$moduleName->menu as $label => $menu)
+        $menuKey = 'menu';
+        if($app->viewType == 'mhtml') $menuKey = 'webMenu';
+
+        foreach($lang->$moduleName->$menuKey as $label => $menu)
         {
-            $lang->$moduleName->menu->$label = self::setMenuVarsEx($menu, $objectID, $params);
+            $lang->$moduleName->$menuKey->$label = self::setMenuVarsEx($menu, $objectID, $params);
             if(isset($menu['subMenu']))
             {
                 foreach($menu['subMenu'] as $key1 => $subMenu)
                 {
-                    $lang->$moduleName->menu->{$label}['subMenu']->$key1 = self::setMenuVarsEx($subMenu, $objectID, $params);
+                    $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1 = self::setMenuVarsEx($subMenu, $objectID, $params);
                 }
             }
 
@@ -2364,13 +2373,13 @@ EOD;
 
             foreach($menu['dropMenu'] as $key2 => $dropMenu)
             {
-                $lang->$moduleName->menu->{$label}['dropMenu']->$key2 = self::setMenuVarsEx($dropMenu, $objectID, $params);
+                $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key2 = self::setMenuVarsEx($dropMenu, $objectID, $params);
 
                 if(!isset($dropMenu['subMenu'])) continue;
 
                 foreach($dropMenu['subMenu'] as $key3 => $subMenu)
                 {
-                    $lang->$moduleName->menu->{$label}['dropMenu']->$key3 = self::setMenuVarsEx($subMenu, $objectID, $params);
+                    $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key3 = self::setMenuVarsEx($subMenu, $objectID, $params);
                 }
             }
         }

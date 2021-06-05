@@ -95,6 +95,25 @@ function loadExecutionBuilds(executionID)
 }
 
 /**
+ * Load test report.
+ *
+ * @param  int    buildID
+ * @access public
+ * @return void
+ */
+function loadTestReports(buildID)
+{
+    link = createLink('testtask', 'ajaxGetTestReports', 'buildID=' + buildID);
+    $.get(link, function(data)
+    {
+        if(!data) data = '<select id="testreport" name="testreport" class="form-control"></select>';
+        $('#testreport').replaceWith(data);
+        $('#testreport_chosen').remove();
+        $("#testreport").chosen();
+    });
+}
+
+/**
  * when begin date input change and end date input is null
  * change end date input to begin's after day
  *

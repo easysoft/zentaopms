@@ -324,11 +324,12 @@ class testcase extends control
 
             $this->executeHooks($caseID);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $caseID));
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $response['locate'] = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            $response['locate'] = ($this->session->caseList and strpos($this->session->caseList, 'dynamic') === false) ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
             $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -473,9 +474,11 @@ class testcase extends control
         $this->loadModel('story');
         if(!empty($_POST))
         {
-            $caseID = $this->testcase->batchCreate($productID, $branch, $storyID);
+            $caseIDList = $this->testcase->batchCreate($productID, $branch, $storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIDList));
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
@@ -819,7 +822,9 @@ class testcase extends control
         $caseIDList = array_unique($caseIDList);
         $branchProduct = false;
 
-        if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($this->session->project);
+        if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
+        if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
 
         /* The cases of a product. */
         if($productID)
@@ -843,7 +848,6 @@ class testcase extends control
             else
             {
                 $product = $this->product->getByID($productID);
-                $this->testcase->setMenu($this->products, $productID, $branch);
 
                 if($product->type != 'normal') $branchProduct = true;
 

@@ -146,6 +146,8 @@ class story extends control
 
             $this->executeHooks($storyID);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $storyID));
+
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
@@ -162,7 +164,7 @@ class story extends control
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $branchID  = $this->post->branch  ? $this->post->branch  : $branch;
                 $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=unclosed&param=0&type=$type&orderBy=id_desc");
-                if($this->session->storyList) $response['locate'] = $this->session->storyList;
+                if($this->session->storyList and $this->app->openApp != 'product') $response['locate'] = $this->session->storyList;
             }
             else
             {
@@ -404,6 +406,7 @@ class story extends control
                 if(dao::isError()) die(js::error(dao::getError()));
             }
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
 
             if($storyID)
@@ -430,7 +433,6 @@ class story extends control
         $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
-
 
         /* Init vars. */
         $planID   = $plan;
@@ -491,6 +493,7 @@ class story extends control
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $plans;
+        $this->view->users            = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $this->view->priList          = $priList;
         $this->view->sourceList       = $sourceList;
         $this->view->planID           = $planID;
@@ -819,7 +822,7 @@ class story extends control
 
         /* Assign. */
         $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->users      = $this->user->getPairs('pofirst|nodeleted', $this->view->story->assignedTo);
+        $this->view->users      = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
         $this->view->position[] = $this->lang->story->change;
         $this->view->needReview = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->display();
@@ -996,7 +999,7 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::reload('parent.parent'));
 
             $module = $from == 'project' ? 'projectstory' : 'story';
             die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
@@ -1063,7 +1066,7 @@ class story extends control
 
         if(dao::isError()) die(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->storyList, 'parent'));
+        die(js::reload('parent'));
     }
 
     /**
@@ -1274,7 +1277,7 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->story->successToTask;
 
-            $this->story->batchToTask($executionID, $this->session->project);
+            $tasks = $this->story->batchToTask($executionID, $this->session->project);
 
             if(dao::isError())
             {
@@ -1283,6 +1286,7 @@ class story extends control
                 $this->send($response);
             }
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $tasks));
             $response['locate'] = $this->createLink('execution', 'task', "executionID=$executionID");
             $this->send($response);
         }
@@ -1912,20 +1916,20 @@ class story extends control
 
                 if(!empty($children))
                 {
-                    $reorderStory = array();
+                    $reorderStories = array();
                     foreach($stories as $story)
                     {
-                        $reorderStory[$story->id] = $story;
+                        $reorderStories[$story->id] = $story;
                         if(isset($children[$story->id]))
                         {
                             foreach($children[$story->id] as $childrenID => $childrenStory)
                             {
-                                $reorderStory[$childrenID] = $childrenStory;
+                                $reorderStories[$childrenID] = $childrenStory;
                             }
                         }
                         unset($stories[$story->id]);
                     }
-                    $stories = $reorderStory;
+                    $stories = $reorderStories;
                 }
             }
 

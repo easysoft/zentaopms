@@ -670,7 +670,15 @@ class upgradeModel extends model
             $this->fixExecutionTeam();
             $this->appendExec('15_0_rc3');
         case '15_0':
-            $this->updateProjectLifeTime();
+            $this->saveLogs('Execute 15_0');
+            $this->execSQL($this->getUpgradeFile('15.0'));
+            $this->adjustBugOfProject();
+            $this->processBuildTable();
+            $this->appendExec('15_0');
+        case '15_0_1':
+            $this->saveLogs('Execute 15_0_1');
+            $this->updateProductVersion();
+            $this->appendExec('15_0_1');
         }
 
         $this->deletePatch();
@@ -858,6 +866,7 @@ class upgradeModel extends model
             case '15_0_rc1':
             case '15_0_rc2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.rc2'));
             case '15_0_rc3': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.rc3'));
+            case '15_0': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -4478,7 +4487,6 @@ class upgradeModel extends model
             $data->path     = ",{$projectID},{$sprint->id},";
             $data->type     = 'sprint';
             $data->acl      = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
-            $data->lifetime = empty($sprint->lifetime) ? $sprint->type : $sprint->lifetime;
 
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
 
@@ -4631,13 +4639,14 @@ class upgradeModel extends model
             if(isset($data->name))
             {
                 $product = new stdclass();
-                $product->program     = $data->program;
-                $product->name        = $data->name;
-                $product->acl         = 'open';
-                $product->PO          = isset($this->app->user->account) ? $this->app->user->account : '';
-                $product->createdBy   = isset($this->app->user->account) ? $this->app->user->account : '';
-                $product->createdDate = helper::now();
-                $product->status      = 'normal';
+                $product->program        = $data->program;
+                $product->name           = $data->name;
+                $product->acl            = 'open';
+                $product->PO             = isset($this->app->user->account) ? $this->app->user->account : '';
+                $product->createdBy      = isset($this->app->user->account) ? $this->app->user->account : '';
+                $product->createdDate    = helper::now();
+                $product->status         = 'normal';
+                $product->createdVersion = $this->config->version;
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertID();
@@ -4794,82 +4803,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Process sprint concept.
-     *
-     * @access public
-     * @return bool
-     */
-    public function processSprintConcept()
-    {
-        $productProject = $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('module')->eq('custom')
-            ->andWhere('`key`')->eq('productProject')
-            ->fetch();
-
-        $newValue = substr($productProject->value, 2);
-        $this->dao->update(TABLE_CONFIG)
-            ->set('`value`')->eq($newValue)
-            ->set('`key`')->eq('sprintConcept')
-            ->where('id')->eq($productProject->id)
-            ->exec();
-
-        return true;
-    }
-
-    /**
-     * Adjust budget units and values.
-     *
-     * @access public
-     * @return bool
-     */
-    public function adjustBudget()
-    {
-        $budgets = $this->dao->select('id,budget,budgetUnit')->from(TABLE_PROJECT)
-            ->where('type')->in('project,program')
-            ->fetchAll('id');
-
-        foreach($budgets as $id => $budget)
-        {
-            $data = array();
-            if($budget->budgetUnit == 'yuan')
-            {
-                $data['budget']     = number_format($budget->budget / 10000, 2);
-                $data['budgetUnit'] = 'wanyuan';
-            }
-
-            if($data) $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($id)->exec();
-        }
-
-        return true;
-    }
-
-    /**
-     * Adjust budget units and values.
-     *
-     * @access public
-     * @return bool
-     */
-    public function adjustBudgetUnit()
-    {
-        $budgets = $this->dao->select('id,budget,budgetUnit')->from(TABLE_PROJECT)
-            ->where('type')->in('project,program')
-            ->fetchAll('id');
-
-        foreach($budgets as $id => $budget)
-        {
-            $data = array();
-            $data['budgetUnit'] = 'CNY';
-            $data['budget']     = str_replace(',', '', $budget->budget);
-            if($budget->budgetUnit == 'wanyuan') $data['budget']     = (float)$data['budget'] * 10000;
-            if($budget->budgetUnit == 'dollar')  $data['budgetUnit'] = 'USD';
-
-            if($data) $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($id)->exec();
-        }
-
-        return true;
-    }
-
-    /**
      * Adjust the project field of the zt_bug table.
      *
      * @access public
@@ -4877,15 +4810,14 @@ class upgradeModel extends model
      */
     public function adjustBugOfProject()
     {
-        $bugs       = $this->dao->select('id,execution')->from(TABLE_BUG)->fetchAll('id');
-        $executions = $this->dao->select('id,project')->from(TABLE_EXECUTION)->fetchAll('id');
+        if($this->config->systemMode != 'new') return true;
 
-        foreach($bugs as $id => $bug)
+        $bugs       = $this->dao->select('id,execution')->from(TABLE_BUG)->where('execution')->ne('0')->andWhere('project')->eq(0)->fetchPairs('id', 'execution');
+        $executions = $this->dao->select('id,project')->from(TABLE_EXECUTION)->where('id')->in(array_unique(array_values($bugs)))->fetchPairs('id', 'project');
+
+        foreach($bugs as $id => $executionID)
         {
-            if($bug->execution == 0) continue;
-            $data = array();
-            $data['project'] = $executions[$bug->execution]->project;
-            if($data) $this->dao->update(TABLE_BUG)->data($data)->where('id')->eq($id)->exec();
+            if(isset($executions[$executionID])) $this->dao->update(TABLE_BUG)->set('project')->eq($executions[$executionID])->where('id')->eq($id)->exec();
         }
 
         return true;
@@ -5035,15 +4967,14 @@ class upgradeModel extends model
     }
 
     /**
-     * Update the lifetime field default value of the zt_project table.
+     * Update the createdVersion field of the zt_product table.
      *
      * @access public
-     * @return bool
+     * @return void
      */
-    public function updateProjectLifeTime()
+    public function updateProductVersion()
     {
-        $this->dao->update(TABLE_PROJECT)->set('lifetime')->eq('')->where('lifetime')->eq('sprint')->exec();
-
+        $this->dao->update(TABLE_PRODUCT)->set('createdVersion')->eq($this->config->version)->where('createdVersion')->eq('')->exec();
         return true;
     }
 }

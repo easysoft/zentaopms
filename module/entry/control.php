@@ -5,19 +5,19 @@
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     entry 
+ * @package     entry
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 class entry extends control
 {
     /**
-     * Browse entries. 
-     * 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Browse entries.
+     *
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -36,8 +36,8 @@ class entry extends control
     }
 
     /**
-     * Create an entry. 
-     * 
+     * Create an entry.
+     *
      * @access public
      * @return void
      */
@@ -49,6 +49,7 @@ class entry extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('entry', $id, 'created');
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $id));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -61,9 +62,9 @@ class entry extends control
     }
 
     /**
-     * Edit an entry. 
-     * 
-     * @param  int    $id 
+     * Edit an entry.
+     *
+     * @param  int    $id
      * @access public
      * @return void
      */
@@ -93,9 +94,9 @@ class entry extends control
     }
 
     /**
-     * Delete an entry. 
-     * 
-     * @param  int    $id 
+     * Delete an entry.
+     *
+     * @param  int    $id
      * @access public
      * @return void
      */
@@ -108,13 +109,13 @@ class entry extends control
     }
 
     /**
-     * Browse logs of an entry. 
-     * 
-     * @param  int    $id 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Browse logs of an entry.
+     *
+     * @param  int    $id
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */

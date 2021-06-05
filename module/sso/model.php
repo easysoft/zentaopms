@@ -3,7 +3,7 @@ class ssoModel extends model
 {
     /**
      * Check Key.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -16,8 +16,8 @@ class ssoModel extends model
 
     /**
      * Get bind user.
-     * 
-     * @param  string    $user 
+     *
+     * @param  string    $user
      * @access public
      * @return object
      */
@@ -28,7 +28,7 @@ class ssoModel extends model
 
     /**
      * Get bind users with ranzhi.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -38,8 +38,8 @@ class ssoModel extends model
     }
 
     /**
-     * Bind user. 
-     * 
+     * Bind user.
+     *
      * @access public
      * @return object
      */
@@ -83,14 +83,14 @@ class ssoModel extends model
 
     /**
      * Create a user from ranzhi.
-     * 
+     *
      * @access public
      * @return void
      */
     public function createUser()
     {
         $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($this->post->account)->fetch();
-        if($user) return array('status' => 'fail', 'data' => $this->lang->sso->bindHasAccount); 
+        if($user) return array('status' => 'fail', 'data' => $this->lang->sso->bindHasAccount);
 
         $user = new stdclass();
         $user->account  = $this->post->account;
@@ -101,7 +101,7 @@ class ssoModel extends model
 
         $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
 
-        if(dao::isError()) return array('status' => 'fail', 'data' => dao::getError()); 
-        return array('status' => 'success'); 
+        if(dao::isError()) return array('status' => 'fail', 'data' => dao::getError());
+        return array('status' => 'success', 'id' => $this->dao->lastInsertId());
     }
 }

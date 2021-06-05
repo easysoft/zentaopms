@@ -119,6 +119,7 @@ class repo extends control
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
@@ -354,7 +355,24 @@ class repo extends control
         $repo = $this->repo->getRepoByID($repoID);
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID"));
 
-        $branches = $this->repo->getBranches($repo);
+        /* Set branch for git. */
+        $branches = array();
+        if(strpos($repo->SCM, 'Git') !== false)
+        {
+            $branches = $this->repo->getBranches($repo);
+
+            if(empty($branchID) and $this->cookie->repoBranch) $branchID = $this->cookie->repoBranch;
+            if($branchID) $this->repo->setRepoBranch($branchID);
+            if(!isset($branches[$branchID]))
+            {
+                $branchID = key($branches);
+                $this->repo->setRepoBranch($branchID);
+            }
+        }
+        else
+        {
+            $this->repo->setRepoBranch('');
+        }
 
         /* Decrypt path and get cacheFile. */
         $path      = $this->repo->decodePath($path);
@@ -426,7 +444,7 @@ class repo extends control
         $revisions = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
 
         /* Synchronous commit only in root path. */
-        if(strpos($repo->SCM, 'Git') != false and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
+        if(strpos($repo->SCM, 'Git') !== false and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
 
         /* Set committers. */
         $commiters = $this->loadModel('user')->getCommiters();
@@ -441,7 +459,7 @@ class repo extends control
         $this->view->infos     = $infos;
         $this->view->repoID    = $repoID;
         $this->view->branches  = $branches;
-        $this->view->branchID  = $branchID ? $branchID : key($branches);
+        $this->view->branchID  = $branchID;
         $this->view->objectID  = $objectID;
         $this->view->pager     = $pager;
         $this->view->path      = urldecode($path);
@@ -910,7 +928,7 @@ class repo extends control
 
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
         $logs     = array();
-        $revision = $version == 1 ? 'HEAD' : (strpos($repo->SCM, 'Git') !== false ? $latestInDB->commit : $latestInDB->revision);
+        $revision = $version == 1 ? 'HEAD' : ($repo->SCM == 'Git' ? $latestInDB->commit : $latestInDB->revision);
         if($type == 'batch')
         {
             $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
@@ -960,7 +978,7 @@ class repo extends control
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) die();
-        if(strpos($repo->SCM, 'Git') != false) die('finish');
+        if(strpos($repo->SCM, 'Git') === false) die('finish');
         if($branch) $branch = base64_decode($branch);
 
         $this->scm->setEngine($repo);
@@ -979,6 +997,7 @@ class repo extends control
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
         $logs     = array();
         $revision = $version == 1 ? 'HEAD' : $latestInDB->commit;
+        if($repo->SCM == 'Gitlab' and $version > 1) $revision = $latestInDB->revision;
 
         $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branch);
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branch);

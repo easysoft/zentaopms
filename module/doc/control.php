@@ -133,7 +133,7 @@ class doc extends control
                 if($objectType == 'execution' and $this->post->execution) $objectID = $this->post->execution;
                 if($objectType == 'custom' or $objectType == 'book')      $objectID = 0;
 
-                if($objectType == 'execution' and $this->config->systemMode == 'new')
+                if($objectType == 'execution' and $this->config->systemMode == 'new' and $this->app->openApp == 'doc')
                 {
                     $execution  = $this->execution->getByID($this->post->execution);
                     $objectType = 'project';
@@ -142,6 +142,7 @@ class doc extends control
 
                 $this->action->create('docLib', $libID, 'Created');
 
+                if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
                 die(js::locate($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID"), 'parent.parent'));
             }
             else
@@ -157,8 +158,8 @@ class doc extends control
         if($type == 'execution')
         {
             $execution = $this->execution->getByID($objectID);
-            $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
-            $this->lang->doc->libTypeList['execution'] = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->libTypeList['execution']);
+            if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
+            if($execution->type == 'stage') $this->lang->doc->libTypeList['execution'] = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->libTypeList['execution']);
         }
 
         $libTypeList = $this->lang->doc->libTypeList;
@@ -288,6 +289,7 @@ class doc extends control
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, '');
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
             $link     = $this->createLink('doc', 'objectLibs', $params);
@@ -894,7 +896,7 @@ class doc extends control
 
         if(!$libID) $libID = key($libs);
 
-        $openApp = $this->app->openApp;
+        $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
         if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
 
         /* Set Custom. */

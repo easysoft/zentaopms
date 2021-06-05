@@ -37,6 +37,7 @@ class build extends control
 
             $this->executeHooks($buildID);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $buildID));
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadExecutionBuilds($executionID)")); // Code for task #5126.
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
@@ -252,6 +253,14 @@ class build extends control
         $this->view->type         = $type;
         $this->view->bugPager     = $bugPager;
         $this->view->branchName   = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
+
+        if($this->app->getViewType() == 'json')
+        {
+            unset($this->view->storyPager);
+            unset($this->view->generatedBugPager);
+            unset($this->view->bugPager);
+        }
+
         $this->display();
     }
 
@@ -384,7 +393,7 @@ class build extends control
                 $html .= html::a("javascript:loadExecutionBuilds($executionID)", $this->lang->refresh);
                 die($html);
             }
-            die(html::select('build', $builds, $build, "class='form-control'"));
+            die(html::select('build', array('') + $builds, $build, "class='form-control' onchange='loadTestReports(this.value)'"));
         }
         if($varName == 'dropdownList')
         {

@@ -133,6 +133,7 @@
             if(['team'].includes(methodLowerCase)) return 'system';
         }
         if(moduleName === 'company') if(methodLowerCase == 'browse') return 'admin';
+        if(moduleName === 'opportunity' || moduleName === 'risk' || moduleName == 'trainplan') if(methodLowerCase == 'view') return 'project';
         if(moduleName === 'tree')
         {
             if(methodLowerCase === 'browse')
@@ -178,21 +179,23 @@
             }
         }
 
-        /* Set openApp cookie */
-        $.cookie('openApp', appCode, {expires: config.cookieLife, path: config.webRoot});
-
-        /* Highlight at main menu */
-        var $menuMainNav   = $('#menuMainNav,#menuMoreNav');
-        var $lastActiveNav = $menuMainNav.find('li.active');
-        if($lastActiveNav.data('app') !== appCode)
-        {
-            $lastActiveNav.removeClass('active');
-            $menuMainNav.find('li[data-app="' + appCode + '"]').addClass('active');
-        }
-
         /* Create pate app object and store it */
         var app = openedApps[appCode];
-        if(!app)
+        if(app)
+        {
+            if(app.$iframe && app.$iframe.length)
+            {
+                var iframe = app.$iframe[0];
+                if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.$)
+                {
+                    var result = iframe.contentWindow.$(iframe.contentDocument).triggerHandler('openapp.apps', [app, url]);
+                    if (result === false) {
+                        return 'cancel';
+                    }
+                }
+            }
+        }
+        else
         {
             var $iframe = $(
             [
@@ -214,6 +217,18 @@
 
             /* If first show without url, then use the default url */
             if(!url) url = appsMap[appCode].url;
+        }
+
+        /* Set openApp cookie */
+        $.cookie('openApp', appCode, {expires: config.cookieLife, path: config.webRoot});
+
+        /* Highlight at main menu */
+        var $menuMainNav   = $('#menuMainNav,#menuMoreNav');
+        var $lastActiveNav = $menuMainNav.find('li.active');
+        if($lastActiveNav.data('app') !== appCode)
+        {
+            $lastActiveNav.removeClass('active');
+            $menuMainNav.find('li[data-app="' + appCode + '"]').addClass('active');
         }
 
         /* Show page app and update iframe source */
@@ -328,6 +343,18 @@
         appCode = appCode || lastOpenedApp;
         var app = openedApps[appCode];
         if(!app) return;
+
+        if(app.$iframe && app.$iframe.length)
+        {
+            var iframe = app.$iframe[0];
+            if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.$)
+            {
+                var result = iframe.contentWindow.$(iframe.contentDocument).triggerHandler('closeapp.apps', [app]);
+                if (result === false) {
+                    return 'cancel';
+                }
+            }
+        }
 
         var appKeys = Object.keys(openedApps)
         if(appKeys[0] == appCode)

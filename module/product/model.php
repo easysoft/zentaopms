@@ -18,14 +18,15 @@ class productModel extends model
      *
      * @param  array  $products
      * @param  int    $productID
-     * @param  string $currentModule
-     * @param  string $currentMethod
      * @param  string $extra
+     * @param  string $branch
+     * @param  string $module
+     * @param  string $moduleType
      *
      * @access public
      * @return string
      */
-    public function getModuleNav($products, $project, $product, $extra, $branch, $module, $moduleType)
+    public function getModuleNav($products, $productID, $extra, $branch, $module = 0, $moduleType = '')
     {
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
@@ -39,7 +40,7 @@ class productModel extends model
         }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
-        $selectHtml = $this->select($products, $product->id, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
+        $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
 
         $pageNav  = '';
         $isMobile = $this->app->viewType == 'mhtml';
@@ -315,6 +316,24 @@ class productModel extends model
     }
 
     /**
+     * Get product pairs by project model.
+     *
+     * @param  string $model all|scrum|waterfall
+     * @access public
+     * @return array
+     */
+    public function getPairsByProjectModel($model)
+    {
+        return $this->dao->select('t3.id as id, t3.name as name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+            ->where('t3.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in($this->app->user->view->products)->fi()
+            ->beginIF($model != 'all')->andWhere('t2.model')->eq($model)
+            ->fetchPairs('id', 'name');
+    }
+
+    /**
      * Get products by project.
      *
      * @param  int    $projectID
@@ -464,6 +483,9 @@ class productModel extends model
         $fromModule   = $this->lang->navGroup->qa == 'qa' ? 'qa' : '';
         $dropMenuLink = helper::createLink($this->app->openApp == 'qa' ? 'product' : $this->app->openApp, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra&from=$fromModule");
 
+        if($this->app->viewType == 'mhtml' and $productID) return $this->getModuleNav(array($productID => $currentProductName), $productID, $extra, $branch);
+
+
         $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-top: 3px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
@@ -501,8 +523,31 @@ class productModel extends model
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->join('whitelist', ',')
-            ->remove('uid')
+            ->remove('uid,newLine,lineName')
             ->get();
+
+        if(!empty($_POST['lineName']))
+        {
+            /* Insert product line. */
+            $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
+            $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
+
+            $line = new stdClass();
+            $line->type   = 'line';
+            $line->parent = 0;
+            $line->grade  = 1;
+            $line->name   = $this->post->lineName;
+            $line->root   = $product->program;
+            $line->order  = $maxOrder;
+            $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+
+            $lineID = $this->dao->lastInsertID();
+            $path   = ",$lineID,";
+            $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+
+            if(dao::isError()) return false;
+            $product->line = $lineID;
+        }
 
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
@@ -874,7 +919,7 @@ class productModel extends model
         $programList = $this->loadModel('program')->getParentPairs('', 'noclosed');
         foreach($projectList as $id => $project)
         {
-            $projectList[$id]->programName = $project->parent ? $programList[$project->parent] : '';
+            $projectList[$id]->programName = $project->parent ? zget($programList, $project->parent, '') : '';
             $projectList[$id]->programName = preg_replace('/\//', '', $projectList[$id]->programName, 1);
         }
 
@@ -1046,7 +1091,7 @@ class productModel extends model
         $projectIdList = array();
         foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
 
-        $executionPairs = array();
+        $executionPairs = array(0 => '');
         $projectPairs   = $this->loadModel('project')->getPairsByIdList($projectIdList);
         foreach($executions as $id => $execution)
         {

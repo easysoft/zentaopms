@@ -60,10 +60,11 @@ class actionModel extends model
         }
 
         /* Get product project and execution for this object. */
-        $relation          = $this->getRelatedFields($action->objectType, $objectID);
-        $action->product   = $relation['product'];
-        $action->project   = ($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') ? (int)$extra : (int)$relation['project'];
-        $action->execution = ($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') ? (int)$extra : (int)$relation['execution'];
+        $relation          = $this->getRelatedFields($action->objectType, $objectID, $actionType, $extra);
+        $action->product   = (int)$relation['product'];
+        $action->project   = (int)$relation['project'];
+        $action->execution = (int)$relation['execution'];
+
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dbh->lastInsertID();
@@ -142,10 +143,12 @@ class actionModel extends model
      *
      * @param  string $objectType
      * @param  int    $objectID
+     * @param  string $actionType
+     * @param  string $extra
      * @access public
      * @return array
      */
-    public function getRelatedFields($objectType, $objectID)
+    public function getRelatedFields($objectType, $objectID, $actionType = '', $extra = '')
     {
         $emptyRecord = array('product' => ',0,', 'project' => 0, 'execution' => 0);
 
@@ -177,7 +180,7 @@ class actionModel extends model
         }
 
         /* Only process these object types. */
-        if(strpos(',story,productplan,release,task,build,bug,case,testtask,doc,issue,risk,', ",{$objectType},") !== false)
+        if(strpos($this->config->action->needGetRelateField, ",{$objectType},") !== false)
         {
             if(!isset($this->config->objectTables[$objectType])) return $emptyRecord;
 
@@ -185,14 +188,22 @@ class actionModel extends model
             $fields = '*';
             if(strpos('story, productplan, case',  $objectType) !== false) $fields = 'product';
             if(strpos('build, bug, testtask, doc', $objectType) !== false) $fields = 'product, project, execution';
+            if(strpos('case, repo', $objectType) !== false) $fields = 'execution';
             if($objectType == 'release') $fields = 'product, build';
             if($objectType == 'task')    $fields = 'project, execution, story';
 
-            $record = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+            if($objectType != 'team') $record = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
 
             /* Process story, release and task. */
-            if($objectType == 'story')   $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
+            if($objectType == 'story') $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
+            if($objectType == 'team')
+            {
+                $team   = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+                $type   = $team->type == 'project' ? 'project' : 'execution';
+                $record = new stdclass();
+                $record->$type = $objectID;
+            }
             if($objectType == 'task')
             {
                 if($record->story != 0)
@@ -206,6 +217,32 @@ class actionModel extends model
                     $record->product = join(',', array_keys($products));
                 }
             }
+
+            if($objectType == 'story' and ($actionType == 'linked2build' or $actionType == 'unlinkedfrombuild'))
+            {
+                $build = $this->dao->select('project,execution')->from(TABLE_BUILD)->where('id')->eq((int)$extra)->fetch();
+                $record->project   = $build->project;
+                $record->execution = $build->execution;
+            }
+
+            if($objectType == 'story' and $actionType == 'estimated')
+            {
+                $record->project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq((int)$extra)->fetch('project');
+                $record->execution = (int)$extra;
+            }
+
+            if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false) and (int)$extra)
+            {
+                $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
+                $record->project   = $testtask->project;
+                $record->execution = $testtask->execution;
+            }
+
+            if($objectType == 'whitelist' and $extra == 'product') $record->product = $objectID;
+            if($objectType == 'whitelist' and $extra == 'project') $record->project = $objectID;
+            if($objectType == 'whitelist' and ($extra == 'sprint' or $extra == 'stage')) $record->execution = $objectID;
+            if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $record->project = (int)$extra ;
+            if($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') $record->execution = (int)$extra;
 
             if($record)
             {
@@ -597,7 +634,11 @@ class actionModel extends model
          */
         if(empty($desc))
         {
-            if(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
+            {
+                $desc = $this->lang->$objectType->action->rejectreviewed;
+            }
+            elseif(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
             {
                 $desc = $this->lang->$objectType->action->$actionType;
             }
@@ -638,14 +679,23 @@ class actionModel extends model
             /* Fix bug #741. */
             if(isset($desc['extra'])) $desc['extra'] = $this->lang->$objectType->{$desc['extra']};
 
+            $actionDesc = '';
             if(isset($desc['extra'][$extra]))
             {
-                echo str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+                $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
             }
             else
             {
-                echo str_replace('$extra', $action->extra, $desc['main']);
+                $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
             }
+
+            if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, ',') !== false)
+            {
+                list($extra, $reason) = explode(',', $extra);
+                $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
+                $actionDesc = str_replace(array('$extra', '$reason'), array($desc['extra'][$extra], $desc['reason'][$reason]), $desc['main']);
+            }
+            echo $actionDesc;
         }
         else
         {
@@ -701,7 +751,7 @@ class actionModel extends model
         if(is_numeric($projectID)) $executions = $this->loadModel('execution')->getPairs($projectID);
 
         $this->loadModel('doc');
-        $libs = $this->doc->getLibs('all');
+        $libs = $this->doc->getLibs('includeDeleted');
         $docs = $this->doc->getPrivDocs(array_keys($libs), 0, 'all');
 
         $actionCondition = $this->getActionCondition();
@@ -904,13 +954,26 @@ class actionModel extends model
                 }
                 elseif($objectType == 'story')
                 {
-                    $objectInfo  = $this->dao->select('id,title,type')->from($table)->where('id')->in($objectIds)->fetchAll();
+                    $objectInfo = $this->dao->select('id,title,type')->from($table)->where('id')->in($objectIds)->fetchAll();
                     foreach($objectInfo as $object)
                     {
                         $objectName[$object->id] = $object->title;
                         if($object->type == 'requirement') $requirements[$object->id] = $object->id;
                     }
                     $objectProject = array();
+                }
+                elseif($objectType == 'team')
+                {
+                    $objectInfo = $this->dao->select('id,team,type')->from(TABLE_PROJECT)
+                        ->where('id')->in($objectIds)
+                        ->fetchAll();
+
+                    $objectProject = array();
+                    foreach($objectInfo as $object)
+                    {
+                        $objectName[$object->id] = $object->team;
+                        if($object->type == 'project') $objectProject[$object->id] = $object->id;
+                    }
                 }
                 else
                 {
@@ -988,6 +1051,13 @@ class actionModel extends model
 
                 $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
                 $action->objectLabel = $objectLabel;
+            }
+            elseif($action->objectType == 'team')
+            {
+                $action->objectLink = '';
+                if($action->project) $action->objectLink = helper::createLink('project', 'manageMembers', 'projectID=' . $action->project);
+                if($action->execution) $action->objectLink = helper::createLink('execution', 'team', 'executionID=' . $action->execution);
+                $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
             }
             else
             {

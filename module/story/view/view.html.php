@@ -336,6 +336,10 @@
                 </tr>
                 <?php endif;?>
                 <tr>
+                  <th><?php echo $lang->story->category;?></th>
+                  <td><?php echo $lang->story->categoryList[$story->category];?></td>
+                </tr>
+                <tr>
                   <th><?php echo $lang->story->pri;?></th>
                   <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
                 </tr>
@@ -489,7 +493,7 @@
                     <?php
                     foreach($cases as $case)
                     {
-                        echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C] #$case->id $case->title") . '</li>';
+                        echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C] #$case->id $case->title", '',"data-toggle='modal'") . '</li>';
                     }
                     ?>
                     </ul>

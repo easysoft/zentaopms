@@ -21,7 +21,7 @@ js::set('dittoNotice', $dittoNotice);
     <h2>
       <?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?>
       <?php if($executionName):?>
-      <small class='text-muted'><?php echo html::icon($lang->icons[$executionType]) . ' ' . $lang->task->execution . $lang->colon . ' ' . $executionName;?></small>
+      <small class='text-muted'><?php echo $lang->task->execution . $lang->colon . ' ' . $executionName;?></small>
       <?php endif;?>
     </h2>
     <div class='pull-right btn-toolbar'>

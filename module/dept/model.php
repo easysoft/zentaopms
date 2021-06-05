@@ -318,7 +318,7 @@ class deptModel extends model
      * @param  int    $parentDeptID
      * @param  string $childs
      * @access public
-     * @return void
+     * @return array
      */
     public function manageChild($parentDeptID, $childs)
     {
@@ -335,18 +335,21 @@ class deptModel extends model
         }
 
         $i = 1;
+        $deptIDList = array();
         foreach($childs as $deptID => $deptName)
         {
             if(empty($deptName)) continue;
             if(is_numeric($deptID))
             {
+                $dept = new stdclass();
                 $dept->name   = strip_tags($deptName);
                 $dept->parent = $parentDeptID;
                 $dept->grade  = $grade;
                 $dept->order  = $this->post->maxOrder + $i * 10;
                 $this->dao->insert(TABLE_DEPT)->data($dept)->exec();
-                $deptID = $this->dao->lastInsertID();
-                $childPath = $parentPath . "$deptID,";
+                $deptID       = $this->dao->lastInsertID();
+                $deptIDList[] = $deptID;
+                $childPath    = $parentPath . "$deptID,";
                 $this->dao->update(TABLE_DEPT)->set('path')->eq($childPath)->where('id')->eq($deptID)->exec();
                 $i++;
             }
@@ -356,6 +359,8 @@ class deptModel extends model
                 $this->dao->update(TABLE_DEPT)->set('name')->eq(strip_tags($deptName))->where('id')->eq($deptID)->exec();
             }
         }
+
+        return $deptIDList;
     }
 
     /**

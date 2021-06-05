@@ -168,6 +168,7 @@ class projectModel extends model
         if(!$project) return false;
 
         if($project->end == '0000-00-00') $project->end = '';
+        $project = $this->loadModel('file')->replaceImgURL($project, 'desc');
         return $project;
     }
 
@@ -757,14 +758,15 @@ class projectModel extends model
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
-                $product->name         = $this->post->productName ? $this->post->productName : $project->name;
-                $product->bind         = $this->post->parent ? 0 : 1;
-                $product->program      = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
-                $product->acl          = $project->acl = 'open' ? 'open' : 'private';
-                $product->PO           = $project->PM;
-                $product->createdBy    = $this->app->user->account;
-                $product->createdDate  = helper::now();
-                $product->status       = 'normal';
+                $product->name           = $this->post->productName ? $this->post->productName : $project->name;
+                $product->bind           = $this->post->parent ? 0 : 1;
+                $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
+                $product->acl            = $project->acl = 'open' ? 'open' : 'private';
+                $product->PO             = $project->PM;
+                $product->createdBy      = $this->app->user->account;
+                $product->createdDate    = helper::now();
+                $product->status         = 'normal';
+                $product->createdVersion = $this->config->version;
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertId();
@@ -1477,6 +1479,29 @@ class projectModel extends model
     }
 
     /**
+     * Get team member pairs by projectID.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberPairs($projectID)
+    {
+        $project = $this->getByID($projectID);
+        $type    = $this->config->systemMode == 'new' ? $project->type : 'project';
+        if(empty($project)) return array();
+
+        $members =  $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.root')->eq((int)$projectID)
+            ->andWhere('t1.type')->eq($type)
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchPairs('account', 'realname');
+
+        return array('' => '') + $members;
+    }
+
+    /**
      * Get project stats.
      *
      * @param  int     $projectID
@@ -1646,9 +1671,15 @@ class projectModel extends model
         global $lang;
         $project = $this->getByID($objectID);
 
-        $lang->project->menu        = $lang->{$project->model}->menu;
-        $lang->project->menuOrder   = $lang->{$project->model}->menuOrder;
-        $lang->project->dividerMenu = $lang->{$project->model}->dividerMenu;
+        $model = 'scrum';
+        if($project) $model = $project->model;
+
+        if(isset($lang->$model))
+        {
+            $lang->project->menu        = $lang->{$model}->menu;
+            $lang->project->menuOrder   = $lang->{$model}->menuOrder;
+            $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
+        }
 
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
         common::setMenuVars('project', $objectID);

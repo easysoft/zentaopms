@@ -38,7 +38,6 @@ $lang->custom->waterfallCommon      = "瀑布";
 $lang->custom->buildin              = "系统内置";
 $lang->custom->editStoryConcept     = "编辑需求概念";
 $lang->custom->setStoryConcept      = "设置需求概念";
-$lang->custom->setDefaultConcept    = "设置默认概念";
 $lang->custom->browseStoryConcept   = "需求概念列表";
 $lang->custom->deleteStoryConcept   = "删除需求概念";
 $lang->custom->URConcept            = "用需概念";
@@ -96,6 +95,7 @@ $lang->custom->project->defaultCurrency    = '默认货币';
 $lang->custom->project->fields['unitList'] = '预算单位';
 
 $lang->custom->story = new stdClass();
+$lang->custom->story->fields['categoryList']     = '类型';
 $lang->custom->story->fields['priList']          = '优先级';
 $lang->custom->story->fields['sourceList']       = '来源';
 $lang->custom->story->fields['reasonList']       = '关闭原因';

@@ -122,6 +122,8 @@ class testsuite extends control
 
             $this->executeHooks($suiteID);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $suiteID));
+
             $response['locate']  = $this->createLink('testsuite', 'browse', "productID=$productID");
             $this->send($response);
         }

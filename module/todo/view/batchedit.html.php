@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::set('moduleList', $config->todo->moduleList)?>
+<?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->todo->common . $lang->colon . $lang->todo->batchEdit;?></h2>
@@ -53,7 +55,7 @@
           <?php
           if($todo->type == 'cycle')
           {
-              echo html::hidden("types[$todo->id]", $todo->type); 
+              echo html::hidden("types[$todo->id]", $todo->type);
               echo $lang->todo->cycle;
           }
           else
@@ -71,11 +73,6 @@
           {
               echo html::input("names[$todo->id]", $todo->name, "class='form-control'");
           }
-          elseif($todo->type == 'feedback')
-          {
-              echo html::input("names[$todo->id]", $todo->name, "class='form-control'");
-              echo html::hidden("feedbacks[$todo->id]", $todo->idvalue, "class='form-control'");
-          }
           elseif($todo->type == 'task')
           {
               echo html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="form-control chosen"');
@@ -86,7 +83,7 @@
           }
           elseif($todo->type == 'story')
           {
-              echo html::select("storys[$todo->id]", $storys, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("stories[$todo->id]", $storys, $todo->idvalue, 'class="form-control chosen"');
           }
           elseif($todo->type == 'issue')
           {
@@ -104,6 +101,14 @@
           {
               echo html::select("testtasks[$todo->id]", $testtasks, $todo->idvalue, 'class="form-control chosen"');
           }
+          elseif($todo->type == 'opportunity')
+          {
+              echo html::select("opportunities[$todo->id]", $opportunities, $todo->idvalue, 'class="form-control chosen"');
+          }
+          elseif($todo->type == 'feedback')
+          {
+              echo html::select("feedbacks[$todo->id]", $feedbacks, $todo->idvalue, 'class="form-control chosen"');
+          }
           ?>
           </div>
         </td>
@@ -111,13 +116,13 @@
         <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
           <div class='input-group'>
             <?php
-            echo html::select("begins[$todo->id]", $times, $todo->begin, "onchange=\"setBeginsAndEnds($todo->id, 'begin');\" class='form-control chosen control-time-begin'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
+            echo html::select("begins[$todo->id]", $times, substr($todo->begin, 0, 2) . substr($todo->begin, 3, 2), "onchange=\"setBeginsAndEnds($todo->id, 'begin');\" class='form-control chosen control-time-begin'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '') ? '' : " disabled"));
             echo '<span class="input-group-addon fix-border fix-padding"></span>';
-            echo html::select("ends[$todo->id]", $times, $todo->end, "onchange=\"setBeginsAndEnds($todo->id, 'end');\" class='form-control chosen control-time-end'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
+            echo html::select("ends[$todo->id]", $times, substr($todo->end, 0, 2) . substr($todo->end, 3, 2), "onchange=\"setBeginsAndEnds($todo->id, 'end');\" class='form-control chosen control-time-end'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '') ? '' : " disabled"));
             ?>
             <span class="input-group-addon">
               <div class='checkbox-primary dateSwitcher'>
-                <input type='checkbox' name="switchTime[<?php echo $todo->id;?>]" id="switchTime<?php echo $todo->id;?>" data-key="<?php echo $todo->id;?>" onclick='switchTimeList(<?php echo $todo->id?>);' <?php if($todo->begin == '2400') echo "checked='checked'";?>>
+                <input type='checkbox' name="switchTime[<?php echo $todo->id;?>]" id="switchTime<?php echo $todo->id;?>" data-key="<?php echo $todo->id;?>" onclick='switchTimeList(<?php echo $todo->id?>);' <?php if($todo->begin == '') echo "checked='checked'";?>>
                 <label for='switchTime'><?php echo $lang->todo->periods['future'];?></label>
               </div>
             </span>

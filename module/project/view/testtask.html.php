@@ -60,7 +60,7 @@
           <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
           <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
           <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
+          <th class='<?php echo $project->model == 'scrum' ? 'c-actions-5' : 'c-actions-4';?> text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -92,9 +92,9 @@
             {
                 common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
                 common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
-                if(common::hasPriv('execution', 'testreport'))
+                if(common::hasPriv('execution', 'testreport') and $project->model == 'scrum')
                 {
-                    echo html::a($this->createLink('testreport', 'browse', "objectID=$task->product&objectType=product&extra=$task->id"), '<i class="icon-testreport-browse icon-flag"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="qa"');
+                    echo html::a($this->createLink('execution', 'testreport', "executionID=$task->execution&objectType=execution&extra=$task->id"), '<i class="icon-testreport-browse icon-flag"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="project"');
                 }
                 common::printIcon('testtask', 'edit',   "taskID=$task->id", $task, 'list');
                 common::printIcon('testtask', 'delete', "taskID=$task->id", $task, 'list', 'trash', 'hiddenwin');

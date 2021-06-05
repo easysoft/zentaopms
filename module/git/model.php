@@ -15,39 +15,39 @@ class gitModel extends model
 {
     /**
      * The git binary client.
-     * 
-     * @var int   
+     *
+     * @var int
      * @access public
      */
     public $client;
 
     /**
      * Repos.
-     * 
-     * @var array 
+     *
+     * @var array
      * @access public
      */
-    public $repos = array(); 
+    public $repos = array();
 
     /**
      * The root path of a repo
-     * 
+     *
      * @var string
      * @access public
      */
     public $repoRoot = '';
 
     /**
-     * Users 
-     * 
-     * @var array 
+     * Users
+     *
+     * @var array
      * @access public
      */
     public $users = array();
 
     /**
      * Construct function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -59,8 +59,8 @@ class gitModel extends model
     }
 
     /**
-     * Run. 
-     * 
+     * Run.
+     *
      * @access public
      * @return void
      */
@@ -145,7 +145,7 @@ class gitModel extends model
                 continue;
             }
 
-            $version = $lastInDB->commit;
+            $version = (int)$lastInDB->commit + 1;
             $logs    = $this->repo->getUnsyncCommits($repo);
             $objects = array();
             if(!empty($logs))
@@ -196,13 +196,13 @@ class gitModel extends model
 
     /**
      * Set the repos.
-     * 
+     *
      * @access public
      * @return bool
      */
     public function setRepos()
     {
-        $repos    = $this->loadModel('repo')->getListBySCM('Git');
+        $repos    = $this->loadModel('repo')->getListBySCM('Git,Gitlab');
         $gitRepos = array();
         $paths    = array();
         foreach($repos as $repo)
@@ -224,7 +224,7 @@ class gitModel extends model
 
     /**
      * Get repos.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -239,8 +239,8 @@ class gitModel extends model
 
     /**
      * Set repo.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
      * @return bool
      */
@@ -269,10 +269,10 @@ class gitModel extends model
 
     /**
      * set the root path of a repo.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
-     * @return void 
+     * @return void
      */
     public function setRepoRoot($repo)
     {
@@ -295,9 +295,9 @@ class gitModel extends model
 
     /**
      * Get repo logs.
-     * 
-     * @param  object  $repo 
-     * @param  int     $fromRevision 
+     *
+     * @param  object  $repo
+     * @param  int     $fromRevision
      * @access public
      * @return array
      */
@@ -323,8 +323,8 @@ class gitModel extends model
 
     /**
      * Convert log from xml format to object.
-     * 
-     * @param  object    $log 
+     *
+     * @param  object    $log
      * @access public
      * @return object
      */
@@ -365,9 +365,9 @@ class gitModel extends model
 
     /**
      * Diff a url.
-     * 
+     *
      * @param  string $path
-     * @param  int    $revision 
+     * @param  int    $revision
      * @access public
      * @return string|bool
      */
@@ -407,9 +407,9 @@ class gitModel extends model
 
     /**
      * Cat a url.
-     * 
+     *
      * @param  string $path
-     * @param  int    $revision 
+     * @param  int    $revision
      * @access public
      * @return string|bool
      */
@@ -448,8 +448,8 @@ class gitModel extends model
 
     /**
      * Get repo by url.
-     * 
-     * @param  string    $url 
+     *
+     * @param  string    $url
      * @access public
      * @return object|bool
      */
@@ -465,8 +465,8 @@ class gitModel extends model
 
     /**
      * Pring log.
-     * 
-     * @param  sting    $log 
+     *
+     * @param  sting    $log
      * @access public
      * @return void
      */

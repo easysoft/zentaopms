@@ -115,8 +115,8 @@ class testreportModel extends model
         $objectID = (int)$objectID;
         return $this->dao->select('*')->from(TABLE_TESTREPORT)
             ->where('deleted')->eq(0)
-            ->beginIF($objectType == 'execution')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('execution')->fi()
-            ->beginIF($objectType == 'project')->andWhere('project')->eq($objectID)->andWhere('objectType')->eq('execution')->fi()
+            ->beginIF($objectType == 'execution')->andWhere('execution')->eq($objectID)->fi()
+            ->beginIF($objectType == 'project')->andWhere('project')->eq($objectID)->fi()
             ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
             ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()
             ->orderBy($orderBy)
@@ -138,23 +138,83 @@ class testreportModel extends model
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
         $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
+        $resolvedBugs  = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('resolvedDate')->ge($begin)->andWhere('resolvedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
         $foundBugs     = array();
         $legacyBugs    = array();
         $byCaseNum     = 0;
         $buildIdList   = array_keys($builds);
         $taskIdList    = array_keys($tasks);
 
+        $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = $stageGoups = $handleGroups = array();
+
+        /* Init stageGroups. */
+        $isEmptyStage = true;
+        foreach($this->lang->bug->priList as $priKey => $priValue)
+        {
+            $stageGroups[$priKey]['generated'] = 0;
+            $stageGroups[$priKey]['legacy']    = 0;
+            $stageGroups[$priKey]['resolved']  = 0;
+        }
+
+        /* Init handleGroups. */
+        $isEmptyHandle  = true;
+        $beginTimeStamp = strtotime($begin);
+        $endTimeStamp   = strtotime($end);
+        for($i = $beginTimeStamp; $i <= $endTimeStamp; $i += 86400)
+        {
+            $date = date('m-d', $i);
+            $handleGroups['generated'][$date] = 0;
+            $handleGroups['legacy'][$date]    = 0;
+            $handleGroups['resolved'][$date]  = 0;
+        }
+
+        /* Get the resolved bug data. */
+        foreach($resolvedBugs as $bug)
+        {
+            if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
+            {
+                $resolvedDate = date('m-d', strtotime($bug->resolvedDate));
+                $stageGroups[$bug->pri]['resolved']      += 1;
+                $handleGroups['resolved'][$resolvedDate] += 1;
+                $isEmptyStage  = false;
+                $isEmptyHandle = false;
+            }
+        }
+
+        /* Get the generated and leagcy bug data. */
         foreach($generatedBugs as $bug)
         {
             if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
             {
+                $openedDate = date('m-d', strtotime($bug->openedDate));
+
                 $foundBugs[$bug->id] = $bug;
-                if($bug->status == 'active' or $bug->resolvedDate > "$end 23:59:59") $legacyBugs[$bug->id] = $bug;
+                $stageGroups[$bug->pri]['generated']    += 1;
+                $handleGroups['generated'][$openedDate] += 1;
+                $isEmptyStage  = false;
+                $isEmptyHandle = false;
+
+                if($bug->status == 'active' or $bug->resolvedDate > "$end 23:59:59")
+                {
+                    $legacyBugs[$bug->id] = $bug;
+                    $stageGroups[$bug->pri]['legacy'] += 1;
+
+                    $beginTimeStamp = strtotime($begin);
+                    $endTimeStamp   = strtotime($end);
+                    for($i = $beginTimeStamp; $i <= $endTimeStamp; $i += 86400)
+                    {
+                        $dateTime = date('Y-m-d 23:59:59', $i);
+                        if($bug->openedDate <= $dateTime and (helper::isZeroDate($bug->resolvedDate) or $bug->resolvedDate > $dateTime))
+                        {
+                            $date = date('m-d', $i);
+                            $handleGroups['legacy'][$date] += 1;
+                        }
+                    }
+                }
                 if($bug->case and !empty($bug->testtask) and in_array($bug->testtask, $taskIdList)) $byCaseNum ++;
             }
         }
 
-        $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = array();
         $resolvedBugs   = 0;
         foreach($foundBugs as $bug)
         {
@@ -174,6 +234,8 @@ class testreportModel extends model
         $bugInfo['countBugByTask']      = $byCaseNum;
         $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
+        $bugInfo['bugStageGroups']      = $isEmptyStage ? array() : $stageGroups;
+        $bugInfo['bugHandleGroups']     = $isEmptyHandle ? array() : $handleGroups;
 
         $this->app->loadLang('bug');
         $users = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted');
@@ -266,30 +328,33 @@ class testreportModel extends model
             ->beginIF($idList)->andWhere('t2.id')->in($idList)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchGroup('task','id');
 
-        $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
-            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
-            ->where('t2.task')->in(array_keys($tasks))
-            ->andWhere('t1.`case`')->in(array_keys($cases))
-            ->andWhere('t1.date')->ge($begin)
-            ->andWhere('t1.date')->le($end . " 23:59:59")
-            ->orderBy('date')
-            ->fetchAll('case');
-
-        foreach($cases as $caseID => $case)
+        foreach($cases as $taskID => $caseList)
         {
-            $case->lastRunner    = '';
-            $case->lastRunDate   = '';
-            $case->lastRunResult = '';
-            $case->status        = 'normal';
-            if(isset($results[$caseID]))
+            $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
+                ->where('t2.task')->eq($taskID)
+                ->andWhere('t1.`case`')->in(array_keys($caseList))
+                ->andWhere('t1.date')->ge($begin)
+                ->andWhere('t1.date')->le($end . " 23:59:59")
+                ->orderBy('date')
+                ->fetchAll('case');
+
+            foreach($caseList as $caseID => $case)
             {
-                $result = $results[$caseID];
-                $case->lastRunner    = $result->lastRunner;
-                $case->lastRunDate   = $result->date;
-                $case->lastRunResult = $result->caseResult;
-                $case->status        = $result->caseResult == 'blocked' ? 'blocked' : 'normal';
+                $case->lastRunner    = '';
+                $case->lastRunDate   = '';
+                $case->lastRunResult = '';
+                $case->status        = 'normal';
+                if(isset($results[$caseID]))
+                {
+                    $result = $results[$caseID];
+                    $case->lastRunner    = $result->lastRunner;
+                    $case->lastRunDate   = $result->date;
+                    $case->lastRunResult = $result->caseResult;
+                    $case->status        = $result->caseResult == 'blocked' ? 'blocked' : 'normal';
+                }
             }
         }
 
@@ -328,23 +393,32 @@ class testreportModel extends model
      */
     public function getResultSummary($tasks, $cases, $begin, $end)
     {
+        $caseCount = 0;
+        $casesList = array();
+        foreach($cases as $taskID => $caseList)
+        {
+            foreach($caseList as $caseID => $case)
+            {
+                $casesList[$caseID] = $case;
+                $caseCount++;
+            }
+        }
+
         $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
             ->where('t2.task')->in(array_keys($tasks))
-            ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->andWhere('t1.`case`')->in(array_keys($casesList))
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->orderBy('date')
             ->fetchAll('id');
 
-        $failResults = array();
+        $failResults = 0;
         $runCasesNum = array();
-        foreach($results as $result)
-        {
-            $runCasesNum[$result->case] = $result->case;
-            if($result->caseResult == 'fail') $failResults[$result->case] = $result->case;
-        }
-        return sprintf($this->lang->testreport->caseSummary, count($cases), count($runCasesNum), count($results), count($failResults));
+        foreach($results as $result) $runCasesNum[$result->run] = $result->caseResult;
+        foreach($runCasesNum as $lastResult) if($lastResult == 'fail') $failResults++;
+
+        return sprintf($this->lang->testreport->caseSummary, $caseCount, count($runCasesNum), count($results), $failResults);
     }
 
     /**
@@ -435,6 +509,7 @@ class testreportModel extends model
             ->beginIF(is_array($builds) and $type == 'build')->andWhere('id')->in(trim($bugIdList, ','))->fi()
             ->beginIF(!is_array($builds) and $type == 'build')->andWhere("(resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59')")->fi()
             ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
+            ->beginIF($type == 'execution')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
             ->fetchAll('id');
     }
 

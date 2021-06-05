@@ -104,7 +104,7 @@ class stakeholderModel extends model
      * Batch create stakeholders for a project.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function batchCreate()
     {
@@ -116,6 +116,7 @@ class stakeholderModel extends model
         $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->project)->andWhere('objectType')->eq('project')->fetchPairs();
         $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->project)->andWhere('objectType')->eq('project')->exec();
 
+        $stakeholderList = array();
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
@@ -130,7 +131,8 @@ class stakeholderModel extends model
 
             $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->exec();
 
-            $stakeholderID = $this->dao->lastInsertId();
+            $stakeholderID     = $this->dao->lastInsertId();
+            $stakeholderList[] = $stakeholderID;
             $this->action->create('stakeholder', $stakeholderID, 'added');
         }
 
@@ -141,6 +143,8 @@ class stakeholderModel extends model
         $changedAccounts = array_unique($changedAccounts);
 
         $this->loadModel('user')->updateUserView($this->session->project, 'project', $changedAccounts);
+
+        return $stakeholderList;
     }
 
     /**

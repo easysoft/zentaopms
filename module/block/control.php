@@ -1094,7 +1094,7 @@ class block extends control
         }
 
         /* Get bugs. */
-        $bugs = $this->dao->select("project, status, count(status) as totalBugs, count(status = 'active' or null) as activeBugs, count(resolvedDate like '{$yesterday}%' or null) as yesterdayResolved")->from(TABLE_BUG)
+        $bugs = $this->dao->select("project, count(status) as totalBugs, count(status = 'active' or null) as activeBugs, count(resolvedDate like '{$yesterday}%' or null) as yesterdayResolved")->from(TABLE_BUG)
             ->where('project')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
             ->groupBy('project')

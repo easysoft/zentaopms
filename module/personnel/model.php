@@ -19,11 +19,10 @@ class personnelModel extends model
      * @param  string    $browseType
      * @param  string    $orderBy
      * @param  int       $queryID
-     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getAccessiblePersonnel($programID = 0, $deptID = 0, $browseType = 'all', $queryID = 0, $pager)
+    public function getAccessiblePersonnel($programID = 0, $deptID = 0, $browseType = 'all', $queryID = 0)
     {
         $accessibleQuery = '';
         if($browseType == 'bysearch')
@@ -41,18 +40,67 @@ class personnelModel extends model
         /* Determine who can be accessed based on access control. */
         $program = $this->loadModel('program')->getByID($programID);
         $personnelList = array();
-        if($program->acl != 'open')
+        $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t2.deleted')->eq(0)
+            ->beginIF($program->acl != 'open')->andWhere("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
+            ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
+            ->fetchAll('id');
+
+        if($program->acl == 'open')
         {
-            $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
-                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-                ->where("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
-                ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
-                ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
-                ->page($pager)
-                ->fetchAll();
+            foreach($personnelList as $personnel)
+            {
+                if(!$this->canViewProgram($programID, $personnel->account)) unset($personnelList[$personnel->id]);
+            }
         }
 
         return $personnelList;
+    }
+
+    /**
+     * Check if you have permission to view the program.
+     *
+     * @param  int    $programID
+     * @param  string $account
+     * @access public
+     * @return void
+     */
+    public function canViewProgram($programID, $account)
+    {
+        if($this->app->user->admin) return true;
+
+        static $groupAcl  = array();
+        static $groupInfo = array();
+        if(empty($groupAcl))
+        {
+            $groupAcl = $this->dao->select('id,acl')->from(TABLE_GROUP)->fetchPairs();
+            foreach($groupAcl as $groupID => $group) $groupInfo[$groupID] = json_decode($groupAcl[$groupID]);
+        }
+
+        static $userGroups = array();
+        if(empty($userGroups)) $userGroups = $this->dao->select('*')->from(TABLE_USERGROUP)->fetchGroup('account', 'group');
+
+        $programRight = false;
+        if(isset($userGroups[$account]))
+        {
+            foreach($userGroups[$account] as $groupID => $userGroup)
+            {
+                $group = $groupInfo[$groupID];
+                if(!isset($group->programs))
+                {
+                    $programRight = true;
+                    continue;
+                }
+                elseif(in_array($programID, $group->programs))
+                {
+                    $programRight = true;
+                    continue;
+                }
+            }
+        }
+        return $programRight;
     }
 
     /**

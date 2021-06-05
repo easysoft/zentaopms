@@ -56,46 +56,6 @@ class repoModel extends model
             }
         }
 
-        /*
-        if($showSeleter && !empty($repos))
-        {
-            $repoIndex  = '<div class="btn-group header-btn"  id="swapper"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . ($repo->SCM == 'Subversion' ? '[SVN] ' : '[GIT] ') . $repo->name . ' <span class="caret"></span></button>';
-            $repoIndex .= $this->select($repos, $repoID);
-            $repoIndex .= '</div></div>';
-
-            $branches = $this->getBranches($repo);
-            if(empty($branches))
-            {
-                $this->setRepoBranch('');
-            }
-            else
-            {
-                $branchID = 'master';
-                if($this->cookie->repoBranch) $branchID = $this->cookie->repoBranch;
-                if(!isset($branches[$branchID])) $branchID = 'master';
-
-                $branch = zget($branches, $branchID);
-                if(empty($branch)) $branchID = $branch = current($branches);
-
-                $this->setRepoBranch($branchID);
-
-                $repoIndex .= '<div class="btn-group header-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $branch . ' <span class="caret"></span></button>';
-                $repoIndex .= "<div class='dropdown-menu search-list' data-ride='searchList'>";
-                $repoIndex .= "<div class='list-group'>";
-                foreach($branches as $branch)
-                {
-                    if(empty($branch)) continue;
-
-                    $class = $branchID == $branch ? "class='active'" : '';
-                    $repoIndex .= html::a("javascript:switchBranch(\"$branch\")", $branch, '', $class);
-                }
-                $repoIndex .= "</div></div></div></div>";
-            }
-
-            $this->lang->switcherMenu = $repoIndex;
-        }
-         */
-
         common::setMenuVars('devops', $repoID);
         session_start();
         $this->session->set('repoID', $repoID);
@@ -189,7 +149,7 @@ class repoModel extends model
                         if(isset($productIdList[$productID])) $hasPriv = true;
                     }
 
-                    if(!$haspriv) unset($repos[$i]);
+                    if(!$hasPriv) unset($repos[$i]);
                 }
             }
         }
@@ -208,7 +168,7 @@ class repoModel extends model
     public function getListBySCM($scm, $type = 'all')
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('SCM')->eq($scm)
+            ->andWhere('SCM')->in($scm)
             ->andWhere('synced')->eq(1)
             ->orderBy('id')
             ->fetchAll();
@@ -471,7 +431,7 @@ class repoModel extends model
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
             ->beginIF($revision != 'HEAD')->andWhere('t1.revision')->eq($revision)->fi()
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->orderBy('time desc')
             ->limit(1)
             ->fetch('time');
@@ -486,7 +446,7 @@ class repoModel extends model
                 ->andWhere('t1.repo')->eq($repo->id)
                 ->andWhere('t2.`time`')->le($revisionTime)
                 ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
-                ->beginIF($this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
+                ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
                 ->beginIF($type == 'dir')
                 ->andWhere('t1.parent', true)->like(rtrim($entry, '/') . "/%")
                 ->orWhere('t1.parent')->eq(rtrim($entry, '/'))
@@ -503,7 +463,7 @@ class repoModel extends model
             ->where('t1.repo')->eq($repoID)
             ->andWhere('t1.`time`')->le($revisionTime)
             ->andWhere('left(t1.comment, 12)')->ne('Merge branch')
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->beginIF($entry != '/' and !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
             ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t1.time')->le($end)->fi()
@@ -1769,7 +1729,7 @@ class repoModel extends model
         return $buildedURL;
     }
 
-	/**  
+	/**
 	 * Get gitlab projects.
 	 *
 	 * @param  string   $host
@@ -1778,18 +1738,18 @@ class repoModel extends model
 	 * @return array
 	 */
 	public function getGitlabProjects($host, $token)
-	{    
+	{
 		$host  = rtrim($host, '/');
 		$host .= '/api/v4/projects';
 
 		$allResults = array();
 		for($page = 1; true; $page ++)
-		{    
-			$results = json_decode(file_get_contents($host . "?private_token=$token&page={$page}&per_page=100"));
-			if(empty($results)) break;
+		{
+			$results = json_decode(file_get_contents($host . "?private_token=$token&simple=true&membership=true&page={$page}&per_page=100"));
+			if(empty($results) or $page > 10) break;
 			$allResults = $allResults + $results;
-		}    
+		}
 
 		return $allResults;
-	} 
+	}
 }

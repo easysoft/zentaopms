@@ -60,7 +60,7 @@ adjustMenuWidth();
       </section>
       <footer class='table-footer'>
         <?php echo str_replace($words, urlencode($words), $pager->get('right', 'short'));?>
-        <span class='execute-info text-muted'><?php printf($lang->search->executeInfo, $pager->recTotal, $consumed);?></span> 
+        <span class='execute-info text-muted'><?php printf($lang->search->executeInfo, $pager->recTotal, $consumed);?></span>
       </footer>
     </div>
   </div>

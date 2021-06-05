@@ -53,7 +53,10 @@ $lang->upgrade->noticeSQL      = '檢查到你的資料庫跟標準不一致，�
 $lang->upgrade->afterDeleted   = '以上檔案未能刪除， 刪除後刷新！';
 $lang->upgrade->mergeProgram   = '數據遷移';
 $lang->upgrade->mergeTips      = '數據遷移提示';
-$lang->upgrade->to15Guide      = '禪道開源版15版本升級';
+$lang->upgrade->toPMS15Guide   = '禪道開源版15版本升級';
+$lang->upgrade->toPRO10Guide   = '禪道專業版10版本升級';
+$lang->upgrade->toBIZ5Guide    = '禪道企業版5版本升級';
+$lang->upgrade->toMAXGuide     = '禪道旗艦版版本升級';
 $lang->upgrade->to15Desc       = <<<EOD
 <p>尊敬的用戶，禪道從15版本開始對導航和概念做了調整，主要改動如下：</p>
 <ol>

@@ -161,7 +161,7 @@ class bugModel extends model
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = $now;
             $bug->product     = (int)$productID;
-            $bug->branch      = (int)$data->branches[$i];
+            $bug->branch      = isset($data->branches) ? (int)$data->branches[$i] : 0;
             $bug->module      = (int)$data->modules[$i];
             $bug->execution   = (int)$data->executions[$i];
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
@@ -627,6 +627,7 @@ class bugModel extends model
             ->checkIF($bug->resolvedBy, 'resolution', 'notempty')
             ->checkIF($bug->closedBy,   'resolution', 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
+            ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
 
@@ -2646,7 +2647,7 @@ class bugModel extends model
                 $class .= ' c-user';
                 $title  = "title='" . zget($users, $bug->resolvedBy) . "'";
             }
-            if($id == 'deadline' && isset($bug->delay)) $class .= ' delayed';
+            if($id == 'deadline' && isset($bug->delay) && $bug->status == 'active') $class .= ' delayed';
             if(strpos(',type,execution,story,plan,task,openedBuild,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
             echo "<td class='" . $class . "' $title>";

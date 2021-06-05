@@ -38,7 +38,6 @@ $lang->custom->waterfallCommon      = "Waterfall";
 $lang->custom->buildin              = "Buildin";
 $lang->custom->editStoryConcept     = "Edit Story Concept";
 $lang->custom->setStoryConcept      = "Set Story Concept";
-$lang->custom->setDefaultConcept    = "Set Default Concept";
 $lang->custom->browseStoryConcept   = "List of story concepts";
 $lang->custom->deleteStoryConcept   = "Delete story Concept";
 $lang->custom->URConcept            = "UR Concept";
@@ -96,6 +95,7 @@ $lang->custom->project->defaultCurrency    = 'Default Currency';
 $lang->custom->project->fields['unitList'] = 'Unit List';
 
 $lang->custom->story = new stdClass();
+$lang->custom->story->fields['categoryList']     = 'Category';
 $lang->custom->story->fields['priList']          = 'Priority';
 $lang->custom->story->fields['sourceList']       = 'Source';
 $lang->custom->story->fields['reasonList']       = 'Close Reason';

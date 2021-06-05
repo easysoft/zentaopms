@@ -233,7 +233,7 @@ class userModel extends model
      * Create a user.
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function create()
     {
@@ -302,6 +302,8 @@ class userModel extends model
             $this->loadModel('action')->create('user', $userID, 'Created');
             $this->loadModel('mail');
             if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
+
+            return $userID;
         }
     }
 
@@ -310,7 +312,7 @@ class userModel extends model
      *
      * @param  int    $users
      * @access public
-     * @return void
+     * @return array
      */
     public function batchCreate()
     {
@@ -400,6 +402,7 @@ class userModel extends model
         }
 
         $this->loadModel('mail');
+        $userIDList = array();
         foreach($data as $user)
         {
             if($user->group)
@@ -413,7 +416,8 @@ class userModel extends model
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
 
             /* Fix bug #2941 */
-            $userID = $this->dao->lastInsertID();
+            $userID       = $this->dao->lastInsertID();
+            $userIDList[] = $userID;
             $this->loadModel('action')->create('user', $userID, 'Created');
 
             if(dao::isError())
@@ -427,6 +431,7 @@ class userModel extends model
                 if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
             }
         }
+        return $userIDList;
     }
 
     /**

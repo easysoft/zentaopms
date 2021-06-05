@@ -33,7 +33,8 @@ class testtaskModel extends model
             ->setIF($this->config->systemMode == 'new', 'project', $projectID)
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('uid,contactListMenu')
+            ->join('type', ',')
+            ->remove('files,labels,uid,contactListMenu')
             ->get();
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->create['id'], $this->post->uid);
@@ -49,6 +50,7 @@ class testtaskModel extends model
         {
             $taskID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
+            $this->file->saveUpload('testtask', $taskID);
             return $taskID;
         }
     }
@@ -267,6 +269,7 @@ class testtaskModel extends model
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
+        $task->files = $this->loadModel('file')->getByObject('testtask', $task->id);
         return $task;
     }
 
@@ -487,6 +490,20 @@ class testtaskModel extends model
             ->andWhere('t1.status')->ne('wait')
             ->page($pager)
             ->fetchAll();
+    }
+
+    /**
+     * Get test report pairs by build.
+     *
+     * @param  string $build
+     * @access public
+     * @return array
+     */
+    public function getTestReportPairsByBuild($build = '')
+    {
+        if(empty($build)) return array();
+
+        return $this->dao->select('id,title')->from(TABLE_TESTREPORT)->where("CONCAT(',', builds, ',')")->like("%,$build,%")->fetchPairs('id','title');
     }
 
     /**
@@ -730,7 +747,7 @@ class testtaskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
-        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid,comment,contactListMenu')->get();
+        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->join('type', ',')->remove('files,labels,uid,comment,contactListMenu')->get();
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($task)
             ->autoCheck()
@@ -741,6 +758,7 @@ class testtaskModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
+            $this->file->saveUpload('testtask', $taskID);
             return common::createChanges($oldTask, $task);
         }
     }
@@ -878,6 +896,7 @@ class testtaskModel extends model
                 $data->version = 1;
                 $data->order   = ++ $lastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
+                $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
             }
         }
     }
@@ -1431,7 +1450,7 @@ class testtaskModel extends model
             case 'status':
                 if($caseChanged)
                 {
-                    echo "<span class='warning'>{$this->lang->testcase->changed}</span>";
+                    echo "<span title='{$this->lang->testcase->changed}' class='warning'>{$this->lang->testcase->changed}</span>";
                 }
                 else
                 {

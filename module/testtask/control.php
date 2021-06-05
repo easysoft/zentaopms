@@ -216,6 +216,8 @@ class testtask extends control
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
 
             $this->executeHooks($taskID);
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
+
             $task = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch();
             if($this->app->openApp == 'project') $link = $this->createLink('project', 'testtask', "projectID=$task->project");
             if($this->app->openApp == 'execution') $link = $this->createLink('execution', 'testtask', "executionID=$task->execution");
@@ -242,6 +244,8 @@ class testtask extends control
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
 
+        $testreports = $this->testtask->getTestReportPairsByBuild($build);
+
         /* Set menu. */
         $productID  = $this->product->saveState($productID, $this->products);
 
@@ -256,6 +260,7 @@ class testtask extends control
         $this->view->executions  = $executions;
         $this->view->builds      = $builds;
         $this->view->build       = $build;
+        $this->view->testreports = $testreports;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
 
         $this->display();
@@ -315,13 +320,14 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->view;
 
-        $this->view->productID = $productID;
-        $this->view->task      = $task;
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->actions   = $this->loadModel('action')->getList('testtask', $taskID);
-        $this->view->build     = $build;
-        $this->view->stories   = $stories;
-        $this->view->bugs      = $bugs;
+        $this->view->productID       = $productID;
+        $this->view->task            = $task;
+        $this->view->users           = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->actions         = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->build           = $build;
+        $this->view->testreportTitle = $this->dao->select('title')->from(TABLE_TESTREPORT)->where('id')->eq($task->testreport)->fetch('title');
+        $this->view->stories         = $stories;
+        $this->view->bugs            = $bugs;
         $this->display();
     }
 
@@ -740,15 +746,17 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->edit;
 
         /* Create testtask from testtask of test.*/
-        $productID  = $productID ? $productID : key($this->products);
-        $projectID  = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
-        $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $productID   = $productID ? $productID : key($this->products);
+        $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
+        $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
+        $builds      = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $testreports = $this->testtask->getTestReportPairsByBuild($task->build);
 
         $this->view->task         = $task;
         $this->view->executions   = $executions;
         $this->view->builds       = $builds;
-        $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
+        $this->view->testreports  = $testreports;
+        $this->view->users        = $this->loadModel('user')->getPairs('nodeleted|noclosed', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
         $this->display();
@@ -1069,12 +1077,14 @@ class testtask extends control
             $response['result']  = 'success';
             $response['message'] = '';
 
+            $testRun = $this->dao->select('task,`case`')->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->fetch();
             $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->exec();
             if(dao::isError())
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
             }
+            $this->loadModel('action')->create('case' ,$testRun->case, 'unlinkedfromtesttask', '', $testRun->task);
             $this->send($response);
         }
     }
@@ -1094,6 +1104,8 @@ class testtask extends control
                 ->where('task')->eq((int)$taskID)
                 ->andWhere('`case`')->in($this->post->caseIDList)
                 ->exec();
+            $this->loadModel('action');
+            foreach($_POST['caseIDList'] as $caseID) $this->action->create('case', $caseID, 'unlinkedfromtesttask', '', $taskID);
         }
 
         die(js::locate($this->createLink('testtask', 'cases', "taskID=$taskID")));
@@ -1126,6 +1138,8 @@ class testtask extends control
             $caseResult = $this->testtask->createResult($runID);
             if(dao::isError()) die(js::error(dao::getError()));
 
+            $taskID = empty($run->task) ? 0 : $run->task;
+            $this->loadModel('action')->create('case', $caseID, 'run', '', $taskID);
             if($caseResult == 'fail')
             {
 
@@ -1200,6 +1214,8 @@ class testtask extends control
         if($this->post->results)
         {
             $this->testtask->batchRun($from, $taskID);
+            $this->loadModel('action');
+            foreach(array_keys($this->post->results) as $caseID) $this->action->create('case', $caseID, 'run', '', $taskID);
             die(js::locate($url, 'parent'));
         }
 
@@ -1209,7 +1225,18 @@ class testtask extends control
         /* The case of tasks of qa. */
         if($productID or ($this->app->openApp == 'project' and empty($productID)))
         {
-            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
+            if($this->app->openApp == 'project')
+            {
+                $this->loadModel('project')->setMenu($this->session->project);
+            }
+            elseif($this->app->openApp == 'execution')
+            {
+                $this->loadModel('execution')->setMenu($this->session->execution);
+            }
+            else
+            {
+                $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
+            }
             $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case');
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
@@ -1316,6 +1343,8 @@ class testtask extends control
             ->where('task')->eq((int)$taskID)
             ->andWhere('`case`')->in($this->post->caseIDList)
             ->exec();
+        $this->loadModel('action');
+        foreach($this->post->caseIDList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $taskID);
         die(js::locate($this->session->caseList, 'parent'));
     }
 
@@ -1410,5 +1439,19 @@ class testtask extends control
     {
         $pairs = $this->testtask->getPairs($productID, $executionID);
         die(html::select('testtask', $pairs, '', "class='form-control chosen'"));
+    }
+
+    /**
+     * Ajax get test report.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTestReports($buildID)
+    {
+        /* Testreport list. */
+        $pairs = $this->testtask->getTestReportPairsByBuild($buildID);
+        die(html::select('testreport', $pairs, '', "class='form-control chosen'"));
     }
 }

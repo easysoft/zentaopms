@@ -28,6 +28,7 @@ $lang->product->updateOrder   = 'Ordre';
 $lang->product->orderAction   = "Rang {$lang->productCommon}";
 $lang->product->all           = "Tous les {$lang->productCommon}s";
 $lang->product->manageLine    = "Manage {$lang->productCommon} Line";
+$lang->product->newLine       = "Create {$lang->productCommon} Line";
 $lang->product->export        = 'Export';
 $lang->product->exportAction  = "Export {$lang->productCommon}";
 $lang->product->dashboard     = "Dashboard";

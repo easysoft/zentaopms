@@ -14,13 +14,15 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noTodo', $lang->todo->noTodo);?>
+<?php js::set('moduleList', $config->todo->moduleList)?>
+<?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->todo->create;?></h2>
     </div>
     <form method='post' target='hiddenwin' id='dataform'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
         <tr>
           <th class='thWidth'><?php echo $lang->todo->date;?></th>
           <td class='w-400px'>
@@ -124,7 +126,7 @@
                   <span class="pri-text"><span class="label-pri label-pri-3">3</span></span> &nbsp;<span class="caret"></span>
                 </button>
                 <div class='dropdown-menu pull-right'>
-                  <?php echo html::select('pri', $lang->todo->priList, 3, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>             
+                  <?php echo html::select('pri', $lang->todo->priList, 3, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
                 </div>
               </div>
             </div>

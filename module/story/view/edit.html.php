@@ -167,6 +167,10 @@
               </tr>
               <?php endif;?>
               <tr>
+                <th><?php echo $lang->story->category;?></th>
+                <td><?php echo html::select('category', $lang->story->categoryList, $story->category, "class='form-control chosen'");?></td>
+              </tr>
+              <tr>
                 <th><?php echo $lang->story->pri;?></th>
                 <td><?php echo html::select('pri', $lang->story->priList, $story->pri, "class='form-control chosen'");?></td>
               </tr>

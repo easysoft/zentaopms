@@ -299,6 +299,8 @@ class project extends control
                 }
             }
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
+
             if($this->app->openApp == 'program')
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
@@ -384,7 +386,6 @@ class project extends control
      * Edit a project.
      *
      * @param  int    $projectID
-     * @param  string $from  project|program|programProject
      * @access public
      * @return void
      */
@@ -612,8 +613,9 @@ class project extends control
         if(!empty($_POST))
         {
             $_POST['project'] = $projectID;
-            $this->group->create();
+            $groupID = $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
             die(js::closeModal('parent.parent'));
         }
 
@@ -1091,6 +1093,8 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
+            $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
+
             $link = $this->createLink('project', 'manageMembers', "projectID=$projectID");
             $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
@@ -1135,6 +1139,12 @@ class project extends control
         $groupUsers = $this->group->getUserPairs($groupID);
         $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
+
+        if($this->config->systemMode == 'new')
+        {
+            $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
+            $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
+        }
 
         $title      = $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[] = $group->name;

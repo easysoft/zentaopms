@@ -966,6 +966,7 @@ class execution extends control
      */
     public function testreport($executionID = 0, $objectType = 'execution', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($this->session->project);
         echo $this->fetch('testreport', 'browse', "objectID=$executionID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
@@ -1286,6 +1287,8 @@ class execution extends control
             $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', join(',', $_POST['products']));
 
             $this->executeHooks($executionID);
+
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $executionID));
 
             if($this->app->openApp == 'doc')
             {
@@ -1901,14 +1904,14 @@ class execution extends control
 
         if($_POST)
         {
-            $stories    = $this->loadModel('story')->getStories($executionID, 0, 0, $orderBy);
+            $stories    = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
             $storySpecs = $this->story->getStorySpecs(array_keys($stories));
 
             $order = 1;
             foreach($stories as $story) $story->order = $order++;
 
             $kanbanTasks = $this->execution->getKanbanTasks($executionID, "id");
-            $kanbanBugs  = $this->loadModel('bug')->getBugs($executionID);
+            $kanbanBugs  = $this->loadModel('bug')->getExecutionBugs($executionID);
 
             $users       = array();
             $taskAndBugs = array();
@@ -1978,7 +1981,7 @@ class execution extends control
 
             $this->view->hasBurn    = $hasBurn;
             $this->view->datas      = $datas;
-            $this->view->chartData  = $chartData;
+            $this->view->chartData  = isset($chartData) ? $chartData : array();
             $this->view->storySpecs = $storySpecs;
             $this->view->realnames  = $this->loadModel('user')->getRealNameAndEmails($users);
             $this->view->executionID  = $executionID;
@@ -2186,6 +2189,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->execution->manageMembers($executionID);
+            $this->loadModel('action')->create('team', $executionID, 'managedTeam');
             die(js::locate($this->createLink('execution', 'team', "executionID=$executionID"), 'parent'));
         }
 
@@ -2252,6 +2256,7 @@ class execution extends control
         $account = $user->account;
 
         $this->execution->unlinkMember($executionID, $account);
+        if(!dao::isError()) $this->loadModel('action')->create('team', $executionID, 'managedTeam');
 
         /* if ajax request, send result. */
         if($this->server->ajax)
@@ -2375,7 +2380,7 @@ class execution extends control
 
         $this->view->object       = $object;
         $this->view->products     = $products;
-        $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
+        $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
         $this->view->pager        = $pager;
         $this->view->browseType   = $browseType;
         $this->view->productType  = $productType;
@@ -2711,6 +2716,12 @@ class execution extends control
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->saveState($projectID, $projects);
             $this->project->setMenu($projectID);
+        }
+
+        if($this->app->viewType == 'mhtml')
+        {
+            $executionID = $this->execution->saveState(0, $this->executions);
+            $this->execution->setMenu($executionID);
         }
 
         /* Load pager and get tasks. */

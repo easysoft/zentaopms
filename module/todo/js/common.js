@@ -25,40 +25,12 @@ function loadList(type, id)
 
     var param = 'userID=' + userID;
     if(id) param += '&id=' + id;
-    if(type == 'bug')
+    if(moduleList.indexOf(type) !== -1)
     {
-        link = createLink('bug', 'ajaxGetUserBugs', param);
-    }
-    else if(type == 'task')
-    {
-        link = createLink('task', 'ajaxGetUserTasks', param);
-    }
-    else if(type == 'story')
-    {
-        link = createLink('story', 'ajaxGetUserStories', param);
-    }
-    else if(type == 'issue')
-    {
-        link = createLink('issue', 'ajaxGetUserIssues', param);
-    }
-    else if(type == 'risk')
-    {
-        link = createLink('risk', 'ajaxGetUserRisks', param);
-    }
-    else if(type == 'testtask')
-    {
-        link = createLink('testtask', 'ajaxGetUserTestTasks', param);
-    }
-    else if(type == 'review')
-    {
-        link = createLink('review', 'ajaxGetUserReviews', param);
-    }
-    else if(type == 'feedback')
-    {
-        link = createLink('feedback', 'ajaxGetUserFeedback', param);
+        link = createLink(type, objectsMethod[type], param);
     }
 
-    if(type == 'bug' || type == 'task' || type == 'story' || type == 'issue' || type == 'risk' || type == 'testtask' || type == 'review' || type == 'feedback')
+    if(moduleList.indexOf(type) !== -1)
     {
         $.get(link, function(data, status)
         {
@@ -133,7 +105,7 @@ function switchTimeList(number)
 
 function switchDateFeature(switcher)
 {
-    if(switcher.checked) 
+    if(switcher.checked)
     {
         $('#begin').attr('disabled','disabled').trigger('chosen:updated');
         $('#end').attr('disabled','disabled').trigger('chosen:updated');

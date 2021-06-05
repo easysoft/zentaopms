@@ -516,9 +516,10 @@ class user extends control
                 $this->send(array('result' => 'fail', 'message' => str_replace('ID ', '', sprintf($this->lang->user->error->reserved, $_POST['account']))));
             }
 
-            $this->user->create();
+            $userID = $this->user->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $userID));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
         }
 
@@ -568,7 +569,9 @@ class user extends control
 
         if(!empty($_POST))
         {
-            $this->user->batchCreate();
+            $userIDList = $this->user->batchCreate();
+
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIDList));
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
