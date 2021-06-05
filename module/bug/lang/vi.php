@@ -181,6 +181,7 @@ $lang->bug->remindTask            = 'Bug này đã chuyển thành một nhiệm
 $lang->bug->skipClose             = 'Bug %s được kích hoạt. Bạn không thể đóng nó.';
 $lang->bug->executionAccessDenied = "Truy cập của bạn tới {$lang->executionCommon} mà Bug này sở hữu bị từ chối!";
 $lang->bug->stepsNotEmpty         = "The reproduction step cannot be empty.";
+$lang->bug->confirmUnlinkBuild    = "Replacing the solution version will disassociate the bug from the old version. Are you sure you want to disassociate the bug from %s?";
 
 /* Template. */
 $lang->bug->tplStep   = "<p>[Các bước]</p><br/>";
