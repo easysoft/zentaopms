@@ -103,9 +103,6 @@ $lang->action->objectTypes['entry']       = '应用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['team']        = '团队';
 $lang->action->objectTypes['whitelist']   = '白名单';
-$lang->action->objectTypes['opportunity'] = '机会';
-$lang->action->objectTypes['trainplan']   = '培训计划';
-$lang->action->objectTypes['gapanalysis'] = '能力差距分析';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -490,9 +487,6 @@ $lang->action->label->risk        = '风险|risk|view|riskID=%s';
 $lang->action->label->issue       = '问题|issue|view|issueID=%s';
 $lang->action->label->design      = '设计|design|view|designID=%s';
 $lang->action->label->stakeholder = '干系人|stakeholder|view|userID=%s';
-$lang->action->label->opportunity = '机会|opportunity|view|opportunityID=%s';
-$lang->action->label->trainplan   = '培训计划|trainplan|view|trainplanID=%s';
-$lang->action->label->gapanalysis = '能力差距分析|gapanalysis|view|gapanalysisID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

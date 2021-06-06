@@ -30,9 +30,6 @@ $config->action->objectNameFields['stakeholder'] = 'user';
 $config->action->objectNameFields['budget']      = 'name';
 $config->action->objectNameFields['job']         = 'name';
 $config->action->objectNameFields['team']        = 'name';
-$config->action->objectNameFields['opportunity'] = 'name';
-$config->action->objectNameFields['trainplan']   = 'name';
-$config->action->objectNameFields['gapanalysis'] = 'account';
 
 $config->action->commonImgSize = 870;
 
