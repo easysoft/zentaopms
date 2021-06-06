@@ -90,6 +90,7 @@ $lang->execution->oneProduct      = "階段只能關聯一個{$lang->productComm
 $lang->execution->noLinkProduct   = "階段沒有關聯{$lang->productCommon}";
 $lang->execution->recent          = '近期訪問：';
 $lang->execution->copyNoExecution = '沒有可用的' . $lang->executionCommon . '來複制';
+$lang->execution->noTeam          = '暫時沒有團隊成員';
 
 $lang->execution->start    = "開始";
 $lang->execution->activate = "激活";

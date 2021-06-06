@@ -134,7 +134,7 @@ class svnModel extends model
             return false;
         }
 
-        $version = $lastInDB->commit;
+        $version = (int)$lastInDB->commit + 1;
         $logs    = $this->repo->getUnsyncCommits($repo);
 
         /* Update code commit history. */

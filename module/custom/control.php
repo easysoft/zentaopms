@@ -411,6 +411,19 @@ class custom extends control
     }
 
     /**
+     * Set story concept.
+     *
+     * @param  int   $key
+     * @access public
+     * @return void
+     */
+    public function setDefaultConcept($key = 0)
+    {
+        $this->loadModel('setting')->setItem('system.custom.URSR', $key);
+        die(js::reload('parent'));
+    }
+
+    /**
      * Delete story concept.
      *
      * @param  int    $key

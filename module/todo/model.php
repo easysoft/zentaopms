@@ -39,7 +39,7 @@ class todoModel extends model
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
-        if(!isset($todo->pri) and in_array($this->post->type, $this->config->todo->moduleList) and $this->post->type !== 'review')
+        if(!isset($todo->pri) and in_array($this->post->type, $this->config->todo->moduleList) and $this->post->type !== 'review' and $this->post->type !== 'feedback')
         {
             $todo->pri = $this->dao->select('pri')->from($this->config->objectTables[$this->post->type])->where('id')->eq($this->post->idvalue)->fetch('pri');
 

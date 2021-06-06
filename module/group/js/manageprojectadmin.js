@@ -8,13 +8,15 @@ function addItem(obj)
     $newRow.find('div[id^=members], div[id^=program]').remove();
     $newRow.find('select[name^="members"], select[name^="program"]').val('').chosen();
     setTimeout(function()
-    {   
+    {
         $newRow.removeClass('highlight');
     }, 1600);
 }
 
 function deleteItem(obj)
 {
+    if($("table tr").size() < 3) return false;
+
     var $currentLine= $(obj).closest('tr');
     $currentLine.remove();
 }

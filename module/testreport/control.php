@@ -511,11 +511,10 @@ class testreport extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $tasks      = $report->tasks ? $this->testtask->getByList($report->tasks) : array();;
-        $builds     = $report->builds ? $this->build->getByList($report->builds) : array();
-        $cases      = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases, $pager);
-        $caseIdList = $this->testreport->getCaseIdList($reportID);
-        $bugInfo    = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
+        $tasks   = $report->tasks ? $this->testtask->getByList($report->tasks) : array();;
+        $builds  = $report->builds ? $this->build->getByList($report->builds) : array();
+        $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end);
+        $bugInfo = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
 
         if($report->objectType == 'testtask')
         {
@@ -537,15 +536,15 @@ class testreport extends control
         $this->view->stories   = $stories;
         $this->view->bugs      = $report->bugs ? $this->bug->getByList($report->bugs) : array();
         $this->view->builds    = $builds;
-        $this->view->cases     = $cases;
+        $this->view->cases     = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases, $pager);
         $this->view->users     = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->actions   = $this->loadModel('action')->getList('testreport', $reportID);
 
         $this->view->storySummary = $this->product->summary($stories);
-        $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $caseIdList, $report->begin, $report->end);
+        $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $cases, $report->begin, $report->end);
 
-        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $caseIdList, $report->begin, $report->end);
-        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $caseIdList, $report->begin, $report->end);
+        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $report->cases, $report->begin, $report->end);
+        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $report->cases, $report->begin, $report->end);
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
         $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
