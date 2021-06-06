@@ -28,17 +28,26 @@ $lang->project->addProduct        = 'Add product';
 $lang->project->manageGroupMember = 'Manage Group';
 $lang->project->moduleSetting     = 'List Settings';
 $lang->project->moduleOpen        = 'Program Name';
+$lang->project->dynamic           = 'Dynamic';
+$lang->project->execution         = 'Execution';
+$lang->project->qa                = 'QA';
+$lang->project->bug               = 'Bug List';
+$lang->project->testcase          = 'Case List';
+$lang->project->testtask          = 'Test Task';
+$lang->project->build             = 'Build';
 $lang->project->updateOrder       = 'Order';
 $lang->project->sort              = 'Order';
 $lang->project->whitelist         = 'Project Whitelist';
 $lang->project->addWhitelist      = 'Project Add Whitelist';
-$lang->project->unbindWhitelist    = 'Project Remove Whitelist';
+$lang->project->unbindWhitelist   = 'Project Remove Whitelist';
 $lang->project->manageProducts    = 'Manage Products';
 $lang->project->copyTitle         = 'Please select an project to copy';
 $lang->project->errorSameProducts = 'Project cannot be associated with multiple identical products.';
 $lang->project->errorNoProducts   = 'At least one product is associated';
 $lang->project->copyNoProject     = 'There are no items available to copy.';
 $lang->project->searchByName      = 'Enter the project name to search';
+$lang->project->linkedProducts    = "Linked {$lang->productCommon}s";
+$lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
 
 /* Fields. */
 $lang->project->common             = 'Program';
@@ -89,7 +98,7 @@ $lang->project->sv                 = 'SV%';
 $lang->project->ac                 = 'AC';
 $lang->project->cv                 = 'CV%';
 $lang->project->teamCount          = 'Team';
-$lang->project->longTime           = 'Long-Term Project';
+$lang->project->longTime           = 'Long-Term Program';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = 'More Project';
 $lang->project->days               = 'Manntage';
@@ -101,6 +110,7 @@ $lang->project->changeProgramTip       = 'After modifying the project set, the p
 $lang->project->linkedProjectsTip      = 'Linked projects are as follows';
 $lang->project->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
 $lang->project->linkStoryByPlanTips    = "This action will associate all {$lang->SRCommon} under the selected plan to this project";
+$lang->project->createExecution        = "There is no {$lang->executionCommon} under this project, please create {$lang->executionCommon} first";
 
 $lang->project->tenThousand = '';
 
@@ -155,6 +165,10 @@ $lang->project->aclList['open']    = "Open (accessible with project view permiss
 $lang->project->acls['private'] = 'Private';
 $lang->project->acls['open']    = "Open";
 
+$lang->project->subAclList['private'] = "Private (Only the project leader, team members and stakeholders can access)";
+$lang->project->subAclList['open']    = "Open (accessible with project view permissions)";
+$lang->project->subAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members and stakeholders can access)';
+
 $lang->project->authList['extend'] = 'Inherit (system privilege and project privilege)';
 $lang->project->authList['reset']  = 'Reset (project privilege only)';
 
@@ -175,13 +189,12 @@ $lang->project->chooseProgramType      = 'Select the project management model';
 $lang->project->nextStep               = 'Next step';
 $lang->project->hoursUnit              = '%s hours';
 $lang->project->membersUnit            = '%s men';
-$lang->project->lastIteration          = 'Recent iterations';
+$lang->project->lastIteration          = "Recent {$lang->executionCommon}";
 $lang->project->ongoingStage           = 'Ongoing stage';
 $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = 'CMMI';
 $lang->project->waterfallTitle         = 'CMMI';
 $lang->project->cannotCreateChild      = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
-$lang->project->hasChildren            = 'It has child projects or projects. You cannot delete it.';
 $lang->project->confirmDelete          = "Do you want to delete [%s]?";
 $lang->project->emptyPM                = 'No manager';
 $lang->project->cannotChangeToCat      = "It is not empty, so you cannot change it to a parent.";

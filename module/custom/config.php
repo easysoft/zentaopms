@@ -1,6 +1,6 @@
 <?php
 $config->custom = new stdClass();
-$config->custom->canAdd['story']    = 'reasonList,sourceList,priList';
+$config->custom->canAdd['story']    = 'reasonList,sourceList,priList,categoryList';
 $config->custom->canAdd['task']     = 'priList,typeList,reasonList';
 $config->custom->canAdd['bug']      = 'priList,severityList,osList,browserList,typeList,resolutionList';
 $config->custom->canAdd['testcase'] = 'priList,typeList,stageList,resultList,statusList';
@@ -62,7 +62,7 @@ $config->custom->fieldList['testsuite']              = 'desc';
 $config->custom->fieldList['caselib']                = 'desc';
 $config->custom->fieldList['testcase']['createcase'] = 'lib,stage,pri,precondition,keywords';
 $config->custom->fieldList['testreport']             = 'begin,end,members,report';
-$config->custom->fieldList['testtask']               = 'owner,pri,status,desc';
+$config->custom->fieldList['testtask']               = 'owner,pri,desc';
 $config->custom->fieldList['doc']                    = 'keywords,content';
 $config->custom->fieldList['user']['create']         = 'dept,role,email,commiter';
 $config->custom->fieldList['user']['edit']           = 'dept,role,email,commiter,skype,qq,mobile,phone,address,zipcode,dingding,slack,whatsapp,weixin';

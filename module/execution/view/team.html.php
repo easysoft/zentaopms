@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkMember', $lang->execution->confirmUnlinkMember)?>
+<?php js::set('noAccess', $lang->user->error->noAccess)?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->team;?></span></span>
@@ -66,7 +67,15 @@
         <tr>
           <td>
           <?php
-          if(!common::printLink('user', 'view', "userID={$member->userID}", $member->realname)) print $member->realname;
+          if(common::hasPriv('user', 'view'))
+          {
+              $link = isset($deptUsers[$member->userID]) ? $this->createLink('user', 'view', "userID={$member->userID}") : "javascript:checkUserDept();";
+              echo html::a($link, $member->realname, '', 'data-app="system"');
+          }
+          else
+          {
+              echo $member->realname;
+          }
           $memberHours = $member->days * $member->hours;
           $totalHours  += $memberHours;
           ?>

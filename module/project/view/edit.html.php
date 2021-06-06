@@ -18,11 +18,10 @@
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('longTime', $lang->project->longTime);?>
-<?php js::set('from', $from);?>
 <?php js::set('unmodifiableProducts', $unmodifiableProducts)?>
 <?php js::set('tip', $lang->project->notAllowRemoveProducts);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
-<?php $aclList = $project->parent ? $lang->program->subAclList : $lang->project->aclList;?>
+<?php $aclList = $project->parent ? $lang->project->subAclList : $lang->project->aclList;?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -83,7 +82,7 @@
           <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <?php if($project->model == 'scrum'):?>
-        <tr>
+        <tr id='daysBox' <?php if($project->end == LONG_TIME) echo "class='hidden'";?>>
           <th><?php echo $lang->project->days;?></th>
           <td>
             <div class='input-group'>
@@ -160,7 +159,8 @@
             <?php
               echo html::hidden('model', $project->model);
               echo html::submitButton();
-              echo html::backButton();
+              $browseLink = $this->session->projectList ? $this->session->projectList : $this->createLink('project', 'browse');
+              if(!isonlybody()) echo html::a($browseLink, $lang->goback, '', 'class="btn btn-back btn-wide"');
             ?>
           </td>
         </tr>
@@ -172,7 +172,7 @@
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl == 'project' ? 'private' : 'open', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div id='programAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->project->subAclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div class="modal fade" id="promptBox">
   <div class="modal-dialog mw-600px">

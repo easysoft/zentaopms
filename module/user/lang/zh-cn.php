@@ -97,7 +97,7 @@ $lang->user->tplContentNotEmpty    = '模板内容不能为空!';
 
 $lang->user->profile   = '档案';
 $lang->user->project   = $lang->executionCommon;
-$lang->user->execution = '执行';
+$lang->user->execution = $lang->execution->common;
 $lang->user->task      = '任务';
 $lang->user->bug       = 'Bug';
 $lang->user->test      = '测试';
@@ -207,6 +207,7 @@ $lang->user->error->dangerPassword = "【ID %s】的密码不能使用【%s】�
 $lang->user->error->verifyPassword   = "验证失败，请检查您的系统登录密码是否正确";
 $lang->user->error->originalPassword = "原密码不正确";
 $lang->user->error->companyEmpty     = "公司名称不能为空！";
+$lang->user->error->noAccess         = "该人员和你不是同一部门，你无权访问该人员的工作信息。";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
@@ -242,7 +243,7 @@ $lang->user->noticeResetFile = "<h5>普通用户请联系管理员重置密码</
     <ol>
     <li>文件内容为空。</li>
     <li>如果之前文件存在，删除之后重新创建。</li>
-    </ol>"; 
+    </ol>";
 $lang->user->notice4Safe = "警告：检测到一键安装包密码口令弱";
 $lang->user->process4DIR = "检测到您可能在使用一键安装包环境，该环境中其他站点还在用简单密码，安全起见，如果不使用其他站点，请及时处理。将 %s 目录删除或改名。详情查看：<a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
 $lang->user->process4DB  = "检测到您可能在使用一键安装包环境，该环境中其他站点还在用简单密码，安全起见，如果不使用其他站点，请及时处理。请登录数据库，修改 %s 数据库的zt_user表的password字段。详情查看：<a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";

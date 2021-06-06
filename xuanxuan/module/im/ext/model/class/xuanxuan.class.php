@@ -20,20 +20,20 @@ class xuanxuanIm extends imModel
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
 
-        $products  = $this->loadModel('product')->getPairs();
-        $projects  = $this->loadModel('project')->getPairs();
-        $products  = empty($products) ? array() : array_keys($products);
-        $projects  = empty($projects) ? array() : array_keys($projects);
-        $libIdList = array_keys($this->loadModel('doc')->getLibs('all'));
-        $productID = isset($products[0])  ? $products[0]  : 1;
-        $projectID = isset($projects[0])  ? $projects[0]  : 1;
-        $libID     = isset($libIdList[0]) ? $libIdList[0] : 1;
+        $products    = $this->loadModel('product')->getPairs();
+        $executions  = $this->loadModel('execution')->getPairs();
+        $products    = empty($products) ? array() : array_keys($products);
+        $executions  = empty($executions) ? array() : array_keys($executions);
+        $libIdList   = array_keys($this->loadModel('doc')->getLibs('all'));
+        $productID   = isset($products[0])   ? $products[0]   : 1;
+        $executionID = isset($executions[0]) ? $executions[0] : 1;
+        $libID       = isset($libIdList[0])  ? $libIdList[0]  : 1;
 
         $actions = new stdclass();
-        if(common::hasPriv('bug',   'create') and !empty($products) and strpos('full|onlyTest', $this->config->global->flow) !== false)  $actions->createBug   = array('title' => $this->lang->im->createBug,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('bug', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('story', 'create') and !empty($products) and strpos('full|onlyStory', $this->config->global->flow) !== false) $actions->createStory = array('title' => $this->lang->im->createStory, 'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('story', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('task',  'create') and !empty($projects) and strpos('full|onlyTask', $this->config->global->flow) !== false)  $actions->createTask  = array('title' => $this->lang->im->createTask,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('task', 'create', "project=$projectID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('doc',   'create') and !empty($libIdList))$actions->createDoc   = array('title' => $this->lang->im->createDoc,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('doc', 'create', "libID=$libID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('bug',   'create') and !empty($products))  $actions->createBug   = array('title' => $this->lang->im->createBug,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('bug', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('story', 'create') and !empty($products))  $actions->createStory = array('title' => $this->lang->im->createStory, 'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('story', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('task',  'create') and !empty($executions))$actions->createTask  = array('title' => $this->lang->im->createTask,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('task', 'create', "execution=$executionID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('doc',   'create') and !empty($libIdList)) $actions->createDoc   = array('title' => $this->lang->im->createDoc,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('doc', 'create', "objectType=&objectID=0&libID=0", 'xhtml')), 'height' => "600px", 'width' => "800px");
         if(common::hasPriv('todo',  'create')) $actions->createTodo = array('title' => $this->lang->im->createTodo,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')), 'height' => "600px", 'width' => "800px");
 
         $urls = array();
@@ -112,5 +112,32 @@ class xuanxuanIm extends imModel
         $this->dao->update(TABLE_FILE)->set('pathname')->eq($path)->where('id')->eq($fileID)->exec();
 
         return $fileID;
+    }
+
+    public function chatAddAction($chatId = '', $action = '', $actorId = '', $result = '', $comment = '')
+    {
+        return;
+    }
+
+    public function userAddAction($user, $actionType, $result, $comment = '', $common = false)
+    {
+        if(!zget($this->config->xuanxuan, 'logLevel', 1) && !$common) return;
+
+        $account = '';
+        $userID  = 0;
+        if(is_int($user))
+        {
+            $account = $this->dao->select('account')->from(TABLE_USER)->where('id')->eq($user)->fetch('account');
+            $userID  = $user;
+        }
+        if(is_string($user))
+        {
+            $userID  = $this->dao->select('id')->from(TABLE_USER)->where('account')->eq($user)->fetch('id');
+            $account = $user;
+        }
+
+        $actor   = !empty($account) ? $account : '';
+        $extra   = json_encode(array('actorId' => $userID));
+        $this->loadModel('action')->create('user', $userID, $actionType, $comment, $extra, $actor);
     }
 }

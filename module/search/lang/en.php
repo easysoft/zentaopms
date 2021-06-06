@@ -87,7 +87,7 @@ $lang->search->modules['testreport']  = 'Testing Report';
 $lang->search->modules['productplan'] = 'Plan';
 $lang->search->modules['program']     = 'Program';
 $lang->search->modules['project']     = 'Project';
-$lang->search->modules['execution']   = 'Execution';
+$lang->search->modules['execution']   = $lang->executionCommon;
 $lang->search->modules['story']       = 'Story';
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;

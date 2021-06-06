@@ -17,7 +17,8 @@ $lang->bug->branch           = 'Branche/Plateforme';
 $lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
-$lang->bug->execution        = $lang->executionCommon;
+$lang->bug->project          = 'Project';
+$lang->bug->execution        = $lang->execution->common;
 $lang->bug->story            = 'Story';
 $lang->bug->storyVersion     = 'Version Story';
 $lang->bug->color            = 'Couleur';
@@ -159,6 +160,7 @@ $lang->bug->createBuild   = 'Nouveau';
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = 'Infos de Base';
 $lang->bug->legendAttatch               = 'Fichiers';
+$lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
 $lang->bug->legendExecStoryTask         = $lang->executionCommon . '/Story/Tâche';
 $lang->bug->lblTypeAndSeverity          = 'Type/Severité';
 $lang->bug->lblSystemBrowserAndHardware = 'Système/Browser';
@@ -179,6 +181,7 @@ $lang->bug->remindTask            = 'Ce bug a été converti en tâche. Voulez-v
 $lang->bug->skipClose             = 'Bug %s est actif. Vous ne pouvez pas le fermer.';
 $lang->bug->executionAccessDenied = "Votre accès à {$lang->executionCommon} auquel ce bug appartient est refusé !";
 $lang->bug->stepsNotEmpty         = "The reproduction step cannot be empty.";
+$lang->bug->confirmUnlinkBuild    = "Replacing the solution version will disassociate the bug from the old version. Are you sure you want to disassociate the bug from %s?";
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Etape]</p><br/>";

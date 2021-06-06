@@ -17,8 +17,8 @@
     <?php echo html::a($this->createLink('stakeholder', 'browse', 'browseType=all'), '<span class="text">' . $lang->stakeholder->browse . '</span>', '', 'class="btn btn-link btn-active-text"');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('stakeholder', 'batchcreate', '', "<i class='icon icon-plus'></i>" . $lang->stakeholder->batchCreate, '', "class='btn btn-primary'");?>
-    <?php common::printLink('stakeholder', 'create', '', "<i class='icon icon-plus'></i>" . $lang->stakeholder->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('stakeholder', 'batchcreate', "projectID=$projectID", "<i class='icon icon-plus'></i>" . $lang->stakeholder->batchCreate, '', "class='btn btn-primary'");?>
+    <?php common::printLink('stakeholder', 'create', "projectID=$projectID", "<i class='icon icon-plus'></i>" . $lang->stakeholder->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
@@ -28,7 +28,7 @@
       <table class='table has-sort-head' id='userList'>
         <thead>
         <tr>
-          <?php $vars = "browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+          <?php $vars = "projectID=$projectID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
           <th class='c-id'>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
@@ -49,7 +49,7 @@
           </td>
           <?php $stakeholder->name = $stakeholder->companyName ? $stakeholder->companyName . '/' . $stakeholder->name : $stakeholder->name;?>
           <?php $isKey = $stakeholder->key ? " <i class='icon icon-star-empty'></i>" : '';?>
-          <?php $title = $stakeholder->key ? $lang->stakeholder->isKey : '';?>
+          <?php $title = $stakeholder->key ? $stakeholder->name . '(' . $lang->stakeholder->isKey . ')' : $stakeholder->name;?>
           <td><?php common::printLink('stakeholder', 'view', "id=$stakeholder->id", $stakeholder->name . $isKey, '', "title=$title");?></td>
           <td title='<?php echo zget($lang->stakeholder->typeList, $stakeholder->type, '');?>'><?php echo zget($lang->stakeholder->typeList, $stakeholder->type, '');?></td>
           <td title="<?php echo $stakeholder->phone;?>"><?php echo $stakeholder->phone;?></td>

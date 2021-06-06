@@ -1,4 +1,6 @@
 <?php
+global $config;
+
 $lang->custom->common               = 'Tùy biến';
 $lang->custom->index                = 'Trang chủ';
 $lang->custom->set                  = 'Tùy biến';
@@ -19,7 +21,6 @@ $lang->custom->score                = 'Điểm';
 $lang->custom->timezone             = 'Timezone';
 $lang->custom->scoreReset           = 'Thiết lập lại điểm';
 $lang->custom->scoreTitle           = 'Tính năng điểm';
-$lang->custom->execution            = 'Execution';
 $lang->custom->product              = $lang->productCommon;
 $lang->custom->convertFactor        = 'Convert factor';
 $lang->custom->region               = 'Interval';
@@ -42,9 +43,13 @@ $lang->custom->browseStoryConcept   = "List of story concepts";
 $lang->custom->deleteStoryConcept   = "Delete story Concept";
 $lang->custom->URConcept            = "UR Concept";
 $lang->custom->SRConcept            = "SR Concept";
+$lang->custom->reviewRule           = 'Review Rules';
 $lang->custom->switch               = "Switch";
 $lang->custom->oneUnit              = "One {$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "Please set the conversion factor of {$lang->hourCommon} to %s first";
+
+if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
+if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -71,12 +76,12 @@ $lang->custom->saveTips            = 'After clicking save, the current %s will b
 
 $lang->custom->numberError = 'The interval must be greater than zero!';
 
-$lang->custom->closedExecution = 'Closed Executions';
+$lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
-$lang->custom->object['project']   = 'Project';
+if($config->systemMode == 'new') $lang->custom->object['project']   = 'Project';
 $lang->custom->object['product']   = $lang->productCommon;
-$lang->custom->object['execution'] = 'Execution';
+$lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['story']     = 'Câu chuyện';
 $lang->custom->object['task']      = 'Nhiệm vụ';
 $lang->custom->object['bug']       = 'Bug';
@@ -92,11 +97,13 @@ $lang->custom->project->defaultCurrency    = 'Default Currency';
 $lang->custom->project->fields['unitList'] = 'Unit List';
 
 $lang->custom->story = new stdClass();
+$lang->custom->story->fields['categoryList']     = 'Category';
 $lang->custom->story->fields['priList']          = 'Ưu tiên';
 $lang->custom->story->fields['sourceList']       = 'Nguồn';
 $lang->custom->story->fields['reasonList']       = 'Lý do đóng';
 $lang->custom->story->fields['stageList']        = 'Giai đoạn';
 $lang->custom->story->fields['statusList']       = 'Tình trạng';
+$lang->custom->story->fields['reviewRules']      = 'Review Rules';
 $lang->custom->story->fields['reviewResultList'] = 'Duyệt kết quả';
 $lang->custom->story->fields['review']           = 'Duyệt nhu cầu';
 
@@ -164,7 +171,7 @@ $lang->custom->notice->required            = 'Trường được chọn là bắ
 $lang->custom->notice->conceptResult       = 'According to your preference, <b> %s-%s </b> is set for you. Sử dụng <b>%s</b> + <b> %s</b>.';
 $lang->custom->notice->conceptPath         = 'Vào Quản trị -> Tùy biến -> Mô hình để thiết lập nó.';
 $lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
-$lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed execution is also forbidden.";
+$lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->executionCommon} is also forbidden.";
 $lang->custom->notice->URSREmpty           = 'Custom requirement name can not be empty!';
 $lang->custom->notice->confirmDelete       = 'Are you sure you want to delete it?';
 
@@ -221,7 +228,7 @@ $lang->custom->CRExecution[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Kế hoạch';
-$lang->custom->moduleName['execution']   = 'Execution';
+$lang->custom->moduleName['execution']   = $lang->custom->execution;
 
 $lang->custom->conceptQuestions['overview'] = "1. Sự kết hợp quản lý nào phù hợp với công ty của bạn?";
 $lang->custom->conceptQuestions['URAndSR']  = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
@@ -242,3 +249,6 @@ $lang->custom->conceptOptions->hourPoint['2'] = 'Function Point';
 
 $lang->custom->scrum = new stdclass();
 $lang->custom->scrum->setConcept = 'Set concept';
+
+$lang->custom->reviewRules['allpass']  = 'All passed';
+$lang->custom->reviewRules['halfpass'] = 'More than half passed';

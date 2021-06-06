@@ -14,7 +14,9 @@ function loadAllUsers()
             var moduleID  = $('#module').val();
             var productID = $('#product').val();
             setAssignedTo(moduleID, productID);
-            $('#assignedTo').empty().append($(data).find('option')).trigger('chosen:updated').trigger('chosen:activate');
+            $('#assignedTo').replaceWith(data);
+            $('#assignedTo_chosen').remove();
+            $('#assignedTo').chosen();
         }
     });
 }
@@ -29,7 +31,12 @@ function loadAllUsers()
 function loadExecutionTeamMembers(productID)
 {
     var link = createLink('bug', 'ajaxLoadExecutionTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
-    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen();});
+    $.post(link, function(data)
+    {
+        $('#assignedTo').replaceWith(data);
+        $('#assignedTo_chosen').remove();
+        $('#assignedTo').chosen();
+    })
 }
 
 /**
@@ -92,7 +99,7 @@ $(function()
     var assignedto = $('#assignedTo').val();
     changeProductConfirmed = true;
     oldStoryID             = $('#story').val() || 0;
-    oldExecutionID           = 0;
+    oldExecutionID         = 0;
     oldOpenedBuild         = '';
     oldTaskID              = $('#oldTaskID').val() || 0;
 
@@ -143,4 +150,8 @@ $(function()
             return false;
         }
     });
+});
+
+$(window).unload(function(){
+    if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });

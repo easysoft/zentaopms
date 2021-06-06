@@ -3,7 +3,7 @@
  * The log view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong 
+ * @author      Wang Yidong, Zhu Jinyong
  * @package     repo
  * @version     $Id: log.html.php $
  */
@@ -19,14 +19,14 @@
     <div class="page-title">
       <strong>
       <?php
-      echo html::a($this->repo->createLink('log', "repoID=$repoID"), $repo->name);
+      echo html::a($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}'");
       $paths= explode('/', $entry);
       $fileName = array_pop($paths);
       $postPath = '';
       foreach($paths as $pathName)
       {
           $postPath .= $pathName . '/';
-          echo '/' . ' ' . html::a($this->repo->createLink('log', "repoID=$repoID&entry=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
+          echo '/' . ' ' . html::a($this->repo->createLink('log', "repoID=$repoID&ojbectID=$objectID&entry=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
       }
       echo '/' . ' ' . $fileName;
       ?>
@@ -40,9 +40,9 @@
     <ul class="nav nav-default">
       <?php $encodeEntry = $this->repo->encodePath($entry);?>
       <li><a><?php echo $lang->repo->log;?></a></li>
-      <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&entry=$encodeEntry&revision=$revision"), $lang->repo->view);?></li>
+      <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodeEntry&revision=$revision"), $lang->repo->view, '', "data-app='{$app->openApp}'");?></li>
       <?php if($info->kind == 'file'):?>
-      <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&entry=$encodeEntry&revision=$revision"), $lang->repo->blame);?></li>
+      <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID*&entry=$encodeEntry&revision=$revision"), $lang->repo->blame, '', "data-app='{$app->openApp}'");?></li>
       <li><?php echo html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodeEntry&fromRevision=$revision"), $lang->repo->download, 'hiddenwin');?></li>
       <?php endif;?>
     </ul>
@@ -53,7 +53,7 @@
         <tr>
           <th class='w-40px'></th>
           <th class='w-110px'><?php echo $lang->repo->revision?></th>
-          <?php if($repo->SCM == 'Git'):?>
+          <?php if($repo->SCM != 'Subversion'):?>
           <th class='w-90px'><?php echo $lang->repo->commit?></th>
           <?php endif;?>
           <th class='w-150px'><?php echo $lang->repo->date?></th>
@@ -70,8 +70,8 @@
               <label></label>
             </div>
           </td>
-          <td class='versions'><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&revision=" . $log->revision), substr($log->revision, 0, 10));?></td>
-          <?php if($repo->SCM == 'Git'):?>
+          <td class='versions'><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision=" . $log->revision), substr($log->revision, 0, 10), '', "data-app='{$app->openApp}'");?></td>
+          <?php if($repo->SCM != 'Subversion'):?>
           <td><?php echo $log->commit?></td>
           <?php endif;?>
           <td><?php echo $log->time;?></td>
@@ -82,7 +82,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
-      <?php echo html::submitButton($lang->repo->diff, '', 'btn btn-primary')?>
+      <?php echo html::submitButton($lang->repo->diff, '', count($logs) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

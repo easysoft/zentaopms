@@ -66,7 +66,7 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    static public function jsonEncode4Parse($data, $options = 0)
+    public static function jsonEncode4Parse($data, $options = 0)
     {
         $json = json_encode($data);
         if($options) $json = str_replace(array("'", '"'), array('\u0027', '\u0022'), $json);
@@ -86,7 +86,7 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    static public function convertEncoding($string, $fromEncoding, $toEncoding = 'utf-8')
+    public static function convertEncoding($string, $fromEncoding, $toEncoding = 'utf-8')
     {
         $toEncoding = str_replace('utf8', 'utf-8', $toEncoding);
         if(function_exists('mb_convert_encoding'))
@@ -121,7 +121,7 @@ class helper extends baseHelper
      *
      * @return bool|float
      */
-    static public function workDays($begin, $end)
+    public static function workDays($begin, $end)
     {
         $begin = strtotime($begin);
         $end   = strtotime($end);

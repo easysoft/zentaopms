@@ -12,6 +12,19 @@
 class search extends control
 {
     /**
+     * Determine whether to display the effort object.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct($module = '', $method = '')
+    {
+        parent::__construct($module, $method);
+        if(!isset($this->config->maxVersion))  unset($this->lang->search->modules['effort']);
+        if($this->config->systemMode != 'new') unset($this->lang->search->modules['program'], $this->lang->search->modules['project']);
+    }
+
+    /**
      * Build search form.
      *
      * @param  string  $module
@@ -157,8 +170,9 @@ class search extends control
             }
         }
 
-        $this->lang->search->menu = $this->lang->admin->menu;
-        $this->lang->menugroup->search = 'system';
+        $this->lang->navGroup->search  = 'admin';
+        $this->lang->search->menu      = $this->lang->admin->menu;
+        $this->lang->search->menuOrder = $this->lang->admin->menuOrder;
 
         $this->view->title = $this->lang->search->buildIndex;
         $this->display();
@@ -187,46 +201,49 @@ class search extends control
         $type = (empty($type) or $type[0] == 'all') ? 'all' : $type;
 
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $this->config->search->recPerPage, $pageID);
+        $pager  = new pager($recTotal, $this->config->search->recPerPage, $pageID);
+        $begin  = time();
+        $result = $this->search->getList($words, $pager, $type);
 
         /* Set session. */
-        $uri  = inlink('index', "recTotal=$recTotal&pageID=$pageID");
+        $uri  = inlink('index', "recTotal=$pager->recTotal&pageID=$pager->pageID");
         $uri .= strpos($uri, '?') === false ? '?' : '&';
         $uri .= 'words=' . $words;
-        $this->session->set('bugList',         $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('docList',         $uri);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('executionList',   $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('testtaskList',    $uri);
-        $this->session->set('todoList',        $uri);
-        $this->session->set('effortList',      $uri);
-        $this->session->set('reportList',      $uri);
-        $this->session->set('testsuiteList',   $uri);
-        $this->session->set('issueList',       $uri);
-        $this->session->set('riskList',        $uri);
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('docList',         $uri, 'doc');
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('programList',     $uri, 'program');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('testtaskList',    $uri, 'qa');
+        $this->session->set('todoList',        $uri, 'my');
+        $this->session->set('effortList',      $uri, 'my');
+        $this->session->set('reportList',      $uri, 'qa');
+        $this->session->set('testsuiteList',   $uri, 'qa');
+        $this->session->set('issueList',       $uri, 'project');
+        $this->session->set('riskList',        $uri, 'project');
+        $this->session->set('caselibList',     $uri, 'qa');
         $this->session->set('searchIngWord',   $words);
         $this->session->set('searchIngType',   $type);
-
-        $begin = time();
-        $this->view->results = $this->search->getList($words, $pager, $type);
 
         if(strpos($this->server->http_referer, 'search') === false)
         {
             $this->session->set('referer', $this->server->http_referer);
         }
 
-        $this->view->consumed = time() - $begin;
-        $this->view->title    = $this->lang->search->index;
-        $this->view->type     = $type;
-        $this->view->pager    = $pager;
-        $this->view->words    = $words;
-        $this->view->referer  = $this->session->referer;
+        $this->view->results    = $result;
+        $this->view->consumed   = time() - $begin;
+        $this->view->title      = $this->lang->search->index;
+        $this->view->type       = $type;
+        $this->view->pager      = $pager;
+        $this->view->words      = $words;
+        $this->view->referer    = $this->session->referer;
 
         $this->display();
     }

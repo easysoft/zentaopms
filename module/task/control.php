@@ -39,8 +39,9 @@ class task extends control
      */
     public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
-        $executions  = $this->execution->getPairs($this->session->PRJ);
+        $executions  = $this->execution->getPairs();
         $executionID = $this->execution->saveState($executionID, $executions);
+        $this->execution->setMenu($executionID);
 
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
@@ -82,14 +83,14 @@ class task extends control
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
-        $this->execution->setMenu($executions, $execution->id);
+        $this->execution->setMenu($execution->id);
 
         if(!empty($_POST))
         {
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
-            setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+            setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             if($this->post->execution) $executionID = (int)$this->post->execution;
             $tasksID = $this->task->create($executionID);
             if(dao::isError())
@@ -130,6 +131,9 @@ class task extends control
 
             $this->executeHooks($taskID);
 
+            /* Return task id when call the API. */
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
+
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
@@ -149,7 +153,7 @@ class task extends control
             }
             elseif($this->post->after == 'toTaskList')
             {
-                setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, false);
+                setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=unclosed&param=0&orderBy=id_desc");
                 $response['locate'] = $taskLink;
                 $this->send($response);
@@ -167,7 +171,7 @@ class task extends control
         }
 
         $users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $members          = $this->execution->getTeamMemberPairs($executionID, 'nodeleted');
+        $members          = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $showAllModule    = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
@@ -190,6 +194,18 @@ class task extends control
         }
         $stories = $this->story->getExecutionStoryPairs($executionID, 0, 0, $moduleIdList, 'full', 'unclosed');
 
+        /* Get block id of assinge to me. */
+        $blockID = 0;
+        if(isonlybody())
+        {
+            $blockID = $this->dao->select('id')->from(TABLE_BLOCK)
+                ->where('block')->eq('assingtome')
+                ->andWhere('module')->eq('my')
+                ->andWhere('account')->eq($this->app->user->account)
+                ->orderBy('order_desc')
+                ->fetch('id');
+        }
+
         $title      = $execution->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $execution->name);
         $position[] = $this->lang->task->common;
@@ -206,12 +222,13 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->execution        = $execution;
-        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($this->session->PRJ, 'all', 0, true);
+        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'all', 0, true);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;
         $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         $this->view->members          = $members;
+        $this->view->blockID          = $blockID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
     }
@@ -237,18 +254,25 @@ class task extends control
             die(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
         }
 
+        $execution = $this->execution->getById($executionID);
         if($this->config->systemMode == 'new')
         {
-            $project = $this->project->getByID($this->session->PRJ);
+            $project = $this->project->getByID($execution->project);
             if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
         }
 
-        $execution = $this->execution->getById($executionID);
-        $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID&tab=task");
+        if($this->app->openApp == 'my')
+        {
+            $taskLink = $this->createLink('my', 'work', 'mode=task');
+        }
+        else
+        {
+            $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID");
+        }
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $execution->id);
+        $this->execution->setMenu($execution->id);
 
         /* When common task are child tasks, query whether common task are consumed. */
         $taskConsumed = 0;
@@ -263,9 +287,15 @@ class task extends control
             $mails = $this->task->batchCreate($executionID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $taskIDList = array();
+            foreach($mails as $mail) $taskIDList[] = $mail->taskID;
+
+            /* Return task id list when call the API. */
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
+
             /* Locate the browser. */
             if(!empty($iframe)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $storyLink));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
         }
 
         /* Set Custom*/
@@ -275,7 +305,7 @@ class task extends control
 
 
         $stories = $this->story->getExecutionStoryPairs($executionID, 0, 0, 0, 'short');
-        $members = $this->execution->getTeamMemberPairs($executionID, 'nodeleted');
+        $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
@@ -313,11 +343,11 @@ class task extends control
     {
         $this->view->task      = $this->loadModel('task')->getByID($taskID);
         $this->view->execution = $this->execution->getById($this->view->task->execution);
-        $this->view->members   = $this->execution->getTeamMemberPairs($this->view->execution->id ,'nodeleted');
+        $this->view->members   = $this->loadModel('user')->getTeamMemberPairs($this->view->execution->id, 'execution','nodeleted');
         $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $this->view->execution->id);
+        $this->execution->setMenu($this->execution->getPairs(), $this->view->execution->id);
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
     }
 
@@ -392,7 +422,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject($this->session->PRJ, 'all', 0, true);
+        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject(0, 'all', 0, true);
         $this->display();
     }
 
@@ -445,7 +475,7 @@ class task extends control
         if($executionID)
         {
             $execution = $this->execution->getById($executionID);
-            $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $execution->id);
+            $this->execution->setMenu($this->execution->getPairs(), $execution->id);
 
             /* Set modules and members. */
             $showAllModule = isset($this->config->task->allModule) ? $this->config->task->allModule : '';
@@ -460,10 +490,10 @@ class task extends control
         /* The tasks of my. */
         else
         {
-            $this->lang->task->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.task', 'my');
-            $this->lang->task->menuOrder = $this->lang->my->menuOrder;
+            /* Set my menu. */
             $this->loadModel('my')->setMenu();
+            $this->lang->my->menu->work['subModule'] = 'task';
+
             $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
             $this->view->title      = $this->lang->task->batchEdit;
             $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -476,7 +506,7 @@ class task extends control
         /* Get execution teams. */
         $executionIDList = array();
         foreach($tasks as $task) if(!in_array($task->execution, $executionIDList)) $executionIDList[] = $task->execution;
-        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIDList)->andWhere('type')->in('sprint,stage')->fetchGroup('root', 'account');
+        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIDList)->andWhere('type')->eq('execution')->fetchGroup('root', 'account');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
@@ -533,7 +563,7 @@ class task extends control
 
         $task = $this->task->getByID($taskID);
 
-        $members = $this->execution->getTeamMemberPairs($executionID, 'nodeleted');
+        $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 
         /* Compute next assignedTo. */
         if(!empty($task->team))
@@ -625,9 +655,10 @@ class task extends control
      */
     public function view($taskID)
     {
-        $task = $this->task->getById($taskID, true);
+        $taskID = (int)$taskID;
+        $task   = $this->task->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->PRJ = $task->project;
+        $this->session->project = $task->project;
 
         if($task->fromBug != 0)
         {
@@ -655,7 +686,7 @@ class task extends control
 
         /* Set menu. */
         $execution = $this->execution->getById($task->execution);
-        $this->execution->setMenu($this->execution->getPairs($this->session->PRJ), $execution->id);
+        if($this->app->openApp == 'execution') $this->execution->setMenu($execution->id);
 
         $this->executeHooks($taskID);
 
@@ -745,7 +776,7 @@ class task extends control
         $this->view->position[] = $this->lang->task->start;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->members    = $this->execution->getTeamMemberPairs($task->execution, 'nodeleted');
+        $this->view->members    = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
         $this->display();
     }
@@ -786,8 +817,8 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->session->set('estimateList', $this->app->getURI(true));
-        if(isonlybody() && $this->config->requestType != 'GET') $this->session->set('estimateList', $this->app->getURI(true) . '?onlybody=yes');
+        $this->session->set('estimateList', $this->app->getURI(true), 'execution');
+        if(isonlybody() && $this->config->requestType != 'GET') $this->session->set('estimateList', $this->app->getURI(true) . '?onlybody=yes', 'execution');
 
         $this->view->task      = $this->task->getById($taskID);
         $this->view->estimates = $this->task->getTaskEstimate($taskID);
@@ -904,7 +935,7 @@ class task extends control
         }
 
         $task         = $this->view->task;
-        $members      = $this->execution->getTeamMemberPairs($task->execution, 'nodeleted');
+        $members      = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $task->nextBy = $task->openedBy;
 
         $this->view->users = $members;
@@ -1005,7 +1036,7 @@ class task extends control
         $this->view->position[] = $this->lang->task->restart;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->members    = $this->execution->getTeamMemberPairs($task->execution, 'nodeleted');
+        $this->view->members    = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
         $this->display();
     }
@@ -1206,6 +1237,13 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        if(!empty($this->view->task->team))
+        {
+            $members = array();
+            foreach($this->view->task->team as $account => $member) $members[$account] = zget($this->view->members, $account);
+            $this->view->members = $members;
+        }
+
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
         $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
@@ -1323,9 +1361,9 @@ class task extends control
             }
         }
 
-        $executions = $this->execution->getPairs($this->session->PRJ);
+        $executions = $this->execution->getPairs();
 
-        $this->execution->setMenu($executions, $executionID);
+        $this->execution->setMenu($executionID);
         $this->executions          = $executions;
         $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->task->report->common;
         $this->view->position[]    = $this->executions[$executionID];
@@ -1401,7 +1439,7 @@ class task extends control
 
             /* Get users and executions. */
             $users      = $this->loadModel('user')->getPairs('noletter');
-            $executions = $this->execution->getPairs($this->session->execution, 'all', 'all|nocode');
+            $executions = $this->execution->getPairs($execution->project, 'all', 'all|nocode');
 
             /* Get related objects id lists. */
             $relatedStoryIdList  = array();
@@ -1537,6 +1575,18 @@ class task extends control
                 if(isset($users[$task->canceledBy]))   $task->canceledBy   = $users[$task->canceledBy];
                 if(isset($users[$task->closedBy]))     $task->closedBy     = $users[$task->closedBy];
                 if(isset($users[$task->lastEditedBy])) $task->lastEditedBy = $users[$task->lastEditedBy];
+
+                /* Convert username to real name. */
+                if(!empty($task->mailto))
+                {
+                    $mailtoList = explode(',', $task->mailto);
+
+                    $task->mailto = '';
+                    foreach($mailtoList as $mailto)
+                    {
+                        if(!empty($mailto)) $task->mailto .= ',' . zget($users, $mailto);
+                    }
+                }
 
                 if($task->parent > 0 && strpos($task->name, htmlentities('>')) !== 0) $task->name = '>' . $task->name;
                 if(!empty($task->team))   $task->name = '[' . $taskLang->multipleAB . '] ' . $task->name;

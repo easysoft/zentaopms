@@ -9,13 +9,18 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+global $config;
 $lang->block = new stdclass();
-$lang->block->common = '区块';
-$lang->block->name   = '区块名称';
-$lang->block->style  = '外观';
-$lang->block->grid   = '位置';
-$lang->block->color  = '颜色';
-$lang->block->reset  = '恢复默认';
+$lang->block->common     = '区块';
+$lang->block->name       = '区块名称';
+$lang->block->style      = '外观';
+$lang->block->grid       = '位置';
+$lang->block->color      = '颜色';
+$lang->block->reset      = '恢复默认';
+$lang->block->story      = '需求';
+$lang->block->investment = '投入';
+$lang->block->estimate   = '预计工时';
+$lang->block->last       = '近期';
 
 $lang->block->account = '所属用户';
 $lang->block->module  = '所属模块';
@@ -31,7 +36,7 @@ $lang->block->lblBlock     = '区块';
 $lang->block->lblNum       = '条数';
 $lang->block->lblHtml      = 'HTML内容';
 $lang->block->dynamic      = '最新动态';
-$lang->block->assignToMe   = '指派给我';
+$lang->block->assignToMe   = '待处理';
 $lang->block->done         = '已完成';
 $lang->block->lblFlowchart = '流程图';
 $lang->block->welcome      = '欢迎总览';
@@ -46,7 +51,7 @@ $lang->block->myExecution         = '未关闭的' . $lang->executionCommon;
 $lang->block->myProduct           = '未关闭的' . $lang->productCommon;
 $lang->block->delayed             = '已延期';
 $lang->block->noData              = '当前统计类型下暂无数据';
-$lang->block->emptyTip            = '暂无信息';
+$lang->block->emptyTip            = '暂无数据';
 $lang->block->createdTodos        = '创建的待办数';
 $lang->block->createdRequirements = '创建的' . $lang->URCommon . '数';
 $lang->block->createdStories      = '创建的' . $lang->SRCommon . '数';
@@ -68,6 +73,7 @@ $lang->block->time                = '第';
 $lang->block->week                = '周';
 $lang->block->selectProduct       = '选择产品';
 $lang->block->of                  = '的';
+$lang->block->remain              = '剩余工时';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';
@@ -140,13 +146,17 @@ $lang->block->default['waterfall']['project']['7']['params']['type']    = 'all';
 $lang->block->default['waterfall']['project']['7']['params']['count']   = '15';
 $lang->block->default['waterfall']['project']['7']['params']['orderBy'] = 'id_desc';
 
-$lang->block->default['scrum']['project']['1']['title'] =  '项目整体情况';
+$lang->block->default['scrum']['project']['1']['title'] =  '项目概况';
 $lang->block->default['scrum']['project']['1']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['project']['1']['grid']  = 8;
 
 $lang->block->default['scrum']['project']['2']['title'] = $lang->executionCommon . '列表';
 $lang->block->default['scrum']['project']['2']['block'] = 'scrumlist';
 $lang->block->default['scrum']['project']['2']['grid']  = 8;
+
+$lang->block->default['scrum']['project']['2']['params']['type']    = 'undone';
+$lang->block->default['scrum']['project']['2']['params']['count']   = '20';
+$lang->block->default['scrum']['project']['2']['params']['orderBy'] = 'id_desc';
 
 $lang->block->default['scrum']['project']['3']['title'] = '待测版本';
 $lang->block->default['scrum']['project']['3']['block'] = 'scrumtest';
@@ -275,10 +285,14 @@ $lang->block->default['full']['my']['3']['grid']            = 4;
 $lang->block->default['full']['my']['3']['source']          = 'todo';
 $lang->block->default['full']['my']['3']['params']['count'] = '20';
 
-$lang->block->default['full']['my']['4']['title']  = '项目统计';
-$lang->block->default['full']['my']['4']['block']  = 'statistic';
-$lang->block->default['full']['my']['4']['source'] = 'project';
-$lang->block->default['full']['my']['4']['grid']   = 8;
+if($config->systemMode == 'new')
+{
+    $lang->block->default['full']['my']['4']['title']           = '项目统计';
+    $lang->block->default['full']['my']['4']['block']           = 'statistic';
+    $lang->block->default['full']['my']['4']['source']          = 'project';
+    $lang->block->default['full']['my']['4']['grid']            = 8;
+    $lang->block->default['full']['my']['4']['params']['count'] = '20';
+}
 
 $lang->block->default['full']['my']['5']['title']  = '我的贡献';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';
@@ -290,7 +304,7 @@ $lang->block->default['full']['my']['6']['block']  = 'recentproject';
 $lang->block->default['full']['my']['6']['source'] = 'project';
 $lang->block->default['full']['my']['6']['grid']   = 8;
 
-$lang->block->default['full']['my']['7']['title']  = '指派给我';
+$lang->block->default['full']['my']['7']['title']  = '待处理';
 $lang->block->default['full']['my']['7']['block']  = 'assigntome';
 $lang->block->default['full']['my']['7']['source'] = '';
 $lang->block->default['full']['my']['7']['grid']   = 8;
@@ -302,15 +316,23 @@ $lang->block->default['full']['my']['7']['params']['riskNum']  = '20';
 $lang->block->default['full']['my']['7']['params']['issueNum'] = '20';
 $lang->block->default['full']['my']['7']['params']['storyNum'] = '20';
 
-$lang->block->default['full']['my']['8']['title']  = '项目人力投入';
-$lang->block->default['full']['my']['8']['block']  = 'projectteam';
-$lang->block->default['full']['my']['8']['source'] = 'project';
-$lang->block->default['full']['my']['8']['grid']   = 8;
+if($config->systemMode == 'new')
+{
+    $lang->block->default['full']['my']['8']['title']  = '项目人力投入';
+    $lang->block->default['full']['my']['8']['block']  = 'projectteam';
+    $lang->block->default['full']['my']['8']['source'] = 'project';
+    $lang->block->default['full']['my']['8']['grid']   = 8;
+}
 
 $lang->block->default['full']['my']['9']['title']  = '项目列表';
 $lang->block->default['full']['my']['9']['block']  = 'project';
 $lang->block->default['full']['my']['9']['source'] = 'project';
 $lang->block->default['full']['my']['9']['grid']   = 8;
+if($config->systemMode == 'classic')
+{
+    $lang->block->default['full']['my']['9']['block']  = 'execution';
+    $lang->block->default['full']['my']['9']['source'] = 'execution';
+}
 
 $lang->block->default['full']['my']['9']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['9']['params']['count']   = '15';
@@ -320,7 +342,7 @@ $lang->block->type    = '类型';
 $lang->block->orderBy = '排序';
 
 $lang->block->availableBlocks            = new stdclass();
-$lang->block->availableBlocks->todo      = '我的待办';
+$lang->block->availableBlocks->todo      = '我的日程';
 $lang->block->availableBlocks->task      = '我的任务';
 $lang->block->availableBlocks->bug       = '我的Bug';
 $lang->block->availableBlocks->case      = '我的用例';
@@ -334,9 +356,9 @@ $lang->block->availableBlocks->testtask  = '测试版本列表';
 $lang->block->availableBlocks->risk      = '我的风险';
 $lang->block->availableBlocks->issue     = '我的问题';
 
-$lang->block->moduleList['project']   = '项目';
+if($config->systemMode == 'new') $lang->block->moduleList['project'] = '项目';
 $lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['execution'] = $lang->executionCommon;
+$lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = '测试';
 $lang->block->moduleList['todo']      = '待办';
 
@@ -345,11 +367,11 @@ $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->project       = '项目列表';
 $lang->block->modules['project']->availableBlocks->recentproject = '近期项目';
 $lang->block->modules['project']->availableBlocks->statistic     = '项目统计';
-$lang->block->modules['project']->availableBlocks->projectteam   = '项目人力投入';
+if($config->systemMode == 'new') $lang->block->modules['project']->availableBlocks->projectteam = '项目人力投入';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = '项目整体情况';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = '项目概况';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->executionCommon . '列表';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->executionCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = '待测版本';
@@ -376,9 +398,9 @@ $lang->block->modules['product']->availableBlocks->release   = '发布列表';
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = $lang->executionCommon . '统计';
-$lang->block->modules['execution']->availableBlocks->overview  = $lang->executionCommon . '总览';
-$lang->block->modules['execution']->availableBlocks->list      = $lang->executionCommon . '列表';
+$lang->block->modules['execution']->availableBlocks->statistic = $lang->execution->common . '统计';
+$lang->block->modules['execution']->availableBlocks->overview  = $lang->execution->common . '总览';
+$lang->block->modules['execution']->availableBlocks->list      = $lang->execution->common . '列表';
 $lang->block->modules['execution']->availableBlocks->task      = '任务列表';
 $lang->block->modules['execution']->availableBlocks->build     = '版本列表';
 
@@ -512,11 +534,11 @@ $lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|'
 $lang->block->modules['project']->moreLinkList->cmmiestimate   = 'workestimation|index|';
 $lang->block->modules['project']->moreLinkList->cmmiissue      = 'issue|browse|';
 $lang->block->modules['project']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['project']->moreLinkList->scrumlist      = 'project|all|';
-$lang->block->modules['project']->moreLinkList->scrumtest      = 'testtask|browse|';
+$lang->block->modules['project']->moreLinkList->scrumlist      = 'project|execution|';
+$lang->block->modules['project']->moreLinkList->scrumtest      = 'project|testtask|';
 $lang->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['project']->moreLinkList->sprint         = 'project|all|';
-$lang->block->modules['project']->moreLinkList->projectdynamic = 'company|dynamic|';
+$lang->block->modules['project']->moreLinkList->sprint         = 'project|execution|';
+$lang->block->modules['project']->moreLinkList->projectdynamic = 'project|dynamic|';
 
 $lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|';

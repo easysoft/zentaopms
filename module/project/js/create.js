@@ -27,12 +27,12 @@ $(function()
 /**
  * Set parent program.
  *
+ * @param  $parentProgram
  * @access public
  * @return void
  */
-function setParentProgram()
+function setParentProgram(parentProgram)
 {
-    var parentProgram = $("#parent").val();
     location.href = createLink('project', 'create', 'model=' + model + '&programID=' + parentProgram);
 }
 
@@ -78,13 +78,13 @@ function addNewProduct(obj)
 /**
  * Set access control box.
  *
- * @param  int $projectID
+ * @param  int $programID
  * @access public
  * @return void
  */
-function setAclList(projectID)
+function setAclList(programID)
 {
-    if(projectID != 0)
+    if(programID != 0)
     {
         $('.aclBox').html($('#programAcl').html());
     }

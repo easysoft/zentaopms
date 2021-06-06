@@ -1,7 +1,7 @@
 $(function()
 {
     $('.main-actions-holder').css('height', '0px');
-    var $xuanAction = "<div class='xuancard-actions fixed'>";
+    var xuanAction = "<div class='xuancard-actions fixed'>";
     $('.main-col div.main-actions .btn-toolbar a').each(function(){
         var $that    = $(this);
 
@@ -17,10 +17,10 @@ $(function()
         url = 'xxc:openUrlInDialog/' + encodeURIComponent(sysurl + href);
         target = " target='_blank'";
 
-        $xuanAction += "<a href='" + url + "'" + title + target + btnClass + '>' + action + "</a>";
+        xuanAction += "<a href='" + url + "'" + title + target + btnClass + '>' + action + "</a>";
     });
 
-    $xuanAction += '</div>';
-    $('#footer').replaceWith($xuanAction);
+    xuanAction += '</div>';
+    $('body').append(xuanAction);
     $('.xuancard-actions a.iframe').modalTrigger();
 })

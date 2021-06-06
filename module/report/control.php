@@ -32,18 +32,12 @@ class report extends control
         /* Set report menu group. */
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if(!$this->projectID) $this->lang->navGroup->report = 'report';
-        if($this->lang->navGroup->report == 'project' && isset($this->config->maxVersion))
-        {
-            $index = array_search('report', $this->lang->noMenuModule);
-            unset($this->lang->noMenuModule[$index]);
-            $this->lang->report->menu = $this->lang->report->projectMenu;
-        }
 
         if((isset($this->config->proVersion) || isset($this->config->bizVersion)) && $this->lang->navGroup->report == 'report' && common::hasPriv('report', 'custom')) $this->lang->report->mainMenuAction = html::a(helper::createLink('report', 'custom'), $this->lang->crystal->custom, '', "class='btn btn-link'");
     }
 
     /**
-     * The index of report, goto execution deviation.
+     * The index of report, goto project deviation.
      *
      * @access public
      * @return void
@@ -54,23 +48,23 @@ class report extends control
     }
 
     /**
-     * Execution deviation report.
+     * Project deviation report.
      *
      * @access public
      * @return void
      */
-    public function executionDeviation($begin = 0, $end = 0)
+    public function projectDeviation($begin = 0, $end = 0)
     {
         $begin = $begin ? date('Y-m-d', strtotime($begin)) : '';
         $end   = $end   ? date('Y-m-d', strtotime($end))   : '';
 
-        $this->view->title      = $this->lang->report->executionDeviation;
-        $this->view->position[] = $this->lang->report->executionDeviation;
+        $this->view->title      = $this->lang->report->projectDeviation;
+        $this->view->position[] = $this->lang->report->projectDeviation;
 
         $this->view->executions = $this->report->getExecutions($begin, $end);
         $this->view->begin      = $begin;
         $this->view->end        = $end;
-        $this->view->submenu    = 'execution';
+        $this->view->submenu    = 'project';
         $this->display();
     }
 

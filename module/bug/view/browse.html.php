@@ -21,6 +21,13 @@ js::set('productID',     $productID);
 js::set('branch',        $branch);
 $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($browseType, array_keys($lang->bug->mySelects)) ? $browseType : '';
 ?>
+<style>
+#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text {color: #fff;}
+#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text:after {border-bottom: unset;}
+.btn-group a i.icon-plus {font-size: 16px;}
+.btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.3);}
+.btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+</style>
 <?php if($config->global->flow == 'full'):?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
@@ -111,17 +118,43 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     <?php if(common::canModify('product', $product)):?>
     <?php if(!common::checkNotCN()):?>
     <?php
-    common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&executionID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
-    if(commonModel::isTutorialMode())
-    {
-        $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-        echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), "<i class='icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary btn-bug-create'");
-    }
-    else
-    {
-        common::printLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'");
-    }
+      $createBugLink   = '';
+      $batchCreateLink = '';
+      if(commonModel::isTutorialMode())
+      {
+          $wizardParams  = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+          $createBugLink = $this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams");
+      }
+      else
+      {
+          $createBugLink = $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+      }
+      $batchCreateLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&executionID=0&moduleID=$moduleID");
+
+      $buttonLink  = '';
+      $buttonTitle = '';
+      if(common::hasPriv('bug', 'batchCreate'))
+      {
+          $buttonLink = $batchCreateLink;
+          $buttonTitle = $lang->bug->batchCreate;
+      }
+      if(common::hasPriv('bug', 'create'))
+      {
+          $buttonLink = $createBugLink;
+          $buttonTitle = $lang->bug->create;
+      }
+      $hidden = empty($buttonLink) ? 'hidden' : '';
     ?>
+    <div class='btn-group dropdown'>
+      <?php echo html::a($buttonLink, "<i class='icon-plus'></i> $buttonTitle", '', "class='btn btn-primary $hidden'");?>
+      <?php if(common::hasPriv('bug', 'batchCreate') and common::hasPriv('bug', 'create')):?>
+      <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+      <ul class='dropdown-menu'>
+        <li><?php echo html::a($createBugLink, $lang->bug->create);?></li>
+        <li><?php echo html::a($batchCreateLink, $lang->bug->batchCreate);?></li>
+      </ul>
+      <?php endif;?>
+    </div>
     <?php else:?>
     <div class='btn-group dropdown-hover'>
       <?php

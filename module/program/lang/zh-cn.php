@@ -12,8 +12,8 @@ $lang->program->progress  = '项目进度';
 $lang->program->children  = '子项目集';
 $lang->program->parent    = '父项目集';
 $lang->program->allInput  = '项目集总投入';
-$lang->program->teamCount = '项目集成员';
-$lang->program->longTime  = '长期项目';
+$lang->program->teamCount = '总人数';
+$lang->program->longTime  = '长期';
 $lang->program->view      = '项目集详情';
 
 /* Actions. */
@@ -43,6 +43,8 @@ $lang->program->confirmBatchUnlink      = "您确定要批量移除这些干系�
 $lang->program->stakeholderType         = '干系人类型';
 $lang->program->isStakeholderKey        = '关键干系人';
 $lang->program->importStakeholder       = '从父项目集导入';
+$lang->program->unbindWhitelist         = '移除白名单';
+$lang->program->importStakeholder       = '从父项目集导入';
 $lang->program->manageMembers           = '项目集团队';
 $lang->program->beyondParentBudget      = '已超出所属项目集的剩余预算';
 $lang->program->parentBudget            = '所属项目集剩余预算：';
@@ -51,6 +53,9 @@ $lang->program->endGreaterParent        = "父项目集的完成日期：%s，�
 $lang->program->beginGreateChild        = "子项目集的最小开始日期：%s，父项目集的开始日期不能大于子项目集的最小开始日期";
 $lang->program->endLetterChild          = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
 $lang->program->closeErrorMessage       = '存在子项目集或项目为未关闭状态';
+$lang->program->hasChildren             = '该项目集有子项目集或项目存在，不能删除。';
+$lang->program->confirmDelete           = "您确定要删除吗？";
+$lang->program->readjustTime            = '重新调整项目集起止时间';
 
 $lang->program->stakeholderTypeList['inside']  = '内部';
 $lang->program->stakeholderTypeList['outside'] = '外部';
@@ -70,14 +75,14 @@ $lang->program->aclList['open']    = "公开（有项目集视图权限，即可
 
 $lang->program->subAclList['private'] = "私有（本项目集负责人和干系人可访问，干系人可后续维护）";
 $lang->program->subAclList['open']    = "全部公开（有项目集视图权限，即可访问）";
-$lang->program->subAclList['program'] = "项目集内公开 (所有上级项目集负责人和干系人、本项目集负责人和干系人可访问）";
+$lang->program->subAclList['program'] = "项目集内公开（所有上级项目集负责人和干系人、本项目集负责人和干系人可访问）";
 
 $lang->program->subAcls['private'] = '私有';
 $lang->program->subAcls['open']    = '全部公开';
 $lang->program->subAcls['program'] = '项目集内公开';
 
-$lang->program->authList['extend'] = '继承(取项目权限与组织权限的并集)';
-$lang->program->authList['reset']  = '重新定义(只取项目权限)';
+$lang->program->authList['extend'] = '继承 (取项目权限与组织权限的并集)';
+$lang->program->authList['reset']  = '重新定义 (只取项目权限)';
 
 $lang->program->statusList['wait']      = '未开始';
 $lang->program->statusList['doing']     = '进行中';

@@ -24,6 +24,13 @@ js::set('productID',      $productID);
 js::set('branch',         $branch);
 js::set('suiteID',        $suiteID);
 ?>
+<?php if($this->app->openApp == 'project'):?>
+<style>
+#subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
+#subHeader #dropMenu .col-left {padding-bottom: 0px;}
+</style>
+<?php endif;?>
+
 <div id="mainContent" class="main-row fade">
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
@@ -35,7 +42,7 @@ js::set('suiteID',        $suiteID);
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class='text-center'>
-        <?php common::printLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$this->lang->navGroup->testcase}", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
+        <?php if(!empty($productID)) common::printLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$this->lang->navGroup->testcase}", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>
@@ -47,9 +54,13 @@ js::set('suiteID',        $suiteID);
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
-        <?php if(common::canModify('product', $product) and common::hasPriv('testcase', 'create')):?>
+        <?php if((empty($productID) or common::canModify('product', $product)) and common::hasPriv('testcase', 'create') and $browseType != 'bysuite'):?>
         <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
-        <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
+        <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info' data-app='{$this->app->openApp}'");?>
+        <?php endif;?>
+
+        <?php if(common::hasPriv('testsuite', 'linkCase') and $browseType == 'bysuite'):?>
+        <?php echo html::a($this->createLink('testsuite', 'linkCase', "suiteID=$param"), "<i class='icon icon-plus'></i> " . $lang->testsuite->linkCase, '', "class='btn btn-info' data-app='{$this->app->openApp}'");?>
         <?php endif;?>
       </p>
     </div>
@@ -63,7 +74,7 @@ js::set('suiteID',        $suiteID);
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
-      $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars = $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable)  include '../../common/view/datatable.html.php';
       else               include '../../common/view/tablesorter.html.php';
@@ -79,7 +90,6 @@ js::set('suiteID',        $suiteID);
       $canBatchCaseTypeChange     = common::hasPriv('testcase', 'batchCaseTypeChange');
       $canBatchConfirmStoryChange = common::hasPriv('testcase', 'batchConfirmStoryChange');
       $canBatchChangeModule       = common::hasPriv('testcase', 'batchChangeModule');
-
       $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
@@ -197,7 +207,7 @@ js::set('suiteID',        $suiteID);
             </div>
           </div>
           <?php endif;?>
-          <?php if($canBatchChangeModule):?>
+          <?php if($canBatchChangeModule and !empty($productID)):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 10;?>

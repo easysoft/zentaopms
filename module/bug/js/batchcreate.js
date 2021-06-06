@@ -27,7 +27,7 @@ function setBranchRelated(branchID, productID, num)
         $("#modules" + num).chosen();
     });
 
-    executionLink = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&executionID=0&branch=' + branchID + '&num=' + num);
+    executionLink = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
     $.get(executionLink, function(executions)
     {
         if(!executions) executions = '<select id="executions' + num + '" name="executions[' + num + ']" class="form-control"></select>';

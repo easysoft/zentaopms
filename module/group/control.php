@@ -57,8 +57,9 @@ class group extends control
     {
         if(!empty($_POST))
         {
-            $this->group->create();
+            $groupID = $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
@@ -146,9 +147,13 @@ class group extends control
         $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
 
-        $menugroup = array();
-        foreach($this->lang->menugroup as $moduleName => $groupName) $menugroup[$groupName][$moduleName] = $moduleName;
-        $this->view->menugroup = $menugroup;
+        $navGroup = array();
+        foreach($this->lang->navGroup as $moduleName => $groupName)
+        {
+            if($groupName == $moduleName) continue;
+            $navGroup[$groupName][$moduleName] = $moduleName;
+        }
+        $this->view->navGroup = $navGroup;
 
         $this->display();
     }
@@ -201,11 +206,11 @@ class group extends control
             $changelog = array();
             foreach($this->lang->changelog as $currentVersion => $currentChangeLog)
             {
-                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join($currentChangeLog, ',');
+                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join(',', $currentChangeLog);
             }
 
             $this->view->group      = $group;
-            $this->view->changelogs = ',' . join($changelog, ',') . ',';
+            $this->view->changelogs = ',' . join(',', $changelog) . ',';
             $this->view->groupPrivs = $groupPrivs;
             $this->view->groupID    = $groupID;
             $this->view->menu       = $menu;
@@ -248,22 +253,27 @@ class group extends control
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
-        $group      = $this->group->getById($groupID);
-        $groupUsers = $this->group->getUserPairs($groupID);
-        $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
-        $otherUsers = array_diff_assoc($allUsers, $groupUsers);
+        $group        = $this->group->getById($groupID);
+        $groupUsers   = $this->group->getUserPairs($groupID);
+        $allUsers     = $this->loadModel('dept')->getDeptUserPairs($deptID);
+        $otherUsers   = array_diff_assoc($allUsers, $groupUsers);
+
+        if($this->config->systemMode == 'new')
+        {
+            $outsideUsers = $this->user->getPairs('outside|noclosed|noletter|noempty');
+            $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
+        }
 
         $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[] = $group->name;
         $position[] = $this->lang->group->manageMember;
 
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->group      = $group;
-        $this->view->deptTree   = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
-        $this->view->groupUsers = $groupUsers;
-        $this->view->otherUsers = $otherUsers;
-
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->group        = $group;
+        $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
+        $this->view->groupUsers   = $groupUsers;
+        $this->view->otherUsers   = $otherUsers;
         $this->display();
     }
 

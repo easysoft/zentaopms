@@ -43,7 +43,7 @@
           <tbody>
           <?php foreach($noMergedSprints as $sprintID => $sprint):?>
           <tr>
-            <td><?php echo "{$lang->upgrade->project} #{$sprint->id} {$sprint->name}" . html::hidden("sprints[]", $sprint->id);?></td>
+            <td><?php echo "{$sprint->name}" . html::hidden("sprints[]", $sprint->id);?></td>
             <td class='divider'><i class='icon icon-angle-double-right'></i></td>
             <td><?php echo html::select("projects[]", $sprint->projects, '', "class='form-control chosen'");?></td>
           </tr>

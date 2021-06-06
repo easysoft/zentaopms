@@ -14,10 +14,10 @@
 class settingModel extends model
 {
     //-------------------------------- methods for get, set and delete setting items. ----------------------------//
-    
+
     /**
      * Get value of an item.
-     * 
+     *
      * @param  string   $paramString    see parseItemParam();
      * @access public
      * @return misc
@@ -29,7 +29,7 @@ class settingModel extends model
 
     /**
      * Get some items.
-     * 
+     *
      * @param  string   $paramString    see parseItemParam();
      * @access public
      * @return array
@@ -40,10 +40,10 @@ class settingModel extends model
     }
 
     /**
-     * Set value of an item. 
-     * 
-     * @param  string      $path     system.common.global.sn or system.common.sn 
-     * @param  string      $value 
+     * Set value of an item.
+     *
+     * @param  string      $path     system.common.global.sn or system.common.sn
+     * @param  string      $value
      * @access public
      * @return void
      */
@@ -78,12 +78,12 @@ class settingModel extends model
 
     /**
      * Batch set items, the example:
-     * 
+     *
      * $path = 'system.mail';
      * $items->turnon = true;
      * $items->smtp->host = 'localhost';
      *
-     * @param  string         $path   like system.mail 
+     * @param  string         $path   like system.mail
      * @param  array|object   $items  the items array or object, can be mixed by one level or two levels.
      * @access public
      * @return bool
@@ -112,7 +112,7 @@ class settingModel extends model
 
     /**
      * Delete items.
-     * 
+     *
      * @param  string   $paramString    see parseItemParam();
      * @access public
      * @return void
@@ -124,7 +124,7 @@ class settingModel extends model
 
     /**
      * Parse the param string for select or delete items.
-     * 
+     *
      * @param  string    $paramString     owner=xxx&key=sn and so on.
      * @access public
      * @return array
@@ -132,7 +132,7 @@ class settingModel extends model
     public function parseItemParam($paramString)
     {
         /* Parse the param string into array. */
-        parse_str($paramString, $params); 
+        parse_str($paramString, $params);
 
         /* Init fields not set in the param string. */
         $fields = 'owner,module,section,key';
@@ -144,7 +144,7 @@ class settingModel extends model
 
     /**
      * Create a DAO object to select or delete one or more records.
-     * 
+     *
      * @param  array  $params     the params parsed by parseItemParam() method.
      * @param  string $method     select|delete.
      * @access public
@@ -162,7 +162,7 @@ class settingModel extends model
     /**
      * Get config of system and one user.
      *
-     * @param  string $account 
+     * @param  string $account
      * @access public
      * @return array
      */
@@ -179,6 +179,7 @@ class settingModel extends model
         $config = array();
         foreach($records as $record)
         {
+            if(!isset($config[$record->owner])) $config[$record->owner] = new stdclass();
             if(!isset($record->module)) return array();    // If no module field, return directly. Since 3.2 version, there's the module field.
             if(empty($record->module)) continue;
 
@@ -188,10 +189,10 @@ class settingModel extends model
     }
 
     //-------------------------------- methods for version and sn. ----------------------------//
-   
+
     /**
      * Get the version of current zentaopms.
-     * 
+     *
      * Since the version field not saved in db. So if empty, return 0.3 beta.
      *
      * @access public
@@ -205,9 +206,21 @@ class settingModel extends model
     }
 
     /**
-     * Update version 
-     * 
-     * @param  string    $version 
+     * Get URSR.
+     *
+     * @access public
+     * @return int
+     */
+    public function getURSR()
+    {
+        if(isset($this->config->URSR)) return $this->config->URSR;
+        return $this->getItem('owner=system&module=custom&key=URSR');
+    }
+
+    /**
+     * Update version
+     *
+     * @param  string    $version
      * @access public
      * @return void
      */
@@ -218,7 +231,7 @@ class settingModel extends model
 
     /**
      * Set the sn of current zentaopms.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -230,8 +243,8 @@ class settingModel extends model
 
     /**
      * Compute a SN. Use the server ip, and server software string as seed, and an rand number, two micro time
-     * 
-     * Note: this sn just to unique this zentaopms. No any private info. 
+     *
+     * Note: this sn just to unique this zentaopms. No any private info.
      *
      * @access public
      * @return string
@@ -245,8 +258,8 @@ class settingModel extends model
 
     /**
      * Judge a sn needed update or not.
-     * 
-     * @param  string    $sn 
+     *
+     * @param  string    $sn
      * @access public
      * @return bool
      */

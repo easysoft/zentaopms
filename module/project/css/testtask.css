@@ -1,0 +1,7 @@
+.table-group-btns {width: 200px;}
+.table-footer,
+.table-grouped {box-shadow: none !important;}
+.table-footer {margin-left: 205px; margin-top: 10px;}
+.table-grouped > thead>tr>th.c-id,
+.table-grouped > tbody>tr>td.c-id {padding-left: 15px;}
+.table-grouped > tbody>tr>td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

@@ -1,0 +1,48 @@
+title: 'table zt_trainplan '
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: id
+      range: 1-100000
+    - field: project
+      range: 1-100
+    - field: name
+      range: 1-100000
+      format: "培训计划_%d"
+    - field: begin
+      range: "(-1M)-(+1w):60"
+      prefix: DateTime
+      type: timestamp
+      format: "YY/MM/DD hh:mm:ss"
+    - field: end
+      range: "(-1M)-(+1w):60"
+      prefix: DateTime
+      type: timestamp
+      format: "YY/MM/DD hh:mm:ss"
+    - field: place
+      range: 1-10
+      format: "地点_%d"
+    - field: trainee
+      range: admin,jia,yiyi
+    - field: lecturer
+      range: hufangzhou
+    - field: type
+      range: outside,inside
+    - field: status
+      range: wait,done
+    - field: summary
+      range: ' '
+    - field: createdBy
+      range: admin
+    - field: createdDate
+      range: "(-1M)-(+1w):60"
+      prefix: DateTime
+      type: timestamp
+      format: "YY/MM/DD hh:mm:ss"
+    - field: editedBy
+      range: ' '
+    - field: editedDate
+      range: ' '
+    - field: deleted
+      range: 0

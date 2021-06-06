@@ -17,7 +17,7 @@
 </div>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('system');?></div>
+  <div class='btn-toolbar pull-left'><?php // common::printAdminSubMenu('system');?></div>
 </div>
 <div id='mainContent' class="main-row">
   <div class='side-col' id='sidebar'>
@@ -63,7 +63,7 @@
           <?php if($i == 0):?>
           <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>><?php echo date(DT_DATETIME1, $backupFile->time);?></td>
           <?php endif;?>
-          <td class='text-left' style='padding-left:5px;'><?php echo $file;?></td>
+          <td title=<?php echo $file;?> class='text-left' style='padding-left:5px;'><?php echo $file;?></td>
           <td><?php echo zget($summary, 'allCount', '');?></td>
           <td><?php echo zget($summary, 'count', '');?></td>
           <td>

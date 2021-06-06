@@ -11,9 +11,6 @@
  */
 include "../../../common/view/header.html.php";
 ?>
-<div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left"><?php common::printAdminSubMenu('xuanxuan');?></div>
-</div>
 <div id='dashboardWrapper'>
   <div class='panels-container dashboard' id='dashboard'>
     <div class='row'>

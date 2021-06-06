@@ -25,3 +25,4 @@ $lang->projectrelease->batchUnlinkBug   = "Batch Unlink Bugs";
 $lang->projectrelease->unlinkStory      = "Unlink {$lang->SRCommon}";
 $lang->projectrelease->unlinkBug        = 'Unlink Bug';
 $lang->projectrelease->export           = 'Export as HTML';
+$lang->projectrelease->browseAction     = "Release List";

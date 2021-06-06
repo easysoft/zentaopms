@@ -17,9 +17,9 @@
       </p>
     </div>
     <?php else:?>
-    <?php $style     = $this->app->rawModule == 'projectstory' ? "style='overflow: unset; text-align: left'" : '';?>
-    <?php $openApp   = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
-    <?php $module    = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';?>
+    <?php $style   = $this->app->rawModule == 'projectstory' ? "style='overflow: unset; text-align: left'" : '';?>
+    <?php $openApp = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
+    <?php $module  = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';?>
     <div class='main-table' data-ride="table">
       <table class='table table-bordered' id="trackList">
         <thead>
@@ -31,7 +31,7 @@
                 <?php echo html::a('javascript:;', "<i class='icon icon-product'></i>". $projectProducts[$productID]->name . '<span class="caret"></span>', '', 'class="dropdown-toggle" data-toggle="dropdown"');?>
                 <ul class="dropdown-menu">
                   <?php foreach($projectProducts as $product): ?>
-                  <li><?php echo html::a($this->createLink('projectstory', 'track', "productID=$product->id"), $product->name);?></li>
+                  <li><?php echo html::a($this->createLink('projectstory', 'track', "projectID={$this->session->project}&productID=$product->id"), $product->name);?></li>
                   <?php endforeach;?>
                 </ul>
               </div>
@@ -91,7 +91,7 @@
               <td>
                 <?php foreach($story->revisions as $revision => $repoID):?>
                 <?php
-                echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision) . '<br/>';
+                echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision, '', "data-app='devops'") . '<br/>';
                 ?>
                 <?php endforeach;?>
               </td>

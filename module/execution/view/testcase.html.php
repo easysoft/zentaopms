@@ -4,7 +4,7 @@
     <?php echo html::a(inlink('testcase', "executionID=$executionID&type=$type&orderBy=$orderBy"), "<span class='text'>{$lang->execution->all}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::canModify('execution', $execution)) echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary'");?>
+    <?php if(common::canModify('execution', $execution)) echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary' data-app='{$this->app->openApp}'");?>
   </div>
 </div>
 <div id="mainContent">
@@ -13,7 +13,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
       <?php if(common::canModify('execution', $execution) and common::hasPriv('testcase', 'create')):?>
-      <?php echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
+      <?php echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info' data-app='{$this->app->openApp}'");?>
       <?php endif;?>
     </p>
   </div>
@@ -49,7 +49,7 @@
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <?php $params = "testcaseID=$caseID&version=$case->version";?>
           <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
-          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', $params, '', '', $case->project), $case->title, null, "style='color: $case->color' data-group='project'");?></td>
+          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', $params, '', '', $case->project), $case->title, null, "style='color: $case->color' data-app='{$this->app->openApp}'");?></td>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>
@@ -60,18 +60,19 @@
             <?php
             if($canBeChanged)
             {
-                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', '', '', '', '', $case->project);
+                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID,executionID=$executionID", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'", '', $case->project);
                 common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy', '', '', '', '', '', $case->project);
                 common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', true, "data-width='95%'", '', $case->project);
                 common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->project);
                 common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', '', '', '', '', $case->project);
             }
             ?>
-          </td> 
+          </td>
         </tr>
         <?php endforeach;?>
       </tbody>
     </table>
+    <div class="table-footer"><?php $pager->show('right', 'pagerjs');?></div>
   </form>
   <?php endif;?>
 </div>

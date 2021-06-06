@@ -19,7 +19,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .todoes-input .form-control:-ms-input-placeholder {font-size: 12px; line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control::placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
 .block-todoes .todoes {padding: 0 10px 10px 10px; margin: 0 -20px; max-height: 350px; overflow: auto; overflow-x:hidden}
-.block-todoes .todoes > li {position: relative; padding: 5px 10px 5px 35px; list-style: none; white-space:nowrap; overflow: auto; overflow-x:hidden; width: 410px;}
+.block-todoes .todoes > li {position: relative; padding: 5px 10px 5px 35px; list-style: none; white-space:nowrap; overflow: auto; overflow-x:hidden;}
 .block-todoes .todoes > li:hover {background-color: #e9f2fb;}
 .block-todoes .todo-title {padding: 5px 15px 5px 5px;}
 .block-todoes .todo-pri {margin: 0 5px;}
@@ -96,7 +96,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
       ?>
       <li data-id='<?php echo $todo->id?>'>
         <span class="todo-check icon icon-check-circle"></span>
-        <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' <?php echo $appid?>>
+        <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' data-toggle='modal' <?php echo $appid?>>
           <?php if ($todo->date == '2030-01-01') :?>
           <span class="todo-time"><?php echo $lang->todo->periods['future'] ?></span>
           <?php else:?>

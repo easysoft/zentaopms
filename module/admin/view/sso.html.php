@@ -11,9 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
-<div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left"><?php common::printAdminSubMenu('sso');?></div>
-</div>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

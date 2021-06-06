@@ -64,12 +64,13 @@ function changeLeftNavigation()
 {
     if(window.parent && window.parent.$.apps && isOnlybody)
     {
-        window.parent.$.apps.close();
+        $.closeModal();
         window.parent.$.apps.open('my');
     }
     else
     {
-        window.location.href = indexLink;
+        $.apps.close();
+        $.apps.open('my');
     }
 }
 </script>

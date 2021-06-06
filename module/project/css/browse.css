@@ -2,5 +2,6 @@
 .side-col {padding-right: 20px; width: 18%;}
 #sidebar>.cell {width: 100%;}
 
+th.c-budget,{text-align:right;}
 td.c-actions {overflow: visible;}
 .c-actions .btn {overflow: visible;}

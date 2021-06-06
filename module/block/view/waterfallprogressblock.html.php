@@ -12,7 +12,7 @@
         <canvas width='400' height='120' data-responsive='true'></canvas>
       </div>
     </div>
-    <div class='chart-unit'><?php echo "({$lang->project->workHour})";?></div>
+    <div class='chart-unit'><?php echo "({$lang->execution->workHour})";?></div>
     <div class='chart-legend'>
       <span class="barline line-pv">PV</span>
       <span class="barline line-ev">EV</span>
@@ -112,7 +112,7 @@
               scaleFontColor: '#838A9D',
               tooltipXPadding: 10,
               tooltipYPadding: 10,
-              multiTooltipTitleTemplate: '<%= label %> <?php echo $lang->project->workHour;?> /h',
+              multiTooltipTitleTemplate: '<%= label %> <?php echo $lang->execution->workHour;?> /h',
               multiTooltipTemplate: '<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>',
           });
       }

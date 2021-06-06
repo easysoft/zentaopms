@@ -37,6 +37,7 @@ function loadBranches(product, branch, caseID)
 $(function()
 {
     removeDitto();  //Remove 'ditto' in first row.
+    $('#subNavbar li[data-id="testcase"]').addClass('active');
 });
 
 $(document).on('click', '.chosen-with-drop', function(){oldValue = $(this).prev('select').val();})//Save old value.

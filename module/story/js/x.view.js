@@ -1,7 +1,7 @@
 $(function()
 {
     $('.main-actions-holder').css('height', '0px');
-    var $xuanAction = "<div class='xuancard-actions fixed'>";
+    var xuanAction = "<div class='xuancard-actions fixed'>";
     $('.main-col div.main-actions .btn-toolbar a').each(function(){
         var $that    = $(this);
 
@@ -12,7 +12,7 @@ $(function()
         var btnClass = " class='" + $that.attr('class') + "'";
         var action   = $that.html();
 
-        if(href.indexOf('browse') >= 0 || href.indexOf('batchCreate') >= 0 
+        if(href.indexOf('browse') >= 0 || href.indexOf('batchCreate') >= 0
             || href.indexOf('create') >= 0 || href.indexOf('delete') >= 0) return true;
 
         if($that.hasClass('iframe'))
@@ -26,10 +26,10 @@ $(function()
            target = " target='_blank'";
         }
 
-        $xuanAction += "<a href='" + url + "'" + title + target + btnClass + '>' + action + "</a>";
+        xuanAction += "<a href='" + url + "'" + title + target + btnClass + '>' + action + "</a>";
     });
 
-    $xuanAction += '</div>';
-    $('#footer').replaceWith($xuanAction);
+    xuanAction += '</div>';
+    $('body').append(xuanAction);
     $('.xuancard-actions a.iframe').modalTrigger();
 })

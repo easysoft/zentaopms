@@ -13,8 +13,8 @@ class cronModel extends model
 {
     /**
      * Get by Id.
-     * 
-     * @param  int    $cronID 
+     *
+     * @param  int    $cronID
      * @access public
      * @return object
      */
@@ -25,8 +25,8 @@ class cronModel extends model
 
     /**
      * Get crons.
-     * 
-     * @param  string $params 
+     *
+     * @param  string $params
      * @access public
      * @return array
      */
@@ -40,8 +40,8 @@ class cronModel extends model
 
     /**
      * Parse crons.
-     * 
-     * @param  array    $crons 
+     *
+     * @param  array    $crons
      * @access public
      * @return array
      */
@@ -64,12 +64,12 @@ class cronModel extends model
                     $parsedCron['cron']     = CronExpression::factory($parsedCron['schema']);
                     $parsedCron['time']     = $parsedCron['cron']->getNextRunDate();
                     $parsedCrons[$cron->id] = $parsedCron;
-                }   
-                catch(InvalidArgumentException $e) 
+                }
+                catch(InvalidArgumentException $e)
                 {
                     $this->dao->update(TABLE_CRON)->set('status')->eq('stop')->where('id')->eq($cron->id)->exec();
                     continue;
-                }   
+                }
             }
         }
         $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('lastTime')->eq('0000-00-00 00:00:00')->andWhere('status')->ne('stop')->exec();
@@ -78,10 +78,10 @@ class cronModel extends model
 
     /**
      * Change cron status.
-     * 
-     * @param  int    $cronID 
-     * @param  string $status 
-     * @param  bool   $changeTime 
+     *
+     * @param  int    $cronID
+     * @param  string $status
+     * @param  bool   $changeTime
      * @access public
      * @return bool
      */
@@ -96,8 +96,8 @@ class cronModel extends model
 
     /**
      * Log cron.
-     * 
-     * @param  string    $log 
+     *
+     * @param  string    $log
      * @access public
      * @return void
      */
@@ -115,7 +115,7 @@ class cronModel extends model
 
     /**
      * Get last execed time.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -127,7 +127,7 @@ class cronModel extends model
 
     /**
      * Runable cron.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -145,7 +145,7 @@ class cronModel extends model
 
     /**
      * Check change cron.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -156,8 +156,8 @@ class cronModel extends model
     }
 
     /**
-     * Create cron. 
-     * 
+     * Create cron.
+     *
      * @access public
      * @return int
      */
@@ -168,6 +168,12 @@ class cronModel extends model
             ->add('lastTime', '0000-00-00 00:00:00')
             ->skipSpecial('m,h,dom,mon,dow,command')
             ->get();
+
+        if(!$this->config->features->cronSystemCall and $cron->type == 'system')
+        {
+            dao::$errors[] = $this->lang->cron->notice->errorType;
+            return false;
+        }
 
         $result = $this->checkRule($cron);
         if(!empty($result))
@@ -182,9 +188,9 @@ class cronModel extends model
     }
 
     /**
-     * Update cron. 
-     * 
-     * @param  int    $cronID 
+     * Update cron.
+     *
+     * @param  int    $cronID
      * @access public
      * @return bool
      */
@@ -194,6 +200,12 @@ class cronModel extends model
             ->add('lastTime', '0000-00-00 00:00:00')
             ->skipSpecial('m,h,dom,mon,dow,command')
             ->get();
+
+        if(!$this->config->features->cronSystemCall and $cron->type == 'system')
+        {
+            dao::$errors[] = $this->lang->cron->notice->errorType;
+            return false;
+        }
 
         $result = $this->checkRule($cron);
         if(!empty($result))
@@ -208,8 +220,8 @@ class cronModel extends model
 
     /**
      * Check cron rule.
-     * 
-     * @param  object $cron 
+     *
+     * @param  object $cron
      * @access public
      * @return string
      */
@@ -256,7 +268,7 @@ class cronModel extends model
 
     /**
      * Get current cron status.
-     * 
+     *
      * @access public
      * @return int
      */

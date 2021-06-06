@@ -20,7 +20,7 @@
       <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
       <?php echo isonlybody() ? ("<span title='$project->name'>" . $project->name . '</span>') : html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
       <?php if(!isonlybody()):?>
-      <small><?php echo $lang->arrow . $lang->project->activate;?></small>
+      <small><?php echo $lang->arrow . $lang->{$project->type}->activate;?></small>
       <?php endif;?>
     </h2>
   </div>
@@ -41,7 +41,7 @@
         <td colspan='3'>
           <div class='clearfix row'>
             <div class='col-md-6 pull-left'>
-              <div class="checkbox-primary"><input name="readjustTime" value="1" id="readjustTime" type="checkbox"><label for="readjustTime" class="no-margin"><?php echo $lang->project->readjustTime;?></label></div>
+              <div class="checkbox-primary"><input name="readjustTime" value="1" id="readjustTime" type="checkbox"><label for="readjustTime" class="no-margin"><?php echo $lang->{$project->type}->readjustTime;?></label></div>
             </div>
             <div class='col-md-6 pull-left'>
               <div id='readjustTaskBox' class='checkbox-primary hidden'><input name="readjustTask" value="1" id="readjustTask" type="checkbox"> <label for='readjustTask' class='no-margin'><?php echo $lang->execution->readjustTask?></label></div>
@@ -59,7 +59,7 @@
         <td colspan='5'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
       </tr>
       <tr>
-        <td class='text-center form-actions' colspan='6'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide'); ?></td>
+        <td class='text-center form-actions' colspan='6'><?php echo html::submitButton($lang->{$project->type}->activate) . html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide'); ?></td>
       </tr>
     </table>
   </form>

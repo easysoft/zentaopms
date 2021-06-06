@@ -63,8 +63,9 @@ class job extends control
     {
         if($_POST)
         {
-            $this->job->create();
+            $jobID = $this->job->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jobID));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 

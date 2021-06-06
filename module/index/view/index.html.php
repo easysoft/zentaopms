@@ -23,9 +23,6 @@ js::set('defaultOpen', $open);
 #versionTitle {margin: 8px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-upgrade.svg';?>);}
 .icon-version {width: 20px; height: 24px; margin: -4px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-new.svg';?>);}
 .version-hr {margin-top: 15px; margin-bottom: 15px;}
-<?php if(isset($this->config->bizVersion)):?>
-#searchbox .dropdown-menu.show-quick-go.with-active {top: -468px; max-height: 465px;}
-<?php endif;?>
 
 <?php if(empty($latestVersionList)):?>
 #upgradeContent {top: -272px; height: 262px;}
@@ -36,8 +33,12 @@ js::set('defaultOpen', $open);
   <nav id='menuNav'>
     <ul class='nav nav-default' id='menuMainNav'>
     </ul>
-    <ul class='nav nav-default'>
-      <?php commonModel::printRecentMenu();?>
+    <ul class='nav nav-default' id='menuMoreNav'>
+      <li class='divider'></li>
+      <li class='dropdown dropdown-hover'>
+        <a title='<?php echo $lang->more; ?>'><i class='icon icon-more-circle'></i><span class='text'><?php echo $lang->more; ?></span></a>
+        <ul id='menuMoreList' class='dropdown-menu fade'></ul>
+      </li>
     </ul>
   </nav>
   <div class="table-col col-right">
@@ -51,9 +52,12 @@ js::set('defaultOpen', $open);
     </div>
   </div>
   <div id='menuFooter'>
-    <ul id="userNav" class="nav">
-      <li id='menuToggleMenu'><a type='button' class='menu-toggle'><i class='icon icon-sm icon-menu-collapse'></i></a></li>
-      <li class='dropdown dropdown-hover has-avatar'><?php common::printUserBar();?></li>
+    <ul id="flodNav" class="nav">
+      <li id='menuToggleMenu'>
+        <a type='button' class='menu-toggle'>
+          <i class='icon icon-sm icon-menu-collapse'></i>
+        </a>
+      </li>
     </ul>
   </div>
 </div>
@@ -72,7 +76,7 @@ js::set('defaultOpen', $open);
             <?php echo common::printSearchBox();?>
           </div>
           <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example" id="searchboxExample">
-            <input id="globalSearchInput" type="search" onclick="this.value=''" onkeydown="if(event.keyCode==13) $.gotoObject();" class="form-control search-input" placeholder="<?php echo $lang->index->search;?>" autocomplete="off">
+            <input id="globalSearchInput" type="search" onclick="this.value=''" onkeydown="if(event.keyCode==13) $.gotoObject();" class="form-control search-input" placeholder="<?php echo $lang->index->pleaseInput;?>" autocomplete="off">
           </div>
           <span class="input-group-btn" onclick="javascript:$.gotoObject();">
             <button id="globalSearchButton" class="btn btn-secondary" type="button"><i class="icon icon-search"></i></button>
@@ -82,7 +86,7 @@ js::set('defaultOpen', $open);
     </div>
     <div id='upgradeContent' class='main-table'>
       <div class='main-header' style='padding: 5px 20px 5px 15px;'>
-        <i class='version-upgrade' id='versionTitle'></i> 
+        <i class='version-upgrade' id='versionTitle'></i>
         <h2>
           <?php echo $lang->index->upgradeVersion;?>
         </h2>
@@ -96,7 +100,8 @@ js::set('defaultOpen', $open);
         </div>
         <?php else:?>
         <div class='version-content'>
-          <?php foreach($latestVersionList as $version):?>
+          <?php $lastVersion = end($latestVersionList);?>
+          <?php foreach($latestVersionList as $versionNumber => $version):?>
           <div class="version-list">
             <div>
               <i class='version-upgrade icon-version'></i>
@@ -104,11 +109,13 @@ js::set('defaultOpen', $open);
             </div>
             <div class="version-detail"><?php echo $version->explain;?></div>
             <div class="version-footer">
-              <a href="<?php echo inLink('changeLog', 'version=' . $version->name);?>" class="btn btn-link iframe" data-width="800"><?php echo $lang->index->log;?></strong></a>
-              <a href='<?php echo $version->link?>' class='btn btn-primary upgrade-now' style='color: white;' target='_blank'><?php echo $lang->index->upgrade;?></a>
+              <a href="<?php echo inLink('changeLog', 'version=' . $versionNumber);?>" class="btn btn-link iframe" data-width="800"><?php echo $lang->index->log;?></strong></a>
+              <a href='<?php echo $version->link?>' class='btn btn-primary upgrade-now' style='color: white;' target='_blank'><?php echo $lang->index->upgradeNow;?></a>
             </div>
           </div>
+          <?php if($version->name != $lastVersion->name):?>
           <hr class='version-hr'>
+          <?php endif;?>
           <?php endforeach;?>
         </div>
         <?php endif;?>
@@ -118,4 +125,10 @@ js::set('defaultOpen', $open);
 </div>
 <?php js::set('searchAB', $lang->searchAB);?>
 <?php js::set('searchObjectList', ',' . implode(',', array_keys($lang->searchObjects)) . ',');?>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php js::set('searchCommon', $lang->index->search);?>
+
+<script>
+<?php if(isset($pageJS)) echo $pageJS;?>
+</script>
+</body>
+</html>

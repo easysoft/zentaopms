@@ -26,6 +26,7 @@ class todoModel extends model
 
         $idvalue = 0;
         if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
+
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->setDefault('idvalue', 0)
@@ -37,6 +38,23 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
+
+        if(!isset($todo->pri) and in_array($this->post->type, $this->config->todo->moduleList) and $this->post->type !== 'review' and $this->post->type !== 'feedback')
+        {
+            $todo->pri = $this->dao->select('pri')->from($this->config->objectTables[$this->post->type])->where('id')->eq($this->post->idvalue)->fetch('pri');
+
+            if($todo->pri == 'high')   $todo->pri = 1;
+            if($todo->pri == 'middle') $todo->pri = 2;
+            if($todo->pri == 'low')    $todo->pri = 3;
+        }
+
+        if($todo->type != 'custom')
+        {
+            $type   = $todo->type;
+            $object = $this->loadModel($type)->getByID($this->post->$type);
+            if(isset($object->name))  $todo->name = $object->name;
+            if(isset($object->title)) $todo->name = $object->title;
+        }
 
         if($todo->end < $todo->begin)
         {
@@ -93,7 +111,7 @@ class todoModel extends model
      * Create batch todo
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function batchCreate()
     {
@@ -102,7 +120,17 @@ class todoModel extends model
         $validTodos = array();
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
-            if($todos->names[$i] != '' || isset($todos->bugs[$i + 1]) || isset($todos->tasks[$i + 1]) || isset($todos->stories[$i + 1]) || isset($todos->issues[$i + 1]) || isset($todos->risks[$i + 1]) || isset($todos->reviews[$i + 1]) || isset($todos->testtask[$i + 1]))
+            $isExist = false;
+            foreach($this->config->todo->objectList as $objects)
+            {
+                if(isset($todos->{$objects}[$i + 1]))
+                {
+                    $isExist = true;
+                    break;
+                }
+            }
+
+            if($todos->names[$i] != '' || $isExist)
             {
                 $todo          = new stdclass();
                 $todo->account = $this->app->user->account;
@@ -125,13 +153,15 @@ class todoModel extends model
                 $todo->private = 0;
                 $todo->idvalue = 0;
 
-                if($todo->type == 'bug')      $todo->idvalue = isset($todos->bugs[$i + 1])      ? $todos->bugs[$i + 1] : 0;
-                if($todo->type == 'task')     $todo->idvalue = isset($todos->tasks[$i + 1])     ? $todos->tasks[$i + 1] : 0;
-                if($todo->type == 'story')    $todo->idvalue = isset($todos->stories[$i + 1])   ? $todos->stories[$i + 1] : 0;
-                if($todo->type == 'issue')    $todo->idvalue = isset($todos->issues[$i + 1])    ? $todos->issues[$i + 1] : 0;
-                if($todo->type == 'risk')     $todo->idvalue = isset($todos->risks[$i + 1])     ? $todos->risks[$i + 1] : 0;
-                if($todo->type == 'review')   $todo->idvalue = isset($todos->reviews[$i + 1])   ? $todos->reviews[$i + 1] : 0;
-                if($todo->type == 'testtask') $todo->idvalue = isset($todos->testtasks[$i + 1]) ? $todos->testtasks[$i + 1] : 0;
+                if(in_array($todo->type, $this->config->todo->moduleList)) $todo->idvalue = isset($todos->{$this->config->todo->objectList[$todo->type]}[$i + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$i + 1] : 0;
+
+                if($todo->type != 'custom' and $todo->idvalue)
+                {
+                    $type   = $todo->type;
+                    $object = $this->loadModel($type)->getByID($todo->idvalue);
+                    if(isset($object->name))  $todo->name = $object->name;
+                    if(isset($object->title)) $todo->name = $object->title;
+                }
 
                 if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
@@ -148,6 +178,7 @@ class todoModel extends model
             }
         }
 
+        $todoIDList = array();
         foreach($validTodos as $todo)
         {
             $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
@@ -156,10 +187,13 @@ class todoModel extends model
                 echo js::error(dao::getError());
                 die(js::reload('parent'));
             }
-            $todoID = $this->dao->lastInsertID();
+            $todoID       = $this->dao->lastInsertID();
+            $todoIDList[] = $todoID;
             $this->loadModel('score')->create('todo', 'create', $todoID);
             $this->loadModel('action')->create('todo', $todoID, 'opened');
         }
+
+        return $todoIDList;
     }
 
     /**
@@ -187,7 +221,7 @@ class todoModel extends model
             ->setIF($this->post->end   == false, 'end', '2400')
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
-            ->remove(implode(',', $this->config->todo->moduleList) . 'uid')
+            ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
         if($todo->end < $todo->begin)
@@ -225,7 +259,7 @@ class todoModel extends model
         $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')
+            ->checkIF(in_array($todo->type, array('custom', 'feedback')), $this->config->todo->edit->requiredFields, 'notempty')
             ->checkIF($hasObject && $todo->idvalue == 0, 'idvalue', 'notempty')
             ->where('id')->eq($todoID)
             ->exec();
@@ -260,18 +294,14 @@ class todoModel extends model
                 $todo->type   = $data->types[$todoID];
                 $todo->pri    = $data->pris[$todoID];
                 $todo->status = $data->status[$todoID];
-                $todo->name   = ($todo->type == 'custom' or $todo->type == 'cycle') ? $data->names[$todoID] : '';
+                $todo->name   = ($todo->type == 'custom' or $todo->type == 'cycle' or $todo->type == 'feedback') ? $data->names[$todoID] : '';
                 $todo->begin  = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
                 $todo->end    = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
-                if($todo->type == 'task')     $todo->idvalue = isset($data->tasks[$todoID]) ? $data->tasks[$todoID] : 0;
-                if($todo->type == 'bug')      $todo->idvalue = isset($data->bugs[$todoID]) ? $data->bugs[$todoID] : 0;
-                if($todo->type == 'story')    $todo->idvalue = isset($data->storys[$todoID]) ? $data->storys[$todoID] : 0;
-                if($todo->type == 'issue')    $todo->idvalue = isset($data->issues[$todoID]) ? $data->issues[$todoID] : 0;
-                if($todo->type == 'risk')     $todo->idvalue = isset($data->risks[$todoID]) ? $data->risks[$todoID] : 0;
-                if($todo->type == 'review')   $todo->idvalue = isset($data->reviews[$todoID]) ? $data->reviews[$todoID] : 0;
-                if($todo->type == 'testtask') $todo->idvalue = isset($data->testtasks[$todoID]) ? $data->testtasks[$todoID] : 0;
-                if($todo->type == 'feedback') $todo->idvalue = isset($data->feedbacks[$todoID]) ? $data->feedbacks[$todoID] : 0;
 
+                if(in_array($todo->type, $this->config->todo->moduleList))
+                {
+                    $todo->idvalue = isset($data->{$this->config->todo->objectList[$todo->type]}[$todoID]) ? $data->{$this->config->todo->objectList[$todo->type]}[$todoID] : 0;
+                }
                 if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $todos[$todoID] = $todo;
@@ -284,12 +314,13 @@ class todoModel extends model
                 if($oldTodo->type == 'bug' or $oldTodo->type == 'task' or $oldTodo->type == 'story' or $oldTodo->type == 'feedback') $oldTodo->name = '';
                 $this->dao->update(TABLE_TODO)->data($todo)
                     ->autoCheck()
-                    ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')
+                    ->checkIF(in_array($todo->type, array('custom', 'feedback')), $this->config->todo->edit->requiredFields, 'notempty')
                     ->checkIF($todo->type == 'bug'   and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'task'  and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'story' and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'issue' and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'risk' and $todo->idvalue == 0, 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'opportunity' and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'review' and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'testtask' and $todo->idvalue == 0, 'idvalue', 'notempty')
                     ->checkIF($todo->type == 'feedback' and $todo->idvalue == 0, 'idvalue', 'notempty')
@@ -363,9 +394,10 @@ class todoModel extends model
         if($todo->type == 'story')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
         if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')      $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-        if($todo->type == 'issue')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
-        if($todo->type == 'risk')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
-        if($todo->type == 'review')   $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
+        if($todo->type == 'issue'  and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
+        if($todo->type == 'risk'   and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
+        if($todo->type == 'opportunity' and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_OPPORTUNITY)->fetch('name');
+        if($todo->type == 'review' and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
         if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TESTTASK)->fetch('name');
         $todo->date = str_replace('-', '', $todo->date);
         return $todo;
@@ -450,7 +482,7 @@ class todoModel extends model
         if(empty($account)) $account = $this->app->user->account;
 
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
-            ->where('1')
+            ->where('deleted')->eq('0')
             ->andWhere('account', true)->eq($account)
             ->orWhere('assignedTo')->eq($account)
             ->orWhere('finishedBy')->eq($account)
@@ -480,6 +512,7 @@ class todoModel extends model
             if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TESTTASK)->fetch('name');
             if($todo->type == 'issue'  && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
             if($todo->type == 'risk'   && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
+            if($todo->type == 'opportunity' && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_OPPORTUNITY)->fetch('name');
             if($todo->type == 'review' && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
             $todo->begin = date::formatTime($todo->begin);
             $todo->end   = date::formatTime($todo->end);
@@ -499,8 +532,8 @@ class todoModel extends model
      * @access public
      * @return object
      */
-    public function getByList($todoIDList = 0) 
-    {    
+    public function getByList($todoIDList = 0)
+    {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->beginIF($todoIDList)->where('id')->in($todoIDList)->fi()
             ->fetchAll('id');
@@ -545,7 +578,7 @@ class todoModel extends model
         $this->loadModel('action');
         $today = helper::today();
         $now   = helper::now();
-        $lastCycleList = $this->dao->select('*')->from(TABLE_TODO)->where('type')->eq('cycle')->andWhere('idvalue')->in(array_keys($todoList))->orderBy('date_asc')->fetchAll('idvalue');
+        $lastCycleList = $this->dao->select('*')->from(TABLE_TODO)->where('type')->eq('cycle')->andWhere('deleted')->eq('0')->andWhere('idvalue')->in(array_keys($todoList))->orderBy('date_asc')->fetchAll('idvalue');
         $activedUsers  = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs('account', 'account');
         foreach($todoList as $todoID => $todo)
         {
@@ -698,9 +731,9 @@ class todoModel extends model
     }
 
     /**
-     * Assign todo. 
-     * 
-     * @param  int    $todoID 
+     * Assign todo.
+     *
+     * @param  int    $todoID
      * @access public
      * @return bool
      */
@@ -722,8 +755,8 @@ class todoModel extends model
 
     /**
      * Get todo count.
-     * 
-     * @param  string $account 
+     *
+     * @param  string $account
      * @access public
      * @return int
      */
@@ -732,6 +765,7 @@ class todoModel extends model
         if(empty($account)) $account = $this->app->user->account;
         return $this->dao->select('count(*) as count')->from(TABLE_TODO)
             ->where('cycle')->eq('0')
+            ->andWhere('deleted')->eq('0')
             ->andWhere('account', true)->eq($account)
             ->orWhere('assignedTo')->eq($account)
             ->orWhere('finishedBy')->eq($account)
@@ -763,6 +797,7 @@ class todoModel extends model
             if($type == 'bug')      $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_BUG)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
             if($type == 'issue')    $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_ISSUE)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
             if($type == 'risk')     $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_RISK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
+            if($type == 'opportunity') $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_OPPORTUNITY)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
             if($type == 'review')   $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_REVIEW)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
             if($type == 'testtask') $projectIdList[$type] = $this->dao->select('id,project')->from(TABLE_TESTTASK)->where('id')->in($todoIdList)->fetchPairs('id', 'project');
         }

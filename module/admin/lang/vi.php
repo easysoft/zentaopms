@@ -9,7 +9,6 @@
  * @version  $Id: vi.php 4460 2013-02-26 02:28:02Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->admin->common        = 'Quản trị';
 $lang->admin->index         = 'Trang quản trị';
 $lang->admin->checkDB       = 'Kiểm tra CSDL';
 $lang->admin->sso           = 'Zdoo';

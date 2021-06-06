@@ -27,7 +27,8 @@ class groupModel extends model
             unset($group->limited);
             $group->role = 'limited';
         }
-        return $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->exec();
+        return $this->dao->lastInsertId();
     }
 
     /**
@@ -336,7 +337,7 @@ class groupModel extends model
     }
 
     /**
-     * Update view priv
+     * Update view priv.
      *
      * @param  int    $groupID
      * @access public
@@ -354,15 +355,7 @@ class groupModel extends model
             $dynamic = array();
             foreach($actions['actions'] as $moduleName => $moduleActions)
             {
-                if(isset($this->lang->menugroup->$moduleName))
-                {
-                    $groupModule = $this->lang->menugroup->$moduleName;
-                    if($groupModule != 'my' and !isset($actions['views'][$groupModule])) continue;
-                }
-                else
-                {
-                    if($moduleName != 'my' and !isset($actions['views'][$moduleName])) continue;
-                }
+                if($moduleName != 'todo' and isset($actions['views']) and !in_array($this->lang->navGroup->$moduleName, $actions['views'])) continue;
 
                 $dynamic[$moduleName] = $moduleActions;
             }
@@ -483,6 +476,8 @@ class groupModel extends model
         ksort($this->lang->moduleOrder, SORT_ASC);
         foreach($this->lang->moduleOrder as $moduleName)
         {
+            if(!isset($resources->$moduleName)) continue;
+
             $resource = $resources->$moduleName;
             unset($resources->$moduleName);
             $this->lang->resource->$moduleName = $resource;

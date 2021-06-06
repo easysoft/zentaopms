@@ -9,6 +9,8 @@ $lang->webhook->chooseDept = '選擇同步部門';
 $lang->webhook->assigned   = '指派給';
 $lang->webhook->setting    = '設置';
 
+$lang->webhook->logAction = 'Webhook日誌';
+
 $lang->webhook->browse = '瀏覽Webhook';
 $lang->webhook->create = '添加Webhook';
 $lang->webhook->edit   = '編輯Webhook';
@@ -23,7 +25,7 @@ $lang->webhook->contentType = '內容類型';
 $lang->webhook->sendType    = '發送方式';
 $lang->webhook->secret      = '密鑰';
 $lang->webhook->product     = "關聯{$lang->productCommon}";
-$lang->webhook->execution   = "關聯{$lang->executionCommon}";
+$lang->webhook->execution   = "關聯{$lang->execution->common}";
 $lang->webhook->params      = '參數';
 $lang->webhook->action      = '觸發動作';
 $lang->webhook->desc        = '描述';
@@ -40,6 +42,8 @@ $lang->webhook->typeList['dinggroup']   = '釘釘群通知機器人';
 $lang->webhook->typeList['dinguser']    = '釘釘工作消息通知';
 $lang->webhook->typeList['wechatgroup'] = '企業微信群機器人';
 $lang->webhook->typeList['wechatuser']  = '企業微信應用消息';
+$lang->webhook->typeList['feishugroup'] = '飛書群通知機器人';
+$lang->webhook->typeList['feishuuser']  = '飛書工作消息通知';
 $lang->webhook->typeList['default']     = '其他';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
@@ -58,6 +62,11 @@ $lang->webhook->wechatAgentId    = '企業應用的ID';
 $lang->webhook->wechatUserid     = '微信用戶';
 $lang->webhook->wechatBindStatus = '微信綁定狀態';
 
+$lang->webhook->feishuAppId       = '飛書App ID';
+$lang->webhook->feishuAppSecret   = '飛書App Secret';
+$lang->webhook->feishuUserid      = '飛書用戶';
+$lang->webhook->feishuBindStatus  = '飛書綁定狀態';
+
 $lang->webhook->zentaoUser  = '禪道用戶';
 
 $lang->webhook->dingBindStatusList['0'] = '未綁定';
@@ -66,7 +75,7 @@ $lang->webhook->dingBindStatusList['1'] = '已綁定';
 $lang->webhook->paramsList['objectType'] = '對象類型';
 $lang->webhook->paramsList['objectID']   = '對象ID';
 $lang->webhook->paramsList['product']    = "所屬{$lang->productCommon}";
-$lang->webhook->paramsList['execution']  = "所屬{$lang->executionCommon}";
+$lang->webhook->paramsList['execution']  = "所屬{$lang->execution->common}";
 $lang->webhook->paramsList['action']     = '動作';
 $lang->webhook->paramsList['actor']      = '操作者';
 $lang->webhook->paramsList['date']       = '操作日期';
@@ -81,7 +90,7 @@ $lang->webhook->note = new stdClass();
 $lang->webhook->note->async     = '非同步需要打開計劃任務。';
 $lang->webhook->note->bind      = '只有[釘釘/微信]工作通知類型才需要綁定用戶。';
 $lang->webhook->note->product   = "此項為空時所有{$lang->productCommon}的動作都會觸發鈎子，否則只有關聯{$lang->productCommon}的動作才會觸發。";
-$lang->webhook->note->execution = "此項為空時所有{$lang->executionCommon}的動作都會觸發鈎子，否則只有關聯{$lang->executionCommon}的動作才會觸發。";
+$lang->webhook->note->execution = "此項為空時所有{$lang->execution->common}的動作都會觸發鈎子，否則只有關聯{$lang->execution->common}的動作才會觸發。";
 
 $lang->webhook->note->dingHelp   = " <a href='http://www.zentao.net/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
 $lang->webhook->note->wechatHelp = " <a href='http://www.zentao.net/book/zentaopmshelp/367.html' target='_blank'><i class='icon-help'></i></a>";

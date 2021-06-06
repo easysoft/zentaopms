@@ -33,6 +33,7 @@
         <div class="detail-title"><?php echo $lang->testtask->desc;?></div>
         <div class="detail-content article-content"><?php echo !empty($task->desc) ? $task->desc : $lang->noData;?></div>
       </div>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));?>
       <?php if($task->report):?>
       <div class="detail">
         <div class="detail-title"><?php echo $lang->testtask->report;?></div>
@@ -79,7 +80,7 @@
           <table class="table table-data table-fixed">
             <?php $isOnlybody = helper::inOnlyBodyMode(); ?>
             <tr>
-              <th class='w-60px'><?php echo $lang->testtask->execution;?></th>
+              <th class='w-90px'><?php echo $lang->testtask->execution;?></th>
               <td><?php echo $isOnlybody ? $task->executionName : html::a($this->createLink('execution', 'story', "executionID=$task->execution"), $task->executionName, '', "title='{$task->executionName}'");?></td>
             </tr>
             <tr>
@@ -96,6 +97,12 @@
                 }
                 ?>
               </td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->testtask->type;?></th>
+              <?php $testType = '';?>
+              <?php foreach(explode(',', $task->type) as $type) $testType .= zget($lang->testtask->typeList, $type) . ' ';?>
+              <td class="c-name" title="<?php echo $testType;?>"><?php echo $testType;?></td>
             </tr>
             <tr>
               <th><?php echo $lang->testtask->owner;?></th>
@@ -120,6 +127,10 @@
             <tr>
               <th><?php echo $lang->testtask->status;?></th>
               <td class='task-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->testtask->testreport;?></th>
+              <td class="c-name" title="<?php echo $testreportTitle;?>"><?php echo empty($task->testreport) ? '' : html::a($this->createLink('testreport', 'view', "reportID=$task->testreport"), $testreportTitle);?></td>
             </tr>
           </table>
         </div>

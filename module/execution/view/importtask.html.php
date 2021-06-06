@@ -15,9 +15,9 @@
   <div class='pull-left btn-toolbar'>
     <?php echo html::a($this->createLink('execution', 'importTask', "execution=$executionID"), "<span class='text'>{$lang->execution->importTask}</span>", '', "class='btn btn-link btn-active-text'");?>
     <div class='input-control input-group space w-150px'>
-      <?php $executions = array(0 => $lang->execution->allProjects) + $executions;?>
-      <span class='input-group-addon'><?php echo $lang->execution->selectProject;?></span>
-      <?php  echo html::select('fromexecution', $executions, $fromProject, "onchange='reload($executionID, this.value)' class='form-control chosen'");?>
+      <?php $executions = array(0 => $lang->execution->allExecutions) + $executions;?>
+      <span class='input-group-addon'><?php echo $lang->execution->selectExecution;?></span>
+      <?php  echo html::select('fromexecution', $executions, $fromExecution, "onchange='reload($executionID, this.value)' class='form-control chosen'");?>
     </div>
   </div>
 </div>

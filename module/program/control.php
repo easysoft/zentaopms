@@ -19,21 +19,6 @@ class program extends control
     }
 
     /**
-     * Program create guide.
-     *
-     * @param  int    $programID
-     * @param  string $from
-     * @access public
-     * @return void
-     */
-    public function createGuide($programID = 0, $from = 'PRJ')
-    {
-        $this->view->from      = $from;
-        $this->view->programID = $programID;
-        $this->display();
-    }
-
-    /**
      * Program list.
      *
      * @param  varchar $status
@@ -43,11 +28,10 @@ class program extends control
      */
     public function browse($status = 'all', $orderBy = 'order_asc')
     {
-        $this->lang->program->mainMenuAction = html::a('javascript:history.go(-1);', '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
-
         if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-secondary'");
 
-        $this->app->session->set('programList', $this->app->getURI(true));
+        $this->session->set('programList', $this->app->getURI(true), 'program');
+        $this->session->set('projectList', $this->app->getURI(true), 'project');
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
@@ -98,12 +82,10 @@ class program extends control
         $programID = $this->program->saveState($programID, $this->program->getPairs());
         setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
+        $this->program->setMenu($programID);
+
         $program = $this->program->getByID($programID);
         if(empty($program) || $program->type != 'program') die(js::error($this->lang->notFound) . js::locate('back'));
-
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        $this->program->setViewMenu($programID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -142,10 +124,11 @@ class program extends control
 
         if($_POST)
         {
-            $projectID = $this->program->create();
+            $programID = $this->program->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID));
 
-            $this->loadModel('action')->create('program', $projectID, 'opened');
+            $this->loadModel('action')->create('program', $programID, 'opened');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -217,7 +200,7 @@ class program extends control
     public function close($programID)
     {
         $this->loadModel('action');
-        $program = $this->program->getByID($programID);
+        $program = $this->project->getByID($programID, 'program');
 
         if(!empty($_POST))
         {
@@ -260,7 +243,7 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $changes = $this->project->start($programID);
+            $changes = $this->project->start($programID, 'program');
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -272,12 +255,12 @@ class program extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->title      = $this->lang->project->start;
-        $this->view->position[] = $this->lang->project->start;
-        $this->view->program    = $this->program->getByID($programID);
+        $this->view->title      = $this->lang->program->start;
+        $this->view->position[] = $this->lang->program->start;
+        $this->view->project    = $this->project->getByID($programID, 'program');
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
-        $this->display();
+        $this->display('project', 'start');
     }
 
     /**
@@ -290,7 +273,7 @@ class program extends control
     public function activate($programID = 0)
     {
         $this->loadModel('action');
-        $program = $this->program->getByID($programID);
+        $program = $this->project->getByID($programID, 'program');
 
         if(!empty($_POST))
         {
@@ -311,12 +294,12 @@ class program extends control
 
         $this->view->title      = $this->lang->program->activate;
         $this->view->position[] = $this->lang->program->activate;
-        $this->view->program    = $program;
+        $this->view->project    = $program;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
         $this->view->newBegin   = $newBegin;
         $this->view->newEnd     = $newEnd;
-        $this->display();
+        $this->display('project', 'activate');
     }
 
     /**
@@ -344,11 +327,11 @@ class program extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->title      = $this->lang->project->suspend;
-        $this->view->position[] = $this->lang->project->suspend;
+        $this->view->title      = $this->lang->program->suspend;
+        $this->view->position[] = $this->lang->program->suspend;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
-        $this->view->project    = $this->program->getByID($programID);
+        $this->view->project    = $this->project->getByID($programID, 'program');
 
         $this->display('project', 'suspend');
     }
@@ -370,7 +353,7 @@ class program extends control
         if($confirm == 'no') die(js::confirm($this->lang->program->confirmDelete, $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
 
         $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
-        $this->loadModel('action')->create('program', $programID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+        $this->loadModel('action')->create('program', $programID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         die(js::reload('parent'));
     }
@@ -387,18 +370,16 @@ class program extends control
      * @access public
      * @return void
      */
-    public function project($programID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function project($programID = 0, $browseType = 'all', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $programID = $this->program->saveState($programID, $this->program->getPairs());
-        if(!$programID) $this->locate($this->createLink('program', 'browse'));
         setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        if(!$programID) $this->locate($this->createLink('program', 'browse'));
 
-        $this->app->session->set('programProject', $this->app->getURI(true));
-        $this->app->session->set('projectList', $this->app->getURI(true));
+        $this->program->setMenu($programID);
 
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        $this->program->setViewMenu($programID);
+        $this->app->session->set('programProject', $this->app->getURI(true), 'program');
+        $this->app->session->set('projectList', $this->app->getURI(true), 'project');
 
         $this->loadModel('datatable');
 
@@ -438,9 +419,7 @@ class program extends control
      */
     public function stakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        $this->program->setViewMenu($programID);
+        $this->program->setMenu($programID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -475,9 +454,7 @@ class program extends control
         }
 
         $this->loadModel('user');
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        $this->program->setViewMenu($programID);
+        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
 
         $this->loadModel('dept');
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
@@ -723,7 +700,8 @@ class program extends control
      */
     public function view($programID)
     {
-        $program = $this->program->getByID($programID);
+        $programID = (int)$programID;
+        $program   = $this->program->getByID($programID);
         if(!$program) die(js::error($this->lang->notFound) . js::locate('back'));
 
         echo $this->fetch('program', 'product', "programID=$programID");

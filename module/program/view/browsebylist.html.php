@@ -1,12 +1,12 @@
 <?php $canOrder = (common::hasPriv('program', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
-<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false'>
+<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true'>
   <table class='table has-sort-head table-fixed table-nested' id='programList'>
     <?php $vars = "status=$status&orderBy=%s";?>
     <thead>
       <tr>
         <th class='table-nest-title'>
-          <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
-          <?php echo $lang->program->name;?>
+          <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
+          <?php echo $lang->nameAB;?>
         </th>
         <th class='w-100px'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
         <th class='text-right w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
@@ -45,7 +45,8 @@
 
       <tr <?php echo $trAttrs;?>>
         <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?>' title='<?php echo $program->name?>'>
-          <span class="table-nest-icon icon icon-<?php echo $program->type; ?>"></span>
+          <?php $class = $program->type == 'program' ? ' table-nest-toggle' : '';?>
+          <span class="table-nest-icon icon icon-<?php echo $program->type;?> <?php echo $class;?>"></span>
           <?php if($program->type == 'program'):?>
           <?php echo html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name);?>
           <?php else:?>
@@ -56,7 +57,7 @@
           <?php $userID = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : ''?>
           <?php if(!empty($program->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $program->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
         </td>
-        <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $program->budget >= 10000 ? number_format($program->budget / 10000, 1) . $lang->project->tenThousand : number_format((float)$program->budget, 1);?>
+        <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$program->budget / 10000, 2) . $lang->project->tenThousand : round((float)$program->budget, 2);?>
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td><?php echo $program->begin;?></td>
@@ -78,7 +79,7 @@
           </div>
           <?php endif;?>
           <?php common::printIcon('program', 'edit',   "programID=$program->id", '', 'list', 'edit');?>
-          <?php common::printIcon('program', 'create', "programID=$program->id", '', 'list', 'split', '', '', '', '', $this->lang->program->children);?>
+          <?php common::printIcon('program', 'create', "programID=$program->id", '', 'list', 'split', '', '', '', $program->status == 'closed' ? 'disabled' : '', $this->lang->program->children);?>
           <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->delete}'");?>
 
           <?php else:?>
@@ -95,15 +96,15 @@
             </ul>
           </div>
           <?php endif;?>
-          <?php common::printIcon('project', 'edit', "projectID=$program->id&from=browse", $program, 'list', 'edit', '', '', '', "data-group='program'", '', $program->id);?>
-          <?php common::printIcon('project', 'manageMembers', "projectID=$program->id", $program, 'list', 'group', '', '', '', 'data-group="program"', '', $program->id);?>
-          <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', '', '', 'data-group="program"', '', $program->id);?>
+          <?php common::printIcon('project', 'edit', "projectID=$program->id", $program, 'list', 'edit', '', 'iframe', true, '', '', $program->id);?>
+          <?php common::printIcon('project', 'manageMembers', "projectID=$program->id", $program, 'list', 'group', '', '', '', 'data-app="project"', '', $program->id);?>
+          <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', '', '', 'data-app="project"', '', $program->id);?>
           <?php if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete')):?>
           <div class='btn-group'>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
-              <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&programID=0&from=browse", $program, 'list', 'link', '', '', '', "data-group='program'", '', $program->id);?>
-              <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&programID=0&module=program&from=browse", $program, 'list', 'shield-check', '', '', '', "data-group='program'", '', $program->id);?>
+              <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&from=browse", $program, 'list', 'link', '', '', '', "data-app='project'", '', $program->id);?>
+              <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&module=project&from=browse", $program, 'list', 'shield-check', '', '', '', "data-app='project'", '', $program->id);?>
               <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->delete}' data-group='program'");?>
             </ul>
           </div>
@@ -120,9 +121,10 @@
 #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
 #programList .c-actions {overflow: visible;}
+#programList > thead > tr > th .table-nest-toggle-global {top: 6px}
+#programList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
 #programTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
-#programTableList .icon-project:before, #programTableList .no-nest .icon-program:before, #programTableList .is-nest-child .icon-program:before {content: '\e99c'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
-#programTableList .no-nest .icon-program:before, #programTableList .is-nest-child .icon-program:before {content: '\e944'; color: #ffe066; font-size: 16px;}
+#programTableList .icon-project:before {content: '\e99c'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>

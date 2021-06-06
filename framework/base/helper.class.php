@@ -56,17 +56,14 @@ class baseHelper
      * @param string|array $vars           the params passed to the method, can be array('key' => 'value') or key1=value1&key2=value2) or key1=value1&key2=value2
      * @param string       $viewType       the view type
      * @param bool         $onlyBody       pass onlyBody=yes to the link thus the app can control the header and footer hide or show..
-     * @param bool         $PRJID      set PRJ id in to session.
-     * @param bool         $removePRJ  if true, remove PRJ param.
      * @static
      * @access public
      * @return string the link string.
      */
-    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false, $PRJID = 0, $removePRJ = false)
+    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false)
     {
         /* 设置$appName和$moduleName。Set appName and moduleName. */
         global $app, $config;
-        $PRJID = $PRJID ? $PRJID : $app->session->PRJ;
 
         if(strpos($moduleName, '.') !== false)
         {
@@ -98,8 +95,7 @@ class baseHelper
             if($viewType != 'html') $link .= "&{$config->viewVar}=" . $viewType;
             foreach($vars as $key => $value) $link .= "&$key=$value";
 
-            $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
+            return self::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -114,8 +110,7 @@ class baseHelper
             foreach($vars as $value) $link .= "{$config->requestFix}$value";
             $link .= '.' . $viewType;
 
-            $link = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
+            return self::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -126,8 +121,7 @@ class baseHelper
         if($moduleName == $config->default->module)
         {
             $link .= $config->default->method . '.' . $viewType;
-            $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
+            return self::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -138,8 +132,7 @@ class baseHelper
         if($viewType == $app->getViewType())
         {
             $link .= $moduleName . '/';
-            $link  = self::processOnlyBodyParam($link, $onlyBody);
-            return self::processProjectParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
+            return self::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -148,36 +141,7 @@ class baseHelper
          *
          */
         $link .= $moduleName . '.' . $viewType;
-        $link  = self::processOnlyBodyParam($link, $onlyBody);
-        return self::processProjectParam($link, $PRJID, $onlyBody, $moduleName, $removePRJ);
-    }
-
-    /**
-     *  处理PRJ 参数。
-     *  Process the PRJID param in url.
-     *
-     *  如果传参的时候设定了$PRJID，在生成链接的时候继续追加。
-     *  If $progrmID in the url, append it to the link.
-     *
-     *  @param  string  $link
-     *  @param  int     $PRJID
-     *  @param  bool    $onlybody
-     *  @param  string  $moduleName
-     *  @param  bool    $removePRJ
-     *  @static
-     *  @access public
-     *  @return string
-     */
-    public static function processProjectParam($link, $PRJID = '', $onlybody = false, $moduleName = '', $removePRJ = false)
-    {
-        global $config, $lang;
-
-        if(!$PRJID || $removePRJ) return $link;
-        $app = zget($lang->navGroup, $moduleName);
-        if($app != 'project' and $app != 'execution') return $link;
-
-        $link .= strpos($link, '?') === false ? "?PRJ=$PRJID" : "&PRJ=$PRJID";
-        return $link;
+        return self::processOnlyBodyParam($link, $onlyBody);
     }
 
     /**
@@ -251,15 +215,12 @@ class baseHelper
     {
         if(is_array($idList))
         {
-            if(!function_exists('get_magic_quotes_gpc') or !get_magic_quotes_gpc())
-            {
-                foreach($idList as $key=>$value) $idList[$key] = addslashes($value);
-            }
+            foreach($idList as $key=>$value) $idList[$key] = addslashes($value);
             return "IN ('" . join("','", $idList) . "')";
         }
 
         if(!is_string($idList)) $idList = json_encode($idList);
-        if(!function_exists('get_magic_quotes_gpc') or !get_magic_quotes_gpc()) $idList = addslashes($idList);
+        $idList = addslashes($idList);
         return "IN ('" . str_replace(',', "','", str_replace(' ', '', $idList)) . "')";
     }
 
@@ -302,7 +263,7 @@ class baseHelper
      */
     static public function jsonEncode($data)
     {
-        return (function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc()) ? addslashes(json_encode($data)) : json_encode($data);
+        return json_encode($data);
     }
 
     /**
@@ -331,7 +292,7 @@ class baseHelper
                 $oversize = strlen($password) % 8;
                 if($oversize != 0) $password .= str_repeat("\0", 8 - $oversize);
 
-                $encrypted = @openssl_encrypt($password, 'DES-CBC', $secret, OPENSSL_ZERO_PADDING);
+                $encrypted = @openssl_encrypt($password, 'DES-CBC', substr($secret, 0, 8), OPENSSL_ZERO_PADDING);
             }
         }
         if(empty($encrypted)) $encrypted = $password;
@@ -357,7 +318,7 @@ class baseHelper
             $secret = $config->encryptSecret;
             if(function_exists('mcrypt_decrypt'))
             {
-                $decryptedPassword = @mcrypt_decrypt(MCRYPT_DES, $secret, base64_decode($password), MCRYPT_MODE_CBC);
+                $decryptedPassword = @mcrypt_decrypt(MCRYPT_DES, substr($secret, 0, 8), base64_decode($password), MCRYPT_MODE_CBC);
             }
             elseif(function_exists('openssl_decrypt'))
             {
@@ -906,4 +867,18 @@ function zget($var, $key, $valueWhenNone = false, $valueWhenExists = false)
 
     if($valueWhenNone !== false) return $valueWhenNone;
     return $key;
+}
+
+/**
+ * Is https.
+ *
+ * @access public
+ * @return bool
+ */
+function isHttps()
+{
+    if(!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') return true;
+    if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') return true;
+    if(!empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off') return true;
+    return false;
 }

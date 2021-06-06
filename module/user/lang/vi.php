@@ -204,6 +204,7 @@ $lang->user->error->dangerPassword = "ID %s，Mật khẩu không thể được
 
 $lang->user->error->verifyPassword   = "Xác thực thất bại. Vui lòng nhập mạt khẩu đăng nhập của bạn.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
+$lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information.";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;

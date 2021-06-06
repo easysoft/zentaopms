@@ -26,7 +26,7 @@ common:
 	cp -fr sdk zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload
 	mkdir zentaopms/tmp
-	mkdir zentaopms/tmp/cache/ 
+	mkdir zentaopms/tmp/cache/
 	mkdir zentaopms/tmp/extension/
 	mkdir zentaopms/tmp/log/
 	mkdir zentaopms/tmp/model/
@@ -58,7 +58,7 @@ zentaoxx:
 	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
 	mv $(XUANPATH)/xuan.zip .
 	unzip xuan.zip
-	cp xuan/xxb/config/ext/xuanxuan.php zentaoxx/config/ext/
+	cp xuan/xxb/config/ext/_0_xuanxuan.php zentaoxx/config/ext/
 	cp -r xuan/xxb/lib/phpaes zentaoxx/lib/
 	cp -r xuan/xxb/framework/xuanxuan.class.php zentaoxx/framework/
 	cp -r xuan/xxb/db/*.sql zentaoxx/db/
@@ -78,8 +78,7 @@ zentaoxx:
 	cp -r xuan/xxb/www/x.php zentaoxx/www/
 	mkdir zentaoxx/module/action
 	cp -r xuan/xxb/module/action/ext zentaoxx/module/action
-	cp -r xuan/xxb/config/ext/xxb.php zentaoxx/config/ext/
-	cp -r xuan/xxb/config/ext/maps.php zentaoxx/config/ext/
+	cp -r xuan/xxb/config/ext/_1_maps.php zentaoxx/config/ext/
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
@@ -87,8 +86,8 @@ zentaoxx:
 	mkdir zentaoxx/db/
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
 	rm -rf zentaoxx/db_bak/
-	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/xuanxuan.php
-	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/xuanxuan.php
+	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/_0_xuanxuan.php
+	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/_0_xuanxuan.php
 	sed -i 's/site,//' zentaoxx/module/im/model/user.php
 	sed -i 's/admin, g/g/' zentaoxx/module/im/model/user.php
 	sed -i '/password = md5/d' zentaoxx/module/im/model/user.php
@@ -110,7 +109,7 @@ zentaoxx:
 	sed -i '/deviceToken/d' zentaoxx/db/*.sql
 	sed -i '/deviceType/d' zentaoxx/db/*.sql
 	sed -i "/fetch('push', 'pushMessage');/d" zentaoxx/module/im/control.php
-	sed -i "s/marked\.html\.php';?>/marked\.html\.php';?>\n<div id='mainMenu' class='clearfix'><div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('xuanxuan');?><\/div><\/div>/g" zentaoxx/module/client/view/checkupgrade.html.php
+	#sed -i "s/marked\.html\.php';?>/marked\.html\.php';?>\n<div id='mainMenu' class='clearfix'><div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('xuanxuan');?><\/div><\/div>/g" zentaoxx/module/client/view/checkupgrade.html.php
 	sed -i '/var serverVersions/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/var currentVersion/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/setRequiredFields(/d' zentaoxx/module/common/view/header.modal.html.php
@@ -120,7 +119,10 @@ zentaoxx:
 	sed -i 's/helper::jsonEncode(/json_encode(/g' zentaoxx/framework/xuanxuan.class.php
 	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/module/im/view/debug.html.php
 	sed -i 's/v\.//g' zentaoxx/module/client/js/checkupgrade.js
+	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/module/im/control.php
+	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/module/im/model/conference.php
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
+	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	cp tools/en2de.php zentaoxx/tools; cd zentaoxx/tools; php en2de.php ../
 	rm -rf zentaoxx/tools
@@ -141,8 +143,8 @@ package:
 	#rm -r zentaopms/module/misc/ext
 	rm -rf zentaopms/tools
 pms:
-	make common 
-	make zentaoxx 
+	make common
+	make zentaoxx
 	unzip zentaoxx.*.zip
 	cp zentaoxx/* zentaopms/ -r
 	cat zentaoxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql

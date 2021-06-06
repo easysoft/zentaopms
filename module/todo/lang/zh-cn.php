@@ -35,7 +35,7 @@ $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期设置";
 $lang->todo->project      = "所属项目";
 $lang->todo->product      = "所属产品";
-$lang->todo->execution    = "所属" . $lang->sprintCommon;
+$lang->todo->execution    = "所属执行";
 
 $lang->todo->reasonList['story'] = "转{$lang->SRCommon}";
 $lang->todo->reasonList['task']  = "转任务";
@@ -68,6 +68,7 @@ $lang->todo->finishedDate = '完成时间';
 $lang->todo->closedBy     = '由谁关闭';
 $lang->todo->closedDate   = '关闭时间';
 $lang->todo->deadline     = '过期时间';
+$lang->todo->deleted      = '已删除';
 
 $lang->todo->every        = '间隔';
 $lang->todo->specify      = '指定';
@@ -97,7 +98,6 @@ $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = '任务';
 $lang->todo->typeList['story']    = $lang->SRCommon;
-$lang->todo->typeList['review']   = '评审';
 $lang->todo->typeList['testtask'] = '测试单';
 
 $lang->todo->confirmDelete  = "您确定要删除这条待办吗？";

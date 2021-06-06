@@ -56,7 +56,7 @@ $lang->task->allModule           = '所有模块';
 $lang->task->common           = '任务';
 $lang->task->id               = '编号';
 $lang->task->project          = '所属项目';
-$lang->task->execution        = '所属' . $lang->executionCommon;
+$lang->task->execution        = '所属' . $lang->execution->common;
 $lang->task->module           = '所属模块';
 $lang->task->moduleAB         = '模块';
 $lang->task->story            = "相关{$lang->SRCommon}";
@@ -131,9 +131,11 @@ $lang->task->lblPri           = 'P';
 $lang->task->lblHour          = '(h)';
 $lang->task->lblTestStory     = "测试{$lang->SRCommon}";
 
+$lang->task->recordEstimateAction = '添加工时';
+
 $lang->task->ditto             = '同上';
 $lang->task->dittoNotice       = "该任务与上一任务不属于同一%s！";
-$lang->task->selectTestStory   = "选择测试{$lang->SRCommon}";
+$lang->task->selectTestStory   = "选择测试需求";
 $lang->task->selectAllUser     = '全部';
 $lang->task->noStory           = "无{$lang->SRCommon}";
 $lang->task->noAssigned        = '未指派';

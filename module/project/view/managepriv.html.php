@@ -22,7 +22,7 @@
 .checkbox-right{padding-left:0px !important;}
 
 td.menus {border-right: 0;padding-right: 0;width: 220px !important;}
-td.menus + td {border-left: 0;} 
+td.menus + td {border-left: 0;}
 .menus .checkbox-primary {float: left; width: 220px;}
 .menus .checkbox-primary:first-child {float: left; width: auto;}
 .menus a {margin-left: 10px;}
@@ -67,8 +67,8 @@ td.menus + td {border-left: 0;}
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
   <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?> <i class="icon icon-chevron-right"></i></span>
-    <?php $params = "type=byGroup&param=$groupID";?>
-    <?php echo html::a(inlink('pgmmanagepriv', $params), "<span class='text'>{$lang->group->all}</span>", '', "class='btn btn-link btn-active-text'")?>
+    <?php $params = "projectID=$projectID&type=byGroup&param=$groupID";?>
+    <?php echo html::a(inlink('managepriv', $params), "<span class='text'>{$lang->group->all}</span>", '', "class='btn btn-link btn-active-text'")?>
   </div>
 </div>
 <div id='mainContent' class='main-content'>
@@ -164,7 +164,7 @@ $(document).ready(function()
     })
 
     /**
-     * 勾选浏览列表标签时，自动勾选下面的所有标签。 
+     * 勾选浏览列表标签时，自动勾选下面的所有标签。
      * Check all tabs when the Browse list tab is selected.
      */
     $('.menus input[value=browse]').change(function()

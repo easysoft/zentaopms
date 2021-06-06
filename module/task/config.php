@@ -44,7 +44,7 @@ $config->task->customBatchEditFields   = 'module,assignedTo,status,pri,estimate,
 $config->task->custom = new stdclass();
 $config->task->custom->createFields      = $config->task->customCreateFields;
 $config->task->custom->batchCreateFields = 'module,story,assignedTo,estimate,desc,pri';
-$config->task->custom->batchEditFields   = 'module,assignedTo,status,pri,estimate,record,left,finishedBy,closedBy,closedReason';
+$config->task->custom->batchEditFields   = 'module,assignedTo,status,pri,estimate,record,left';
 
 $config->task->datatable = new stdclass();
 $config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'assignedTo', 'finishedBy', 'estimate', 'consumed', 'left', 'progress', 'deadline', 'actions');
@@ -72,7 +72,7 @@ $config->task->datatable->fieldList['type']['required'] = 'no';
 
 $config->task->datatable->fieldList['status']['title']    = 'statusAB';
 $config->task->datatable->fieldList['status']['fixed']    = 'no';
-$config->task->datatable->fieldList['status']['width']    = '80';
+$config->task->datatable->fieldList['status']['width']    = '60';
 $config->task->datatable->fieldList['status']['required'] = 'no';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
@@ -99,7 +99,7 @@ $config->task->datatable->fieldList['progress']['name']     = $lang->task->progr
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
-$config->task->datatable->fieldList['deadline']['width']    = '100';
+$config->task->datatable->fieldList['deadline']['width']    = '60';
 $config->task->datatable->fieldList['deadline']['required'] = 'no';
 
 $config->task->datatable->fieldList['openedBy']['title']    = 'openedByAB';

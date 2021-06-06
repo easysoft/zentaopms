@@ -155,7 +155,10 @@ $(function()
         stopPropagation(e);
     });
 
-    $itemContent.on('click', stopPropagation);
+    $itemContent.on('click', function(event)
+    {
+        if(!$(event.target).closest('a[data-app]').length) event.stopPropagation();
+    });
     $taskTree.on('click', stopPropagation);
     $(window).on('resize scroll', adjustSidePosition);
 

@@ -39,14 +39,14 @@ function deleteItem(obj)
 
 function setDeptUsers(obj)
 {
-    dept = $(obj).val();//Get dept ID.
-    link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&team2Import=' + team2Import + '&dept=' + dept);//Create manageMembers link.
+    dept = $(obj).val(); // Get dept ID.
+    link = createLink('execution', 'manageMembers', 'executionID=' + executionID + '&team2Import=' + team2Import + '&dept=' + dept); // Create manageMembers link.
     location.href=link;
 }
 
 function choseTeam2Copy(obj)
 {
     team = $(obj).val();
-    link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&team2Import=' + team);
+    link = createLink('execution', 'manageMembers', 'executionID=' + executionID + '&team2Import=' + team);
     location.href=link;
 }

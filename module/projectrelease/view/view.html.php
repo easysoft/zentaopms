@@ -96,7 +96,7 @@
                 </thead>
                 <tbody>
                   <?php foreach($stories as $storyID => $story):?>
-                  <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
+                  <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$projectID", '', true);?>
                   <tr>
                     <td class='c-id text-left'>
                       <?php if(($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
@@ -115,7 +115,7 @@
                       ?>
                     </td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
-                    <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+                    <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                     <td>
                       <span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
                     </td>
@@ -146,7 +146,7 @@
 
                   if(common::hasPriv('story', 'batchClose'))
                   {
-                      $closeURL = $this->createLink('story', 'batchClose', "productID=$release->product");
+                      $closeURL = $this->createLink('story', 'batchClose');
                       echo html::a("###", $lang->story->batchClose, '', "onclick='setFormAction(\"$closeURL\", \"\", this)' class='btn'");
                   }
                   ?>

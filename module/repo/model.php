@@ -35,6 +35,7 @@ class repoModel extends model
      */
     public function setMenu($repos, $repoID = '', $showSeleter = true)
     {
+        if(empty($repos)) $this->lang->switcherMenu = '';
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
 
@@ -55,11 +56,35 @@ class repoModel extends model
             }
         }
 
-        if($showSeleter && !empty($repos))
+        common::setMenuVars('devops', $repoID);
+        session_start();
+        $this->session->set('repoID', $repoID);
+        session_write_close();
+    }
+
+    /**
+     * Create the select code of repos.
+     *
+     * @param  array     $repos
+     * @param  int       $repoID
+     * @param  string    $type
+     * @param  int       $objectID
+     * @access public
+     * @return string
+     */
+    public function select($repos, $repoID, $type = 'repo', $objectID = 0)
+    {
+        $output = '';
+        if(!empty($repos))
         {
-            $repoIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . ($repo->SCM == 'Subversion' ? '[SVN] ' : '[GIT] ') . $repo->name . ' <span class="caret"></span></button>';
-            $repoIndex .= $this->select($repos, $repoID);
-            $repoIndex .= '</div></div>';
+            $dropMenuLink = helper::createLink('repo', 'ajaxGetDropMenu', "repoID=$repoID&type=$type&objectID=$objectID");
+
+            $repo    = $this->dao->findById($repoID)->from(TABLE_REPO)->fetch();
+            $scm     = $repo->SCM == 'Subversion' ? 'svn' : 'git';
+
+            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$repo->name}'><span class='text'>[$scm] {$repo->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "</div></div>";
 
             $branches = $this->getBranches($repo);
             if(empty($branches))
@@ -77,58 +102,16 @@ class repoModel extends model
 
                 $this->setRepoBranch($branchID);
 
-                $repoIndex .= '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $branch . ' <span class="caret"></span></button>';
-                $repoIndex .= "<div class='dropdown-menu search-list' data-ride='searchList'>";
-                $repoIndex .= "<div class='list-group'>";
-                foreach($branches as $branch)
-                {
-                    if(empty($branch)) continue;
+                $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
 
-                    $class = $branchID == $branch ? "class='active'" : '';
-                    $repoIndex .= html::a("javascript:switchBranch(\"$branch\")", $branch, '', $class);
-                }
-                $repoIndex .= "</div></div></div></div>";
+                $dropMenuLink = helper::createLink('repo', 'ajaxGetBranchDropMenu', "repID=$repoID&branchID=$branchID&objectID=$objectID");
+                $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+                $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+                $output .= "</div></div>";
             }
-
-            $this->lang->modulePageNav = $repoIndex;
         }
 
-        foreach($this->lang->repo->menu as $key => $menu)
-        {
-            common::setMenuVars($this->lang->repo->menu, $key, $repoID);
-        }
-
-        session_start();
-        $this->session->set('repoID', $repoID);
-        session_write_close();
-    }
-
-    /**
-     * Create the select code of repos.
-     *
-     * @param  array     $repos
-     * @param  int       $repoID
-     * @param  string    $currentModule
-     * @param  string    $currentMethod
-     * @access public
-     * @return string
-     */
-    public function select($repos, $repoID)
-    {
-        $selectHtml  = "<div class='dropdown-menu search-list' data-ride='searchList'>";
-        $selectHtml .= "<div class='input-control search-box has-icon-left has-icon-right search-example'>";
-        $selectHtml .= "<input id='repoSearchBox' type='search' autocomplete='off' class='form-control search-input empty'>";
-        $selectHtml .= "<label for='repoSearchBox' class='input-control-icon-left search-icon'><i class='icon icon-search'></i></label>";
-        $selectHtml .= "<a class='input-control-icon-right search-clear-btn'><i class='icon icon-close icon-sm'></i></a></div>";
-        $selectHtml .= "<div class='list-group'>";
-        foreach($repos as $id => $name)
-        {
-            $class = $repoID == $id ? "class='active'" : '';
-            $selectHtml .= html::a(helper::createLink('repo', 'browse', "repoID={$id}"), $name, '', $class);
-        }
-        $selectHtml .= "</div></div>";
-
-        return $selectHtml;
+        return $output;
     }
 
     /**
@@ -142,15 +125,13 @@ class repoModel extends model
      */
     public function getList($projectID = 0, $orderBy = 'id_desc', $pager = null)
     {
-        /* Get products. */
-        $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
-            ->andWhere('product')->in($productIdList)
             ->orderBy($orderBy)
             ->page($pager)->fetchAll('id');
 
+        /* Get products. */
+        $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
         foreach($repos as $i => $repo)
         {
             $repo->acl = json_decode($repo->acl);
@@ -160,7 +141,16 @@ class repoModel extends model
             }
             else
             {
-                if($projectID && !in_array($repo->product, $productIdList)) unset($repos[$i]);
+                if($projectID)
+                {
+                    $hasPriv = false;
+                    foreach(explode(',', $repo->product) as $productID)
+                    {
+                        if(isset($productIdList[$productID])) $hasPriv = true;
+                    }
+
+                    if(!$hasPriv) unset($repos[$i]);
+                }
             }
         }
 
@@ -178,7 +168,7 @@ class repoModel extends model
     public function getListBySCM($scm, $type = 'all')
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('SCM')->eq($scm)
+            ->andWhere('SCM')->in($scm)
             ->andWhere('synced')->eq(1)
             ->orderBy('id')
             ->fetchAll();
@@ -203,10 +193,17 @@ class repoModel extends model
     {
         if(!$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
+
         $data = fixer::input('post')
+            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
+            ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->skipSpecial('path,client,account,password')
+            ->setDefault('product', '')
             ->join('product', ',')
             ->get();
+
+        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -220,8 +217,9 @@ class repoModel extends model
         }
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->insert(TABLE_REPO)->data($data)
+        $this->dao->insert(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'GitLab', 'gitlabProject', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
@@ -243,12 +241,19 @@ class repoModel extends model
         $repo = $this->getRepoByID($id);
 
         $data = fixer::input('post')
+            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
+            ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->setDefault('client', 'svn')
             ->setDefault('prefix', $repo->prefix)
-            ->setIF($this->post->path != $repo->path, 'synced', 0)
+            ->setDefault('product', '')
             ->skipSpecial('path,client,account,password')
             ->join('product', ',')
             ->get();
+
+        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
+        if($data->path != $repo->path) $data->synced = 0;
+
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
         if($data->SCM == 'Subversion' and $data->path != $repo->path)
@@ -268,9 +273,10 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->update(TABLE_REPO)->data($data)
+        $this->dao->update(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'GitLab', 'extra', 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 
@@ -286,20 +292,47 @@ class repoModel extends model
     }
 
     /**
+     * Save repo state.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @access public
+     * @return int
+     */
+    public function saveState($repoID = 0, $objectID = 0)
+    {
+        if($repoID > 0) $this->session->set('repoID', (int)$repoID);
+
+        $repos = $this->getRepoPairs($this->app->openApp, $objectID);
+        if($repoID == 0 and $this->session->repoID == '')
+        {
+            $this->session->set('repoID', key($repos));
+        }
+
+        if(!isset($repos[$this->session->repoID]))
+        {
+            $this->session->set('repoID', key($repos));
+        }
+
+        return $this->session->repoID;
+    }
+
+    /**
      * Get repo pairs.
      *
+     * @param  string $type  project|execution|repo
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getRepoPairs($projectID = 0)
+    public function getRepoPairs($type, $projectID = 0)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->fetchAll();
 
         /* Get products. */
-        $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
+        $productIdList = ($type == 'project' or $type == 'execution') ? $this->loadModel('product')->getProductIDByProject($projectID, false) : array();
 
         $repoPairs = array();
         foreach($repos as $repo)
@@ -308,7 +341,7 @@ class repoModel extends model
             $scm = $repo->SCM == 'Subversion' ? 'svn' : 'git';
             if($this->checkPriv($repo))
             {
-                if($projectID)
+                if($type == 'project' or $type == 'execution')
                 {
                     foreach($productIdList as $productID)
                     {
@@ -398,7 +431,7 @@ class repoModel extends model
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
             ->beginIF($revision != 'HEAD')->andWhere('t1.revision')->eq($revision)->fi()
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->orderBy('time desc')
             ->limit(1)
             ->fetch('time');
@@ -413,7 +446,7 @@ class repoModel extends model
                 ->andWhere('t1.repo')->eq($repo->id)
                 ->andWhere('t2.`time`')->le($revisionTime)
                 ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
-                ->beginIF($this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
+                ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
                 ->beginIF($type == 'dir')
                 ->andWhere('t1.parent', true)->like(rtrim($entry, '/') . "/%")
                 ->orWhere('t1.parent')->eq(rtrim($entry, '/'))
@@ -430,7 +463,7 @@ class repoModel extends model
             ->where('t1.repo')->eq($repoID)
             ->andWhere('t1.`time`')->le($revisionTime)
             ->andWhere('left(t1.comment, 12)')->ne('Merge branch')
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->beginIF($entry != '/' and !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
             ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t1.time')->le($end)->fi()
@@ -818,13 +851,12 @@ class repoModel extends model
      * @param  string $params
      * @param  string $viewType
      * @param  bool   $onlybody
-     * @param  int    $projectID
      * @access public
      * @return string
      */
-    public function createLink($method, $params = '', $viewType = '', $onlybody = false, $projectID = 0)
+    public function createLink($method, $params = '', $viewType = '', $onlybody = false)
     {
-        if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType, $onlybody, $projectID);
+        if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType, $onlybody);
 
         $parsedParams = array();
         parse_str($params, $parsedParams);
@@ -841,7 +873,7 @@ class repoModel extends model
         }
 
         $params = http_build_query($parsedParams);
-        $link   = helper::createLink('repo', $method, $params, $viewType, $onlybody, $projectID);
+        $link   = helper::createLink('repo', $method, $params, $viewType, $onlybody);
         if(empty($pathParams)) return $link;
 
         $link .= strpos($link, '?') === false ? '?' : '&';
@@ -867,8 +899,8 @@ class repoModel extends model
         if($type == 'list') unset($_SESSION['repoView']);
         if($withOtherModule)
         {
-            $this->session->set('bugList', $uri);
-            $this->session->set('taskList', $uri);
+            $this->session->set('bugList', $uri, 'qa');
+            $this->session->set('taskList', $uri, 'execution');
         }
         session_write_close();
     }
@@ -882,7 +914,7 @@ class repoModel extends model
      */
     public function setRepoBranch($branch)
     {
-        setcookie("repoBranch", $branch, 0, $this->config->webRoot);
+        setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         $_COOKIE['repoBranch'] = $branch;
     }
 
@@ -978,6 +1010,7 @@ class repoModel extends model
      */
     public function checkClient()
     {
+        if($this->post->SCM == 'Gitlab') return true;
         if(!$this->config->features->checkClient) return true;
         if(!$this->post->client) return true;
 
@@ -1695,4 +1728,28 @@ class repoModel extends model
 
         return $buildedURL;
     }
+
+	/**
+	 * Get gitlab projects.
+	 *
+	 * @param  string   $host
+	 * @param  string   $token
+	 * @access public
+	 * @return array
+	 */
+	public function getGitlabProjects($host, $token)
+	{
+		$host  = rtrim($host, '/');
+		$host .= '/api/v4/projects';
+
+		$allResults = array();
+		for($page = 1; true; $page ++)
+		{
+			$results = json_decode(file_get_contents($host . "?private_token=$token&simple=true&membership=true&page={$page}&per_page=100"));
+			if(empty($results) or $page > 10) break;
+			$allResults = $allResults + $results;
+		}
+
+		return $allResults;
+	}
 }

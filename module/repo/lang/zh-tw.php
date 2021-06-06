@@ -3,26 +3,31 @@ $lang->repo->common          = '代碼';
 $lang->repo->browse          = '瀏覽';
 $lang->repo->viewRevision    = '查看修訂';
 $lang->repo->product         = '所屬產品';
+$lang->repo->execution       = '所屬' . $lang->execution->common;
 $lang->repo->create          = '創建';
-$lang->repo->createAction    = '創建版本庫';
 $lang->repo->maintain        = '版本庫列表';
 $lang->repo->edit            = '編輯';
-$lang->repo->editAction      = '編輯版本庫';
 $lang->repo->delete          = '刪除版本庫';
 $lang->repo->showSyncCommit  = '顯示同步進度';
 $lang->repo->ajaxSyncCommit  = '介面：AJAX同步註釋';
 $lang->repo->setRules        = '指令配置';
 $lang->repo->download        = '下載';
 $lang->repo->downloadDiff    = '下載Diff';
-$lang->repo->diffAction      = '版本對比';
-$lang->repo->revisionAction  = '版本詳情';
-$lang->repo->blameAction     = '版本追溯';
 $lang->repo->addBug          = '添加評審';
 $lang->repo->editBug         = '編輯評審';
 $lang->repo->deleteBug       = '刪除評審';
 $lang->repo->addComment      = '添加備註';
 $lang->repo->editComment     = '編輯備註';
 $lang->repo->deleteComment   = '刪除備註';
+
+$lang->repo->browseAction    = '瀏覽版本庫';
+$lang->repo->createAction    = '創建版本庫';
+$lang->repo->editAction      = '編輯版本庫';
+$lang->repo->diffAction      = '版本對比';
+$lang->repo->downloadAction  = '下載代碼庫檔案';
+$lang->repo->revisionAction  = '版本詳情';
+$lang->repo->blameAction     = '版本追溯';
+$lang->repo->reviewAction    = '評審列表';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
@@ -120,6 +125,14 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
+$lang->repo->scmList['Gitlab']     = 'Gitlab';
+
+$lang->repo->gitlabHost    = 'Gitlab 地址';
+$lang->repo->gitlabToken   = 'Gitlab Token';
+$lang->repo->gitlabProject = '項目';
+
+$lang->repo->placeholder = new stdclass;
+$lang->repo->placeholder->gitlabHost = '請填寫gitlab訪問地址';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 請稍等...';

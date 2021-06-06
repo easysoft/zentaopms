@@ -266,8 +266,8 @@ class searchModel extends model
             $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
             $users['$@me'] = $this->lang->search->me;
         }
-        if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->PRJ);
-        if($hasExecution) $executions = array('' => '') + $this->loadModel('execution')->getPairs($this->session->PRJ);
+        if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->project);
+        if($hasExecution) $executions = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project);
 
         foreach($fields as $fieldName)
         {
@@ -543,8 +543,6 @@ class searchModel extends model
                 if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
 
                 if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
-                if($module == 'execution'  and common::haspriv('project', 'view'))     $allowedobject[] = $objectType;
-                if($module == 'project'    and common::haspriv('program', 'index'))    $allowedobject[] = $objectType;
                 if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
             }
         }
@@ -578,30 +576,26 @@ class searchModel extends model
             {
                 if(!isset($this->config->objectTables[$record->objectType])) continue;
                 $table       = $this->config->objectTables[$record->objectType];
-                $executionID = $this->dao->select('execution')->from($table)->where('id')->eq($record->objectID)->fetch('execution');
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $executionID);
+                $projectID   = $this->dao->select('project')->from($table)->where('id')->eq($record->objectID)->fetch('project');
+                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $projectID);
             }
             elseif($module == 'issue')
             {
-                $issue             = $this->dao->select('id,execution,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
-                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->execution);
+                $issue             = $this->dao->select('id,project,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
+                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
                 $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
+            }
+            elseif($module == 'execution')
+            {
+                $execution         = $this->dao->select('id,type,project')->from(TABLE_EXECUTION)->where('id')->eq($record->objectID)->fetch();
+                $record->url       = helper::createLink('execution', $method, "id={$record->objectID}", '', false, $execution->project);
+                $record->extraType = $execution->type;
             }
             elseif($module == 'story')
             {
                 $story             = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
                 $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
                 $record->extraType = $story->type;
-            }
-            elseif($module == 'execution')
-            {
-                $execution         = $this->dao->select('id,type,project')->from(TABLE_PROJECT)->where('id')->eq($record->objectID)->fetch();
-                $record->url       = helper::createLink('execution', $method, "id={$record->objectID}", '', false, $execution->project);
-                $record->extraType = $execution->type;
-            }
-            elseif($module == 'project')
-            {
-                $record->url = helper::createLink('project', 'index', "id={$record->objectID}", '', false, 0, true);
             }
             else
             {
@@ -1021,7 +1015,7 @@ class searchModel extends model
             while(true)
             {
                 $query    = $this->buildIndexQuery($module);
-                $dataList = $query->beginIF($lastID)->andWhere('t1.id')->gt($lastID)->fi()->limit($limit)->fetchAll('id');
+                $dataList = $query->beginIF($lastID)->andWhere('t1.id')->gt($lastID)->fi()->orderBy('t1.id')->limit($limit)->fetchAll('id');
                 if(empty($dataList))
                 {
                     $lastID = 0;

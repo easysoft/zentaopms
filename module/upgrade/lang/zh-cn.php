@@ -53,7 +53,10 @@ $lang->upgrade->noticeSQL      = '检查到你的数据库跟标准不一致，�
 $lang->upgrade->afterDeleted   = '以上文件未能删除， 删除后刷新！';
 $lang->upgrade->mergeProgram   = '数据迁移';
 $lang->upgrade->mergeTips      = '数据迁移提示';
-$lang->upgrade->to15Guide      = '禅道开源版15.0.beta1升级';
+$lang->upgrade->toPMS15Guide   = '禅道开源版15版本升级';
+$lang->upgrade->toPRO10Guide   = '禅道专业版10版本升级';
+$lang->upgrade->toBIZ5Guide    = '禅道企业版5版本升级';
+$lang->upgrade->toMAXGuide     = '禅道旗舰版版本升级';
 $lang->upgrade->to15Desc       = <<<EOD
 <p>尊敬的用户，禅道从15版本开始对导航和概念做了调整，主要改动如下：</p>
 <ol>
@@ -103,5 +106,6 @@ $lang->upgrade->mergeByProduct     = "以产品组织的迭代：可以选择多
 $lang->upgrade->mergeByProject     = "独立的迭代：可以选择若干迭代归并到一个项目中，也可以独立归并。";
 $lang->upgrade->mergeByMoreLink    = "关联多个产品的迭代：选择这个迭代归属于哪一个产品。";
 $lang->upgrade->mergeRepoTips      = "将选中的版本库归并到所选产品下。";
+$lang->upgrade->needBuild4Add      = '本次升级需要创建索引。请到 [后台->系统->重建索引] 页面，重新创建索引。';
 
 include dirname(__FILE__) . '/version.php';

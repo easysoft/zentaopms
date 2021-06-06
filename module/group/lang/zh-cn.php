@@ -32,7 +32,7 @@ $lang->group->productList        = '可访问' . $lang->productCommon;
 $lang->group->projectList        = '可访问项目';
 $lang->group->dynamic            = '可查看动态';
 $lang->group->noticeVisit        = '空代表没有访问限制';
-$lang->group->noneProgram        = "暂时没有项目";
+$lang->group->noneProgram        = "暂时没有项目集";
 $lang->group->noneProduct        = "暂时没有{$lang->productCommon}";
 $lang->group->noneProject        = "暂时没有{$lang->executionCommon}";
 
@@ -56,6 +56,7 @@ $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
 $lang->group->versions['']          = '修改历史';
+$lang->group->versions['15_0_rc1']  = '禅道15.0.rc1';
 $lang->group->versions['12_5']      = '禅道12.5';
 $lang->group->versions['12_3']      = '禅道12.3';
 $lang->group->versions['11_6_2']    = '禅道11.6.2';

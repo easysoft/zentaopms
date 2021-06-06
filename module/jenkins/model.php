@@ -60,8 +60,8 @@ class jenkinsModel extends model
 
     /**
      * Get jenkins tasks.
-     * 
-     * @param  int    $id 
+     *
+     * @param  int    $id
      * @access public
      * @return array
      */
@@ -107,7 +107,8 @@ class jenkinsModel extends model
             ->batchCheck("url", 'URL')
             ->autoCheck()
             ->exec();
-        return !dao::isError();
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertId();
     }
 
     /**

@@ -9,7 +9,6 @@
  * @version  $Id: vi.php 5091 2013-07-10 06:06:46Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->product->common        = $lang->productCommon;
 $lang->product->index         = 'Trang '.$lang->productCommon;
 $lang->product->browse        = 'Danh sách câu chuyện';
 $lang->product->dynamic       = 'Lịch sử';
@@ -29,6 +28,7 @@ $lang->product->updateOrder   = 'Sắp xếp';
 $lang->product->orderAction   = "Đánh giá {$lang->productCommon}";
 $lang->product->all           = "Tất cả {$lang->productCommon}";
 $lang->product->manageLine    = "Manage {$lang->productCommon} Line";
+$lang->product->newLine       = "Create {$lang->productCommon} Line";
 $lang->product->export        = 'Xuất';
 $lang->product->exportAction  = "Xuất {$lang->productCommon}";
 $lang->product->dashboard     = "Dashboard";
@@ -41,7 +41,8 @@ $lang->product->plans       = 'Kế hoạch';
 $lang->product->releases    = 'Phát hành';
 $lang->product->docs        = 'Tài liệu';
 $lang->product->bugs        = 'Bug liên kết';
-$lang->product->projects    = "{$lang->executionCommon} liên kết";
+$lang->product->projects    = "Linked Project";
+$lang->product->executions  = "{$lang->execution->common} liên kết";
 $lang->product->cases       = 'Tình huống';
 $lang->product->builds      = 'Bản dựng';
 $lang->product->roadmap     = "Lộ trình {$lang->productCommon}";
@@ -51,7 +52,7 @@ $lang->product->build       = 'Danh sách bản dựng';
 $lang->product->moreProduct = "More Product";
 $lang->product->projectInfo = "Projects đã liên kết tới {$lang->productCommon} này được liệt kê bên dưới.";
 
-$lang->product->currentExecution      = "Hiện {$lang->sprintCommon}";
+$lang->product->currentExecution      = "Hiện Execution";
 $lang->product->activeStories         = 'Kích hoạt [S]';
 $lang->product->activeStoriesTitle    = 'Kích hoạt câu chuyện';
 $lang->product->changedStories        = 'Đã thay đổi [S]';

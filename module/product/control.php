@@ -31,7 +31,7 @@ class product extends control
 
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs('nocode');
-        if(empty($this->products) and strpos(',create,index,showerrornone,', $this->methodName) === false and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('product', 'create'));
+        if(empty($this->products) and strpos(',create,index,showerrornone,ajaxgetdropmenu,', $this->methodName) === false and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
     }
 
@@ -49,15 +49,15 @@ class product extends control
      */
     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher();
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher();
 
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
-        //$this->product->setMenu($this->products, $productID, $branch);
+
+        if($this->app->viewType == 'mhtml') $this->product->setMenu($productID, $branch);
 
         if(common::hasPriv('product', 'create')) $this->lang->TRActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
 
@@ -78,17 +78,15 @@ class product extends control
      */
     public function project($status = 'all', $productID = 0, $branch = 0, $involved = 0)
     {
-        $this->product->setMenu($this->products, $productID, $branch);
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-
-        $this->app->loadLang('my');
         $this->app->loadLang('execution');
-        $this->app->loadLang('program');
+        $this->app->loadLang('project');
+
+        $this->product->setMenu($productID, $branch);
 
         /* Get PM id list. */
         $accounts     = array();
         $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved);
+
         foreach($projectStats as $project)
         {
             if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
@@ -118,12 +116,21 @@ class product extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
-     * @param  string $from product|project
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $from = 'product')
+    public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
+        $productID = $this->app->openApp != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
+
+        if($this->app->openApp == 'product') $this->product->setMenu($productID, $branch);
+        if($this->app->openApp == 'project')
+        {
+            $this->session->set('storyList', $this->app->getURI(true), 'project');
+            $this->loadModel('project')->setMenu($projectID);
+        }
+
         /* Lower browse type. */
         $browseType = strtolower($browseType);
 
@@ -132,67 +139,60 @@ class product extends control
         $this->loadModel('execution');
 
         /* Set product, module and query. */
-        $productID = $this->app->rawModule != 'projectstory' ? $this->product->saveState($productID, $this->products) : $productID;
-        $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
-        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        $branch = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
             $_COOKIE['storyModule'] = 0;
-            setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
+            setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
 
         if($browseType == 'bymodule' or $browseType == '')
         {
-            setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', false, false);
+            setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($this->app->openApp == 'project') setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $_COOKIE['storyBranch'] = 0;
-            setcookie('storyBranch', 0, 0, $this->config->webRoot, '', false, false);
-            if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+            setcookie('storyBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
-        if($browseType == 'bybranch') setcookie('storyBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+        if($browseType == 'bybranch') setcookie('storyBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-        $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->storyModule ? $this->cookie->storyModule : 0));
+        $cookieModule = $this->app->openApp == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
+        $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($cookieModule ? $cookieModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu. The projectstory module does not execute. */
-        if($this->app->rawModule == 'product')
+        if($this->app->openApp == 'product')
         {
             /* Save session. */
-            $this->session->set('storyList',   $this->app->getURI(true));
-            $this->session->set('productList', $this->app->getURI(true));
+            $this->session->set('storyList',   $this->app->getURI(true), 'product');
+            $this->session->set('productList', $this->app->getURI(true), 'product');
 
-            $this->lang->product->menu = $this->lang->product->viewMenu;
-            $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
-            $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-            $this->product->setMenu($this->products, $productID, $branch);
+            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
         }
 
         /* Set moduleTree. */
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
         if($browseType == '')
         {
-            setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', false, false);
+            setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $browseType = 'unclosed';
-            if($this->app->rawModule == 'projectstory' and empty($productID))
-            {
-                $moduleTree = $this->tree->getExecutionStoryTreeMenu($this->session->PRJ, 0, array('treeModel', 'createProjectStoryLink'));
-            }
-            else
-            {
-                $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch, "&param=$param&storyType=$storyType");
-            }
         }
         else
         {
-            if($this->app->rawModule == 'projectstory' and empty($productID))
-            {
-                $moduleTree = $this->tree->getExecutionStoryTreeMenu($this->session->PRJ, 0, array('treeModel', 'createProjectStoryLink'));
-            }
-            else
-            {
-                $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', (int)$this->cookie->treeBranch, "&param=$param&storyType=$storyType");
-            }
+            $branch = (int)$this->cookie->treeBranch;
+        }
+
+        /* If in project story and not chose product, get project story mdoules. */
+        if($this->app->rawModule == 'projectstory' and empty($productID))
+        {
+            $moduleTree = $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
+        }
+        else
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), array('projectID' => $projectID, 'productID' => $productID), $branch, "&param=$param&storyType=$storyType");
         }
 
         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
@@ -200,7 +200,7 @@ class product extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
-        setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', false, true);
+        setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -215,12 +215,12 @@ class product extends control
         if($this->app->rawModule == 'projectstory')
         {
             if(!empty($product)) $this->session->set('currentProductType', $product->type);
-            $this->products  = $this->loadModel('project')->getProducts($this->session->PRJ, false);
-            $projectProducts = $this->product->getProducts($this->session->PRJ);
+            $this->products  = $this->loadModel('project')->getProducts($projectID, false);
+            $projectProducts = $this->product->getProducts($projectID);
             $productPlans    = $this->execution->getPlans($projectProducts);
 
             if($browseType == 'bybranch') $param = $branch;
-            $stories = $this->story->getExecutionStories($this->session->PRJ, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
+            $stories = $this->story->getExecutionStories($projectID, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
         }
         else
         {
@@ -229,6 +229,8 @@ class product extends control
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch' && $this->app->rawModule != 'projectstory');
+
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
         /* Get related tasks, bugs, cases count of each story. */
         $storyIdList = array();
@@ -250,12 +252,17 @@ class product extends control
             $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
             $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
+            unset($this->config->product->search['fields']['plan']);
+            unset($this->config->product->search['fields']['stage']);
         }
 
         /* Build search form. */
         $rawModule = $this->app->rawModule;
         $rawMethod = $this->app->rawMethod;
-        $actionURL = $this->createLink($rawModule, $rawMethod, "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
+
+        $params    = $rawModule == 'projectstory' ? "projectID=$projectID&" : '';
+        $actionURL = $this->createLink($rawModule, $rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
+
         $this->config->product->search['onMenuBar'] = 'yes';
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
@@ -293,10 +300,11 @@ class product extends control
         $this->view->storyBugs       = $storyBugs;
         $this->view->storyCases      = $storyCases;
         $this->view->param           = $param;
+        $this->view->projectID       = $projectID;
         $this->view->products        = $this->products;
         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
         $this->view->storyType       = $storyType;
-        $this->view->from            = $from;
+        $this->view->from            = $this->app->openApp;
         $this->display();
     }
 
@@ -309,9 +317,6 @@ class product extends control
      */
     public function create($programID = 0)
     {
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher();
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-
         if(!empty($_POST))
         {
             $productID = $this->product->create();
@@ -319,23 +324,18 @@ class product extends control
             $this->loadModel('action')->create('product', $productID, 'opened');
 
             $this->executeHooks($productID);
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
 
-            $moduleName = $programID ? 'program'    : $this->moduleName;
-            $methodName = $programID ? 'product' : 'browse';
-            $param      = $programID ? "programID=$programID" : "productID=$productID";
+            $openApp    = $this->app->openApp;
+            $moduleName = $openApp == 'program'? 'program' : $this->moduleName;
+            $methodName = $openApp == 'program'? 'product' : 'browse';
+            $param      = $openApp == 'program' ? "programID=$programID" : "productID=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
+            if($openApp == 'doc') $locate = $this->createLink('doc', 'objectLibs', 'type=product');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        if($programID)
-        {
-            $this->app->rawModule = 'program';
-            $this->app->rawMethod = 'product';
-            $this->lang->navGroup->program = 'program';
-            $this->loadModel('program')->setViewMenu($programID);
-            $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-            $this->lang->program->mainMenuAction = $this->program->getMainAction();
-        }
+        if($this->app->openApp == 'program') $this->loadModel('program')->setMenu($programID);
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
@@ -347,15 +347,20 @@ class product extends control
         $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
+        $lines = array();
+        if($programID) $lines = array('') + $this->product->getLinePairs($programID);
+        if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
+
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->programID  = $programID;
         $this->view->poUsers    = $poUsers;
         $this->view->qdUsers    = $qdUsers;
         $this->view->rdUsers    = $rdUsers;
         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
         $this->view->programs   = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-        $this->view->lines      = $this->config->systemMode == 'new' ? array() : array('' => '') + $this->product->getLinePairs();
+        $this->view->lines      = $lines;
         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
 
         unset($this->lang->product->typeList['']);
@@ -374,14 +379,12 @@ class product extends control
      */
     public function edit($productID, $action = 'edit', $extra = '', $programID = 0)
     {
-        /* Set menu. */
         $this->app->loadLang('custom');
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
 
         /* Init vars. */
-        $product              = $this->product->getById($productID);
+        $product = $this->product->getById($productID);
+        if($product->bind) $this->config->product->edit->requiredFields = 'name';
+
         $unmodifiableProjects = array();
         $canChangeProgram     = true;
         $singleLinkProjects   = array();
@@ -434,10 +437,13 @@ class product extends control
         {
             $changes = $this->product->update($productID);
 
-            /* Change the projects set of the program. */
-            if(($_POST['program'] != $product->program) and $singleLinkProjects or $multipleLinkProjects)
+            if($this->config->systemMode == 'new')
             {
-                $this->product->updateProjects($productID, $singleLinkProjects, $multipleLinkProjects);
+                /* Change the projects set of the program. */
+                if(($_POST['program'] != $product->program) and $singleLinkProjects or $multipleLinkProjects)
+                {
+                    $this->product->updateProjects($productID, $singleLinkProjects, $multipleLinkProjects);
+                }
             }
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -461,35 +467,27 @@ class product extends control
             $param      = $programID ? "programID=$programID" : "product=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
 
-            if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param));
+            if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         $productID = $this->product->saveState($productID, $this->products);
-        $this->product->setMenu($this->products, $productID);
-
-        $moduleIndex = array_search('product', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        $this->product->setMenu($productID);
 
         if($programID)
         {
-            $this->app->rawModule = 'program';
-            $this->app->rawMethod = 'product';
-            $this->lang->navGroup->program = 'program';
-            $this->loadModel('program')->setViewMenu($programID);
-            $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-            $this->lang->program->mainMenuAction = $this->program->getMainAction();
+            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
         }
 
         /* Get the relevant person in charge. */
         $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|pofirst',  $product->PO, $this->config->maxCount);
+        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  $product->PO, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
 
-        $qdUsers = $this->user->getPairs('nodeleted|qdfirst',  $product->QD, $this->config->maxCount);
+        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  $product->QD, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
 
-        $rdUsers = $this->user->getPairs('nodeleted|devfirst', $product->RD, $this->config->maxCount);
+        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', $product->RD, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $lines = array();
@@ -565,12 +563,7 @@ class product extends control
         }
 
         /* Navigation remains under the program. */
-        $this->app->rawModule = 'program';
-        $this->app->rawMethod = 'product';
-        $this->lang->navGroup->program = 'program';
-        $this->loadModel('program')->setViewMenu($programID);
-        $this->lang->program->switcherMenu   = $this->program->getSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getMainAction();
+        $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst', $appendPoUsers);
@@ -623,7 +616,7 @@ class product extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($productID);
 
         $this->view->product    = $product;
         $this->view->title      = $this->view->product->name . $this->lang->colon .$this->lang->close;
@@ -642,17 +635,12 @@ class product extends control
      */
     public function view($productID)
     {
-        $product = $this->product->getStatByID($productID);
+        $productID = (int)$productID;
+        $product   = $this->product->getStatByID($productID);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $moduleIndex = array_search('product', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -691,7 +679,7 @@ class product extends control
         {
             $this->product->delete(TABLE_PRODUCT, $productID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
-            $this->session->set('product', '');     // 清除session。
+            $this->session->set('product', '');
             $this->executeHooks($productID);
             die(js::locate($this->createLink('product', 'browse'), 'parent'));
         }
@@ -706,13 +694,11 @@ class product extends control
      */
     public function roadmap($productID, $branch = 0)
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, '', $branch);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-        $this->product->setMenu($this->products, $productID, $branch);
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
+        $this->product->setMenu($productID, $branch);
 
-        $this->session->set('releaseList',     $this->app->getURI(true));
-        $this->session->set('productPlanList', $this->app->getURI(true));
+        $this->session->set('releaseList',     $this->app->getURI(true), 'product');
+        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(empty($product)) $this->locate($this->createLink('product', 'showErrorNone', 'fromModule=product'));
@@ -743,18 +729,19 @@ class product extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('projectList',     $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
 
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($productID);
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
@@ -773,15 +760,14 @@ class product extends control
         }
         $period  = $type == 'account' ? 'all'  : $type;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID, 'all', $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID, 'all', 'all', $date, $direction);
 
         /* The header and position. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
         $this->view->position[] = $this->lang->product->dynamic;
 
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, $type);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, $type);
 
         $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
@@ -812,12 +798,8 @@ class product extends control
         $product   = $this->product->getStatByID($productID);
         if(!$product) die(js::locate('product', 'all'));
 
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -838,29 +820,69 @@ class product extends control
     }
 
     /**
-     * AJAX: get executions of a product in html select.
+     * Ajax get products.
      *
-     * @param  int    $productID
      * @param  int    $executionID
-     * @param  int    $branch
-     * @param  string $number
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions($productID, $executionID = 0, $branch = 0, $number = '')
+    public function ajaxGetProducts($executionID)
     {
-        $executions = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch, 'id_desc', $executionID);
+        $this->loadModel('build');
+        $products = $this->product->getProductPairsByProject($executionID);
+        if(empty($products))
+        {
+            die(printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project'));
+        }
+        else
+        {
+            die(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+        }
+    }
+
+    /**
+     * AJAX: get projects of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjects($productID, $branch = 0, $projectID = 0)
+    {
+        $projects  = array('' => '');
+        $projects += $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : $branch);
+        if($this->app->getViewType() == 'json') die(json_encode($projects));
+
+        die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
+    }
+
+    /**
+     * AJAX: get executions of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $branch
+     * @param  string $number
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0)
+    {
+        $executions = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : $branch, 'id_desc', $projectID);
         if($this->app->getViewType() == 'json') die(json_encode($executions));
 
         if($number === '')
         {
-            die(html::select('execution', $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
+            die(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
         }
         else
         {
             $executionsName = "executions[$number]";
             $executions     = empty($executions) ? array('' => '') : $executions;
-            die(html::select($executionsName, $executions, '', "class='form-control' onchange='loadProjectBuilds($productID, this.value, $number)'"));
+            die(html::select($executionsName, $executions, '', "class='form-control' onchange='loadExecutionBuilds($executionID, this.value, $number)'"));
         }
     }
 
@@ -922,9 +944,7 @@ class product extends control
             foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
         }
 
-        $moduleGroup = zget($this->lang->navGroup, $module);
-        $moduleGroup = in_array($moduleGroup, array('product', 'qa'))? $moduleGroup : 'project';
-        $products    = $moduleGroup == 'project' ? $this->product->getProducts($this->session->PRJ, 'all', 'program desc, line desc, ') : $this->product->getList(0, 'all', 0, 0, 'program desc, line desc, ');
+        $products = $this->app->openApp == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList();
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
@@ -932,10 +952,10 @@ class product extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
         $this->view->products  = $products;
-        $this->view->projectID = $moduleGroup == 'project' ? $this->session->PRJ : 0;
+        $this->view->projectID = $this->app->openApp == 'project' ? $this->session->project : 0;
         $this->view->programs  = $this->loadModel('program')->getPairs(true);
         $this->view->lines     = $this->product->getLinePairs();
-        $this->view->openApp   = $moduleGroup;
+        $this->view->openApp   = $this->app->openApp;
         $this->display();
     }
 
@@ -971,53 +991,50 @@ class product extends control
     /**
      * Show error no product when visit qa.
      *
-     * @param  string $fromModule
+     * @param  string $moduleName
+     * @param  string $activeMenu
+     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function showErrorNone($fromModule = 'bug', $moduleGroup = 'product', $activeMenu = '')
+    public function showErrorNone($moduleName = 'qa', $activeMenu = 'index', $objectID = 0)
     {
-        /* The module in the test menu shows the created product. */
-        if($moduleGroup == 'qa')
+        if($moduleName == 'project')
+        {
+            $this->loadModel('project')->setMenu($objectID);
+            $project = $this->project->getByID($objectID);
+            $this->lang->project->menu      = $this->lang->{$project->model}->menu;
+            $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
+            $this->app->rawModule = $activeMenu;
+
+            if($activeMenu == 'bug')            $this->lang->{$project->model}->menu->qa['subMenu']->bug['subModule']        = 'product';
+            if($activeMenu == 'testcase')       $this->lang->{$project->model}->menu->qa['subMenu']->testcase['subModule']   = 'product';
+            if($activeMenu == 'testtask')       $this->lang->{$project->model}->menu->qa['subMenu']->testtask['subModule']   = 'product';
+            if($activeMenu == 'testreport')     $this->lang->{$project->model}->menu->qa['subMenu']->testreport['subModule'] = 'product';
+            if($activeMenu == 'projectrelease') $this->lang->{$project->model}->menu->release['subModule']                   = 'projectrelease';
+        }
+        elseif($moduleName == 'qa')
         {
             $this->loadModel('qa')->setMenu(array(), 0);
+            $this->app->rawModule = $activeMenu;
 
-            $this->app->loadLang($fromModule);
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-
-            $this->lang->set('menugroup.product', $activeMenu);
-            $this->lang->product->menu      = $this->lang->qa->menu;
-            $this->lang->product->menuOrder = $this->lang->qa->menuOrder;
+            if($activeMenu == 'testcase')   $this->lang->qa->menu->testcase['subMenu']->case['subModule']      = 'product';
+            if($activeMenu == 'testsuite')  $this->lang->qa->menu->testcase['subMenu']->testsuite['subModule'] = 'product';
+            if($activeMenu == 'testtask')   $this->lang->qa->menu->testtask['subMenu']->testtask['subModule']  = 'product';
+            if($activeMenu == 'testreport') $this->lang->qa->menu->testtask['subMenu']->report['subModule']    = 'product';
         }
-
-        /* The module in the project menu displays related products. */
-        if($moduleGroup == 'project')
+        elseif($moduleName == 'execution')
         {
-            $this->app->loadLang($fromModule);
-
-            $this->lang->set('menugroup.product', $activeMenu);
-            $projectModel = $this->loadModel('project')->getByID($this->session->PRJ);
-            $this->lang->product->menu      = $this->lang->menu->{$projectModel->model};
-            $this->lang->product->menuOrder = $this->lang->{$projectModel->model}->menuOrder;
-
-            /* The secondary test menu processing in the project. */
-            if(in_array($fromModule, array('qa', 'bug', 'testtask', 'testreport')))
-            {
-                $this->lang->set('menugroup.product', 'qa');
-                $moduleIndex = array_search('product', $this->lang->noMenuModule);
-                if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
-                $menu = $this->lang->qa->menu->$activeMenu;
-                $menu['subModule'] = 'product';
-                $this->lang->qa->menu->$activeMenu = $menu;
-                $this->app->rawModule = 'qa';
-                $this->loadModel('qa')->setMenu(array(), 0);
-            }
+            $this->loadModel('execution')->setMenu($objectID);
+            $this->app->rawModule = $activeMenu;
+            if($activeMenu == 'bug')        $this->lang->execution->menu->qa['subMenu']->bug['subModule']        = 'product';
+            if($activeMenu == 'testcase')   $this->lang->execution->menu->qa['subMenu']->testcase['subModule']   = 'product';
+            if($activeMenu == 'testtask')   $this->lang->execution->menu->qa['subMenu']->testtask['subModule']   = 'product';
+            if($activeMenu == 'testreport') $this->lang->execution->menu->qa['subMenu']->testreport['subModule'] = 'product';
         }
 
-        $this->view->title       = $this->lang->$fromModule->common;
-        $this->view->fromModule  = $fromModule;
-        $this->view->moduleGroup = $moduleGroup;
+        $this->view->title    = $this->lang->$moduleName->common;
+        $this->view->objectID = $objectID;
         $this->display();
     }
 
@@ -1029,13 +1046,17 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($browseType = 'noclosed', $orderBy = 'order_asc')
+    public function all($browseType = 'noclosed', $orderBy = 'program_asc')
     {
-        if($this->session->moreProductLink) $this->lang->product->mainMenuAction = html::a($this->session->moreProductLink, '<i class="icon icon-back"></i> ' . $this->lang->goback, '', "class='btn btn-link'");
-
         /* Load module and set session. */
         $this->loadModel('program');
-        $this->session->set('productList', $this->app->getURI(true));
+        $this->session->set('productList', $this->app->getURI(true), 'product');
+
+        if($this->app->viewType == 'mhtml')
+        {
+            $productID = $this->product->saveState(0, $this->products);
+            $this->product->setMenu($productID);
+        }
 
         /* Process product structure. */
         $productStructure = array();
@@ -1098,10 +1119,8 @@ class product extends control
      */
     public function whitelist($productID = 0, $module = 'product', $objectType = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, '', 0);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-        $this->product->setMenu($this->products, $productID, 0);
+        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', 0);
+        $this->product->setMenu($productID, 0);
         $this->lang->modulePageNav = '';
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -1118,12 +1137,7 @@ class product extends control
      */
     public function addWhitelist($productID = 0, $deptID = 0, $branch = '')
     {
-        $this->lang->product->menu           = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->product->getSwitcher($productID, '', $branch);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
-        $this->product->setMenu($this->products, $productID, $branch);
-        $moduleIndex = array_search('product', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+        $this->product->setMenu($productID, $branch);
         $this->lang->modulePageNav = '';
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&objectType=product&module=product");
@@ -1195,18 +1209,6 @@ class product extends control
     }
 
     /**
-     * Doc for compatible.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function doc($productID)
-    {
-        $this->locate($this->createLink('doc', 'objectLibs', "type=product&objectID=$productID&from=product"));
-    }
-
-    /**
      * Build of product.
      *
      * @param  int    $productID
@@ -1216,19 +1218,19 @@ class product extends control
     public function build($productID = 0, $branch = 0)
     {
         $this->app->loadLang('build');
-        $this->session->set('productList', $this->app->getURI(true));
+        $this->session->set('productList', $this->app->getURI(true), 'product');
 
         /* Get all product list. Locate to the create product page if there is no product. */
-        $this->products = $this->product->getPairs('', $this->session->PRJ);
+        $this->products = $this->product->getPairs('', $this->session->project);
         if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
 
         /* Get current product. */
         $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getById($productID);
-        $this->product->setMenu($this->products, $productID, $branch);
+        $this->product->setMenu($productID, $branch);
 
         /* Set menu.*/
-        $this->session->set('buildList', $this->app->getURI(true));
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->build;
         $this->view->position[] = $this->lang->product->build;

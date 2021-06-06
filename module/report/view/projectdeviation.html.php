@@ -1,23 +1,27 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/chart.html.php';?>
+<?php if(isset($config->maxVersion) or isset($config->proVersion) or isset($config->bizVersion)):?>
+<style>#mainContent > .side-col.col-lg{width: 235px}</style>
+<style>.hide-sidebar #sidebar{width: 0 !important}</style>
+<?php endif;?>
 <?php $chartData = array('labels' => array(), 'data' => array());?>
 <div id='mainContent' class='main-row'>
   <div class='side-col col-lg' id='sidebar'>
     <?php include 'blockreportlist.html.php';?>
   </div>
-  <div class='main-col w-800px'>
+  <div class='main-col'>
     <div class='cell'>
       <div class="row" id='conditions'>
         <div class='w-220px col-md-3 col-sm-6'>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->report->executionCommon . $lang->report->begin;?></span>
+            <span class='input-group-addon'><?php echo $lang->report->execution . $lang->report->begin;?></span>
             <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
           </div>
         </div>
         <div class='w-220px col-md-3 col-sm-6'>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->report->executionCommon . $lang->report->end;?></span>
+            <span class='input-group-addon'><?php echo $lang->report->execution . $lang->report->end;?></span>
             <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
           </div>
         </div>

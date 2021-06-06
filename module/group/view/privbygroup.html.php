@@ -48,7 +48,7 @@
 <?php else:?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-  <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?> <i class="icon icon-chevron-right"></i></span>
+    <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?> <i class="icon icon-chevron-right"></i></span>
     <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
     <?php $active = empty($menu) ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, '')), "<span class='text'>{$lang->group->all}</span>", '', "class='btn btn-link $active'")?>
@@ -56,14 +56,14 @@
     <?php foreach($lang->mainNav as $module => $title):?>
     <?php if(!is_string($title)) continue;?>
     <?php $active = $menu == $module ? 'btn-active-text' : '';?>
-    <?php echo html::a(inlink('managePriv', sprintf($params, $module)), "<span class='text'>" . substr($title, 0, strpos($title, '|')) . '</span>', '', "class='btn btn-link $active'")?>
+    <?php echo html::a(inlink('managePriv', sprintf($params, $module)), "<span class='text'>" . strip_tags(substr($title, 0, strpos($title, '|'))) . '</span>', '', "class='btn btn-link $active'")?>
     <?php endforeach;?>
 
     <?php $active = $menu == 'other' ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), "<span class='text'>{$lang->group->other}</span>", '', "class='btn btn-link $active'");?>
 
     <div class='input-control space w-150px'>
-    <?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control chosen'");?>
+      <?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control chosen'");?>
     </div>
   </div>
 </div>
@@ -160,7 +160,7 @@ $(document).ready(function()
     })
 
     /**
-     * 勾选浏览列表标签时，自动勾选下面的所有标签。 
+     * 勾选浏览列表标签时，自动勾选下面的所有标签。
      * Check all tabs when the Browse list tab is selected.
      */
     $('.menus input[value=browse]').change(function()

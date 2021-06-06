@@ -77,7 +77,7 @@
                 <?php $vars = "releaseID={$release->id}&type=story&link=$link&param=$param&orderBy=%s";?>
                 <thead>
                   <tr>
-                    <th class='c-id text-left'>
+                    <th class='c-id text-left w-110px'>
                       <?php if(($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
                       <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                         <label></label>
@@ -115,7 +115,7 @@
                       ?>
                     </td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
-                    <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+                    <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                     <td>
                       <span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
                     </td>

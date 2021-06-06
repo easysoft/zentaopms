@@ -3,6 +3,7 @@ $(function()
     $('#parent').change(function()
     {
         var programID = $(this).val();
+        setAclList(programID);
 
         /* Determine whether the project can change the project set. */
         link = createLink('project', 'ajaxCheckProduct', 'programID=' + programID + '&projectID=' + projectID);

@@ -1,8 +1,6 @@
 <?php
 global $config;
 
-$lang->my->common = '我的地盘';
-
 /* 方法列表。*/
 $lang->my->index           = '首页';
 $lang->my->todo            = '我的待办';
@@ -14,6 +12,7 @@ $lang->my->bug             = '我的Bug';
 $lang->my->testTask        = '我的版本';
 $lang->my->testCase        = '我的用例';
 $lang->my->story           = "我的{$lang->SRCommon}";
+$lang->my->doc             = "我的文档";
 $lang->my->createProgram   = '添加项目';
 $lang->my->project         = "我的项目";
 $lang->my->execution       = "我的{$lang->executionCommon}";
@@ -42,11 +41,18 @@ $lang->my->testtask        = '我的测试单';
 $lang->my->testcase        = '我的用例';
 $lang->my->storyConcept    = $config->URAndSR ? '默认需求概念组合' : '默认需求概念';
 
+$lang->my->indexAction      = '地盘仪表盘';
+$lang->my->calendarAction   = '我的日程';
+$lang->my->workAction       = '我的待处理';
+$lang->my->contributeAction = '我的贡献';
+$lang->my->profileAction    = '个人档案';
+$lang->my->dynamicAction    = '动态';
+
 $lang->my->myExecutions = "我参与的阶段/冲刺/迭代";
 $lang->my->name         = '名称';
 $lang->my->code         = '代号';
 $lang->my->projects     = '所属项目';
-$lang->my->executions   = '所属' . $lang->executionCommon;
+$lang->my->executions   = "所属{$lang->executionCommon}";
 
 $lang->my->executionMenu = new stdclass();
 $lang->my->executionMenu->undone = '未结束';
@@ -61,6 +67,7 @@ $lang->my->taskMenu->canceledByMe = '由我取消';
 
 $lang->my->storyMenu = new stdclass();
 $lang->my->storyMenu->assignedToMe = '指派给我';
+$lang->my->storyMenu->reviewByMe   = '待我评审';
 $lang->my->storyMenu->openedByMe   = '由我创建';
 $lang->my->storyMenu->reviewedByMe = '由我评审';
 $lang->my->storyMenu->closedByMe   = '由我关闭';
@@ -80,7 +87,8 @@ $lang->my->form->lblAccount = '帐号信息';
 $lang->my->programLink   = '项目集默认着陆页';
 $lang->my->productLink   = '产品默认着陆页';
 $lang->my->projectLink   = '项目默认着陆页';
-$lang->my->executionLink = '执行默认着陆页';
+if($config->systemMode == 'classic') $lang->my->executionLink = $lang->executionCommon . '默认着陆页';
+if($config->systemMode == 'new') $lang->my->executionLink = '执行默认着陆页';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '默认进入项目集列表，可以查看所有的项目集';
@@ -99,6 +107,10 @@ $lang->my->projectLinkList['project-execution'] = '默认进入项目下所有�
 $lang->my->projectLinkList['project-index']     = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
 
 $lang->my->executionLinkList = array();
-$lang->my->executionLinkList['execution-index'] = '默认进入执行仪表盘，可以了解所有执行的统计数据和概况';
-$lang->my->executionLinkList['execution-all']   = '默认进入执行列表，可以查看所有的执行';
-$lang->my->executionLinkList['execution-task']  = '默认进入最近一个执行的任务列表，可以查看当前迭代下的任务信息';
+if($config->systemMode == 'new')
+{
+    $lang->my->executionLinkList['execution-task']  = '默认进入最近一个执行的任务列表，可以查看当前迭代下的任务信息';
+    $lang->my->executionLinkList['execution-index'] = '默认进入执行仪表盘，可以了解所有执行的统计数据和概况';
+    $lang->my->executionLinkList['execution-all']   = '默认进入执行列表，可以查看所有的执行';
+}
+if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = "默认进入最近一个{$lang->executionCommon}的任务列表，可以查看当前{$lang->executionCommon}下的任务信息";

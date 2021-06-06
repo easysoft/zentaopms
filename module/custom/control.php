@@ -19,7 +19,11 @@ class custom extends control
      */
     public function index()
     {
-        if(common::hasPriv('custom', 'set')) die(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
+        if(($this->config->systemMode == 'new') and common::hasPriv('custom', 'set'))
+        {
+            die(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
+        }
+
         if(common::hasPriv('custom', 'product'))   die(js::locate(inlink('product')));
         if(common::hasPriv('custom', 'execution')) die(js::locate(inlink('execution')));
 
@@ -54,6 +58,11 @@ class custom extends control
             $unitList = zget($this->config->$module, 'unitList', '');
             $this->view->unitList        = explode(',', $unitList);
             $this->view->defaultCurrency = zget($this->config->$module, 'defaultCurrency', 'CNY');
+        }
+        if($module == 'story' and $field == 'reviewRules')
+        {
+            $this->app->loadConfig($module);
+            $this->view->reviewRule = zget($this->config->$module, 'reviewRules', '1');
         }
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
@@ -100,6 +109,11 @@ class custom extends control
             elseif($module == 'story' and $field == 'review')
             {
                 $data = fixer::input('post')->join('forceReview', ',')->get();
+                $this->loadModel('setting')->setItems("system.$module", $data);
+            }
+            elseif($module == 'story' and $field == 'reviewRules')
+            {
+                $data = fixer::input('post')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
             elseif($module == 'testcase' and $field == 'review')
@@ -207,7 +221,7 @@ class custom extends control
         $this->view->fieldList   = $fieldList;
         $this->view->dbFields    = $dbFields;
         $this->view->field       = $field;
-        $this->view->lang2Set     = str_replace('_', '-', $lang);
+        $this->view->lang2Set    = str_replace('_', '-', $lang);
         $this->view->module      = $module;
         $this->view->currentLang = $currentLang;
         $this->view->canAdd      = strpos($this->config->custom->canAdd[$module], $field) !== false;
@@ -284,8 +298,8 @@ class custom extends control
 
         if($moduleName == 'doc')
         {
-            unset($requiredFields['createLib']);
-            unset($requiredFields['editLib']);
+            unset($requiredFields['createlib']);
+            unset($requiredFields['editlib']);
         }
 
         $this->view->title      = $this->lang->custom->required;
@@ -332,7 +346,6 @@ class custom extends control
 
         unset($this->lang->admin->menu->custom['subModule']);
         $this->lang->admin->menu->system['subModule'] = 'custom';
-        $this->lang->custom->menu = $this->lang->admin->menu;
 
         $this->view->title = $this->lang->custom->timezone;
         $this->view->position[] = $this->lang->custom->timezone;
@@ -347,14 +360,6 @@ class custom extends control
      */
     public function browseStoryConcept()
     {
-        /* Process menu.*/
-        $this->app->loadLang('custom');
-        $this->lang->custom->menu = $this->lang->subject->menu;
-        $this->lang->navGroup->custom = 'admin';
-        $this->lang->admin->menu->model['subModule'] .= ',custom';
-        $key = array_search('custom', $this->lang->noMenuModule);
-        if($key !== false) unset($this->lang->noMenuModule[$key]);
-
         $this->view->title      = $this->lang->custom->browseStoryConcept;
         $this->view->position[] = $this->lang->custom->browseStoryConcept;
         $this->view->URSRList   = $this->custom->getURSRList();
@@ -514,6 +519,7 @@ class custom extends control
         {
             $this->custom->setConcept();
             $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->post->URAndSR);
+            if(!isset($this->config->maxVersion)) $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             $this->app->loadLang('common');
             $locate = inlink('flow');
@@ -544,7 +550,7 @@ class custom extends control
         $mode = zget($this->config->global, 'mode', 'classic');
         if($mode == 'new')
         {
-            if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') $this->locate($this->createLink('upgrade', 'mergeProgram'));
+            if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') die(js::locate($this->createLink('upgrade', 'mergeProgram'), 'parent'));
 
             unset($_SESSION['upgrading']);
             $this->locate(inlink('index'));
@@ -718,7 +724,7 @@ class custom extends control
             $data = fixer::input('post')->join('showLibs', ',')->get();
             if(isset($data->showLibs)) $data = $data->showLibs;
             $this->loadModel('setting')->setItem("{$this->app->user->account}.doc.custom.showLibs", $data);
-            die(js::reload('parent.parent'));
+            die(js::reload('parent'));
         }
     }
 

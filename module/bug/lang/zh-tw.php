@@ -17,8 +17,9 @@ $lang->bug->branch           = '分支/平台';
 $lang->bug->productplan      = '所屬' . '計劃';
 $lang->bug->module           = '所屬模組';
 $lang->bug->moduleAB         = '模組';
+$lang->bug->project          = '所屬項目';
 $lang->bug->execution        = '所屬' . $lang->executionCommon;
-$lang->bug->story            = "相關{$lang->SRCommon}";
+$lang->bug->story            = "相關需求";
 $lang->bug->storyVersion     = "{$lang->SRCommon}版本";
 $lang->bug->color            = '標題顏色';
 $lang->bug->task             = '相關任務';
@@ -159,6 +160,7 @@ $lang->bug->createBuild   = '創建';
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
 $lang->bug->legendAttatch               = '附件';
+$lang->bug->legendPRJExecStoryTask      = "項目/" . $lang->executionCommon . "/{$lang->SRCommon}/任務";
 $lang->bug->legendExecStoryTask         = $lang->executionCommon . "/{$lang->SRCommon}/任務";
 $lang->bug->lblTypeAndSeverity          = '類型/嚴重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系統/瀏覽器';
@@ -179,6 +181,7 @@ $lang->bug->remindTask            = '該Bug已經轉化為任務，是否更新�
 $lang->bug->skipClose             = 'Bug %s 不是已解決狀態，不能關閉。';
 $lang->bug->executionAccessDenied = "您無權訪問該Bug所屬的{$lang->executionCommon}！";
 $lang->bug->stepsNotEmpty         = "重現步驟不能為空。";
+$lang->bug->confirmUnlinkBuild    = "更換解决版本將取消與舊版本的關聯，您確定取消該bug與%s的關聯嗎？";
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步驟]</p><br/>";

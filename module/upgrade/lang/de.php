@@ -51,7 +51,9 @@ $lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard
 $lang->upgrade->afterDeleted  = 'File is not deleted. Please refresh after you delete it.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->to15Guide     = 'ZenTao open source version 15.0.beta1 upgrade';
+$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15.0.beta1 upgrade';
+$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10.0.rc1 upgrade';
+$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5.0.rc1 upgrade';
 $lang->upgrade->to15Desc      = <<<EOD
 <p>Dear users, ZenTao has made adjustments to navigation and concepts since version 15. The main changes are as follows:</p>
 <ol>
@@ -116,5 +118,9 @@ $lang->upgrade->mergeByProduct     = "PRODUCT-BASED iterations: You can select m
 $lang->upgrade->mergeByProject     = "Independent iterations: You can select several iterations and merge them into one large project, or merge them independently";
 $lang->upgrade->mergeByMoreLink    = "Iteration that relates multiple products: select which product the iteration belongs to.";
 $lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
+
+$lang->upgrade->needBuild4Add    = 'Full text retrieval has been added in this upgrad. Please create an index.';
+$lang->upgrade->needBuild4Adjust = 'Full text retrieval has been adjusted. Please create an index.';
+$lang->upgrade->buildIndex       = 'Create Index';
 
 include dirname(__FILE__) . '/version.php';

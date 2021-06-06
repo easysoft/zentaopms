@@ -29,6 +29,7 @@ $lang->company->guest    = '匿名登录';
 $lang->company->admins   = '管理员';
 
 $lang->company->product   = $lang->productCommon;
+$lang->company->project   = '项目';
 $lang->company->execution = $lang->executionCommon;
 $lang->company->user      = '用户';
 

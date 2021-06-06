@@ -14,6 +14,14 @@ class testreport extends control
     public $projectID = 0;
 
     /**
+     * All products.
+     *
+     * @var    array
+     * @access public
+     */
+    public $products = array();
+
+    /**
      * Construct
      *
      * @param  string $moduleName
@@ -36,18 +44,26 @@ class testreport extends control
         $this->loadModel('user');
         $this->app->loadLang('report');
 
-        /* Set testreport menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
+        /* Get product data. */
+        $objectID = 0;
+        if($this->app->openApp == 'project')
         {
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $objectID = $this->session->project;
+            $products  = $this->loadModel('project')->getProducts($objectID, false);
         }
-        else 
-        {    
-            $this->lang->testreport->menu    = $this->lang->projectQa->menu;
-            $this->lang->testreport->subMenu = $this->lang->projectQa->subMenu;
+        elseif($this->app->openApp == 'execution')
+        {
+            $objectID = $this->session->execution;
+            $products = $this->loadModel('execution')->getProducts($objectID, false);
         }
+        else
+        {
+            $products = $this->product->getPairs();
+        }
+
+        $this->view->products = $this->products = $products;
+        $openApp = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
+        if(empty($this->products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testreport&objectID=$objectID")));
     }
 
     /**
@@ -65,8 +81,8 @@ class testreport extends control
      */
     public function browse($objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if($objectType != 'product' and $objectType != 'project') die('Type Error!');
-        $this->session->set('reportList', $this->app->getURI(true));
+        if(strpos('product|execution|project', $objectType) === false) die('Type Error!');
+        $this->session->set('reportList', $this->app->getURI(true), $this->app->openApp);
 
         $objectID = $this->commonAction($objectID, $objectType);
         $object   = $this->$objectType->getById($objectID);
@@ -81,9 +97,9 @@ class testreport extends control
 
         $reports = $this->testreport->getList($objectID, $objectType, $extra, $orderBy, $pager);
 
-        if($objectType == 'project' and isset($_POST['taskIdList']))
+        if(strpos('project|execution', $objectType) !== false and ($extra or isset($_POST['taskIdList'])))
         {
-            $taskIdList = $_POST['taskIdList'];
+            $taskIdList = isset($_POST['taskIdList']) ? $_POST['taskIdList'] : array($extra);
             foreach($reports as $reportID => $report)
             {
                 $tasks = explode(',', $report->tasks);
@@ -96,10 +112,10 @@ class testreport extends control
         {
             $param = '';
             if($objectType == 'product' and $extra) $param = "objectID=$extra&objectType=testtask";
-            if($objectType == 'project')
+            if(($objectType == 'project' or $objectType == 'execution') and ($extra or !empty($_POST['taskIdList'])))
             {
-                $param = "objectID=$objectID&objectType=project";
-                if(isset($_POST['taskIdList'])) $param .= '&extra=' . join(',', $_POST['taskIdList']);
+                $param  = "objectID=$objectID&objectType=$objectType";
+                $param .= isset($_POST['taskIdList']) ? '&extra=' . join(',', $_POST['taskIdList']) : '&extra=' . $extra;
             }
             if($param) $this->locate($this->createLink('testreport', 'create', $param));
         }
@@ -149,6 +165,7 @@ class testreport extends control
             $reportID = $this->testreport->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('testreport', $reportID, 'Opened');
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $reportID));
             die(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
         }
 
@@ -179,6 +196,9 @@ class testreport extends control
                 $productID = $this->commonAction($task->product, 'product');
             }
             $this->view->taskPairs = $taskPairs;
+
+            if($this->app->openApp == 'execution') $this->execution->setMenu($task->execution);
+            if($this->app->openApp == 'project') $this->project->setMenu($task->project);
         }
 
         if(empty($objectID)) die(js::alert($this->lang->testreport->noObjectID) . js::locate('back'));
@@ -215,14 +235,14 @@ class testreport extends control
             $this->view->position[]  = $this->lang->testreport->create;
             $this->view->reportTitle = date('Y-m-d') . " TESTTASK#{$task->id} {$task->name} {$this->lang->testreport->common}";
         }
-        elseif($objectType == 'project')
+        elseif($objectType == 'execution')
         {
-            $executionID = $this->commonAction($objectID, 'execution');
+            $executionID = $this->commonAction($objectID, $objectType);
             if($executionID != $objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
-            $execution = $this->execution->getById($executionID);
-            $tasks     = $this->testtask->getExecutionTasks($executionID);
-            $owners    = array();
+            $execution     = $this->execution->getById($executionID);
+            $tasks         = $this->testtask->getExecutionTasks($executionID);
+            $owners        = array();
             $buildIdList   = array();
             $productIdList = array();
             foreach($tasks as $i => $task)
@@ -244,6 +264,18 @@ class testreport extends control
                 die(js::locate('back'));
             }
 
+            if($this->app->openApp == 'qa')
+            {
+                $productID = $this->product->saveState(key($productIdList), $this->products);
+                $this->loadModel('qa')->setMenu($this->products, $productID);
+            }
+            elseif($this->app->openApp == 'project')
+            {
+                $projects  = $this->project->getPairsByProgram();
+                $projectID = $this->project->saveState($execution->project, $projects);
+                $this->project->setMenu($projectID);
+            }
+
             $builds  = $this->build->getByList($buildIdList);
             $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getExecutionStories($execution->id);;
 
@@ -255,9 +287,9 @@ class testreport extends control
             $this->view->title       = $execution->name . $this->lang->testreport->create;
             $this->view->position[]  = html::a(inlink('browse', "objectID=$executionID&objectType=execution"), $execution->name);
             $this->view->position[]  = $this->lang->testreport->create;
-            $this->view->reportTitle = date('Y-m-d') . " PROJECT#{$execution->id} {$execution->name} {$this->lang->testreport->common}";
-
+            $this->view->reportTitle = date('Y-m-d') . " EXECUTION#{$execution->id} {$execution->name} {$this->lang->testreport->common}";
         }
+
         $cases   = $this->testreport->getTaskCases($tasks, $begin, $end);
         $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $begin, $end, $builds);
         $this->view->begin   = $begin;
@@ -278,8 +310,13 @@ class testreport extends control
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
 
-        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $cases, $begin, $end);
-        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $begin, $end);
+        $caseList = array();
+        foreach($cases as $taskID => $casesList)
+        {
+            foreach($casesList as $caseID => $case) $caseList[$caseID] = $case;
+        }
+        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, array_keys($caseList), $begin, $end);
+        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, array_keys($caseList), $begin, $end);
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
         $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
@@ -296,12 +333,13 @@ class testreport extends control
     /**
      * Edit report
      *
-     * @param  int    $reportID
-     * @param  string $from
+     * @param  int       $reportID
+     * @param  string    $begin
+     * @param  string    $end
      * @access public
      * @return void
      */
-    public function edit($reportID, $from = 'product', $begin = '', $end ='')
+    public function edit($reportID, $begin = '', $end ='')
     {
         if($_POST)
         {
@@ -313,14 +351,15 @@ class testreport extends control
             $actionID   = $this->loadModel('action')->create('testreport', $reportID, 'Edited', $fileAction);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
-            die(js::locate(inlink('view', "reportID=$reportID&from=$from"), 'parent'));
+            die(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
         }
 
         $report    = $this->testreport->getById($reportID);
         $execution = $this->execution->getById($report->execution);
         $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $report->begin;
         $end       = !empty($end) ? date("Y-m-d", strtotime($end)) : $report->end;
-        if($from == 'product' and is_numeric($report->product))
+
+        if($this->app->openApp == 'qa' and !empty($report->product))
         {
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
@@ -330,12 +369,20 @@ class testreport extends control
             $this->view->position[] = html::a($browseLink, $product->name);
             $this->view->position[] = $this->lang->testreport->edit;
         }
-        else
+        elseif($this->app->openApp == 'execution' or $this->app->openApp == 'project')
         {
-            $executionID = $this->commonAction($report->execution, 'execution');
-            if($executionID != $report->objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($this->app->openApp == 'execution')
+            {
+                $objectID = $this->commonAction($report->execution, 'execution');
+                if($objectID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            }
+            else
+            {
+                $objectID = $this->commonAction($report->project, 'project');
+                if($objectID != $report->project) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            }
 
-            $browseLink = inlink('browse', "objectID=$executionID&objectType=project");
+            $browseLink = inlink('browse', "objectID=$objectID&objectType=execution");
             $this->view->position[] = html::a($browseLink, $execution->name);
             $this->view->position[] = $this->lang->testreport->edit;
         }
@@ -364,7 +411,7 @@ class testreport extends control
 
             $this->setChartDatas($report->objectID);
         }
-        else
+        elseif($report->objectType == 'execution')
         {
             $tasks = $this->testtask->getByList($report->tasks);
             $productIdList[$report->product] = $report->product;
@@ -382,7 +429,6 @@ class testreport extends control
         $this->view->title = $report->title . $this->lang->testreport->edit;
 
         $this->view->report        = $report;
-        $this->view->from          = $from;
         $this->view->begin         = $begin;
         $this->view->end           = $end;
         $this->view->stories       = $stories;
@@ -392,14 +438,14 @@ class testreport extends control
         $this->view->tasks         = join(',', array_keys($tasks));
         $this->view->storySummary  = $this->product->summary($stories);
 
-        $this->view->builds  = $builds;
-        $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
+        $this->view->builds = $builds;
+        $this->view->users  = $this->user->getPairs('noletter|noclosed|nodeleted');
 
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
 
-        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $cases, $begin, $end);
-        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $begin, $end);
+        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $report->cases, $begin, $end);
+        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $report->cases, $begin, $end);
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
         $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
@@ -414,7 +460,6 @@ class testreport extends control
      * View report.
      *
      * @param  int    $reportID
-     * @param  string $from
      * @param  string $tab
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -422,14 +467,15 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function view($reportID, $from = 'product', $tab = 'basic', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function view($reportID, $tab = 'basic', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $report  = $this->testreport->getById($reportID);
+        $reportID = (int)$reportID;
+        $report   = $this->testreport->getById($reportID);
         if(!$report) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->session->PRJ = $report->project;
+        $this->session->project = $report->project;
 
         $execution = $this->execution->getById($report->execution);
-        if($from == 'product' and is_numeric($report->product))
+        if($this->app->openApp == 'qa' and !empty($report->product))
         {
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
@@ -438,12 +484,20 @@ class testreport extends control
             $browseLink = inlink('browse', "objectID=$productID&objectType=product");
             $this->view->position[] = html::a($browseLink, $product->name);
         }
-        else
+        elseif($this->app->openApp == 'execution' or $this->app->openApp == 'project')
         {
-            $executionID = $this->commonAction($report->execution, 'execution');
-            if($executionID != $report->objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($this->app->openApp == 'execution')
+            {
+                $objectID = $this->commonAction($report->execution, 'execution');
+                if($objectID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            }
+            else
+            {
+                $objectID = $this->commonAction($report->project, 'project');
+                if($objectID != $report->project) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            }
 
-            $browseLink = inlink('browse', "objectID=$executionID&objectType=project");
+            $browseLink = inlink('browse', "objectID=$objectID&objectType=execution");
             $this->view->position[] = html::a($browseLink, $execution->name);
         }
 
@@ -462,11 +516,10 @@ class testreport extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $tasks      = $report->tasks ? $this->testtask->getByList($report->tasks) : array();;
-        $builds     = $report->builds ? $this->build->getByList($report->builds) : array();
-        $cases      = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases, $pager);
-        $caseIdList = $this->testreport->getCaseIdList($reportID);
-        $bugInfo    = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
+        $tasks   = $report->tasks ? $this->testtask->getByList($report->tasks) : array();;
+        $builds  = $report->builds ? $this->build->getByList($report->builds) : array();
+        $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end);
+        $bugInfo = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
 
         if($report->objectType == 'testtask')
         {
@@ -488,15 +541,15 @@ class testreport extends control
         $this->view->stories   = $stories;
         $this->view->bugs      = $report->bugs ? $this->bug->getByList($report->bugs) : array();
         $this->view->builds    = $builds;
-        $this->view->cases     = $cases;
+        $this->view->cases     = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases, $pager);
         $this->view->users     = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->actions   = $this->loadModel('action')->getList('testreport', $reportID);
 
         $this->view->storySummary = $this->product->summary($stories);
-        $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $caseIdList, $report->begin, $report->end);
+        $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $cases, $report->begin, $report->end);
 
-        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $caseIdList, $report->begin, $report->end);
-        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $caseIdList, $report->begin, $report->end);
+        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $report->cases, $report->begin, $report->end);
+        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $report->cases, $report->begin, $report->end);
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
         $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
@@ -539,21 +592,23 @@ class testreport extends control
     {
         if($objectType == 'product')
         {
-            $projectID      = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->PRJ;
-            $this->products = $this->product->getProductPairsByProject($projectID);
-            if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=testreport&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=report')));
-            $productID      = $this->product->saveState($objectID, $this->products);
-            $this->testreport->setMenu($this->products, $productID);
+            $productID = $this->product->saveState($objectID, $this->products);
+            $this->loadModel('qa')->setMenu($this->products, $productID);
             return $productID;
+        }
+        elseif($objectType == 'execution')
+        {
+            $executions  = $this->execution->getPairs();
+            $executionID = $this->execution->saveState($objectID, $executions);
+            $this->execution->setMenu($executionID);
+            return $executionID;
         }
         elseif($objectType == 'project')
         {
-            $this->executions = $this->execution->getPairs($this->session->PRJ, 'all', 'nocode');
-            $executionID      = $this->execution->saveState($objectID, $this->executions);
-            $this->execution->setMenu($this->executions, $executionID);
-            $this->lang->testreport->menu = $this->lang->execution->menu;
-            $this->lang->menugroup->testreport = 'execution';
-            return $executionID;
+            $projects  = $this->project->getPairsByProgram();
+            $projectID = $this->project->saveState($objectID, $projects);
+            $this->project->setMenu($projectID);
+            return $projectID;
         }
     }
 

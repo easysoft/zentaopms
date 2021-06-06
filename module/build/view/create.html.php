@@ -19,11 +19,17 @@
     </div>
     <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
       <table class='table table-form'>
+        <?php if($openApp == 'project'):?>
+        <tr>
+          <th><?php echo $lang->executionCommon;?></th>
+          <td><?php echo html::select('execution', $executions, $executionID, "onchange='loadProducts(this.value);' class='form-control chosen' required");?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->build->product;?></th>
           <?php if(!empty($products)):?>
           <td>
-            <div class='input-group'>
+            <div class='input-group' id='productBox'>
               <?php echo html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>
               <?php
               if(!empty($product) and $product->type != 'normal' and isset($branches[$product->branch]))
@@ -34,10 +40,14 @@
               ?>
             </div>
           </td>
-          <td></td>
           <?php else:?>
-          <td class='text-muted' colspan='2'><?php printf($lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate"));?></td>
+          <td>
+            <div class='input-group' id='productBox'>
+              <?php printf($lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), $openApp);?>
+            </div>
+          </td>
           <?php endif;?>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->build->name;?></th>

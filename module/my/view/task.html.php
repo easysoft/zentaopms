@@ -34,7 +34,7 @@
   </div>
   <?php else:?>
   <form id='myTaskForm' class="main-table table-task" method="post">
-    <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
+    <?php $canBatchEdit  = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
     <table class="table has-sort-head table-fixed" id='taskTable'>
       <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
@@ -50,7 +50,6 @@
           </th>
           <th class='c-pri w-40px'>        <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-name'>              <?php common::printOrderLink('name',       $orderBy, $vars, $lang->task->name);?></th>
-          <th class='c-project w-120px'>   <?php common::printOrderLink('project',    $orderBy, $vars, $lang->task->project);?></th>
           <th class='c-project w-120px'>   <?php common::printOrderLink('execution',  $orderBy, $vars, $lang->my->executions);?></th>
           <?php if($type != 'openedBy'): ?>
           <th class='c-user w-90px'>       <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
@@ -88,7 +87,6 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color' data-group='execution'");?>
             <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
-          <td class='c-project' title="<?php echo zget($projects, $task->project, '');?>"><?php echo zget($projects, $task->project, '');?></td>
           <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution", '', '', $task->project), $task->executionName, '', "data-group='execution'");?></td>
           <?php if($type != 'openedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
@@ -99,9 +97,9 @@
           <?php if($type != 'finishedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
           <?php endif;?>
-          <td class='c-hours' title="<?php echo round($task->estimate, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->estimate, 1) . ' ' . $lang->execution->workHourUnit;?></td>
-          <td class='c-hours' title="<?php echo round($task->consumed, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->consumed, 1) . ' ' . $lang->execution->workHourUnit;?></td>
-          <td class='c-hours' title="<?php echo round($task->left,     1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->left,     1) . ' ' . $lang->execution->workHourUnit;?></td>
+          <td class='c-hours' title="<?php echo round($task->estimate, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->estimate, 1) . $lang->execution->workHourUnit;?></td>
+          <td class='c-hours' title="<?php echo round($task->consumed, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->consumed, 1) . $lang->execution->workHourUnit;?></td>
+          <td class='c-hours' title="<?php echo round($task->left,     1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->left,     1) . $lang->execution->workHourUnit;?></td>
           <td class='c-status'>
             <?php $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));?>
             <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->my->storyChanged}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");?>
@@ -123,8 +121,8 @@
                     common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, '', '', $task->project);
 
                     common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true, '', '', $task->project);
-                    common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list', '', '', '', '', 'data-group="execution"', '', $task->project);
-                    common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'split', '', '', '', 'data-group="project"', $this->lang->task->children, $task->project);
+                    common::printIcon('task', 'edit', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, "data-width='95%'", '', $task->project);
+                    common::printIcon('task', 'batchCreate', "executionID=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=true", $task, 'list', 'split', '', 'iframe', true, "data-width='95%'", $this->lang->task->children, $task->project);
                 }
             }
             ?>
@@ -150,7 +148,6 @@
               <?php if($child->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
               <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color' data-group='project'");?>
             </td>
-            <td class='c-project'><?php echo zget($projects, $child->project, '');?></td>
             <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project", '', '', $child->project), $child->executionName, '', "data-group='execution'");?></td>
             <?php if($type != 'openedBy'): ?>
             <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
@@ -186,7 +183,7 @@
 
                       common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true, '', '', $child->project);
                       common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list', '', '', '', '', 'data-group="execution"', '', $child->project);
-                      common::printIcon('task', 'batchCreate', "project=$child->project&storyID=$child->story&moduleID=$child->module&taskID=$child->id&ifame=0", $child, 'list', 'split', '', '', '', 'data-group="project"', $this->lang->task->children, $child->project);
+                      common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=true", $child, 'list', 'split', '', 'iframe', true, 'data-group="execution"', $this->lang->task->children, $child->project);
                   }
               }
               ?>
@@ -199,11 +196,18 @@
       </tbody>
     </table>
     <div class="table-footer">
-      <?php if($canBatchClose):?>
+      <?php if($canBatchClose or $canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <?php endif;?>
       <div class="table-actions btn-toolbar">
       <?php
+      if($canBatchEdit)
+      {
+          $actionLink = $this->createLink('task', 'batchEdit');
+          $misc       = "data-form-action='$actionLink'";
+          echo html::commonButton($lang->edit, $misc);
+      }
+
       if($canBatchClose)
       {
           $actionLink = $this->createLink('task', 'batchClose', null, '', '', $task->project);

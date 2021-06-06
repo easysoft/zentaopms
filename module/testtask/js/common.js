@@ -54,7 +54,11 @@ function createBug(obj)
 
     var onlybody    = config.onlybody;
     config.onlybody = 'no';
-    window.open(createLink('bug', 'create', params + ',stepIdList=' + stepIdList), '_parent');
+
+    var link = createLink('bug', 'create', params + ',stepIdList=' + stepIdList);
+    if(onlybody = 'yes') link += '#app=qa';
+    window.parent.$.apps.open(link);
+
     config.onlybody = onlybody;
 }
 
@@ -87,6 +91,25 @@ function loadExecutionBuilds(executionID)
     {
         $('#resolvedBuild').attr('id', 'build').attr('name', 'build').find('option[value=trunk]').remove();
         $('#build').chosen();
+    });
+}
+
+/**
+ * Load test report.
+ *
+ * @param  int    buildID
+ * @access public
+ * @return void
+ */
+function loadTestReports(buildID)
+{
+    link = createLink('testtask', 'ajaxGetTestReports', 'buildID=' + buildID);
+    $.get(link, function(data)
+    {
+        if(!data) data = '<select id="testreport" name="testreport" class="form-control"></select>';
+        $('#testreport').replaceWith(data);
+        $('#testreport_chosen').remove();
+        $("#testreport").chosen();
     });
 }
 

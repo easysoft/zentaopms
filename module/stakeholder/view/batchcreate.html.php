@@ -22,7 +22,7 @@
       <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
     </div>
     <?php if($project->parent and $config->systemMode == 'new'):?>
-    <?php echo html::a($this->createLink('stakeholder', 'batchcreate', "dept=&parent=$project->parent"), $lang->program->importStakeholder, '', 'class="btn btn-primary"');?>
+    <?php echo html::a($this->createLink('stakeholder', 'batchcreate', "projectID={$projectID}&dept=&parent=$project->parent"), $lang->program->importStakeholder, '', 'class="btn btn-primary"');?>
     <?php endif;?>
   </div>
 </div>

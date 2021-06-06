@@ -191,7 +191,8 @@ class userModel extends model
     /**
      * Get user info by ID.
      *
-     * @param  int    $userID
+     * @param  mix    $userID
+     * @param  string    $field id|account
      * @access public
      * @return object|bool
      */
@@ -232,7 +233,7 @@ class userModel extends model
      * Create a user.
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function create()
     {
@@ -301,6 +302,8 @@ class userModel extends model
             $this->loadModel('action')->create('user', $userID, 'Created');
             $this->loadModel('mail');
             if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
+
+            return $userID;
         }
     }
 
@@ -309,7 +312,7 @@ class userModel extends model
      *
      * @param  int    $users
      * @access public
-     * @return void
+     * @return array
      */
     public function batchCreate()
     {
@@ -399,6 +402,7 @@ class userModel extends model
         }
 
         $this->loadModel('mail');
+        $userIDList = array();
         foreach($data as $user)
         {
             if($user->group)
@@ -412,7 +416,8 @@ class userModel extends model
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
 
             /* Fix bug #2941 */
-            $userID = $this->dao->lastInsertID();
+            $userID       = $this->dao->lastInsertID();
+            $userIDList[] = $userID;
             $this->loadModel('action')->create('user', $userID, 'Created');
 
             if(dao::isError())
@@ -426,6 +431,7 @@ class userModel extends model
                 if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
             }
         }
+        return $userIDList;
     }
 
     /**
@@ -793,7 +799,7 @@ class userModel extends model
             if(defined('IN_USE')) $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
 
             /* Create cycle todo in login. */
-            $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('account')->eq($user->account)->fetchAll('id');
+            $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq('0')->andWhere('account')->eq($user->account)->fetchAll('id');
             $this->loadModel('todo')->createByCycle($todoList);
         }
         return $user;
@@ -814,6 +820,7 @@ class userModel extends model
 
         $user->rights = $this->authorize($account);
         $user->groups = $this->getGroups($account);
+        $user->view   = $this->grantUserView($user->account, $user->rights['acls']);
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
@@ -836,6 +843,7 @@ class userModel extends model
 
         $user->rights = $this->authorize($account);
         $user->groups = $this->getGroups($account);
+        $user->view   = $this->grantUserView($user->account, $user->rights['acls']);
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
@@ -986,9 +994,9 @@ class userModel extends model
      */
     public function keepLogin($user)
     {
-        setcookie('keepLogin', 'on', $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        setcookie('za', $user->account, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        setcookie('zp', sha1($user->account . $user->password . $this->server->request_time), $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('keepLogin', 'on', $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('za', $user->account, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('zp', sha1($user->account . $user->password . $this->server->request_time), $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
     }
 
     /**
@@ -1020,15 +1028,18 @@ class userModel extends model
      * @param  string $account
      * @param  string $type project|execution
      * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
     public function getExecutions($account, $type = 'execution', $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        if($type == 'execution') $type = 'sprint,stage';
+        $projectType    = $type == 'execution' ? 'sprint,stage' : $type;
         $myProjectsList = $this->dao->select('t1. *,t2. *')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
-            ->where('t1.type')->in($type)
+            ->where('t1.type')->eq($type)
+            ->andWhere('t2.type')->in($projectType)
             ->beginIF(strpos('doing|wait|suspended|closed', $status) !== false)->andWhere('status')->eq($status)->fi()
             ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
@@ -1554,7 +1565,7 @@ class userModel extends model
             /* Get teams. */
             if($teams === null)
             {
-                $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,sprint,stage')->query();
+                $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,execution')->query();
                 while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
             }
 
@@ -1662,7 +1673,9 @@ class userModel extends model
         /* Get linked projects teams. */
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
-            ->where('type')->eq('project')
+            ->where('1=1')
+            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
+            ->beginIF($this->config->systemMode == 'classic')->andWhere('type')->eq('execution')->fi()
             ->andWhere('root')->in(array_keys($projectProducts))
             ->query();
 
@@ -2070,7 +2083,7 @@ class userModel extends model
         /* Get team group. */
         $teamGroups = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
-            ->where('type')->in('project,sprint,stage')
+            ->where('type')->in('project,execution')
             ->andWhere('root')->in(array_merge($sprintIdList, $parentIdList))
             ->query();
 
@@ -2286,7 +2299,7 @@ class userModel extends model
         }
 
         /* Judge sprint auth. */
-        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private')
+        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private' && $this->config->systemMode == 'new')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             $users[$parent->openedBy] = $parent->openedBy;
@@ -2366,6 +2379,43 @@ class userModel extends model
     }
 
     /**
+     * Get team members in object.
+     *
+     * @param  int    $objectID
+     * @param  string $type     project|execution
+     * @param  string $params
+     * @param  string $usersToAppended
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberPairs($objectID, $type = 'project', $params = '', $usersToAppended = '')
+    {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
+
+        $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
+        $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.root')->eq((int)$objectID)
+            ->andWhere('t1.type')->eq($type)
+            ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
+            ->andWhere('t2.deleted')->eq(0)
+            ->fi()
+            ->fetchAll($keyField);
+
+        if($usersToAppended) $users += $this->dao->select("id, account, realname")->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
+
+        if(!$users) return array('' => '');
+
+        foreach($users as $account => $user)
+        {
+            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
+            if(!empty($this->config->isINT)) $firstLetter = '';
+            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
+        }
+        return array('' => '') + $users;
+    }
+
+    /**
      * Judge an action is clickable or not.
      *
      * @param  object    $user
@@ -2437,7 +2487,7 @@ class userModel extends model
         $count   = 'count(*) AS count';
 
         $personalData = array();
-        $personalData['createdTodos']        = $this->dao->select($count)->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
+        $personalData['createdTodos']        = $this->dao->select($count)->from(TABLE_TODO)->where('account')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['createdRequirements'] = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('type')->eq('requirement')->fetch('count');
         $personalData['createdStories']      = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('type')->eq('story')->fetch('count');
         $personalData['createdBugs']         = $this->dao->select($count)->from(TABLE_BUG)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
@@ -2458,17 +2508,5 @@ class userModel extends model
             ->fetch('count');
 
         return $personalData;
-    }
-
-    /**
-     * Reset menu when from my module.
-     *
-     * @access public
-     * @return void
-     */
-    public function resetMenu()
-    {
-        $this->lang->navGroup->user = 'system';
-        $this->lang->noMenuModule[] = 'user';
     }
 }

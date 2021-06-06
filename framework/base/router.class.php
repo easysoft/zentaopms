@@ -376,13 +376,13 @@ class baseRouter
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);
 
+        $this->setCookieSecure();
+        $this->setOpenApp();
         $this->setSuperVars();
         $this->setDebug();
         $this->setErrorHandler();
         $this->setTimezone();
         $this->startSession();
-        $this->setProject();
-        $this->setOpenApp();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
@@ -600,7 +600,7 @@ class baseRouter
         $this->get     = new super('get');
         $this->server  = new super('server');
         $this->cookie  = new super('cookie');
-        $this->session = new super('session');
+        $this->session = new super('session', $this->openApp);
 
         unset($GLOBALS);
         unset($_REQUEST);
@@ -617,6 +617,18 @@ class baseRouter
         $_POST   = validater::filterSuper($_POST);
         $_GET    = validater::filterSuper($_GET);
         $_COOKIE = validater::filterSuper($_COOKIE);
+    }
+
+    /**
+     * Set cookieSecure config.
+     *
+     * @access public
+     * @return void
+     */
+    public function setCookieSecure()
+    {
+        $this->config->cookieSecure = false;
+        if($this->config->framework->setCookieSecure and isHttps()) $this->config->cookieSecure = true;
     }
 
     /**
@@ -841,7 +853,7 @@ class baseRouter
         {
             $sessionName = $this->config->sessionVar;
             session_name($sessionName);
-            session_set_cookie_params(0, $this->config->webRoot);
+            session_set_cookie_params(0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
             session_start();
 
@@ -855,18 +867,6 @@ class baseRouter
     }
 
     /**
-     * 从Get里取project id 设置到session中。
-     * Get project id from Get and set it to session.
-     *
-     * @access public
-     * @return void
-     */
-    public function setProject()
-    {
-        if(isset($_GET['PRJ'])) $this->session->set('PRJ', $_GET['PRJ']); //Set project id into session.
-    }
-
-    /**
      * 从cookie中获取当前的group, 即URL锚链接'#open=?'。
      * Get current group from cookie, original source is url '#open=?'.
      *
@@ -875,7 +875,15 @@ class baseRouter
      */
     public function setOpenApp()
     {
-        if(isset($_COOKIE['openApp'])) $this->openApp = $_COOKIE['openApp'];
+        if(isset($_COOKIE['openApp']) and $_COOKIE['openApp'])
+        {
+            $this->openApp = $_COOKIE['openApp'];
+        }
+        else
+        {
+            $module = $this->rawModule;
+            $this->openApp = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : 'my';
+        }
     }
 
     /**
@@ -906,7 +914,7 @@ class baseRouter
             $this->clientLang = $this->config->default->lang;
         }
 
-        setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+        setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
         if(!isset($_COOKIE['lang'])) $_COOKIE['lang'] = $this->clientLang;
 
         return true;
@@ -960,7 +968,7 @@ class baseRouter
             $this->clientTheme = $this->config->default->theme;
         }
 
-        setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+        setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
         if(!isset($_COOKIE['theme'])) $_COOKIE['theme'] = $this->clientTheme;
 
         return true;
@@ -986,7 +994,7 @@ class baseRouter
             $this->clientDevice = ($mobile->isMobile() and !$mobile->isTablet()) ? 'mobile' : 'desktop';
         }
 
-        setcookie('device', $this->clientDevice, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('device', $this->clientDevice, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if(!isset($_COOKIE['device'])) $_COOKIE['device'] = $this->clientDevice;
 
         return $this->clientDevice;
@@ -1830,7 +1838,6 @@ class baseRouter
         global $filter;
 
         /* Remove these three params. */
-        unset($passedParams['PRJ']);
         unset($passedParams['onlybody']);
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 
@@ -2269,6 +2276,9 @@ class baseRouter
         extract($trace[1]);
         $log .= ", last called by $file on line $line through function $function.\n";
 
+        /* Change absolute path to relative path. */
+        $log = str_replace($this->basePath, '', $log);
+
         /* 触发错误(Trigger the error) */
         trigger_error($log, $exit ? E_USER_ERROR : E_USER_WARNING);
     }
@@ -2477,9 +2487,10 @@ class super
      * @access  public
      * @return  void
      */
-    public function __construct($scope)
+    public function __construct($scope, $openApp = '')
     {
-        $this->scope = $scope;
+        $this->scope   = $scope;
+        $this->openApp = $openApp;
     }
 
     /**
@@ -2491,7 +2502,7 @@ class super
      * @access  public
      * @return  void
      */
-    public function set($key, $value)
+    public function set($key, $value, $openApp = '')
     {
         if($this->scope == 'post')
         {
@@ -2511,6 +2522,7 @@ class super
         }
         elseif($this->scope == 'session')
         {
+            if($openApp) $_SESSION["app-$openApp"][$key] = $value;
             $_SESSION[$key] = $value;
         }
         elseif($this->scope == 'env')
@@ -2558,6 +2570,8 @@ class super
         }
         elseif($this->scope == 'session')
         {
+            $openApp = $this->openApp;
+            if($openApp and isset($_SESSION["app-$openApp"][$key])) return $_SESSION["app-$openApp"][$key];
             if(isset($_SESSION[$key])) return $_SESSION[$key];
             return false;
         }

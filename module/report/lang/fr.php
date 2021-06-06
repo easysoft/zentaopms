@@ -9,16 +9,15 @@
  * @version     $Id: en.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        https://www.zentao.pm
  */
-$lang->report->common          = 'Rapports';
-$lang->report->index           = 'Accueil Rapports';
-$lang->report->list            = 'Rapports';
-$lang->report->item            = 'Item';
-$lang->report->value           = 'Valeur';
-$lang->report->percent         = '%';
-$lang->report->undefined       = 'N/D';
-$lang->report->query           = 'Requête';
-$lang->report->annual          = 'Résumé Annuel';
-$lang->report->executionCommon = 'Execution';
+$lang->report->index     = 'Accueil Rapports';
+$lang->report->list      = 'Rapports';
+$lang->report->item      = 'Item';
+$lang->report->value     = 'Valeur';
+$lang->report->percent   = '%';
+$lang->report->undefined = 'N/D';
+$lang->report->query     = 'Requête';
+$lang->report->annual    = 'Résumé Annuel';
+$lang->report->project   = 'Project';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -38,30 +37,30 @@ $lang->report->assign['assign']   = 'Affecté';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->executionDeviation = 'Dérive Effectué';
-$lang->report->productSummary     = 'Résumé ' . $lang->productCommon;
-$lang->report->bugCreate          = 'Résumé remontée Bugs';
-$lang->report->bugAssign          = 'Résumé affectation Bugs';
-$lang->report->workload           = 'Résumé charge travail';
-$lang->report->workloadAB         = 'Charge Travail';
-$lang->report->bugOpenedDate      = 'Bugs signalés de';
-$lang->report->beginAndEnd        = ' de';
-$lang->report->begin              = 'Begin';
-$lang->report->end                = 'End';
-$lang->report->dept               = 'Compartiment';
-$lang->report->deviationChart     = 'Graphique de Dérive d uEffectué' ;
+$lang->report->projectDeviation = 'Rapport de déviation du projet';
+$lang->report->productSummary   = 'Résumé ' . $lang->productCommon;
+$lang->report->bugCreate        = 'Résumé remontée Bugs';
+$lang->report->bugAssign        = 'Résumé affectation Bugs';
+$lang->report->workload         = 'Résumé charge travail';
+$lang->report->workloadAB       = 'Charge Travail';
+$lang->report->bugOpenedDate    = 'Bugs signalés de';
+$lang->report->beginAndEnd      = ' de';
+$lang->report->begin            = 'Begin';
+$lang->report->end              = 'End';
+$lang->report->dept             = 'Compartiment';
+$lang->report->deviationChart   = 'Courbe de déviation du projet';
 
 $lang->reportList = new stdclass();
-$lang->reportList->execution = new stdclass();
-$lang->reportList->product   = new stdclass();
-$lang->reportList->test      = new stdclass();
-$lang->reportList->staff     = new stdclass();
+$lang->reportList->project = new stdclass();
+$lang->reportList->product = new stdclass();
+$lang->reportList->test    = new stdclass();
+$lang->reportList->staff   = new stdclass();
 
-$lang->reportList->execution->lists[10] = 'Dériv Effectué|report|executiondeviation';
-$lang->reportList->product->lists[10]   = 'Résumé ' . $lang->productCommon . '|report|productsummary';
-$lang->reportList->test->lists[10]      = 'Résumé remontée Bugs|report|bugcreate';
-$lang->reportList->test->lists[13]      = 'Résumé affectation Bugs|report|bugassign';
-$lang->reportList->staff->lists[10]     = 'Résumé charge travail|report|workload';
+$lang->reportList->project->lists[10] = 'Dériv Effectué|report|projectdeviation';
+$lang->reportList->product->lists[10] = 'Résumé ' . $lang->productCommon . '|report|productsummary';
+$lang->reportList->test->lists[10]    = 'Résumé remontée Bugs|report|bugcreate';
+$lang->reportList->test->lists[13]    = 'Résumé affectation Bugs|report|bugassign';
+$lang->reportList->staff->lists[10]   = 'Résumé charge travail|report|workload';
 
 $lang->report->id            = 'ID';
 $lang->report->execution     = $lang->executionCommon;

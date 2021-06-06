@@ -17,7 +17,8 @@ $lang->bug->branch           = 'Branch/Platform';
 $lang->bug->productplan      = 'Kế hoạch';
 $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
-$lang->bug->execution        = $lang->executionCommon;
+$lang->bug->project          = 'Project';
+$lang->bug->execution        = $lang->execution->common;
 $lang->bug->story            = 'Câu chuyện';
 $lang->bug->storyVersion     = 'Phiên bản câu chuyện';
 $lang->bug->color            = 'Màu';
@@ -159,6 +160,7 @@ $lang->bug->createBuild   = 'Mới';
 /* Legend list。*/
 $lang->bug->legendBasicInfo             = 'Thông tin cơ bản';
 $lang->bug->legendAttatch               = 'Files';
+$lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
 $lang->bug->legendExecStoryTask         = $lang->executionCommon . '/Câu chuyện/Nhiệm vụ';
 $lang->bug->lblTypeAndSeverity          = 'Loại/Mức độ';
 $lang->bug->lblSystemBrowserAndHardware = 'Hệ thống/Trình duyệt';
@@ -179,6 +181,7 @@ $lang->bug->remindTask            = 'Bug này đã chuyển thành một nhiệm
 $lang->bug->skipClose             = 'Bug %s được kích hoạt. Bạn không thể đóng nó.';
 $lang->bug->executionAccessDenied = "Truy cập của bạn tới {$lang->executionCommon} mà Bug này sở hữu bị từ chối!";
 $lang->bug->stepsNotEmpty         = "The reproduction step cannot be empty.";
+$lang->bug->confirmUnlinkBuild    = "Replacing the solution version will disassociate the bug from the old version. Are you sure you want to disassociate the bug from %s?";
 
 /* Template. */
 $lang->bug->tplStep   = "<p>[Các bước]</p><br/>";

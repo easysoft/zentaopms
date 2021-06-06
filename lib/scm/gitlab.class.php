@@ -2,86 +2,83 @@
 class gitlab
 {
     public $client;
-    public $root;
+    public $projectID;
 
     /**
-     * Construct 
-     * 
-     * @param  string $client 
-     * @param  string $root 
+     * Construct
+     *
+     * @param  string    $client    gitlab api url.
+     * @param  string    $root      id of gitlab project.
+     * @param  string    $username  null
+     * @param  string    $password  token of gitlab api.
+     * @param  string    $encoding
      * @access public
      * @return void
      */
-    public function __construct($client, $token)
+    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8')
     {
-        putenv('LC_CTYPE=en_US.UTF-8');
-
         $this->client = $client;
-        $this->root   = rtrim($root, DIRECTORY_SEPARATOR);
-        $this->branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : '';
-
-        chdir($this->root);
-        exec("{$this->client} config core.quotepath false");
-    }
-
-    public function projects()
-    {
-        
+        $this->root   = rtrim($root, '/') . '/';
+        $this->token  = $password;
+        $this->branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : 'HEAD';
     }
 
     /**
      * List files.
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
     public function ls($path, $revision = 'HEAD')
     {
         if(!scm::checkRevision($revision)) return array();
+        $api  = "tree";
 
-        $path = ltrim($path, DIRECTORY_SEPARATOR);
-        $sub  = ''; 
-        chdir($this->root);
-        if(!empty($path)) $sub = ":$path";
-        if(!empty($this->branch))$revision = $this->branch;
-        $cmd = escapeCmd("$this->client ls-tree -l $revision$sub");
-        $list = execCmd($cmd . ' 2>&1', 'array', $result);
-        if($result) return array();
+        $param = new stdclass();
+        $param->path      = ltrim($path, '/');
+        $param->ref       = $revision;
+        $param->recursive = 0;
+        if(!empty($this->branch)) $param->ref = $this->branch;
 
-        $infos   = array();
-        foreach($list as $entry)
+        $list = $this->fetch($api, $param);
+        if(empty($list)) return array();
+
+        $infos = array();
+        foreach($list as $file)
         {
-            list($mod, $kind, $revision, $size, $name) = preg_split('/[\t ]+/', $entry);
+            if(!isset($file->type)) continue;
 
-            /* Get commit info. */
-            $pathName = ltrim($path . DIRECTORY_SEPARATOR . $name, DIRECTORY_SEPARATOR);
-            $cmd      = escapeCmd("$this->client log -1 $this->branch -- $pathName");
-            $commit   = execCmd($cmd, 'array');
-            $logs    = $this->parseLog($commit);
+            $info = new stdClass();
+            if($file->type == 'blob')
+            {
+                $path = $file->path;
+                $file = $this->files($file->path);
 
-            if($size > 1024 * 1024)
-            {
-                $size = round($size / (1024 * 1024), 2) . 'MB';
-            }
-            else if($size > 1024)
-            {
-                $size = round($size / 1024, 2) . 'KB';
+                $info->name     = $file->file_name;
+                $info->kind     = 'file';
+                $info->account  = $file->committer;
+                $info->date     = $file->date;
+                $info->size     = $file->size;
+                $info->comment  = $file->comment;
+                $info->revision = $file->revision;
             }
             else
             {
-                $size .= 'Bytes'; 
+                $commits = $this->getCommitsByPath($file->path);
+                if(empty($commits)) continue;
+                $commit = $commits[0];
+
+                $info->name     = $file->name;
+                $info->kind     = 'dir';
+                $info->revision = $commit->id;
+                $info->account  = $commit->committer_name;
+                $info->date     = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+                $info->size     = 0;
+                $info->comment  = $commit->message;
             }
 
-            $info = new stdClass();
-            $info->name     = $name;
-            $info->kind     = $kind == 'tree' ? 'dir' : 'file';
-            $info->revision = $logs ? $logs[0]->revision : $revision;
-            $info->size     = $size;
-            $info->account  = $logs ? $logs[0]->committer : '';
-            $info->date     = $logs ? $logs[0]->time : '';
-            $info->comment  = $logs ? $logs[0]->comment : '';
             $infos[] = $info;
             unset($info);
         }
@@ -89,84 +86,97 @@ class gitlab
         /* Sort by kind */
         foreach($infos as $key => $info) $kinds[$key] = $info->kind;
         if($infos) array_multisort($kinds, SORT_ASC, $infos);
-
         return $infos;
     }
 
     /**
-     * Get tags 
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     * Get files info.
+     *
+     * @param  string    $path
+     * @param  string    $ref
+     * @access public
+     * @return array
+     */
+    public function files($path, $ref = 'master')
+    {
+        $path = urlencode($path);
+        $api  = "files/$path";
+        $param = new stdclass();
+        $param->ref = $ref;
+        $file = $this->fetch($api, $param);
+
+        $commits = $this->getCommitsByPath($path);
+        $file->revision = $file->commit_id;
+        $file->size     = $this->formatBytes($file->size);
+
+        if(!empty($commits))
+        {
+            $commit = $commits[0];
+            $file->committer = $commit->committer_name;
+            $file->comment   = $commit->message;
+            $file->date      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+        }
+
+        return $file;
+    }
+
+    /**
+     * Get tags
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
     public function tags($path, $revision = 'HEAD')
     {
-        if(!scm::checkRevision($revision)) return array();
+        $api = "tags";
+        $list = $this->fetch($api);
 
-        chdir($this->root);
-        $cmd  = escapeCmd("$this->client tag --sort=taggerdate");
-        $list = execCmd($cmd . ' 2>&1', 'array', $result);
-        if($result) return array();
-        return $list;
+        $tags = array();
+        foreach($list as $tag) $tags[] = $tag->name;
+
+        return $tags;
     }
 
     /**
-     * Get branch 
-     * 
+     * Get branch
+     *
      * @access public
      * @return array
      */
     public function branch()
     {
-        chdir($this->root);
-
-        /* Get local branch. */
-        $cmd  = escapeCmd("$this->client branch");
-        $list = execCmd($cmd . ' 2>&1', 'array', $result);
-        if($result) return array();
+        $api  = "branches";
+        $list = $this->fetch($api);
 
         $branches = array();
-        foreach($list as $localBranch)
-        {
-            if($localBranch[0] == '*') $localBranch = substr($localBranch, 1);
-
-            $localBranch = trim($localBranch);
-            if(empty($localBranch))continue;
-            $branches[$localBranch] = $localBranch;
-        }
+        foreach($list as $branch) $branches[$branch->name] = $branch->name;
         asort($branches);
+
         return $branches;
     }
 
     /**
-     * Get last log. 
-     * 
-     * @param  string $path 
-     * @param  int    $count 
+     * Get last log.
+     *
+     * @param  string $path
+     * @param  int    $count
      * @access public
      * @return array
      */
     public function getLastLog($path, $count = 10)
     {
-        $path     = ltrim($path, DIRECTORY_SEPARATOR);
-        $revision = $this->branch ? $this->branch : 'HEAD';
-
-        chdir($this->root);
-        $list = execCmd(escapeCmd("$this->client log -10 $revision -- $path"), 'array');
-        $logs = $this->parseLog($list);
-
-        return $logs;
+        return $this->log($path);
     }
 
     /**
-     * Get logs
-     * 
-     * @param  string $path 
-     * @param  string $fromRevision 
-     * @param  string $toRevision 
-     * @param  int    $count 
+     * Get logs.
+     *
+     * @param  string $path
+     * @param  string $fromRevision
+     * @param  string $toRevision
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -177,39 +187,18 @@ class gitlab
 
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
-        /* compatible with svn. */
-        if($fromRevision == 'HEAD' and $this->branch) $fromRevision = $this->branch;
-        if($toRevision   == 'HEAD' and $this->branch) $toRevision   = $this->branch;
-        if($fromRevision === $toRevision)
-        {
-            $logs = array();
-            chdir($this->root);
 
-            $list = execCmd(escapeCmd("$this->client log --stat=1024 --name-status --stat-name-width=1000 -1 $fromRevision -- $path"), 'array');
-            $logs = $this->parseLog($list);
-            return $logs;
-        }
+        $list = $this->getCommitsByPath($path, $fromRevision, $toRevision);
+        foreach($list as $commit) $commit->diffs = $this->getFilesByCommit($commit->id);
 
-        if(!$fromRevision)
-        {
-            $revisions = " $toRevision";
-        }
-        else
-        {
-            $revisions = "$fromRevision..$toRevision"; 
-        }
-        chdir($this->root);
-        $list = execCmd(escapeCmd("$this->client log  --stat=1024 --name-status --stat-name-width=1000 $count $revisions -- $path"), 'array');
-        $logs = $this->parseLog($list);
-
-        return $logs;
+        return $this->parseLog($list);
     }
 
     /**
      * Blame file
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
@@ -218,51 +207,47 @@ class gitlab
         if(!scm::checkRevision($revision)) return array();
 
         $path = ltrim($path, DIRECTORY_SEPARATOR);
-        chdir($this->root);
-        $list = execCmd(escapeCmd("$this->client blame -l $revision -- $path"), 'array');
+        $path = urlencode($path);
+        $api  = "files/$path/blame";
+        $param = new stdclass;
+        $param->ref = $this->branch;
+        $results = $this->fetch($api, $param);
 
         $blames   = array();
         $revLine  = 0;
         $revision = '';
-        foreach($list as $line)
+
+        $lineNumber = 1;
+        foreach($results as $blame)
         {
-            if(empty($line)) continue;
-            if($line[0] == '^') $line = substr($line, 1);
-            preg_match('/^([0-9a-f]{39,40})\s.*\((\S+)\s+([\d-]+)\s(.*)\s(\d+)\)(.*)$/U', $line, $matches);
+            $line = array();
+            $line['revision']  = $blame->commit->id;
+            $line['committer'] = $blame->commit->committer_name;
+            $line['time']      = $blame->commit->committer_name;
+            $line['line']      = $lineNumber;
+            $line['lines']     = count($blame->lines);
+            $line['content']   = array_shift($blame->lines);
 
-            if(isset($matches[1]) and $matches[1] != $revision)
+            $blames[] = $line;
+
+            $lineNumber ++;
+
+            foreach($blame->lines as $line)
             {
-                $blame = array();
-                $blame['revision']  = $matches[1];
-                $blame['committer'] = $matches[2];
-                $blame['time']      = $matches[3];
-                $blame['line']      = $matches[5];
-                $blame['lines']     = 1;
-                $blame['content']   = strpos($matches[6], ' ') === false ? $matches[6] : substr($matches[6], 1);
-
-                $revision         = $matches[1];
-                $revLine          = $matches[5];
-                $blames[$revLine] = $blame;
-            }
-            elseif(isset($matches[5]))
-            {
-                $blame            = array();
-                $blame['line']    = $matches[5];
-                $blame['content'] = strpos($matches[6], ' ') === false ? $matches[6] : substr($matches[6], 1);
-
-                $blames[$matches[5]] = $blame;
-                $blames[$revLine]['lines'] ++;
+                $blames[] = array('line' => $lineNumber, 'content' => $line);
+                $lineNumber ++;
             }
         }
+
         return $blames;
     }
 
     /**
      * Diff file.
-     * 
-     * @param  string $path 
-     * @param  string $fromRevision 
-     * @param  string $toRevision 
+     *
+     * @param  string $path
+     * @param  string $fromRevision
+     * @param  string $toRevision
      * @access public
      * @return array
      */
@@ -271,44 +256,50 @@ class gitlab
         if(!scm::checkRevision($fromRevision)) return array();
         if(!scm::checkRevision($toRevision))   return array();
 
-        $path = ltrim($path, DIRECTORY_SEPARATOR);
-        chdir($this->root);
-        if($toRevision == 'HEAD' and $this->branch) $toRevision = $this->branch;
-        if($fromRevision == '^') $fromRevision = $toRevision . '^';
-        if(strpos($fromRevision, '^') !== false)
+        $api     = "compare";
+        $params  = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => 1);
+        if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
+        $results = $this->fetch($api, $params);
+        foreach($results->diffs as $key => $diff)
         {
-            $list = execCmd(escapeCmd("$this->client log -2 $toRevision --pretty=format:%H -- $path"), 'array');
-            if(isset($list[1])) $fromRevision = $list[1];
+            if($path != '' and strpos($diff->new_path, $path) === false) unset($results->diffs[$key]);
         }
-        $lines = execCmd(escapeCmd("$this->client diff $fromRevision $toRevision -- $path"), 'array');
+        $diffs = $results->diffs;
+        $lines = array();
+        foreach($diffs as $diff)
+        {
+            $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
+            $lines[] = sprintf("index %s ... %s %s ", $fromRevision, $toRevision, $diff->b_mode);
+            $lines[] = sprintf("--a/%s", $diff->old_path);
+            $lines[] = sprintf("--b/%s", $diff->new_path);
+            $diffLines = explode("\n", $diff->diff);
+            foreach($diffLines as $diffLine) $lines[] = $diffLine;
+        }
         return $lines;
+        //return $results->diffs;
     }
 
     /**
      * Cat file.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return string
      */
     public function cat($entry, $revision = 'HEAD')
     {
         if(!scm::checkRevision($revision)) return false;
-
-        chdir($this->root);
         if($revision == 'HEAD' and $this->branch) $revision = $this->branch;
-        $cmd     = escapeCmd("$this->client show $revision:$entry");
-        $content = execCmd($cmd);
-        if(is_array($content)) $content = implode("\n", $content);
-        return $content;
+        $file = $this->files($entry, $revision);
+        return base64_decode($file->content);
     }
 
     /**
      * Get info.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return object
      */
@@ -316,53 +307,48 @@ class gitlab
     {
         if(!scm::checkRevision($revision)) return false;
 
-        chdir($this->root);
-        if($revision == 'HEAD' and $this->branch) $revision = $this->branch;
-        $path   = ltrim($entry, DIRECTORY_SEPARATOR);
-        $cmd    = escapeCmd("$this->client ls-tree $revision -- $path");
-        $result = execCmd($cmd);
-        $kind   = '';
-        if($result)
+        $info = new stdclass();
+        $info->kind     = 'dir';
+        $info->path     = $entry;
+        $info->revision = $revision;
+        $info->root     = '';
+        if($revision == 'HEAD' and $this->branch) $info->revision = $this->branch;
+
+        if($entry)
         {
-            $results = explode("\n", trim($result));
-            if(count($results) >= 2)
-            {
-                $kind = 'dir';
-            }
-            else
-            {
-                list($mode, $type) = explode(' ', $results[0]);
-                $kind = $type == 'tree' ? 'dir' : 'file';
-            }
+            $parent = dirname($entry);
+            if($parent == '.') $parent = '/';
+            if($parent == '')  $parent = '/';
+            $list = $this->tree($parent, 0);
+
+            foreach($list as $node) if($node->path == $entry) $file = $node;
+
+            $commits = $this->getCommitsByPath($entry);
+
+            if(!empty($commits)) $file->revision = zget($commits[0], 'id', '');
+            $info->kind = $file->type == 'tree' ? 'dir' : 'file';
         }
 
-        $list = execCmd(escapeCmd("$this->client log -1 $revision --pretty=format:%H -- $path"), 'array');
-        $revision = $list[0];
-        $info     = new stdclass();
-        $info->kind     = $kind; 
-        $info->path     = $entry; 
-        $info->revision = $revision; 
-        $info->root     = $this->root; 
         return $info;
     }
 
     /**
      * Exec git cmd.
-     * 
-     * @param  string $cmd 
+     *
+     * @param  string $cmd
      * @access public
+     * @todo Exec commads by gitlab api.
      * @return array
      */
     public function exec($cmd)
     {
-        chdir($this->root);
         return execCmd(escapeCmd("$this->client $cmd"), 'array');
     }
 
     /**
      * Parse diff.
-     * 
-     * @param  array $lines 
+     *
+     * @param  array $lines
      * @access public
      * @return array
      */
@@ -456,9 +442,9 @@ class gitlab
 
     /**
      * Get commit count.
-     * 
-     * @param  int    $commits 
-     * @param  string $lastVersion 
+     *
+     * @param  int    $commits
+     * @param  string $lastVersion
      * @access public
      * @return int
      */
@@ -473,7 +459,7 @@ class gitlab
 
     /**
      * Get first revision.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -485,8 +471,8 @@ class gitlab
     }
 
     /**
-     * Get latest revision 
-     * 
+     * Get latest revision
+     *
      * @access public
      * @return string
      */
@@ -500,71 +486,205 @@ class gitlab
 
     /**
      * Get commits.
-     * 
-     * @param  string $version 
-     * @param  int    $count 
-     * @param  string $branch 
+     *
+     * @param  string $version
+     * @param  int    $count
+     * @param  string $branch
      * @access public
      * @return array
      */
     public function getCommits($version = '', $count = 0, $branch = '')
     {
         if(!scm::checkRevision($version)) return array();
+        $api = "commits";
 
-        if($version == 'HEAD' and $branch) $version = $branch;
-        $revision = empty($version) ? $revision : $version;
-        $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
-        $count    = $count == 0 ? '' : "-n $count";
+        if(empty($count)) $count = 100;
+        $params = array();
+        $params['ref_name'] = $branch;
+        $params['per_page'] = $count;
+        $params['all']      = 1;
 
-        chdir($this->root);
-        $list    = execCmd(escapeCmd("$this->client log $count $revision -- ./"), 'array');
-        $commits = $this->parseLog($list);
-
-        $logs = array();
-        foreach($commits as $commit)
+        if($version and $version != 'HEAD')
         {
-            $hash = $commit->revision;
-            $log  = new stdClass();
-            $log->committer = $commit->committer;
-            $log->revision  = $commit->revision;
-            $log->comment   = $commit->comment;
-            $log->time      = $commit->time;
-            $logs['commits'][$hash] = $log;
-            $logs['files'][$hash]   = array();
-        }
-        if(empty($logs)) return $logs;
+            $lastCommit = $this->getSingleCommit($version);
+            if(!isset($lastCommit->committed_date)) return array('commits' => array(), 'files' => array());
 
-        $hash  = '';
-        $files = execCmd(escapeCmd("$this->client whatchanged $count $revision --pretty=format:%an@_@%cd@_@%H@_@%s -- ./"), 'array');
-        foreach($files as $commit)
-        {
-            $commit = trim($commit);
-            if(empty($commit)) continue;
-            $parsedCommit = explode('@_@', $commit);
-            if(count($parsedCommit) == 4)
-            {
-                list($account, $date, $hash, $comment) = $parsedCommit;
-            }
-            else 
-            {
-                $file = explode(' ', $commit);
-                $file = end($file);
-                list($action, $path) = explode("\t", $file);
-                $parsedFile = new stdclass();
-                $parsedFile->revision = $hash;
-                $parsedFile->path     = '/' . trim($path);
-                $parsedFile->type     = 'file';
-                $parsedFile->action   = $action;
-                $logs['files'][$hash][]  = $parsedFile;
-            }
+            $params['until'] = $lastCommit->committed_date;
         }
-        return $logs;
+
+        $list = $this->fetch($api, $params);
+
+        $commits = array();
+        foreach($list as $commit)
+        {
+            $log = new stdclass;
+            $log->committer = $commit->committer_name;
+            $log->revision  = $commit->id;
+            $log->comment   = $commit->message;
+            $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
+
+            $commits[$commit->id] = $log;
+            $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+        }
+
+        return array('commits' => $commits, 'files' => $files);
+    }
+
+    /**
+     * getCommit
+     *
+     * @param  int    $sha
+     * @access public
+     * @return void
+     */
+    public function getSingleCommit($sha)
+    {
+        if(!scm::checkRevision($sha)) return null;
+        $api = "commits/$sha";
+        return $this->fetch($api);
+    }
+
+    /**
+     * Get commits by path.
+     *
+     * @param  string    $path
+     * @access public
+     * @return array
+     */
+    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '')
+    {
+        $path = ltrim($path, DIRECTORY_SEPARATOR);
+        $api = "commits";
+
+        $param = new stdclass();
+        $param->path     = urldecode($path);
+        $param->ref_name = $this->branch;
+
+        $fromRevision = ($fromRevision and $fromRevision != 'HEAD') ? $this->getSingleCommit($fromRevision) : '';
+        $toRevision   = ($toRevision and $toRevision != 'HEAD') ? $this->getSingleCommit($toRevision) : '';
+
+        $since = '';
+        $until = '';
+        if($fromRevision and $toRevision)
+        {
+            $since = min($fromRevision->committed_date, $toRevision->committed_date);
+            $until = max($fromRevision->committed_date, $toRevision->committed_date);
+        }
+        elseif($fromRevision)
+        {
+            $since = $fromRevision->committed_date;
+        }
+
+        if($since) $param->since = $since;
+        if($until) $param->until = $until;
+
+        return $this->fetch($api, $param);
+    }
+
+    /**
+     * Get files by commit.
+     *
+     * @param  string    $commit
+     * @access public
+     * @return void
+     */
+    public function getFilesByCommit($revision)
+    {
+        if(!scm::checkRevision($revision)) return array();
+        $api  = "commits/{$revision}/diff";
+        $params = new stdclass;
+        $params->page     = 1;
+        $params->per_page = 200;
+
+        $allResults = array();
+        while($results = $this->fetch($api, $params))
+        {
+            $params->page ++;
+            $allResults = $allResults + $results;
+        }
+
+        $files = array();
+        foreach($allResults as $row)
+        {
+            $file = new stdclass();
+            $file->revision = $revision;
+            $file->path     = '/' . $row->new_path;
+            $file->type     = 'file';
+
+            $file->action   = 'M';
+            if($row->new_file) $file->action = 'A';
+            if($row->renamed_file) $file->action = 'R';
+            if($row->deleted_file) $file->action = 'D';
+            $files[] = $file;
+        }
+
+        return $files;
+    }
+
+    /**
+     * Repository/tree api.
+     *
+     * @param  string    $path
+     * @param  bool      $recursive
+     * @access public
+     * @return void
+     */
+    public function tree($path, $recursive = 1)
+    {
+        $api = "tree";
+
+        $params = array();
+        $params['path']      = ltrim($path, '/');
+        $params['ref']       = $this->branch;
+        $params['recursive'] = (int) $recursive;
+        return $this->fetch($api, $params);
+    }
+
+    /**
+     * Fetch data from gitlab api.
+     *
+     * @param  string    $api
+     * @access public
+     * @return void
+     */
+    public function fetch($api, $params = array())
+    {
+        $params = (array) $params;
+        $params['private_token'] = $this->token;
+
+        $api = ltrim($api, '/');
+        $api = $this->root . $api . '?' . http_build_query($params);
+
+        $response = commonModel::http($api);
+        if(!empty(commonModel::$requestErrors))
+        {
+            commonModel::$requestErrors = array();
+            return array();
+        }
+
+        return json_decode($response);
+    }
+
+    /**
+     * Format bytes shown.
+     *
+     * @param  int    $size
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function formatBytes($size)
+    {
+        if($size < 1024) return $size . 'Bytes';
+        if(round($size / (1024 * 1024), 2) > 1) return round($size / (1024 * 1024), 2) . 'G';
+        if(round($size / 1024, 2) > 1) return round($size / 1024, 2) . 'M';
+        return round($size, 2) . 'KB';
     }
 
     /**
      * Parse log.
-     * 
-     * @param  array  $logs 
+     *
+     * @param  array  $logs
      * @access public
      * @return array
      */
@@ -572,54 +692,21 @@ class gitlab
     {
         $parsedLogs = array();
         $i          = 0;
-        foreach($logs as $line)
+        foreach($logs as $commit)
         {
-            if(strpos($line, 'commit ') === 0)
+            $parsedLog = new stdclass();
+            $parsedLog->revision  = $commit->id;
+            $parsedLog->committer = $commit->committer_name;
+            $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+            $parsedLog->comment   = $commit->message;
+            $parsedLog->change    = array();
+            foreach($commit->diffs as $diff)
             {
-                if(isset($log))
-                {
-                    $log->comment = trim($comment);
-                    $log->change  = $changes;
-                    $parsedLogs[$i] = $log;
-                    $i++;
-                }
-
-                $log     = new stdclass();
-                $comment = '';
-                $changes = array();
-
-                $log->revision = trim(preg_replace('/^commit/', '', $line));
+                $parsedLog->change[$diff->path] = array();
+                $parsedLog->change[$diff->path]['action'] = $diff->action;
+                $parsedLog->change[$diff->path]['kind']   = $diff->type;
             }
-            elseif(strpos($line, 'Author:') === 0)
-            {
-                $account        = preg_replace('/^Author:/', '', $line);
-                $log->committer = trim(preg_replace('/<[a-zA-Z0-9_\-\.]+@[a-zA-Z0-9_\-\.]+>/', '', $account));
-            }
-            elseif(strpos($line, 'Date:') === 0)
-            {
-                $date      = trim(preg_replace('/^Date:/', '', $line));
-                $log->time = date('Y-m-d H:i:s', strtotime($date)); 
-            }
-            elseif(preg_match('/^\s{2,}/', $line))
-            {
-                $comment .= $line;
-            }
-            elseif(strpos($line, "\t") !== false)
-            {
-                list($action, $entry) = explode("\t", $line);
-                $entry = '/' . trim($entry);
-                $pathInfo = array();
-                $pathInfo['action'] = $action;
-                $pathInfo['kind']   = 'file';
-                $changes[$entry]    = $pathInfo;
-            }
-        }
-
-        if(isset($log))
-        {
-            $log->comment   = trim($comment);
-            $log->change    = $changes;
-            $parsedLogs[$i] = $log;
+            $parsedLogs[] = $parsedLog;
         }
 
         return $parsedLogs;

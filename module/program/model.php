@@ -24,19 +24,6 @@ class programModel extends model
     }
 
     /**
-     * Get program main menu action.
-     *
-     * @access public
-     * @return string
-     */
-    public function getMainAction()
-    {
-        $link = html::a(helper::createLink('program', 'browse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
-        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
-        return common::hasPriv('program', 'pgmbrowse') ? $html : '';
-    }
-
-    /**
      * Get program pairs.
      *
      * @param  bool   $isQueryAll
@@ -91,7 +78,9 @@ class programModel extends model
      */
     public function getByID($programID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('`type`')->eq('program')->fetch();
+        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('`type`')->eq('program')->fetch();
+        $program = $this->loadModel('file')->replaceImgURL($program, 'desc');
+        return $program;
     }
 
     /**
@@ -109,8 +98,9 @@ class programModel extends model
             ->where('type')->in('program,project')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)
-            ->andWhere('id')->in($this->app->user->view->programs)
+            ->andWhere('(id')->in($this->app->user->view->programs)
             ->orWhere('id')->in($this->app->user->view->projects)
+            ->markRight(1)
             ->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
@@ -213,29 +203,6 @@ class programModel extends model
     }
 
     /**
-     * Set view menu.
-     *
-     * @param  int    $programID
-     * @access private
-     * @return void
-     */
-    public function setViewMenu($programID = 0)
-    {
-        foreach($this->lang->program->viewMenu as $label => $menu)
-        {
-            $this->lang->program->viewMenu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
-        }
-
-        foreach($this->lang->personnel->menu as $label => $menu)
-        {
-            $menu['link'] = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
-            $this->lang->personnel->menu->$label = $menu;
-        }
-
-        $this->lang->program->menu = $this->lang->program->viewMenu;
-    }
-
-    /**
      * Create a program.
      *
      * @access private
@@ -296,7 +263,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique')
+            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program'")
             ->exec();
 
         if(!dao::isError())
@@ -351,6 +318,7 @@ class programModel extends model
 
             if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $minChildBegin);
             if($maxChildEnd   and $program->end   < $maxChildEnd and $this->post->delta != 999) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild, $maxChildEnd);
+            if(dao::isError()) return false;
         }
 
         if($program->parent)
@@ -385,7 +353,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->check('name', 'unique', "id!=$programID and deleted='0'")
+            ->check('name', 'unique', "id!=$programID and deleted='0' and `type`='program'")
             ->where('id')->eq($programID)
             ->limit(1)
             ->exec();
@@ -407,7 +375,6 @@ class programModel extends model
      * Get program swapper.
      *
      * @param  int     $programID
-     * @param  bool    $active
      * @access private
      * @return string
      */
@@ -429,7 +396,7 @@ class programModel extends model
         }
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'><i class='icon icon-program'></i> {$currentProgramName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'>{$currentProgramName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
 
         return $output;
@@ -441,10 +408,12 @@ class programModel extends model
      * @param  int    $programID
      * @param  string $from
      * @param  string $vars
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return string
      */
-    public function getTreeMenu($programID = 0, $from = 'program', $vars = '')
+    public function getTreeMenu($programID = 0, $from = 'program', $vars = '', $moduleName = '', $methodName = '')
     {
         $programMenu = array();
         $query = $this->dao->select('*')->from(TABLE_PROJECT)
@@ -464,8 +433,8 @@ class programModel extends model
 
         while($program = $stmt->fetch())
         {
-            $link = $from == 'program' ? helper::createLink('program', 'pgmproduct', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
-            $linkHtml = html::a($link, html::icon($this->lang->icons[$program->type], 'icon icon-sm text-muted') . ' ' . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
+            $link = $from == 'program' ? helper::createLink($moduleName, $methodName, "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
+            $linkHtml = html::a($link, $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {
@@ -555,7 +524,7 @@ class programModel extends model
     public function hasUnfinished($program)
     {
         $unfinished = $this->dao->select("count(IF(id != {$program->id}, true, null)) as count")->from(TABLE_PROJECT)
-            ->where('type')->in('program,project')
+            ->where('type')->in('program, project')
             ->andWhere('path')->like($program->path . '%')
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq('0')
@@ -686,11 +655,11 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getParentPairs($model = '', $mode = '')
+    public function getParentPairs($model = '', $mode = 'noclosed')
     {
         $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
-            ->beginIF(strpos($mode, 'noclosed') === false)->andWhere('status')->ne('closed')->fi()
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->orderBy('grade desc, `order`')
@@ -806,11 +775,8 @@ class programModel extends model
             $hour = (object)$emptyHour;
             foreach($projectTasks as $task)
             {
-                if($task->status != 'cancel')
-                {
-                    $hour->totalEstimate += $task->estimate;
-                    $hour->totalConsumed += $task->consumed;
-                }
+                $hour->totalEstimate += $task->estimate;
+                $hour->totalConsumed += $task->consumed;
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
             }
             $hours[$projectID] = $hour;
@@ -866,5 +832,48 @@ class programModel extends model
         foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
 
         return $budgetUnitList;
+    }
+
+    /**
+     * Get program team member pairs.
+     *
+     * @param  int  $programID
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberPairs($programID = 0)
+    {
+      $projectList = $this->loadModel('project')->getPairsByProgram($programID);
+      if(!$projectList) return array('' => '');
+
+      $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+          ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+          ->where('t1.root')->in(array_keys($projectList))
+          ->andWhere('t1.type')->eq('project')
+          ->andWhere('t2.deleted')->eq(0)
+          ->fetchAll('account');
+      if(!$users) return array('' => '');
+
+      foreach($users as $account => $user)
+      {
+        $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
+        if(!empty($this->config->isINT)) $firstLetter = '';
+        $users[$account] = $firstLetter . ($user->realname ? $user->realname : $user->account);
+      }
+
+      return array('' => '') + $users;
+    }
+
+    /*
+     * Set program menu.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function setMenu($programID)
+    {
+        $this->lang->switcherMenu = $this->getSwitcher($programID);
+        common::setMenuVars('program', $programID);
     }
 }

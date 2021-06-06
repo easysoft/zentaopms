@@ -51,6 +51,9 @@ $lang->program->endGreaterParent        = "Parent end date: %s, end date should 
 $lang->program->beginGreateChild        = "Child earliest begin: %s, parent begin date <                  = child earliest begin date.";
 $lang->program->endLetterChild          = "Child latest end: %s, parent end date >                        = child latest end date.";
 $lang->program->closeErrorMessage       = 'There are subprograms or projects that are not closed';
+$lang->program->confirmDelete           = "Do you want to delete it?";
+$lang->program->hasChildren             = 'It has child programs or projects. You cannot delete it.';
+$lang->program->readjustTime            = 'Change the program begin&end date.';
 
 $lang->program->stakeholderTypeList['inside']  = 'Inside';
 $lang->program->stakeholderTypeList['outside'] = 'Outside';
@@ -69,15 +72,15 @@ $lang->program->aclList['private'] = "Private (accessible to project portfolio h
 $lang->program->aclList['open']    = "Default(user who can visit the program can access it)";
 
 $lang->program->subAclList['private'] = "Private (accessible to this program set leader and stakeholders, stakeholders can follow up maintenance)";
-$lang->program->subAclList['open']    = "Default(user who can visit the program can access it)";
+$lang->program->subAclList['open']    = "Default (user who can visit the program can access it)";
 $lang->program->subAclList['program'] = "Open within the program (accessible to all higher-level program directors and affiliates, as well as to this program director and affiliates)";
 
 $lang->program->subAcls['private'] = 'Private';
 $lang->program->subAcls['open']    = 'Default';
 $lang->program->subAcls['program'] = 'Open within the program';
 
-$lang->program->authList['extend'] = 'Inherit(program privileges and company privileges)';
-$lang->program->authList['reset']  = 'Reset(program privileges only)';
+$lang->program->authList['extend'] = 'Inherit (program privileges and company privileges)';
+$lang->program->authList['reset']  = 'Reset (program privileges only)';
 
 $lang->program->statusList['wait']      = 'Waiting';
 $lang->program->statusList['doing']     = 'Doing';

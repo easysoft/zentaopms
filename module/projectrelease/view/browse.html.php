@@ -16,15 +16,13 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a(inlink('browse', "type=all"), "<span class='text'>{$lang->release->all}</span>" . ($type == 'all' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "type=normal"), "<span class='text'>{$lang->release->statusList['normal']}</span>" . ($type == 'normal' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='normalTab' class='btn btn-link" . ('normal' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "type=terminate"), "<span class='text'>{$lang->release->statusList['terminate']}</span>" . ($type == 'terminate' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='terminateTab' class='btn btn-link" . ('terminate' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('browse', "projectID=$projectID&executionID=$executionID&type=all"), "<span class='text'>{$lang->release->all}</span>" . ($type == 'all' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "' data-app='$from'");
+    echo html::a(inlink('browse', "projectID=$projectID&executionID=$executionID&type=normal"), "<span class='text'>{$lang->release->statusList['normal']}</span>" . ($type == 'normal' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='normalTab' class='btn btn-link" . ('normal' == $type ? ' btn-active-text' : '') . "' data-app='$from'");
+    echo html::a(inlink('browse', "projectID=$projectID&executionID=$executionID&type=terminate"), "<span class='text'>{$lang->release->statusList['terminate']}</span>" . ($type == 'terminate' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='terminateTab' class='btn btn-link" . ('terminate' == $type ? ' btn-active-text' : '') . "' data-app='$from'");
     ?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::canModify('execution', $execution)):?>
-    <?php common::printLink('projectrelease', 'create', '', "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
-    <?php endif;?>
+    <?php common::printLink('projectrelease', 'create', "projectID=$projectID", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent" class='main-table'>
@@ -32,8 +30,8 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
-      <?php if(common::canModify('execution', $execution) and common::hasPriv('projectrelease', 'create')):?>
-      <?php echo html::a($this->createLink('projectrelease', 'create'), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
+      <?php if(common::hasPriv('projectrelease', 'create')):?>
+      <?php echo html::a($this->createLink('projectrelease', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -63,7 +61,7 @@
         <td>
           <?php
           $flagIcon = $release->marker ? "<icon class='icon icon-flag red' title='{$lang->release->marker}'></icon> " : '';
-          echo html::a(inlink('view', "release=$release->id"), $release->name) . $flagIcon;
+          echo html::a(inlink('view', "release=$release->id"), $release->name, '', "data-app='$from'") . $flagIcon;
           ?>
         </td>
         <td title='<?php echo $release->productName?>'><?php echo $release->productName?></td>

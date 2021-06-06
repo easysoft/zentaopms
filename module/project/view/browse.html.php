@@ -17,13 +17,14 @@ js::set('programID', $programID);
 js::set('browseType', $browseType);
 ?>
 <style>
-.project-type-label.label-outline {width: 47px;}
+.project-type-label.label-outline {width: 50px; min-width: 50px;}
+.project-type-label.label {overflow: unset !important; text-overflow: unset !important; white-space: unset !important;}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if($this->config->systemMode == 'new'):?>
   <div id="sidebarHeader">
     <div class="title">
-      <?php echo empty($project) ? $lang->project->common : $project->name;?>
+      <?php echo $programID ? $program->name : $lang->project->parent;?>
       <?php if($programID) echo html::a(inLink('browse', 'programID=0'), "<i class='icon icon-sm icon-close'></i>", '', 'class="text-muted"');?>
     </div>
   </div>
@@ -52,9 +53,9 @@ js::set('browseType', $browseType);
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
-      <?php echo $projectTree;?>
+      <?php echo $programTree;?>
       <div class="text-center">
-        <?php common::printLink('project', 'projectProgramTitle', '', $lang->project->moduleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
+        <?php common::printLink('project', 'programTitle', '', $lang->project->moduleSetting, '', "class='btn btn-info btn-wide iframe'", true, true);?>
       </div>
     </div>
   </div>
@@ -87,11 +88,12 @@ js::set('browseType', $browseType);
         <thead>
           <tr>
             <?php
-              foreach($setting as $value)
-              {
-                if($value->id == 'status' and $browseType !== 'all') $value->show = false;
-                if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
-              }
+            foreach($setting as $value)
+            {
+              if($value->id == 'status' and $browseType !== 'all') $value->show = false;
+              if($value->id == 'teamCount' and $browseType == 'all') $value->show = false;
+              if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
+            }
             ?>
           </tr>
         </thead>

@@ -35,10 +35,11 @@
   <?php else:?>
   <form id='myBugForm' class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
     <?php
+    $canBatchEdit     = (common::hasPriv('bug', 'batchEdit') and $type == 'assignedTo');
     $canBatchConfirm  = common::hasPriv('bug', 'batchConfirm');
     $canBatchClose    = (common::hasPriv('bug', 'batchClose') and strtolower($type) != 'closedby');
     $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
-    $canBatchAction   = ($canBatchConfirm or $canBatchClose or $canBatchAssignTo);
+    $canBatchAction   = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchAssignTo);
     ?>
     <table class="table has-sort-head table-fixed" id='bugList'>
       <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
@@ -102,8 +103,8 @@
             <?php endif;?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', '', $bug->project), $bug->title, null, "style='color: $bug->color' title={$bug->title} data-group='project'");?></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('product', 'view', "productID=$bug->product", '', '', $bug->project), $bug->productName, null, "title={$bug->productName} data-group='product'");?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color' title={$bug->title}");?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('product', explode('-', $config->productLink)[1], "productID=$bug->product"), $bug->productName, null, "title={$bug->productName}");?></td>
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <?php if($type != 'openedBy'): ?>
           <td><?php echo zget($users, $bug->openedBy);?></td>
@@ -123,8 +124,8 @@
                 common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true, '', '', $bug->project);
                 common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true, '', '', $bug->project);
                 common::printIcon('bug', 'close',      $params, $bug, 'list', '',        '', 'iframe', true, '', '', $bug->project);
-                common::printIcon('bug', 'edit',       $params, $bug, 'list', '',        '', '',       '',   '', '', $bug->project);
-                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', '', '', '', '', $bug->project);
+                common::printIcon('bug', 'edit',       $params, $bug, 'list', '',        '', 'iframe', true, "data-width='95%'", '', $bug->project);
+                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', 'iframe', true, "data-width='95%'", '', $bug->project);
             }
             ?>
           </td>
@@ -138,6 +139,12 @@
       <?php endif;?>
       <div class="table-actions btn-toolbar">
         <?php
+        if($canBatchEdit)
+        {
+            $actionLink = $this->createLink('bug', 'batchEdit');
+            $misc       = "data-form-action='$actionLink'";
+            echo html::commonButton($lang->edit, $misc);
+        }
         if($canBatchConfirm)
         {
           $actionLink = $this->createLink('bug', 'batchConfirm', '', '', '', $bug->project);

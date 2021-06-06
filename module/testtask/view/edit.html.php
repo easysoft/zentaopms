@@ -25,7 +25,7 @@
     <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo $lang->testtask->execution;?></th>
+          <th class='w-100px'><?php echo $lang->testtask->execution;?></th>
           <td class='w-p35-f'>
           <?php
           echo html::select('execution', $executions, $task->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");
@@ -35,9 +35,13 @@
           <td></td>
         </tr>
         <tr>
-          <th class='w-80px'><?php echo $lang->testtask->build;?></th>
-          <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></span></td>
+          <th><?php echo $lang->testtask->build;?></th>
+          <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen' onchange='loadTestReports(this.value)'");?></span></td>
           <td></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testtask->type;?></th>
+          <td><?php echo html::select('type[]', $lang->testtask->typeList, $task->type, "class='form-control chosen' multiple");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->owner;?></th>
@@ -64,6 +68,10 @@
           <td><?php echo html::select('status', $lang->testtask->statusList, $task->status,  "class='form-control chosen'");?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->testtask->testreport;?></th>
+          <td><?php echo html::select('testreport', $testreports, $task->testreport,  "class='form-control chosen'");?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->testtask->name;?></th>
           <td colspan='2'><?php echo html::input('name', $task->name, "class='form-control'");?></td>
         </tr>
@@ -74,6 +82,10 @@
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->files;?></th>
+          <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->mailto;?></th>

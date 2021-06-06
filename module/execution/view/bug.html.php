@@ -11,18 +11,22 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+#subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
+#subHeader #dropMenu .col-left {padding-bottom: 0px;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
     $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
-    echo html::a($this->inlink('bug', "executionID={$execution->id}&orderBy=status,id_desc&build=$buildID&type=all"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a($this->inlink('bug', "executionID={$execution->id}&orderBy=status,id_desc&build=$buildID&type=unresolved"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "executionID={$execution->id}&productID={$productID}&orderBy=status,id_desc&build=$buildID&type=all"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "executionID={$execution->id}&productID={$productID}&orderBy=status,id_desc&build=$buildID&type=unresolved"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
     ?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=&executionID=$execution->id", "<i class='icon icon-export muted'> </i>" . $lang->bug->export, '', "class='btn btn-link export'");?>
-    <?php if(common::canModify('execution', $execution)) common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extra=executionID=$execution->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
+    <?php if(common::canModify('execution', $execution)) common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extras=executionID=$execution->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
@@ -32,7 +36,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
       <?php if(common::canModify('execution', $execution) and common::hasPriv('bug', 'create')):?>
-      <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=executionID=$execution->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=executionID=$execution->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info' data-app='execution'");?>
       <?php endif;?>
     </p>
   </div>
@@ -40,7 +44,7 @@
   <form class='main-table' method='post' id='executionBugForm' data-ride="table">
     <table class='table has-sort-head' id='bugList'>
       <?php $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');?>
-      <?php $vars = "executionID={$execution->id}&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <?php $vars = "executionID={$execution->id}&productID={$productID}&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr>
           <th class='c-id'>
@@ -77,11 +81,12 @@
       <?php
       $canBeChanged = common::canBeChanged('bug', $bug);
       $arrtibute    = $canBeChanged ? '' : 'disabled';
+      $viewLink     = helper::createLink('bug', 'view', "bugID=$bug->id");
       ?>
       <tr>
         <td class='cell-id'>
           <?php if($canBatchAssignTo):?>
-          <?php echo html::checkbox('bugIDList', array($bug->id => ''), '', $arrtibute) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?>
+          <?php echo html::checkbox('bugIDList', array($bug->id => ''), '', $arrtibute) . html::a($viewLink, sprintf('%03d', $bug->id), '', "data-app={$this->app->openApp}");?>
           <?php else:?>
           <?php printf('%03d', $bug->id);?>
           <?php endif;?>
@@ -94,7 +99,7 @@
           <?php endif;?>
         </td>
         <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-        <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>
+        <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->openApp}");?></td>
         <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
         <td class='c-assignedTo has-btn text-left'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
         <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
@@ -103,7 +108,7 @@
           <?php
           if($canBeChanged)
           {
-              $params = "bugID=$bug->id";
+              $params = "bugID=$bug->id,executionID={$execution->id}";
               common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true);
               common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
               common::printIcon('bug', 'close',      $params, $bug, 'list', '',        '', 'iframe', true);

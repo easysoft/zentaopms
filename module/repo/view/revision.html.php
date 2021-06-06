@@ -3,7 +3,7 @@
  * The revision view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong 
+ * @author      Wang Yidong, Zhu Jinyong
  * @package     repo
  * @version     $Id: revision.html.php $
  */
@@ -19,11 +19,11 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php $browseLink = $app->session->revisionList != false ? $app->session->revisionList : $this->repo->createLink('browse', "repoID={$repoID}{$preDir}");?>
+    <?php $browseLink = $app->session->revisionList != false ? $app->session->revisionList : $this->repo->createLink('browse', "repoID={$repoID}&branchID=$branchID&objectID=$objectID{$preDir}");?>
     <?php echo html::a($browseLink, "<i class='icon icon-back'></i>" . $lang->goback, '', "class='btn btn-link'");?>
     <div class="divider"></div>
     <div class="page-title">
-      <?php echo $lang->repo->revisionA . ' ' . ($repo->SCM == 'Git' ? $this->repo->getGitRevisionName($revision, $log->commit) : $revision);?>
+      <?php echo $lang->repo->revisionA . ' ' . ($repo->SCM == 'Subversion' ? $revision : $this->repo->getGitRevisionName($revision, $log->commit));?>
     </div>
   </div>
 </div>
@@ -34,7 +34,7 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
       <div class='detail'>
         <div class='detail-title'>
           <?php echo $lang->repo->changes;?>
-          <div class='pull-right'><?php if(common::hasPriv('repo', 'diff')) echo html::a($this->repo->createLink('diff', "repoID=$repoID&entry=&fromRevision=$oldRevision&toRevision=$revision"), $lang->repo->diffAll);?></div>
+          <div class='pull-right'><?php if(common::hasPriv('repo', 'diff')) echo html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&fromRevision=$oldRevision&toRevision=$revision"), $lang->repo->diffAll, '', "data-app='{$app->openApp}'");?></div>
         </div>
         <div class='detail-content'>
           <table class='table no-margin'>
@@ -63,7 +63,7 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
               <th><?php echo $lang->repo->revisionA?></th>
               <td><?php echo $log->revision?></td>
             </tr>
-            <?php if($repo->SCM == 'Git'):?>
+            <?php if($repo->SCM != 'Subversion'):?>
             <tr>
               <th><?php echo $lang->repo->commit?></th>
               <td><?php echo $log->commit?></td>
@@ -85,8 +85,8 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
 </div>
 <div id="mainActions" class='main-actions'>
   <nav class="container">
-    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('revision', "repoID=$repoID&revision={$preAndNext->pre}" . $pathInfo . $typeInfo, "", 'html'), "<i class='icon-pre icon-chevron-left'></i>", '', "id='prevPage' class='btn btn-info' title='{$preAndNext->pre}'")?>
-    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('revision', "repoID=$repoID&revision={$preAndNext->next}" . $pathInfo . $typeInfo, "", 'html'), "<i class='icon-pre icon-chevron-right'></i>", '', "id='nextPage' class='btn btn-info' title='{$preAndNext->next}'")?>
+    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->pre}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-left'></i>", '', "data-app='{$app->openApp}' id='prevPage' class='btn btn-info' title='{$preAndNext->pre}'")?>
+    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->next}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-right'></i>", '', "data-app='{$app->openApp}' id='nextPage' class='btn btn-info' title='{$preAndNext->next}'")?>
   </nav>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -28,7 +28,6 @@ class taskModel extends model
             return false;
         }
 
-        $this->getExtraRequiredFields();
         $executionID    = (int)$executionID;
         $taskIdList     = array();
         $taskFiles      = array();
@@ -47,7 +46,7 @@ class taskModel extends model
             ->setDefault('execution', $executionID)
             ->setDefault('estimate,left,story', 0)
             ->setDefault('status', 'wait')
-            ->setIF($this->config->systemMode == 'new', 'project', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new', 'project', $this->getProjectID($executionID))
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('estStarted', '0000-00-00')
@@ -80,7 +79,7 @@ class taskModel extends model
             if($assignedTo) $task->assignedDate = helper::now();
 
             /* Check duplicate task. */
-            if($task->type != 'affair')
+            if($task->type != 'affair' and $task->name)
             {
                 $result = $this->loadModel('common')->removeDuplicate('task', $task, "execution={$executionID} and story=" . (int)$task->story);
                 if($result['stop'])
@@ -280,8 +279,8 @@ class taskModel extends model
         $assignedTo = '';
 
         /* Get task data. */
-        $this->getExtraRequiredFields();
         $extendFields = $this->getFlowExtendFields();
+        $projectID    = $this->getProjectID($executionID);
         $data         = array();
         foreach($tasks->name as $i => $name)
         {
@@ -303,7 +302,7 @@ class taskModel extends model
             $data[$i]->pri        = $tasks->pri[$i];
             $data[$i]->estimate   = $tasks->estimate[$i];
             $data[$i]->left       = $tasks->estimate[$i];
-            $data[$i]->project    = $this->config->systemMode == 'new' ? $this->session->PRJ : 0;
+            $data[$i]->project    = $this->config->systemMode == 'new' ? $projectID : 0;
             $data[$i]->execution  = $executionID;
             $data[$i]->estStarted = empty($tasks->estStarted[$i]) ? '0000-00-00' : $tasks->estStarted[$i];
             $data[$i]->deadline   = empty($tasks->deadline[$i]) ? '0000-00-00' : $tasks->deadline[$i];
@@ -779,8 +778,6 @@ class taskModel extends model
      */
     public function update($taskID)
     {
-        $this->getExtraRequiredFields();
-
         $oldTask = $this->getByID($taskID);
         if($this->post->estimate < 0 or $this->post->left < 0 or $this->post->consumed < 0)
         {
@@ -839,7 +836,7 @@ class taskModel extends model
             ->setIF($oldTask->parent < 0, 'estimate', $oldTask->estimate)
             ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
 
-            ->setIF($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline, 'version', $oldTask->version + 1)
+            ->setIF($oldTask->name != $this->post->name || $oldTask->estStarted != $this->post->estStarted || $oldTask->deadline != $this->post->deadline, 'version', $oldTask->version + 1)
 
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -862,7 +859,7 @@ class taskModel extends model
         $teams = array();
         if($this->post->multiple)
         {
-            if(strpos(',done,closed,cancel,', ",{$task->status},") === false && !in_array($this->post->assignedTo, $this->post->team))
+            if(strpos(',done,closed,cancel,', ",{$task->status},") === false && $this->post->assignedTo && !in_array($this->post->assignedTo, $this->post->team))
             {
                 dao::$errors[] = $this->lang->task->error->assignedTo;
                 return false;
@@ -937,7 +934,6 @@ class taskModel extends model
             ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
             ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
-            ->checkIF($task->status == 'closed', 'closedReason', 'notempty')
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->where('id')->eq((int)$taskID)->exec();
 
@@ -951,7 +947,7 @@ class taskModel extends model
             }
 
             /* Record task version. */
-            if($task->version > $oldTask->version)
+            if(isset($task->version) and $task->version > $oldTask->version)
             {
                 $taskSpec = new stdClass();
                 $taskSpec->task       = $taskID;
@@ -1361,7 +1357,7 @@ class taskModel extends model
 
         if($this->post->left == 0)
         {
-            if($task->consumed == 0)
+            if(isset($task->consumed) and $task->consumed == 0)
             {
                 dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->task->consumed);
                 return false;
@@ -1494,6 +1490,7 @@ class taskModel extends model
         $data->status         = $task->status;
         $data->lastEditedBy   = $this->app->user->account;
         $data->lastEditedDate = $now;
+        if(helper::isZeroDate($task->realStarted)) $data->realStarted = $now;
 
         if($left == 0)
         {
@@ -1870,6 +1867,11 @@ class taskModel extends model
         if($task->story) $task->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->andWhere('deleted')->eq('0')->fetchPairs();
 
         return $this->processTask($task);
+    }
+
+    public function getProjectID($executionID = 0)
+    {
+        return $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
     }
 
     /**
@@ -2534,7 +2536,7 @@ class taskModel extends model
 
         $datas = $this->processData4Report($tasks, '', 'execution');
 
-        $executions = $this->loadModel('execution')->getPairs($this->session->PRJ, 'all', 'all');
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
         foreach($datas as $executionID => $data)
         {
             $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
@@ -2970,13 +2972,13 @@ class taskModel extends model
                 $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");
                 break;
             case 'estimate':
-                echo round($task->estimate, 1) . ' ' . $this->lang->execution->workHourUnit;
+                echo round($task->estimate, 1) . $this->lang->execution->workHourUnit;
                 break;
             case 'consumed':
-                echo round($task->consumed, 1) . ' ' . $this->lang->execution->workHourUnit;
+                echo round($task->consumed, 1) . $this->lang->execution->workHourUnit;
                 break;
             case 'left':
-                echo round($task->left, 1)     . ' ' . $this->lang->execution->workHourUnit;
+                echo round($task->left, 1)     . $this->lang->execution->workHourUnit;
                 break;
             case 'progress':
                 echo round($task->progress, 2) . '%';
@@ -3028,7 +3030,7 @@ class taskModel extends model
                 {
                     if(common::hasPriv('story', 'view'))
                     {
-                        echo html::a(helper::createLink('story', 'view', "storyid=$task->storyID", 'html', true), "<i class='icon icon-{$this->lang->icons['story']}'></i>", '', "class='iframe' title='{$task->storyTitle}'");
+                        echo html::a(helper::createLink('story', 'view', "storyid=$task->storyID", 'html', true), "<i class='icon icon-{$this->lang->icons['story']}'></i>", '', "class='iframe' data-width='1050' title='{$task->storyTitle}'");
                     }
                     else
                     {
@@ -3242,29 +3244,12 @@ class taskModel extends model
      */
     public function getMemberPairs($task)
     {
-        $users   = $this->loadModel('execution')->getTeamMemberPairs($task->execution, 'nodeleted');
+        $users   = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $members = array('');
         foreach($task->team as $member)
         {
             if(isset($users[$member->account])) $members[$member->account] = $users[$member->account];
         }
         return $members;
-    }
-
-    /**
-     * Get additional required fields.
-     *
-     * @access public
-     * @return void
-     */
-    public function getExtraRequiredFields()
-    {
-        /* Add required fields to waterfall execution. */
-        $execution = $this->loadModel('project')->getByID($this->session->PRJ);
-        if(!empty($execution) && $execution->model == 'waterfall')
-        {
-            $this->config->task->create->requiredFields .= ',estStarted,deadline';
-            $this->config->task->edit->requiredFields   .= ',estStarted,deadline';
-        }
     }
 }

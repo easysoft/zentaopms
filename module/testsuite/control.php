@@ -29,15 +29,10 @@ class testsuite extends control
      */
     public function __construct($moduleName = '', $methodName = '')
     {
-       parent::__construct($moduleName, $methodName);
+        parent::__construct($moduleName, $methodName);
 
-       /* Set testtask menu group. */
-       $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-       if(!$this->projectID)
-       {
-           $this->app->loadConfig('qa');
-           foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-       }
+        $this->view->products = $this->products = $this->loadModel('product')->getPairs();
+        if(empty($this->products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testsuite")));
     }
 
     /**
@@ -65,14 +60,11 @@ class testsuite extends control
     public function browse($productID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        $this->session->set('testsuiteList', $this->app->getURI(true));
+        $this->session->set('testsuiteList', $this->app->getURI(true), 'qa');
 
         /* Set menu. */
-        $projectID            = $this->lang->navGroup->testreport == 'qa' ? 0 : $this->session->PRJ;
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'fromModule=testsuite&moduleGroup=' . $this->lang->navGroup->bug . '&activeMenu=testsuite')));
         $productID = $this->product->saveState($productID, $this->products);
-        $this->testsuite->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -130,14 +122,15 @@ class testsuite extends control
 
             $this->executeHooks($suiteID);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $suiteID));
+
             $response['locate']  = $this->createLink('testsuite', 'browse', "productID=$productID");
             $this->send($response);
         }
 
         /* Set menu. */
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
         $productID  = $this->product->saveState($productID, $this->products);
-        $this->testsuite->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->create;
         $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -162,17 +155,18 @@ class testsuite extends control
     public function view($suiteID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadLang('testtask');
+
         /* Get test suite, and set menu. */
         $suite = $this->testsuite->getById($suiteID, true);
         if(!$suite) die(js::error($this->lang->notFound) . js::locate('back'));
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
-        $productID = $suite->product;
 
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-        $this->testsuite->setMenu($this->products, $productID);
+        /* Set product session. */
+        $productID = $this->product->saveState($suite->product, $this->products);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -183,8 +177,8 @@ class testsuite extends control
 
         $this->executeHooks($suiteID);
 
-        $this->view->title      = "SUITE #$suite->id $suite->name/" . $this->products[$productID];
-        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->title      = "SUITE #$suite->id $suite->name";
+        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"));
         $this->view->position[] = $this->lang->testsuite->common;
         $this->view->position[] = $this->lang->testsuite->view;
 
@@ -237,15 +231,12 @@ class testsuite extends control
 
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
-        /* Get suite info. */
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
-
-        /* Set menu. */
-        $this->testsuite->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
-        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"));
         $this->view->position[] = $this->lang->testsuite->common;
         $this->view->position[] = $this->lang->testsuite->edit;
 
@@ -308,22 +299,20 @@ class testsuite extends control
      */
     public function linkCase($suiteID, $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Save session. */
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+
         if(!empty($_POST))
         {
             $this->testsuite->linkCase($suiteID);
             $this->locate(inlink('view', "suiteID=$suiteID"));
         }
 
-        /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        $suite = $this->testsuite->getById($suiteID);
 
-        /* Get suite and product id. */
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-        $suite      = $this->testsuite->getById($suiteID);
+        /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
-
-        /* Save session. */
-        $this->testsuite->setMenu($this->products, $productID);
+        $this->loadModel('qa')->setMenu($this->products, $productID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -343,7 +332,7 @@ class testsuite extends control
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         $this->view->title      = $suite->name . $this->lang->colon . $this->lang->testsuite->linkCase;
-        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"));
         $this->view->position[] = $this->lang->testsuite->common;
         $this->view->position[] = $this->lang->testsuite->linkCase;
 

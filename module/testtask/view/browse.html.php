@@ -40,9 +40,9 @@ $status = $this->session->testTaskVersionStatus;
     <?php $condition = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1"?>
     <div class='input-group w-300px input-group-sm'>
       <span class='input-group-addon'><?php echo $lang->testtask->beginAndEnd;?></span>
-      <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $beginTime, "class='form-control form-date' onchange='changeDate(this.value, \"$endTime\", \"$condition\")'");?></div>
+      <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $beginTime, "class='form-control form-date' onchange='changeDate(this.value, \"$endTime\", \"$condition\")' placeholder='" . $lang->testtask->begin . "'");?></div>
       <span class='input-group-addon'><?php echo $lang->testtask->to;?></span>
-      <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $endTime, "class='form-control form-date' onchange='changeDate(\"$beginTime\", this.value, \"$condition\")'");?></div>
+      <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $endTime, "class='form-control form-date' onchange='changeDate(\"$beginTime\", this.value, \"$condition\")' placeholder='" . $lang->testtask->end . "'");?></div>
     </div>
   </div>
   <?php if(common::canModify('product', $product)):?>
@@ -89,7 +89,7 @@ $status = $this->session->testTaskVersionStatus;
       <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
       <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
       <td class='c-name' title="<?php echo $task->executionName?>"><?php echo $task->executionName?></td>
-      <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', "data-group={$lang->navGroup->testtask}");?></td>
+      <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', "data-group=execution");?></td>
       <td title="<?php echo zget($users, $task->owner);?>"><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
@@ -105,9 +105,9 @@ $status = $this->session->testTaskVersionStatus;
         echo '<div id="action-divider">';
         common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
         common::printIcon('testtask',   'linkCase', "taskID=$task->id&type=all&param=myQueryID", $task, 'list', 'link');
-        common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
+        common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list', 'flag');
         echo '</div>';
-        common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true);
+        common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt', '', 'iframe', true, "data-width='90%'");
         common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
         if(common::hasPriv('testtask', 'delete', $task))
         {

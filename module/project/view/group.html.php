@@ -15,7 +15,7 @@
 <?php js::set('confirmDelete', $lang->group->confirmDelete);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::backButton($lang->goback, '', 'btn-secondary');?>
+    <?php // echo html::backButton($lang->goback, '', 'btn-secondary');?>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->group->browse;?></span></span>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -45,7 +45,7 @@
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php $disabled = $group->role == 'limited' ? 'disabled' : '';?>
           <?php common::printIcon('project', 'manageView', "groupID=$group->id&projectID=$projectID&programID=$project->parent", $group, 'list', 'eye', '', $disabled);?>
-          <?php common::printIcon('project', 'managePriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
+          <?php common::printIcon('project', 'managePriv', "projectID=$projectID&type=byGroup&param=$group->id", $group, 'list', 'lock', '', '', '', "data-app='project'");?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
           <?php common::printIcon('project', 'manageGroupMember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='90%'");?>
           <?php common::printIcon('project', 'editGroup', "groupID=$group->id", $group, 'list', 'edit', '', 'iframe', 'yes', "data-width='550'");?>

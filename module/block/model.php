@@ -173,9 +173,9 @@ class blockModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
         $data['stories']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
-        $data['executions'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
+        $data['executions'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_EXECUTION)
             ->where('status')->notIN('done,closed')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
         $data['products']   = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)
@@ -201,7 +201,7 @@ class blockModel extends model
             ->fetch('count');
         $data['delayProject'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
             ->where('status')->in('wait,doing')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('end')->lt($today)
             ->andWhere('deleted')->eq(0)
             ->fetch('count');

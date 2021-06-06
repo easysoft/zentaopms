@@ -1,316 +1,692 @@
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(1, 'user', 20, ',0,', 0, 'azhi', 'logout', '2012-06-05 09:24:52', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(2, 'user', 1, ',0,', 0, 'admin', 'login', '2012-06-05 09:25:00', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(3, 'user', 1, ',0,', 0, 'admin', 'logout', '2012-06-05 09:51:10', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(4, 'user', 2, ',0,', 0, 'productManager', 'login', '2012-06-05 09:51:33', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(5, 'user', 2, ',0,', 0, 'productManager', 'logout', '2012-06-05 09:53:05', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(6, 'user', 1, ',0,', 0, 'admin', 'login', '2012-06-05 09:53:10', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(7, 'user', 1, ',0,', 0, 'admin', 'logout', '2012-06-05 09:53:52', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(8, 'user', 2, ',0,', 0, 'productManager', 'login', '2012-06-05 09:54:07', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(9, 'product', 1, ',1,', 0, 'productManager', 'opened', '2012-06-05 09:57:07', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(10, 'productplan', 1, ',1,', 0, 'productManager', 'opened', '2012-06-05 10:02:49', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(11, 'story', 1, ',1,', 0, 'productManager', 'opened', '2012-06-05 10:09:49', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(12, 'story', 2, ',1,', 0, 'productManager', 'opened', '2012-06-05 10:16:37', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(13, 'story', 3, ',1,', 0, 'productManager', 'opened', '2012-06-05 10:18:10', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(14, 'story', 3, ',1,', 0, 'productManager', 'changed', '2012-06-05 10:19:06', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(15, 'story', 4, ',1,', 0, 'productManager', 'opened', '2012-06-05 10:20:16', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(16, 'story', 5, ',1,', 0, 'productManager', 'opened', '2012-06-05 10:21:39', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(17, 'story', 6, ',1,', 0, 'productManager', 'opened', '2012-06-05 10:23:11', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(18, 'story', 7, ',1,', 0, 'productManager', 'opened', '2012-06-05 10:24:19', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(19, 'story', 1, ',1,', 0, 'productManager', 'reviewed', '2012-06-05 10:25:19', '', 'Pass');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(20, 'story', 2, ',1,', 0, 'productManager', 'reviewed', '2012-06-05 10:25:33', '', 'Pass');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(21, 'story', 3, ',1,', 0, 'productManager', 'reviewed', '2012-06-05 10:25:38', '', 'Pass');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(22, 'story', 4, ',1,', 0, 'productManager', 'reviewed', '2012-06-05 10:25:42', '', 'Pass');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(23, 'user', 2, ',0,', 0, 'productManager', 'logout', '2012-06-05 10:26:20', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(24, 'user', 3, ',0,', 0, 'projectManager', 'login', '2012-06-05 10:26:38', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(25, 'project', 1, ',1,', 1, 'projectManager', 'opened', '2012-06-05 10:28:36', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(26, 'story', 4, ',1,', 1, 'projectManager', 'linked2project', '2012-06-05 10:31:02', '', '1');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(27, 'story', 3, ',1,', 1, 'projectManager', 'linked2project', '2012-06-05 10:31:02', '', '1');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(28, 'story', 2, ',1,', 1, 'projectManager', 'linked2project', '2012-06-05 10:31:02', '', '1');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(29, 'story', 1, ',1,', 1, 'projectManager', 'linked2project', '2012-06-05 10:31:02', '', '1');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(30, 'task', 1, ',1,', 1, 'projectManager', 'opened', '2012-06-05 10:32:03', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(31, 'task', 2, ',1,', 1, 'projectManager', 'opened', '2012-06-05 10:32:23', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(32, 'task', 3, ',1,', 1, 'projectManager', 'opened', '2012-06-05 10:33:01', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(33, 'task', 4, ',1,', 1, 'projectManager', 'opened', '2012-06-05 10:33:21', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(34, 'task', 5, ',1,', 1, 'projectManager', 'opened', '2012-06-05 10:33:44', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(35, 'task', 6, ',1,', 1, 'projectManager', 'opened', '2012-06-05 10:33:59', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(36, 'task', 7, ',1,', 1, 'projectManager', 'opened', '2012-06-05 10:34:25', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(37, 'task', 8, ',1,', 1, 'projectManager', 'opened', '2012-06-05 10:34:45', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(38, 'task', 9, ',1,', 1, 'projectManager', 'opened', '2012-06-05 10:35:01', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(39, 'user', 3, ',0,', 0, 'projectManager', 'logout', '2012-06-05 10:37:30', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(40, 'user', 4, ',0,', 0, 'dev1', 'login', '2012-06-05 10:37:40', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(41, 'task', 1, ',1,', 1, 'dev1', 'started', '2012-06-05 10:37:54', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(42, 'task', 1, ',1,', 1, 'dev1', 'finished', '2012-06-05 10:38:00', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(43, 'task', 8, ',1,', 1, 'dev1', 'finished', '2012-06-05 10:39:14', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(44, 'task', 9, ',1,', 1, 'dev1', 'edited', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(45, 'task', 8, ',1,', 1, 'dev1', 'edited', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(46, 'task', 7, ',1,', 1, 'dev1', 'edited', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(47, 'task', 6, ',1,', 1, 'dev1', 'edited', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(48, 'task', 5, ',1,', 1, 'dev1', 'edited', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(49, 'task', 4, ',1,', 1, 'dev1', 'edited', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(50, 'task', 3, ',1,', 1, 'dev1', 'edited', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(51, 'task', 2, ',1,', 1, 'dev1', 'edited', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(52, 'task', 1, ',1,', 1, 'dev1', 'edited', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(53, 'user', 4, ',0,', 0, 'dev1', 'logout', '2012-06-05 10:41:50', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(54, 'user', 5, ',0,', 0, 'dev2', 'login', '2012-06-05 10:41:56', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(55, 'task', 4, ',1,', 1, 'dev2', 'edited', '2012-06-05 10:42:56', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(56, 'task', 3, ',1,', 1, 'dev2', 'edited', '2012-06-05 10:42:57', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(57, 'user', 5, ',0,', 0, 'dev2', 'logout', '2012-06-05 10:43:02', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(58, 'user', 6, ',0,', 0, 'dev3', 'login', '2012-06-05 10:43:07', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(59, 'task', 6, ',1,', 1, 'dev3', 'edited', '2012-06-05 10:43:32', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(60, 'task', 5, ',1,', 1, 'dev3', 'edited', '2012-06-05 10:43:32', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(61, 'user', 6, ',0,', 0, 'dev3', 'logout', '2012-06-05 10:43:42', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(62, 'user', 3, ',0,', 0, 'projectManager', 'login', '2012-06-05 10:44:05', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(63, 'user', 3, ',0,', 0, 'projectManager', 'logout', '2012-06-05 10:50:03', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(64, 'user', 10, ',0,', 0, 'testManager', 'login', '2012-06-05 10:50:09', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(65, 'user', 10, ',0,', 0, 'testManager', 'logout', '2012-06-05 10:50:14', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(66, 'user', 10, ',0,', 0, 'testManager', 'login', '2012-06-05 10:50:23', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(67, 'user', 10, ',0,', 0, 'testManager', 'logout', '2012-06-05 10:50:32', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(68, 'user', 1, ',0,', 0, 'admin', 'login', '2012-06-05 10:50:36', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(69, 'user', 1, ',0,', 0, 'admin', 'logout', '2012-06-05 10:50:53', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(70, 'user', 10, ',0,', 0, 'testManager', 'login', '2012-06-05 10:51:01', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(71, 'user', 10, ',0,', 0, 'testManager', 'logout', '2012-06-05 10:51:33', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(72, 'user', 7, ',0,', 0, 'tester1', 'login', '2012-06-05 10:51:38', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(73, 'bug', 1, ',1,', 1, 'tester1', 'opened', '2012-06-05 10:56:11', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(74, 'bug', 2, ',1,', 1, 'tester1', 'opened', '2012-06-05 10:57:11', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(75, 'user', 7, ',0,', 0, 'tester1', 'logout', '2012-06-05 10:57:13', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(76, 'user', 8, ',0,', 0, 'tester2', 'login', '2012-06-05 10:57:24', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(77, 'bug', 3, ',1,', 1, 'tester2', 'opened', '2012-06-05 10:58:22', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(78, 'user', 8, ',0,', 0, 'tester2', 'logout', '2012-06-05 10:58:39', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(79, 'user', 9, ',0,', 0, 'tester3', 'login', '2012-06-05 10:58:46', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(80, 'bug', 4, ',1,', 1, 'tester3', 'opened', '2012-06-05 11:00:19', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(81, 'case', 1, ',1,', 0, 'tester3', 'opened', '2012-06-05 11:02:18', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(82, 'case', 1, ',1,', 0, 'tester3', 'edited', '2012-06-05 11:02:47', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(83, 'user', 9, ',0,', 0, 'tester3', 'logout', '2012-06-05 11:02:48', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(84, 'user', 7, ',0,', 0, 'tester1', 'login', '2012-06-05 11:02:56', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(85, 'case', 2, ',1,', 0, 'tester1', 'opened', '2012-06-05 11:03:28', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(86, 'case', 3, ',1,', 0, 'tester1', 'opened', '2012-06-05 11:03:54', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(87, 'user', 7, ',0,', 0, 'tester1', 'logout', '2012-06-05 11:04:00', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(88, 'user', 8, ',0,', 0, 'tester2', 'login', '2012-06-05 11:04:10', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(89, 'case', 4, ',1,', 0, 'tester2', 'opened', '2012-06-05 11:04:48', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(90, 'user', 8, ',0,', 0, 'tester2', 'logout', '2012-06-05 11:04:52', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(91, 'user', 10, ',0,', 0, 'testManager', 'login', '2012-06-05 11:04:58', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(92, 'testtask', 1, ',1,', 1, 'testManager', 'opened', '2012-06-05 11:07:41', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(93, 'testtask', 1, ',1,', 1, 'testManager', 'edited', '2012-06-05 11:07:52', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(94, 'user', 10, ',0,', 0, 'testManager', 'logout', '2012-06-05 11:08:10', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(95, 'user', 1, ',0,', 0, 'admin', 'login', '2012-06-05 11:08:15', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(96, 'user', 1, ',0,', 0, 'admin', 'logout', '2012-06-05 11:08:23', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(97, 'user', 10, ',0,', 0, 'testManager', 'login', '2012-06-05 11:08:35', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(98, 'user', 10, ',0,', 0, 'testManager', 'logout', '2012-06-05 11:08:55', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(99, 'user', 7, ',0,', 0, 'tester1', 'login', '2012-06-05 11:08:59', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(100, 'user', 7, ',0,', 0, 'tester1', 'logout', '2012-06-05 11:09:52', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(101, 'user', 1, ',0,', 0, 'admin', 'login', '2012-06-05 11:09:54', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(102, 'user', 1, ',0,', 0, 'admin', 'logout', '2012-06-05 11:10:38', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(103, 'user', 10, ',0,', 0, 'testManager', 'login', '2012-06-05 11:10:42', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(104, 'user', 10, ',0,', 0, 'testManager', 'logout', '2012-06-05 11:11:13', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(105, 'user', 3, ',0,', 0, 'projectManager', 'login', '2012-06-05 11:11:16', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(106, 'build', 1, ',1,', 1, 'projectManager', 'opened', '2012-06-05 11:11:45', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(107, 'project', 2, ',1,', 2, 'projectManager', 'opened', '2012-06-05 11:12:28', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(108, 'user', 3, ',0,', 0, 'projectManager', 'logout', '2012-06-05 11:14:40', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(109, 'user', 2, ',0,', 0, 'productManager', 'login', '2012-06-05 11:14:43', '', '');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `actor`, `action`, `date`, `comment`, `extra`) VALUES(110, 'product', 2, ',2,', 0, 'productManager', 'opened', '2012-06-05 11:15:20', '', '');
-
-INSERT INTO `zt_bug` (`id`, `product`, `module`, `project`, `story`, `storyVersion`, `task`, `toTask`, `toStory`, `title`, `keywords`, `severity`, `pri`, `type`, `os`, `browser`, `hardware`, `found`, `steps`, `status`, `confirmed`, `activatedCount`, `mailto`, `openedBy`, `openedDate`, `openedBuild`, `assignedTo`, `assignedDate`, `resolvedBy`, `resolution`, `resolvedBuild`, `resolvedDate`, `closedBy`, `closedDate`, `duplicateBug`, `linkBug`, `case`, `caseVersion`, `result`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(1, 1, 8, 1, 1, 1, 1, 0, 0, '首页页面问题', '', 3, 0, 'interface', '', '', '', '', '<p>[步骤]进入首页</p>\r\n<p>[结果]出现乱码&nbsp;&nbsp;&nbsp;&nbsp;</p>\r\n<p>[期望]正常显示</p>', 'active', 0, 0, '', 'tester1', '2012-06-05 10:56:11', 'trunk', 'dev1', '2012-06-05 10:56:11', '', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, '', 0, 1, 0, '', '0000-00-00 00:00:00', '0');
-INSERT INTO `zt_bug` (`id`, `product`, `module`, `project`, `story`, `storyVersion`, `task`, `toTask`, `toStory`, `title`, `keywords`, `severity`, `pri`, `type`, `os`, `browser`, `hardware`, `found`, `steps`, `status`, `confirmed`, `activatedCount`, `mailto`, `openedBy`, `openedDate`, `openedBuild`, `assignedTo`, `assignedDate`, `resolvedBy`, `resolution`, `resolvedBuild`, `resolvedDate`, `closedBy`, `closedDate`, `duplicateBug`, `linkBug`, `case`, `caseVersion`, `result`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(2, 1, 9, 1, 2, 1, 4, 0, 0, '新闻中心页面问题', '', 3, 0, 'codeerror', '', '', '', '', '<p>[步骤]进入新闻中心</p>\r\n<p>[结果]页面出现乱码</p>\r\n<p>[期望]正常显示</p>', 'active', 0, 0, '', 'tester1', '2012-06-05 10:57:11', 'trunk', 'dev2', '2012-06-05 10:57:11', '', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, '', 0, 1, 0, '', '0000-00-00 00:00:00', '0');
-INSERT INTO `zt_bug` (`id`, `product`, `module`, `project`, `story`, `storyVersion`, `task`, `toTask`, `toStory`, `title`, `keywords`, `severity`, `pri`, `type`, `os`, `browser`, `hardware`, `found`, `steps`, `status`, `confirmed`, `activatedCount`, `mailto`, `openedBy`, `openedDate`, `openedBuild`, `assignedTo`, `assignedDate`, `resolvedBy`, `resolution`, `resolvedBuild`, `resolvedDate`, `closedBy`, `closedDate`, `duplicateBug`, `linkBug`, `case`, `caseVersion`, `result`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(3, 1, 10, 1, 3, 2, 6, 0, 0, '成果展示页面问题', '', 3, 0, 'codeerror', '', '', '', '', '<p>[步骤]进入成果展示&nbsp;&nbsp;&nbsp;&nbsp;</p>\r\n<p>[结果]乱码</p>\r\n<p>[期望]正常显示</p>', 'active', 0, 0, '', 'tester2', '2012-06-05 10:58:22', 'trunk', 'dev3', '2012-06-05 10:58:22', '', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, '', 0, 1, 0, '', '0000-00-00 00:00:00', '0');
-INSERT INTO `zt_bug` (`id`, `product`, `module`, `project`, `story`, `storyVersion`, `task`, `toTask`, `toStory`, `title`, `keywords`, `severity`, `pri`, `type`, `os`, `browser`, `hardware`, `found`, `steps`, `status`, `confirmed`, `activatedCount`, `mailto`, `openedBy`, `openedDate`, `openedBuild`, `assignedTo`, `assignedDate`, `resolvedBy`, `resolution`, `resolvedBuild`, `resolvedDate`, `closedBy`, `closedDate`, `duplicateBug`, `linkBug`, `case`, `caseVersion`, `result`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(4, 1, 11, 1, 4, 1, 9, 0, 0, '售后服务页面问题', '', 3, 0, 'codeerror', '', '', '', '', '<p>[步骤]进入售后服务</p>\r\n<p>[结果]乱码</p>\r\n<p>[期望]正常显示</p>', 'active', 0, 0, '', 'tester3', '2012-06-05 11:00:19', 'trunk', 'dev1', '2012-06-05 11:00:19', '', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, '', 0, 1, 0, '', '0000-00-00 00:00:00', '0');
-
-INSERT INTO `zt_build` (`id`, `product`, `project`, `name`, `scmPath`, `filePath`, `date`, `stories`, `bugs`, `builder`, `desc`, `deleted`) VALUES(1, 1, 1, '第一期版本', '', '', '2012-06-05', '3,2,1,4', '', 'projectManager', '', '0');
-
-INSERT INTO `zt_burn` (`project`, `date`, `left`, `consumed`) VALUES(1, '2012-06-05', 0, 38);
-
-INSERT INTO `zt_case` (`id`, `product`, `module`, `path`, `story`, `storyVersion`, `title`, `precondition`, `keywords`, `pri`, `type`, `stage`, `howRun`, `scriptedBy`, `scriptedDate`, `scriptStatus`, `scriptLocation`, `status`, `frequency`, `order`, `openedBy`, `openedDate`, `lastEditedBy`, `lastEditedDate`, `version`, `linkCase`, `fromBug`, `deleted`, `lastRunner`, `lastRunDate`, `lastRunResult`) VALUES(1, 1, 0, 0, 4, 1, '售后服务的测试用例', '', '', 1, 'feature', 'feature', '', '', '0000-00-00', '', '', 'normal', '1', 0, 'tester3', '2012-06-05 11:02:18', 'tester3', '2012-06-05 11:02:46', 1, '', 0, '0', 'testManager', '2012-06-05 11:11:00', 'pass');
-INSERT INTO `zt_case` (`id`, `product`, `module`, `path`, `story`, `storyVersion`, `title`, `precondition`, `keywords`, `pri`, `type`, `stage`, `howRun`, `scriptedBy`, `scriptedDate`, `scriptStatus`, `scriptLocation`, `status`, `frequency`, `order`, `openedBy`, `openedDate`, `lastEditedBy`, `lastEditedDate`, `version`, `linkCase`, `fromBug`, `deleted`, `lastRunner`, `lastRunDate`, `lastRunResult`) VALUES(2, 1, 0, 0, 1, 1, '首页的测试用例', '', '', 3, 'feature', '', '', '', '0000-00-00', '', '', 'normal', '1', 0, 'tester1', '2012-06-05 11:03:28', '', '0000-00-00 00:00:00', 1, '', 0, '0', 'testManager', '2012-06-05 11:11:05', 'pass');
-INSERT INTO `zt_case` (`id`, `product`, `module`, `path`, `story`, `storyVersion`, `title`, `precondition`, `keywords`, `pri`, `type`, `stage`, `howRun`, `scriptedBy`, `scriptedDate`, `scriptStatus`, `scriptLocation`, `status`, `frequency`, `order`, `openedBy`, `openedDate`, `lastEditedBy`, `lastEditedDate`, `version`, `linkCase`, `fromBug`, `deleted`, `lastRunner`, `lastRunDate`, `lastRunResult`) VALUES(3, 1, 0, 0, 2, 1, '新闻中心的测试用例', '', '', 3, 'feature', 'feature', '', '', '0000-00-00', '', '', 'normal', '1', 0, 'tester1', '2012-06-05 11:03:54', '', '0000-00-00 00:00:00', 1, '', 0, '0', 'testManager', '2012-06-05 11:11:07', 'pass');
-INSERT INTO `zt_case` (`id`, `product`, `module`, `path`, `story`, `storyVersion`, `title`, `precondition`, `keywords`, `pri`, `type`, `stage`, `howRun`, `scriptedBy`, `scriptedDate`, `scriptStatus`, `scriptLocation`, `status`, `frequency`, `order`, `openedBy`, `openedDate`, `lastEditedBy`, `lastEditedDate`, `version`, `linkCase`, `fromBug`, `deleted`, `lastRunner`, `lastRunDate`, `lastRunResult`) VALUES(4, 1, 0, 0, 3, 2, '成果展示测试用例', '', '', 3, 'feature', 'feature', '', '', '0000-00-00', '', '', 'normal', '1', 0, 'tester2', '2012-06-05 11:04:48', '', '0000-00-00 00:00:00', 1, '', 0, '0', 'testManager', '2012-06-05 11:11:08', 'pass');
-
-INSERT INTO `zt_casestep` (`id`, `case`, `version`, `desc`, `expect`) VALUES(1, 1, 1, '进入首页', '正常显示');
-INSERT INTO `zt_casestep` (`id`, `case`, `version`, `desc`, `expect`) VALUES(2, 2, 1, '进入首页', '正常显示');
-INSERT INTO `zt_casestep` (`id`, `case`, `version`, `desc`, `expect`) VALUES(3, 3, 1, '进入新闻中心', '正常显示');
-INSERT INTO `zt_casestep` (`id`, `case`, `version`, `desc`, `expect`) VALUES(4, 4, 1, '进入成果展示', '正常显示');
-
-INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(1, '经理', 0, ',1,', 1, 0, '', '', '');
-INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(2, '开发', 0, ',2,', 1, 0, '', '', '');
-INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(3, '测试', 0, ',3,', 1, 0, '', '', '');
-INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(4, '市场', 0, ',4,', 1, 0, '', '', '');
-INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(5, '产品', 1, ',1,5,', 2, 0, '', '', '');
-INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(6, '项目', 1, ',1,6,', 2, 0, '', '', '');
-INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(7, '编程', 2, ',2,7,', 2, 0, '', '', '');
-INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(8, '美工', 2, ',2,8,', 2, 0, '', '', '');
-
-
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(1, 14, 'version', '1', '2', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(2, 14, 'spec', '&nbsp;作为一名本公司的用户，我希望可以在成果展示看到该公司网站的企业新闻，这样可以方便我进行了解该公司的产品并进行购买。&nbsp;<br />', '&nbsp;作为一名本公司的用户，我希望可以在成果展示看到该公司网站的吹产品，这样可以方便我进行了解该公司的产品并进行购买。&nbsp;<br />', '001- <del>作为一名本公司的用户，我希望可以在成果展示看到该公司网站的企业新闻，这样可以方便我进行了解该公司的产品并进行购买。<br /></del>\n001+ <ins>作为一名本公司的用户，我希望可以在成果展示看到该公司网站的吹产品，这样可以方便我进行了解该公司的产品并进行购买。<br /></ins>');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(3, 41, 'consumed', '0', '1', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(4, 41, 'status', 'wait', 'doing', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(6, 42, 'consumed', '1', '7', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(7, 42, 'left', '10', '0', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(8, 42, 'assignedTo', 'dev1', 'projectManager', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(9, 42, 'status', 'doing', 'done', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(10, 42, 'finishedBy', '', 'dev1', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(11, 42, 'finishedDate', '', '2012-06-05 10:38:00', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(13, 43, 'consumed', '0', '6', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(14, 43, 'left', '8', '0', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(15, 43, 'assignedTo', 'dev1', 'projectManager', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(16, 43, 'status', 'wait', 'done', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(17, 43, 'finishedBy', '', 'dev1', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(18, 43, 'finishedDate', '', '2012-06-05 10:39:14', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(20, 44, 'canceledDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(21, 45, 'canceledDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(22, 46, 'canceledDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(23, 47, 'closedDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(24, 48, 'closedDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(25, 49, 'closedDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(26, 50, 'closedDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(27, 51, 'status', 'wait', 'done', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(28, 51, 'consumed', '0', '8', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(29, 51, 'left', '10', '0', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(30, 51, 'finishedBy', '', 'dev1', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(31, 51, 'finishedDate', '', '2012-06-05 10:41:20', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(32, 52, 'finishedDate', '2012-06-05 10:38:00', '2012-06-05 10:41:20', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(33, 55, 'status', 'closed', 'done', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(34, 55, 'consumed', '0', '5', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(35, 55, 'left', '8', '0', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(36, 55, 'finishedBy', '', 'dev2', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(37, 55, 'closedBy', 'dev1', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(38, 55, 'closedReason', 'done', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(39, 55, 'finishedDate', '', '2012-06-05 10:42:56', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(40, 55, 'closedDate', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(41, 56, 'status', 'closed', 'done', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(42, 56, 'consumed', '0', '8', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(43, 56, 'left', '8', '0', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(44, 56, 'finishedBy', '', 'dev2', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(45, 56, 'closedBy', 'dev1', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(46, 56, 'closedReason', 'done', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(47, 56, 'finishedDate', '', '2012-06-05 10:42:56', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(48, 56, 'closedDate', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(49, 59, 'status', 'closed', 'done', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(50, 59, 'consumed', '0', '5', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(51, 59, 'left', '8', '0', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(52, 59, 'finishedBy', 'dev1', 'dev3', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(53, 59, 'closedBy', 'dev1', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(54, 59, 'closedReason', 'done', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(55, 59, 'finishedDate', '', '2012-06-05 10:43:32', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(56, 59, 'closedDate', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(57, 60, 'status', 'closed', 'done', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(58, 60, 'consumed', '0', '5', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(59, 60, 'left', '8', '0', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(60, 60, 'finishedBy', 'dev1', 'dev3', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(61, 60, 'closedBy', 'dev1', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(62, 60, 'closedReason', 'done', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(63, 60, 'finishedDate', '', '2012-06-05 10:43:32', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(64, 60, 'closedDate', '2012-06-05 10:41:20', '', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(65, 82, 'title', '首页的测试用例', '售后服务的测试用例', '001- <del>首页的测试用例</del>\n001+ <ins>售后服务的测试用例</ins>');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(66, 82, 'story', '1', '4', '');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES(67, 93, 'build', '', 'trunk', '');
-
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(1, 1, '首页', 0, ',1,', 1, 10, 'story', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(2, 1, '新闻中心', 0, ',2,', 1, 20, 'story', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(3, 1, '成果展示', 0, ',3,', 1, 30, 'story', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(4, 1, '售后服务', 0, ',4,', 1, 40, 'story', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(5, 1, '诚聘英才', 0, ',5,', 1, 50, 'story', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(6, 1, '合作洽谈', 0, ',6,', 1, 60, 'story', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(7, 1, '关于我们', 0, ',7,', 1, 70, 'story', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(8, 1, '首页', 0, ',8,', 1, 10, 'bug', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(9, 1, '新闻中心', 0, ',9,', 1, 20, 'bug', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(10, 1, '成果展示', 0, ',10,', 1, 30, 'bug', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(11, 1, '售后服务', 0, ',11,', 1, 40, 'bug', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(12, 1, '诚聘英才', 0, ',12,', 1, 50, 'bug', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(13, 1, '合作洽谈', 0, ',13,', 1, 60, 'bug', '');
-INSERT INTO `zt_module` (`id`, `root`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`) VALUES(14, 1, '关于我们', 0, ',14,', 1, 70, 'bug', '');
-
-INSERT INTO `zt_product` (`id`, `program`, `name`, `code`, `status`, `desc`, `PO`, `QD`, `RD`, `acl`, `whitelist`, `createdBy`, `createdDate`, `order`, `deleted`) VALUES(1, 1, '公司企业网站建设', 'companyWebsite', 'normal', '建立公司企业网站，可以更好对外展示。<br />', 'productManager', 'testManager', 'productManager', 'open', '', 'productManager', '2012-06-05 09:57:07', '5', '0');
-INSERT INTO `zt_product` (`id`, `program`, `name`, `code`, `status`, `desc`, `PO`, `QD`, `RD`, `acl`, `whitelist`, `createdBy`, `createdDate`, `order`, `createdVersion`, `deleted`) VALUES(2, 2, '企业内部工时管理系统', 'workhourManage', 'normal', '', 'productManager', 'testManager', 'productManager', 'open', '', 'productManager', '2012-06-05 11:15:20', '10', '5.2.1', '0');
-
-INSERT INTO `zt_productplan` (`id`, `product`, `title`, `desc`, `begin`, `end`, `deleted`) VALUES(1, 1, '1.0版本', '开发出企业网站1.0版本。<br />', '2000-01-01', '2015-01-01', '0');
-
-INSERT INTO `zt_project` (`id`, `type`, `model`, `parent`, `name`, `code`, `begin`, `end`, `days`, `status`, `statge`, `pri`, `desc`, `openedBy`, `openedDate`, `closedBy`, `closedDate`, `canceledBy`, `canceledDate`, `PO`, `PM`, `QD`, `RD`, `team`, `acl`, `whitelist`, `order`, `deleted`) VALUES(1, 'program', '', 0, '企业网站第一期', 'coWeb1', '2012-06-05', '2012-12-04', 184, 'done', '1', '1', '开发企业网站的基本雏形。<br />', '', 0, '', 0, '', 0, 'productManager', 'projectManager', 'testManager', 'productManager', '公司开发团队', 'open', '', '5', '0');
-INSERT INTO `zt_project` (`id`, `type`, `model`, `parent`, `name`, `code`, `begin`, `end`, `days`, `status`, `statge`, `pri`, `desc`, `openedBy`, `openedDate`, `closedBy`, `closedDate`, `canceledBy`, `canceledDate`, `PO`, `PM`, `QD`, `RD`, `team`, `acl`, `whitelist`, `order`, `deleted`) VALUES(2, 'program', '', 0, '企业网站第二期', 'coWebsite2', '2013-06-05', '2014-06-04', 365, 'wait', '1', '1', '', '', 0, '', 0, '', 0, 'productManager', 'projectManager', 'testManager', 'productManager', '公司开发团队', 'open', '', '10', '0');
-
-INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `name`, `acl`, `main`) VALUES(1, 'product', 1, 0, '产品库', 'default','1');
-INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `name`, `acl`, `main`) VALUES(2, 'product', 2, 0, '产品库', 'default', '1');
-INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `name`, `acl`, `main`) VALUES(3, 'project', 0, 1, '项目库', 'default', '1');
-INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `name`, `acl`, `main`) VALUES(4, 'project', 0, 2, '项目库', 'default', '1');
-
-INSERT INTO `zt_projectproduct` (`project`, `product`) VALUES(1, 1);
-INSERT INTO `zt_projectproduct` (`project`, `product`) VALUES(2, 1);
-
-INSERT INTO `zt_projectstory` (`project`, `product`, `story`, `version`) VALUES(1, 1, 4, 1);
-INSERT INTO `zt_projectstory` (`project`, `product`, `story`, `version`) VALUES(1, 1, 3, 2);
-INSERT INTO `zt_projectstory` (`project`, `product`, `story`, `version`) VALUES(1, 1, 2, 1);
-INSERT INTO `zt_projectstory` (`project`, `product`, `story`, `version`) VALUES(1, 1, 1, 1);
-
-
-INSERT INTO `zt_story` (`id`, `product`, `module`, `plan`, `source`, `fromBug`, `title`, `keywords`, `type`, `pri`, `estimate`, `status`, `stage`, `mailto`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `lastEditedBy`, `lastEditedDate`, `reviewedBy`, `reviewedDate`, `closedBy`, `closedDate`, `closedReason`, `toBug`, `childStories`, `linkStories`, `duplicateStory`, `version`, `deleted`) VALUES(1, 1, 1, 1, 'po', 0, '首页设计和开发', '', '', 1, 1, 'active', 'developed', '', 'productManager', '2012-06-05 10:09:49', 'productManager', '0000-00-00 00:00:00', 'productManager', '2012-06-05 10:25:19', 'productManager, ', '2012-06-05', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0');
-INSERT INTO `zt_story` (`id`, `product`, `module`, `plan`, `source`, `fromBug`, `title`, `keywords`, `type`, `pri`, `estimate`, `status`, `stage`, `mailto`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `lastEditedBy`, `lastEditedDate`, `reviewedBy`, `reviewedDate`, `closedBy`, `closedDate`, `closedReason`, `toBug`, `childStories`, `linkStories`, `duplicateStory`, `version`, `deleted`) VALUES(2, 1, 2, 1, 'po', 0, '新闻中心的设计和开发。', '', '', 1, 1, 'active', 'developed', '', 'productManager', '2012-06-05 10:16:37', 'productManager', '2012-06-05 10:16:37', 'productManager', '2012-06-05 10:25:33', 'productManager, ', '2012-06-05', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0');
-INSERT INTO `zt_story` (`id`, `product`, `module`, `plan`, `source`, `fromBug`, `title`, `keywords`, `type`, `pri`, `estimate`, `status`, `stage`, `mailto`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `lastEditedBy`, `lastEditedDate`, `reviewedBy`, `reviewedDate`, `closedBy`, `closedDate`, `closedReason`, `toBug`, `childStories`, `linkStories`, `duplicateStory`, `version`, `deleted`) VALUES(3, 1, 3, 1, 'po', 0, '成果展示的设计和开发', '', '', 1, 0, 'active', 'developed', '', 'productManager', '2012-06-05 10:18:10', 'productManager', '2012-06-05 10:18:10', 'productManager', '2012-06-05 10:25:38', 'productManager, ', '2012-06-05', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 2, '0');
-INSERT INTO `zt_story` (`id`, `product`, `module`, `plan`, `source`, `fromBug`, `title`, `keywords`, `type`, `pri`, `estimate`, `status`, `stage`, `mailto`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `lastEditedBy`, `lastEditedDate`, `reviewedBy`, `reviewedDate`, `closedBy`, `closedDate`, `closedReason`, `toBug`, `childStories`, `linkStories`, `duplicateStory`, `version`, `deleted`) VALUES(4, 1, 4, 1, 'po', 0, '售后服务的设计和开发', '', '', 1, 1, 'active', 'projected', '', 'productManager', '2012-06-05 10:20:16', 'productManager', '2012-06-05 10:20:16', 'productManager', '2012-06-05 10:25:42', 'productManager, ', '2012-06-05', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0');
-INSERT INTO `zt_story` (`id`, `product`, `module`, `plan`, `source`, `fromBug`, `title`, `keywords`, `type`, `pri`, `estimate`, `status`, `stage`, `mailto`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `lastEditedBy`, `lastEditedDate`, `reviewedBy`, `reviewedDate`, `closedBy`, `closedDate`, `closedReason`, `toBug`, `childStories`, `linkStories`, `duplicateStory`, `version`, `deleted`) VALUES(5, 1, 5, 1, 'po', 0, '诚聘英才的设计和开发', '', '', 1, 1, 'draft', 'planned', '', 'productManager', '2012-06-05 10:21:39', 'productManager', '2012-06-05 10:21:39', '', '0000-00-00 00:00:00', '', '0000-00-00', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0');
-INSERT INTO `zt_story` (`id`, `product`, `module`, `plan`, `source`, `fromBug`, `title`, `keywords`, `type`, `pri`, `estimate`, `status`, `stage`, `mailto`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `lastEditedBy`, `lastEditedDate`, `reviewedBy`, `reviewedDate`, `closedBy`, `closedDate`, `closedReason`, `toBug`, `childStories`, `linkStories`, `duplicateStory`, `version`, `deleted`) VALUES(6, 1, 6, 1, 'po', 0, '合作洽谈的设计和开发', '', '', 1, 1, 'draft', 'planned', '', 'productManager', '2012-06-05 10:23:11', 'productManager', '2012-06-05 10:23:11', '', '0000-00-00 00:00:00', '', '0000-00-00', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0');
-INSERT INTO `zt_story` (`id`, `product`, `module`, `plan`, `source`, `fromBug`, `title`, `keywords`, `type`, `pri`, `estimate`, `status`, `stage`, `mailto`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `lastEditedBy`, `lastEditedDate`, `reviewedBy`, `reviewedDate`, `closedBy`, `closedDate`, `closedReason`, `toBug`, `childStories`, `linkStories`, `duplicateStory`, `version`, `deleted`) VALUES(7, 1, 7, 1, 'po', 0, '关于我们的设计和开发', '', '', 1, 1, 'draft', 'planned', '', 'productManager', '2012-06-05 10:24:19', 'productManager', '2012-06-05 10:24:19', '', '0000-00-00 00:00:00', '', '0000-00-00', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0');
-
-INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`) VALUES(1, 1, '首页设计和开发', '作为一名本公司的用户，我希望可以在首页看到该公司网站的基本内容，例如最新动态、部分成果展示、联系信息、工商信息等。<br />', '开发并通过验收<br />');
-INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`) VALUES(2, 1, '新闻中心的设计和开发。', '作为一名本公司的用户，我希望可以在新闻中心看到该公司网站的企业新闻，这样可以通过新闻了解企业的最新动态。<br />', '');
-INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`) VALUES(3, 1, '成果展示的设计和开发', '&nbsp;作为一名本公司的用户，我希望可以在成果展示看到该公司网站的企业新闻，这样可以方便我进行了解该公司的产品并进行购买。&nbsp;<br />', '');
-INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`) VALUES(3, 2, '成果展示的设计和开发', '&nbsp;作为一名本公司的用户，我希望可以在成果展示看到该公司网站的吹产品，这样可以方便我进行了解该公司的产品并进行购买。&nbsp;<br />', '');
-INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`) VALUES(4, 1, '售后服务的设计和开发', '作为一名本公司的用户，我希望可以在售后服务看到该公司网站的售后服务，这样可以方便我联系该公司来解决我的问题。&nbsp;<br />', '');
-INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`) VALUES(5, 1, '诚聘英才的设计和开发', '作为一名求职者，我希望可以在诚聘英才里看到该公司的招聘信息，这样可以方便我应聘该公司。&nbsp;<br />', '');
-INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`) VALUES(6, 1, '合作洽谈的设计和开发', '作为一名合作商，我希望可以在合作洽谈里看到该公司对外的合作内容，这样可以方便我和该公司进行合作洽谈。&nbsp;<br />', '');
-INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`) VALUES(7, 1, '关于我们的设计和开发', '我希望可以在关于我们里看到该公司的基本信息，这样可以方便我了解该公司。<br />', '');
-
-INSERT INTO `zt_task` (`id`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(1, 1, 1, 1, 0, '首页页面的设计', 'design', 1, 10, 7, 0, '0000-00-00', 'done', '', '首页页面的设计<br />', 'projectManager', '2012-06-05 10:32:03', 'projectManager', '2012-06-05 10:41:20', 'dev1', '2012-06-05 10:41:20', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'dev1', '2012-06-05 10:41:20', '0');
-INSERT INTO `zt_task` (`id`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(2, 1, 1, 1, 0, '首页的开发', 'devel', 1, 10, 8, 0, '0000-00-00', 'done', '', '首页的开发<br />', 'projectManager', '2012-06-05 10:32:23', 'dev1', '2012-06-05 10:41:20', 'dev1', '2012-06-05 10:41:20', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'dev1', '2012-06-05 10:41:20', '0');
-INSERT INTO `zt_task` (`id`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(3, 1, 2, 1, 0, '新闻中心的设计', 'design', 1, 8, 8, 0, '0000-00-00', 'done', '', '新闻中心的设计<br />', 'projectManager', '2012-06-05 10:33:01', 'dev2', '2012-06-05 10:42:56', 'dev2', '2012-06-05 10:42:56', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'dev2', '2012-06-05 10:42:56', '0');
-INSERT INTO `zt_task` (`id`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(4, 1, 2, 1, 0, '新闻中心的开发', 'devel', 1, 8, 5, 0, '0000-00-00', 'done', '', '新闻中心的开发<br />', 'projectManager', '2012-06-05 10:33:21', 'dev2', '2012-06-05 10:42:56', 'dev2', '2012-06-05 10:42:56', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'dev2', '2012-06-05 10:42:56', '0');
-INSERT INTO `zt_task` (`id`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(5, 1, 3, 2, 0, '成果展示的设计', 'design', 1, 8, 5, 0, '0000-00-00', 'done', '', '成果展示的设计<br />', 'projectManager', '2012-06-05 10:33:44', 'dev3', '2012-06-05 10:43:32', 'dev3', '2012-06-05 10:43:32', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'dev3', '2012-06-05 10:43:32', '0');
-INSERT INTO `zt_task` (`id`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(6, 1, 3, 2, 0, '成果展示的开发', 'devel', 1, 8, 5, 0, '0000-00-00', 'done', '', '成果展示的开发<br />', 'projectManager', '2012-06-05 10:33:59', 'dev3', '2012-06-05 10:43:32', 'dev3', '2012-06-05 10:43:32', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'dev3', '2012-06-05 10:43:32', '0');
-INSERT INTO `zt_task` (`id`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(7, 1, 4, 1, 0, '售后服务的设计', 'design', 1, 8, 0, 8, '0000-00-00', 'cancel', '', '售后服务的设计<br />', 'projectManager', '2012-06-05 10:34:25', 'projectManager', '2012-06-05 10:41:20', '', '0000-00-00 00:00:00', 'dev1', '2012-06-05 10:41:20', '', '0000-00-00 00:00:00', '', 'dev1', '2012-06-05 10:41:20', '0');
-INSERT INTO `zt_task` (`id`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(8, 1, 4, 1, 0, '售后服务的开发', 'devel', 1, 8, 6, 0, '0000-00-00', 'cancel', '', '售后服务的开发<br />', 'projectManager', '2012-06-05 10:34:45', 'projectManager', '2012-06-05 10:41:20', 'dev1', '0000-00-00 00:00:00', 'dev1', '2012-06-05 10:41:20', '', '0000-00-00 00:00:00', '', 'dev1', '2012-06-05 10:41:20', '0');
-INSERT INTO `zt_task` (`id`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(9, 1, 4, 1, 0, '售后服务的开发', 'devel', 1, 8, 0, 8, '0000-00-00', 'cancel', '', '售后服务的开发<br />', 'projectManager', '2012-06-05 10:35:01', 'projectManager', '2012-06-05 10:41:20', '', '0000-00-00 00:00:00', 'dev1', '2012-06-05 10:41:20', '', '0000-00-00 00:00:00', '', 'dev1', '2012-06-05 10:41:20', '0');
-
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 'project', 'dev3', '研发', '2013-02-20', 184, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 'project', 'productManager', '产品经理', '2013-02-20', 184, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 'project', 'tester2', '测试', '2013-02-20', 184, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 'project', 'tester1', '测试', '2013-02-20', 184, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(2, 'project', 'projectManager', '项目经理', '2013-02-20', 365, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(2, 'project', 'tester2', '测试', '2013-02-20', 365, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(2, 'project', 'tester1', '测试', '2013-02-20', 365, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(2, 'project', 'dev3', '研发', '2013-02-20', 365, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(2, 'project', 'dev2', '研发', '2013-02-20', 365, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(2, 'project', 'dev1', '研发', '2013-02-20', 365, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 'project', 'dev1', '研发', '2013-02-20', 184, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 'project', 'dev2', '研发', '2013-02-20', 184, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 'project', 'projectManager', '项目经理', '2013-02-20', 184, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 'project', 'testManager', '测试主管', '2013-02-20', 184, 7);
-INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `join`, `days`, `hours`) VALUES(2, 'project', 'productManager', '产品经理', '2013-02-20', 365, 7);
-
-INSERT INTO `zt_testresult` (`id`, `run`, `case`, `version`, `caseResult`, `stepResults`, `lastRunner`, `date`) VALUES(1, 4, 1, 1, 'pass', 'a:1:{i:1;a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}', 'testManager', '2012-06-05 11:11:00');
-INSERT INTO `zt_testresult` (`id`, `run`, `case`, `version`, `caseResult`, `stepResults`, `lastRunner`, `date`) VALUES(2, 3, 2, 1, 'pass', 'a:1:{i:2;a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}', 'testManager', '2012-06-05 11:11:05');
-INSERT INTO `zt_testresult` (`id`, `run`, `case`, `version`, `caseResult`, `stepResults`, `lastRunner`, `date`) VALUES(3, 2, 3, 1, 'pass', 'a:1:{i:3;a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}', 'testManager', '2012-06-05 11:11:07');
-INSERT INTO `zt_testresult` (`id`, `run`, `case`, `version`, `caseResult`, `stepResults`, `lastRunner`, `date`) VALUES(4, 1, 4, 1, 'pass', 'a:1:{i:4;a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}', 'testManager', '2012-06-05 11:11:08');
-
-INSERT INTO `zt_testrun` (`id`, `task`, `case`, `version`, `assignedTo`, `lastRunner`, `lastRunDate`, `lastRunResult`, `status`) VALUES(1, 1, 4, 1, '', 'testManager', '2012-06-05 11:11:08', 'pass', 'done');
-INSERT INTO `zt_testrun` (`id`, `task`, `case`, `version`, `assignedTo`, `lastRunner`, `lastRunDate`, `lastRunResult`, `status`) VALUES(2, 1, 3, 1, '', 'testManager', '2012-06-05 11:11:07', 'pass', 'done');
-INSERT INTO `zt_testrun` (`id`, `task`, `case`, `version`, `assignedTo`, `lastRunner`, `lastRunDate`, `lastRunResult`, `status`) VALUES(3, 1, 2, 1, '', 'testManager', '2012-06-05 11:11:05', 'pass', 'done');
-INSERT INTO `zt_testrun` (`id`, `task`, `case`, `version`, `assignedTo`, `lastRunner`, `lastRunDate`, `lastRunResult`, `status`) VALUES(4, 1, 1, 1, '', 'testManager', '2012-06-05 11:11:00', 'pass', 'done');
-
-INSERT INTO `zt_testtask` (`id`, `name`, `product`, `project`, `build`, `owner`, `begin`, `end`, `desc`, `status`, `deleted`) VALUES(1, '企业网站第一期测试任务', 1, 1, 'trunk', 'testManager', '2012-06-05', '2013-06-21', '', 'wait', '0');
-
-INSERT INTO `zt_user` (`id`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `weixin`, `dingding`, `slack`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `deleted`) VALUES(2, 5, 'productManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'po', '产品经理', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 3, '192.168.0.8', 1338866083, '0');
-INSERT INTO `zt_user` (`id`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `weixin`, `dingding`, `slack`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `deleted`) VALUES(3, 6, 'projectManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'pm', '项目经理', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 3, '192.168.0.8', 1338865876, '0');
-INSERT INTO `zt_user` (`id`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `weixin`, `dingding`, `slack`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `deleted`) VALUES(4, 2, 'dev1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发甲', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 1, '192.168.0.8', 1338863860, '1');
-INSERT INTO `zt_user` (`id`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `weixin`, `dingding`, `slack`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `deleted`) VALUES(5, 2, 'dev2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发乙', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 1, '192.168.0.8', 1338864116, '1');
-INSERT INTO `zt_user` (`id`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `weixin`, `dingding`, `slack`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `deleted`) VALUES(6, 2, 'dev3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发丙', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 1, '192.168.0.8', 1338864187, '1');
-INSERT INTO `zt_user` (`id`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `weixin`, `dingding`, `slack`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `deleted`) VALUES(7, 3, 'tester1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试甲', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 3, '192.168.0.8', 1338865739, '1');
-INSERT INTO `zt_user` (`id`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `weixin`, `dingding`, `slack`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `deleted`) VALUES(8, 3, 'tester2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试乙', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 2, '192.168.0.8', 1338865450, '1');
-INSERT INTO `zt_user` (`id`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `weixin`, `dingding`, `slack`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `deleted`) VALUES(9, 3, 'tester3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试丙', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 1, '192.168.0.8', 1338865125, '1');
-INSERT INTO `zt_user` (`id`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `weixin`, `dingding`, `slack`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `deleted`) VALUES(10, 1, 'testManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qd', '测试经理', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 6, '192.168.0.8', 1338865842, '1');
-
-INSERT INTO `zt_usergroup` (`account`, `group`) VALUES('productManager', 5);
-INSERT INTO `zt_usergroup` (`account`, `group`) VALUES('projectManager', 4);
-INSERT INTO `zt_usergroup` (`account`, `group`) VALUES('dev1', 2);
-INSERT INTO `zt_usergroup` (`account`, `group`) VALUES('dev2', 2);
-INSERT INTO `zt_usergroup` (`account`, `group`) VALUES('dev3', 2);
-INSERT INTO `zt_usergroup` (`account`, `group`) VALUES('tester3', 3);
-INSERT INTO `zt_usergroup` (`account`, `group`) VALUES('tester2', 3);
-INSERT INTO `zt_usergroup` (`account`, `group`) VALUES('tester1', 3);
-INSERT INTO `zt_usergroup` (`account`, `group`) VALUES('testManager', 8);
+INSERT INTO `zt_acl` (`id`, `account`, `objectType`, `objectID`, `type`, `source`) VALUES
+(1, 'tester3', 'project', 7, 'whitelist', 'upgrade'),
+(2, 'admin', 'project', 7, 'whitelist', 'upgrade');
+INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `execution`, `actor`, `action`, `date`, `comment`, `extra`, `read`) VALUES
+(1, 'user', 20, ',0,', 0, 0, 'azhi', 'logout', '2012-06-05 09:24:52', '', '', '0'),
+(2, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2012-06-05 09:25:00', '', '', '0'),
+(3, 'user', 1, ',0,', 0, 0, 'admin', 'logout', '2012-06-05 09:51:10', '', '', '0'),
+(4, 'user', 2, ',0,', 0, 0, 'productManager', 'login', '2012-06-05 09:51:33', '', '', '0'),
+(5, 'user', 2, ',0,', 0, 0, 'productManager', 'logout', '2012-06-05 09:53:05', '', '', '0'),
+(6, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2012-06-05 09:53:10', '', '', '0'),
+(7, 'user', 1, ',0,', 0, 0, 'admin', 'logout', '2012-06-05 09:53:52', '', '', '0'),
+(8, 'user', 2, ',0,', 0, 0, 'productManager', 'login', '2012-06-05 09:54:07', '', '', '0'),
+(9, 'product', 1, ',1,', 0, 0, 'productManager', 'opened', '2012-06-05 09:57:07', '', '', '0'),
+(10, 'productplan', 1, ',1,', 0, 0, 'productManager', 'opened', '2012-06-05 10:02:49', '', '', '0'),
+(11, 'story', 1, ',1,', 0, 0, 'productManager', 'opened', '2012-06-05 10:09:49', '', '', '0'),
+(12, 'story', 2, ',1,', 0, 0, 'productManager', 'opened', '2012-06-05 10:16:37', '', '', '0'),
+(13, 'story', 3, ',1,', 0, 0, 'productManager', 'opened', '2012-06-05 10:18:10', '', '', '0'),
+(14, 'story', 3, ',1,', 0, 0, 'productManager', 'changed', '2012-06-05 10:19:06', '', '', '0'),
+(15, 'story', 4, ',1,', 0, 0, 'productManager', 'opened', '2012-06-05 10:20:16', '', '', '0'),
+(16, 'story', 5, ',1,', 0, 0, 'productManager', 'opened', '2012-06-05 10:21:39', '', '', '0'),
+(17, 'story', 6, ',1,', 0, 0, 'productManager', 'opened', '2012-06-05 10:23:11', '', '', '0'),
+(18, 'story', 7, ',1,', 0, 0, 'productManager', 'opened', '2012-06-05 10:24:19', '', '', '0'),
+(19, 'story', 1, ',1,', 0, 0, 'productManager', 'reviewed', '2012-06-05 10:25:19', '', 'Pass', '0'),
+(20, 'story', 2, ',1,', 0, 0, 'productManager', 'reviewed', '2012-06-05 10:25:33', '', 'Pass', '0'),
+(21, 'story', 3, ',1,', 0, 0, 'productManager', 'reviewed', '2012-06-05 10:25:38', '', 'Pass', '0'),
+(22, 'story', 4, ',1,', 0, 0, 'productManager', 'reviewed', '2012-06-05 10:25:42', '', 'Pass', '0'),
+(23, 'user', 2, ',0,', 0, 0, 'productManager', 'logout', '2012-06-05 10:26:20', '', '', '0'),
+(24, 'user', 3, ',0,', 0, 0, 'projectManager', 'login', '2012-06-05 10:26:38', '', '', '0'),
+(25, 'execution', 1, ',1,', 0, 1, 'projectManager', 'opened', '2012-06-05 10:28:36', '', '', '0'),
+(26, 'story', 4, ',1,', 0, 1, 'projectManager', 'linked2project', '2012-06-05 10:31:02', '', '1', '0'),
+(27, 'story', 3, ',1,', 0, 1, 'projectManager', 'linked2project', '2012-06-05 10:31:02', '', '1', '0'),
+(28, 'story', 2, ',1,', 0, 1, 'projectManager', 'linked2project', '2012-06-05 10:31:02', '', '1', '0'),
+(29, 'story', 1, ',1,', 0, 1, 'projectManager', 'linked2project', '2012-06-05 10:31:02', '', '1', '0'),
+(39, 'user', 3, ',0,', 0, 0, 'projectManager', 'logout', '2012-06-05 10:37:30', '', '', '0'),
+(40, 'user', 4, ',0,', 0, 0, 'dev1', 'login', '2012-06-05 10:37:40', '', '', '0'),
+(53, 'user', 4, ',0,', 0, 0, 'dev1', 'logout', '2012-06-05 10:41:50', '', '', '0'),
+(54, 'user', 5, ',0,', 0, 0, 'dev2', 'login', '2012-06-05 10:41:56', '', '', '0'),
+(57, 'user', 5, ',0,', 0, 0, 'dev2', 'logout', '2012-06-05 10:43:02', '', '', '0'),
+(58, 'user', 6, ',0,', 0, 0, 'dev3', 'login', '2012-06-05 10:43:07', '', '', '0'),
+(61, 'user', 6, ',0,', 0, 0, 'dev3', 'logout', '2012-06-05 10:43:42', '', '', '0'),
+(62, 'user', 3, ',0,', 0, 0, 'projectManager', 'login', '2012-06-05 10:44:05', '', '', '0'),
+(63, 'user', 3, ',0,', 0, 0, 'projectManager', 'logout', '2012-06-05 10:50:03', '', '', '0'),
+(64, 'user', 10, ',0,', 0, 0, 'testManager', 'login', '2012-06-05 10:50:09', '', '', '0'),
+(65, 'user', 10, ',0,', 0, 0, 'testManager', 'logout', '2012-06-05 10:50:14', '', '', '0'),
+(66, 'user', 10, ',0,', 0, 0, 'testManager', 'login', '2012-06-05 10:50:23', '', '', '0'),
+(67, 'user', 10, ',0,', 0, 0, 'testManager', 'logout', '2012-06-05 10:50:32', '', '', '0'),
+(68, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2012-06-05 10:50:36', '', '', '0'),
+(69, 'user', 1, ',0,', 0, 0, 'admin', 'logout', '2012-06-05 10:50:53', '', '', '0'),
+(70, 'user', 10, ',0,', 0, 0, 'testManager', 'login', '2012-06-05 10:51:01', '', '', '0'),
+(71, 'user', 10, ',0,', 0, 0, 'testManager', 'logout', '2012-06-05 10:51:33', '', '', '0'),
+(72, 'user', 7, ',0,', 0, 0, 'tester1', 'login', '2012-06-05 10:51:38', '', '', '0'),
+(73, 'bug', 1, ',1,', 0, 1, 'tester1', 'opened', '2012-06-05 10:56:11', '', '', '0'),
+(74, 'bug', 2, ',1,', 0, 1, 'tester1', 'opened', '2012-06-05 10:57:11', '', '', '0'),
+(75, 'user', 7, ',0,', 0, 0, 'tester1', 'logout', '2012-06-05 10:57:13', '', '', '0'),
+(76, 'user', 8, ',0,', 0, 0, 'tester2', 'login', '2012-06-05 10:57:24', '', '', '0'),
+(77, 'bug', 3, ',1,', 0, 1, 'tester2', 'opened', '2012-06-05 10:58:22', '', '', '0'),
+(78, 'user', 8, ',0,', 0, 0, 'tester2', 'logout', '2012-06-05 10:58:39', '', '', '0'),
+(79, 'user', 9, ',0,', 0, 0, 'tester3', 'login', '2012-06-05 10:58:46', '', '', '0'),
+(80, 'bug', 4, ',1,', 0, 1, 'tester3', 'opened', '2012-06-05 11:00:19', '', '', '0'),
+(81, 'case', 1, ',1,', 0, 0, 'tester3', 'opened', '2012-06-05 11:02:18', '', '', '0'),
+(82, 'case', 1, ',1,', 0, 0, 'tester3', 'edited', '2012-06-05 11:02:47', '', '', '0'),
+(83, 'user', 9, ',0,', 0, 0, 'tester3', 'logout', '2012-06-05 11:02:48', '', '', '0'),
+(84, 'user', 7, ',0,', 0, 0, 'tester1', 'login', '2012-06-05 11:02:56', '', '', '0'),
+(85, 'case', 2, ',1,', 0, 0, 'tester1', 'opened', '2012-06-05 11:03:28', '', '', '0'),
+(86, 'case', 3, ',1,', 0, 0, 'tester1', 'opened', '2012-06-05 11:03:54', '', '', '0'),
+(87, 'user', 7, ',0,', 0, 0, 'tester1', 'logout', '2012-06-05 11:04:00', '', '', '0'),
+(88, 'user', 8, ',0,', 0, 0, 'tester2', 'login', '2012-06-05 11:04:10', '', '', '0'),
+(89, 'case', 4, ',1,', 0, 0, 'tester2', 'opened', '2012-06-05 11:04:48', '', '', '0'),
+(90, 'user', 8, ',0,', 0, 0, 'tester2', 'logout', '2012-06-05 11:04:52', '', '', '0'),
+(91, 'user', 10, ',0,', 0, 0, 'testManager', 'login', '2012-06-05 11:04:58', '', '', '0'),
+(92, 'testtask', 1, ',1,', 0, 1, 'testManager', 'opened', '2012-06-05 11:07:41', '', '', '0'),
+(93, 'testtask', 1, ',1,', 0, 1, 'testManager', 'edited', '2012-06-05 11:07:52', '', '', '0'),
+(94, 'user', 10, ',0,', 0, 0, 'testManager', 'logout', '2012-06-05 11:08:10', '', '', '0'),
+(95, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2012-06-05 11:08:15', '', '', '0'),
+(96, 'user', 1, ',0,', 0, 0, 'admin', 'logout', '2012-06-05 11:08:23', '', '', '0'),
+(97, 'user', 10, ',0,', 0, 0, 'testManager', 'login', '2012-06-05 11:08:35', '', '', '0'),
+(98, 'user', 10, ',0,', 0, 0, 'testManager', 'logout', '2012-06-05 11:08:55', '', '', '0'),
+(99, 'user', 7, ',0,', 0, 0, 'tester1', 'login', '2012-06-05 11:08:59', '', '', '0'),
+(100, 'user', 7, ',0,', 0, 0, 'tester1', 'logout', '2012-06-05 11:09:52', '', '', '0'),
+(101, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2012-06-05 11:09:54', '', '', '0'),
+(102, 'user', 1, ',0,', 0, 0, 'admin', 'logout', '2012-06-05 11:10:38', '', '', '0'),
+(103, 'user', 10, ',0,', 0, 0, 'testManager', 'login', '2012-06-05 11:10:42', '', '', '0'),
+(104, 'user', 10, ',0,', 0, 0, 'testManager', 'logout', '2012-06-05 11:11:13', '', '', '0'),
+(105, 'user', 3, ',0,', 0, 0, 'projectManager', 'login', '2012-06-05 11:11:16', '', '', '0'),
+(106, 'build', 1, ',1,', 0, 1, 'projectManager', 'opened', '2012-06-05 11:11:45', '', '', '0'),
+(107, 'execution', 2, ',1,', 0, 2, 'projectManager', 'opened', '2012-06-05 11:12:28', '', '', '0'),
+(108, 'user', 3, ',0,', 0, 0, 'projectManager', 'logout', '2012-06-05 11:14:40', '', '', '0'),
+(109, 'user', 2, ',0,', 0, 0, 'productManager', 'login', '2012-06-05 11:14:43', '', '', '0'),
+(110, 'product', 2, ',2,', 0, 0, 'productManager', 'opened', '2012-06-05 11:15:20', '', '', '0'),
+(111, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2021-04-28 11:03:34', '', '', '0'),
+(112, 'execution', 1, ',1,', 0, 1, 'admin', 'edited', '2021-04-28 11:06:58', '', '', '0'),
+(113, 'execution', 2, ',1,', 0, 2, 'admin', 'edited', '2021-04-28 11:08:02', '', '', '0'),
+(114, 'bug', 1, ',1,', 0, 1, 'admin', 'edited', '2021-04-28 11:09:08', '', '', '0'),
+(115, 'bug', 2, ',1,', 0, 1, 'admin', 'edited', '2021-04-28 11:09:08', '', '', '0'),
+(116, 'bug', 3, ',1,', 0, 1, 'admin', 'edited', '2021-04-28 11:09:08', '', '', '0'),
+(117, 'bug', 4, ',1,', 0, 1, 'admin', 'edited', '2021-04-28 11:09:08', '', '', '0'),
+(118, 'testtask', 1, ',1,', 0, 1, 'admin', 'edited', '2021-04-28 11:10:06', '', '', '0'),
+(119, 'productplan', 1, ',1,', 0, 0, 'admin', 'edited', '2021-04-28 11:11:10', '', '', '0'),
+(120, 'execution', 1, ',1,', 0, 1, 'admin', 'started', '2021-04-28 11:12:22', '', '', '0'),
+(121, 'program', 6, ',0,', 0, 0, '', 'openedbysystem', '2021-04-28 11:22:04', '', '', '0'),
+(122, 'project', 7, ',,', 7, 0, '', 'openedbysystem', '2021-04-28 11:22:04', '', '', '0'),
+(123, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2021-04-28 11:22:17', '', '', '0'),
+(124, 'user', 1, ',0,', 0, 0, 'admin', 'logout', '2021-04-28 11:29:30', '', '', '0'),
+(125, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2021-04-28 11:29:49', '', '', '0'),
+(131, 'user', 1, ',0,', 0, 0, 'admin', 'logout', '2021-04-28 11:33:16', '', '', '0'),
+(132, 'user', 3, ',0,', 0, 0, 'projectManager', 'login', '2021-04-28 11:33:18', '', '', '0'),
+(133, 'user', 3, ',0,', 0, 0, 'projectManager', 'logout', '2021-04-28 11:37:36', '', '', '0'),
+(134, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2021-04-28 11:37:42', '', '', '0'),
+(135, 'user', 1, ',0,', 0, 0, 'admin', 'logout', '2021-04-28 11:56:34', '', '', '0'),
+(136, 'user', 4, ',0,', 0, 0, 'dev1', 'login', '2021-04-28 11:56:39', '', '', '0'),
+(137, 'user', 4, ',0,', 0, 0, 'dev1', 'logout', '2021-04-28 13:10:08', '', '', '0'),
+(138, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2021-04-28 13:10:15', '', '', '0'),
+(139, 'case', 1, ',1,', 0, 1, 'admin', 'unlinkedfromexecution', '2021-04-28 13:10:34', '', '1', '0'),
+(140, 'story', 4, ',1,', 7, 1, 'admin', 'unlinkedfromexecution', '2021-04-28 13:10:34', '', '1', '0'),
+(141, 'case', 4, ',1,', 0, 1, 'admin', 'unlinkedfromexecution', '2021-04-28 13:10:34', '', '1', '0'),
+(142, 'story', 3, ',1,', 7, 1, 'admin', 'unlinkedfromexecution', '2021-04-28 13:10:34', '', '1', '0'),
+(143, 'case', 3, ',1,', 0, 1, 'admin', 'unlinkedfromexecution', '2021-04-28 13:10:34', '', '1', '0'),
+(144, 'story', 2, ',1,', 7, 1, 'admin', 'unlinkedfromexecution', '2021-04-28 13:10:34', '', '1', '0'),
+(145, 'case', 2, ',1,', 0, 1, 'admin', 'unlinkedfromexecution', '2021-04-28 13:10:34', '', '1', '0'),
+(146, 'story', 1, ',1,', 7, 1, 'admin', 'unlinkedfromexecution', '2021-04-28 13:10:34', '', '1', '0'),
+(147, 'case', 1, ',1,', 0, 1, 'admin', 'linked2execution', '2021-04-28 13:10:39', '', '1', '0'),
+(148, 'story', 4, ',1,', 7, 1, 'admin', 'linked2execution', '2021-04-28 13:10:39', '', '1', '0'),
+(149, 'case', 4, ',1,', 0, 1, 'admin', 'linked2execution', '2021-04-28 13:10:39', '', '1', '0'),
+(150, 'story', 3, ',1,', 7, 1, 'admin', 'linked2execution', '2021-04-28 13:10:39', '', '1', '0'),
+(151, 'case', 3, ',1,', 0, 1, 'admin', 'linked2execution', '2021-04-28 13:10:39', '', '1', '0'),
+(152, 'story', 2, ',1,', 7, 1, 'admin', 'linked2execution', '2021-04-28 13:10:39', '', '1', '0'),
+(153, 'case', 2, ',1,', 0, 1, 'admin', 'linked2execution', '2021-04-28 13:10:39', '', '1', '0'),
+(154, 'story', 1, ',1,', 7, 1, 'admin', 'linked2execution', '2021-04-28 13:10:39', '', '1', '0'),
+(155, 'task', 10, ',1,', 7, 1, 'admin', 'opened', '2021-04-28 13:16:15', '', '', '0'),
+(156, 'task', 11, ',1,', 7, 1, 'admin', 'opened', '2021-04-28 13:16:15', '', '', '0'),
+(157, 'task', 12, ',1,', 7, 1, 'admin', 'opened', '2021-04-28 13:16:15', '', '', '0'),
+(158, 'task', 13, ',1,', 7, 1, 'admin', 'opened', '2021-04-28 13:16:15', '', '', '0'),
+(159, 'task', 14, ',1,', 7, 1, 'admin', 'opened', '2021-04-28 13:16:15', '', '', '0'),
+(160, 'task', 15, ',1,', 7, 1, 'admin', 'opened', '2021-04-28 13:16:15', '', '', '0'),
+(161, 'task', 16, ',1,', 7, 1, 'admin', 'opened', '2021-04-28 13:16:15', '', '', '0'),
+(162, 'task', 17, ',1,', 7, 1, 'admin', 'opened', '2021-04-28 13:16:15', '', '', '0'),
+(163, 'user', 1, ',0,', 0, 0, 'admin', 'logout', '2021-04-28 13:16:30', '', '', '0'),
+(164, 'user', 4, ',0,', 0, 0, 'dev1', 'login', '2021-04-28 13:16:33', '', '', '0'),
+(165, 'task', 10, ',1,', 7, 1, 'dev1', 'finished', '2021-04-28 13:17:54', '', '', '0'),
+(166, 'task', 11, ',1,', 7, 1, 'dev1', 'started', '2021-04-28 13:18:45', '', '', '0'),
+(167, 'user', 4, ',0,', 0, 0, 'dev1', 'logout', '2021-04-28 13:19:30', '', '', '0'),
+(168, 'user', 5, ',0,', 0, 0, 'dev2', 'login', '2021-04-28 13:19:33', '', '', '0'),
+(169, 'task', 14, ',1,', 7, 1, 'dev2', 'started', '2021-04-28 13:19:54', '', '', '0'),
+(170, 'task', 15, ',1,', 7, 1, 'dev2', 'started', '2021-04-28 13:20:09', '', '', '0'),
+(171, 'user', 5, ',0,', 0, 0, 'dev2', 'logout', '2021-04-28 13:20:17', '', '', '0'),
+(172, 'user', 6, ',0,', 0, 0, 'dev3', 'login', '2021-04-28 13:20:20', '', '', '0'),
+(173, 'task', 16, ',1,', 7, 1, 'dev3', 'started', '2021-04-28 13:20:38', '', '', '0'),
+(174, 'task', 17, ',1,', 7, 1, 'dev3', 'started', '2021-04-28 13:20:52', '', '', '0'),
+(175, 'task', 16, ',1,', 7, 1, 'dev3', 'finished', '2021-04-28 13:21:22', '', '', '0'),
+(176, 'task', 17, ',1,', 7, 1, 'dev3', 'finished', '2021-04-28 13:21:51', '', '', '0'),
+(177, 'user', 6, ',0,', 0, 0, 'dev3', 'logout', '2021-04-28 13:22:30', '', '', '0'),
+(178, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2021-04-28 13:22:37', '', '', '0');
+INSERT INTO `zt_block` (`id`, `account`, `module`, `type`, `title`, `source`, `block`, `params`, `order`, `grid`, `height`, `hidden`) VALUES
+(1, 'admin', 'my', '', '欢迎', '', 'welcome', '', 1, 8, 0, 0),
+(2, 'admin', 'my', '', '最新动态', '', 'dynamic', '', 2, 4, 0, 0),
+(3, 'admin', 'my', '', '我的待办', 'todo', 'list', '{\"count\":\"20\"}', 3, 4, 0, 0),
+(4, 'admin', 'my', '', '项目统计', 'project', 'statistic', '{\"count\":\"20\"}', 4, 8, 0, 0),
+(5, 'admin', 'my', '', '我的贡献', '', 'contribute', '', 5, 4, 0, 0),
+(6, 'admin', 'my', '', '我近期参与的项目', 'project', 'recentproject', '', 6, 8, 0, 0),
+(7, 'admin', 'my', '', '待处理', '', 'assigntome', '{\"todoNum\":\"20\",\"taskNum\":\"20\",\"bugNum\":\"20\",\"riskNum\":\"20\",\"issueNum\":\"20\",\"storyNum\":\"20\"}', 7, 8, 0, 0),
+(8, 'admin', 'my', '', '项目人力投入', 'project', 'projectteam', '', 8, 8, 0, 0),
+(9, 'admin', 'my', '', '项目列表', 'project', 'project', '{\"orderBy\":\"id_desc\",\"count\":\"15\"}', 9, 8, 0, 0),
+(10, 'admin', 'project', 'scrum', '项目概况', 'project', 'scrumoverview', '', 1, 8, 0, 0),
+(11, 'admin', 'project', 'scrum', '迭代列表', 'project', 'scrumlist', '{\"type\":\"undone\",\"count\":\"20\",\"orderBy\":\"id_desc\"}', 2, 8, 0, 0),
+(12, 'admin', 'project', 'scrum', '待测版本', 'project', 'scrumtest', '{\"type\":\"wait\",\"count\":\"15\",\"orderBy\":\"id_desc\"}', 3, 8, 0, 0),
+(13, 'admin', 'project', 'scrum', '迭代总览', 'project', 'sprint', '', 4, 4, 0, 0),
+(14, 'admin', 'project', 'scrum', '最新动态', 'project', 'projectdynamic', '', 5, 4, 0, 0),
+(15, 'admin', 'product', '', '产品统计', 'product', 'statistic', '{\"type\":\"all\",\"count\":\"20\"}', 1, 8, 0, 0),
+(16, 'admin', 'product', '', '产品总览', 'product', 'overview', '', 2, 4, 0, 0),
+(17, 'admin', 'product', '', '未关闭的产品', 'product', 'list', '{\"count\":15,\"type\":\"noclosed\"}', 3, 8, 0, 0),
+(18, 'admin', 'product', '', '指派给我的软件需求', 'product', 'story', '{\"count\":15,\"orderBy\":\"id_desc\",\"type\":\"assignedTo\"}', 4, 4, 0, 0),
+(19, 'admin', 'qa', '', '测试统计', 'qa', 'statistic', '{\"type\":\"noclosed\",\"count\":\"20\"}', 1, 8, 0, 0),
+(20, 'admin', 'qa', '', '指派给我的Bug', 'qa', 'bug', '{\"count\":15,\"orderBy\":\"id_desc\",\"type\":\"assignedTo\"}', 2, 4, 0, 0),
+(21, 'admin', 'qa', '', '指派给我的用例', 'qa', 'case', '{\"count\":15,\"orderBy\":\"id_desc\",\"type\":\"assigntome\"}', 3, 4, 0, 0),
+(22, 'admin', 'qa', '', '待测版本列表', 'qa', 'testtask', '{\"count\":15,\"orderBy\":\"id_desc\",\"type\":\"wait\"}', 4, 8, 0, 0),
+(23, 'projectManager', 'my', '', '欢迎', '', 'welcome', '', 1, 8, 0, 0),
+(24, 'projectManager', 'my', '', '最新动态', '', 'dynamic', '', 2, 4, 0, 0),
+(25, 'projectManager', 'my', '', '我的待办', 'todo', 'list', '{\"count\":\"20\"}', 3, 4, 0, 0),
+(26, 'projectManager', 'my', '', '项目统计', 'project', 'statistic', '{\"count\":\"20\"}', 4, 8, 0, 0),
+(27, 'projectManager', 'my', '', '我的贡献', '', 'contribute', '', 5, 4, 0, 0),
+(28, 'projectManager', 'my', '', '我近期参与的项目', 'project', 'recentproject', '', 6, 8, 0, 0),
+(29, 'projectManager', 'my', '', '待处理', '', 'assigntome', '{\"todoNum\":\"20\",\"taskNum\":\"20\",\"bugNum\":\"20\",\"riskNum\":\"20\",\"issueNum\":\"20\",\"storyNum\":\"20\"}', 7, 8, 0, 0),
+(30, 'projectManager', 'my', '', '项目人力投入', 'project', 'projectteam', '', 8, 8, 0, 0),
+(31, 'projectManager', 'my', '', '项目列表', 'project', 'project', '{\"orderBy\":\"id_desc\",\"count\":\"15\"}', 9, 8, 0, 0),
+(32, 'projectManager', 'qa', '', '测试统计', 'qa', 'statistic', '{\"type\":\"noclosed\",\"count\":\"20\"}', 1, 8, 0, 0),
+(33, 'projectManager', 'qa', '', '指派给我的Bug', 'qa', 'bug', '{\"count\":15,\"orderBy\":\"id_desc\",\"type\":\"assignedTo\"}', 2, 4, 0, 0),
+(34, 'projectManager', 'qa', '', '指派给我的用例', 'qa', 'case', '{\"count\":15,\"orderBy\":\"id_desc\",\"type\":\"assigntome\"}', 3, 4, 0, 0),
+(35, 'projectManager', 'qa', '', '待测版本列表', 'qa', 'testtask', '{\"count\":15,\"orderBy\":\"id_desc\",\"type\":\"wait\"}', 4, 8, 0, 0),
+(36, 'dev1', 'my', '', '欢迎', '', 'welcome', '', 1, 8, 0, 0),
+(37, 'dev1', 'my', '', '最新动态', '', 'dynamic', '', 2, 4, 0, 0),
+(38, 'dev1', 'my', '', '我的待办', 'todo', 'list', '{\"count\":\"20\"}', 3, 4, 0, 0),
+(39, 'dev1', 'my', '', '项目统计', 'project', 'statistic', '{\"count\":\"20\"}', 4, 8, 0, 0),
+(40, 'dev1', 'my', '', '我的贡献', '', 'contribute', '', 5, 4, 0, 0),
+(41, 'dev1', 'my', '', '我近期参与的项目', 'project', 'recentproject', '', 6, 8, 0, 0),
+(42, 'dev1', 'my', '', '待处理', '', 'assigntome', '{\"todoNum\":\"20\",\"taskNum\":\"20\",\"bugNum\":\"20\",\"riskNum\":\"20\",\"issueNum\":\"20\",\"storyNum\":\"20\"}', 7, 8, 0, 0),
+(43, 'dev1', 'my', '', '项目人力投入', 'project', 'projectteam', '', 8, 8, 0, 0),
+(44, 'dev1', 'my', '', '项目列表', 'project', 'project', '{\"orderBy\":\"id_desc\",\"count\":\"15\"}', 9, 8, 0, 0),
+(45, 'dev2', 'my', '', '欢迎', '', 'welcome', '', 1, 8, 0, 0),
+(46, 'dev2', 'my', '', '最新动态', '', 'dynamic', '', 2, 4, 0, 0),
+(47, 'dev2', 'my', '', '我的待办', 'todo', 'list', '{\"count\":\"20\"}', 3, 4, 0, 0),
+(48, 'dev2', 'my', '', '项目统计', 'project', 'statistic', '{\"count\":\"20\"}', 4, 8, 0, 0),
+(49, 'dev2', 'my', '', '我的贡献', '', 'contribute', '', 5, 4, 0, 0),
+(50, 'dev2', 'my', '', '我近期参与的项目', 'project', 'recentproject', '', 6, 8, 0, 0),
+(51, 'dev2', 'my', '', '待处理', '', 'assigntome', '{\"todoNum\":\"20\",\"taskNum\":\"20\",\"bugNum\":\"20\",\"riskNum\":\"20\",\"issueNum\":\"20\",\"storyNum\":\"20\"}', 7, 8, 0, 0),
+(52, 'dev2', 'my', '', '项目人力投入', 'project', 'projectteam', '', 8, 8, 0, 0),
+(53, 'dev2', 'my', '', '项目列表', 'project', 'project', '{\"orderBy\":\"id_desc\",\"count\":\"15\"}', 9, 8, 0, 0),
+(54, 'dev3', 'my', '', '欢迎', '', 'welcome', '', 1, 8, 0, 0),
+(55, 'dev3', 'my', '', '最新动态', '', 'dynamic', '', 2, 4, 0, 0),
+(56, 'dev3', 'my', '', '我的待办', 'todo', 'list', '{\"count\":\"20\"}', 3, 4, 0, 0),
+(57, 'dev3', 'my', '', '项目统计', 'project', 'statistic', '{\"count\":\"20\"}', 4, 8, 0, 0),
+(58, 'dev3', 'my', '', '我的贡献', '', 'contribute', '', 5, 4, 0, 0),
+(59, 'dev3', 'my', '', '我近期参与的项目', 'project', 'recentproject', '', 6, 8, 0, 0),
+(60, 'dev3', 'my', '', '待处理', '', 'assigntome', '{\"todoNum\":\"20\",\"taskNum\":\"20\",\"bugNum\":\"20\",\"riskNum\":\"20\",\"issueNum\":\"20\",\"storyNum\":\"20\"}', 7, 8, 0, 0),
+(61, 'dev3', 'my', '', '项目人力投入', 'project', 'projectteam', '', 8, 8, 0, 0),
+(62, 'dev3', 'my', '', '项目列表', 'project', 'project', '{\"orderBy\":\"id_desc\",\"count\":\"15\"}', 9, 8, 0, 0);
+INSERT INTO `zt_bug` (`id`, `project`, `product`, `branch`, `module`, `execution`, `plan`, `story`, `storyVersion`, `task`, `toTask`, `toStory`, `title`, `keywords`, `severity`, `pri`, `type`, `os`, `browser`, `hardware`, `found`, `steps`, `status`, `subStatus`, `color`, `confirmed`, `activatedCount`, `activatedDate`, `mailto`, `openedBy`, `openedDate`, `openedBuild`, `assignedTo`, `assignedDate`, `deadline`, `resolvedBy`, `resolution`, `resolvedBuild`, `resolvedDate`, `closedBy`, `closedDate`, `duplicateBug`, `linkBug`, `case`, `caseVersion`, `result`, `repo`, `entry`, `lines`, `v1`, `v2`, `repoType`, `testtask`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES
+(1, 7, 1, 0, 8, 1, 0, 1, 1, 1, 0, 0, '首页页面问题', '', 3, 1, 'codeerror', '', '', '', '', '<p>[步骤]进入首页</p>\r\n<p>[结果]出现乱码&nbsp;&nbsp;&nbsp;&nbsp;</p>\r\n<p>[期望]正常显示</p>', 'active', '', '', 0, 0, '0000-00-00 00:00:00', '', 'tester1', '2012-06-05 10:56:11', 'trunk', 'dev1', '2012-06-05 10:56:11', '0000-00-00', '', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, '', 0, 1, 0, 0, '', '', '', '', '', 0, 'admin', '2021-04-28 11:09:08', '0'),
+(2, 7, 1, 0, 9, 1, 0, 2, 1, 4, 0, 0, '新闻中心页面问题', '', 3, 2, 'codeerror', '', '', '', '', '<p>[步骤]进入新闻中心</p>\r\n<p>[结果]页面出现乱码</p>\r\n<p>[期望]正常显示</p>', 'active', '', '', 0, 0, '0000-00-00 00:00:00', '', 'tester1', '2012-06-05 10:57:11', 'trunk', 'dev1', '2012-06-05 10:57:11', '0000-00-00', '', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, '', 0, 1, 0, 0, '', '', '', '', '', 0, 'admin', '2021-04-28 11:09:08', '0'),
+(3, 7, 1, 0, 10, 1, 0, 3, 2, 6, 0, 0, '成果展示页面问题', '', 3, 1, 'codeerror', '', '', '', '', '<p>[步骤]进入成果展示&nbsp;&nbsp;&nbsp;&nbsp;</p>\r\n<p>[结果]乱码</p>\r\n<p>[期望]正常显示</p>', 'active', '', '', 0, 0, '0000-00-00 00:00:00', '', 'tester2', '2012-06-05 10:58:22', 'trunk', 'dev1', '2012-06-05 10:58:22', '0000-00-00', '', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, '', 0, 1, 0, 0, '', '', '', '', '', 0, 'admin', '2021-04-28 11:09:08', '0'),
+(4, 7, 1, 0, 11, 1, 0, 4, 1, 9, 0, 0, '售后服务页面问题', '', 3, 1, 'codeerror', '', '', '', '', '<p>[步骤]进入售后服务</p>\r\n<p>[结果]乱码</p>\r\n<p>[期望]正常显示</p>', 'active', '', '', 0, 0, '0000-00-00 00:00:00', '', 'tester3', '2012-06-05 11:00:19', 'trunk', 'dev1', '2012-06-05 11:00:19', '0000-00-00', '', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, '', 0, 1, 0, 0, '', '', '', '', '', 0, 'admin', '2021-04-28 11:09:08', '0');
+INSERT INTO `zt_build` (`id`, `project`, `product`, `branch`, `execution`, `name`, `scmPath`, `filePath`, `date`, `stories`, `bugs`, `builder`, `desc`, `deleted`) VALUES
+(1, 7, 1, 0, 1, '第一期版本', '', '', '2012-06-05', '3,2,1,4', '', 'projectManager', '', '0');
+INSERT INTO `zt_burn` (`execution`, `product`, `task`, `date`, `estimate`, `left`, `consumed`, `storyPoint`) VALUES
+(1, 0, 0, '2012-06-05', 0, 0, 38, 0);
+INSERT INTO `zt_case` (`id`, `project`, `product`, `branch`, `lib`, `module`, `path`, `story`, `storyVersion`, `title`, `precondition`, `keywords`, `pri`, `type`, `auto`, `frame`, `stage`, `howRun`, `scriptedBy`, `scriptedDate`, `scriptStatus`, `scriptLocation`, `status`, `subStatus`, `color`, `frequency`, `order`, `openedBy`, `openedDate`, `reviewedBy`, `reviewedDate`, `lastEditedBy`, `lastEditedDate`, `version`, `linkCase`, `fromBug`, `fromCaseID`, `fromCaseVersion`, `deleted`, `lastRunner`, `lastRunDate`, `lastRunResult`, `execution`) VALUES
+(1, 7, 1, 0, 0, 0, 0, 4, 1, '售后服务的测试用例', '', '', 1, 'feature', 'no', '', 'feature', '', '', '0000-00-00', '', '', 'normal', '', '', '1', 0, 'tester3', '2012-06-05 11:02:18', '', '0000-00-00', 'tester3', '2012-06-05 11:02:46', 1, '', 0, 0, 1, '0', 'testManager', '2012-06-05 11:11:00', 'pass', 0),
+(2, 7, 1, 0, 0, 0, 0, 1, 1, '首页的测试用例', '', '', 3, 'feature', 'no', '', '', '', '', '0000-00-00', '', '', 'normal', '', '', '1', 0, 'tester1', '2012-06-05 11:03:28', '', '0000-00-00', '', '0000-00-00 00:00:00', 1, '', 0, 0, 1, '0', 'testManager', '2012-06-05 11:11:05', 'pass', 0),
+(3, 7, 1, 0, 0, 0, 0, 2, 1, '新闻中心的测试用例', '', '', 3, 'feature', 'no', '', 'feature', '', '', '0000-00-00', '', '', 'normal', '', '', '1', 0, 'tester1', '2012-06-05 11:03:54', '', '0000-00-00', '', '0000-00-00 00:00:00', 1, '', 0, 0, 1, '0', 'testManager', '2012-06-05 11:11:07', 'pass', 0),
+(4, 7, 1, 0, 0, 0, 0, 3, 2, '成果展示测试用例', '', '', 3, 'feature', 'no', '', 'feature', '', '', '0000-00-00', '', '', 'normal', '', '', '1', 0, 'tester2', '2012-06-05 11:04:48', '', '0000-00-00', '', '0000-00-00 00:00:00', 1, '', 0, 0, 1, '0', 'testManager', '2012-06-05 11:11:08', 'pass', 0);
+INSERT INTO `zt_casestep` (`id`, `parent`, `case`, `version`, `type`, `desc`, `expect`) VALUES
+(1, 0, 1, 1, 'step', '进入首页', '正常显示'),
+(2, 0, 2, 1, 'step', '进入首页', '正常显示'),
+(3, 0, 3, 1, 'step', '进入新闻中心', '正常显示'),
+(4, 0, 4, 1, 'step', '进入成果展示', '正常显示');
+INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES
+(1, '经理', 0, ',1,', 1, 0, '', '', ''),
+(2, '开发', 0, ',2,', 1, 0, '', '', ''),
+(3, '测试', 0, ',3,', 1, 0, '', '', ''),
+(4, '市场', 0, ',4,', 1, 0, '', '', ''),
+(5, '产品', 1, ',1,5,', 2, 0, '', '', ''),
+(6, '项目', 1, ',1,6,', 2, 0, '', '', ''),
+(7, '编程', 2, ',2,7,', 2, 0, '', '', ''),
+(8, '美工', 2, ',2,8,', 2, 0, '', '', '');
+INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `execution`, `name`, `acl`, `groups`, `users`, `main`, `collector`, `order`, `deleted`) VALUES
+(1, 'product', 1, 0, 0, '产品库', 'default', '', '', '1', '', 0, '0'),
+(2, 'product', 2, 0, 0, '产品库', 'default', '', '', '1', '', 0, '0'),
+(3, 'project', 0, 0, 1, '项目库', 'default', '', '', '1', '', 0, '0'),
+(4, 'project', 0, 0, 2, '项目库', 'default', '', '', '1', '', 0, '0'),
+(5, 'project', 0, 7, 0, '项目主库', 'default', '', '', '1', '', 0, '0');
+INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES
+(1, 14, 'version', '1', '2', ''),
+(2, 14, 'spec', '&nbsp;作为一名本公司的用户，我希望可以在成果展示看到该公司网站的企业新闻，这样可以方便我进行了解该公司的产品并进行购买。&nbsp;<br />', '&nbsp;作为一名本公司的用户，我希望可以在成果展示看到该公司网站的吹产品，这样可以方便我进行了解该公司的产品并进行购买。&nbsp;<br />', '001- <del>作为一名本公司的用户，我希望可以在成果展示看到该公司网站的企业新闻，这样可以方便我进行了解该公司的产品并进行购买。<br /></del>\n001+ <ins>作为一名本公司的用户，我希望可以在成果展示看到该公司网站的吹产品，这样可以方便我进行了解该公司的产品并进行购买。<br /></ins>'),
+(3, 41, 'consumed', '0', '1', ''),
+(4, 41, 'status', 'wait', 'doing', ''),
+(6, 42, 'consumed', '1', '7', ''),
+(7, 42, 'left', '10', '0', ''),
+(8, 42, 'assignedTo', 'dev1', 'projectManager', ''),
+(9, 42, 'status', 'doing', 'done', ''),
+(10, 42, 'finishedBy', '', 'dev1', ''),
+(11, 42, 'finishedDate', '', '2012-06-05 10:38:00', ''),
+(13, 43, 'consumed', '0', '6', ''),
+(14, 43, 'left', '8', '0', ''),
+(15, 43, 'assignedTo', 'dev1', 'projectManager', ''),
+(16, 43, 'status', 'wait', 'done', ''),
+(17, 43, 'finishedBy', '', 'dev1', ''),
+(18, 43, 'finishedDate', '', '2012-06-05 10:39:14', ''),
+(20, 44, 'canceledDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', ''),
+(21, 45, 'canceledDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', ''),
+(22, 46, 'canceledDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', ''),
+(23, 47, 'closedDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', ''),
+(24, 48, 'closedDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', ''),
+(25, 49, 'closedDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', ''),
+(26, 50, 'closedDate', '2012-06-05 10:41:12', '2012-06-05 10:41:20', ''),
+(27, 51, 'status', 'wait', 'done', ''),
+(28, 51, 'consumed', '0', '8', ''),
+(29, 51, 'left', '10', '0', ''),
+(30, 51, 'finishedBy', '', 'dev1', ''),
+(31, 51, 'finishedDate', '', '2012-06-05 10:41:20', ''),
+(32, 52, 'finishedDate', '2012-06-05 10:38:00', '2012-06-05 10:41:20', ''),
+(33, 55, 'status', 'closed', 'done', ''),
+(34, 55, 'consumed', '0', '5', ''),
+(35, 55, 'left', '8', '0', ''),
+(36, 55, 'finishedBy', '', 'dev2', ''),
+(37, 55, 'closedBy', 'dev1', '', ''),
+(38, 55, 'closedReason', 'done', '', ''),
+(39, 55, 'finishedDate', '', '2012-06-05 10:42:56', ''),
+(40, 55, 'closedDate', '2012-06-05 10:41:20', '', ''),
+(41, 56, 'status', 'closed', 'done', ''),
+(42, 56, 'consumed', '0', '8', ''),
+(43, 56, 'left', '8', '0', ''),
+(44, 56, 'finishedBy', '', 'dev2', ''),
+(45, 56, 'closedBy', 'dev1', '', ''),
+(46, 56, 'closedReason', 'done', '', ''),
+(47, 56, 'finishedDate', '', '2012-06-05 10:42:56', ''),
+(48, 56, 'closedDate', '2012-06-05 10:41:20', '', ''),
+(49, 59, 'status', 'closed', 'done', ''),
+(50, 59, 'consumed', '0', '5', ''),
+(51, 59, 'left', '8', '0', ''),
+(52, 59, 'finishedBy', 'dev1', 'dev3', ''),
+(53, 59, 'closedBy', 'dev1', '', ''),
+(54, 59, 'closedReason', 'done', '', ''),
+(55, 59, 'finishedDate', '', '2012-06-05 10:43:32', ''),
+(56, 59, 'closedDate', '2012-06-05 10:41:20', '', ''),
+(57, 60, 'status', 'closed', 'done', ''),
+(58, 60, 'consumed', '0', '5', ''),
+(59, 60, 'left', '8', '0', ''),
+(60, 60, 'finishedBy', 'dev1', 'dev3', ''),
+(61, 60, 'closedBy', 'dev1', '', ''),
+(62, 60, 'closedReason', 'done', '', ''),
+(63, 60, 'finishedDate', '', '2012-06-05 10:43:32', ''),
+(64, 60, 'closedDate', '2012-06-05 10:41:20', '', ''),
+(65, 82, 'title', '首页的测试用例', '售后服务的测试用例', '001- <del>首页的测试用例</del>\n001+ <ins>售后服务的测试用例</ins>'),
+(66, 82, 'story', '1', '4', ''),
+(67, 93, 'build', '', 'trunk', ''),
+(68, 112, 'begin', '2012-06-05', '2020-06-05', ''),
+(69, 112, 'end', '2012-12-04', '2021-12-04', ''),
+(70, 112, 'days', '184', '391', ''),
+(71, 112, 'status', 'done', 'wait', ''),
+(72, 113, 'begin', '2013-06-05', '2021-06-05', ''),
+(73, 113, 'end', '2014-06-04', '2022-06-04', ''),
+(74, 113, 'days', '365', '260', ''),
+(75, 114, 'type', 'interface', 'codeerror', ''),
+(76, 114, 'pri', '0', '1', ''),
+(77, 115, 'pri', '0', '2', ''),
+(78, 116, 'pri', '0', '1', ''),
+(79, 117, 'pri', '0', '1', ''),
+(80, 118, 'build', 'trunk', '1', ''),
+(81, 118, 'begin', '2012-06-05', '2020-06-05', ''),
+(82, 118, 'end', '2013-06-21', '2021-06-21', ''),
+(83, 119, 'begin', '2000-01-01', '2020-06-05', ''),
+(84, 119, 'end', '2015-01-01', '2021-06-04', ''),
+(85, 120, 'status', 'wait', 'doing', ''),
+(86, 126, 'assignedTo', 'dev1', 'projectManager', ''),
+(87, 127, 'assignedTo', 'dev2', 'projectManager', ''),
+(88, 128, 'assignedTo', 'dev2', 'projectManager', ''),
+(89, 129, 'assignedTo', 'dev3', 'projectManager', ''),
+(90, 130, 'assignedTo', 'dev3', 'projectManager', ''),
+(91, 165, 'consumed', '0', '8', ''),
+(92, 165, 'realStarted', '0000-00-00 00:00:00', '2021-04-28 13:17:54', ''),
+(93, 165, 'finishedDate', '', '2021-04-01 16:00', ''),
+(94, 165, 'status', 'wait', 'done', ''),
+(95, 165, 'left', '7', '0', ''),
+(96, 165, 'finishedBy', '', 'dev1', ''),
+(97, 166, 'realStarted', '0000-00-00 00:00:00', '2021-04-01 16:00', ''),
+(98, 166, 'status', 'wait', 'doing', ''),
+(99, 169, 'realStarted', '0000-00-00 00:00:00', '2021-04-01 08:00', ''),
+(100, 169, 'status', 'wait', 'doing', ''),
+(101, 170, 'realStarted', '0000-00-00 00:00:00', '2021-04-01 08:00', ''),
+(102, 170, 'status', 'wait', 'doing', ''),
+(103, 173, 'realStarted', '0000-00-00 00:00:00', '2021-04-02 08:00', ''),
+(104, 173, 'status', 'wait', 'doing', ''),
+(105, 174, 'realStarted', '0000-00-00 00:00:00', '2021-04-02 08:00', ''),
+(106, 174, 'status', 'wait', 'doing', ''),
+(107, 175, 'consumed', '0', '6', ''),
+(108, 175, 'finishedDate', '', '2021-04-05 17:00', ''),
+(109, 175, 'status', 'doing', 'done', ''),
+(110, 175, 'left', '5', '0', ''),
+(111, 175, 'finishedBy', '', 'dev3', ''),
+(112, 176, 'consumed', '0', '5', ''),
+(113, 176, 'finishedDate', '', '2021-04-06 15:30', ''),
+(114, 176, 'status', 'doing', 'done', ''),
+(115, 176, 'left', '5', '0', ''),
+(116, 176, 'finishedBy', '', 'dev3', '');
+INSERT INTO `zt_module` (`id`, `root`, `branch`, `name`, `parent`, `path`, `grade`, `order`, `type`, `owner`, `collector`, `short`, `deleted`) VALUES
+(1, 1, 0, '首页', 0, ',1,', 1, 10, 'story', '', '', '', '0'),
+(2, 1, 0, '新闻中心', 0, ',2,', 1, 20, 'story', '', '', '', '0'),
+(3, 1, 0, '成果展示', 0, ',3,', 1, 30, 'story', '', '', '', '0'),
+(4, 1, 0, '售后服务', 0, ',4,', 1, 40, 'story', '', '', '', '0'),
+(5, 1, 0, '诚聘英才', 0, ',5,', 1, 50, 'story', '', '', '', '0'),
+(6, 1, 0, '合作洽谈', 0, ',6,', 1, 60, 'story', '', '', '', '0'),
+(7, 1, 0, '关于我们', 0, ',7,', 1, 70, 'story', '', '', '', '0'),
+(8, 1, 0, '首页', 0, ',8,', 1, 10, 'bug', '', '', '', '0'),
+(9, 1, 0, '新闻中心', 0, ',9,', 1, 20, 'bug', '', '', '', '0'),
+(10, 1, 0, '成果展示', 0, ',10,', 1, 30, 'bug', '', '', '', '0'),
+(11, 1, 0, '售后服务', 0, ',11,', 1, 40, 'bug', '', '', '', '0'),
+(12, 1, 0, '诚聘英才', 0, ',12,', 1, 50, 'bug', '', '', '', '0'),
+(13, 1, 0, '合作洽谈', 0, ',13,', 1, 60, 'bug', '', '', '', '0'),
+(14, 1, 0, '关于我们', 0, ',14,', 1, 70, 'bug', '', '', '', '0'),
+(15, 6, 0, '企业管理', 0, ',15,', 1, 0, 'line', '', '', '', '0');
+INSERT INTO `zt_product` (`id`, `program`, `name`, `code`, `bind`, `line`, `type`, `status`, `subStatus`, `desc`, `PO`, `QD`, `RD`, `acl`, `whitelist`, `createdBy`, `createdDate`, `createdVersion`, `order`, `deleted`, `storyConcept`) VALUES
+(1, 6, '公司企业网站建设', 'companyWebsite', '0', 0, 'normal', 'normal', '', '建立公司企业网站，可以更好对外展示。<br />', 'productManager', 'testManager', 'productManager', 'open', '', 'productManager', '2012-06-05 09:57:07', '', 5, '0', 0),
+(2, 6, '企业内部工时管理系统', 'workhourManage', '0', 0, 'normal', 'normal', '', '', 'productManager', 'testManager', 'productManager', 'open', '', 'productManager', '2012-06-05 11:15:20', '5.2.1', 10, '0', 0);
+INSERT INTO `zt_productplan` (`id`, `product`, `branch`, `parent`, `title`, `desc`, `begin`, `end`, `order`, `deleted`) VALUES
+(1, 1, 0, 0, '1.0版本', '开发出企业网站1.0版本。<br />', '2020-06-05', '2021-06-04', '', '0');
+INSERT INTO `zt_project` (`id`, `project`, `model`, `type`, `product`, `lifetime`, `budget`, `budgetUnit`, `attribute`, `percent`, `milestone`, `output`, `auth`, `parent`, `path`, `grade`, `name`, `code`, `begin`, `end`, `realBegan`, `realEnd`, `days`, `status`, `subStatus`, `statge`, `pri`, `desc`, `version`, `parentVersion`, `planDuration`, `realDuration`, `openedBy`, `openedDate`, `openedVersion`, `lastEditedBy`, `lastEditedDate`, `closedBy`, `closedDate`, `canceledBy`, `canceledDate`, `PO`, `PM`, `QD`, `RD`, `team`, `acl`, `whitelist`, `order`, `deleted`, `storyConcept`) VALUES
+(1, 7, '', 'sprint', 'single', 'sprint', '0', 'CNY', '', 0, '0', '', '', 7, ',7,1,', 1, '企业网站第一期', 'coWeb1', '2020-06-05', '2021-12-04', '0000-00-00', '0000-00-00', 391, 'doing', '', '1', '1', '开发企业网站的基本雏形。<br />', 0, 0, 0, 0, '', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 'productManager', 'projectManager', 'testManager', 'productManager', '公司开发团队', 'open', '', 5, '0', 0),
+(2, 7, '', 'sprint', 'single', 'sprint', '0', 'CNY', '', 0, '0', '', '', 7, ',7,2,', 1, '企业网站第二期', 'coWebsite2', '2021-06-05', '2022-06-04', '0000-00-00', '0000-00-00', 260, 'wait', '', '1', '1', '', 0, 0, 0, 0, '', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 'productManager', 'projectManager', 'testManager', 'productManager', '公司开发团队', 'open', '', 10, '0', 0),
+(7, 0, 'scrum', 'project', 'single', 'sprint', '0', 'CNY', '', 0, '0', '', 'extend', 6, ',6,7,', 2, '企业管理系统', '', '2021-06-05', '2022-06-04', '0000-00-00', '0000-00-00', 0, 'doing', '', '1', '1', '', 0, 0, 0, 0, 'admin', '2021-04-28 11:22:04', '15.0.rc3', 'admin', '2021-04-28 11:22:04', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'projectManager', '', '', '', 'open', ',tester3,admin', 35, '0', 0),
+(6, 0, '', 'program', 'single', 'sprint', '0', 'CNY', '', 0, '0', '', '', 0, ',6,', 1, '企业管理', '', '2021-06-05', '2022-06-04', '0000-00-00', '0000-00-00', 0, 'doing', '', '1', '1', '', 0, 0, 0, 0, 'admin', '2021-04-28 11:22:04', '15.0.rc3', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', '', '', '', '', 'open', '', 30, '0', 0);
+INSERT INTO `zt_projectcase` (`project`, `product`, `case`, `count`, `version`, `order`) VALUES
+(1, 1, 2, 1, 1, 4),
+(7, 1, 1, 1, 1, 5),
+(1, 1, 1, 1, 1, 1),
+(7, 1, 2, 1, 1, 5),
+(1, 1, 4, 1, 1, 2),
+(7, 1, 3, 1, 1, 5),
+(1, 1, 3, 1, 1, 3),
+(7, 1, 4, 1, 1, 5);
+INSERT INTO `zt_projectproduct` (`project`, `product`, `branch`, `plan`) VALUES
+(1, 1, 0, 0),
+(2, 1, 0, 0),
+(7, 1, 0, 0),
+(7, 2, 0, 0);
+INSERT INTO `zt_projectstory` (`project`, `product`, `story`, `version`, `order`) VALUES
+(1, 1, 1, 1, 0),
+(1, 1, 2, 1, 0),
+(1, 1, 3, 2, 0),
+(1, 1, 4, 1, 0),
+(7, 1, 4, 1, 0),
+(7, 1, 3, 2, 0),
+(7, 1, 2, 1, 0),
+(7, 1, 1, 1, 0);
+INSERT INTO `zt_searchdict` (`key`, `value`) VALUES
+(39318, '首'),
+(39029, '页'),
+(38754, '面'),
+(38382, '问'),
+(39064, '题'),
+(27493, '步'),
+(39588, '骤'),
+(36827, '进'),
+(20837, '入'),
+(32467, '结'),
+(26524, '果'),
+(20986, '出'),
+(29616, '现'),
+(20081, '乱'),
+(30721, '码'),
+(26399, '期'),
+(26395, '望'),
+(27491, '正'),
+(24120, '常'),
+(26174, '显'),
+(31034, '示'),
+(26032, '新'),
+(38395, '闻'),
+(20013, '中'),
+(24515, '心'),
+(25104, '成'),
+(23637, '展'),
+(21806, '售'),
+(21518, '后'),
+(26381, '服'),
+(21153, '务'),
+(31532, '第'),
+(19968, '一'),
+(29256, '版'),
+(26412, '本'),
+(30340, '的'),
+(27979, '测'),
+(35797, '试'),
+(29992, '用'),
+(20363, '例'),
+(20844, '公'),
+(21496, '司'),
+(20225, '企'),
+(19994, '业'),
+(32593, '网'),
+(31449, '站'),
+(24314, '建'),
+(35774, '设'),
+(31435, '立'),
+(65292, '，'),
+(21487, '可'),
+(20197, '以'),
+(26356, '更'),
+(22909, '好'),
+(23545, '对'),
+(22806, '外'),
+(12290, '。'),
+(20869, '内'),
+(37096, '部'),
+(24037, '工'),
+(26102, '时'),
+(31649, '管'),
+(29702, '理'),
+(31995, '系'),
+(32479, '统'),
+(24320, '开'),
+(21457, '发'),
+(35745, '计'),
+(21644, '和'),
+(20316, '作'),
+(20026, '为'),
+(21517, '名'),
+(25143, '户'),
+(25105, '我'),
+(24076, '希'),
+(22312, '在'),
+(30475, '看'),
+(21040, '到'),
+(35813, '该'),
+(22522, '基'),
+(23481, '容'),
+(22914, '如'),
+(26368, '最'),
+(21160, '动'),
+(24577, '态'),
+(12289, '、'),
+(20998, '分'),
+(32852, '联'),
+(20449, '信'),
+(24687, '息'),
+(21830, '商'),
+(31561, '等'),
+(24182, '并'),
+(36890, '通'),
+(36807, '过'),
+(39564, '验'),
+(25910, '收'),
+(36825, '这'),
+(26679, '样'),
+(20102, '了'),
+(35299, '解'),
+(21561, '吹'),
+(20135, '产'),
+(21697, '品'),
+(26041, '方'),
+(20415, '便'),
+(34892, '行'),
+(36141, '购'),
+(20080, '买'),
+(26469, '来'),
+(20915, '决'),
+(35802, '诚'),
+(32856, '聘'),
+(33521, '英'),
+(25165, '才'),
+(27714, '求'),
+(32844, '职'),
+(32773, '者'),
+(37324, '里'),
+(25307, '招'),
+(24212, '应'),
+(21512, '合'),
+(27965, '洽'),
+(35848, '谈'),
+(20851, '关'),
+(20110, '于'),
+(20204, '们'),
+(20219, '任'),
+(38607, '雏'),
+(24418, '形'),
+(20108, '二');
+INSERT INTO `zt_searchindex` (`id`, `objectType`, `objectID`, `title`, `content`, `addedDate`, `editedDate`) VALUES
+(1, 'bug', 1, ' 39318 39029 39029 38754 38382 39064', ' 27493 39588 36827 20837 39318 39029 32467 26524 20986 29616 20081 30721 &nbsp &nbsp &nbsp &nbsp 26399 26395 27491 24120 26174 31034', '2012-06-05 10:56:11', '2021-04-28 11:09:08'),
+(2, 'bug', 2, ' 26032 38395 20013 24515 39029 38754 38382 39064', ' 27493 39588 36827 20837 26032 38395 20013 24515 32467 26524 39029 38754 20986 29616 20081 30721 26399 26395 27491 24120 26174 31034', '2012-06-05 10:57:11', '2021-04-28 11:09:08'),
+(3, 'bug', 3, ' 25104 26524 23637 31034 39029 38754 38382 39064', ' 27493 39588 36827 20837 25104 26524 23637 31034 &nbsp &nbsp &nbsp &nbsp 32467 26524 20081 30721 26399 26395 27491 24120 26174 31034', '2012-06-05 10:58:22', '2021-04-28 11:09:08'),
+(4, 'bug', 4, ' 21806 21518 26381 21153 39029 38754 38382 39064', ' 27493 39588 36827 20837 21806 21518 26381 21153 32467 26524 20081 30721 26399 26395 27491 24120 26174 31034', '2012-06-05 11:00:19', '2021-04-28 11:09:08'),
+(5, 'build', 1, ' 31532 19968 26399 29256 26412', '', '2012-06-05 11:11:45', '2012-06-05 11:11:45'),
+(6, 'case', 1, ' 21806 21518 26381 21153 30340 27979 35797 29992 20363', ' 36827 20837 39318 39029 27491 24120 26174 31034', '2012-06-05 11:02:18', '2012-06-05 11:02:47'),
+(7, 'case', 2, ' 39318 39029 30340 27979 35797 29992 20363', ' 36827 20837 39318 39029 27491 24120 26174 31034', '2012-06-05 11:03:28', '2012-06-05 11:03:28'),
+(8, 'case', 3, ' 26032 38395 20013 24515 30340 27979 35797 29992 20363', ' 36827 20837 26032 38395 20013 24515 27491 24120 26174 31034', '2012-06-05 11:03:54', '2012-06-05 11:03:54'),
+(9, 'case', 4, ' 25104 26524 23637 31034 27979 35797 29992 20363', ' 36827 20837 25104 26524 23637 31034 27491 24120 26174 31034', '2012-06-05 11:04:48', '2012-06-05 11:04:48'),
+(10, 'product', 1, ' 20844 21496 20225 19994 32593 31449 24314 35774', ' companywebsite 24314 31435 20844 21496 20225 19994 32593 31449 65292 21487 20197 26356 22909 23545 22806 23637 31034 12290', '2012-06-05 09:57:07', '2012-06-05 09:57:07'),
+(11, 'product', 2, ' 20225 19994 20869 37096 24037 26102 31649 29702 31995 32479', ' workhourmanage', '2012-06-05 11:15:20', '2012-06-05 11:15:20'),
+(12, 'productplan', 1, ' 1.0__ 29256 26412', ' 24320 21457 20986 20225 19994 32593 31449 1.0__ 29256 26412 12290', '2012-06-05 10:02:49', '2021-04-28 11:11:10'),
+(13, 'project', 7, ' 20225 19994 31649 29702 31995 32479', '', '2021-04-28 11:22:04', '2021-04-28 11:22:04'),
+(14, 'story', 1, ' 39318 39029 35774 35745 21644 24320 21457', ' 20316 20026 19968 21517 26412 20844 21496 30340 29992 25143 65292 25105 24076 26395 21487 20197 22312 39318 39029 30475 21040 35813 20844 21496 32593 31449 30340 22522 26412 20869 23481 65292 20363 22914 26368 26032 21160 24577 12289 37096 20998 25104 26524 23637 31034 12289 32852 31995 20449 24687 12289 24037 21830 20449 24687 31561 12290 24320 21457 24182 36890 36807 39564 25910', '2012-06-05 10:09:49', '2012-06-05 10:31:02'),
+(15, 'story', 2, ' 26032 38395 20013 24515 30340 35774 35745 21644 24320 21457 12290', ' 20316 20026 19968 21517 26412 20844 21496 30340 29992 25143 65292 25105 24076 26395 21487 20197 22312 26032 38395 20013 24515 30475 21040 35813 20844 21496 32593 31449 30340 20225 19994 26032 38395 65292 36825 26679 21487 20197 36890 36807 26032 38395 20102 35299 20225 19994 30340 26368 26032 21160 24577 12290', '2012-06-05 10:16:37', '2012-06-05 10:31:02'),
+(16, 'story', 3, ' 25104 26524 23637 31034 30340 35774 35745 21644 24320 21457', ' &nbsp 20316 20026 19968 21517 26412 20844 21496 30340 29992 25143 65292 25105 24076 26395 21487 20197 22312 25104 26524 23637 31034 30475 21040 35813 20844 21496 32593 31449 30340 21561 20135 21697 65292 36825 26679 21487 20197 26041 20415 25105 36827 34892 20102 35299 35813 20844 21496 30340 20135 21697 24182 36827 34892 36141 20080 12290 &nbsp', '2012-06-05 10:18:10', '2012-06-05 10:31:02'),
+(17, 'story', 4, ' 21806 21518 26381 21153 30340 35774 35745 21644 24320 21457', ' 20316 20026 19968 21517 26412 20844 21496 30340 29992 25143 65292 25105 24076 26395 21487 20197 22312 21806 21518 26381 21153 30475 21040 35813 20844 21496 32593 31449 30340 21806 21518 26381 21153 65292 36825 26679 21487 20197 26041 20415 25105 32852 31995 35813 20844 21496 26469 35299 20915 25105 30340 38382 39064 12290 &nbsp', '2012-06-05 10:20:16', '2012-06-05 10:31:02'),
+(18, 'story', 5, ' 35802 32856 33521 25165 30340 35774 35745 21644 24320 21457', ' 20316 20026 19968 21517 27714 32844 32773 65292 25105 24076 26395 21487 20197 22312 35802 32856 33521 25165 37324 30475 21040 35813 20844 21496 30340 25307 32856 20449 24687 65292 36825 26679 21487 20197 26041 20415 25105 24212 32856 35813 20844 21496 12290 &nbsp', '2012-06-05 10:21:39', '2012-06-05 10:21:39'),
+(19, 'story', 6, ' 21512 20316 27965 35848 30340 35774 35745 21644 24320 21457', ' 20316 20026 19968 21517 21512 20316 21830 65292 25105 24076 26395 21487 20197 22312 21512 20316 27965 35848 37324 30475 21040 35813 20844 21496 23545 22806 30340 21512 20316 20869 23481 65292 36825 26679 21487 20197 26041 20415 25105 21644 35813 20844 21496 36827 34892 21512 20316 27965 35848 12290 &nbsp', '2012-06-05 10:23:11', '2012-06-05 10:23:11'),
+(20, 'story', 7, ' 20851 20110 25105 20204 30340 35774 35745 21644 24320 21457', ' 25105 24076 26395 21487 20197 22312 20851 20110 25105 20204 37324 30475 21040 35813 20844 21496 30340 22522 26412 20449 24687 65292 36825 26679 21487 20197 26041 20415 25105 20102 35299 35813 20844 21496 12290', '2012-06-05 10:24:19', '2012-06-05 10:24:19'),
+(21, 'task', 1, ' 39318 39029 39029 38754 30340 35774 35745', ' 39318 39029 39029 38754 30340 35774 35745', '2012-06-05 10:32:03', '2012-06-05 10:41:20'),
+(22, 'task', 2, ' 39318 39029 30340 24320 21457', ' 39318 39029 30340 24320 21457', '2012-06-05 10:32:23', '2012-06-05 10:41:20'),
+(23, 'task', 3, ' 26032 38395 20013 24515 30340 35774 35745', ' 26032 38395 20013 24515 30340 35774 35745', '2012-06-05 10:33:01', '2012-06-05 10:42:57'),
+(24, 'task', 4, ' 26032 38395 20013 24515 30340 24320 21457', ' 26032 38395 20013 24515 30340 24320 21457', '2012-06-05 10:33:21', '2012-06-05 10:42:56'),
+(25, 'task', 5, ' 25104 26524 23637 31034 30340 35774 35745', ' 25104 26524 23637 31034 30340 35774 35745', '2012-06-05 10:33:44', '2012-06-05 10:43:32'),
+(26, 'task', 6, ' 25104 26524 23637 31034 30340 24320 21457', ' 25104 26524 23637 31034 30340 24320 21457', '2012-06-05 10:33:59', '2012-06-05 10:43:32'),
+(27, 'task', 7, ' 21806 21518 26381 21153 30340 35774 35745', ' 21806 21518 26381 21153 30340 35774 35745', '2012-06-05 10:34:25', '2012-06-05 10:41:20'),
+(28, 'task', 8, ' 21806 21518 26381 21153 30340 24320 21457', ' 21806 21518 26381 21153 30340 24320 21457', '2012-06-05 10:34:45', '2012-06-05 10:41:20'),
+(29, 'task', 9, ' 21806 21518 26381 21153 30340 24320 21457', ' 21806 21518 26381 21153 30340 24320 21457', '2012-06-05 10:35:01', '2012-06-05 10:41:20'),
+(30, 'testtask', 1, ' 20225 19994 32593 31449 31532 19968 26399 27979 35797 20219 21153', '', '2012-06-05 11:07:41', '2021-04-28 11:10:06'),
+(31, 'program', 6, ' 20225 19994 31649 29702', '', '2021-04-28 11:22:04', '2021-04-28 11:22:04'),
+(32, 'execution', 1, ' 20225 19994 32593 31449 31532 19968 26399', ' coweb1 24320 21457 20225 19994 32593 31449 30340 22522 26412 38607 24418 12290', '2012-06-05 10:28:36', '2021-04-28 11:12:22'),
+(33, 'execution', 2, ' 20225 19994 32593 31449 31532 20108 26399', ' cowebsite2', '2012-06-05 11:12:28', '2021-04-28 11:08:02'),
+(34, 'task', 10, ' 39318 39029 39029 38754 30340 35774 35745', ' 39318 39029 39029 38754 30340 35774 35745', '2021-04-28 13:16:15', '2021-04-28 13:16:15'),
+(35, 'task', 11, ' 39318 39029 39029 38754 30340 24320 21457', ' 39318 39029 39029 38754 30340 24320 21457', '2021-04-28 13:16:15', '2021-04-28 13:16:15'),
+(36, 'task', 12, ' 26032 38395 20013 24515 30340 35774 35745', ' 26032 38395 20013 24515 30340 35774 35745', '2021-04-28 13:16:15', '2021-04-28 13:16:15'),
+(37, 'task', 13, ' 26032 38395 20013 24515 30340 24320 21457', ' 26032 38395 20013 24515 30340 24320 21457', '2021-04-28 13:16:15', '2021-04-28 13:16:15'),
+(38, 'task', 14, ' 25104 26524 23637 31034 30340 35774 35745', ' 25104 26524 23637 31034 30340 35774 35745', '2021-04-28 13:16:15', '2021-04-28 13:16:15'),
+(39, 'task', 15, ' 25104 26524 23637 31034 30340 24320 21457', ' 25104 26524 23637 31034 30340 24320 21457', '2021-04-28 13:16:15', '2021-04-28 13:16:15'),
+(40, 'task', 16, ' 21806 21518 26381 21153 30340 35774 35745', ' 21806 21518 26381 21153 30340 35774 35745', '2021-04-28 13:16:15', '2021-04-28 13:16:15'),
+(41, 'task', 17, ' 21806 21518 26381 21153 30340 24320 21457', ' 21806 21518 26381 21153 30340 24320 21457', '2021-04-28 13:16:15', '2021-04-28 13:16:15');
+INSERT INTO `zt_story` (`id`, `parent`, `product`, `branch`, `module`, `plan`, `source`, `sourceNote`, `fromBug`, `title`, `keywords`, `type`, `pri`, `estimate`, `status`, `subStatus`, `color`, `stage`, `stagedBy`, `mailto`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `lastEditedBy`, `lastEditedDate`, `reviewedBy`, `reviewedDate`, `closedBy`, `closedDate`, `closedReason`, `toBug`, `childStories`, `linkStories`, `duplicateStory`, `version`, `URChanged`, `deleted`) VALUES
+(1, 0, 1, 0, 1, '1', 'po', '', 0, '首页设计和开发', '', 'story', 1, 1, 'active', '', '', 'developing', '', '', 'productManager', '2012-06-05 10:09:49', 'productManager', '0000-00-00 00:00:00', 'productManager', '2012-06-05 10:25:19', 'productManager, ', '2012-06-05 00:00:00', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0', '0'),
+(2, 0, 1, 0, 2, '1', 'po', '', 0, '新闻中心的设计和开发。', '', 'story', 1, 1, 'active', '', '', 'projected', '', '', 'productManager', '2012-06-05 10:16:37', 'productManager', '2012-06-05 10:16:37', 'productManager', '2012-06-05 10:25:33', 'productManager, ', '2012-06-05 00:00:00', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0', '0'),
+(3, 0, 1, 0, 3, '1', 'po', '', 0, '成果展示的设计和开发', '', 'story', 1, 0, 'active', '', '', 'developing', '', '', 'productManager', '2012-06-05 10:18:10', 'productManager', '2012-06-05 10:18:10', 'productManager', '2012-06-05 10:25:38', 'productManager, ', '2012-06-05 00:00:00', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 2, '0', '0'),
+(4, 0, 1, 0, 4, '1', 'po', '', 0, '售后服务的设计和开发', '', 'story', 1, 1, 'active', '', '', 'developed', '', '', 'productManager', '2012-06-05 10:20:16', 'productManager', '2012-06-05 10:20:16', 'productManager', '2012-06-05 10:25:42', 'productManager, ', '2012-06-05 00:00:00', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0', '0'),
+(5, 0, 1, 0, 5, '1', 'po', '', 0, '诚聘英才的设计和开发', '', 'story', 1, 1, 'draft', '', '', 'planned', '', '', 'productManager', '2012-06-05 10:21:39', 'productManager', '2012-06-05 10:21:39', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0', '0'),
+(6, 0, 1, 0, 6, '1', 'po', '', 0, '合作洽谈的设计和开发', '', 'story', 1, 1, 'draft', '', '', 'planned', '', '', 'productManager', '2012-06-05 10:23:11', 'productManager', '2012-06-05 10:23:11', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0', '0'),
+(7, 0, 1, 0, 7, '1', 'po', '', 0, '关于我们的设计和开发', '', 'story', 1, 1, 'draft', '', '', 'planned', '', '', 'productManager', '2012-06-05 10:24:19', 'productManager', '2012-06-05 10:24:19', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 0, '', '', 0, 1, '0', '0');
+INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`) VALUES
+(1, 1, '首页设计和开发', '作为一名本公司的用户，我希望可以在首页看到该公司网站的基本内容，例如最新动态、部分成果展示、联系信息、工商信息等。<br />', '开发并通过验收<br />'),
+(2, 1, '新闻中心的设计和开发。', '作为一名本公司的用户，我希望可以在新闻中心看到该公司网站的企业新闻，这样可以通过新闻了解企业的最新动态。<br />', ''),
+(3, 1, '成果展示的设计和开发', '&nbsp;作为一名本公司的用户，我希望可以在成果展示看到该公司网站的企业新闻，这样可以方便我进行了解该公司的产品并进行购买。&nbsp;<br />', ''),
+(3, 2, '成果展示的设计和开发', '&nbsp;作为一名本公司的用户，我希望可以在成果展示看到该公司网站的吹产品，这样可以方便我进行了解该公司的产品并进行购买。&nbsp;<br />', ''),
+(4, 1, '售后服务的设计和开发', '作为一名本公司的用户，我希望可以在售后服务看到该公司网站的售后服务，这样可以方便我联系该公司来解决我的问题。&nbsp;<br />', ''),
+(5, 1, '诚聘英才的设计和开发', '作为一名求职者，我希望可以在诚聘英才里看到该公司的招聘信息，这样可以方便我应聘该公司。&nbsp;<br />', ''),
+(6, 1, '合作洽谈的设计和开发', '作为一名合作商，我希望可以在合作洽谈里看到该公司对外的合作内容，这样可以方便我和该公司进行合作洽谈。&nbsp;<br />', ''),
+(7, 1, '关于我们的设计和开发', '我希望可以在关于我们里看到该公司的基本信息，这样可以方便我了解该公司。<br />', '');
+INSERT INTO `zt_task` (`id`, `project`, `parent`, `execution`, `module`, `design`, `story`, `storyVersion`, `designVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `subStatus`, `color`, `mailto`, `desc`, `version`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `estStarted`, `realStarted`, `finishedBy`, `finishedDate`, `finishedList`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `realDuration`, `planDuration`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `activatedDate`, `deleted`) VALUES
+(17, 7, 0, 1, 0, 0, 4, 1, 0, 0, '售后服务的开发', 'devel', 1, 5, 5, 0, '0000-00-00', 'done', '', '', NULL, '售后服务的开发', 1, 'admin', '2021-04-28 13:16:15', 'dev3', '2021-04-28 13:21:51', '0000-00-00', '2021-04-02 08:00:00', 'dev3', '2021-04-06 15:30:00', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, 0, '', 'dev3', '2021-04-28 13:21:51', '0000-00-00', '0'),
+(16, 7, 0, 1, 0, 0, 4, 1, 0, 0, '售后服务的设计', 'design', 1, 5, 6, 0, '0000-00-00', 'done', '', '', NULL, '售后服务的设计', 1, 'admin', '2021-04-28 13:16:15', 'dev3', '2021-04-28 13:21:22', '0000-00-00', '2021-04-02 08:00:00', 'dev3', '2021-04-05 17:00:00', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, 0, '', 'dev3', '2021-04-28 13:21:22', '0000-00-00', '0'),
+(15, 7, 0, 1, 0, 0, 3, 2, 0, 0, '成果展示的开发', 'devel', 1, 7, 0, 7, '0000-00-00', 'doing', '', '', NULL, '成果展示的开发', 1, 'admin', '2021-04-28 13:16:15', 'dev2', '2021-04-28 13:16:15', '0000-00-00', '2021-04-01 08:00:00', '', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, 0, '', 'dev2', '2021-04-28 13:20:09', '0000-00-00', '0'),
+(14, 7, 0, 1, 0, 0, 3, 2, 0, 0, '成果展示的设计', 'design', 1, 6, 0, 6, '0000-00-00', 'doing', '', '', NULL, '成果展示的设计', 1, 'admin', '2021-04-28 13:16:15', 'dev2', '2021-04-28 13:16:15', '0000-00-00', '2021-04-01 08:00:00', '', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, 0, '', 'dev2', '2021-04-28 13:19:54', '0000-00-00', '0'),
+(13, 7, 0, 1, 0, 0, 2, 1, 0, 0, '新闻中心的开发', 'devel', 1, 7, 0, 7, '0000-00-00', 'wait', '', '', NULL, '新闻中心的开发', 1, 'admin', '2021-04-28 13:16:15', 'dev1', '2021-04-28 13:16:15', '0000-00-00', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, 0, '', '', '0000-00-00 00:00:00', '0000-00-00', '0'),
+(12, 7, 0, 1, 0, 0, 2, 1, 0, 0, '新闻中心的设计', 'design', 1, 7, 0, 7, '0000-00-00', 'wait', '', '', NULL, '新闻中心的设计', 1, 'admin', '2021-04-28 13:16:15', 'dev1', '2021-04-28 13:16:15', '0000-00-00', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, 0, '', '', '0000-00-00 00:00:00', '0000-00-00', '0'),
+(10, 7, 0, 1, 0, 0, 1, 1, 0, 0, '首页页面的设计', 'design', 1, 7, 8, 0, '0000-00-00', 'done', '', '', NULL, '首页页面的设计', 1, 'admin', '2021-04-28 13:16:15', 'dev1', '2021-04-28 13:17:54', '0000-00-00', '2021-04-28 13:17:54', 'dev1', '2021-04-01 16:00:00', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, 0, '', 'dev1', '2021-04-28 13:17:54', '0000-00-00', '0'),
+(11, 7, 0, 1, 0, 0, 1, 1, 0, 0, '首页页面的开发', 'devel', 1, 8, 0, 8, '0000-00-00', 'doing', '', '', NULL, '首页页面的开发', 1, 'admin', '2021-04-28 13:16:15', 'dev1', '2021-04-28 13:16:15', '0000-00-00', '2021-04-01 16:00:00', '', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 0, 0, '', 'dev1', '2021-04-28 13:18:45', '0000-00-00', '0');
+INSERT INTO `zt_taskestimate` (`id`, `task`, `date`, `left`, `consumed`, `account`, `work`) VALUES
+(1, 10, '2021-04-01', 0, 8, 'dev1', ''),
+(2, 11, '2021-04-01', 8, 0, 'dev1', ''),
+(3, 14, '2021-04-01', 6, 0, 'dev2', ''),
+(4, 15, '2021-04-01', 7, 0, 'dev2', ''),
+(5, 16, '2021-04-02', 5, 0, 'dev3', ''),
+(6, 17, '2021-04-02', 5, 0, 'dev3', ''),
+(7, 16, '2021-04-05', 0, 6, 'dev3', ''),
+(8, 17, '2021-04-06', 0, 5, 'dev3', '');
+INSERT INTO `zt_taskspec` (`task`, `version`, `name`, `estStarted`, `deadline`) VALUES
+(10, 1, '首页页面的设计', '0000-00-00', '0000-00-00'),
+(11, 1, '首页页面的开发', '0000-00-00', '0000-00-00'),
+(12, 1, '新闻中心的设计', '0000-00-00', '0000-00-00'),
+(13, 1, '新闻中心的开发', '0000-00-00', '0000-00-00'),
+(14, 1, '成果展示的设计', '0000-00-00', '0000-00-00'),
+(15, 1, '成果展示的开发', '0000-00-00', '0000-00-00'),
+(16, 1, '售后服务的设计', '0000-00-00', '0000-00-00'),
+(17, 1, '售后服务的开发', '0000-00-00', '0000-00-00');
+INSERT INTO `zt_team` (`id`, `root`, `type`, `account`, `role`, `limited`, `join`, `days`, `hours`, `estimate`, `consumed`, `left`, `order`) VALUES
+(1, 1, 'execution', 'dev3', '研发', 'no', '2013-02-20', 184, 7.0, '0.00', '0.00', '0.00', 0),
+(2, 1, 'execution', 'productManager', '产品经理', 'no', '2013-02-20', 184, 7.0, '0.00', '0.00', '0.00', 0),
+(3, 1, 'execution', 'tester2', '测试', 'no', '2013-02-20', 184, 7.0, '0.00', '0.00', '0.00', 0),
+(4, 1, 'execution', 'tester1', '测试', 'no', '2013-02-20', 184, 7.0, '0.00', '0.00', '0.00', 0),
+(5, 2, 'execution', 'projectManager', '项目经理', 'no', '2013-02-20', 365, 7.0, '0.00', '0.00', '0.00', 0),
+(6, 2, 'execution', 'tester2', '测试', 'no', '2013-02-20', 365, 7.0, '0.00', '0.00', '0.00', 0),
+(7, 2, 'execution', 'tester1', '测试', 'no', '2013-02-20', 365, 7.0, '0.00', '0.00', '0.00', 0),
+(8, 2, 'execution', 'dev3', '研发', 'no', '2013-02-20', 365, 7.0, '0.00', '0.00', '0.00', 0),
+(9, 2, 'execution', 'dev2', '研发', 'no', '2013-02-20', 365, 7.0, '0.00', '0.00', '0.00', 0),
+(10, 2, 'execution', 'dev1', '研发', 'no', '2013-02-20', 365, 7.0, '0.00', '0.00', '0.00', 0),
+(11, 1, 'execution', 'dev1', '研发', 'no', '2013-02-20', 184, 7.0, '0.00', '0.00', '0.00', 0),
+(12, 1, 'execution', 'dev2', '研发', 'no', '2013-02-20', 184, 7.0, '0.00', '0.00', '0.00', 0),
+(13, 1, 'execution', 'projectManager', '项目经理', 'no', '2013-02-20', 184, 7.0, '0.00', '0.00', '0.00', 0),
+(16, 1, 'execution', 'testManager', '测试负责人', 'no', '2021-04-28', 391, 7.0, '0.00', '0.00', '0.00', 0),
+(15, 2, 'execution', 'productManager', '产品经理', 'no', '2013-02-20', 365, 7.0, '0.00', '0.00', '0.00', 0),
+(17, 2, 'execution', 'testManager', '测试负责人', 'no', '2021-04-28', 260, 7.0, '0.00', '0.00', '0.00', 0),
+(18, 7, 'project', 'productManager', '', 'no', '2021-04-28', 0, 0.0, '0.00', '0.00', '0.00', 0),
+(19, 7, 'project', 'projectManager', '', 'no', '2021-04-28', 0, 0.0, '0.00', '0.00', '0.00', 0);
+INSERT INTO `zt_testresult` (`id`, `run`, `case`, `version`, `job`, `compile`, `caseResult`, `stepResults`, `lastRunner`, `date`, `duration`, `xml`) VALUES
+(1, 4, 1, 1, 0, 0, 'pass', 'a:1:{i:1;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}', 'testManager', '2012-06-05 11:11:00', 0, ''),
+(2, 3, 2, 1, 0, 0, 'pass', 'a:1:{i:2;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}', 'testManager', '2012-06-05 11:11:05', 0, ''),
+(3, 2, 3, 1, 0, 0, 'pass', 'a:1:{i:3;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}', 'testManager', '2012-06-05 11:11:07', 0, ''),
+(4, 1, 4, 1, 0, 0, 'pass', 'a:1:{i:4;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}', 'testManager', '2012-06-05 11:11:08', 0, '');
+INSERT INTO `zt_testrun` (`id`, `task`, `case`, `version`, `assignedTo`, `lastRunner`, `lastRunDate`, `lastRunResult`, `status`) VALUES
+(1, 1, 4, 1, '', 'testManager', '2012-06-05 11:11:08', 'pass', 'done'),
+(2, 1, 3, 1, '', 'testManager', '2012-06-05 11:11:07', 'pass', 'done'),
+(3, 1, 2, 1, '', 'testManager', '2012-06-05 11:11:05', 'pass', 'done'),
+(4, 1, 1, 1, '', 'testManager', '2012-06-05 11:11:00', 'pass', 'done');
+INSERT INTO `zt_testtask` (`id`, `project`, `name`, `product`, `execution`, `build`, `owner`, `pri`, `begin`, `end`, `mailto`, `desc`, `report`, `status`, `auto`, `subStatus`, `deleted`) VALUES
+(1, 0, '企业网站第一期测试任务', 1, 1, '1', 'testManager', 0, '2020-06-05', '2021-06-21', '', '', '', 'wait', 'no', '', '0');
+REPLACE INTO `zt_user` (`company`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `mobile`, `phone`, `weixin`, `dingding`, `slack`, `whatsapp`, `address`, `zipcode`, `nature`, `analysis`, `strategy`, `join`, `visits`, `ip`, `last`, `fails`, `locked`, `ranzhi`, `score`, `scoreLevel`, `deleted`) VALUES
+(0, 5, 'productManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'po', '产品经理', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 3, '192.168.0.8', 1338866083, 0, '0000-00-00 00:00:00', '', 0, 0, '0'),
+(0, 6, 'projectManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'pm', '项目经理', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 4, '10.0.2.2', 1619580798, 0, '0000-00-00 00:00:00', '', 0, 0, '0'),
+(0, 2, 'dev1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发甲', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 3, '10.0.2.2', 1619586993, 0, '0000-00-00 00:00:00', '', 0, 0, '1'),
+(0, 2, 'dev2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发乙', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 2, '10.0.2.2', 1619587173, 0, '0000-00-00 00:00:00', '', 0, 0, '1'),
+(0, 2, 'dev3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发丙', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 2, '10.0.2.2', 1619587220, 0, '0000-00-00 00:00:00', '', 0, 0, '1'),
+(0, 3, 'tester1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试甲', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 3, '192.168.0.8', 1338865739, 0, '0000-00-00 00:00:00', '', 0, 0, '1'),
+(0, 3, 'tester2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试乙', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 2, '192.168.0.8', 1338865450, 0, '0000-00-00 00:00:00', '', 0, 0, '1'),
+(0, 3, 'tester3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试丙', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 1, '192.168.0.8', 1338865125, 0, '0000-00-00 00:00:00', '', 0, 0, '1'),
+(0, 1, 'testManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qd', '测试经理', '', '', '', '0000-00-00', 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0000-00-00', 6, '192.168.0.8', 1338865842, 0, '0000-00-00 00:00:00', '', 0, 0, '1');
+INSERT INTO `zt_usergroup` (`account`, `group`, `project`) VALUES
+('productManager', 5, ''),
+('projectManager', 4, ''),
+('dev1', 2, ''),
+('dev2', 2, ''),
+('dev3', 2, ''),
+('tester3', 3, ''),
+('tester2', 3, ''),
+('tester1', 3, ''),
+('testManager', 8, '');
+REPLACE INTO `zt_userview` (`account`, `programs`, `projects`, `products`, `sprints`) VALUES
+('admin', '', '', '', ''),
+('dev1', '', '', '', ''),
+('dev2', '', '', '', ''),
+('dev3', '', '', '', ''),
+('productManager', '', '', '', ''),
+('projectManager', '', '', '', ''),
+('tester1', '', '', '', ''),
+('tester2', '', '', '', ''),
+('tester3', '', '', '', ''),
+('testManager', '', '', '', '');

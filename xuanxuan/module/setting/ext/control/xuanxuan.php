@@ -38,8 +38,7 @@ class setting extends control
         $os = 'win';
         if(strpos(strtolower(PHP_OS), 'win') !== 0) $os = strtolower(PHP_OS);
 
-        $this->lang->setting->menu      = $this->lang->admin->menu;
-        $this->lang->menugroup->setting = 'admin';
+        $this->lang->navGroup->im = 'admin';
 
         $this->view->title      = $this->lang->im->common;
         $this->view->position[] = html::a($this->createLink('admin', 'xuanxuan'), $this->lang->im->common);

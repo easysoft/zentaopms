@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<style>.table .c-progress {width: 60px;}</style>
 <?php if(empty($executionStats)): ?>
 <div class='empty-tip'><?php common::printLink('execution', 'create', '', "<i class='icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
@@ -39,8 +40,8 @@
       $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
       $viewLink = $this->createLink('execution', 'task', 'executionID=' . $execution->id);
       ?>
-      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($this->createLink('execution', 'task', 'executionID=' . $execution->id), $execution->name, '', "title='$execution->name'");?></nobr></td>
+      <tr <?php echo $appid?>>
+        <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($viewLink, $execution->name, '', "title='$execution->name'");?></nobr></td>
         <td class="c-date"><?php echo $execution->end;?></td>
         <?php if($longBlock):?>
         <td class="w-70px">
@@ -51,15 +52,13 @@
           <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
           <?php endif;?>
         </td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalEstimate . ' ' . $lang->execution->workHourUnit;?></td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalConsumed . ' ' . $lang->execution->workHourUnit;?></td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalLeft     . $lang->execution->workHourUnit;?></td>
         <?php endif;?>
         <td class="c-progress">
-          <div class="progress progress-text-left">
-            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $execution->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->hours->progress;?>%">
-            <span class="progress-text"><?php echo $execution->hours->progress;?>%</span>
-            </div>
+          <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo $execution->hours->progress;?></div>
           </div>
         </td>
         <?php if($longBlock):?>

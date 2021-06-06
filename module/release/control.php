@@ -21,18 +21,14 @@ class release extends control
      */
     public function commonAction($productID, $branch = 0)
     {
-        $this->lang->product->menu = $this->lang->product->viewMenu;
-        $this->lang->product->switcherMenu   = $this->loadModel('product')->getSwitcher($productID, '', $branch);
-        $this->lang->product->mainMenuAction = $this->product->getProductMainAction();
+        $this->loadModel('product')->setMenu($productID, $branch);
 
-        $this->loadModel('product');
         $product = $this->product->getById($productID);
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
         $this->view->product  = $product;
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}&branch=$branch"), $this->view->product->name);
-        $this->product->setMenu($this->product->getPairs(), $productID, $branch);
     }
 
     /**
@@ -47,7 +43,7 @@ class release extends control
     public function browse($productID, $branch = 0, $type = 'all')
     {
         $this->commonAction($productID, $branch);
-        $this->session->set('releaseList', $this->app->getURI(true));
+        $this->session->set('releaseList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
@@ -74,6 +70,7 @@ class release extends control
 
             $this->executeHooks($releaseID);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
@@ -150,11 +147,12 @@ class release extends control
      */
     public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $release = $this->release->getByID((int)$releaseID, true);
+        $releaseID = (int)$releaseID;
+        $release   = $this->release->getByID($releaseID, true);
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        if($type == 'story') $this->session->set('storyList', $this->app->getURI(true));
-        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true));
+        if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -384,7 +382,7 @@ class release extends control
             $this->release->linkStory($releaseID);
             die(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
         }
-        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
 
         $release = $this->release->getById($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build);
@@ -504,7 +502,7 @@ class release extends control
             die(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
         }
 
-        $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+        $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
         /* Set menu. */
         $release = $this->release->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build);

@@ -80,7 +80,7 @@
             }
             common::printIcon('testtask', 'create', "product=$build->product&execution=$execution->id&build=$build->id", $build, 'list', 'bullhorn');
             $lang->execution->bug = $lang->execution->viewBug;
-            common::printIcon('execution', 'bug',  "execution=$execution->id&orderBy=status&build=$build->id", $build, 'list');
+            common::printIcon('execution', 'bug',  "execution=$execution->id&productID=$productID&orderBy=status&build=$build->id", $build, 'list');
             common::printIcon('build',   'edit', "buildID=$build->id", $build, 'list');
             if(common::hasPriv('build',  'delete', $build))
             {

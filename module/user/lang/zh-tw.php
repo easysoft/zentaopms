@@ -56,6 +56,7 @@ $lang->user->type             = '用戶類型';
 $lang->user->cropAvatar       = '剪切頭像';
 $lang->user->cropAvatarTip    = '拖拽選框來選擇頭像剪切範圍';
 $lang->user->cropImageTip     = '所使用的頭像圖片過小，建議圖片大小至少為 48x48，當前圖片大小為 %s';
+$lang->user->captcha          = '驗證碼';
 
 $lang->user->legendBasic        = '基本資料';
 $lang->user->legendContribution = '個人貢獻';
@@ -96,7 +97,7 @@ $lang->user->tplContentNotEmpty    = '模板內容不能為空!';
 
 $lang->user->profile   = '檔案';
 $lang->user->project   = $lang->executionCommon;
-$lang->user->execution = '執行';
+$lang->user->execution = $lang->execution->common;
 $lang->user->task      = '任務';
 $lang->user->bug       = 'Bug';
 $lang->user->test      = '測試';
@@ -128,6 +129,7 @@ $lang->user->lockWarning  = "您還有%s次嘗試機會。";
 $lang->user->loginLocked  = "密碼嘗試次數太多，請聯繫管理員解鎖，或%s分鐘後重試。";
 $lang->user->weakPassword = "您的密碼強度小於系統設定。";
 $lang->user->errorWeak    = "密碼不能使用【%s】這些常用弱口令。";
+$lang->user->errorCaptcha = "驗證碼不正確！";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研發';
@@ -204,6 +206,8 @@ $lang->user->error->dangerPassword = "【ID %s】的密碼不能使用【%s】�
 
 $lang->user->error->verifyPassword   = "驗證失敗，請檢查您的系統登錄密碼是否正確";
 $lang->user->error->originalPassword = "原密碼不正確";
+$lang->user->error->companyEmpty     = "公司名稱不能為空！";
+$lang->user->error->noAccess         = "該人員和你不是同一部門，你無權訪問該人員的工作信息。";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
@@ -239,7 +243,7 @@ $lang->user->noticeResetFile = "<h5>普通用戶請聯繫管理員重置密碼</
     <ol>
     <li>檔案內容為空。</li>
     <li>如果之前檔案存在，刪除之後重新創建。</li>
-    </ol>"; 
+    </ol>";
 $lang->user->notice4Safe = "警告：檢測到一鍵安裝包密碼口令弱";
 $lang->user->process4DIR = "檢測到您可能在使用一鍵安裝包環境，該環境中其他站點還在用簡單密碼，安全起見，如果不使用其他站點，請及時處理。將 %s 目錄刪除或改名。詳情查看：<a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
 $lang->user->process4DB  = "檢測到您可能在使用一鍵安裝包環境，該環境中其他站點還在用簡單密碼，安全起見，如果不使用其他站點，請及時處理。請登錄資料庫，修改 %s 資料庫的zt_user表的password欄位。詳情查看：<a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";

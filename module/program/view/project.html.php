@@ -16,7 +16,8 @@ js::set('programID', $programID);
 js::set('browseType', $browseType);
 ?>
 <style>
-.project-type-label.label-outline {width: 47px;}
+.project-type-label.label-outline {width: 50px; min-width: 50px;}
+.project-type-label.label {overflow: unset !important; text-overflow: unset !important; white-space: unset !important;}
 </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolBar pull-left">
@@ -30,9 +31,9 @@ js::set('browseType', $browseType);
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(isset($this->config->maxVersion)):?>
-    <?php common::printLink('project', 'createGuide', "programID=$programID&from=program", '<i class="icon icon-plus"></i>' . $lang->program->PRJCreate, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php elseif($this->config->systemMode == 'new'):?>
-    <?php common::printLink('project', 'create', "mode=scrum&programID=$programID&from=program", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('project', 'create', "mode=scrum&programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
     <?php endif;?>
   </div>
 </div>
@@ -43,9 +44,9 @@ js::set('browseType', $browseType);
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
         <?php if(isset($this->config->maxVersion)):?>
-        <?php common::printLink('program', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
+        <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
         <?php elseif($this->config->systemMode == 'new'):?>
-        <?php common::printLink('project', 'create', "mode=scrum&programID=$programID&from=program", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide"');?>
+        <?php common::printLink('project', 'create', "mode=scrum&programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info btn-wide"');?>
         <?php endif;?>
       </p>
     </div>
@@ -56,13 +57,13 @@ js::set('browseType', $browseType);
         $setting = $this->datatable->getSetting('program');
       ?>
       <table class='table has-sort-head'>
-      <?php $canBatchEdit = common::hasPriv('program', 'PRJBatchEdit');?>
+      <?php $canBatchEdit = common::hasPriv('project', 'batchEdit');?>
         <thead>
           <tr>
             <?php
               foreach($setting as $value)
               {
-                if($value->id == 'PRJStatus' and $browseType !== 'all') $value->show = false;
+                if($value->id == 'projectStatus' and $browseType !== 'all') $value->show = false;
                 if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
               }
             ?>
@@ -85,7 +86,7 @@ js::set('browseType', $browseType);
         <?php
         if($canBatchEdit)
         {
-            $actionLink = $this->createLink('program', 'PRJBatchEdit', "from=pgmproject&programID=$programID");
+            $actionLink = $this->createLink('project', 'batchEdit', "from=pgmproject&programID=$programID");
             $misc       = "data-form-action='$actionLink'";
             echo html::commonButton($lang->edit, $misc);
         }

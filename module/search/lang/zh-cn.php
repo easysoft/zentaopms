@@ -76,7 +76,7 @@ $lang->search->modules['bug']         = 'Bug';
 $lang->search->modules['case']        = '用例';
 $lang->search->modules['doc']         = '文档';
 $lang->search->modules['todo']        = '待办';
-$lang->search->modules['build']       = 'Build';
+$lang->search->modules['build']       = '版本';
 $lang->search->modules['effort']      = '日志';
 $lang->search->modules['caselib']     = '测试库';
 $lang->search->modules['product']     = $lang->productCommon;
@@ -87,7 +87,7 @@ $lang->search->modules['testreport']  = '报告';
 $lang->search->modules['productplan'] = '计划';
 $lang->search->modules['program']     = '项目集';
 $lang->search->modules['project']     = '项目';
-$lang->search->modules['execution']   = '执行';
+$lang->search->modules['execution']   = $lang->executionCommon;
 $lang->search->modules['story']       = '需求';
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;

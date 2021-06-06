@@ -114,9 +114,6 @@
     </form>
   </div>
 </div>
-<script>
-var reportID = <?php echo $report->id;?>;
-var from     = '<?php echo $from;?>';
-var method   = 'edit';
-</script>
+<?php js::set('reportID', $report->id);?>
+<?php js::set('method', 'edit');?>
 <?php include '../../common/view/footer.html.php';?>

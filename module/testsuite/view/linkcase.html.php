@@ -40,18 +40,22 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='w-70px text-center'><nobr><?php echo $lang->testsuite->linkVersion;?></nobr></th>
-          <th class='w-70px text-center'><?php echo $lang->priAB;?></th>
+          <th class='w-70px'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->testcase->title;?></th>
-          <th class='w-type'><?php echo $lang->testcase->type;?></th>
-          <th class='c-user text-center'><?php echo $lang->openedByAB;?></th>
-          <th class='c-status text-center'><?php echo $lang->statusAB;?></th>
+          <th class='w-90px'><?php echo $lang->testcase->type;?></th>
+          <th class='c-user'><?php echo $lang->openedByAB;?></th>
+          <th class='c-status'><?php echo $lang->statusAB;?></th>
         </tr>
       </thead>
       <tbody>
       <?php foreach($cases as $case):?>
-      <tr class='text-center'>
-        <td class='cell-id'>
-          <?php echo html::checkbox('cases', array($case->id => sprintf('%03d', $case->id)));?>
+      <tr>
+        <td class='c-id'>
+          <div class="checkbox-primary">
+            <input type='checkbox' name='cases[]' value='<?php echo $case->id;?>'/>
+            <label></label>
+          </div>
+          <?php echo sprintf('%03d', $case->id);?>
         </td>
         <td><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class="form-control"');?> </td>
         <td><span class='label-pri label-pri-<?php echo $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>

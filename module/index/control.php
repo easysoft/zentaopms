@@ -69,4 +69,21 @@ class index extends control
     {
         echo $this->fetch('misc', 'getsid');
     }
+
+    /**
+     * ajaxClearObjectSession
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxClearObjectSession()
+    {
+        $objectType = $this->post->objectType;
+        $appGroup   = zget($this->config->index->appGroup, $objectType, '');
+        if($objectType == 'testcase')    $objectType = 'case';
+        if($objectType == 'testreport')  $objectType = 'report';
+        if($objectType == 'productplan') $objectType = 'productPlan';
+
+        $this->session->set($objectType . 'List', '', $appGroup);
+    }
 }

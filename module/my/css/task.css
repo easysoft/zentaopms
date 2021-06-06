@@ -10,5 +10,6 @@ td.delayed {background: #e84e0f !important; color: white;}
 .table td.has-child > .task-toggle > .icon:before {text-align: left;}
 .table td.has-child > .task-toggle.collapsed {top: 2px;}
 .table td.has-child > .task-toggle.collapsed > .icon {-ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -o-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);}
+.table td.c-hours {padding-right: 12px;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}

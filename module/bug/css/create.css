@@ -9,7 +9,6 @@ html[lang='en'] #deadlineTd .input-group-addon {padding: 5px 18px;}
 .bootbox-prompt .modal-dialog {width: 500px; margin-top: 10%;}
 
 #buildBoxActions {padding-left: 15px;}
-#executionIdBox {display: block;}
 
 #module + .chosen-container-single .chosen-single,
 #task + .chosen-container-single .chosen-single,

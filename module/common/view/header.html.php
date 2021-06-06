@@ -7,45 +7,28 @@ include 'chosen.html.php';
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
-<?php
-$rawModule   = zget($lang->navGroup, $app->rawModule);
-$isProgram   = $rawModule == 'program';
-$isProduct   = $rawModule == 'product';
-$isProject   = $rawModule == 'project';
-$isExecution = $rawModule == 'execution';
-$isReport    = $rawModule == 'report';
-$isQa        = $rawModule == 'qa';
-?>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
       <div id='heading'>
-        <?php if($isProduct)   echo isset($lang->product->switcherMenu) ? $lang->product->switcherMenu : '';?>
-        <?php if($isQa)        echo isset($lang->qa->switcherMenu) ? $lang->qa->switcherMenu : '';?>
-        <?php if($this->config->systemMode == 'new'):?>
-        <?php if($isProgram)   echo isset($lang->program->switcherMenu) ? $lang->program->switcherMenu : '';?>
-        <?php if($isProject)   echo $this->loadModel('project')->getSwitcher($this->session->PRJ, $app->rawModule, $app->rawMethod);?>
-        <?php if($isExecution) echo $this->loadModel('execution')->getSwitcher($this->session->execution, $app->rawModule, $app->rawMethod);?>
-        <?php elseif($this->config->systemMode == 'classic'):?>
-        <?php if($isProject)   echo isset($lang->project->switcherMenu) ? $lang->project->switcherMenu : '';;?>
-        <?php endif;?>
+        <?php common::printHomeButton($app->openApp);?>
+        <?php echo isset($lang->switcherMenu) ? $lang->switcherMenu : '';?>
       </div>
-      <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>
+      <nav id='navbar'><?php $activeMenu = commonModel::printMainMenu();?></nav>
       <div id='toolbar'>
-        <?php if($isProgram)   echo isset($lang->program->mainMenuAction) ? $lang->program->mainMenuAction : '';?>
-        <?php if($isProject)   echo $this->loadModel('project')->getMainAction($app->rawModule, $app->rawMethod);?>
-        <?php if($isExecution) echo $this->execution->getMainAction($app->rawModule, $app->rawMethod);?>
-        <?php if($isProduct)   echo isset($lang->product->mainMenuAction) ? $lang->product->mainMenuAction : '';?>
-        <?php if($isReport)    echo isset($lang->report->mainMenuAction) ? $lang->report->mainMenuAction : '';?>
-        <?php if($isQa)        echo isset($lang->qa->mainMenuAction) ? $lang->qa->mainMenuAction : '';?>
+        <div id='userMenu'>
+          <ul id="userNav" class="nav nav-default">
+            <li class='dropdown dropdown-hover has-avatar'><?php common::printUserBar();?></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
-  <?php if(!in_array($app->rawModule, $lang->noMenuModule)):?>
+  <?php if(isset($lang->{$app->openApp}->menu->$activeMenu) and isset($lang->{$app->openApp}->menu->{$activeMenu}['subMenu'])):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>
-      <nav id='subNavbar'><?php common::printModuleMenu($app->rawModule);?></nav>
+      <nav id='subNavbar'><?php common::printModuleMenu($activeMenu);?></nav>
       <div id="pageActions"><div class='btn-toolbar'><?php if(isset($lang->TRActions)) echo $lang->TRActions;?></div></div>
     </div>
   </div>

@@ -49,6 +49,7 @@ $imgCutter.imgCutter(
     done: function(response)
     {
         window.parent.$('#main-avatar, #menu-avatar').html('<img src="<?php echo $user->avatar?>"/>');
+        window.parent.$('#mainContent .avatar').html('<img src="<?php echo $user->avatar?>"/>');
         if(window.parent.$('#main-avatar, #menu-avatar').hasClass('with-text')) window.parent.$('#main-avatar, #menu-avatar').toggleClass('with-text').css('background', 'none');
         location.href = createLink('my', 'profile');
     },

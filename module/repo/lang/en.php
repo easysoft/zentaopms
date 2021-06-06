@@ -3,26 +3,31 @@ $lang->repo->common          = 'Repo';
 $lang->repo->browse          = 'View';
 $lang->repo->viewRevision    = 'View Revision';
 $lang->repo->product         = 'Product';
+$lang->repo->execution       = $lang->execution->common;
 $lang->repo->create          = 'Create';
-$lang->repo->createAction    = 'Create Repo';
 $lang->repo->maintain        = 'Repo List';
 $lang->repo->edit            = 'Edit';
-$lang->repo->editAction      = 'Edit Repo';
 $lang->repo->delete          = 'Delete Repo';
 $lang->repo->showSyncCommit  = 'Display Sync';
 $lang->repo->ajaxSyncCommit  = 'Interface: Ajax Sync Note';
 $lang->repo->setRules        = 'Set Rules';
 $lang->repo->download        = 'Download File';
 $lang->repo->downloadDiff    = 'Download Diff';
-$lang->repo->diffAction      = 'Revision Diff';
-$lang->repo->revisionAction  = 'Revision Detail';
-$lang->repo->blameAction     = 'Repo Blame';
 $lang->repo->addBug          = 'Add Review';
 $lang->repo->editBug         = 'Edit Bug';
 $lang->repo->deleteBug       = 'Delete Bug';
 $lang->repo->addComment      = 'Add Comment';
 $lang->repo->editComment     = 'Edit Comment';
 $lang->repo->deleteComment   = 'Delete Comment';
+
+$lang->repo->browseAction    = 'Browse Repo';
+$lang->repo->createAction    = 'Create Repo';
+$lang->repo->editAction      = 'Edit Repo';
+$lang->repo->diffAction      = 'Diff Revision';
+$lang->repo->downloadAction  = 'Download File';
+$lang->repo->revisionAction  = 'Revision Detail';
+$lang->repo->blameAction     = 'Blame';
+$lang->repo->reviewAction    = 'Review List';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
@@ -120,6 +125,14 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';
+$lang->repo->scmList['Gitlab']     = 'Gitlab';
+
+$lang->repo->gitlabHost    = 'Gitlab Host';
+$lang->repo->gitlabToken   = 'Gitlab Token';
+$lang->repo->gitlabProject = 'Projects';
+
+$lang->repo->placeholder = new stdclass;
+$lang->repo->placeholder->gitlabHost = 'Input url of gitlab';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = 'Synchronizing. Please wait ...';

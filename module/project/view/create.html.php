@@ -80,7 +80,7 @@
           <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <?php if($model == 'scrum'):?>
-        <tr>
+        <tr id='daysBox'>
           <th><?php echo $lang->execution->days;?></th>
           <td>
             <div class='input-group'>
@@ -200,6 +200,6 @@
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div id='programAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->project->subAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

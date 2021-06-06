@@ -12,14 +12,6 @@
 class automation extends control
 {
     /** 
-     * Project id.
-     *
-     * @var    int
-     * @access public
-     */
-    public $projectID = 0;
-
-    /** 
      * Products.
      *
      * @var    array
@@ -36,16 +28,7 @@ class automation extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-
-        /* Set testtask menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
-        {
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-        }
-
-        $this->view->products = $this->products = $this->loadModel('product')->getProductPairsByProject($this->projectID);
+        $this->view->products = $this->products = $products = $this->loadModel('product')->getPairs();
     }
 
     /**
@@ -61,7 +44,7 @@ class automation extends control
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
         if(empty($branch)) $branch = (int)$this->cookie->preBranch;
-        $this->automation->setMenu($this->products, $productID, $branch);
+        $this->loadModel('qa')->setMenu($this->products, $productID, $branch);
 
         $this->view->title      = $this->lang->automation->common;
         $this->view->position[] = $this->lang->automation->browse;

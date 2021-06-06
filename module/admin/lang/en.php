@@ -9,7 +9,6 @@
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->admin->common        = 'Admin';
 $lang->admin->index         = 'Admin Home';
 $lang->admin->checkDB       = 'Check Database';
 $lang->admin->sso           = 'Zdoo';
@@ -80,7 +79,7 @@ $lang->admin->safe->reasonList['birthday'] = 'Same as DOB';
 $lang->admin->safe->modifyPasswordList[1] = 'Yes';
 $lang->admin->safe->modifyPasswordList[0] = 'No';
 
-$lang->admin->safe->loginCaptchaList[1] = 'Yes'
+$lang->admin->safe->loginCaptchaList[1] = 'Yes';
 $lang->admin->safe->loginCaptchaList[0] = 'No';
 
 $lang->admin->safe->noticeMode   = 'Password will be checked when a user logs in, or a user is added or edited.';

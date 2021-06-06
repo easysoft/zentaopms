@@ -10,7 +10,7 @@
 
     $label  = "<span class='text'>{$lang->user->schedule}</span>";
     $active = $methodName == 'todo' ? ' btn-active-text' : '';
-    common::printLink('user', 'todo', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
+    common::printLink('user', 'todo', "userID={$user->id}&type=all", $label, '', "class='btn btn-link $active'");
 
     $label  = "<span class='text'>{$lang->user->task}</span>";
     $active = $methodName == 'task' ? ' btn-active-text' : '';
@@ -39,18 +39,21 @@
     $active = $methodName == 'testcase' ? ' btn-active-text' : '';
     common::printLink('user', 'testcase', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
-    $label  = "<span class='text'>{$lang->user->execution}</span>";
-    $active = $methodName == 'execution' ? ' btn-active-text' : '';
-    common::printLink('user', 'execution',  "userID={$user->id}", $label, '', "class='btn btn-link $active'");
+    if($this->config->systemMode == 'new')
+    {
+        $label  = "<span class='text'>{$lang->user->execution}</span>";
+        $active = $methodName == 'execution' ? ' btn-active-text' : '';
+        common::printLink('user', 'execution',  "userID={$user->id}", $label, '', "class='btn btn-link $active'");
+    }
 
     if(isset($this->config->maxVersion))
     {
         $label  = "<span class='text'>{$lang->user->issue}</span>";
-        $active = ($methodName == 'issue' or $methodName == 'issue')? ' btn-active-text' : '';
+        $active = $methodName == 'issue' ? ' btn-active-text' : '';
         common::printLink('user', 'issue', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
 
         $label  = "<span class='text'>{$lang->user->risk}</span>";
-        $active = ($methodName == 'risk' or $methodName == 'risk')? ' btn-active-text' : '';
+        $active = $methodName == 'risk' ? ' btn-active-text' : '';
         common::printLink('user', 'risk', "userID={$user->id}", $label, '', "class='btn btn-link $active'");
     }
 

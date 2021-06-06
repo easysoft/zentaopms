@@ -96,6 +96,7 @@ class productplanModel extends model
             $plans      = $this->reorder4Children($plans);
             $planIdList = array_keys($plans);
 
+            $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
             $product = $this->loadModel('product')->getById($product);
             if($product->type == 'normal')
             {
@@ -126,6 +127,22 @@ class productplanModel extends model
                 $plan->bugs      = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
                 $plan->hour      = array_sum($storyPairs);
                 $plan->projectID = $plan->project;
+
+                /* Sync linked stories. */
+                if(!isset($storyCountInTable[$plan->id]) or $storyCountInTable[$plan->id] != $plan->stories)
+                {
+                    $this->dao->delete()->from(TABLE_PLANSTORY)->where('plan')->eq($plan->id)->exec();
+
+                    $order = 1;
+                    foreach($storyPairs as $storyID => $estimate)
+                    {
+                        $planStory = new stdclass();
+                        $planStory->plan = $plan->id;
+                        $planStory->story = $storyID;
+                        $planStory->order = $order ++;
+                        $this->dao->replace(TABLE_PLANSTORY)->data($planStory)->exec();
+                    }
+                }
 
                 if(!isset($parentStories[$plan->parent])) $parentStories[$plan->parent] = 0;
                 if(!isset($parentBugs[$plan->parent]))    $parentBugs[$plan->parent]    = 0;
@@ -292,8 +309,8 @@ class productplanModel extends model
 
     /**
      * Get Children plan.
-     * 
-     * @param  int    $planID 
+     *
+     * @param  int    $planID
      * @access public
      * @return array
      */
@@ -433,8 +450,8 @@ class productplanModel extends model
 
     /**
      * Change parent field by planID.
-     * 
-     * @param  int    $planID 
+     *
+     * @param  int    $planID
      * @access public
      * @return void
      */
@@ -561,9 +578,44 @@ class productplanModel extends model
     }
 
     /**
+     * Link project.
+     *
+     * @param  int    $projectID
+     * @param  array  $newPlans
+     * @param  array  $oldPlanStories
+     * @access public
+     * @return void
+     */
+    public function linkProject($projectID, $newPlans, $oldPlanStories = '')
+    {
+        if(!empty($oldPlanStories)) $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->in(array_keys($oldPlanStories))->exec();
+
+        $this->loadModel('execution');
+        foreach($newPlans as $planID)
+        {
+            $planStories = $planProducts = array();
+            $planStory   = $this->loadModel('story')->getPlanStories($planID);
+            if(!empty($planStory))
+            {
+                foreach($planStory as $id => $story)
+                {
+                    if($story->status == 'draft')
+                    {
+                        unset($planStory[$id]);
+                        continue;
+                    }
+                    $planProducts[$story->id] = $story->product;
+                }
+                $planStories = array_keys($planStory);
+                $this->execution->linkStory($projectID, $planStories, $planProducts);
+            }
+        }
+    }
+
+    /**
      * Reorder for children plans.
-     * 
-     * @param  array    $plans 
+     *
+     * @param  array    $plans
      * @access public
      * @return array
      */

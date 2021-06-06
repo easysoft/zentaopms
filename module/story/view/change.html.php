@@ -24,9 +24,9 @@
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
-          <td class='w-p35-f'>
+          <td colspan="2">
             <div class="input-group">
-              <?php echo html::select('assignedTo', $users, $story->reviewedBy, 'class="form-control chosen"');?>
+              <?php echo html::select('reviewer[]', $users, $reviewer, 'class="form-control chosen" multiple');?>
               <?php if(!$this->story->checkForceReview()):?>
               <span class="input-group-addon">
               <?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?>
@@ -34,7 +34,6 @@
               <?php endif;?>
             </div>
           </td>
-          <td></td>
         </tr>
         <tr class='hide'>
           <th><?php echo $lang->story->status;?></th>
@@ -71,7 +70,7 @@
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::submitButton();
-            echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), 'self', '', 'btn btn-wide');
+            if(!isonlybody()) echo html::a($app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), $lang->goback, '', 'class="btn btn-wide"');
             ?>
           </td>
         </tr>

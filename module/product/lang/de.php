@@ -9,7 +9,6 @@
  * @version     $Id: en.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->common        = $lang->productCommon;
 $lang->product->index         = $lang->productCommon . 'Home';
 $lang->product->browse        = 'Story Liste';
 $lang->product->dynamic       = 'Verlauf';
@@ -29,6 +28,7 @@ $lang->product->updateOrder   = 'Ranking';
 $lang->product->orderAction   = "Rank {$lang->productCommon}";
 $lang->product->all           = "Alle {$lang->productCommon}";
 $lang->product->manageLine    = "Manage {$lang->productCommon} Line";
+$lang->product->newLine       = "Create {$lang->productCommon} Line";
 $lang->product->export        = 'Exportiere Daten';
 $lang->product->exportAction  = "Export {$lang->productCommon}";
 $lang->product->dashboard     = 'Dashboard';
@@ -41,7 +41,8 @@ $lang->product->plans       = 'Plan';
 $lang->product->releases    = 'Release';
 $lang->product->docs        = 'Dok';
 $lang->product->bugs        = 'Verknüpfte Bugs';
-$lang->product->projects    = "Verknüpfte {$lang->executionCommon}";
+$lang->product->projects    = "Linked Project";
+$lang->product->executions  = "Verknüpfte {$lang->execution->common}";
 $lang->product->cases       = 'Fälle';
 $lang->product->builds      = 'Builds';
 $lang->product->roadmap     = 'Roadmap';
@@ -51,7 +52,7 @@ $lang->product->build       = 'Build';
 $lang->product->moreProduct = "More Product";
 $lang->product->projectInfo = "Projects that are linked to this {$lang->productCommon} are listed below.";
 
-$lang->product->currentExecution      = "Aktuelle {$lang->sprintCommon}";
+$lang->product->currentExecution      = "Aktuelle Execution";
 $lang->product->activeStories         = 'Aktivierte [S]';
 $lang->product->activeStoriesTitle    = 'Active Stories';
 $lang->product->changedStories        = 'Geänderte [S]';

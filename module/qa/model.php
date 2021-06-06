@@ -23,32 +23,9 @@ class qaModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $extra = '')
     {
-        $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'qa', 'index', $extra, $branch);
-
-        $productIndex = '';
-        $isMobile     = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $productIndex  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-            $productIndex .= $selectHtml;
-        }
-        else
-        {
-            $currentMethod = $this->app->getMethodName();
-            $productIndex .= $selectHtml;
-        }
-
-        $this->lang->modulePageNav = $productIndex;
-        foreach($this->lang->qa->menu as $key => $menu)
-        {
-            if($this->config->global->flow == 'full' && $this->lang->navGroup->qa != 'qa') $this->setSubMenu('qa', $key, $productID);
-            $replace = $productID;
-            if($this->lang->navGroup->testcase == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->qa->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->qa == 'qa') $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
+        if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->loadModel('product')->getSwitcher($productID, $extra, $branch);
+        if($this->app->rawModule == 'product' and $this->app->rawMethod == 'showerrornone') $this->lang->switcherMenu = '';
+        common::setMenuVars('qa', $productID);
     }
 
     /**

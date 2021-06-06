@@ -1,6 +1,6 @@
 function setCopyProject(executionID)
 {
-    location.href = createLink('execution', 'create', 'productID=&executionID=0&copyExecutionID=' + executionID);
+    location.href = createLink('execution', 'create', 'projectID=&executionID=0&copyExecutionID=' + executionID);
 }
 
 $(function()
@@ -38,7 +38,7 @@ $(function()
 
     var adjustMainCol = function()
     {
-        if(isSprint) $('.main-form .col-main').css('width', Math.max(250, Math.floor(($('#productsBox').outerWidth() - 50)/3) + 10));
+        if(!isStage) $('.main-form .col-main').css('width', Math.max(250, Math.floor(($('#productsBox').outerWidth() - 50)/3) + 10));
     };
     adjustMainCol();
     $(window).on('resize', adjustMainCol);
@@ -57,3 +57,14 @@ function showLifeTimeTips()
     }
 }
 
+/**
+ * Refresh page.
+ *
+ * @param  object $projectID
+ * @access public
+ * @return void
+ */
+function refreshPage(projectID)
+{
+    location.href = createLink('execution', 'create', 'projectID=' + projectID);
+}

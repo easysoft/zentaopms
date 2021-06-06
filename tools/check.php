@@ -11,6 +11,9 @@ $config->programLink   = '-';
 $config->productLink   = '-';
 $config->projectLink   = '-';
 $config->executionLink = '-';
+$config->systemMode    = 'new';
+$config->URAndSR       = true;
+$config->systemScore   = true;
 
 /* set module root path and included the resource of group module. */
 $moduleRoot = '../module/';
@@ -48,8 +51,8 @@ $whiteList[] = 'help-field';
 $whiteList[] = 'index-testext';
 $whiteList[] = 'productplan-commonaction';
 $whiteList[] = 'project-managechilds';
-$whiteList[] = 'project-tips';
-$whiteList[] = 'project-commonaction';
+$whiteList[] = 'execution-tips';
+$whiteList[] = 'execution-commonaction';
 $whiteList[] = 'project-sendmail';
 $whiteList[] = 'release-commonaction';
 $whiteList[] = 'task-commonaction';
@@ -125,6 +128,7 @@ $whiteList[] = 'ci-initqueue';
 $whiteList[] = 'ci-exec';
 $whiteList[] = 'ci-checkcompilestatus';
 $whiteList[] = 'im-userlogin';
+$whiteList[] = 'user-refreshRandom';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
@@ -293,7 +297,7 @@ foreach($demoSQL as $line => $sql)
 
     if(strpos($sql, $config->db->prefix . 'config')  !== false or
        strpos($sql, $config->db->prefix . 'company') !== false or
-       strpos($sql, $config->db->prefix . 'group')   !== false) 
+       strpos($sql, $config->db->prefix . 'group')   !== false)
     {
         die('line ' . ($line + 1) . " has error\n");
     }

@@ -31,11 +31,13 @@ $lang->story->reviewAction      = 'Duyệt câu chuyện';
 $lang->story->needReview        = 'Duyệt nhu cầu';
 $lang->story->batchReview       = 'Duyệt hàng loạt';
 $lang->story->edit              = "Sửa câu chuyện";
+$lang->story->editAB            = "Sửa câu chuyện";
 $lang->story->batchEdit         = "Sửa hàng loạt";
 $lang->story->subdivide         = 'Phân rã';
 $lang->story->link              = 'Link';
 $lang->story->unlink            = 'Unlink';
 $lang->story->track             = 'Track';
+$lang->story->trackAB           = 'Track';
 $lang->story->processStoryChange= 'Process Story Change';
 $lang->story->subdivideAction   = 'Phân rã câu chuyện';
 $lang->story->splitRequirent    = 'Phân rã';
@@ -80,6 +82,7 @@ $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
 $lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->SRCommon} and link {$lang->SRCommon} to the task. The closed {$lang->SRCommon} will not be converted into tasks.";
 $lang->story->successToTask   = "Converted to task.";
+$lang->story->storyRound      = '%s time estimation';
 
 $lang->story->common         = 'Câu chuyện';
 $lang->story->id             = 'ID';
@@ -93,7 +96,7 @@ $lang->story->source         = 'Từ';
 $lang->story->sourceNote     = 'Ghi chú';
 $lang->story->fromBug        = 'Từ Bug';
 $lang->story->title          = 'Tiêu đề';
-$lang->story->type           = 'Loại';
+$lang->story->category       = 'Category';
 $lang->story->color          = 'Màu';
 $lang->story->toBug          = 'Tới Bug';
 $lang->story->spec           = 'Mô tả';
@@ -120,6 +123,7 @@ $lang->story->closedDate     = 'Ngày đóng';
 $lang->story->closedReason   = 'Lý do';
 $lang->story->rejectedReason = 'Lý do từ chối';
 $lang->story->reviewedBy     = 'Người duyệt';
+$lang->story->reviewers      = 'Reviewers';
 $lang->story->reviewedDate   = 'Ngày duyệt';
 $lang->story->version        = 'Phiên bản';
 $lang->story->plan           = 'Kế hoạch liên kết';
@@ -152,6 +156,8 @@ $lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 $lang->story->completeRate   = 'Completion Rate';
+$lang->story->reviewed       = 'Reviewed';
+$lang->story->toBeReviewed   = 'To Be Reviewed';
 
 $lang->story->ditto       = 'Như trên';
 $lang->story->dittoNotice = 'Câu chuyện này chưa liên kết tới cùng sản phẩm bởi bởi vì nó là cuối cùng!';
@@ -247,7 +253,7 @@ $lang->story->lblClose    = 'Đóng';
 $lang->story->lblTBC      = 'Nhiệm vụ/Bug/Tình huống';
 
 $lang->story->checkAffection   = 'Ảnh hưởng';
-$lang->story->affectedProjects = ' ' . $lang->executionCommon;
+$lang->story->affectedProjects = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs     = 'Bugs';
 $lang->story->affectedCases    = 'Tình huống';
 
@@ -257,6 +263,7 @@ $lang->story->successSaved         = "Câu chuyện đã lưu lại!";
 $lang->story->confirmDelete        = "Bạn có muốn xóa câu chuyện này?";
 $lang->story->errorEmptyChildStory = '『Câu chuyện đã phân rã』 không thể để trống.';
 $lang->story->errorNotSubdivide    = "Nếu tình trạng này là chưa kích hoạt, hoặc giai đoạn này chưa đợi, hoặc một câu chuyện con, nó không thể bị chia nhỏ.";
+$lang->story->errorEmptyReviewedBy = "『ReviewedBy』 không thể để trống.";
 $lang->story->mustChooseResult     = 'Chọn kết quả';
 $lang->story->mustChoosePreVersion = 'Chọn một phiên bản để chuyển thành.';
 $lang->story->noStory              = 'Không có câu chuyện nào';
@@ -265,6 +272,7 @@ $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Ple
 $lang->story->cannotDeleteParent   = "Không thể xóa {$lang->SRCommon} mẹ";
 $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
+$lang->story->estimateMustBeNumber = 'Estimate value must be number.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Phạm vi';
@@ -274,7 +282,11 @@ $lang->story->form->file     = 'Nếu bất kỳ tập tin mà liên kết tới
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed              = array('main' => '$date, ghi nhận bởi <strong>$actor</strong>. Kết quả là <strong>$extra</strong>.', 'extra' => 'reviewResultList');
-$lang->story->action->closed                = array('main' => '$date, được đóng bởi <strong>$actor</strong>.Lý do là <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
+$lang->story->action->passreviewed          = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Pass</strong>.');
+$lang->story->action->clarifyreviewed       = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Review Failed</strong>. Please re-initiate the review after changing.');
+$lang->story->action->rejectreviewed        = array('main' => '$date, ghi nhận bởi <strong>$actor</strong>. Kết quả là <strong>$extra</strong>. Lý do là <strong>$reason</strong>', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
+$lang->story->action->closed                = array('main' => '$date, được đóng bởi <strong>$actor</strong>. Lý do là <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
+$lang->story->action->reviewclosed          = array('main' => '$date, closed by <strong>System</strong>. The reasion is <strong>Review Failed</strong>.');
 $lang->story->action->linked2plan           = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới kế hoạch <strong>$extra</strong>');
 $lang->story->action->unlinkedfromplan      = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ kế hoạch <strong>$extra</strong>.');
 $lang->story->action->linked2execution      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới ' . $lang->executionCommon . ' <strong>$extra</strong>.');
@@ -384,3 +396,11 @@ $lang->story->convertToTask->fieldList['spec']       = "Description";
 $lang->story->convertToTask->fieldList['pri']        = 'Priority';
 $lang->story->convertToTask->fieldList['mailto']     = 'Mailto';
 $lang->story->convertToTask->fieldList['assignedTo'] = 'AssignTo';
+
+$lang->story->categoryList['feature']     = 'Feature';
+$lang->story->categoryList['interface']   = 'Interface';
+$lang->story->categoryList['performance'] = 'Performance';
+$lang->story->categoryList['safe']        = 'Safe';
+$lang->story->categoryList['experience']  = 'Experience';
+$lang->story->categoryList['improve']     = 'Improve';
+$lang->story->categoryList['other']       = 'Other';

@@ -45,7 +45,7 @@
       <table class="table table-form">
         <thead>
           <tr class='text-center'>
-            <th class='w-40px'><?php echo $lang->idAB;?></th> 
+            <th class='w-40px'><?php echo $lang->idAB;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'dept', ' hidden') . zget($requiredFields, 'dept', '', ' required');?>'>              <?php echo $lang->user->dept;?></th>
             <th class='accountThWidth required'><?php echo $lang->user->account;?></th>
             <th class='w-130px required'><?php echo $lang->user->realname;?></th>
@@ -87,7 +87,7 @@
             <?php
             echo html::input("password[$i]", '', "class='form-control' onkeyup='toggleCheck(this, $i)'");
             echo "<span class='input-group-addon passwordStrength'></span>";
-            if($i != 0) echo "<span class='input-group-addon'><input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->user->ditto}</span>";
+            if($i != 0) echo "<span class='input-group-addon passwordBox'><input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->user->ditto}</span>";
             ?>
             </div>
           </td>

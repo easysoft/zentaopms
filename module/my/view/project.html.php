@@ -26,13 +26,6 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->project->empty;?></span>
-      <?php if(isset($this->config->maxVersion) and common::hasPriv('project', 'createGuide')):?>
-      <?php echo html::a($this->createLink('project', 'createGuide'), "<i class='icon icon-plus'></i> " . $lang->my->createProgram, '', "class='btn btn-info' data-toggle=modal");?>
-      <?php elseif($this->config->systemMode == 'new' and common::hasPriv('project', 'create')):?>
-      <?php echo html::a($this->createLink('project', 'create'), '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal" data-target="#guideDialog"');?>
-      <?php elseif($this->config->systemMode == 'classic' and common::hasPriv('execution', 'create')):?>
-      <?php echo html::a($this->createLink('execution', 'create'), '<i class="icon icon-plus"></i>' . $lang->execution->create, '', 'class="btn btn-info"');?>
-      <?php endif;?>
     </p>
   </div>
   <?php else:?>
@@ -57,14 +50,21 @@
         <tr>
           <td class='c-id'><?php printf('%03d', $project->id);?></td>
           <td class='c-name text-left' title='<?php echo $project->name?>'>
-            <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project'");?>
+            <?php
+            if(isset($this->config->maxVersion))
+            {
+                if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$lang->project->waterfall}</span> ";
+                if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$lang->project->scrum}</span> ";
+            }
+            echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project'");
+            ?>
           </td>
           <?php if($status == 'openedbyme'):?>
           <td class='c-status'><span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
           <?php endif;?>
           <td class='text-left'><?php echo $project->begin;?></td>
-          <td class='text-left'><?php echo $project->end == '0000-00-00' ? '' : $project->end;?></td>
-          <?php $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->project->tenThousand : number_format((float)$project->budget, 1);?>
+          <td class='text-left'><?php echo $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;?></td>
+          <?php $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
           <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->future;?></td>
           <td>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
@@ -91,8 +91,8 @@
             <div class='btn-group'>
               <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
               <ul class='dropdown-menu pull-right text-center' role='menu'>
-                <?php common::printIcon('project', 'manageProducts', "projectID=$project->id&projectID=$project->parent", $project, 'list', 'link', '', '', false, "data-group='project'", '', $project->id);?>
-                <?php common::printIcon('project', 'whitelist', "projectID=$project->id&projectID=$project->parent&module=project", $project, 'list', 'shield-check', '', '', false, "data-group='project'", '', $project->id);?>
+                <?php common::printIcon('project', 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', '', false, "data-group='project'", '', $project->id);?>
+                <?php common::printIcon('project', 'whitelist', "projectID=$project->id&module=project", $project, 'list', 'shield-check', '', '', false, "data-group='project'", '', $project->id);?>
                 <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->project->delete}' data-group='my'");?>
               </ul>
             </div>

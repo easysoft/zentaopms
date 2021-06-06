@@ -146,7 +146,9 @@ $(document).ready(function()
                     var deltaX = e.pageX - mouseDownX;
                     setFirstColWidth(startFirstWidth + deltaX);
                     e.preventDefault();
-                } else {
+                }
+                else
+                {
                     $(document).off(documentEventName);
                     $element.removeClass('row-spliting');
                 }

@@ -44,10 +44,24 @@
 
             if(!defaultApp) defaultApp = item.code;
         });
+
+        appsMap['search'] =
+        {
+            active:     false,
+            code:       'search',
+            group:      'search',
+            icon:       'icon-search',
+            methodName: 'index',
+            moduleName: 'search',
+            text:       searchCommon,
+            title:      '<i class="icon icon-search"></i> ' + searchCommon,
+            url:        '/index.php?m=search&f=index',
+            vars:       ''
+        };
     }
 
     /**
-     * Get app app code from url
+     * Get app code from url
      * @param {String} urlOrModuleName Url string
      * @return {String}
      */
@@ -98,10 +112,6 @@
         {
             return (link.params.from || link.params.$3) == 'project' ? 'project' : 'execution';
         }
-        if(['repo', 'jenkins', 'job', 'compile'].includes(moduleName))
-        {
-            return link.prj ? 'project' : 'repo';
-        }
         if(moduleName === 'product')
         {
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
@@ -114,15 +124,16 @@
         {
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
         }
-        if(moduleName === 'user')    
+        if(moduleName === 'user')
         {
-            if(['todo', 'task', 'story', 'bug', 'testtask', 'testcase', 'execution', 'dynamic', 'profile'].includes(methodLowerCase)) return 'system';
+            if(['todo', 'todocalendar', 'effortcalendar', 'effort', 'task', 'todo', 'story', 'bug', 'testtask', 'testcase', 'execution', 'dynamic', 'profile', 'view', 'issue', 'risk'].includes(methodLowerCase)) return 'system';
         }
-        if(moduleName === 'my')    
+        if(moduleName === 'my')
         {
-            if(['todo', 'team', 'calendar'].includes(methodLowerCase)) return 'system';
+            if(['team'].includes(methodLowerCase)) return 'system';
         }
         if(moduleName === 'company') if(methodLowerCase == 'browse') return 'admin';
+        if(moduleName === 'opportunity' || moduleName === 'risk' || moduleName == 'trainplan') if(methodLowerCase == 'view') return 'project';
         if(moduleName === 'tree')
         {
             if(methodLowerCase === 'browse')
@@ -139,6 +150,7 @@
                 return 'project';
             }
         }
+        if(moduleName === 'search' && methodLowerCase === 'buildindex') return 'admin';
 
         code = window.navGroup[moduleName] || moduleName || urlOrModuleName;
         return appsMap[code] ? code : '';
@@ -158,7 +170,7 @@
             if(appsMap[url])
             {
                 appCode = url;
-                url = '';
+                url     = '';
             }
             else
             {
@@ -167,21 +179,23 @@
             }
         }
 
-        /* Set openApp cookie */
-        $.cookie('openApp', appCode, {expires: config.cookieLife, path: config.webRoot});
-
-        /* Highlight at main menu */
-        var $menuMainNav = $('#menuMainNav');
-        var $lastActiveNav = $menuMainNav.find('li.active');
-        if($lastActiveNav.data('app') !== appCode)
-        {
-            $lastActiveNav.removeClass('active');
-            $menuMainNav.find('li[data-app="' + appCode + '"]').addClass('active');
-        }
-
         /* Create pate app object and store it */
         var app = openedApps[appCode];
-        if(!app)
+        if(app)
+        {
+            if(app.$iframe && app.$iframe.length)
+            {
+                var iframe = app.$iframe[0];
+                if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.$)
+                {
+                    var result = iframe.contentWindow.$(iframe.contentDocument).triggerHandler('openapp.apps', [app, url]);
+                    if (result === false) {
+                        return 'cancel';
+                    }
+                }
+            }
+        }
+        else
         {
             var $iframe = $(
             [
@@ -205,6 +219,18 @@
             if(!url) url = appsMap[appCode].url;
         }
 
+        /* Set openApp cookie */
+        $.cookie('openApp', appCode, {expires: config.cookieLife, path: config.webRoot});
+
+        /* Highlight at main menu */
+        var $menuMainNav   = $('#menuMainNav,#menuMoreNav');
+        var $lastActiveNav = $menuMainNav.find('li.active');
+        if($lastActiveNav.data('app') !== appCode)
+        {
+            $lastActiveNav.removeClass('active');
+            $menuMainNav.find('li[data-app="' + appCode + '"]').addClass('active');
+        }
+
         /* Show page app and update iframe source */
         if(url) reloadApp(appCode, url);
         app.zIndex = openedAppZIndex++;
@@ -212,13 +238,16 @@
 
         /* Update task bar */
         var $bars = $('#bars');
-        var $bar = $('#appBar-' + appCode);
+        var $bar  = $('#appBar-' + appCode);
         if(!$bar.length)
         {
             var $link= $('<a data-pos="bar"></a>')
                 .attr('data-app', appCode)
                 .attr('class', 'show-in-app')
-                .html(app.text);
+                .html('<span>' + app.text + '</span>');
+            var barCount = $('#bars li').length;
+
+            if(barCount) $bar = $('<li class="divider"></li>').appendTo($bars);
             $bar = $('<li></li>').attr('data-app', appCode)
                 .attr('id', 'appBar-' + appCode)
                 .append($link)
@@ -315,11 +344,36 @@
         var app = openedApps[appCode];
         if(!app) return;
 
+        if(app.$iframe && app.$iframe.length)
+        {
+            var iframe = app.$iframe[0];
+            if(iframe && iframe.contentDocument && iframe.contentWindow && iframe.contentWindow.$)
+            {
+                var result = iframe.contentWindow.$(iframe.contentDocument).triggerHandler('closeapp.apps', [app]);
+                if (result === false) {
+                    return 'cancel';
+                }
+            }
+        }
+
+        var appKeys = Object.keys(openedApps)
+        if(appKeys[0] == appCode)
+        {
+            $("#bars li.divider:first").remove();
+        }
+        else
+        {
+            $("#appBar-" + appCode).prev().remove();
+        }
+
         app.closed = true;
         hideApp(appCode);
         app.$app.remove();
         app.$bar.remove();
         delete openedApps[appCode];
+
+        var firstClass = $("#bars li:first").attr('class');
+        if(firstClass == 'divider') $("#bars li.divider:first").remove();
     }
 
     /**
@@ -386,8 +440,85 @@
         getAppCode: getAppCodeFromUrl,
         getLastApp: getLastApp,
         openedApps: openedApps,
-        appsMap:  appsMap
+        appsMap:    appsMap
     };
+
+    /**
+     * Refresh more menu in #menuNav
+     * @return {void}
+     */
+    function refreshMoreMenu()
+    {
+        var $mainNav       = $('#menuMainNav');
+        var $list          = $('#menuMoreList');
+        var $menuNav       = $('#menuNav');
+        var $menuItems     = $mainNav.children('li');
+        var maxHeight      = $menuNav.height();
+        var showMoreMenu   = false;
+        var currentHeight  = 40;
+        var moreMenuHeight = 12;
+
+        $menuItems.each(function()
+        {
+            var $item     = $(this);
+            var isDivider = $item.hasClass('divider');
+            var height    = isDivider ? 17 : 40;
+            currentHeight += height;
+            if(currentHeight > maxHeight)
+            {
+                $item.addClass('hidden');
+                if(!showMoreMenu)
+                {
+                    showMoreMenu = true;
+                    $list.empty();
+
+                    var $prevItem = $item.prev();
+                    if($prevItem.hasClass('divider')) $prevItem.addClass('hidden');
+
+                    if(isDivider) return;
+                }
+                moreMenuHeight += isDivider ? 13 : 30;
+                $list.append($item.clone().removeClass('hidden'));
+            }
+            else
+            {
+                $item.removeClass('hidden');
+            }
+        });
+
+        /* The magic number "111" is the space between dropdown trigger
+           btn and the bottom of screen */
+        var listStyle = {maxHeight: 'initial', top: moreMenuHeight > 111 ? 111 - moreMenuHeight : ''};
+        if($list[0].getBoundingClientRect)
+        {
+            var btnBounding = $list.prev('a')[0].getBoundingClientRect();
+            if(btnBounding.height)
+            {
+                var winHeight = $(window).height();
+                if(winHeight < moreMenuHeight)
+                {
+                    listStyle.maxHeight = winHeight;
+                    listStyle.overflow = 'auto';
+                    listStyle.top = 5 - btnBounding.top;
+                }
+                else if(moreMenuHeight > (winHeight - btnBounding.top))
+                {
+                    listStyle.top = winHeight - btnBounding.top - moreMenuHeight + 5;
+                }
+            }
+        }
+        $list.css(listStyle);
+        $menuNav.toggleClass('show-more-nav', showMoreMenu);
+
+        if(showMoreMenu && !$list.data('listened-click'))
+        {
+            $list.data('listened-click', true).on('click', function()
+            {
+                $list.addClass('hidden');
+                setTimeout(function(){$list.removeClass('hidden')}, 200);
+            });
+        }
+    }
 
     /* Init after current page load */
     $(function()
@@ -441,13 +572,20 @@
                     options.y = bounding.top;
                 }
             }
+            var $dropdown = $btn.closest('.dropdown');
+            if($dropdown.length)
+            {
+                $dropdown.addClass('open');
+                options.onHide = function(){$dropdown.removeClass('open');}
+            }
+
             $.zui.ContextMenu.show(items, options);
             event.preventDefault();
         });
 
         window.addEventListener('popstate', function(event)
         {
-            if(lastOpenedApp !== event.state.app) openApp(event.state.app);
+            if(event.state && lastOpenedApp !== event.state.app) openApp(event.state.app);
         });
 
         /* Redirect or open default app after document load */
@@ -456,8 +594,13 @@
         {
             defaultOpenUrl = decodeURIComponent(location.hash.substr(5));
         }
-        if(defaultOpenUrl) openApp(defaultOpenUrl);
-        else openApp(defaultApp);
+
+        openApp(defaultOpenUrl ? defaultOpenUrl : defaultApp);
+
+        /* Refresh more menu on window resize */
+        $(window).on('resize', refreshMoreMenu);
+        refreshMoreMenu();
+        setTimeout(refreshMoreMenu, 500);
     });
 }());
 
@@ -480,54 +623,8 @@
             var $menu = $('#userNav .dropdown-menu').addClass('hidden');
             setTimeout(function(){$menu.removeClass('hidden')}, 200);
         });
-
-        /* Hide execution list on mouseleave or click */
-        $(document).click(function()
-        {
-            $("#moreExecution").hide();
-        });
-
-        $("#recentMenu").click(function(event)
-        {
-            $('#globalSearchInput').click();
-            event.stopPropagation();
-            getExecutions();
-        });
-
-        $("#moreExecution").click(function(event)
-        {
-            event.stopPropagation();
-        });
     });
 }());
-
-/* Get recent executions. */
-function getExecutions()
-{
-    var $moreExecution = $('#moreExecution').toggle();
-    if(!$moreExecution.is(':hidden'))
-    {
-        if($('body').hasClass('menu-hide'))
-        {
-            $('#moreExecution').addClass('more-execution-hide');
-        }
-        else
-        {
-            $('#moreExecution').removeClass('more-execution-hide');
-        }
-
-        $.ajax(
-        {
-            url: createLink('execution', 'ajaxGetRecentExecutions'),
-            dataType: 'html',
-            type: 'post',
-            success: function(data)
-            {
-                $('#executionList').html(data);
-            }
-        })
-    }
-}
 
 $.extend(
 {
@@ -541,16 +638,19 @@ $.extend(
             var reg = /[^0-9]/;
             if(reg.test(objectValue) || objectType == 'all')
             {
-                location.href = createLink('search', 'index') + (config.requestType == 'PATH_INFO' ? '?' : '&') + 'words=' + objectValue;
+                var searchLink = createLink('search', 'index') + (config.requestType == 'PATH_INFO' ? '?' : '&') + 'words=' + objectValue;
             }
             else
             {
-                var types = objectType.split('-');
+                var types        = objectType.split('-');
                 var searchModule = types[0];
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
-
-                location.href = createLink(searchModule, searchMethod, "id=" + objectValue);
+                var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
             }
+
+            $.post(createLink('index', 'ajaxClearObjectSession'), {objectType: objectType});
+            $.apps.open(searchLink);
+            $('#globalSearchInput').click();
         }
     }
 });
@@ -558,12 +658,11 @@ $.extend(
 /* Initialize global search. */
 $(function()
 {
-    var reg = /[^0-9]/;
+    var reg           = /[^0-9]/;
     var $searchbox    = $('#searchbox');
     var $typeSelector = $searchbox.find('.input-group-btn');
     var $dropmenu     = $typeSelector.children('.dropdown-menu');
     var $searchQuery  = $('#globalSearchInput');
-    var searchType    = $('#searchType').val();
 
     var toggleMenu = function(show)
     {
@@ -688,6 +787,8 @@ function changeSearchObject()
     if(searchType == 'deploystep') var searchType = 'deploy-viewstep';
 
     $("#searchType").val(searchType);
+    $('#searchTypeMenu li:first').attr('class', 'search-type-all');
+
     return searchType;
 }
 

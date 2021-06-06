@@ -10,9 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if($app->openApp == 'execution'): ?>
+<style>#heading {padding: 8px 0;}</style>
+<?php endif;?>
 <?php if(isset($tips)):?>
-<?php $defaultURL = $this-> createLink('execution', 'task', 'executionID=' . $executionID);?>
-<?php include '../../common/view/header.lite.html.php';?>
+<?php $defaultURL = $config->systemMode == 'new' ? $this->createLink('project', 'execution', "status=all&projectID=$projectID") : $this->createLink('execution', 'task', 'executionID=' . $executionID);?>
+<?php include '../../common/view/header.html.php';?>
+<?php js::set('isStage', false);?>
 <body>
   <div class='modal-dialog mw-500px' id='tipsModal'>
     <div class='modal-header'>
@@ -35,29 +39,30 @@
 <?php js::set('holders', $lang->execution->placeholder);?>
 <?php js::set('errorSameProducts', $lang->execution->errorSameProducts);?>
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
-<?php js::set('isSprint', $isSprint);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->execution->create;?></h2>
+      <h2><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->createExec : $lang->execution->create;?></h2>
       <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->execution->copy;?></button>
+        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->copyExec : $lang->execution->copy);?></button>
       </div>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
+        <?php if($config->systemMode == 'new'):?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->project;?></th>
-          <td class="col-main"><?php echo html::select("project", $allProjects, '', "class='form-control chosen' required onchange='loadBranches(this)'");?></td>
+          <td class="col-main"><?php echo html::select("project", $allProjects, $projectID, "class='form-control chosen' required onchange='refreshPage(this.value)'");?></td>
           <td></td><td></td>
         </tr>
+        <?php endif;?>
         <tr>
-          <th class='w-120px'><?php echo $lang->execution->name;?></th>
+          <th class='w-120px'><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td></td><td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->execution->code;?></th>
+          <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execCode : $lang->execution->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
@@ -85,32 +90,10 @@
           <td><?php echo html::input('team', $team, "class='form-control'");?></td><td></td><td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->execution->type;?></th>
-          <td>
-          <?php
-          if($isSprint)
-          {
-              echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'");
-          }
-          else
-          {
-              echo html::select('attribute', $lang->stage->typeList, '', "class='form-control'");
-          }
-          ?>
-          </td>
+          <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execType : $lang->execution->type;?></th>
+          <td><?php echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'"); ?></td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
-        <?php if(!$isSprint):?>
-        <tr>
-          <th><?php echo $lang->programplan->percent;?></th>
-          <td>
-            <div class='input-group'>
-              <?php echo html::input('percent', '', "class='form-control'");?>
-              <span class='input-group-addon'>%</span>
-            </div>
-          </td>
-        </tr>
-        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->execution->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
@@ -165,7 +148,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->execution->desc;?></th>
+          <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execDesc : $lang->execution->desc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=execution&link=desc');?>
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?>
@@ -183,7 +166,6 @@
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
-            <?php if($isSprint) echo html::hidden('lifetime', 'short');?>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
           </td>
@@ -202,7 +184,7 @@
       <?php if(count($executions) == 1):?>
       <div class='alert with-icon'>
         <i class='icon-exclamation-sign'></i>
-        <div class='content'><?php echo $lang->execution->copyNoProject;?></div>
+        <div class='content'><?php echo $lang->execution->copyNoExecution;?></div>
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>

@@ -2,6 +2,7 @@ $(function()
 {
     var page = window.page || '';
     var flow = window.flow;
+    if(typeof(systemMode) == undefined) var systemMode = '';
 
     $('#subNavbar a[data-toggle=dropdown]').parent().addClass('dropdown dropdown-hover');
 
@@ -55,11 +56,11 @@ function loadAll(productID)
         $('#task').chosen();
         loadProductBranches(productID)
         loadProductModules(productID);
-        loadProductExecutions(productID);
+        loadProductProjects(productID);
         loadProductBuilds(productID);
         loadProductplans(productID);
         loadProductStories(productID);
-        loadTestTasks(productID);
+        //loadTestTasks(productID);
     }
 }
 
@@ -75,7 +76,7 @@ function loadBranch()
     $('#task').chosen();
     productID = $('#product').val();
     loadProductModules(productID);
-    loadProductExecutions(productID);
+    loadProductProjects(productID);
     loadProductBuilds(productID);
     loadProductplans(productID);
     loadProductStories(productID);
@@ -208,7 +209,8 @@ function loadProductModules(productID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
+    if(typeof(moduleID) == 'undefined') moduleID = 0;
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + moduleID);
     $('#moduleIdBox').load(link, function()
     {
         $(this).find('select').chosen()
@@ -227,27 +229,58 @@ function loadProductStories(productID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleId=0&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen();});
+}
+
+/**
+ * Load projects of product.
+ *
+ * @param  int    $productID
+ * @access public
+ * @return void
+ */
+function loadProductProjects(productID)
+{
+    if(systemMode == 'classic')
+    {
+        var projectID = $('#execution').find("option:selected").val();
+        loadProductExecutions(productID, projectID);
+        return true;
+    }
+
+    branch = $('#branch').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + oldProjectID);
+    $('#projectBox').load(link, function()
+    {
+        $(this).find('select').chosen();
+        var projectID = $('#project').find("option:selected").val();
+        loadProductExecutions(productID, projectID);
+    });
 }
 
 /**
  * Load executions of product.
  *
  * @param  int    $productID
+ * @param  int    $projectID
  * @access public
  * @return void
  */
-function loadProductExecutions(productID)
+function loadProductExecutions(productID, projectID = 0)
 {
     required = $('#execution_chosen').hasClass('required');
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&executionID=' + oldExecutionID + '&branch=' + branch);
+    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch);
     $('#executionIdBox').load(link, function()
     {
         $(this).find('select').chosen();
+        if(typeof(bugExecution) == 'string' && systemMode != 'classic') $('#executionIdBox').prepend("<span class='input-group-addon' style='border-left-width: 0px;'>" + bugExecution + "</span>");
         if(required) $(this).addClass('required');
     });
 }
@@ -278,6 +311,7 @@ function loadProductBuilds(productID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(oldOpenedBuild) == 'undefined') oldOpenedBuild = 0;
     link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
 
     if(page == 'create')
@@ -357,6 +391,7 @@ function loadExecutionStories(executionID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
     link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&branch=' + branch + '&moduleID=0&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen();});
 }
@@ -510,19 +545,23 @@ function notice()
     if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
-        if($('#execution').length == 0 || $('#execution').val() == '')
+        if($('#execution').length == 0 || $('#execution').val() == 0)
         {
             var branch = $('#branch').val();
             if(typeof(branch) == 'undefined') branch = 0;
             var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch);
-            link += config.requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
+            if(config.onlybody != 'yes') link += config.requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
             html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createBuild + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }
         else
         {
             executionID = $('#execution').val();
-            html += '<a href="' + createLink('build', 'create','executionID=' + executionID) + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
+            productID   = $('#product').val();
+            projectID   = $('#project').val();
+            link = createLink('build', 'create','executionID=' + executionID + '&productID=' + productID + '&projectID=' + projectID);
+            link += config.requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
+            html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createBuild + '</a> ';
             html += '<a href="javascript:loadExecutionBuilds(' + executionID + ')">' + refresh + '</a>';
         }
         var $bba = $('#buildBoxActions');

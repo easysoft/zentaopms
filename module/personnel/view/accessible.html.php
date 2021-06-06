@@ -12,7 +12,6 @@
 <?php include '../../common/view/header.html.php';
 js::set('deptID', $deptID);
 ?>
-<?php if($acl != 'open'): ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <div class="title">
@@ -24,19 +23,15 @@ js::set('deptID', $deptID);
     <a id="bysearchTab" class="btn btn-link querybox-toggle"><i class="icon icon-search muted"></i><?php echo $lang->personnel->search;?></a>
   </div>
 </div>
-<?php endif;?>
 <div id="mainContent" class="main-row fade">
-  <?php if($acl != 'open'): ?>
   <div id="sidebar" class="side-col">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
       <?php echo $deptTree;?>
     </div>
   </div>
-  <?php endif;?>
   <div class="main-col">
-  <?php if(!empty($personnelList)):?>
-    <div id="queryBox" class="cell" data-module="accessible"></div>
+    <div id="queryBox" class="cell <?php if($browseType == 'bysearch') echo ' show';?>" data-module="accessible"></div>
     <form class="main-table table-personnel" action="" data-ride="table">
       <table id="accessibleList" class="table has-sort-head">
         <thead>
@@ -67,12 +62,5 @@ js::set('deptID', $deptID);
       </div>
     </form>
   </div>
-  <?php else:?>
-    <div class="table-empty-tip">
-      <p>
-        <span class="text-muted"><?php echo $acl == 'open' ? $lang->personnel->openedPGMTip : $lang->noData;?></span>
-      </p>
-    </div>
-  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

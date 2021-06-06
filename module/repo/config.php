@@ -34,11 +34,17 @@ $config->repo->editor->view   = array('id' => 'commentText', 'tools' => 'simpleT
 $config->repo->editor->diff   = array('id' => 'commentText', 'tools' => 'simpleTools');
 
 $config->repo->create = new stdclass();
-$config->repo->create->requiredFields = 'SCM,name,path,encoding,client';
+$config->repo->create->requiredFields = 'product,SCM,name,path,encoding,client';
+
 $config->repo->edit = new stdclass();
-$config->repo->edit->requiredFields = 'SCM,name,path,encoding,client';
+$config->repo->edit->requiredFields = 'product,SCM,name,path,encoding,client';
+
 $config->repo->svn = new stdclass();
 $config->repo->svn->requiredFields = 'account,password';
+
+$config->repo->gitlab = new stdclass;
+$config->repo->gitlab->perPage = 300;
+$config->repo->gitlab->apiPath = "%s/api/v4/projects/%s/repository/";
 
 $config->repo->rules['module']['task']     = 'Task';
 $config->repo->rules['module']['bug']      = 'Bug';

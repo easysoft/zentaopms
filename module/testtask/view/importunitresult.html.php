@@ -13,6 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<style>
+.input-group>.chosen-container.required:after {top: 6px;}
+</style>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -92,11 +95,16 @@
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
             <?php echo html::hidden('product', $productID);?>
-            <?php echo html::hidden('status', 'done');?>
           </td>
         </tr>
       </table>
     </form>
   </div>
 </div>
+<script>
+$(function()
+{
+    $('#subNavbar li[data-id="case"]').addClass('active');
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>

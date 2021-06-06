@@ -62,7 +62,10 @@
         <?php if($suite->type == 'private') echo "<span class='label label-info label-badge'>{$lang->testsuite->authorList['private']}</span> ";?>
         <?php echo html::a(inlink('view', "suiteID=$suite->id"), $suite->name);?>
       </td>
-      <td class='c-desc'><?php echo $suite->desc;?></td>
+      <td class='c-desc'>
+        <?php $desc = trim(strip_tags(str_replace(array('</p>', '<br />', '<br>', '<br/>'), "\n", str_replace(array("\n", "\r"), '', $suite->desc)), '<img>'));?>
+        <div title='<?php echo $desc;?>'><?php echo nl2br($desc);?></div>
+      </td>
       <td><?php echo zget($users, $suite->addedBy);?></td>
       <td><?php echo $suite->addedDate;?></td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $suite) . "</td>";?>
@@ -70,12 +73,7 @@
         <?php
         common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'list', 'link');
         common::printIcon('testsuite', 'edit',     "suiteID=$suite->id", $suite, 'list');
-
-        if(common::hasPriv('testsuite', 'delete', $suite))
-        {
-            $deleteURL = $this->createLink('testsuite', 'delete', "suiteID=$suite->id&confirm=yes");
-            echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"suiteList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testsuite->delete}' class='btn'");
-        }
+        common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", $suite, 'list', 'trash', 'hiddenwin');
         ?>
       </td>
     </tr>

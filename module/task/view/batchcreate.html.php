@@ -200,5 +200,6 @@
 <?php js::set('mainField', 'name');?>
 <?php js::set('ditto', $lang->task->ditto);?>
 <?php js::set('storyID', $storyID);?>
+<?php js::set('hiddenStory', $hiddenStory);?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,0 +1,32 @@
+title: 'table zt_gapanalysis'
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: id
+      range: 1-6
+    - field: project
+      range: 13
+    - field: account
+      range: [admin,dev1,dev2,qa1,qa2]
+    - field: role
+      range: []{1},[研发]{2},[测试]{2}
+    - field: definition
+      range: a-z:R
+    - field: analysis
+      range: A-Z:R
+    - field: isTrain
+      range: 0-2:R
+    - field: createdBy
+      range: admin
+    - field: createdDate
+      range: "(-1M)-(+1w):60"
+      prefix: DateTime
+      type: timestamp
+      format: "YY/MM/DD hh:mm:ss"
+    - field: editedBy
+      range: ' '
+    - field: editedDate
+      range: [0000-00-00 00:00:00]
+    - field: deleted
+      range: 0

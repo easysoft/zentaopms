@@ -20,4 +20,6 @@ $(function()
             $('#urlBox').removeClass('hidden');
         }
     });
+
+    $('#subNavbar li[data-id="doc"]').addClass('active');
 })

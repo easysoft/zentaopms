@@ -10,5 +10,5 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php echo $this->fetch('block', 'dashboard', "module=project&type={$project->model}");?>
+<?php echo $this->fetch('block', 'dashboard', "module=project&type={$project->model}&projectID={$project->id}");?>
 <?php include '../../common/view/footer.html.php';?>

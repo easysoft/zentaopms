@@ -53,8 +53,8 @@ tbody tr td:first-child input {display: none;}
     {
         echo $this->buildOperateMenu($build, 'view');
 
-        if(common::hasPriv('build', 'edit'))   echo html::a($this->createLink('build', 'edit',   "buildID=$build->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-        if(common::hasPriv('build', 'delete')) echo html::a($this->createLink('build', 'delete', "buildID=$build->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+        if(common::hasPriv('build', 'edit'))   echo html::a($this->createLink('build', 'edit',   "buildID=$build->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}' data-app='{$app->openApp}'");
+        if(common::hasPriv('build', 'delete')) echo html::a($this->createLink('build', 'delete', "buildID=$build->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin' data-app='{$app->openApp}'");
     }
     ?>
   </div>
@@ -99,8 +99,9 @@ tbody tr td:first-child input {display: none;}
               </tr>
             </thead>
             <tbody class='text-center'>
+              <?php $objectID = $this->app->openApp == 'execution' ? $build->execution : $build->project;?>
               <?php foreach($stories as $storyID => $story):?>
-              <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
+              <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$objectID", '', true);?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
@@ -117,7 +118,7 @@ tbody tr td:first-child input {display: none;}
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
-                <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+                <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                 <td>
                   <span class='status-story status-<?php echo $story->status;?>'>
                     <?php echo $this->processStatus('story', $story);?>
@@ -129,7 +130,7 @@ tbody tr td:first-child input {display: none;}
                   if($canBeChanged and common::hasPriv('build', 'unlinkStory'))
                   {
                       $unlinkURL = inlink('unlinkStory', "buildID=$build->id&story=$story->id");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn btn-icon' title='{$lang->build->unlinkStory}'");
+                      echo html::a("###", '<i class="icon-unlink"></i>', '', "onclick='ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)' class='btn' title='{$lang->build->unlinkStory}'");
                   }
                   ?>
                 </td>
@@ -210,7 +211,7 @@ tbody tr td:first-child input {display: none;}
                   if($canBeChanged and common::hasPriv('build', 'unlinkBug'))
                   {
                       $unlinkURL = inlink('unlinkBug', "buildID=$build->id&bug=$bug->id");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn btn-icon' title='{$lang->build->unlinkBug}'");
+                      echo html::a("###", '<i class="icon-unlink"></i>', '', "onclick='ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)' class='btn' title='{$lang->build->unlinkBug}'");
                   }
                   ?>
                 </td>

@@ -14,53 +14,6 @@
 class testsuiteModel extends model
 {
     /**
-     * Set the menu.
-     *
-     * @param  array $products
-     * @param  int   $productID
-     * @access public
-     * @return void
-     */
-    public function setMenu($products, $productID)
-    {
-        $this->loadModel('product')->setMenu($products, $productID);
-        $selectHtml = $this->select($products, $productID, 'testsuite', 'browse');
-        if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
-
-        $pageNav     = '';
-        $pageActions = '';
-        $isMobile    = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-        }
-        $pageNav .= $selectHtml;
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
-        foreach($this->lang->testsuite->menu as $key => $value)
-        {
-            if($this->config->global->flow == 'full' and $this->lang->navGroup->testcase != 'qa') $this->loadModel('qa')->setSubMenu('testsuite', $key, $productID);
-            $replace = $productID;
-            if($this->lang->navGroup->testsuite == 'project' and $key == 'bug') $replace = 0;
-            common::setMenuVars($this->lang->testsuite->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->testsuite == 'qa')
-        {
-            foreach($this->lang->qa->subMenu->testcase as $key => $menu)
-            {
-                common::setMenuVars($this->lang->qa->subMenu->testcase, $key, $productID);
-            }
-
-            $this->lang->qa->menu         = $this->lang->testsuite->menu;
-            $this->lang->testsuite->menu  = $this->lang->qa->subMenu->testcase;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', 0);
-        }
-    }
-
-    /**
      * Build select string.
      *
      * @param  array  $products
@@ -79,7 +32,7 @@ class testsuiteModel extends model
             return;
         }
 
-        setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         $currentProduct = $this->product->getById($productID);
 
         $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
@@ -108,7 +61,7 @@ class testsuiteModel extends model
     {
         $suite = fixer::input('post')
             ->stripTags($this->config->testsuite->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa', 'project', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa', 'project', $this->session->project)
             ->add('product', (int)$productID)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
@@ -140,7 +93,7 @@ class testsuiteModel extends model
     {
         return $this->dao->select("*")->from(TABLE_TESTSUITE)
             ->where('product')->eq((int)$productID)
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")
             ->orderBy($orderBy)
@@ -249,7 +202,7 @@ class testsuiteModel extends model
         $cases = $this->dao->select('t1.*,t2.version as caseVersion')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
             ->where('t2.suite')->eq($suiteID)
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('t1.project')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.product')->eq($suite->product)
             ->andWhere('t1.product')->eq($suite->product)
             ->andWhere('t1.deleted')->eq(0)
@@ -293,7 +246,7 @@ class testsuiteModel extends model
         $linkedCases = $this->getLinkedCases($suite->id, 'id_desc', null, $append = false);
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
             ->andWhere('id')->notIN(array_keys($linkedCases))
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)
@@ -330,7 +283,6 @@ class testsuiteModel extends model
     {
         $importedCases = $this->dao->select('fromCaseID')->from(TABLE_CASE)
             ->where('product')->eq($productID)
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
             ->andWhere('lib')->eq($libID)
             ->andWhere('fromCaseID')->ne('')
             ->andWhere('deleted')->eq(0)
@@ -364,7 +316,6 @@ class testsuiteModel extends model
         return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->PRJ)->fi()
             ->andWhere('product')->eq(0)
             ->andWhere('id')->notIN($importedCases)
             ->orderBy($orderBy)

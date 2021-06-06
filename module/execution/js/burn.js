@@ -3,7 +3,7 @@ $(function()
     initBurnChar();
     $('#interval').change(function()
     {
-        location.href = createLink('project', 'burn', 'projectID=' + projectID + '&type=' + type + '&interval=' + $(this).val());
+        location.href = createLink('execution', 'burn', 'executionID=' + executionID + '&type=' + type + '&interval=' + $(this).val());
     });
 })
 
@@ -40,7 +40,7 @@ function downloadBurn()
         var $canvas  = $('#cloneCanvas #burnCanvas');
         var imgSrc   = $canvas.get(0).toDataURL("image/png");
         var imgData  = imgSrc.replace(type,'image/octet-stream');
-        var filename = projectName + '.' + type;
+        var filename = executionName + '.' + type;
         saveFile(imgData,filename);
         $('#burnWrapper #cloneCanvas').remove();
     }, 500);

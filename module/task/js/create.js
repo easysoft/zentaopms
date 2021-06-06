@@ -21,6 +21,8 @@ function loadAll(executionID)
  */
 function loadExecutionMembers(executionID)
 {
+    $("#multipleBox").removeAttr("checked");
+    $('.team-group').addClass('hidden');
     $.get(createLink('execution', 'ajaxGetMembers', 'executionID=' + executionID + '&assignedTo=' + $('#assignedTo').val()), function(data)
     {
         $('#assignedTo_chosen').remove();
@@ -34,6 +36,13 @@ function loadExecutionMembers(executionID)
             $(this).find('#team').next('.picker').remove();
             $(this).find('#team').replaceWith(data);
             $(this).find('#assignedTo').attr('id', 'team').attr('name', 'team[]').chosen();
+        });
+
+        $('#testStoryBox table tbody tr').each(function(i)
+        {
+            $td = $(this).find('#testAssignedTo').closest('td');
+            $td.html(data);
+            $td.find('#assignedTo').val('').attr('id', 'testAssignedTo').attr('name', 'testAssignedTo[]').chosen();
         });
     });
 }
@@ -53,6 +62,29 @@ function loadExecutionStories(executionID)
         $('#story').next('.picker').remove();
         $('#story').replaceWith(data);
         $('#story').addClass('filled').chosen();
+
+        if($('#testStoryBox table tbody tr').length == 0)
+        {
+            var trHtml  = $('#testStoryTemplate tr').prop("outerHTML");
+            $('#testStoryBox table tbody').append(trHtml);
+
+            $td = $('#testStoryBox table tbody tr:first').find('#testStory').closest('td');
+            $td.html(data);
+            $td.find('#story').val($td.find('#story option').eq(i).val()).attr('id', 'testStory').attr('name', 'testStory[]').addClass('filled').chosen();
+
+            $td = $('#testStoryBox table tbody tr:first').find('#testPri_chosen').closest('td');
+            $td.find('#testPri_chosen').remove();
+            $td.find('#testPri').chosen();
+        }
+        else
+        {
+            $('#testStoryBox table tbody tr').each(function(i)
+            {
+                $td = $(this).find('#testStory').closest('td');
+                $td.html(data);
+                $td.find('#story').val($td.find('#story option').eq(i).val()).attr('id', 'testStory').attr('name', 'testStory[]').addClass('filled').chosen();
+            });
+        }
     });
 }
 
@@ -156,12 +188,15 @@ function setPreview()
     {
         storyLink  = createLink('story', 'view', "storyID=" + $('#story').val());
         var concat = config.requestType != 'GET' ? '?'  : '&';
-        storyLink  = storyLink + concat + 'onlybody=yes';
+
+        if(storyLink.indexOf("onlybody=yes") < 0) storyLink = storyLink + concat + 'onlybody=yes';
+
         $('#preview').removeClass('hidden');
         $('#preview a').attr('href', storyLink);
         $('#copyButton').removeClass('hidden');
         $('.title-group.required > div').attr('id', 'copyStory-input').removeClass('.required');
-        $('div.colorpicker').css('right', '57px');//Adjust for task #4151;
+        $('div.colorpicker').css('right', '80px');//Adjust for task #4151;
+        $('#copyButton').css('width', '80px');
     }
 
     setAfter();
@@ -304,7 +339,6 @@ function markTestStory()
             var $tr = $(this);
             storiesHasTest[$tr.find('select[name^="testStory"]').val()] = true;
         });
-        console.log(storiesHasTest);
         return storiesHasTest;
     };
 
@@ -473,4 +507,8 @@ $('#modalTeam .btn').click(function()
         $('#teamMember').val(team);
         $('#estimate').val(time);
     })
+});
+
+$(window).unload(function(){
+    if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });

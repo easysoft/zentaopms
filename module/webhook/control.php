@@ -41,7 +41,7 @@ class webhook extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Unset selectedDepts cookie. */
-        setcookie('selectedDepts', '', 0, $this->config->webRoot, '', false, true);
+        setcookie('selectedDepts', '', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
         $this->view->webhooks   = $this->webhook->getList($orderBy, $pager);
@@ -62,8 +62,9 @@ class webhook extends control
     {
         if($_POST)
         {
-            $this->webhook->create();
+            $webhookID = $this->webhook->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $webhookID));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -137,17 +138,18 @@ class webhook extends control
     {
         /* Save session. */
         $uri   = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('executionList',   $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
-        $this->session->set('todoList',        $uri);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
+        $this->session->set('todoList',        $uri, 'my');
+        $this->session->set('docList',         $uri, 'doc');
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -195,7 +197,7 @@ class webhook extends control
         /* Get selected depts. */
         if($this->get->selectedDepts)
         {
-            setcookie('selectedDepts', $this->get->selectedDepts, 0, $this->config->webRoot, '', false, true);
+            setcookie('selectedDepts', $this->get->selectedDepts, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $_COOKIE['selectedDepts'] = $this->get->selectedDepts;
         }
         $selectedDepts = $this->cookie->selectedDepts ? $this->cookie->selectedDepts : '';

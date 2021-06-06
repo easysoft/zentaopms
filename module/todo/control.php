@@ -24,7 +24,6 @@ class todo extends control
         $this->loadModel('task');
         $this->loadModel('bug');
         $this->loadModel('my')->setMenu();
-        if(!isset($this->config->qcVersion)) unset($this->lang->todo->typeList['review']);
     }
 
     /**
@@ -69,7 +68,8 @@ class todo extends control
                 $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
             }
 
-            if($this->app->getViewType() == 'xhtml') die(js::locate($this->createLink('todo', 'view', "todoID=$todoID"), 'parent'));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
+            if($this->viewType == 'xhtml') die(js::locate($this->createLink('todo', 'view', "todoID=$todoID"), 'parent'));
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('my', 'todo', "type=all&userID=&status=all&orderBy=id_desc"), 'parent'));
         }
@@ -96,7 +96,7 @@ class todo extends control
         if($date == 'today') $date = date(DT_DATE1, time());
         if(!empty($_POST))
         {
-            $this->todo->batchCreate();
+            $todoIDList = $this->todo->batchCreate();
             if(dao::isError()) die(js::error(dao::getError()));
 
             /* Locate the browser. */
@@ -109,6 +109,8 @@ class todo extends control
             {
                 $date= 'today';
             }
+
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIDList));
             if(isonlybody())die(js::reload('parent.parent'));
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
@@ -191,16 +193,18 @@ class todo extends control
             $bugs      = $this->bug->getUserBugPairs($account);
             $tasks     = $this->task->getUserTaskPairs($account, $status);
             $storys    = $this->loadModel('story')->getUserStoryPairs($account);
+            if(isset($this->config->bizVersion) or isset($this->config->maxVersion)) $this->view->feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account);
             if(isset($this->config->maxVersion))
             {
-                $issues = $this->loadModel('issue')->getUserIssuePairs($account);
-                $risks  = $this->loadModel('risk')->getUserRiskPairs($account);
+                $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
+                $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
+                $opportunities = $this->loadmodel('opportunity')->getUserOpportunityPairs($account);
             }
             $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
 
             $reviews = array();
-            if(isset($this->config->qcVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account);
-            $allTodos  = $this->todo->getList($type, $account, $status);
+            if(isset($this->config->qcVersion) or isset($this->config->maxVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account);
+            $allTodos = $this->todo->getList($type, $account, $status);
             if($this->post->todoIDList) $todoIDList = $this->post->todoIDList;
 
             /* Initialize todos whose need to edited. */
@@ -210,21 +214,6 @@ class todo extends control
                 {
                     $editedTodos[$todo->id] = $todo;
                 }
-            }
-            foreach($editedTodos as $todo)
-            {
-                if($todo->type == 'story')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
-                if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
-                if($todo->type == 'bug')      $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-                if(isset($this->config->maxVersion))
-                {
-                    if($todo->type == 'issue') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
-                    if($todo->type == 'risk')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
-                }
-                if($todo->type == 'review')   $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
-                if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TESTTASK)->fetch('name');
-                $todo->begin = $todo->begin ? str_replace(':', '', $todo->begin) : '2400';
-                $todo->end   = $todo->end ? str_replace(':', '', $todo->end) : '2400';
             }
 
             /* Judge whether the edited todos is too large. */
@@ -250,8 +239,9 @@ class todo extends control
             $this->view->storys      = $storys;
             if(isset($this->config->maxVersion))
             {
-                $this->view->issues = $issues;
-                $this->view->risks  = $risks;
+                $this->view->issues        = $issues;
+                $this->view->risks         = $risks;
+                $this->view->opportunities = $opportunities;
             }
             $this->view->reviews     = $reviews;
             $this->view->testtasks   = $testtasks;
@@ -294,8 +284,12 @@ class todo extends control
         {
             $confirmNote = 'confirm' . ucfirst($todo->type);
             $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
+            $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
+            if($todo->type == 'bug')   $app = 'qa';
+            if($todo->type == 'task')  $app = 'execution';
+            if($todo->type == 'story') $app = 'product';
             $cancelURL   = $this->server->HTTP_REFERER;
-            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, 'parent', 'parent'));
+            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
         }
         if(isonlybody())die(js::reload('parent.parent'));
         die(js::reload('parent'));
@@ -372,8 +366,11 @@ class todo extends control
         if(!$todo) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Save the session. */
-        $this->session->set('taskList', $this->app->getURI(true));
-        $this->session->set('bugList',  $this->app->getURI(true));
+        $uri = $this->app->getURI(true);
+        $this->session->set('bugList',      $uri, 'qa');
+        $this->session->set('taskList',     $uri, 'execution');
+        $this->session->set('storyList',    $uri, 'product');
+        $this->session->set('testtaskList', $uri, 'qa');
 
         /* Fix bug #936. */
         if($this->app->user->account != $todo->account and !common::hasPriv('company', 'index'))
@@ -381,26 +378,11 @@ class todo extends control
             $this->locate($this->createLink('user', 'deny', "module=company&method=index"));
         }
 
-        /* Set menus. */
         $this->loadModel('user');
-        if($from == 'company')
-        {
-            $this->lang->todo->menu      = $this->lang->user->menu;
-            $this->lang->todo->menuOrder = $this->lang->user->menuOrder;
-            $this->lang->company->menu->browseUser['subModule'] = 'todo';
-            $this->lang->set('menugroup.todo', $from);
-        }
-        elseif($from == 'my')
-        {
-            $this->lang->todo->menu      = $this->lang->my->menu;
-            $this->lang->todo->menuOrder = $this->lang->my->menuOrder;
-            $this->loadModel('my')->setMenu();
-            $this->lang->my->menu->todo['subModule'] = 'todo';
-            $this->lang->set('menugroup.todo', $from);
-        }
 
-        $projects = $this->loadModel('project')->getPairsByModel('all');
-        if(!isset($this->session->PRJ)) $this->session->set('project', key($projects));
+        $model = $todo->type == 'opportunity' ? 'waterfall' : 'all';
+        $projects = $this->loadModel('project')->getPairsByModel($model);
+        if(!isset($this->session->project)) $this->session->set('project', key($projects));
 
         $this->view->title           = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;
         $this->view->position[]      = $this->lang->todo->view;
@@ -411,9 +393,9 @@ class todo extends control
         $this->view->actions         = $this->loadModel('action')->getList('todo', $todoID);
         $this->view->from            = $from;
         $this->view->projects        = $projects;
-        $this->view->executions      = $this->loadModel('execution')->getPairs($this->session->PRJ);
-        $this->view->products        = $this->loadModel('product')->getPairs();
-        $this->view->projectProducts = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
+        $this->view->executions      = $this->loadModel('execution')->getPairs($this->session->project);
+        $this->view->products        = $todo->type == 'opportunity' ? $this->loadModel('product')->getPairsByProjectModel('waterfall') : $this->loadModel('product')->getPairs();
+        $this->view->projectProducts = $this->loadModel('product')->getProductPairsByProject($this->session->project);
 
         $this->display();
     }
@@ -435,8 +417,7 @@ class todo extends control
         }
         else
         {
-            $this->dao->delete()->from(TABLE_TODO)->where('id')->eq($todoID)->exec();
-            $this->loadModel('action')->create('todo', $todoID, 'erased');
+            $this->todo->delete(TABLE_TODO, $todoID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -474,9 +455,13 @@ class todo extends control
         if(in_array($todo->type, array('bug', 'task', 'story')))
         {
             $confirmNote = 'confirm' . ucfirst($todo->type);
+            $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
             $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
+            if($todo->type == 'bug')   $app = 'qa';
+            if($todo->type == 'task')  $app = 'execution';
+            if($todo->type == 'story') $app = 'product';
             $cancelURL   = $this->server->HTTP_REFERER;
-            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, 'parent', 'parent'));
+            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
         }
         if(isonlybody())die(js::reload('parent.parent'));
         die(js::reload('parent'));
@@ -576,8 +561,9 @@ class todo extends control
             $tasks     = $this->loadModel('task')->getUserTaskPairs($account);
             if(isset($this->config->maxVersion))
             {
-                $issues = $this->loadModel('issue')->getUserIssuePairs($account);
-                $risks  = $this->loadModel('risk')->getUserRiskPairs($account);
+                $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
+                $risks         = $this->loadModel('risk')->getUserRiskPairs($account);
+                $opportunities = $this->loadModel('opprotunity')->getUserOpportunityPairs($account);
             }
             $testTasks = $this->loadModel('testtask')->getUserTesttaskPairs($account);
             if(isset($this->config->qcVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account, 0, 'wait');
@@ -599,6 +585,7 @@ class todo extends control
                 {
                     if($type == 'issue') $todo->name = isset($issues[$todo->idvalue]) ? $issues[$todo->idvalue] . "(#$todo->idvalue)" : '';
                     if($type == 'risk')  $todo->name = isset($risks[$todo->idvalue])  ? $risks[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                    if($type == 'opportunity')  $todo->name = isset($opportunities[$todo->idvalue])  ? $opportunities[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 }
                 if($type == 'testtask')           $todo->name    = isset($testTasks[$todo->idvalue]) ? $testTasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if($type == 'review' && isset($this->config->qcVersion)) $todo->name = isset($reviews[$todo->idvalue]) ? $reviews[$todo->idvalue] . "(#$todo->idvalue)" : '';
@@ -681,7 +668,7 @@ class todo extends control
         $this->session->set('project', $projectID);
 
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        die(html::select('product', $products, '', "class='form-control chosen'"));
+        die(html::select('bugProduct', $products, '', "class='form-control chosen'"));
     }
 
     /**
@@ -692,7 +679,7 @@ class todo extends control
      */
     public function createCycle()
     {
-        $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->fetchAll('id');
+        $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id');
         $this->todo->createByCycle($todoList);
     }
 }

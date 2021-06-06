@@ -38,9 +38,9 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php
-    if(!isset($browseType)) $browseType = '';
+    if(!isset($browseType)) $browseType = 'all';
     if(!isset($orderBy))    $orderBy = '';
-    common::printIcon('task', 'report', "execution=$executionID&browseType=$browseType", '', 'button', 'bar-chart muted');
+    common::printIcon('task', 'report', "execution=$executionID&browseType=all", '', 'button', 'bar-chart muted');
     ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>
@@ -74,7 +74,7 @@
     <?php
     $checkObject = new stdclass();
     $checkObject->execution = $executionID;
-    $link = $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+    $link = $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ''));
     if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
     ?>
   </div>
@@ -85,7 +85,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->task->noTask;?></span>
       <?php if(common::hasPriv('task', 'create', $checkObject)):?>
-      <?php echo html::a($this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
@@ -202,9 +202,9 @@
         <td class="c-status"><span class='status-task status-<?php echo $task->status;?>'> <?php echo $this->processStatus('task', $task);?></span></td>
         <td class="c-assign text-left"><?php echo "<span class='$assignedToClass'>" . $task->assignedToRealName . "</span>";?></td>
         <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
-        <td class="c-hours em" title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . ' ' . $lang->execution->workHourUnit;?></td>
-        <td class="c-hours em" title="<?php echo $task->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $task->consumed . ' ' . $lang->execution->workHourUnit;?></td>
-        <td class="c-hours em" title="<?php echo $task->left     . ' ' . $lang->execution->workHour;?>"><?php echo $task->left     . ' ' . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours em" title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours em" title="<?php echo $task->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $task->consumed . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours em" title="<?php echo $task->left     . ' ' . $lang->execution->workHour;?>"><?php echo $task->left     . $lang->execution->workHourUnit;?></td>
         <td class="c-num em"><?php echo $task->progress . '%';?></td>
         <td class="c-type"><?php echo zget($lang->task->typeList, $task->type);?></td>
         <td class='c-date <?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>

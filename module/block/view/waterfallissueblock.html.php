@@ -19,8 +19,8 @@
         <?php if($longBlock):?>
         <th class='w-80px'><?php echo $lang->issue->severity;?></th>
         <th class='w-80px'><?php echo $lang->issue->pri;?></th>
-        <th class='w-120px'><?php echo $lang->issue->owner;?></th>
-        <th class='w-120px'><?php echo $lang->issue->assignedTo;?></th>
+        <th class='w-80px'><?php echo $lang->issue->owner;?></th>
+        <th class='w-80px'><?php echo $lang->issue->assignedTo;?></th>
         <?php endif;?>
         <th class='w-80px'><?php echo $lang->issue->status;?></th>
       </tr>

@@ -82,7 +82,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
         foreach($demoUsers as $demoAccount => $demoUser)
         {
             if($demoUser->password != $password) continue;
-            echo html::a($link . "account={$demoAccount}&password=" . md5($password . $this->session->rand), $demoUser->realname, 'hiddenwin');
+            echo html::a($link . "account={$demoAccount}&password=" . md5($password . $this->session->rand), $demoUser->realname);
         }
         ?>
       </footer>
