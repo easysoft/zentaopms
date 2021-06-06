@@ -170,6 +170,10 @@ $lang->project->aclList['open']    = "公開 (有項目視圖權限即可訪問)
 $lang->project->acls['private'] = '私有';
 $lang->project->acls['open']    = '公開';
 
+$lang->project->subAclList['private'] = "私有 (只有本項目負責人、團隊成員和干係人可訪問)";
+$lang->project->subAclList['open']    = "公開 (有項目視圖權限即可訪問)";
+$lang->project->subAclList['program'] = '項目集內公開（所有上級項目集負責人和干係人、本項目負責人、團隊成員和干係人可訪問）';
+
 $lang->project->authList['extend'] = '繼承 (取系統權限與項目權限的合集)';
 $lang->project->authList['reset']  = '重新定義 (只取項目權限)';
 

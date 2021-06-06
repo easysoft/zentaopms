@@ -49,6 +49,7 @@ $lang->testreport->legendLegacyBugs  = '遺留的Bug';
 $lang->testreport->legendReport      = '報表';
 $lang->testreport->legendComment     = '總結';
 $lang->testreport->legendMore        = '更多功能';
+$lang->testreport->date              = '日期';
 
 $lang->testreport->bugSeverityGroups   = 'Bug嚴重級別分佈';
 $lang->testreport->bugTypeGroups       = 'Bug類型分佈';
@@ -57,9 +58,16 @@ $lang->testreport->bugOpenedByGroups   = 'Bug創建者分佈';
 $lang->testreport->bugResolvedByGroups = 'Bug解決者分佈';
 $lang->testreport->bugResolutionGroups = 'Bug解決方案分佈';
 $lang->testreport->bugModuleGroups     = 'Bug模組分佈';
+$lang->testreport->bugStageGroups      = 'Bug重要程度階段分佈';
+$lang->testreport->bugHandleGroups     = 'Bug每日處理情況分佈';
 $lang->testreport->legacyBugs          = '遺留的Bug';
 $lang->testreport->bugConfirmedRate    = '有效Bug率 (方案為已解決或延期 / 狀態為已解決或已關閉)';
 $lang->testreport->bugCreateByCaseRate = '用例發現Bug率 (用例創建的Bug / 時間區間中新增的Bug)';
+
+$lang->testreport->bugStageList = array();
+$lang->testreport->bugStageList['generated'] = '產生的Bug';
+$lang->testreport->bugStageList['legacy']    = '遺留的Bug';
+$lang->testreport->bugStageList['resolved']  = '解決的Bug';
 
 $lang->testreport->caseSummary    = '共有<strong>%s</strong>個用例，共執行<strong>%s</strong>個用例，產生了<strong>%s</strong>個結果，失敗的用例有<strong>%s</strong>個。';
 $lang->testreport->buildSummary   = '共測試了<strong>%s</strong>個版本。';

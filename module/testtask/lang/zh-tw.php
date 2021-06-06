@@ -179,6 +179,8 @@ $lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug創建者分佈';
 $lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug解決者分佈';
 $lang->testtask->report->charts['bugResolutionGroups']  = 'Bug解決方案分佈';
 $lang->testtask->report->charts['bugModuleGroups']      = 'Bug模組分佈';
+$lang->testtask->report->charts['bugStageGroups']       = 'Bug重要程度階段分佈';
+$lang->testtask->report->charts['bugHandleGroups']      = 'Bug每日處理情況分佈';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();

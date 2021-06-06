@@ -262,6 +262,11 @@ $lang->action->label->tracked               = '跟蹤了';
 $lang->action->label->hangup                = '掛起了';
 $lang->action->label->run                   = '執行了';
 $lang->action->label->estimated             = '估算了';
+$lang->action->label->reviewclosed          = '評審失敗';
+$lang->action->label->passreviewed          = '確認通過';
+$lang->action->label->clarifyreviewed       = '有待明確';
+$lang->action->label->commitsummary         = '提交培訓總結';
+$lang->action->label->updatetrainee         = '更新培訓人員';
 
 /* 動態信息按照對象分組 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -336,6 +341,8 @@ $lang->action->dynamicAction->execution['managed']   = '維護' . $lang->executi
 $lang->action->dynamicAction->execution['undeleted'] = '還原' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['hidden']    = '隱藏' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = '導入任務';
+
+$lang->action->dynamicAction->team['managedTeam'] = '維護團隊';
 
 $lang->action->dynamicAction->task['opened']              = '創建任務';
 $lang->action->dynamicAction->task['edited']              = '編輯任務';

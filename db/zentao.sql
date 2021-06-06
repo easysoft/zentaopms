@@ -643,7 +643,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `model` char(30) NOT NULL,
   `type` char(30) NOT NULL DEFAULT 'sprint',
   `product` char(30) NOT NULL DEFAULT 'single',
-  `lifetime` char(30) NOT NULL,
+  `lifetime` char(30) NOT NULL DEFAULT '',
   `budget` varchar(30) NOT NULL DEFAULT '0',
   `budgetUnit` char(30) NOT NULL DEFAULT 'CNY',
   `attribute` varchar(30) NOT NULL DEFAULT '',

@@ -25,5 +25,4 @@ $lang->projectrelease->batchUnlinkBug   = "批量移除Bug";
 $lang->projectrelease->unlinkStory      = "移除{$lang->SRCommon}";
 $lang->projectrelease->unlinkBug        = '移除Bug';
 $lang->projectrelease->export           = '導出HTML';
-
-$lang->projectrelease->browseAction = "發佈列表";
+$lang->projectrelease->browseAction     = "發佈列表";
