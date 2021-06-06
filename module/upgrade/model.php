@@ -675,7 +675,7 @@ class upgradeModel extends model
             $this->adjustBugOfProject();
             $this->processBuildTable();
             $this->updateProductVersion();
-            $this->appendExec('15_0_1');
+            $this->appendExec('15_0');
         }
 
         $this->deletePatch();
