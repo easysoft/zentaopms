@@ -345,7 +345,8 @@ class groupModel extends model
      */
     public function updateView($groupID)
     {
-        $actions = $this->post->actions;
+        $actions  = $this->post->actions;
+        $oldGroup = $this->getByID($groupID);
         if(isset($_POST['allchecker']))$actions['views']   = array();
         if(!isset($actions['actions']))$actions['actions'] = array();
 
@@ -361,6 +362,20 @@ class groupModel extends model
             }
         }
         $actions['actions'] = $dynamic;
+
+        /* Update whitelist. */
+        $users   = $this->getUserPairs($groupID);
+        $users   = array_keys($users);
+        foreach($this->config->group->acl->objectTypes as $key => $objectType)
+        {
+            $oldAcls        = isset($oldGroup->acl[$key]) ? $oldGroup->acl[$key] : array();
+            $newAcls        = isset($actions[$key]) ? $actions[$key] : array();
+            $needRemoveAcls = array_diff($oldAcls, $newAcls);
+            $needAddAcls    = array_diff($newAcls, $oldAcls);
+            foreach($needAddAcls as $objectID) $this->loadModel('personnel')->updateWhitelist($users, $objectType, $objectID, 'whitelist', 'add', 'increase');
+            foreach($needRemoveAcls as $objectID) $this->loadModel('personnel')->deleteWhitelist($users, $objectType, $objectID);
+        }
+
 
         $actions = empty($actions) ? '' : json_encode($actions);
         $this->dao->update(TABLE_GROUP)->set('acl')->eq($actions)->where('id')->eq($groupID)->exec();
