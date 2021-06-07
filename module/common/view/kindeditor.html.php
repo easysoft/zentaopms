@@ -54,6 +54,7 @@ $uid = uniqid('');
         placeholderStyle: {fontSize: '13px', color: '#888'},
         pasteImage: {postUrl: createLink('file', 'ajaxPasteImage', 'uid=' + kuid)},
         syncAfterBlur: true,
+        allowFileManager: false,
         spellcheck: false
     };
 
