@@ -12,8 +12,8 @@
 class svn extends control
 {
     /**
-     * Sync svn. 
-     * 
+     * Sync svn.
+     *
      * @access public
      * @return void
      */
@@ -24,9 +24,9 @@ class svn extends control
 
     /**
      * Diff a file.
-     * 
-     * @param  string $url 
-     * @param  int    $revision 
+     *
+     * @param  string $url
+     * @param  int    $revision
      * @access public
      * @return void
      */
@@ -40,11 +40,11 @@ class svn extends control
             $svnRepos = $this->loadModel('repo')->getListBySCM('Subversion', 'haspriv');
             foreach($svnRepos as $repo)
             {
-                if(strpos(strtolower($url), strtolower($repo->path)) === 0) 
+                if(strpos(strtolower($url), strtolower($repo->path)) === 0)
                 {
                     $entry = $this->repo->encodePath(str_ireplace($repo->path, '', $url));
                     $oldRevision = $revision - 1;
-                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', true));
+                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&objectID=0&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', true));
                 }
             }
         }
@@ -58,9 +58,9 @@ class svn extends control
 
     /**
      * Cat a file.
-     * 
-     * @param  string $url 
-     * @param  int    $revision 
+     *
+     * @param  string $url
+     * @param  int    $revision
      * @access public
      * @return void
      */
@@ -77,7 +77,7 @@ class svn extends control
                 if(strpos(strtolower($url), strtolower($repo->path)) === 0)
                 {
                     $entry = $this->repo->encodePath(str_ireplace(strtolower($repo->path), '', $url));
-                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&entry=$entry&revision=$revision", 'html', true));
+                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&objectID=0&entry=$entry&revision=$revision", 'html', true));
                 }
             }
         }
@@ -86,12 +86,12 @@ class svn extends control
         $this->view->revision = $revision;
         $this->view->code     = $this->svn->cat($url, $revision);
 
-        $this->display(); 
+        $this->display();
     }
 
     /**
      * Sync from the syncer by api.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -131,7 +131,7 @@ class svn extends control
 
     /**
      * Ajax save log.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -187,7 +187,7 @@ class svn extends control
 
     /**
      * Ajax get repos.
-     * 
+     *
      * @access public
      * @return void
      */
