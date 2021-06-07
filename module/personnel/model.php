@@ -497,25 +497,27 @@ class personnelModel extends model
      * @param  array   $users
      * @param  string  $objectType  program|project|product|sprint
      * @param  int     $objectID
-     * @param  string  $type    whitelist|blacklist
-     * @param  string  $source  upgrade|add|sync
+     * @param  string  $type        whitelist|blacklist
+     * @param  string  $source      upgrade|add|sync
+     * @param  string  $updateType  increase|replace
      * @access public
      * @return void
      */
-    public function updateWhitelist($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add')
+    public function updateWhitelist($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add', $updateType = 'replace')
     {
         $oldWhitelist = $this->dao->select('account,objectType,objectID,type,source')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
-        $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
+        if($updateType == 'replace') $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
 
         $users = array_filter($users);
         $users = array_unique($users);
         $accounts = array();
         foreach($users as $account)
         {
+            $accounts[$account] = $account;
+
             if(isset($oldWhitelist[$account]))
             {
-                $this->dao->insert(TABLE_ACL)->data($oldWhitelist[$account])->exec();
-                $accounts[$account] = $account;
+                if($updateType == 'replace') $this->dao->insert(TABLE_ACL)->data($oldWhitelist[$account])->exec();
                 continue;
             }
 
@@ -527,11 +529,17 @@ class personnelModel extends model
             $acl->source     = $source;
             $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
             if(!dao::isError()) $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, $acl->account);
-            $accounts[$account] = $account;
         }
 
-        $whitelist = ',' . implode(',', $accounts);
+        /* Update whitelist field. */
         $objectTable = $objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        if($updateType == 'increase')
+        {
+            $oldWhitelist = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($objectID)->fetch('whitelist');
+            $oldWhitelist = explode(',', $oldWhitelist);
+            $accounts     = array_unique(array_merge($accounts, $oldWhitelist));
+        }
+        $whitelist = ',' . implode(',', $accounts);
         $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
 
         $deletedAccounts = array();
@@ -549,10 +557,13 @@ class personnelModel extends model
             $programWhitelist = $this->getWhitelistAccount($product->program, 'program');
             $newWhitelist     = array_merge($programWhitelist, $accounts);
             $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-            $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', $source);
+            $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', $source, $updateType);
 
             /* Removal of persons from centralized program whitelisting. */
-            foreach($deletedAccounts as $account) $this->deleteProgramWhitelist($objectID, $account);
+            if($updateType == 'replace')
+            {
+                foreach($deletedAccounts as $account) $this->deleteProgramWhitelist($objectID, $account);
+            }
         }
 
         /* Synchronization of people from the sprint white list to the project. */
@@ -567,7 +578,10 @@ class personnelModel extends model
             $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source);
 
             /* Removal of whitelisted persons from projects. */
-            foreach($deletedAccounts as $account) $this->deleteProjectWhitelist($objectID, $account);
+            if($updateType == 'replace')
+            {
+                foreach($deletedAccounts as $account) $this->deleteProjectWhitelist($objectID, $account);
+            }
         }
     }
 
@@ -583,6 +597,23 @@ class personnelModel extends model
     {
         $users = $this->post->accounts;
         $this->updateWhitelist($users, $objectType, $objectID);
+    }
+
+    /**
+     * Delete product whitelist.
+     *
+     * @param  int    $objectID
+     * @param  string $account
+     * @access public
+     * @return void
+     */
+    public function deleteProductWhitelist($objectID, $account = '')
+    {
+        $product = $this->dao->select('id,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($objectID)->fetch('whitelist');
+        if(empty($product)) return false;
+
+        $newWhitelist = str_replace(',' . $acl->account, '', $product->whitelist);
+        $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($objectID)->exec();
     }
 
     /**
@@ -632,6 +663,30 @@ class personnelModel extends model
             $newWhitelist = str_replace(',' . $account, '', $project->whitelist);
             $this->dao->update(TABLE_PROJECT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($projectID)->exec();
             $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($projectID)->andWhere('account')->eq($account)->andWhere('objectType')->eq('project')->exec();
+        }
+    }
+
+    /**
+     * Delete users in whitelist.
+     *
+     * @param  array  $users
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function deleteWhitelist($users = array(), $objectType = 'program', $objectID = 0)
+    {
+        $this->dao->delete()->from(TABLE_ACL)
+            ->where('objectID')->eq($objectID)
+            ->andWhere('account')->in($users)
+            ->exec();
+
+        foreach($users as $account)
+        {
+            if($objectType == 'program') $this->deleteProgramWhitelist($objectID, $account);
+            if($objectType == 'project') $this->deleteProjectWhitelist($objectID, $account);
+            if($objectType == 'product') $this->deleteProductWhitelist($objectID, $account);
         }
     }
 
