@@ -18,9 +18,10 @@ class productModel extends model
      *
      * @param  array  $products
      * @param  int    $productID
-     * @param  string $currentModule
-     * @param  string $currentMethod
      * @param  string $extra
+     * @param  string $branch
+     * @param  string $module
+     * @param  string $moduleType
      *
      * @access public
      * @return string
@@ -312,6 +313,24 @@ class productModel extends model
         }
 
         return $pairs;
+    }
+
+    /**
+     * Get product pairs by project model.
+     *
+     * @param  string $model all|scrum|waterfall
+     * @access public
+     * @return array
+     */
+    public function getPairsByProjectModel($model)
+    {
+        return $this->dao->select('t3.id as id, t3.name as name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+            ->where('t3.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in($this->app->user->view->products)->fi()
+            ->beginIF($model != 'all')->andWhere('t2.model')->eq($model)
+            ->fetchPairs('id', 'name');
     }
 
     /**

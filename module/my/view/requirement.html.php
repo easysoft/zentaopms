@@ -26,8 +26,8 @@
     }
     else
     {
-        echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>"   . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo'   ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewByMe}</span>" . ($type == 'reviewBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewBy' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->reviewByMe}</span>"   . ($type == 'reviewBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewBy'   ? ' btn-active-text' : '') . "'");
     }
     ?>
   </div>

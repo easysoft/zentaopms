@@ -69,9 +69,15 @@ class personnelModel extends model
      */
     public function canViewProgram($programID, $account)
     {
-        if(strpos($this->app->company->admins, ",{$account},") !== false) return true;
-        static $groupAcl = array();
-        if(empty($groupAcl)) $groupAcl = $this->dao->select('id,acl')->from(TABLE_GROUP)->fetchPairs();
+        if($this->app->user->admin) return true;
+
+        static $groupAcl  = array();
+        static $groupInfo = array();
+        if(empty($groupAcl))
+        {
+            $groupAcl = $this->dao->select('id,acl')->from(TABLE_GROUP)->fetchPairs();
+            foreach($groupAcl as $groupID => $group) $groupInfo[$groupID] = json_decode($groupAcl[$groupID]);
+        }
 
         static $userGroups = array();
         if(empty($userGroups)) $userGroups = $this->dao->select('*')->from(TABLE_USERGROUP)->fetchGroup('account', 'group');
@@ -81,7 +87,7 @@ class personnelModel extends model
         {
             foreach($userGroups[$account] as $groupID => $userGroup)
             {
-                $group = json_decode($groupAcl[$groupID]);
+                $group = $groupInfo[$groupID];
                 if(!isset($group->programs))
                 {
                     $programRight = true;

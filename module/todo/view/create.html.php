@@ -14,6 +14,8 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noTodo', $lang->todo->noTodo);?>
+<?php js::set('moduleList', $config->todo->moduleList)?>
+<?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

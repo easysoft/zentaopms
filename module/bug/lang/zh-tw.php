@@ -181,6 +181,7 @@ $lang->bug->remindTask            = '該Bug已經轉化為任務，是否更新�
 $lang->bug->skipClose             = 'Bug %s 不是已解決狀態，不能關閉。';
 $lang->bug->executionAccessDenied = "您無權訪問該Bug所屬的{$lang->executionCommon}！";
 $lang->bug->stepsNotEmpty         = "重現步驟不能為空。";
+$lang->bug->confirmUnlinkBuild    = "更換解决版本將取消與舊版本的關聯，您確定取消該bug與%s的關聯嗎？";
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步驟]</p><br/>";

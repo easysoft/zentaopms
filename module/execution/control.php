@@ -2759,7 +2759,7 @@ class execution extends control
         if($this->app->viewType == 'mhtml')
         {
             $executionID = $this->execution->saveState(0, $this->executions);
-            $this->execution->setMenu($productID);
+            $this->execution->setMenu($executionID);
         }
 
         /* Load pager and get tasks. */

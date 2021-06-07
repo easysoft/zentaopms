@@ -493,6 +493,20 @@ class testtaskModel extends model
     }
 
     /**
+     * Get test report pairs by build.
+     *
+     * @param  string $build
+     * @access public
+     * @return array
+     */
+    public function getTestReportPairsByBuild($build = '')
+    {
+        if(empty($build)) return array();
+
+        return $this->dao->select('id,title')->from(TABLE_TESTREPORT)->where("CONCAT(',', builds, ',')")->like("%,$build,%")->fetchPairs('id','title');
+    }
+
+    /**
      * Get related test tasks.
      *
      * @param  int    $productID
@@ -885,7 +899,6 @@ class testtaskModel extends model
                 $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
             }
         }
-
     }
 
     /**

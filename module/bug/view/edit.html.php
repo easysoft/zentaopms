@@ -25,6 +25,7 @@ js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
 js::set('systemMode'             , $config->systemMode);
+js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
 ?>
 
 <div class='main-content' id='mainContent'>
@@ -172,7 +173,7 @@ js::set('systemMode'             , $config->systemMode);
             </table>
           </div>
           <div class='detail'>
-            <div class='detail-title'><?php echo $lang->bug->legendExecStoryTask;?></div>
+            <div class='detail-title'><?php echo $config->systemMode == 'class' ? $lang->bug->legendExecStoryTask : $lang->bug->legendPRJExecStoryTask;?></div>
             <table class='table table-form'>
               <tbody>
                 <?php if($config->systemMode == 'new'):?>

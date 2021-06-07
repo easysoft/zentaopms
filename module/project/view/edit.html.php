@@ -21,7 +21,7 @@
 <?php js::set('unmodifiableProducts', $unmodifiableProducts)?>
 <?php js::set('tip', $lang->project->notAllowRemoveProducts);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
-<?php $aclList = $project->parent ? $lang->program->subAclList : $lang->project->aclList;?>
+<?php $aclList = $project->parent ? $lang->project->subAclList : $lang->project->aclList;?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -160,7 +160,7 @@
               echo html::hidden('model', $project->model);
               echo html::submitButton();
               $browseLink = $this->session->projectList ? $this->session->projectList : $this->createLink('project', 'browse');
-              echo isonlybody() ? html::backButton() : html::a($browseLink, $lang->goback, '', 'class="btn btn-back btn-wide"');
+              if(!isonlybody()) echo html::a($browseLink, $lang->goback, '', 'class="btn btn-back btn-wide"');
             ?>
           </td>
         </tr>
@@ -172,7 +172,7 @@
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl == 'project' ? 'private' : 'open', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div id='programAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->program->subAclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
+  <?php echo nl2br(html::radio('acl', $lang->project->subAclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div class="modal fade" id="promptBox">
   <div class="modal-dialog mw-600px">

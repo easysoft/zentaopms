@@ -97,7 +97,6 @@ $lang->todo->typeList['cycle']    = 'Wiederkehrend';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = 'Aufgabe';
 $lang->todo->typeList['story']    = 'Story';
-$lang->todo->typeList['review']   = 'Review';
 $lang->todo->typeList['testtask'] = 'Testtask';
 
 $lang->todo->confirmDelete  = "Möchten Sie diesen ToDo löschen?";

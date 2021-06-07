@@ -24,7 +24,6 @@ class todo extends control
         $this->loadModel('task');
         $this->loadModel('bug');
         $this->loadModel('my')->setMenu();
-        if(!isset($this->config->qcVersion)) unset($this->lang->todo->typeList['review']);
     }
 
     /**
@@ -194,16 +193,17 @@ class todo extends control
             $bugs      = $this->bug->getUserBugPairs($account);
             $tasks     = $this->task->getUserTaskPairs($account, $status);
             $storys    = $this->loadModel('story')->getUserStoryPairs($account);
+            if(isset($this->config->bizVersion) or isset($this->config->maxVersion)) $this->view->feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account);
             if(isset($this->config->maxVersion))
             {
                 $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
-                $risks         = $this->loadmodel('risk')->getuserriskpairs($account);
+                $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
                 $opportunities = $this->loadmodel('opportunity')->getUserOpportunityPairs($account);
             }
             $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
 
             $reviews = array();
-            if(isset($this->config->qcVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account);
+            if(isset($this->config->qcVersion) or isset($this->config->maxVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account);
             $allTodos = $this->todo->getList($type, $account, $status);
             if($this->post->todoIDList) $todoIDList = $this->post->todoIDList;
 
@@ -394,7 +394,7 @@ class todo extends control
         $this->view->from            = $from;
         $this->view->projects        = $projects;
         $this->view->executions      = $this->loadModel('execution')->getPairs($this->session->project);
-        $this->view->products        = $this->loadModel('product')->getPairs();
+        $this->view->products        = $todo->type == 'opportunity' ? $this->loadModel('product')->getPairsByProjectModel('waterfall') : $this->loadModel('product')->getPairs();
         $this->view->projectProducts = $this->loadModel('product')->getProductPairsByProject($this->session->project);
 
         $this->display();

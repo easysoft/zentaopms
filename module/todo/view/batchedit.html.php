@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::set('moduleList', $config->todo->moduleList)?>
+<?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->todo->common . $lang->colon . $lang->todo->batchEdit;?></h2>
@@ -71,11 +73,6 @@
           {
               echo html::input("names[$todo->id]", $todo->name, "class='form-control'");
           }
-          elseif($todo->type == 'feedback')
-          {
-              echo html::input("names[$todo->id]", $todo->name, "class='form-control'");
-              echo html::hidden("feedbacks[$todo->id]", $todo->idvalue, "class='form-control'");
-          }
           elseif($todo->type == 'task')
           {
               echo html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="form-control chosen"');
@@ -86,7 +83,7 @@
           }
           elseif($todo->type == 'story')
           {
-              echo html::select("storys[$todo->id]", $storys, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("stories[$todo->id]", $storys, $todo->idvalue, 'class="form-control chosen"');
           }
           elseif($todo->type == 'issue')
           {
@@ -107,6 +104,10 @@
           elseif($todo->type == 'opportunity')
           {
               echo html::select("opportunities[$todo->id]", $opportunities, $todo->idvalue, 'class="form-control chosen"');
+          }
+          elseif($todo->type == 'feedback')
+          {
+              echo html::select("feedbacks[$todo->id]", $feedbacks, $todo->idvalue, 'class="form-control chosen"');
           }
           ?>
           </div>

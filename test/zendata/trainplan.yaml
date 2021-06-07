@@ -4,11 +4,11 @@ author: automated export
 version: "1.0"
 fields:
     - field: id
-      range: 1-10
+      range: 1-100000
     - field: project
-      range: 21
+      range: 1-100
     - field: name
-      range: 1-10
+      range: 1-100000
       format: "培训计划_%d"
     - field: begin
       range: "(-1M)-(+1w):60"
@@ -30,7 +30,7 @@ fields:
     - field: type
       range: outside,inside
     - field: status
-      range: wait
+      range: wait,done
     - field: summary
       range: ' '
     - field: createdBy

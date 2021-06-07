@@ -1,6 +1,24 @@
 $(function()
 {
     loadModuleRelated();
+
+    resolution = $('#resolution').val();
+    if(resolution == 'fixed')
+    {
+        $('#resolvedBuildBox').change(function()
+        {
+            if($('#resolvedBuild').val() != oldResolvedBuild)
+            {
+                confirmResult = confirm(confirmUnlinkBuild);
+                if(!confirmResult)
+                {
+                    $('#resolvedBuild').val(oldResolvedBuild);
+                    $('#resolvedBuild').trigger("chosen:updated");
+                    $('#resolvedBuild').chosen();
+                }
+            }
+        });
+    }
 });
 
 /**

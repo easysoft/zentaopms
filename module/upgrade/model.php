@@ -672,7 +672,6 @@ class upgradeModel extends model
         case '15_0':
             $this->saveLogs('Execute 15_0');
             $this->execSQL($this->getUpgradeFile('15.0'));
-            $this->updateProjectLifeTime();
             $this->adjustBugOfProject();
             $this->processBuildTable();
             $this->updateProductVersion();
@@ -986,6 +985,18 @@ class upgradeModel extends model
     }
 
     /**
+     * Delete tmp model files.
+     *
+     * @access public
+     * @return void
+     */
+    public function deleteTmpModel()
+    {
+        $tmpModelDir = $this->app->getTmpRoot() . 'model/';
+        foreach(glob($tmpModelDir . '/*.php') as $tmpModelFile) unlink($tmpModelFile);
+    }
+
+    /**
      * Delete Useless Files
      *
      * @access public
@@ -1018,8 +1029,6 @@ class upgradeModel extends model
 
         return $result;
     }
-
-
 
     /**
      * Update ubb code in bug table and user Templates table to html.
@@ -4965,19 +4974,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Update the lifetime field default value of the zt_project table.
-     *
-     * @access public
-     * @return bool
-     */
-    public function updateProjectLifeTime()
-    {
-        $this->dao->update(TABLE_PROJECT)->set('lifetime')->eq('')->where('lifetime')->eq('sprint')->exec();
-
-        return true;
-    }
-
-    /**
      * Update the createdVersion field of the zt_product table.
      *
      * @access public
@@ -4985,7 +4981,7 @@ class upgradeModel extends model
      */
     public function updateProductVersion()
     {
-        $this->dao->update(TABLE_PRODUCT)->set('createdVersion')->eq($this->config->version)->where('createdVersion')->eq('')->exec();
+        $this->dao->update(TABLE_PRODUCT)->set('createdVersion')->eq($this->config->version)->where('createdVersion')->eq('')->andWhere('createdDate')->gt('2020-01-01')->exec();
         return true;
     }
 }

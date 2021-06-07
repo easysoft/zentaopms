@@ -12,7 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-
+<?php js::set('moduleList', $config->todo->moduleList)?>
+<?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <form id='todoBatchAddForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
   <div id="mainContent">
     <div class="main-header">
