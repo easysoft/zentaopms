@@ -65,6 +65,18 @@ class gitlab extends control
     }
 
     /**
+     * bind a gitlab.
+     *
+     * @access public
+     * @return void
+     */
+    public function bind()
+    {
+        echo 123;die;
+        $this->display();
+    }
+
+    /**
      * Edit a gitlab.
      *
      * @param  int    $id
@@ -106,17 +118,17 @@ class gitlab extends control
     }
 
     /**
-     * Ajax get tasks.
+     * Ajax get gitlab token permissions.
      *
-     * @param  int    $id
+     * @param  string    $host
+     * @param  string    $token
      * @access public
      * @return void
      */
-    public function ajaxGetTasks($id)
+    public function ajaxCheckToken($host, $token)
     {
-        if(empty($id)) die(json_encode(array('' => '')));
+        $host  = helper::safe64Decode($host);
+        $permissions = $this->gitlab->getPermissionsByToken($host, $token);
 
-        $tasks = $this->gitlab->getTasks($id);
-        die(json_encode($tasks));
     }
 }

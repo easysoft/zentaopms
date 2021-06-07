@@ -21,7 +21,7 @@ class gitlabModel extends model
      */
     public function getByID($id)
     {
-        $gitlab = $this->dao->select('*')->from(TABLE_GITLAB)->where('id')->eq($id)->fetch();
+        $gitlab = $this->dao->select('*')->from(TABLE_JENKINS)->where('id')->eq($id)->fetch();
         $gitlab->password = base64_decode($gitlab->password);
 
         return $gitlab;
@@ -37,8 +37,9 @@ class gitlabModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_GITLAB)
+        return $this->dao->select('*')->from(TABLE_JENKINS)
             ->where('deleted')->eq('0')
+            ->andwhere('type')->eq('1')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -51,39 +52,11 @@ class gitlabModel extends model
      */
     public function getPairs()
     {
-        $gitlab = $this->dao->select('id,name')->from(TABLE_GITLAB)
+        $gitlab = $this->dao->select('id,name')->from(TABLE_JENKINS)
             ->where('deleted')->eq('0')
             ->orderBy('id')->fetchPairs('id', 'name');
         $gitlab = array('' => '') + $gitlab;
         return $gitlab;
-    }
-
-    /**
-     * Get gitlab tasks.
-     *
-     * @param  int    $id
-     * @access public
-     * @return array
-     */
-    public function getTasks($id)
-    {
-        $gitlab = $this->getById($id);
-
-        $gitlabServer   = $gitlab->url;
-        $gitlabUser     = $gitlab->account;
-        $gitlabPassword = $gitlab->token ? $gitlab->token : $gitlab->password;
-
-        $userPWD  = "$gitlabUser:$gitlabPassword";
-        $response = common::http($gitlabServer . '/api/json/items/list', '', array(CURLOPT_USERPWD => $userPWD));
-        $response = json_decode($response);
-
-        $tasks = array();
-        if(isset($response->jobs))
-        {
-            foreach($response->jobs as $job) $tasks[basename($job->url)] = $job->name;
-        }
-        return $tasks;
-
     }
 
     /**
@@ -97,12 +70,11 @@ class gitlabModel extends model
         $gitlab = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-            ->skipSpecial('url,token,account,password')
+            ->add('type', 1)
+            ->skipSpecial('url,token')
             ->get();
 
-        $gitlab->password = base64_encode($gitlab->password);
-
-        $this->dao->insert(TABLE_GITLAB)->data($gitlab)
+        $this->dao->insert(TABLE_JENKINS)->data($gitlab)
             ->batchCheck($this->config->gitlab->create->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->autoCheck()
@@ -123,12 +95,10 @@ class gitlabModel extends model
         $gitlab = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
-            ->skipSpecial('url,token,account,password')
+            ->skipSpecial('url,token')
             ->get();
 
-        $gitlab->password = base64_encode($gitlab->password);
-
-        $this->dao->update(TABLE_GITLAB)->data($gitlab)
+        $this->dao->update(TABLE_JENKINS)->data($gitlab)
             ->batchCheck($this->config->gitlab->edit->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->autoCheck()
@@ -136,4 +106,23 @@ class gitlabModel extends model
             ->exec();
         return !dao::isError();
     }
+
+    /**
+     * Get gitlab token permissions.
+     *
+     * @param  string   $host
+     * @param  string   $token
+     * @access public
+     * @return array
+     */
+    public function getPermissionsByToken($host, $token)
+    {
+        $host  = rtrim($host, '/');
+        $host .= '/api/v4/activities';
+
+        $results = json_decode(file_get_contents($host . "?private_token=$token"));
+
+        return $results;
+    }
+
 }
