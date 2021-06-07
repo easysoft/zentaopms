@@ -30,18 +30,9 @@
             <td></td>
           </tr>
           <tr>
-            <th><?php echo $lang->gitlab->account;?></th>
-            <td><?php echo html::input('account', '', "class='form-control'");?></td>
-          </tr>
-          <tr>
             <th><?php echo $lang->gitlab->token;?></th>
             <td><?php echo html::input('token', '', "class='form-control'");?></td>
             <td><?php echo $lang->gitlab->tokenFirst;?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->gitlab->password;?></th>
-            <td><?php echo html::password('password', '', "class='form-control'");?></td>
-            <td><?php echo $lang->gitlab->tips;?></td>
           </tr>
           <tr>
             <th></th>

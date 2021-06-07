@@ -318,14 +318,14 @@ $lang->devops->menu = new stdclass();
 $lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccomment');
 $lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->menu->jenkins  = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
-$lang->devops->menu->gitlab   = array('link' => "gitlab|gitlab|browse", 'alias' => 'create,edit');
+$lang->devops->menu->gitlab   = array('link' => "Gitlab|gitlab|browse", 'alias' => 'create,edit');
 $lang->devops->menu->maintain = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
 $lang->devops->menu->rules    = array('link' => "{$lang->devops->rules}|repo|setrules");
 
 $lang->devops->menuOrder[5]  = 'code';
 $lang->devops->menuOrder[10] = 'compile';
 $lang->devops->menuOrder[15] = 'jenkins';
-$lang->devops->menuOrder[16] = 'gitlab';
+$lang->devops->menuOrder[14] = 'gitlab';
 $lang->devops->menuOrder[20] = 'maintain';
 $lang->devops->menuOrder[25] = 'rules';
 
