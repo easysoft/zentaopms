@@ -1,7 +1,7 @@
 <?php
-$lang->pipline->id       = 'ID';
-$lang->pipline->name     = '名称';
-$lang->pipline->url      = '服务地址';
-$lang->pipline->token    = 'Token';
-$lang->pipline->account  = '用户名';
-$lang->pipline->password = '密码';
+$lang->pipeline->id       = 'ID';
+$lang->pipeline->name     = '名称';
+$lang->pipeline->url      = '服务地址';
+$lang->pipeline->token    = 'Token';
+$lang->pipeline->account  = '用户名';
+$lang->pipeline->password = '密码';

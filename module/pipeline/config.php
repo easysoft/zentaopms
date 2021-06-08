@@ -1,5 +1,5 @@
 <?php
-$config->pipline->create = new stdclass();
-$config->pipline->edit   = new stdclass();
-$config->pipline->create->requiredFields = 'name,url,type';
-$config->pipline->edit->requiredFields   = 'name,url,type';
+$config->pipeline->create = new stdclass();
+$config->pipeline->edit   = new stdclass();
+$config->pipeline->create->requiredFields = 'name,url,type';
+$config->pipeline->edit->requiredFields   = 'name,url,type';
