@@ -600,23 +600,6 @@ class personnelModel extends model
     }
 
     /**
-     * Delete product whitelist.
-     *
-     * @param  int    $objectID
-     * @param  string $account
-     * @access public
-     * @return void
-     */
-    public function deleteProductWhitelist($objectID, $account = '')
-    {
-        $product = $this->dao->select('id,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($objectID)->fetch('whitelist');
-        if(empty($product)) return false;
-
-        $newWhitelist = str_replace(',' . $acl->account, '', $product->whitelist);
-        $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($objectID)->exec();
-    }
-
-    /**
      * Determine whether the user exists in the white list of multiple products.
      *
      * @param  int     $objectID
@@ -682,11 +665,22 @@ class personnelModel extends model
             ->andWhere('account')->in($users)
             ->exec();
 
-        foreach($users as $account)
+        $table  = $objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $object = $this->dao->select('id,whitelist')->from($table)->where('id')->eq($objectID)->fetch();
+        if(empty($object)) return false;
+
+        $newWhitelist = $object->whitelist;
+        foreach($users as $account) $newWhitelist = str_replace(',' . $account, '', $newWhitelist);
+        $this->dao->update($table)->set('whitelist')->eq($newWhitelist)->where('id')->eq($objectID)->exec();
+
+        /* Update user view. */
+        $fieldName = $objectType . 's';
+        $userViews = $this->dao->select("account, $fieldName")->from(TABLE_USERVIEW)->where('account')->in($users)->fetchAll();
+        foreach($userViews as $userView)
         {
-            if($objectType == 'program') $this->deleteProgramWhitelist($objectID, $account);
-            if($objectType == 'project') $this->deleteProjectWhitelist($objectID, $account);
-            if($objectType == 'product') $this->deleteProductWhitelist($objectID, $account);
+            $newUserView = str_replace(',' . $objectID . ',', ',', $userView->$fieldName . ',');
+            $newUserView = substr($newUserView, 0, strlen($newUserView) - 1);
+            $this->dao->update(TABLE_USERVIEW)->set($fieldName)->eq($newUserView)->where('account')->eq($userView->account)->exec();
         }
     }
 
