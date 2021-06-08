@@ -21,10 +21,7 @@ class gitlabModel extends model
      */
     public function getByID($id)
     {
-        $gitlab = $this->dao->select('*')->from(TABLE_PIPLINE)->where('id')->eq($id)->fetch();
-        $gitlab->password = base64_decode($gitlab->password);
-
-        return $gitlab;
+        return $this->loadModel('pipeline')->getByID($id);
     }
 
     /**
@@ -37,12 +34,7 @@ class gitlabModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_PIPLINE)
-            ->where('deleted')->eq('0')
-            ->andwhere('type')->eq('1')
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
+         return $this->loadModel('pipeline')->getList('gitlab', $orderBy, $pager);
     }
 
     /**
@@ -52,11 +44,7 @@ class gitlabModel extends model
      */
     public function getPairs()
     {
-        $gitlab = $this->dao->select('id,name')->from(TABLE_PIPLINE)
-            ->where('deleted')->eq('0')
-            ->orderBy('id')->fetchPairs('id', 'name');
-        $gitlab = array('' => '') + $gitlab;
-        return $gitlab;
+       return $this->loadModel('pipeline')->getPairs('gitlab');
     }
 
     /**
@@ -67,20 +55,7 @@ class gitlabModel extends model
      */
     public function create()
     {
-        $gitlab = fixer::input('post')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->add('type', 1)
-            ->skipSpecial('url,token')
-            ->get();
-
-
-        $this->dao->insert(TABLE_PIPLINE)->data($gitlab)
-            ->batchCheck($this->config->gitlab->create->requiredFields, 'notempty')
-            ->autoCheck()
-            ->exec();
-        if(dao::isError()) return false;
-        return $this->dao->lastInsertId();
+       return $this->loadModel('pipeline')->create('gitlab');
     }
 
     /**
@@ -92,19 +67,7 @@ class gitlabModel extends model
      */
     public function update($id)
     {
-        $gitlab = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::now())
-            ->skipSpecial('url,token')
-            ->get();
-
-        $this->dao->update(TABLE_PIPLINE)->data($gitlab)
-            ->batchCheck($this->config->gitlab->edit->requiredFields, 'notempty')
-            ->batchCheck("url", 'URL')
-            ->autoCheck()
-            ->where('id')->eq($id)
-            ->exec();
-        return !dao::isError();
+       return $this->loadModel('pipeline')->update($id);
     }
 
     /**
@@ -118,11 +81,9 @@ class gitlabModel extends model
     public function getPermissionsByToken($host, $token)
     {
         $host  = rtrim($host, '/');
-        $host .= '/api/v4/user/activities';
-
+        $host .= '/api/v4/activities';
         $results = json_decode(file_get_contents($host . "?private_token=$token"));
 
         return $results;
     }
-
 }

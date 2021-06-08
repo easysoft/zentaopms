@@ -471,9 +471,10 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_jenkins`;
-CREATE TABLE IF NOT EXISTS `zt_jenkins` (
+-- DROP TABLE IF EXISTS `zt_pipline`;
+CREATE TABLE IF NOT EXISTS `zt_pipline` (
   `id` smallint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `type` char(30) NOT NULL,
   `name` varchar(50) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
   `account` varchar(30) DEFAULT NULL,

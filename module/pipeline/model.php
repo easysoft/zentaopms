@@ -1,6 +1,6 @@
 <?php
 /**
- * The model file of pipline module of ZenTaoPMS.
+ * The model file of pipeline module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -10,10 +10,10 @@
  * @link        http://www.zentao.net
  */
 
-class piplineModel extends model
+class pipelineModel extends model
 {
     /**
-     * Get a pipline by id.
+     * Get a pipeline by id.
      *
      * @param  int    $id
      * @access public
@@ -21,13 +21,13 @@ class piplineModel extends model
      */
     public function getByID($id)
     {
-        $pipline = $this->dao->select('*')->from(TABLE_PIPLINE)->where('id')->eq($id)->fetch();
-        $pipline->password = base64_decode($pipline->password);
-        return $pipline;
+        $pipeline = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($id)->fetch();
+        $pipeline->password = base64_decode($pipeline->password);
+        return $pipeline;
     }
 
     /**
-     * Get pipline list.
+     * Get pipeline list.
      *
      * @param  string $type jenkins|gitlab
      * @param  string $orderBy
@@ -37,7 +37,7 @@ class piplineModel extends model
      */
     public function getList($type = 'jenkins', $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_PIPLINE)
+        return $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
             ->AndWhere('type')->eq($type)
             ->orderBy($orderBy)
@@ -46,39 +46,39 @@ class piplineModel extends model
     }
 
     /**
-     * Get pipline pairs
+     * Get pipeline pairs
      *
      * @return array
      */
     public function getPairs($type)
     {
-        $pipline = $this->dao->select('id,name')->from(TABLE_PIPLINE)
+        $pipeline = $this->dao->select('id,name')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
             ->AndWhere('type')->eq($type)
             ->orderBy('id')->fetchPairs('id', 'name');
-        $pipline = array('' => '') + $pipline;
-        return $pipline;
+        $pipeline = array('' => '') + $pipeline;
+        return $pipeline;
     }
 
     /**
-     * Create a pipline.
+     * Create a pipeline.
      *
      * @access public
      * @return bool
      */
     public function create($type)
     {
-        $pipline = fixer::input('post')
+        $pipeline = fixer::input('post')
             ->add('type', $type)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->skipSpecial('url,token,account,password')
             ->get();
 
-        $pipline->password = base64_encode($pipline->password);
+        $pipeline->password = base64_encode($pipeline->password);
 
-        $this->dao->insert(TABLE_PIPLINE)->data($pipline)
-            ->batchCheck($this->config->pipline->create->requiredFields, 'notempty')
+        $this->dao->insert(TABLE_PIPELINE)->data($pipeline)
+            ->batchCheck($this->config->pipeline->create->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->autoCheck()
             ->exec();
@@ -87,7 +87,7 @@ class piplineModel extends model
     }
 
     /**
-     * Update a pipline.
+     * Update a pipeline.
      *
      * @param  int    $id
      * @access public
@@ -95,16 +95,16 @@ class piplineModel extends model
      */
     public function update($id)
     {
-        $pipline = fixer::input('post')
+        $pipeline = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->skipSpecial('url,token,account,password')
             ->get();
 
-        $pipline->password = base64_encode($pipline->password);
+        $pipeline->password = base64_encode($pipeline->password);
 
-        $this->dao->update(TABLE_PIPLINE)->data($pipline)
-            ->batchCheck($this->config->pipline->edit->requiredFields, 'notempty')
+        $this->dao->update(TABLE_PIPELINE)->data($pipeline)
+            ->batchCheck($this->config->pipeline->edit->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->autoCheck()
             ->where('id')->eq($id)
