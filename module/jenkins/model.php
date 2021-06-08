@@ -21,7 +21,7 @@ class jenkinsModel extends model
      */
     public function getByID($id)
     {
-         return $this->loadModel('pipline')->getByID($id);
+         return $this->loadModel('pipeline')->getByID($id);
     }
 
     /**
@@ -34,7 +34,7 @@ class jenkinsModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-         return $this->loadModel('pipline')->getList('jenkins', $orderBy, $pager);
+         return $this->loadModel('pipeline')->getList('jenkins', $orderBy, $pager);
     }
 
     /**
@@ -44,7 +44,7 @@ class jenkinsModel extends model
      */
     public function getPairs()
     {
-       return $this->loadModel('pipline')->getPairs('jenkins');
+       return $this->loadModel('pipeline')->getPairs('jenkins');
     }
 
     /**
@@ -83,7 +83,7 @@ class jenkinsModel extends model
      */
     public function create()
     {
-       return $this->loadModel('pipline')->create('jenkins');
+       return $this->loadModel('pipeline')->create('jenkins');
     }
 
     /**
@@ -95,6 +95,6 @@ class jenkinsModel extends model
      */
     public function update($id)
     {
-       return $this->loadModel('pipline')->update($id);
+       return $this->loadModel('pipeline')->update($id);
     }
 }
