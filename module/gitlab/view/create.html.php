@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
+<?php js::import($jsRoot . 'misc/base64.js');?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -32,13 +33,13 @@
           <tr>
             <th><?php echo $lang->gitlab->token;?></th>
             <td><?php echo html::input('token', '', "class='form-control'");?></td>
-            <td>Store Pickup Store Pickup</td>
+            <td><span></span></td>
           </tr>
           <tr>
             <th></th>
             <td class='text-center form-actions'>
-              <?php echo html::submitButton(); ?>
-              <?php echo html::backButton(); ?>
+              <?php echo html::submitButton();?>
+              <?php echo html::backButton();?>
             </td>
           </tr>
         </table>

@@ -50,6 +50,9 @@ class gitlab extends control
     {
         if($_POST)
         {
+            $tokenValid = $this->gitlab->getPermissionsByToken($this->post->url, $this->post->token);
+            if($tokenValid['result'] == 'fail') $this->send($tokenValid);
+
             $gitlabID = $this->gitlab->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $gitlabID));
@@ -90,6 +93,9 @@ class gitlab extends control
         $gitlab = $this->gitlab->getByID($id);
         if($_POST)
         {
+            $tokenValid = $this->gitlab->getPermissionsByToken($this->post->url, $this->post->token);
+            if($tokenValid['result'] == 'fail') $this->send($tokenValid);
+
             $this->gitlab->update($id);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
@@ -131,6 +137,6 @@ class gitlab extends control
     {
         $host  = helper::safe64Decode($host);
         $permissions = $this->gitlab->getPermissionsByToken($host, $token);
-
+        $this->send($permissions);
     }
 }

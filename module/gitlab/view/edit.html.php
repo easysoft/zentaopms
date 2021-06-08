@@ -37,8 +37,7 @@
           <tr>
             <th></th>
             <td class='text-center form-actions'>
-              <?php echo html::submitButton(); ?>
-              <?php echo html::backButton() ?>
+              <?php echo html::submitButton() . html::backButton(); ?>
             </td>
           </tr>
         </table>

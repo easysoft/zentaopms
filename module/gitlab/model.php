@@ -80,10 +80,13 @@ class gitlabModel extends model
      */
     public function getPermissionsByToken($host, $token)
     {
-        $host  = rtrim($host, '/');
-        $host .= '/api/v4/activities';
-        $results = json_decode(file_get_contents($host . "?private_token=$token"));
+        if(strpos($host, 'http') !== 0) return array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError)));
+        if(!$this->post->token) return array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError)));
+        $host = rtrim($host, '/') . "/api/v4/user?private_token=$token";
+        $response = json_decode(commonModel::http($host));
 
-        return $results;
+        if(!is_object($response)) return array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))); 
+        if(isset($response->is_admin) and $response->is_admin == true) return array('result' => 'success');
+        return array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError)));
     }
 }

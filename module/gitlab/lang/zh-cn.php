@@ -1,4 +1,5 @@
 <?php
+$lang->gitlab = new stdclass;
 $lang->gitlab->common        = 'Gitlab';
 $lang->gitlab->browse        = '浏览gitlab';
 $lang->gitlab->create        = '添加gitlab';
@@ -20,5 +21,5 @@ $lang->gitlab->desc       = '描述';
 $lang->gitlab->tokenFirst = 'Token不为空时，优先使用Token。';
 $lang->gitlab->tips       = '使用密码时，请在gitlab全局安全设置中禁用"防止跨站点请求伪造"选项。';
 
-/* 交互提示。*/
-$lang->gitlab->tokenPermissions   = "当前token非root权限。";
+$lang->gitlab->tokenError = "当前token非管理员权限。";
+$lang->gitlab->hostError  = "无效的gitlab服务地址。";

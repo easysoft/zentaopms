@@ -75,7 +75,7 @@ class pipelineModel extends model
             ->skipSpecial('url,token,account,password')
             ->get();
 
-        $pipeline->password = base64_encode($pipeline->password);
+        if(isset($pipeline->password)) $pipeline->password = base64_encode($pipeline->password);
 
         $this->dao->insert(TABLE_PIPELINE)->data($pipeline)
             ->batchCheck($this->config->pipeline->create->requiredFields, 'notempty')
@@ -101,7 +101,7 @@ class pipelineModel extends model
             ->skipSpecial('url,token,account,password')
             ->get();
 
-        $pipeline->password = base64_encode($pipeline->password);
+        if(isset($pipeline->password)) $pipeline->password = base64_encode($pipeline->password);
 
         $this->dao->update(TABLE_PIPELINE)->data($pipeline)
             ->batchCheck($this->config->pipeline->edit->requiredFields, 'notempty')
