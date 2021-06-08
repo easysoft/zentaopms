@@ -592,18 +592,9 @@ class gitlab
     {
         if(!scm::checkRevision($revision)) return array();
         $api  = "commits/{$revision}/diff";
-        $params = new stdclass;
-        $params->page     = 1;
-        $params->per_page = 200;
 
-        $allResults = array();
-        while($results = $this->fetch($api, $params))
-        {
-            $params->page ++;
-            $allResults = $allResults + $results;
-        }
-
-        $files = array();
+        $allResults = $this->fetch($api);
+        $files      = array();
         foreach($allResults as $row)
         {
             $file = new stdclass();
