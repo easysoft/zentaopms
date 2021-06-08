@@ -21,7 +21,7 @@ class gitlabModel extends model
      */
     public function getByID($id)
     {
-        $gitlab = $this->dao->select('*')->from(TABLE_JENKINS)->where('id')->eq($id)->fetch();
+        $gitlab = $this->dao->select('*')->from(TABLE_PIPLINE)->where('id')->eq($id)->fetch();
         $gitlab->password = base64_decode($gitlab->password);
 
         return $gitlab;
@@ -37,7 +37,7 @@ class gitlabModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_JENKINS)
+        return $this->dao->select('*')->from(TABLE_PIPLINE)
             ->where('deleted')->eq('0')
             ->andwhere('type')->eq('1')
             ->orderBy($orderBy)
@@ -52,7 +52,7 @@ class gitlabModel extends model
      */
     public function getPairs()
     {
-        $gitlab = $this->dao->select('id,name')->from(TABLE_JENKINS)
+        $gitlab = $this->dao->select('id,name')->from(TABLE_PIPLINE)
             ->where('deleted')->eq('0')
             ->orderBy('id')->fetchPairs('id', 'name');
         $gitlab = array('' => '') + $gitlab;
@@ -74,9 +74,9 @@ class gitlabModel extends model
             ->skipSpecial('url,token')
             ->get();
 
-        $this->dao->insert(TABLE_JENKINS)->data($gitlab)
+
+        $this->dao->insert(TABLE_PIPLINE)->data($gitlab)
             ->batchCheck($this->config->gitlab->create->requiredFields, 'notempty')
-            ->batchCheck("url", 'URL')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
@@ -98,7 +98,7 @@ class gitlabModel extends model
             ->skipSpecial('url,token')
             ->get();
 
-        $this->dao->update(TABLE_JENKINS)->data($gitlab)
+        $this->dao->update(TABLE_PIPLINE)->data($gitlab)
             ->batchCheck($this->config->gitlab->edit->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->autoCheck()
@@ -118,7 +118,7 @@ class gitlabModel extends model
     public function getPermissionsByToken($host, $token)
     {
         $host  = rtrim($host, '/');
-        $host .= '/api/v4/activities';
+        $host .= '/api/v4/user/activities';
 
         $results = json_decode(file_get_contents($host . "?private_token=$token"));
 

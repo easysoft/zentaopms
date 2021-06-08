@@ -32,7 +32,7 @@
           <tr>
             <th><?php echo $lang->gitlab->token;?></th>
             <td><?php echo html::input('token', '', "class='form-control'");?></td>
-            <td><?php echo $lang->gitlab->tokenFirst;?></td>
+            <td>Store Pickup Store Pickup</td>
           </tr>
           <tr>
             <th></th>

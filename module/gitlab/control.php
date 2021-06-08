@@ -72,7 +72,9 @@ class gitlab extends control
      */
     public function bind()
     {
-        echo 123;die;
+        var_dump($this->gitlab->getPermissionsByToken('http://127.0.0.1:8090/','rpz2PZKriNE6TD34QtDA'));
+        die;
+
         $this->display();
     }
 
@@ -113,7 +115,7 @@ class gitlab extends control
     {
         if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
-        $this->gitlab->delete(TABLE_GITLAB, $id);
+        $this->gitlab->delete(TABLE_PIPLINE, $id);
         die(js::reload('parent'));
     }
 
