@@ -21,7 +21,7 @@ class piplineModel extends model
      */
     public function getByID($id)
     {
-        $pipline = $this->dao->select('*')->from(TABLE_PIPLINE)->where('id')->eq($id)->fetch();
+        $pipline = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($id)->fetch();
         $pipline->password = base64_decode($pipline->password);
         return $pipline;
     }
@@ -37,7 +37,7 @@ class piplineModel extends model
      */
     public function getList($type = 'jenkins', $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_PIPLINE)
+        return $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
             ->AndWhere('type')->eq($type)
             ->orderBy($orderBy)
@@ -52,7 +52,7 @@ class piplineModel extends model
      */
     public function getPairs($type)
     {
-        $pipline = $this->dao->select('id,name')->from(TABLE_PIPLINE)
+        $pipline = $this->dao->select('id,name')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
             ->AndWhere('type')->eq($type)
             ->orderBy('id')->fetchPairs('id', 'name');
@@ -77,7 +77,7 @@ class piplineModel extends model
 
         $pipline->password = base64_encode($pipline->password);
 
-        $this->dao->insert(TABLE_PIPLINE)->data($pipline)
+        $this->dao->insert(TABLE_PIPELINE)->data($pipline)
             ->batchCheck($this->config->pipline->create->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->autoCheck()
@@ -103,7 +103,7 @@ class piplineModel extends model
 
         $pipline->password = base64_encode($pipline->password);
 
-        $this->dao->update(TABLE_PIPLINE)->data($pipline)
+        $this->dao->update(TABLE_PIPELINE)->data($pipline)
             ->batchCheck($this->config->pipline->edit->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->autoCheck()

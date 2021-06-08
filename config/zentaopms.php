@@ -179,7 +179,7 @@ define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
-define('TABLE_PIPLINE',       '`' . $config->db->prefix . 'jenkins`');
+define('TABLE_PIPELINE',       '`' . $config->db->prefix . 'jenkins`');
 define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 
