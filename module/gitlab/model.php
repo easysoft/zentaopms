@@ -89,4 +89,27 @@ class gitlabModel extends model
         if(isset($response->is_admin) and $response->is_admin == true) return array('result' => 'success');
         return array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError)));
     }
+
+    /**
+     * Get projects of one gitlab.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return void
+     */
+    public function getProjectsByID($id)
+    {
+        $gitlab = $this->getByID($id);
+        $host   = rtrim($gitlab->url, '/');
+		$host .= '/api/v4/projects';
+
+		$allResults = array();
+		for($page = 1; true; $page ++)
+		{
+			$results = json_decode(file_get_contents($host . "?private_token={$gitlab->token}&simple=true&membership=true&page={$page}&per_page=100"));
+			if(empty($results) or $page > 10) break;
+			$allResults = $allResults + $results;
+		}
+		return $allResults;
+    }
 }
