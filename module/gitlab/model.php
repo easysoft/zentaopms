@@ -85,8 +85,50 @@ class gitlabModel extends model
         $host = rtrim($host, '/') . "/api/v4/user?private_token=$token";
         $response = json_decode(commonModel::http($host));
 
-        if(!is_object($response)) return array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))); 
+        if(!is_object($response)) return array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError)));
         if(isset($response->is_admin) and $response->is_admin == true) return array('result' => 'success');
         return array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError)));
+    }
+
+
+    /**
+     * Get gitlab user list.
+     *
+     * @param  string   $host
+     * @param  string   $token
+     * @access public
+     * @return array
+     */
+    public function getUserBindList($host, $token)
+    {
+        $host  = rtrim($host, '/') .'/api/v4/users?private_token='.$token ;
+        $response = json_decode(commonModel::http($host),true);
+
+        if (!$response) return array();
+            $localUsersList = $this->dao->select('id,account,email,realname')->from(TABLE_USER)->fetchAll();
+
+            $responseAllId    = array();
+            $matchUserIds     = array();
+            $responseMatchIds = array();
+            foreach ($response as $i => $gitlabId) {
+
+                $responseAllId[] = $gitlabId['id'];
+
+                foreach ($localUsersList as $local) {
+
+                    if ( $gitlabId['email'] == $local->email && $gitlabId['username'] == $local->realname &&  $gitlabId['name'] == $local->account)
+                    {
+                        $matchUserIds[$i][$local->realname] = $local->id .'-'. $gitlabId['id'];
+                        $responseMatchIds[] = $gitlabId['id'];
+                    }
+                }
+            }
+            $notMatchUserIds = array_diff($responseAllId,$responseMatchIds);
+
+            foreach ($notMatchUserIds as $k => $v)
+            {
+                $notMatchUserId[$k]['Not matched'] = 0 .'-'. $v;
+            }
+            return array_merge($notMatchUserId,$matchUserIds);
     }
 }

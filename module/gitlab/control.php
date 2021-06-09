@@ -75,7 +75,10 @@ class gitlab extends control
      */
     public function bind()
     {
-        var_dump($this->gitlab->getPermissionsByToken('http://127.0.0.1:8090/','rpz2PZKriNE6TD34QtDA'));
+        $gitlabUserData = $this->gitlab->getUserBindList('http://127.0.0.1:8090/','xV8EKDyCY7Sb5j1-FxyZ');
+
+        var_dump($gitlabUserData);die;
+
         die;
 
         $this->display();
