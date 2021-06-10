@@ -34,7 +34,7 @@ class gitlabModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-         return $this->loadModel('pipeline')->getList('gitlab', $orderBy, $pager);
+        return $this->loadModel('pipeline')->getList('gitlab', $orderBy, $pager);
     }
 
     /**
@@ -44,7 +44,7 @@ class gitlabModel extends model
      */
     public function getPairs()
     {
-       return $this->loadModel('pipeline')->getPairs('gitlab');
+        return $this->loadModel('pipeline')->getPairs('gitlab');
     }
 
     /**
@@ -55,7 +55,7 @@ class gitlabModel extends model
      */
     public function create()
     {
-       return $this->loadModel('pipeline')->create('gitlab');
+        return $this->loadModel('pipeline')->create('gitlab');
     }
 
     /**
@@ -67,7 +67,7 @@ class gitlabModel extends model
      */
     public function update($id)
     {
-       return $this->loadModel('pipeline')->update($id);
+        return $this->loadModel('pipeline')->update($id);
     }
 
     /**
@@ -106,30 +106,53 @@ class gitlabModel extends model
         $response = json_decode(commonModel::http($host),true);
 
         if (!$response) return array();
-            $localUsersList = $this->dao->select('id,account,email,realname')->from(TABLE_USER)->fetchAll();
+        $localUsersList = $this->dao->select('id,account,email,realname')->from(TABLE_USER)->fetchAll();
 
-            $responseAllId    = array();
-            $matchUserIds     = array();
-            $responseMatchIds = array();
-            foreach ($response as $i => $gitlabId) {
+        $responseAllId    = array();
+        $matchUserIds     = array();
+        $responseMatchIds = array();
+        foreach ($response as $i => $gitlabId) {
 
-                $responseAllId[] = $gitlabId['id'];
+            $responseAllId[] = $gitlabId['id'];
 
-                foreach ($localUsersList as $local) {
+            foreach ($localUsersList as $local) {
 
-                    if ( $gitlabId['email'] == $local->email && $gitlabId['username'] == $local->realname &&  $gitlabId['name'] == $local->account)
-                    {
-                        $matchUserIds[$i][$local->realname] = $local->id .'-'. $gitlabId['id'];
-                        $responseMatchIds[] = $gitlabId['id'];
-                    }
+                if ( $gitlabId['email'] == $local->email && $gitlabId['username'] == $local->realname &&  $gitlabId['name'] == $local->account)
+                {
+                    $matchUserIds[$i][$local->realname] = $local->id .'-'. $gitlabId['id'];
+                    $responseMatchIds[] = $gitlabId['id'];
                 }
             }
-            $notMatchUserIds = array_diff($responseAllId,$responseMatchIds);
+        }
+        $notMatchUserIds = array_diff($responseAllId,$responseMatchIds);
 
-            foreach ($notMatchUserIds as $k => $v)
-            {
-                $notMatchUserId[$k]['Not matched'] = 0 .'-'. $v;
-            }
-            return array_merge($notMatchUserId,$matchUserIds);
+        foreach ($notMatchUserIds as $k => $v)
+        {
+            $notMatchUserId[$k]['Not matched'] = 0 .'-'. $v;
+        }
+        return array_merge($notMatchUserId,$matchUserIds);
     }
+
+    /**
+     * Get projects of one gitlab.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return void
+     */
+    public function getProjectsByID($id)
+    {   
+        $gitlab = $this->getByID($id);
+        $host   = rtrim($gitlab->url, '/');
+        $host .= '/api/v4/projects';
+
+        $allResults = array();
+        for($page = 1; true; $page ++) 
+        {   
+            $results = json_decode(file_get_contents($host . "?private_token={$gitlab->token}&simple=true&membership=true&page={$page}&per_page=100"));
+            if(empty($results) or $page > 10) break;
+            $allResults = $allResults + $results;
+        }   
+        return $allResults;
+    }   
 }
