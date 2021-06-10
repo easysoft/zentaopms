@@ -195,9 +195,9 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         $data = fixer::input('post')
-            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
+            ->setIf($this->post->SCM == 'Gitlab', 'password', '')
+            ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
-            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')
@@ -241,9 +241,9 @@ class repoModel extends model
         $repo = $this->getRepoByID($id);
 
         $data = fixer::input('post')
-            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
+            ->setIf($this->post->SCM == 'Gitlab', 'password', '')
+            ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
-            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->setDefault('client', 'svn')
             ->setDefault('prefix', $repo->prefix)
             ->setDefault('product', '')
@@ -251,7 +251,6 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
         if($data->path != $repo->path) $data->synced = 0;
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
@@ -371,6 +370,7 @@ class repoModel extends model
         if(!$repo) return false;
 
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
+        if($repo->SCM == 'Gitlab') $reps = $this->processGitlab($repo);
         $repo->acl = json_decode($repo->acl);
         return $repo;
     }
@@ -1752,4 +1752,14 @@ class repoModel extends model
 
 		return $allResults;
 	}
+
+    public function processGitlab($repo)
+    {
+        $gitlab = $this->loadModel('gitlab')->getByID($repo->client);
+        if(!$gitlab) return $repo;
+        $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $repo->path);
+        $repo->client   = $gitlab->url;
+        $repo->password = $gitlab->token;
+        return $repo;
+    }
 }
