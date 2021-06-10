@@ -121,7 +121,7 @@ class gitlab extends control
     {
         if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
-        $this->gitlab->delete(TABLE_PIPLINE, $id);
+        $this->gitlab->delete(TABLE_PIPELINE, $id);
         die(js::reload('parent'));
     }
 
@@ -135,7 +135,7 @@ class gitlab extends control
      */
     public function ajaxCheckToken($host, $token)
     {
-        $host  = helper::safe64Decode($host);
+        $host = helper::safe64Decode($host);
         $permissions = $this->gitlab->getPermissionsByToken($host, $token);
         $this->send($permissions);
     }
