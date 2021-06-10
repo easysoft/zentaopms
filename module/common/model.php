@@ -1399,12 +1399,13 @@ EOD;
             if(strtolower($key) == 'editedby')        continue;
             if(strtolower($key) == 'editeddate')      continue;
             if(strtolower($key) == 'uid')             continue;
-            if(strtolower($key) == 'finisheddate' && $value == '')    continue;
-            if(strtolower($key) == 'canceleddate' && $value == '')    continue;
-            if(strtolower($key) == 'hangupeddate' && $value == '')    continue;
-            if(strtolower($key) == 'lastcheckeddate' && $value == '') continue;
-            if(strtolower($key) == 'activateddate' && $value == '')   continue;
-            if(strtolower($key) == 'closeddate'   && $value == '')    continue;
+            if(strtolower($key) == 'finisheddate' && $value == '')     continue;
+            if(strtolower($key) == 'canceleddate' && $value == '')     continue;
+            if(strtolower($key) == 'hangupeddate' && $value == '')     continue;
+            if(strtolower($key) == 'lastcheckeddate' && $value == '')  continue;
+            if(strtolower($key) == 'activateddate' && $value == '')    continue;
+            if(strtolower($key) == 'closeddate'   && $value == '')     continue;
+            if(strtolower($key) == 'actualcloseddate' && $value == '') continue;
 
             if(isset($old->$key) and $value != stripslashes($old->$key))
             {
