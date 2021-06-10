@@ -99,6 +99,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
+
     public function getUserBindList($host, $token)
     {
         $host  = rtrim($host, '/') .'/api/v4/users?private_token='.$token ;
