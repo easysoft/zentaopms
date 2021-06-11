@@ -25,7 +25,7 @@
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->id); ?></th>
           <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->name); ?></th>
           <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->gitlab->url); ?></th>
-          <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
+          <th class='w-150px c-actions-4'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
       <tbody>
@@ -36,6 +36,7 @@
           <td class='text' title='<?php echo $gitlab->url; ?>'><?php echo $gitlab->url; ?></td>
           <td class='c-actions text-left'>
             <?php
+            common::printLink('gitlab', 'webhook', "gitlabID=$id", "<i class='icon icon-plus'></i>");
             common::printIcon('gitlab', 'edit', "gitlabID=$id", '', 'list',  'edit');
             common::printIcon('gitlab', 'bind', "gitlabID=$id", '', 'list',  'group');
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'delete', "gitlabID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->delete}' class='btn'");
