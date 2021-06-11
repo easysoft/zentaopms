@@ -77,6 +77,7 @@ class pipelineModel extends model
             ->add('createdDate', helper::now())
             ->skipSpecial('url,token,account,password')
             ->get();
+        if($type == 'gitlab') $pipeline->url = rtrim($pipeline->url, '/');
 
         if(isset($pipeline->password)) $pipeline->password = base64_encode($pipeline->password);
 
@@ -104,6 +105,8 @@ class pipelineModel extends model
             ->skipSpecial('url,token,account,password')
             ->get();
 
+        $type = $this->dao->select('type')->from(TABLE_PIPELINE)->where('id')->eq($id)->fetch('type');
+        if($type == 'gitlab') $pipeline->url = rtrim($pipeline->url, '/');
         if(isset($pipeline->password)) $pipeline->password = base64_encode($pipeline->password);
 
         $this->dao->update(TABLE_PIPELINE)->data($pipeline)

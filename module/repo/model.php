@@ -128,7 +128,8 @@ class repoModel extends model
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
-            ->page($pager)->fetchAll('id');
+            ->page($pager)
+            ->fetchAll('id');
 
         /* Get products. */
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
@@ -152,6 +153,8 @@ class repoModel extends model
                     if(!$hasPriv) unset($repos[$i]);
                 }
             }
+
+            if($repo->SCM == 'Gitlab') $repo = $this->processGitlab($repo);
         }
 
         return $repos;
