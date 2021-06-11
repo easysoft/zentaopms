@@ -176,7 +176,7 @@ $lang->repo->error->clientPath    = "客户端安装目录不能有空格！";
 
 $lang->repo->syncTips             = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。';
 $lang->repo->encodingsTips        = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
-$lang->repo->pathTipsForGitlab    = "GitLab 项目编号";
+$lang->repo->pathTipsForGitlab    = "GitLab 项目URL";
 
 $lang->repo->example              = new stdclass();
 $lang->repo->example->client      = new stdclass();
