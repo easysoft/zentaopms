@@ -572,7 +572,7 @@ class searchModel extends model
                 $method = 'viewstep';
             }
 
-            if(strpos(',task,bug,testcase,build,release,testtask,testsuite,testreport,risk,opportunity,', ",$module,") !== false)
+            if(strpos(',task,bug,testcase,build,release,testtask,testsuite,testreport,risk,opportunity,trainplan,', ",$module,") !== false)
             {
                 if(!isset($this->config->objectTables[$record->objectType])) continue;
                 $table       = $this->config->objectTables[$record->objectType];
