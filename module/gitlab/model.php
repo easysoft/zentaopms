@@ -143,6 +143,7 @@ class gitlabModel extends model
     public function getProjectsByID($id)
     {   
         $gitlab = $this->getByID($id);
+        if( ! $gitlab ) return array();
         $host   = rtrim($gitlab->url, '/');
         $host .= '/api/v4/projects';
 
