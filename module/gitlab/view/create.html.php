@@ -23,17 +23,17 @@
           <tr>
             <th><?php echo $lang->gitlab->name; ?></th>
             <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
-            <td></td>
+            <td class="tips-git"><?php echo $lang->gitlab->gitlabNameTips; ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->url; ?></th>
             <td class='required'><?php echo html::input('url', '', "class='form-control'"); ?></td>
-            <td></td>
+            <td class="tips-git"><?php echo $lang->gitlab->gitlabUrlTips; ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->token;?></th>
             <td><?php echo html::input('token', '', "class='form-control'");?></td>
-            <td><span></span></td>
+            <td class="tips-git"><?php echo $lang->gitlab->gitlabTokenTips; ?></td>
           </tr>
           <tr>
             <th></th>
