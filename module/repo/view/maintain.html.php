@@ -45,7 +45,7 @@
           }
           ?>
           </td>
-          <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
+          <td class='text' title='<?php if(strtolower($repo->SCM) == "gitlab") echo $lang->repo->pathTipsForGitlab; else echo $repo->path; ?>'><?php echo $repo->path; ?></td>
           <td class='text-left c-actions'>
             <?php
             common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list',  'edit');
