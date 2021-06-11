@@ -334,7 +334,17 @@ class product extends control
         }
 
         if($this->app->openApp == 'program') $this->loadModel('program')->setMenu($programID);
-        if($this->app->getViewType() == 'mhtml') $this->product->setMenu('');
+        if($this->app->getViewType() == 'mhtml')
+        {
+            if($this->app->rawModule == 'projectstory' and $this->app->rawMethod == 'story')
+            {
+                $this->loadModel('project')->setMenu();
+            }
+            else
+            {
+                $this->product->setMenu('');
+            }
+        }
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);

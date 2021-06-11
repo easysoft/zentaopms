@@ -2720,8 +2720,17 @@ class execution extends control
 
         if($this->app->viewType == 'mhtml')
         {
-            $executionID = $this->execution->saveState(0, $this->executions);
-            $this->execution->setMenu($executionID);
+            if($this->app->rawModule == 'project' and $this->app->rawMethod == 'execution')
+            {
+                $projects  = $this->project->getPairsByProgram();
+                $projectID = $this->project->saveState($projectID, $projects);
+                $this->project->setMenu($projectID);
+            }
+            else
+            {
+                $executionID = $this->execution->saveState(0, $this->executions);
+                $this->execution->setMenu($executionID);
+            }
         }
 
         /* Load pager and get tasks. */

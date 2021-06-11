@@ -2195,7 +2195,7 @@ EOD;
         $response->errcode = $this->config->entry->errcode[$code];
         $response->errmsg  = $this->lang->entry->errmsg[$code];
 
-        die(helper::jsonEncode($response));
+        die(urldecode(json_encode($response)));
     }
 
     /**

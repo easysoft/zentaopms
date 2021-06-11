@@ -361,6 +361,8 @@ class build extends control
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
         {
+            if(empty($executionID)) $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
             $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, $params, $build);
             if($isJsonView) die(json_encode($builds));
@@ -368,12 +370,16 @@ class build extends control
         }
         if($varName == 'openedBuilds')
         {
+            if(empty($executionID)) $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+
             $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, 'noempty');
             if($isJsonView) die(json_encode($builds));
             else die(html::select($varName . "[$index][]", $builds , $build, 'size=4 class=form-control multiple'));
         }
         if($varName == 'resolvedBuild')
         {
+            if(empty($executionID)) $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+
             $params = ($type == 'all') ? '' : 'noterminate, nodone';
             $builds = $this->build->getExecutionBuildPairs($executionID, $productID, $branch, $params, $build);
             if($isJsonView) die(json_encode($builds));

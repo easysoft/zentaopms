@@ -56,6 +56,7 @@ $lang->program->closeErrorMessage       = '存在子项目集或项目为未关�
 $lang->program->hasChildren             = '该项目集有子项目集或项目存在，不能删除。';
 $lang->program->confirmDelete           = "您确定要删除吗？";
 $lang->program->readjustTime            = '重新调整项目集起止时间';
+$lang->program->accessDenied            = '你无权访问该项目集';
 
 $lang->program->stakeholderTypeList['inside']  = '内部';
 $lang->program->stakeholderTypeList['outside'] = '外部';
