@@ -56,6 +56,7 @@ $lang->program->closeErrorMessage       = '存在子項目集或項目為未關�
 $lang->program->hasChildren             = '該項目集有子項目集或項目存在，不能刪除。';
 $lang->program->confirmDelete           = "您確定要刪除嗎？";
 $lang->program->readjustTime            = '重新調整項目集起止時間';
+$lang->program->accessDenied            = '你無權訪問該項目集';
 
 $lang->program->stakeholderTypeList['inside']  = '內部';
 $lang->program->stakeholderTypeList['outside'] = '外部';

@@ -84,6 +84,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['15.0.2']      = '2021-06-12';
 $lang->misc->releaseDate['15.0.1']      = '2021-06-06';
 $lang->misc->releaseDate['15.0']        = '2021-04-30';
 $lang->misc->releaseDate['15.0.rc3']    = '2021-04-16';
@@ -143,6 +144,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['15.0.2'][]      = array('title' => '修复Bug', 'desc' => '');
 $lang->misc->feature->all['15.0.1'][]      = array('title' => '修复Bug', 'desc' => '');
 $lang->misc->feature->all['15.0'][]        = array('title' => '修复Bug', 'desc' => '');
 $lang->misc->feature->all['15.0.rc3'][]    = array('title' => '完善细节，修复Bug', 'desc' => '');
