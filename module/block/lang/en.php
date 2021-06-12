@@ -309,12 +309,13 @@ $lang->block->default['full']['my']['7']['block']  = 'assigntome';
 $lang->block->default['full']['my']['7']['source'] = '';
 $lang->block->default['full']['my']['7']['grid']   = 8;
 
-$lang->block->default['full']['my']['7']['params']['todoNum']  = '20';
-$lang->block->default['full']['my']['7']['params']['taskNum']  = '20';
-$lang->block->default['full']['my']['7']['params']['bugNum']   = '20';
-$lang->block->default['full']['my']['7']['params']['riskNum']  = '20';
-$lang->block->default['full']['my']['7']['params']['issueNum'] = '20';
-$lang->block->default['full']['my']['7']['params']['storyNum'] = '20';
+$lang->block->default['full']['my']['7']['params']['todoNum']    = '20';
+$lang->block->default['full']['my']['7']['params']['taskNum']    = '20';
+$lang->block->default['full']['my']['7']['params']['bugNum']     = '20';
+$lang->block->default['full']['my']['7']['params']['riskNum']    = '20';
+$lang->block->default['full']['my']['7']['params']['issueNum']   = '20';
+$lang->block->default['full']['my']['7']['params']['storyNum']   = '20';
+$lang->block->default['full']['my']['7']['params']['meetingNum'] = '20';
 
 if($config->systemMode == 'new')
 {
@@ -355,6 +356,7 @@ $lang->block->availableBlocks->build     = 'Builds';
 $lang->block->availableBlocks->testtask  = 'Requests';
 $lang->block->availableBlocks->risk      = 'My Risks';
 $lang->block->availableBlocks->issue     = 'My Issues';
+$lang->block->availableBlocks->meeting   = 'My Meetings';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -472,12 +474,13 @@ $lang->block->orderByList->story['status_desc'] = 'Story Status DESC';
 $lang->block->orderByList->story['stage_asc']   = 'Story Phase ASC';
 $lang->block->orderByList->story['stage_desc']  = 'Story Phase DESC';
 
-$lang->block->todoNum  = 'Todo';
-$lang->block->taskNum  = 'Task';
-$lang->block->bugNum   = 'Bug';
-$lang->block->riskNum  = 'Risk';
-$lang->block->issueNum = 'Issues';
-$lang->block->storyNum = 'Stories';
+$lang->block->todoNum    = 'Todo';
+$lang->block->taskNum    = 'Task';
+$lang->block->bugNum     = 'Bug';
+$lang->block->riskNum    = 'Risk';
+$lang->block->issueNum   = 'Issues';
+$lang->block->storyNum   = 'Stories';
+$lang->block->meetingNum = 'Meetings';
 
 $lang->block->typeList = new stdclass();
 

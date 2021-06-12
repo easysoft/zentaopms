@@ -740,6 +740,10 @@ class blockModel extends model
             $params->issueNum['name']    = $this->lang->block->issueNum;
             $params->issueNum['default'] = 20;
             $params->issueNum['control'] = 'input';
+
+            $params->meetingNum['name']    = $this->lang->block->meetingNum;
+            $params->meetingNum['default'] = 20;
+            $params->meetingNum['control'] = 'input';
         }
 
         $params->storyNum['name']    = $this->lang->block->storyNum;

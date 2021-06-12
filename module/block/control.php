@@ -253,7 +253,7 @@ class block extends control
 
                 /* The list assigned to me jumps to the work page when click more button. */
                 $block->moreLink = $this->createLink($moduleName, $method, $vars);
-                if($moduleName == 'my' and strpos('task|story|requirement|bug|testcase|testtask|issue|risk', $method))
+                if($moduleName == 'my' and strpos('task|story|requirement|bug|testcase|testtask|issue|risk|meeting', $method))
                 {
                     $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
                 }
@@ -1672,6 +1672,7 @@ class block extends control
         if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
         if(common::hasPriv('risk',  'view') and isset($this->config->maxVersion)) $hasViewPriv['risk']  = true;
         if(common::hasPriv('issue', 'view') and isset($this->config->maxVersion)) $hasViewPriv['issue'] = true;
+        if(common::hasPriv('meeting', 'view') and isset($this->config->maxVersion)) $hasViewPriv['meeting'] = true;
         if(common::hasPriv('story', 'view')) $hasViewPriv['story'] = true;
 
         $params = $this->get->param;
@@ -1747,6 +1748,30 @@ class block extends control
 
             $count['risk'] = count($risks);
             $this->view->risks = $risks;
+        }
+        if(isset($hasViewPriv['meeting']))
+        {
+            $this->app->loadLang('meeting');
+            $stmt = $this->dao->select('*')->from(TABLE_MEETING)
+                ->Where('deleted')->eq('0')
+                ->andwhere('(host')->eq($this->app->user->account)
+                ->orWhere('participant')->in($this->app->user->account)
+                ->markRight(1)
+                ->orderBy('id_desc');
+            if(isset($params->meetingNum)) $stmt->limit($params->meetingNum);
+            $meetings = $stmt->fetchAll();
+            $now = strtotime(helper::now());
+
+            foreach($meetings as $meetingID => $meeting)
+            {
+                $date = strtotime($meeting->date . ' ' . $meeting->begin);
+                if($date < $now) unset($meetings[$meetingID]);
+            }
+
+            $count['meeting'] = count($meetings);
+            $this->view->meetings = $meetings;
+            $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
+            $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
         }
         if(isset($hasViewPriv['issue']))
         {

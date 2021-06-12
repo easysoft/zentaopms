@@ -309,12 +309,13 @@ $lang->block->default['full']['my']['7']['block']  = 'assigntome';
 $lang->block->default['full']['my']['7']['source'] = '';
 $lang->block->default['full']['my']['7']['grid']   = 8;
 
-$lang->block->default['full']['my']['7']['params']['todoNum']  = '20';
-$lang->block->default['full']['my']['7']['params']['taskNum']  = '20';
-$lang->block->default['full']['my']['7']['params']['bugNum']   = '20';
-$lang->block->default['full']['my']['7']['params']['riskNum']  = '20';
-$lang->block->default['full']['my']['7']['params']['issueNum'] = '20';
-$lang->block->default['full']['my']['7']['params']['storyNum'] = '20';
+$lang->block->default['full']['my']['7']['params']['todoNum']    = '20';
+$lang->block->default['full']['my']['7']['params']['taskNum']    = '20';
+$lang->block->default['full']['my']['7']['params']['bugNum']     = '20';
+$lang->block->default['full']['my']['7']['params']['riskNum']    = '20';
+$lang->block->default['full']['my']['7']['params']['issueNum']   = '20';
+$lang->block->default['full']['my']['7']['params']['storyNum']   = '20';
+$lang->block->default['full']['my']['7']['params']['meetingNum'] = '20';
 
 if($config->systemMode == 'new')
 {
@@ -355,6 +356,7 @@ $lang->block->availableBlocks->build     = '版本列表';
 $lang->block->availableBlocks->testtask  = '测试版本列表';
 $lang->block->availableBlocks->risk      = '我的风险';
 $lang->block->availableBlocks->issue     = '我的问题';
+$lang->block->availableBlocks->meeting   = '我的会议';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = '项目';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -472,12 +474,13 @@ $lang->block->orderByList->story['status_desc'] = '状态倒序';
 $lang->block->orderByList->story['stage_asc']   = '阶段正序';
 $lang->block->orderByList->story['stage_desc']  = '阶段倒序';
 
-$lang->block->todoNum  = '待办数';
-$lang->block->taskNum  = '任务数';
-$lang->block->bugNum   = 'Bug数';
-$lang->block->riskNum  = '风险数';
-$lang->block->issueNum = '问题数';
-$lang->block->storyNum = '需求数';
+$lang->block->todoNum    = '待办数';
+$lang->block->taskNum    = '任务数';
+$lang->block->bugNum     = 'Bug数';
+$lang->block->riskNum    = '风险数';
+$lang->block->issueNum   = '问题数';
+$lang->block->storyNum   = '需求数';
+$lang->block->meetingNum = '会议数';
 
 $lang->block->typeList = new stdclass();
 
