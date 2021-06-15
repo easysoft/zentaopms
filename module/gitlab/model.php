@@ -10,10 +10,8 @@
  * @link        http://www.zentao.net
  */
 
-
 /* enable JMESPath */
 require __DIR__ . '/../../vendor/autoload.php';
-
 
 class gitlabModel extends model
 {
@@ -162,7 +160,6 @@ class gitlabModel extends model
         return $allResults;
     }
 
-
     /**
      * Get gitlab api base url with access_token
      * 
@@ -187,4 +184,30 @@ class gitlabModel extends model
         $api_json = commonModel::http($host);
         return $api_json;
     }
+
+    public function ListHooks($gitlab_id, $project_id)
+    {
+        return $this->getHooksOfProject();
+    }
+
+    public function GetHook($gitlab_id, $project_id, $hook_id)
+    {
+        return;
+    }  
+
+    public function CreateHooks($gitlab_id, $project_id, $url, $token)
+    {
+        return;
+    }
+
+    public function DeleteHooks($gitlab_id, $project_id, $hook_id)
+    {
+        return;
+    }
+
+    public function UpdateHooks($gitlab_id, $project_id, $hook_id)
+    {
+        return;
+    }
+
 }
