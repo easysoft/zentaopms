@@ -115,6 +115,14 @@ class gitlabModel extends model
         return $users;
     }
 
+    /**
+     * Get matched gitlab users.
+     * 
+     * @param  array    $gitlabUsers 
+     * @param  array    $zentaoUsers 
+     * @access public
+     * @return array
+     */
     public function getMatchedUsers($gitlabUsers, $zentaoUsers)
     {
         $matches = new stdclass;
@@ -143,6 +151,7 @@ class gitlabModel extends model
                 $matchedUsers[] = $gitlabUser;
             }
         }
+
         return $matchedUsers;
     }
 
@@ -214,5 +223,14 @@ class gitlabModel extends model
     {
         return;
     }
+    
+    public function pushTask($task, $gitlab)
+    {
+        
+    }
 
+    public function pushBug($task, $gitlab)
+    {
+        
+    }
 }
