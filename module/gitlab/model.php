@@ -10,9 +10,6 @@
  * @link        http://www.zentao.net
  */
 
-/* enable JMESPath */
-require __DIR__ . '/../../vendor/autoload.php';
-
 class gitlabModel extends model
 {
     /**
@@ -74,25 +71,24 @@ class gitlabModel extends model
     }
 
     /**
-     * Get gitlab token permissions.
+     * Get current user.
      *
      * @param  string   $host
      * @param  string   $token
      * @access public
      * @return array
      */
-    public function getPermissionsByToken($host, $token)
+    public function apiGetCurrentUser($host, $token)
     {
         if(strpos($host, 'http') !== 0) return array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError)));
         if(!$this->post->token) return array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError)));
-        $host = rtrim($host, '/') . "/api/v4/user?private_token=$token";
-        $response = json_decode(commonModel::http($host));
+        $api = rtrim($host, '/') . "/api/v4/user?private_token=$token";
+        $response = json_decode(commonModel::http($api));
 
         if(!is_object($response)) return array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError)));
         if(isset($response->is_admin) and $response->is_admin == true) return array('result' => 'success');
         return array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError)));
     }
-
 
     /**
      * Get gitlab user list.
@@ -103,37 +99,62 @@ class gitlabModel extends model
      * @return array
      */
 
-    public function getUserBindList($host, $token)
+    public function apiGetUsers($gitlab)
     {
-        $host  = rtrim($host, '/') .'/api/v4/users?private_token='.$token ;
-        $response = json_decode(commonModel::http($host),true);
-
+        $api      = rtrim($gitlab->url, '/') . '/api/v4/users?private_token=' . $gitlab->token;
+        $response = json_decode(commonModel::http($api));
+        
         if (!$response) return array();
-        $localUsersList = $this->dao->select('id,account,email,realname')->from(TABLE_USER)->fetchAll();
+        $users = array();
 
-        $responseAllId    = array();
-        $matchUserIds     = array();
-        $responseMatchIds = array();
-        foreach ($response as $i => $gitlabId) {
+        foreach($response as $gitlabUser)
+        {
+            $user = new stdclass;
+            $user->id       = $gitlabUser->id;
+            $user->realname = $gitlabUser->name;
+            $user->account  = $gitlabUser->username;
+            $user->email    = $gitlabUser->email;
 
-            $responseAllId[] = $gitlabId['id'];
+            $users[] = $user;
+        }
+        a($users);
+        return $users;
+    }
 
-            foreach ($localUsersList as $local) {
+    public function getMatchedUsers($gitlabUsers)
+    {
+        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
 
-                if ( $gitlabId['email'] == $local->email && $gitlabId['username'] == $local->realname &&  $gitlabId['name'] == $local->account)
-                {
-                    $matchUserIds[$i][$local->realname] = $local->id .'-'. $gitlabId['id'];
-                    $responseMatchIds[] = $gitlabId['id'];
-                }
+        $matches = new stdclass;
+        foreach($gitlabUsers as $gitlabUser)
+        {
+            foreach($zentaoUsers as $zentaoUser)
+            {
+                if($gitlabUser->account  == $zentaoUser->account)  $matches->accounts[$gitlabUser->account][] = $zentaoUser->account;
+                if($gitlabUser->realname == $zentaoUser->realname) $matches->names[$gitlabUser->realname][]   = $zentaoUser->account;
+                if($gitlabUser->email    == $zentaoUser->email)    $matches->emails[$gitlabUser->email][]     = $zentaoUser->account;
             }
         }
-        $notMatchUserIds = array_diff($responseAllId,$responseMatchIds);
 
-        foreach ($notMatchUserIds as $k => $v)
+        foreach($gitlabUser as $gitlabUser)
         {
-            $notMatchUserId[$k]['Not matched'] = 0 .'-'. $v;
+            $matchedZentaoUsers = array();
+            if(isset($matches->accounts[$gitlabUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$gitlabUser->account]);
+            if(isset($matches->emails[$gitlabUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gitlabUser->email]);
+            if(isset($matches->names[$gitlabUser->realname]))   $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$gitlabUser->realname]);
+           
+            $matchedZentaoUsers = array_unique($matchedZentaoUsers);
+            if(count($matchedZentaoUsers) == 1)
+            {
+                $matchedUsers[$gitlabUser->id] = current($matchedZentaoUsers);
+            }
+            else
+            {
+                $unmatchedUsers[$gitlabUser->id] = $gitlabUser;
+            }
         }
-        return array_merge($notMatchUserId,$matchUserIds);
+
+        return array('matched' => $matchedUsers, 'unmatched' => $unmatchedUsers);
     }
 
     /**
@@ -143,7 +164,7 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function getProjectsByID($id)
+    public function apiGetProjects($id)
     {   
         $gitlab = $this->getByID($id);
         if(!$gitlab) return array();
@@ -176,7 +197,7 @@ class gitlabModel extends model
     }
 
 
-    public function getHooksOfProject($gitlab_id, $project_id)
+    public function apiGetHooks($gitlab_id, $project_id)
     {
         $host = $this->getApiRoot($gitlab_id);
         $api_path = sprintf('/projects/%s/hooks', $project_id);
@@ -185,27 +206,22 @@ class gitlabModel extends model
         return $api_json;
     }
 
-    public function ListHooks($gitlab_id, $project_id)
-    {
-        return $this->getHooksOfProject();
-    }
-
-    public function GetHook($gitlab_id, $project_id, $hook_id)
+       public function apiGetHook($gitlab_id, $project_id, $hook_id)
     {
         return;
     }  
 
-    public function CreateHooks($gitlab_id, $project_id, $url, $token)
+    public function apiCreateHook($gitlab_id, $project_id, $url, $token)
     {
         return;
     }
 
-    public function DeleteHooks($gitlab_id, $project_id, $hook_id)
+    public function apiDeleteHook($gitlab_id, $project_id, $hook_id)
     {
         return;
     }
 
-    public function UpdateHooks($gitlab_id, $project_id, $hook_id)
+    public function apiUpdateHook($gitlab_id, $project_id, $hook_id)
     {
         return;
     }

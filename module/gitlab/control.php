@@ -50,7 +50,7 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $tokenValid = $this->gitlab->getPermissionsByToken($this->post->url, $this->post->token);
+            $tokenValid = $this->gitlab->apiGetCurrentUser($this->post->url, $this->post->token);
             if($tokenValid['result'] == 'fail') $this->send($tokenValid);
 
             $gitlabID = $this->gitlab->create();
@@ -68,19 +68,18 @@ class gitlab extends control
     }
 
     /**
-     * bind a gitlab.
+     * bind gitlab user to zentao users.
      *
      * @access public
      * @return void
      */
-    public function bind()
+    public function bindUser($id)
     {
-        $gitlabUserData = $this->gitlab->getUserBindList('http://127.0.0.1:8090/','xV8EKDyCY7Sb5j1-FxyZ');
-
-        var_dump($gitlabUserData);die;
-
-        die;
-
+        $gitlab = $this->gitlab->getByID($id);
+        $this->view->title = $this->lang->gitlab->bind;
+        $this->view->zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
+        $this->view->gitlabUsers = $this->gitlab->apiGetUsers($gitlab);
+        $this->view->matchedInfo = $this->gitlab->getMatchedUsers($this->view->gitlabUsers);
         $this->display();
     }
 
@@ -96,7 +95,7 @@ class gitlab extends control
         $gitlab = $this->gitlab->getByID($id);
         if($_POST)
         {
-            $tokenValid = $this->gitlab->getPermissionsByToken($this->post->url, $this->post->token);
+            $tokenValid = $this->gitlab->apiGetCurrentUser($this->post->url, $this->post->token);
             if($tokenValid['result'] == 'fail') $this->send($tokenValid);
 
             $this->gitlab->update($id);
@@ -139,7 +138,7 @@ class gitlab extends control
     public function ajaxCheckToken($host, $token)
     {
         $host = helper::safe64Decode($host);
-        $permissions = $this->gitlab->getPermissionsByToken($host, $token);
+        $permissions = $this->gitlab->apiGetCurrentUser($host, $token);
         $this->send($permissions);
     }
 }
