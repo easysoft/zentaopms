@@ -7,7 +7,6 @@
         "php": "~5.2||~7.0",
     	"ext-json" : "*",
     	"ext-mbstring" : "*",
-    	"ext-curl" : "*",
-        "mtdowling/jmespath.php": "2.6.*"
+    	"ext-curl" : "*"
     }
 }
