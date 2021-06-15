@@ -24,7 +24,7 @@
         <thead>
           <tr>
             <?php if(common::hasPriv('custom', 'setDefaultConcept')):?>
-            <th class='w-60px text-center'><?php echo $lang->custom->default;?> </th>
+            <th class='w-70px text-center'><?php echo $lang->custom->default;?> </th>
             <?php endif;?>
             <?php if($this->config->URAndSR):?>
             <th class='text-left'><?php echo $lang->custom->URConcept;?> </th>
@@ -40,9 +40,9 @@
             <td class='text-center'><input type="radio" name='default' value='<?php echo $key;?>' <?php if($key == $config->custom->URSR) echo 'checked';?>></td>
             <?php endif;?>
             <?php if($this->config->URAndSR):?>
-            <td class='text-left'><?php echo $URSR['URName'];?></td>
+            <td class='text-left URBox'><?php echo $URSR['URName'];?></td>
             <?php endif;?>
-            <td class='text-left'><?php echo $URSR['SRName'];?></td>
+            <td class='text-left SRBox'><?php echo $URSR['SRName'];?></td>
             <td class='c-actions'>
               <?php $disabled = $key == $config->custom->URSR ? "disabled=disabled" : '';?>
               <?php if(common::hasPriv('custom', 'editStoryConcept'))   echo html::a($this->createLink('custom', 'editStoryConcept', "id=$key", '', true), "<i class='icon icon-edit'></i>", '', "class='btn iframe' data-width=50% title={$lang->edit}");?>
@@ -60,5 +60,29 @@ $("input[name='default']").change(function()
     var checked = $(this).val();
     hiddenwin.location.href = createLink('custom', 'setDefaultConcept', 'key=' + checked);
 })
+<?php if(!$this->config->URAndSR):?>
+/* Duplicate removal. */
+var $SRBox = $('.table-form .SRBox');
+$SRBox.each(function(i)
+{
+    var $this = $(this);
+    var name = $this.html();
+    $SRBox.each(function(j)
+    {
+        if(j <= i) return;
+        if(name == $(this).html())
+        {
+            if($(this).closest('tr').find(':radio').prop('checked'))
+            {
+                $this.closest('tr').hide();
+            }
+            else
+            {
+                $(this).closest('tr').hide();
+            }
+        }
+    })
+})
+<?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>
