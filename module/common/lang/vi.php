@@ -670,6 +670,8 @@ $lang->error->reg             = "『%s』format error. It should be『%s』.";
 $lang->error->unique          = "『%s』『%s』exists. Go to Admin->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
+$lang->error->lt              = "『%s』should be <『%s』。";
+$lang->error->le              = "『%s』should be <=『%s』。";
 $lang->error->notempty        = "『%s』should not be blank.";
 $lang->error->empty           = "『%s』should be null.";
 $lang->error->equal           = "『%s』has to be『%s』.";

@@ -672,6 +672,8 @@ $lang->error->reg             = "『%s』Format Error. It should be『%s』.";
 $lang->error->unique          = "『%s』『%s』existed. Please go to Admin->Data->Recycle to restore it, if you are sure it is deleted.";
 $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
+$lang->error->lt              = "『%s』should be <『%s』。";
+$lang->error->le              = "『%s』should be <=『%s』。";
 $lang->error->notempty        = "『%s』should not be blank.";
 $lang->error->empty           = "『%s』should be null.";
 $lang->error->equal           = "『%s』has to be『%s』.";
