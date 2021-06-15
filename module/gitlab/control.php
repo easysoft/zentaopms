@@ -79,9 +79,15 @@ class gitlab extends control
      */
     public function bindUser($id)
     {
-        $gitlab = $this->gitlab->getByID($id);
-        $this->view->title = $this->lang->gitlab->bindUser;
+        if($_POST)
+        {
+
+        }
+
+        $gitlab      = $this->gitlab->getByID($id);
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
+
+        $this->view->title         = $this->lang->gitlab->bindUser;
         $this->view->userPairs     = $this->loadModel('user')->getPairs();
         $this->view->gitlabUsers   = $this->gitlab->apiGetUsers($gitlab);
         $this->view->matchedResult = $this->gitlab->getMatchedUsers($this->view->gitlabUsers, $zentaoUsers);
