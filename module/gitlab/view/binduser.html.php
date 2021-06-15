@@ -17,41 +17,40 @@
   </div>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
     <div class="table-responsive">
-      <table class="table table-form w-500px">
+      <table class="table table-borderless w-600px">
         <thead>
           <tr>
-            <th class='w-150px'><?php echo $lang->gitlab->gitlabAccount;?></th>
-            <th class='w-150px'><?php echo $lang->gitlab->zentaoAccount;?></th>
+            <th colspan='2'><?php echo $lang->gitlab->gitlabAccount;?></th>
+            <th><?php echo $lang->gitlab->zentaoAccount;?></th>
           </tr>
         </thead>
         <tbody>
           <?php foreach($gitlabUsers as $gitlabUser):?>
           <?php if(isset($gitlabUser->zentaoAccount)) continue;?>
           <tr>
-            <td>
-              <?php echo html::image($gitlabUser->avatar, "height=40");?>
-              <strong>
-                <?php echo html::hidden('gitlabUsers[]', $gitlabUser->id) . $gitlabUser->realname;?>
-                <br><?php echo "(" . $gitlabUser->account . ") &lt;" . $gitlabUser->email . "&gt;"; ?>
-              </strong>
+            <td class='w-60px'> <?php echo html::image($gitlabUser->avatar, "height=40");?> </td>
+            <td class='text-left'>
+              <strong> <?php echo $gitlabUser->realname;?> </strong>
+              <br><?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;"; ?>
             </td>
-            <td><?php echo html::select('zentaoUsers[]', $userPairs, '', "class='form-control select chosen'" );?></td>
+            <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, '', "class='form-control select chosen'" );?></td>
          </tr>
          <?php endforeach;?>
          <?php foreach($gitlabUsers as $gitlabUser):?>
          <?php if(!isset($gitlabUser->zentaoAccount)) continue;?>
          <tr>
+            <td class='w-60px'> <?php echo html::image($gitlabUser->avatar, "height=40");?> </td>
             <td>
-            <strong><?php echo html::hidden('gitlabUsers[]', $gitlabUser->id) . $gitlabUser->realname;?></strong>
-            <p><?php echo "(" . $gitlabUser->account . ") &lt;" . $gitlabUser->email . "&gt;"; ?></p>
+              <strong><?php echo $gitlabUser->realname;?></strong>
+              <br><?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
-            <td><?php echo html::select('zentaoUsers[]', $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
+            <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
          </tr>
          <?php endforeach;?>
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="<?php echo count($visibleFields) + 3?>" class="text-center form-actions">
+            <td colspan="3" class="text-center form-actions">
               <?php echo html::submitButton($lang->save);?>
               <?php echo html::backButton();?>
             </td>
