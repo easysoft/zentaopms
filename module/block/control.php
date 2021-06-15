@@ -1752,21 +1752,19 @@ class block extends control
         if(isset($hasViewPriv['meeting']))
         {
             $this->app->loadLang('meeting');
+            $today = helper::today();
+            $now = date('H:i:s', strtotime(helper::now()));
             $stmt = $this->dao->select('*')->from(TABLE_MEETING)
                 ->Where('deleted')->eq('0')
+                ->andWhere('(date')->gt($today)
+                ->orWhere('begin')->gt($now)
+                ->markRight(1)
                 ->andwhere('(host')->eq($this->app->user->account)
                 ->orWhere('participant')->in($this->app->user->account)
                 ->markRight(1)
                 ->orderBy('id_desc');
             if(isset($params->meetingNum)) $stmt->limit($params->meetingNum);
             $meetings = $stmt->fetchAll();
-            $now = strtotime(helper::now());
-
-            foreach($meetings as $meetingID => $meeting)
-            {
-                $date = strtotime($meeting->date . ' ' . $meeting->begin);
-                if($date < $now) unset($meetings[$meetingID]);
-            }
 
             $count['meeting'] = count($meetings);
             $this->view->meetings = $meetings;

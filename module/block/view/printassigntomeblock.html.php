@@ -11,7 +11,7 @@
  */
 ?>
 <style>
-.nav>li>a {padding: 8px 12px !important;}
+#assigntomeBlock .nav>li>a {padding: 8px 12px;}
 </style>
 <div id='assigntomeBlock'>
   <ul class="nav nav-secondary">
