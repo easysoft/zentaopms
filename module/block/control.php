@@ -1753,12 +1753,14 @@ class block extends control
         {
             $this->app->loadLang('meeting');
             $today = helper::today();
-            $now = date('H:i:s', strtotime(helper::now()));
+            $now   = date('H:i:s', strtotime(helper::now()));
+
             $stmt = $this->dao->select('*')->from(TABLE_MEETING)
                 ->Where('deleted')->eq('0')
                 ->andWhere('(date')->gt($today)
-                ->orWhere('begin')->gt($now)
-                ->markRight(1)
+                ->orWhere('(begin')->gt($now)
+                ->andWhere('date')->eq($today)
+                ->markRight(2)
                 ->andwhere('(host')->eq($this->app->user->account)
                 ->orWhere('participant')->in($this->app->user->account)
                 ->markRight(1)

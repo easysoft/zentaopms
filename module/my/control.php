@@ -701,18 +701,14 @@ class my extends control
         $uri = $this->app->getURI(true);
         $this->session->set('meetingList', $uri, 'my');
 
-        $meetings = $this->meeting->getListByUser($browseType, $orderBy);
-
-        /* Pager. */
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $recTotal = count($meetings);
-        $pager    = new pager($recTotal, $recPerPage, $pageID);
-        $meetings = array_chunk($meetings, $pager->recPerPage);
-
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->meeting;
         $this->view->browseType = $browseType;
-        $this->view->meetings   = empty($meetings) ? $meetings : $meetings[$pageID - 1];
+        $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, 0, $pager);
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
