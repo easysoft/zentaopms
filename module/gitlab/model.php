@@ -170,10 +170,10 @@ class gitlabModel extends model
      * @access public
      * @return string gitlab api base url with access_token
      */
-    public function getGitlabBaseApiUrl($id)
+    public function getApiRoot($id)
     {
         $gitlab = $this->getByID($id);
-        if(!$gitlab) return array();
+        if(!$gitlab) return "";
         $gitlab_url = rtrim($gitlab->url, '/').'/api/v4%s'."?private_token={$gitlab->token}";
         return $gitlab_url; 
     }
@@ -181,7 +181,7 @@ class gitlabModel extends model
 
     public function getHooksOfProject($gitlab_id, $project_id)
     {
-        $host = $this->getGitlabBaseApiUrl($gitlab_id);
+        $host = $this->getApiRoot($gitlab_id);
         $api_path = sprintf('/projects/%s/hooks', $project_id);
         $host = sprintf($host, $api_path);
         $api_json = commonModel::http($host);
