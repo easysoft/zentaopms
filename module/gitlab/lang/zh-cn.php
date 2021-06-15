@@ -4,9 +4,11 @@ $lang->gitlab->common        = 'Gitlab';
 $lang->gitlab->browse        = '浏览gitlab';
 $lang->gitlab->create        = '添加gitlab';
 $lang->gitlab->edit          = '编辑gitlab';
-$lang->gitlab->bind          = '绑定用户';
+$lang->gitlab->bindUser      = '绑定用户';
 $lang->gitlab->delete        = '删除';
 $lang->gitlab->confirmDelete = '确认删除该gitlab吗？';
+$lang->gitlab->gitlabAccount = 'gitlab用户';
+$lang->gitlab->zentaoAccount = '禅道用户';
 
 $lang->gitlab->browseAction = 'gitlab列表';
 $lang->gitlab->deleteAction = '删除gitlab';

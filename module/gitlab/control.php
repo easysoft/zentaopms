@@ -24,8 +24,6 @@ class gitlab extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if(common::hasPriv('gitlab', 'create')) $this->lang->TRActions = html::a(helper::createLink('gitlab', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->gitlab->create, '', "class='btn btn-primary'");
-
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -50,12 +48,18 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $tokenValid = $this->gitlab->apiGetCurrentUser($this->post->url, $this->post->token);
-            if($tokenValid['result'] == 'fail') $this->send($tokenValid);
+            if(strpos($host, 'http') !== 0) $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
+            if(!$this->post->token) $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+
+            $user = $this->gitlab->apiGetCurrentUser($this->post->url, $this->post->token);
+
+            if(!is_object($user)) $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
+            if(isset($user->is_admin) and $user->is_admin == true) $this->send(array('result' => 'success'));
+            $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
 
             $gitlabID = $this->gitlab->create();
+
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $gitlabID));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -76,10 +80,11 @@ class gitlab extends control
     public function bindUser($id)
     {
         $gitlab = $this->gitlab->getByID($id);
-        $this->view->title = $this->lang->gitlab->bind;
-        $this->view->zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
-        $this->view->gitlabUsers = $this->gitlab->apiGetUsers($gitlab);
-        $this->view->matchedInfo = $this->gitlab->getMatchedUsers($this->view->gitlabUsers);
+        $this->view->title = $this->lang->gitlab->bindUser;
+        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
+        $this->view->userPairs     = $this->loadModel('user')->getPairs();
+        $this->view->gitlabUsers   = $this->gitlab->apiGetUsers($gitlab);
+        $this->view->matchedResult = $this->gitlab->getMatchedUsers($this->view->gitlabUsers, $zentaoUsers);
         $this->display();
     }
 

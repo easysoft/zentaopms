@@ -80,14 +80,8 @@ class gitlabModel extends model
      */
     public function apiGetCurrentUser($host, $token)
     {
-        if(strpos($host, 'http') !== 0) return array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError)));
-        if(!$this->post->token) return array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError)));
         $api = rtrim($host, '/') . "/api/v4/user?private_token=$token";
-        $response = json_decode(commonModel::http($api));
-
-        if(!is_object($response)) return array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError)));
-        if(isset($response->is_admin) and $response->is_admin == true) return array('result' => 'success');
-        return array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError)));
+        return json_decode(commonModel::http($api));
     }
 
     /**
@@ -114,17 +108,15 @@ class gitlabModel extends model
             $user->realname = $gitlabUser->name;
             $user->account  = $gitlabUser->username;
             $user->email    = $gitlabUser->email;
+            $user->avatar   = $gitlabUser->avatar_url;
 
             $users[] = $user;
         }
-        a($users);
         return $users;
     }
 
-    public function getMatchedUsers($gitlabUsers)
+    public function getMatchedUsers($gitlabUsers, $zentaoUsers)
     {
-        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
-
         $matches = new stdclass;
         foreach($gitlabUsers as $gitlabUser)
         {
@@ -136,7 +128,8 @@ class gitlabModel extends model
             }
         }
 
-        foreach($gitlabUser as $gitlabUser)
+        $matchedUsers = array();
+        foreach($gitlabUsers as $gitlabUser)
         {
             $matchedZentaoUsers = array();
             if(isset($matches->accounts[$gitlabUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$gitlabUser->account]);
@@ -146,15 +139,11 @@ class gitlabModel extends model
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
             {
-                $matchedUsers[$gitlabUser->id] = current($matchedZentaoUsers);
-            }
-            else
-            {
-                $unmatchedUsers[$gitlabUser->id] = $gitlabUser;
+                $gitlabUser->zentaoAccount = current($matchedZentaoUsers);
+                $matchedUsers[] = $gitlabUser;
             }
         }
-
-        return array('matched' => $matchedUsers, 'unmatched' => $unmatchedUsers);
+        return $matchedUsers;
     }
 
     /**
