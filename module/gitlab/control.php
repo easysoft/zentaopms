@@ -152,4 +152,11 @@ class gitlab extends control
         $permissions = $this->gitlab->apiGetCurrentUser($host, $token);
         $this->send($permissions);
     }
+
+    public function createHook($gitlab_id, $project_id, $url, $token)
+    {
+        $res = $this->gitlab->apiCreateHook($gitlab_id, $project_id, $url, $token);
+        return $res;
+    }
+
 }
