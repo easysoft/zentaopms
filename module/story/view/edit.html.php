@@ -16,6 +16,7 @@
 <?php js::set('moveChildrenTips', $lang->story->moveChildrenTips);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php js::set('reviewedReviewer', $reviewedReviewer);?>
+<?php js::set('storyModule', $lang->story->module);?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -136,7 +137,7 @@
                 <td><?php echo html::select('source', $lang->story->sourceList, $story->source, "class='form-control chosen'");?></td>
               </tr>
               <tr>
-                <th><?php echo $lang->story->sourceNote;?></th>
+                <th id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></th>
                 <td><?php echo html::input('sourceNote', $story->sourceNote, "class='form-control'");?>
               </td>
               </tr>
