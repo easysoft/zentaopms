@@ -706,7 +706,7 @@ class my extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->meeting;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myMeeting;
         $this->view->browseType = $browseType;
         $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, 0, $pager);
         $this->view->orderBy    = $orderBy;

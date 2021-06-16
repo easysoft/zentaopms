@@ -18,7 +18,6 @@ $lang->my->project         = "My Projects";
 $lang->my->execution       = "My {$lang->executionCommon}s";
 $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
-$lang->my->meeting         = 'My Meetings';
 $lang->my->profile         = 'My Profile';
 $lang->my->dynamic         = 'My Dynamics';
 $lang->my->team            = 'My Team';
