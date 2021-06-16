@@ -169,7 +169,7 @@ class repo extends control
 
         if($repo->SCM == 'Gitlab')
         {
-            $projects = $this->loadModel('gitlab')->getProjectsByID($repo->client, $repo->password);
+            $projects = $this->loadModel('gitlab')->apiGetProjects($repo->client, $repo->password);
 
             $options  = array();
             foreach($projects as $project) $options[$project->id] = $project->name . ':' . $project->http_url_to_repo;
@@ -1115,7 +1115,7 @@ class repo extends control
 	 */
 	public function ajaxGetGitlabProjects($host)
 	{
-        $projects = $this->loadModel('gitlab')->getProjectsByID($host);
+        $projects = $this->loadModel('gitlab')->apiGetProjects($host);
 
         if(!$projects) $this->send(array('message' => array()));
 
