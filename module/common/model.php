@@ -2236,10 +2236,11 @@ EOD;
 
         if(!empty($data))
         {
+            if(is_object($data)) $data = (array) $data;
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
-
+        
         if($options) curl_setopt_array($curl, $options);
 
         $response = curl_exec($curl);

@@ -87,6 +87,9 @@ class pipelineModel extends model
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
+
+        $this->loadModel("gitlab")->initLabels($this->post->gitlabID, $this->post->projectID);
+
         return $this->dao->lastInsertId();
     }
 
@@ -115,6 +118,9 @@ class pipelineModel extends model
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
+
+        if(!dao::isError()) $this->loadModel("gitlab")->initLabels($this->post->gitlabID, $this->post->projectID);
+
         return !dao::isError();
     }
 }
