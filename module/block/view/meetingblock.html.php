@@ -32,7 +32,7 @@
       <tr>
         <td class='c-id-xs'><?php echo sprintf('%03d', $meeting->id);?></td>
         <td class='c-date'><?php echo $meeting->date == '0000-00-00' ? '' : $meeting->date;?></td>
-        <td class='c-name' title='<?php echo $meeting->name?>'><?php echo html::a($this->createLink('meeting', 'view', "meetingID=$meeting->id"), $meeting->name)?></td>
+        <td class='c-name' title='<?php echo $meeting->name?>'><?php echo html::a($this->createLink('meeting', 'view', "meetingID=$meeting->id"), $meeting->name, '', "data-app='my'")?></td>
         <?php if($longBlock):?>
         <td class='c-dept'><?php echo zget($depts, $meeting->dept)?></td>
         <td class='c-mode'><?php echo zget($lang->meeting->modeList, $meeting->dept)?></td>

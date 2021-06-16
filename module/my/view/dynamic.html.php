@@ -57,7 +57,9 @@
               <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text-muted"><?php echo $action->objectLabel;?></span>
-              <?php echo html::a($action->objectLink, $action->objectName);?>
+              <?php $openApp = '';?>
+              <?php if($action->objectType == 'meeting') $openApp = $action->project ? "data-app='project'" : "data-app='my'";?>
+              <?php echo html::a($action->objectLink, $action->objectName, '', $openApp);?>
               <span class="label label-id"><?php echo $action->objectID;?></span>
               <?php endif;?>
             </span>

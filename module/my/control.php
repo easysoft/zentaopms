@@ -1010,6 +1010,9 @@ class my extends control
         $this->session->set('riskList',        $uri, 'project');
         $this->session->set('issueList',       $uri, 'project');
         $this->session->set('stakeholderList', $uri, 'project');
+        $this->session->set('meetingroomList', $uri, 'admin');
+        $this->session->set('meetingList',     $uri, 'project');
+        $this->session->set('meetingList',     $uri, 'my');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
