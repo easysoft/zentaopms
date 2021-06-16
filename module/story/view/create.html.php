@@ -125,7 +125,7 @@
                   <div class="input-group">
                     <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
                     <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-                    <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
+                    <span class='input-group-addon' id="sourceNoteBox"><?php echo $lang->story->sourceNote;?></span>
                     <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
                   </div>
                 </div>
