@@ -169,10 +169,10 @@ class repo extends control
 
         if($repo->SCM == 'Gitlab')
         {
-            $projects = $this->loadModel('gitlab')->apiGetProjects($repo->client, $repo->password);
+            $projects = $this->loadModel('gitlab')->apiGetProjects($repo->gitlab, $repo->password);
 
             $options  = array();
-            foreach($projects as $project) $options[$project->id] = $project->name . ':' . $project->http_url_to_repo;
+            foreach($projects as $project) $options[$project->id] = $project->name_with_namespace;
 
             $this->view->projects = $options;
         }
@@ -1122,7 +1122,7 @@ class repo extends control
         $options = "<option value=''></option>";
         foreach($projects as $project)
         {
-            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name}:{$project->http_url_to_repo}</option>";
+            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
         }
         die($options);
     }
