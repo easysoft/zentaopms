@@ -16,3 +16,4 @@ $lang->branch->deleted = 'Delete';
 
 $lang->branch->confirmDelete = "Voulez-vous vraiment supprimer l'établissement @branch@ ?";
 $lang->branch->canNotDelete  = 'Attention ! Il y a des données dans @branch@. Suppression impossible !';
+$lang->branch->nameNotEmpty  = 'Name must not be empty！';

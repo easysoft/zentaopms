@@ -16,3 +16,4 @@ $lang->branch->deleted = 'Löscht';
 
 $lang->branch->confirmDelete = 'Möchten Sie diesen @branch@ löschen?';
 $lang->branch->canNotDelete  = 'Es sind Daten im @branch@ vorhanden. Löschen nicht möglich.';
+$lang->branch->nameNotEmpty  = 'Name must not be empty！';
