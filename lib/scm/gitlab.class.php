@@ -498,12 +498,11 @@ class gitlab
         if(!scm::checkRevision($version)) return array();
         $api = "commits";
 
-        if(empty($count)) $count = 100;
+        if(empty($count)) $count = 1;
         $params = array();
         $params['ref_name'] = $branch;
-        $params['per_page'] = $count;
+        $params['per_page'] = 11;
         $params['all']      = 1;
-
         if($version and $version != 'HEAD')
         {
             $lastCommit = $this->getSingleCommit($version);
@@ -594,13 +593,15 @@ class gitlab
         $api  = "commits/{$revision}/diff";
         $params = new stdclass;
         $params->page     = 1;
-        $params->per_page = 200;
+        $params->per_page = 100;
 
         $allResults = array();
-        while($results = $this->fetch($api, $params))
+        while(true)
         {
+            $results = $this->fetch($api, $params);
             $params->page ++;
             $allResults = $allResults + $results;
+            if(count($results) < 100) break;
         }
 
         $files = array();
