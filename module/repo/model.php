@@ -229,6 +229,8 @@ class repoModel extends model
 
         if(!dao::isError()) $this->rmClientVersionFile();
 
+        if($this->post->SCM == 'Gitlab') $this->loadModel("gitlab")->initLabels($this->post->gitlabHost, $this->post->gitlabProject);
+
         return $this->dao->lastInsertID();
     }
 
@@ -274,6 +276,7 @@ class repoModel extends model
         if($data->client != $repo->client and !$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
 
+
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
@@ -288,8 +291,10 @@ class repoModel extends model
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
-            return false;
+            if($repo->SCM == 'Gitlab') $this->loadModel("gitlab")->initLabels($this->post->gitlabHost, $this->post->gitlabProject);
+            return false;    
         }
+
         return true;
     }
 

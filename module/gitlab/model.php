@@ -207,8 +207,8 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/hooks";
         $url = sprintf($apiRoot, $apiPath);
-        $apiJsonRes = commonModel::http($url);
-        return $apiJsonRes;
+        $response = commonModel::http($url);
+        return $response;
     }
 
     /**
@@ -225,7 +225,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/$projectID/hooks/$hookID)";
         $url = sprintf($apiRoot, $apiPath);
-        $apiJsonRes = commonModel::http($url);
+        $response = commonModel::http($url);
         return;
     }  
 
@@ -242,11 +242,20 @@ class gitlabModel extends model
     public function apiCreateHook($gitlabID, $projectID, $url, $token)
     {  
         $apiRoot = $this->getApiRoot($gitlabID);
-        $args = "&enable_ssl_verification=false&issues_events=true&merge_requests_events=true&push_events=true&tag_push_events=true&url={$url}&token={$token}";
+    
+        $postData = new stdclass;
+        $postData->enable_ssl_verification = "false";
+        $postData->issues_events           = "true";
+        $postData->merge_requests_events   = "true";
+        $postData->push_events             = "true";
+        $postData->tag_push_events         = "true";
+        $postData->url                     = $url;
+        $postData->token                   = $token;
+
         $apiPath = "/projects/{$projectID}/hooks";
-        $url = sprintf($apiRoot, $apiPath) . $args;
-        $apiJsonRes = commonModel::http($url,"options=array('CURLOPT_CUSTOMREQUEST'=>'post')");
-        return $apiJsonRes;
+        $url = sprintf($apiRoot, $apiPath);
+        $response = commonModel::http($url, $postData); 
+        return $response;
 
     }
 
@@ -264,8 +273,8 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/hooks/{$hookID}";
         $url = sprintf($apiRoot, $apiPath);
-        $apiJsonRes = commonModel::http($url,"options=array('CURLOPT_CUSTOMREQUEST'=>'delete')");
-        return $apiJsonRes;
+        $response = commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete'));
+        return $response;
     }
 
     /**
@@ -280,13 +289,119 @@ class gitlabModel extends model
     public function apiUpdateHook($gitlabID, $projectID, $hookID)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
-        $args = "&enable_ssl_verification=false&issues_events=true&merge_requests_events=true&push_events=true&tag_push_events=true&url={$url}&token={$token}";
+       
+        $postData = new stdclass;
+        $postData->enable_ssl_verification = "false";
+        $postData->issues_events           = "true";
+        $postData->merge_requests_events   = "true";
+        $postData->push_events             = "true";
+        $postData->tag_push_events         = "true";
+        $postData->url                     = $url;
+        $postData->token                   = $token;
+
         $apiPath = "/projects/{$projectID}/hooks/{$hookID}";
-        $url = sprintf($apiRoot, $apiPath) . $args;
-        $apiJsonRes = commonModel::http($url,"options=array('CURLOPT_CUSTOMREQUEST'=>'put')");
-        return $apiJsonRes;
+        $url = sprintf($apiRoot, $apiPath);
+        $response = commonModel::http($url, $postData, $options = array(CURLOPT_CUSTOMREQUEST => 'put'));
+        return $response;
     }
+
+    /**
+     * Create Label for gitlab project.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  int    $label 
+     * @access public
+     * @return void
+     */
+    public function apiCreateLabel($gitlabID, $projectID, $label)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+
+        if(empty($label->name) or empty($label->color)) return false;
+
+        $apiPath = "/projects/{$projectID}/labels/";
+        $url = sprintf($apiRoot, $apiPath);
+        $response = commonModel::http($url, $label);
+        return $response;
+    }
+
+    /**
+     * Get labels of project. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function apiGetLabels($gitlabID, $projectID)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiPath = "/projects/{$projectID}/labels/";
+        $url = sprintf($apiRoot, $apiPath);
+        $response = commonModel::http($url);
+        $labels = json_decode($response);
+        return $labels;
+    }
+
+    /**
+     * Check if predefined label exist in project. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function isLabelExists($gitlabID, $projectID)
+    {
+        $labels = $this->apiGetLabels($gitlabID, $projectID);
+        foreach($labels as $label)
+        {
+            if(strpos($label->name, "zentao task") == 0) return true;
+            if(strpos($label->name, "zentao bug") == 0) return true;
+        }
+
+        return false;
+
     
+    }
+
+    /**
+     * Create predefined labels for project. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function initLabels($gitlabID, $projectID)
+    {
+        if($this->isLabelExists($gitlabID, $projectID)) return true;
+
+        $taskLabel = new stdclass();
+        $taskLabel->name            = "zentao task";
+        $taskLabel->description     = "task label from zentao";
+        $taskLabel->color           = "#0033CC";
+        $taskLabel->priority        = "0";
+
+        $bugLabel = new stdclass();
+        $bugLabel->name             = "zentao bug";
+        $bugLabel->description      = "bug label from zentao";
+        $bugLabel->color            = "#D10069";
+        $bugLabel->priority         = "0";
+        
+        $this->apiCreateLabel($gitlabID, $projectID, $taskLabel);
+        $this->apiCreateLabel($gitlabID, $projectID, $bugLabel);
+
+        return;
+    }
+
+    public function apiCreateIssue($gitlabID, $projectID)
+    {
+
+    }
+
+
     public function pushTask($task, $gitlabID,$projectID)
     {
         
