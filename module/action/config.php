@@ -44,4 +44,4 @@ $config->action->majorList['project']   = array('opened', 'edited');
 $config->action->majorList['execution'] = array('opened', 'edited');
 
 $config->action->needGetProjectType = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity,trainplan,gapanalysis,researchplan,researchreport,';
-$config->action->needGetRelateField = ',story,productplan,release,task,build,bug,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,';
+$config->action->needGetRelateField = ',story,productplan,release,task,build,bug,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,';

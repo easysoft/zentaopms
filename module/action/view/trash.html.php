@@ -68,7 +68,9 @@
             }
             else
             {
-                echo html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title={$action->objectName}");
+                $app = '';
+                if($action->objectType == 'meeting') $app = $action->project ? "data-app='project'" : "data-app='my'";
+                echo html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title={$action->objectName} $app");
             }
             ?>
           </td>
