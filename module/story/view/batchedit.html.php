@@ -51,7 +51,7 @@ foreach(explode(',', $showFields) as $field)
           <th class='w-90px'><?php echo $lang->story->category;?></th>
           <th class='w-70px<?php   echo zget($visibleFields, 'pri', ' hidden')?>'> <?php echo $lang->priAB;?></th>
           <th class='w-100px<?php  echo zget($visibleFields, 'assignedTo', ' hidden')?>'> <?php echo $lang->story->assignedTo;?></th>
-          <th class='w-100px<?php  echo zget($visibleFields, 'source', ' hidden')?>'> <?php echo $lang->story->source;?></th>
+          <th class='w-130px<?php  echo zget($visibleFields, 'source', ' hidden')?>'> <?php echo $lang->story->source;?></th>
           <th class='w-100px<?php  echo zget($visibleFields, 'source', ' hidden')?>'> <?php echo $lang->story->sourceNote;?></th>
           <th class='w-80px'><?php echo $lang->story->status;?></th>
           <th class='w-100px<?php  echo zget($visibleFields, 'stage', ' hidden')?>'> <?php echo $lang->story->stageAB;?></th>
