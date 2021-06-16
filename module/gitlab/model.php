@@ -207,8 +207,8 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/hooks";
         $url = sprintf($apiRoot, $apiPath);
-        $apiJsonRes = commonModel::http($url);
-        return $apiJsonRes;
+        $response = commonModel::http($url);
+        return $response;
     }
 
     /**
@@ -225,7 +225,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/$projectID/hooks/$hookID)";
         $url = sprintf($apiRoot, $apiPath);
-        $apiJsonRes = commonModel::http($url);
+        $response = commonModel::http($url);
         return;
     }  
 
@@ -254,8 +254,8 @@ class gitlabModel extends model
 
         $apiPath = "/projects/{$projectID}/hooks";
         $url = sprintf($apiRoot, $apiPath);
-        $apiJsonRes = commonModel::http($url, $postData); 
-        return $apiJsonRes;
+        $response = commonModel::http($url, $postData); 
+        return $response;
 
     }
 
@@ -273,8 +273,8 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/hooks/{$hookID}";
         $url = sprintf($apiRoot, $apiPath);
-        $apiJsonRes = commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete'));
-        return $apiJsonRes;
+        $response = commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete'));
+        return $response;
     }
 
     /**
@@ -301,10 +301,19 @@ class gitlabModel extends model
 
         $apiPath = "/projects/{$projectID}/hooks/{$hookID}";
         $url = sprintf($apiRoot, $apiPath);
-        $apiJsonRes = commonModel::http($url, $postData, $options = array(CURLOPT_CUSTOMREQUEST => 'put'));
-        return $apiJsonRes;
+        $response = commonModel::http($url, $postData, $options = array(CURLOPT_CUSTOMREQUEST => 'put'));
+        return $response;
     }
 
+    /**
+     * Create Label for gitlab project.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  int    $label 
+     * @access public
+     * @return void
+     */
     public function apiCreateLabel($gitlabID, $projectID, $label)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
@@ -317,6 +326,14 @@ class gitlabModel extends model
         return $response;
     }
 
+    /**
+     * Get labels of project. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function apiGetLabels($gitlabID, $projectID)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
@@ -327,12 +344,21 @@ class gitlabModel extends model
         return $labels;
     }
 
+    /**
+     * Check if predefined label exist in project. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function isLabelExists($gitlabID, $projectID)
     {
         $labels = $this->apiGetLabels($gitlabID, $projectID);
         foreach($labels as $label)
         {
-            if(strpos($label->title, "zentao task") == 0) return true;
+            if(strpos($label->name, "zentao task") == 0) return true;
+            if(strpos($label->name, "zentao bug") == 0) return true;
         }
 
         return false;
@@ -340,6 +366,14 @@ class gitlabModel extends model
     
     }
 
+    /**
+     * Create predefined labels for project. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function initLabels($gitlabID, $projectID)
     {
         if($this->isLabelExists($gitlabID, $projectID)) return true;
