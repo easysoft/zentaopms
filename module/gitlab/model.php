@@ -194,60 +194,105 @@ class gitlabModel extends model
         return $gitlab_url; 
     }
 
-    public function apiGetHooks($gitlab_id, $project_id)
+    /**
+     * Get hooks.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function apiGetHooks($gitlabID, $projectID)
     {
-        $api_root = $this->getApiRoot($gitlab_id);
-        $api_path = "/projects/{$project_id}/hooks";
-        $url = sprintf($api_root, $api_path);
-        $api_json = commonModel::http($url);
-        return $api_json;
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiPath = "/projects/{$projectID}/hooks";
+        $url = sprintf($apiRoot, $apiPath);
+        $apiJsonRes = commonModel::http($url);
+        return $apiJsonRes;
     }
 
-    public function apiGetHook($gitlab_id, $project_id, $hook_id)
+    /**
+     * Get specific hook. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  int    $hookID 
+     * @access public
+     * @return void
+     */
+    public function apiGetHook($gitlabID, $projectID, $hookID)
     {
-        $api_root = $this->getApiRoot($gitlab_id);
-        $api_path = "/projects/$project_id/hooks/$hook_id)";
-        $url = sprintf($api_root, $api_path);
-        $api_json = commonModel::http($url);
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiPath = "/projects/$projectID/hooks/$hookID)";
+        $url = sprintf($apiRoot, $apiPath);
+        $apiJsonRes = commonModel::http($url);
         return;
     }  
 
-    public function apiCreateHook($gitlab_id, $project_id, $url, $token)
+    /**
+     * Create hook.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  int    $url 
+     * @param  int    $token 
+     * @access public
+     * @return void
+     */
+    public function apiCreateHook($gitlabID, $projectID, $url, $token)
     {  
-        $api_root = $this->getApiRoot($gitlab_id);
+        $apiRoot = $this->getApiRoot($gitlabID);
         $args = "&enable_ssl_verification=false&issues_events=true&merge_requests_events=true&push_events=true&tag_push_events=true&url={$url}&token={$token}";
-        $api_path = "/projects/{$project_id}/hooks";
-        $url = sprintf($api_root, $api_path) . $args;
-        $api_json = commonModel::http($url,"options=array('CURLOPT_CUSTOMREQUEST'=>'post')");
-        return $api_json;
+        $apiPath = "/projects/{$projectID}/hooks";
+        $url = sprintf($apiRoot, $apiPath) . $args;
+        $apiJsonRes = commonModel::http($url,"options=array('CURLOPT_CUSTOMREQUEST'=>'post')");
+        return $apiJsonRes;
 
     }
 
-    public function apiDeleteHook($gitlab_id, $project_id, $hook_id)
+    /**
+     * Delete hook. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  int    $hookID 
+     * @access public
+     * @return void
+     */
+    public function apiDeleteHook($gitlabID, $projectID, $hookID)
     {
-        $api_root = $this->getApiRoot($gitlab_id);
-        $api_path = "/projects/{$project_id}/hooks/{$hook_id}";
-        $url = sprintf($api_root, $api_path);
-        $api_json = commonModel::http($url,"options=array('CURLOPT_CUSTOMREQUEST'=>'delete')");
-        return $api_json;
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiPath = "/projects/{$projectID}/hooks/{$hookID}";
+        $url = sprintf($apiRoot, $apiPath);
+        $apiJsonRes = commonModel::http($url,"options=array('CURLOPT_CUSTOMREQUEST'=>'delete')");
+        return $apiJsonRes;
     }
 
-    public function apiUpdateHook($gitlab_id, $project_id, $hook_id)
+    /**
+     * Update hook. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  int    $hookID 
+     * @access public
+     * @return void
+     */
+    public function apiUpdateHook($gitlabID, $projectID, $hookID)
     {
-        $api_root = $this->getApiRoot($gitlab_id);
+        $apiRoot = $this->getApiRoot($gitlabID);
         $args = "&enable_ssl_verification=false&issues_events=true&merge_requests_events=true&push_events=true&tag_push_events=true&url={$url}&token={$token}";
-        $api_path = "/projects/{$project_id}/hooks/{$hook_id}";
-        $url = sprintf($api_root, $api_path) . $args;
-        $api_json = commonModel::http($url,"options=array('CURLOPT_CUSTOMREQUEST'=>'put')");
-        return $api_json;
+        $apiPath = "/projects/{$projectID}/hooks/{$hookID}";
+        $url = sprintf($apiRoot, $apiPath) . $args;
+        $apiJsonRes = commonModel::http($url,"options=array('CURLOPT_CUSTOMREQUEST'=>'put')");
+        return $apiJsonRes;
     }
     
-    public function pushTask($task, $gitlab)
+    public function pushTask($task, $gitlabID,$projectID)
     {
         
     }
 
-    public function pushBug($task, $gitlab)
+    public function pushBug($bug, $gitlabID,$projectID)
     {
         
     }
