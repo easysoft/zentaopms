@@ -1100,6 +1100,7 @@ class storyModel extends model
                 $story->module         = $data->modules[$storyID];
                 $story->plan           = $oldStories[$storyID]->parent < 0 ? '' : $data->plans[$storyID];
                 $story->source         = $data->sources[$storyID];
+                $story->sourceNote     = $data->sourceNote[$storyID];
                 $story->keywords       = $data->keywords[$storyID];
                 $story->stage          = isset($data->stages[$storyID])             ? $data->stages[$storyID]             : $oldStory->stage;
                 $story->closedBy       = isset($data->closedBys[$storyID])          ? $data->closedBys[$storyID]          : $oldStory->closedBy;

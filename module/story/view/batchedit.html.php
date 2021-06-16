@@ -52,6 +52,7 @@ foreach(explode(',', $showFields) as $field)
           <th class='w-70px<?php   echo zget($visibleFields, 'pri', ' hidden')?>'> <?php echo $lang->priAB;?></th>
           <th class='w-100px<?php  echo zget($visibleFields, 'assignedTo', ' hidden')?>'> <?php echo $lang->story->assignedTo;?></th>
           <th class='w-100px<?php  echo zget($visibleFields, 'source', ' hidden')?>'> <?php echo $lang->story->source;?></th>
+          <th class='w-100px<?php  echo zget($visibleFields, 'source', ' hidden')?>'> <?php echo $lang->story->sourceNote;?></th>
           <th class='w-80px'><?php echo $lang->story->status;?></th>
           <th class='w-100px<?php  echo zget($visibleFields, 'stage', ' hidden')?>'> <?php echo $lang->story->stageAB;?></th>
           <th class='w-130px<?php  echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo $lang->story->closedBy;?></th>
@@ -109,7 +110,8 @@ foreach(explode(',', $showFields) as $field)
           <td title='<?php echo $story->title?>'>
             <div class="input-group">
               <div class="input-control has-icon-right">
-                <?php echo html::input("titles[$storyID]", $story->title, "class='form-control input-story-title' disabled"); ?>
+                <?php echo html::input("titles[]", $story->title, "class='form-control input-story-title' disabled"); ?>
+                <?php echo html::hidden("titles[$storyID]", $story->title, "class='form-control input-story-title'"); ?>
 
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
@@ -127,7 +129,19 @@ foreach(explode(',', $showFields) as $field)
           <td><?php echo html::select("category[$storyID]", $lang->story->categoryList, $story->category, 'class=form-control chosen');?></td>
           <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$storyID]",     $priList, $story->pri, 'class=form-control');?></td>
           <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo html::select("assignedTo[$storyID]",     $users, $story->assignedTo, "class='form-control chosen'");?></td>
-          <td <?php echo zget($visibleFields, 'source', "class='hidden'")?>><?php echo html::select("sources[$storyID]",  $sourceList, $story->source, 'class=form-control');?></td>
+          <td <?php echo zget($visibleFields, 'source', "class='hidden'")?>><?php echo html::select("sources[$storyID]",  $sourceList, $story->source, "class='form-control chosen' id='source_$storyID'");?></td>
+          <?php
+          if($story->source == 'meeting' or $story->source == 'researchreport')
+          {
+              $objects = $story->source == 'meeting' ? $meetings : $researchReports;
+              $html = html::select("sourceNote[$storyID]", $objects, $story->sourceNote, "class='form-control chosen' id='sourceNote_$storyID'");
+          }
+          else
+          {
+              $html = html::input("sourceNote[$storyID]", $story->sourceNote, "class='form-control' id='sourceNote_$storyID'");
+          }
+          ?>
+          <td class='<?php echo zget($visibleFields, 'source', 'hidden')?>' data-id="<?php echo $story->sourceNote;?>"><?php echo $html;?></td>
           <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <td <?php echo zget($visibleFields, 'stage', "class='hidden'")?>><?php echo html::select("stages[$storyID]", $stageList, $story->stage, 'class="form-control"' . ($story->status == 'draft' ? ' disabled="disabled"' : ''));?></td>
           <td class='text-left<?php echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo html::select("closedBys[$storyID]",     $users, $story->closedBy, "class='form-control" . ($story->status == 'closed' ? " chosen'" : "' disabled='disabled'"));?></td>
