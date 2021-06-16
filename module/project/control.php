@@ -945,9 +945,15 @@ class project extends control
 
         /* Set project builds. */
         $projectBuilds = array();
+        $productList   = $this->project->getProducts($projectID);
         if(!empty($builds))
         {
-            foreach($builds as $build) $projectBuilds[$build->product][] = $build;
+            foreach($builds as $build) 
+            {
+                /* If product is normal, unset branch name. */
+                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal') $build->branchName = '';
+                $projectBuilds[$build->product][] = $build;
+            }
         }
 
         /* Header and position. */

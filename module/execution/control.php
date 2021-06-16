@@ -1010,9 +1010,15 @@ class execution extends control
 
         /* Set execution builds. */
         $executionBuilds = array();
+        $productList     = $this->execution->getProducts($executionID);
         if(!empty($builds))
         {
-            foreach($builds as $build) $executionBuilds[$build->product][] = $build;
+            foreach($builds as $build) 
+            {
+                /* If product is normal, unset branch name. */
+                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal') $build->branchName = '';
+                $executionBuilds[$build->product][] = $build;
+            }
         }
 
         /* Header and position. */
