@@ -357,8 +357,8 @@ class gitlabModel extends model
         $labels = $this->apiGetLabels($gitlabID, $projectID);
         foreach($labels as $label)
         {
-            if(strpos($label->name, "zentao task") == 0) return true;
-            if(strpos($label->name, "zentao bug") == 0) return true;
+            if(strpos($label->name, $this->config->gitlab->taskLabel->name) == 0) return true;
+            if(strpos($label->name, $this->config->gitlab->bugLabel->name) == 0) return true;
         }
 
         return false;
@@ -379,16 +379,16 @@ class gitlabModel extends model
         if($this->isLabelExists($gitlabID, $projectID)) return true;
 
         $taskLabel = new stdclass();
-        $taskLabel->name            = "zentao task";
-        $taskLabel->description     = "task label from zentao";
-        $taskLabel->color           = "#0033CC";
-        $taskLabel->priority        = "0";
+        $taskLabel->name            = $this->config->gitlab->taskLabel->name;
+        $taskLabel->description     = $this->config->gitlab->taskLabel->description;
+        $taskLabel->color           = $this->config->gitlab->taskLabel->color;
+        $taskLabel->priority        = $this->config->gitlab->taskLabel->priority;
 
         $bugLabel = new stdclass();
-        $bugLabel->name             = "zentao bug";
-        $bugLabel->description      = "bug label from zentao";
-        $bugLabel->color            = "#D10069";
-        $bugLabel->priority         = "0";
+        $bugLabel->name             = $this->config->gitlab->bugLabel->name;
+        $bugLabel->description      = $this->config->gitlab->bugLabel->description;
+        $bugLabel->color            = $this->config->gitlab->bugLabel->color;
+        $bugLabel->priority         = $this->config->gitlab->bugLabel->priority;
         
         $this->apiCreateLabel($gitlabID, $projectID, $taskLabel);
         $this->apiCreateLabel($gitlabID, $projectID, $bugLabel);
@@ -396,15 +396,20 @@ class gitlabModel extends model
         return;
     }
 
-    public function apiCreateIssue($gitlabID, $projectID)
+    public function apiCreateIssue($gitlabID, $projectID, $issue)
     {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiPath = "/projects/{$projectID}/issues/";
+        $url = sprintf($apiRoot, $apiPath);
+        $response = commonModel::http($url, $issue);
+        $labels = json_decode($response);
 
+        return $labels;
     }
-
 
     public function pushTask($task, $gitlabID,$projectID)
     {
-        
+
     }
 
     public function pushBug($bug, $gitlabID,$projectID)
