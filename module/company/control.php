@@ -190,6 +190,9 @@ class company extends control
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
         $this->session->set('effortList',      $uri, 'my');
+        $this->session->set('meetingList',     $uri, 'my');
+        $this->session->set('meetingList',     $uri, 'project');
+        $this->session->set('meetingroomList', $uri, 'admin');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
