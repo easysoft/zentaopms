@@ -45,7 +45,7 @@ class miscModel extends model
 
     /**
      * Get remind.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -63,7 +63,7 @@ class miscModel extends model
 
     /**
      * Check one click package.
-     * 
+     *
      * @access public
      * @return array
      */

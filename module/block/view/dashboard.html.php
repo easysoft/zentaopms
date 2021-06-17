@@ -105,12 +105,28 @@ config.ordersSaved = '<?php echo $lang->block->ordersSaved; ?>';
 config.confirmRemoveBlock = '<?php echo $lang->block->confirmRemoveBlock; ?>';
 var module   = '<?php echo $module?>';
 var useGuest = <?php echo $useGuest ? 'true' : 'false';?>;
-<?php $remind = $this->loadModel('misc')->getRemind();?>
-<?php if(!empty($remind)):?>
-var myModalTrigger = new $.zui.ModalTrigger({title:'<?php echo $lang->misc->remind;?>', custom: function(){return <?php echo json_encode($remind);?>}, width:'600px'});
-var result = myModalTrigger.show();
-$('#showAnnual').click(function(){myModalTrigger.close()});
-<?php endif;?>
+
+<?php /* Check annual remind */ ?>
+$(function()
+{
+    function checkRemind()
+    {
+        $.getJSON(createLink('misc', 'getRemind'), function(response)
+        {
+            if(!response || !response.data) return;
+
+            var myModalTrigger = new $.zui.ModalTrigger(
+            {
+                title: response.data.title,
+                custom: response.data.content,
+                width: 600
+            });
+            myModalTrigger.show();
+            $('#showAnnual').click(function(){myModalTrigger.close()});
+        });
+    }
+    setTimeout(checkRemind, 1000);
+});
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <?php if(isset($pageJS)) js::execute($pageJS);?>
