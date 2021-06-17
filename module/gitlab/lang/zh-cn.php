@@ -29,4 +29,4 @@ $lang->gitlab->gitlabTokenTips     = "请填写具有admin权限账户的access 
 
 $lang->gitlab->tokenError    = "当前token非管理员权限。";
 $lang->gitlab->hostError     = "无效的gitlab服务地址。";
-$lang->gitlab->bindUserError = "禅道用户绑定gitlab服务号失败";
+$lang->gitlab->bindUserError = "不能重复绑定用户 %s";
