@@ -5,7 +5,7 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -16,7 +16,7 @@ helper::import(dirname(dirname(__FILE__)) . '/base/front/front.class.php');
 /**
  * html类，生成html标签。
  * The html class, to build html tags.
- * 
+ *
  * @package framework
  */
 class html extends baseHTML
@@ -101,7 +101,7 @@ class html extends baseHTML
     /**
      * 创建提交按钮。
      * Create submit button.
-     * 
+     *
      * @param  string $label    the label of the button
      * @param  string $class    the class of the button
      * @param  string $misc     other params
@@ -127,10 +127,10 @@ class html extends baseHTML
     /**
      * 创建全选checkbox。
      * Create select buttons include 'selectAll' and 'selectReverse'.
-     * 
+     *
      * @param  string $scope  the scope of select reverse.
-     * @param  bool   $asGroup 
-     * @param  string $appendClass 
+     * @param  bool   $asGroup
+     * @param  string $appendClass
      * @static
      * @access public
      * @return string
@@ -166,7 +166,7 @@ class html extends baseHTML
         if(strpos($attrib, 'id=') !== false) $id = '';
 
         global $config;
-        $string = '';
+        $convertedPinYin = (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($options) : array();
         if(count($options) >= $config->maxCount or isset($config->moreLinks[$name]))
         {
             if(strpos($attrib, 'chosen') !== false) $attrib = str_replace('chosen', 'picker-select', $attrib);
@@ -175,14 +175,9 @@ class html extends baseHTML
                 $link = $config->moreLinks[$name];
                 $attrib .= " data-pickertype='remote' data-pickerremote='" . $link . "'";
             }
+        }
 
-            $convertedPinYin = array();
-            if(count($options) <= $config->maxCount) $convertedPinYin = (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($options) : array();
-        }
-        else
-        {
-            $convertedPinYin = (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($options) : array();
-        }
+        $string  = '';
         $string .= "<select name='$name' {$id} $attrib>\n";
 
         /* The options. */
@@ -202,10 +197,10 @@ class html extends baseHTML
 
     /**
      * Create input tag that type is number.
-     * 
-     * @param  string $name 
-     * @param  string $value 
-     * @param  string $attrib 
+     *
+     * @param  string $name
+     * @param  string $value
+     * @param  string $attrib
      * @static
      * @access public
      * @return string
@@ -222,7 +217,7 @@ class html extends baseHTML
 /**
  * JS类。
  * JS class.
- * 
+ *
  * @package front
  */
 class js extends baseJS
