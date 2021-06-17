@@ -72,25 +72,57 @@ class gitlab extends control
     }
 
     /**
-     * bind gitlab user to zentao users.
+     * Bind gitlab user to zentao users.
      *
      * @access public
      * @return void
      */
-    public function bindUser($id)
+    public function bindUser($gitlabID)
     {
+        $userPairs     = $this->loadModel('user')->getPairs();
         if($_POST)
         {
+            $users = $this->post->zentaoUsers;
+            $accountList = array();
+            $repeatUsers = array();
+            foreach($users as $openID => $user)
+            {
+                if(empty($user)) continue;
+                if(isset($accountList[$user])) $repeatUsers[] = zget($userPairs, $user);
+                $accountList[$user] = $openID;
+            }
 
+            if(count($repeatUsers)) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->bindUserError, join(',', $repeatUsers))));
+
+            $user = new stdclass;
+            $user->providerID   = $gitlabID;
+            $user->providerType = 'gitlab';
+
+            foreach($users as $openID => $account)
+            {
+                if(!$account) continue;
+                $user->account = $account;
+                $user->openID  = $openID;
+
+                $this->dao->delete(TABLE_OAUTH)
+                          ->where('openID')->eq($user->openID)
+                          ->andWhere('providerType')->eq('gitlab')
+                          ->andWhere('providerID')->eq($id)
+                          ->andWhere('account')->eq($user->account)
+                          ->exec();
+
+                $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
+            }
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->sever->http_referer));
         }
 
-        $gitlab      = $this->gitlab->getByID($id);
+        $gitlab      = $this->gitlab->getByID($gitlabID);
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
 
         $this->view->title         = $this->lang->gitlab->bindUser;
-        $this->view->userPairs     = $this->loadModel('user')->getPairs();
+        $this->view->userPairs     = $userPairs;
         $this->view->gitlabUsers   = $this->gitlab->apiGetUsers($gitlab);
-        $this->view->matchedResult = $this->gitlab->getMatchedUsers($this->view->gitlabUsers, $zentaoUsers);
+        $this->view->matchedResult = $this->gitlab->getMatchedUsers($gitlabID, $this->view->gitlabUsers, $zentaoUsers);
         $this->display();
     }
 

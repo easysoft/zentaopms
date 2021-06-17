@@ -97,7 +97,7 @@ class gitlabModel extends model
     {
         $api      = rtrim($gitlab->url, '/') . '/api/v4/users?private_token=' . $gitlab->token;
         $response = json_decode(commonModel::http($api));
-        
+
         if (!$response) return array();
         $users = array();
 
@@ -123,7 +123,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function getMatchedUsers($gitlabUsers, $zentaoUsers)
+    public function getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers)
     {
         $matches = new stdclass;
         foreach($gitlabUsers as $gitlabUser)
@@ -135,10 +135,22 @@ class gitlabModel extends model
                 if($gitlabUser->email    == $zentaoUser->email)    $matches->emails[$gitlabUser->email][]     = $zentaoUser->account;
             }
         }
+            
+        $bindedUsers = $this->dao->select('openID,account')->from(TABLE_OAUTH)
+                                 ->where('providerType')->eq('gitlab')
+                                 ->andWhere('providerID')->eq($gitlabID)
+                                 ->fetchPairs();
 
         $matchedUsers = array();
         foreach($gitlabUsers as $gitlabUser)
         {
+            if(isset($bindedUsers[$gitlabUser->id])) 
+            {
+                $gitlabUser->zentaoAccount = $bindedUsers[$gitlabUser->id];
+                $matchedUsers[] = $gitlabUser;
+                continue;
+            }
+
             $matchedZentaoUsers = array();
             if(isset($matches->accounts[$gitlabUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$gitlabUser->account]);
             if(isset($matches->emails[$gitlabUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gitlabUser->email]);
