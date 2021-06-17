@@ -220,25 +220,6 @@ function initSteps(selector)
 
             updateStepType($step, type);
         });
-
-        /* Auto insert step to group without any steps */
-        if(!skipAutoAddStep)
-        {
-            var needRefresh = false;
-            getStepsElements().each(function(idx)
-            {
-                var $step = $(this).attr('data-index', idx + 1);
-                if($step.attr('data-type') !== 'group') return;
-                var $nextStep = $step.next('.step:not(.drag-shadow)');
-                if(!$nextStep.length || $nextStep.attr('data-type') !== 'item')
-                {
-                    insertStepRow($step, 1, 'item', true);
-                    needRefresh = true;
-                }
-            });
-
-            if(needRefresh) refreshSteps(true);
-        }
     };
     var initSortable = function()
     {
@@ -301,6 +282,17 @@ function initSteps(selector)
             suggestType = suggestChild ? 'item' : 'step';
         }
         $step.find('.step-type').val(suggestType);
+
+        /* Auto insert step to group without any steps */
+        if(suggestType === 'group')
+        {
+            var $nextStep = $step.next('.step:not(.drag-shadow)');
+            if(!$nextStep.length || $nextStep.find('.step-type').val() !== 'item')
+            {
+                insertStepRow($step, 1, 'item', true);
+            }
+        }
+
         refreshSteps();
     }).on('change', '.form-control', function()
     {
