@@ -27,5 +27,6 @@ $lang->gitlab->gitlabNameTips      = '该名称会显示在其他相应模块中
 $lang->gitlab->gitlabUrlTips       = "填写示例：https://gitlab.zcorp.cc <br> 仅填写gitlab服务地址，不需要填写其他URI";
 $lang->gitlab->gitlabTokenTips     = "请填写具有admin权限账户的access token <br> 可在：https://&lt;gitlab url&gt;/-/profile/personal_access_tokens 创建";
 
-$lang->gitlab->tokenError = "当前token非管理员权限。";
-$lang->gitlab->hostError  = "无效的gitlab服务地址。";
+$lang->gitlab->tokenError    = "当前token非管理员权限。";
+$lang->gitlab->hostError     = "无效的gitlab服务地址。";
+$lang->gitlab->bindUserError = "禅道用户绑定gitlab服务号失败";

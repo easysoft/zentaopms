@@ -83,17 +83,22 @@ class gitlab extends control
         {
             if($this->post->zentaoUsers)
             {
+                if(count($this->post->zentaoUsers) != count(array_unique($this->post->zentaoUsers)))
+                {
+                  $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->bindUserError, 'locate' => inlink('binduser')));
+                }
+
                 $data = array();
                 $number = 0;
                 foreach($this->post->zentaoUsers as $gitlabId => $account)
                 {
-                    if($account)
+                   if($account)
                     {
-                        $data[$number]['openID']       = $gitlabId;
-                        $data[$number]['account']      = $account;
-                        $data[$number]['providerType'] = 'gitlab';
-                        $data[$number]['providerID']   = $id;
-                        $number++;
+                      $data[$number]['openID']       = $gitlabId;
+                      $data[$number]['account']      = $account;
+                      $data[$number]['providerType'] = 'gitlab';
+                      $data[$number]['providerID']   = $id;
+                      $number++;
                     }
                 }
             }
@@ -102,10 +107,14 @@ class gitlab extends control
             {
                 if(!$this->gitlab->checkAccountId($bindUser['openID'],$bindUser['providerID']))
                 {
-                    $this->dao->insert(TABLE_OAUTH)->data($bindUser)->exec();
+                  $this->dao->insert(TABLE_OAUTH)->data($bindUser)->exec();
+                  if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                  $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('binduser')));
                 }else
                 {
-                    $this->dao->update(TABLE_OAUTH)->data($bindUser)->where('openID')->eq($bindUser['openID'])->andWhere('providerID')->eq($bindUser['providerID'])->exec();
+                  $this->dao->update(TABLE_OAUTH)->data($bindUser)->where('openID')->eq($bindUser['openID'])->andWhere('providerID')->eq($bindUser['providerID'])->exec();
+                  if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                  $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('binduser')));
                 }
             }
         }

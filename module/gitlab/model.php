@@ -135,6 +135,8 @@ class gitlabModel extends model
                 if($gitlabUser->email    == $zentaoUser->email)    $matches->emails[$gitlabUser->email][]     = $zentaoUser->account;
             }
         }
+            
+        /*Get binded users from db.*/
 
         $matchedUsers = array();
         foreach($gitlabUsers as $gitlabUser)
