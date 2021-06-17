@@ -694,6 +694,17 @@ class my extends control
         $this->display();
     }
 
+    /**
+     * My meeting list.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
     public function myMeeting($browseType = 'futureMeeting', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('meeting');
