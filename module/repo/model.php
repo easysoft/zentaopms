@@ -229,7 +229,16 @@ class repoModel extends model
 
         if(!dao::isError()) $this->rmClientVersionFile();
 
-        if($this->post->SCM == 'Gitlab') $this->loadModel("gitlab")->initLabels($this->post->gitlabHost, $this->post->gitlabProject);
+        if($this->post->SCM == 'Gitlab') 
+        {
+            $this->loadModel("gitlab")->initLabels($this->post->gitlabHost, $this->post->gitlabProject);
+
+            // save the relationship between zentao product and  gitlab project to zt_relation table.
+
+        }
+
+
+
 
         return $this->dao->lastInsertID();
     }

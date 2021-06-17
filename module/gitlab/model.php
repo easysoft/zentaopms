@@ -170,13 +170,13 @@ class gitlabModel extends model
     /**
      * Get projects of one gitlab.
      * 
-     * @param  int    $id 
+     * @param  int    $gitlabID 
      * @access public
      * @return void
      */
-    public function apiGetProjects($id)
+    public function apiGetProjects($gitlabID)
     {   
-        $gitlab = $this->getByID($id);
+        $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return array();
         $host   = rtrim($gitlab->url, '/');
         $host .= '/api/v4/projects';
@@ -190,6 +190,26 @@ class gitlabModel extends model
         }   
         return $allResults;
     }
+
+    public function getProjectPairs($gitlabID)
+    {
+        $projects = $this->apiGetProjects($gitlabID);
+        $projectPairs = array();
+        foreach($projects as $project)
+        {
+            $projectPairs[$project->id] = $project->name_with_namespace;
+        }
+
+        return $projectPairs;
+    }
+
+    public funciton getProjectDisplayName($gitlabID, $projectID)
+    {
+        return array_key_exists($gitlabID, $projectID) ? $this->gitlab->getProjectPairs($gitlabID)[$projectID]: "";
+    }
+
+
+
 
     /**
      * Get gitlab api base url with access_token
