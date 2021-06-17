@@ -147,7 +147,8 @@ function setStories()
 function initSteps(selector)
 {
     /* Fix task #4832. Auto adjust textarea height. */
-    $('textarea.autosize').each(function() {
+    $('textarea.autosize').each(function()
+    {
         $.autoResizeTextarea(this);
     });
 
@@ -177,7 +178,7 @@ function initSteps(selector)
     {
         return $steps.children('.step:not(.drag-shadow)');
     };
-    var refreshSteps = function()
+    var refreshSteps = function(skipAutoAddStep)
     {
         var parentId = 1, childId = 0;
         getStepsElements().each(function(idx)
@@ -187,14 +188,14 @@ function initSteps(selector)
             var stepID;
             if(type == 'group')
             {
-                $step.removeClass('step-item step-step').addClass('step-group');
+                $step.removeClass('step-item').removeClass('step-step').addClass('step-group');
                 stepID = parentId++;
                 $step.find('.step-id').text(stepID);
                 childId = 1;
             }
             else if(type == 'step')
             {
-                $step.removeClass('step-item step-group').addClass('step-step');
+                $step.removeClass('step-item').removeClass('step-group').addClass('step-step');
                 stepID = parentId++;
                 $step.find('.step-id').text(stepID);
                 childId = 0;
@@ -204,11 +205,11 @@ function initSteps(selector)
                 if(childId) // type as child
                 {
                     stepID = (parentId - 1) + '.' + (childId++);
-                    $step.removeClass('step-step step-group').addClass('step-item').find('.step-item-id').text(stepID);
+                    $step.removeClass('step-step').removeClass('step-group').addClass('step-item').find('.step-item-id').text(stepID);
                 }
                 else // type as step
                 {
-                    $step.removeClass('step-item step-group').addClass('step-step');
+                    $step.removeClass('step-item').removeClass('step-group').addClass('step-step');
                     stepID = parentId++;
                     $step.find('.step-id').text(stepID);
                 }
@@ -274,13 +275,24 @@ function initSteps(selector)
         var $step = $checkbox.closest('.step');
         var isChecked = $checkbox.is(':checked');
         var suggestType = isChecked ? 'group' : 'item';
-        if(!isChecked)
+        if(!isChecked && ($step.find('textarea[name^="steps"]').val().length || $step.find('textarea[name^="expects"]').val().length))
         {
             var $prevStep = $step.prev('.step:not(.drag-shadow)');
             var suggestChild = $prevStep.length && $prevStep.is('.step-group') && $step.next('.step:not(.drag-shadow)').length;
             suggestType = suggestChild ? 'item' : 'step';
         }
         $step.find('.step-type').val(suggestType);
+
+        /* Auto insert step to group without any steps */
+        if(suggestType === 'group')
+        {
+            var $nextStep = $step.next('.step:not(.drag-shadow)');
+            if(!$nextStep.length || $nextStep.find('.step-type').val() !== 'item')
+            {
+                insertStepRow($step, 1, 'item', true);
+            }
+        }
+
         refreshSteps();
     }).on('change', '.form-control', function()
     {
