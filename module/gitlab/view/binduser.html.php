@@ -15,7 +15,7 @@
   <div class="main-header">
     <h2><?php echo $lang->gitlab->bindUser;?></h2>
   </div>
-  <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
+  <form method='post' class='load-indicator main-form' enctype='multipart/form-data'>
     <div class="table-responsive">
       <table class="table table-borderless w-600px">
         <thead>

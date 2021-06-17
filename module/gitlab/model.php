@@ -97,7 +97,7 @@ class gitlabModel extends model
     {
         $api      = rtrim($gitlab->url, '/') . '/api/v4/users?private_token=' . $gitlab->token;
         $response = json_decode(commonModel::http($api));
-        
+
         if (!$response) return array();
         $users = array();
 
@@ -192,6 +192,19 @@ class gitlabModel extends model
         if(!$gitlab) return "";
         $gitlab_url = rtrim($gitlab->url, '/').'/api/v4%s'."?private_token={$gitlab->token}";
         return $gitlab_url; 
+    }
+
+
+    /**
+     * check if gitlab id exists
+     * 
+     * @param  string
+     * @access public
+     * @return array
+     */
+    public function checkAccountId($openID,$providerID)
+    {
+        return $this->dao->select('openID')->from(TABLE_OAUTH)->where('openID')->eq($openID)->andWhere('providerID')->eq($providerID)->fetch('openID'); 
     }
 
     /**

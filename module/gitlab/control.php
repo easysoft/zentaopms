@@ -81,7 +81,33 @@ class gitlab extends control
     {
         if($_POST)
         {
+            if($this->post->zentaoUsers)
+            {
+                $data = array();
+                $number = 0;
+                foreach($this->post->zentaoUsers as $gitlabId => $account)
+                {
+                    if($account)
+                    {
+                        $data[$number]['openID']       = $gitlabId;
+                        $data[$number]['account']      = $account;
+                        $data[$number]['providerType'] = 'gitlab';
+                        $data[$number]['providerID']   = $id;
+                        $number++;
+                    }
+                }
+            }
 
+            foreach($data as $bindUser)
+            {
+                if(!$this->gitlab->checkAccountId($bindUser['openID'],$bindUser['providerID']))
+                {
+                    $this->dao->insert(TABLE_OAUTH)->data($bindUser)->exec();
+                }else
+                {
+                    $this->dao->update(TABLE_OAUTH)->data($bindUser)->where('openID')->eq($bindUser['openID'])->andWhere('providerID')->eq($bindUser['providerID'])->exec();
+                }
+            }
         }
 
         $gitlab      = $this->gitlab->getByID($id);
