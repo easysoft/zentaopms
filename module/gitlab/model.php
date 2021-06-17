@@ -402,18 +402,17 @@ class gitlabModel extends model
         $apiPath = "/projects/{$projectID}/issues/";
         $url = sprintf($apiRoot, $apiPath);
         $response = commonModel::http($url, $issue);
-        $labels = json_decode($response);
-
-        return $labels;
+        return $response;
     }
 
     public function pushTask($task, $gitlabID,$projectID)
     {
-
+        $task->label = $this->config->gitlab->taskLabel->name;
     }
 
     public function pushBug($bug, $gitlabID,$projectID)
     {
         
+        $bug->label = $this->config->gitlab->bugLabel->name;
     }
 }

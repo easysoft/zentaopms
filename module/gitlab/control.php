@@ -94,6 +94,11 @@ class gitlab extends control
         $this->display();
     }
 
+    public function bindProduct($gitlabID)
+    {
+    } 
+
+
     /**
      * Edit a gitlab.
      *
