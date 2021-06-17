@@ -2193,7 +2193,7 @@ EOD;
     {
         $response = new stdclass();
         $response->errcode = $this->config->entry->errcode[$code];
-        $response->errmsg  = $this->lang->entry->errmsg[$code];
+        $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
 
         die(urldecode(json_encode($response)));
     }
