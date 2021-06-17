@@ -69,7 +69,7 @@ class executionModel extends model
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
 
-        if($execution->type == 'stage')
+        if($execution and $execution->type == 'stage')
         {
             global $lang;
             $this->app->loadLang('project');
@@ -98,7 +98,7 @@ class executionModel extends model
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
 
-        if($this->cookie->executionMode == 'noclosed' and ($execution->status == 'done' or $execution->status == 'closed'))
+        if($this->cookie->executionMode == 'noclosed' and $execution and ($execution->status == 'done' or $execution->status == 'closed'))
         {
             setcookie('executionMode', 'all');
             $this->cookie->executionMode = 'all';
@@ -298,7 +298,8 @@ class executionModel extends model
 
             /* Determine whether to add a sprint or a stage according to the model of the execution. */
             $project = $this->loadModel('project')->getByID($_POST['project']);
-            $type = zget($this->config->execution->modelList, $project->model, 'sprint');
+            $type    = 'sprint';
+            if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
             /* If the execution model is a stage, determine whether the product is linked. */
             if($type == 'stage' and empty($this->post->products[0]))
